@@ -1,0 +1,178 @@
+{
+  "id": "week-nov-07-2024",
+  "quarter": "Week of Nov 07",
+  "year": 2024,
+  "date": "2024-11-07",
+  "title": "Demo Services Group - Weekly Executive Update",
+  "highlights": [
+    "First key highlight or achievement",
+    "Second key highlight or achievement",
+    "Third key highlight or achievement",
+    "Fourth key highlight or achievement",
+    "Fifth key highlight or achievement"
+  ],
+  "keyMetrics": {
+    "revenue": 1230000,
+    "growth": 48,
+    "customers": 263,
+    "satisfaction": 0
+  },
+  "activityMetrics": {
+    "demoStudio": {
+      "demosRegistered": 263,
+      "demosLinkedToDeals": 126,
+      "wonACV": 1230000,
+      "conversionRate": 48
+    },
+    "hoursByLOB": {
+      "capitalMarkets": {
+        "support": 1464,
+        "prep": 23358,
+        "demo": 11057
+      },
+      "banking": {
+        "support": 684,
+        "prep": 8953,
+        "demo": 6528
+      }
+    },
+    "activityMixPercentages": {
+      "capitalMarkets": {
+        "support": 4,
+        "prep": 65,
+        "demo": 31
+      },
+      "banking": {
+        "support": 4,
+        "prep": 55,
+        "demo": 41
+      }
+    }
+  },
+  "topAssets": [
+    { "name": "D1 Flex", "count": 73, "category": "Banking" },
+    { "name": "D1 Flex Mobile 6.0", "count": 43, "category": "Banking" },
+    { "name": "D1 Flex Mobile (Beacon)", "count": 35, "category": "Banking" },
+    { "name": "D1 Business", "count": 33, "category": "Banking" },
+    { "name": "D1 Banker", "count": 20, "category": "Banking" }
+  ],
+  "weeklyFocus": [
+    "Focus item 1 - describe the priority or action",
+    "Focus item 2 - describe the priority or action",
+    "Focus item 3 - describe the priority or action",
+    "Focus item 4 - describe the priority or action",
+    "Focus item 5 - describe the priority or action",
+    "Focus item 6 - describe the priority or action"
+  ],
+  "departments": [
+    {
+      "name": "Demo Enablement",
+      "performance": 65,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Achievement 1 for this department",
+        "Achievement 2 for this department",
+        "Achievement 3 for this department"
+      ]
+    },
+    {
+      "name": "Demo Operations",
+      "performance": 85,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Achievement 1 for this department",
+        "Achievement 2 for this department",
+        "Achievement 3 for this department"
+      ]
+    },
+    {
+      "name": "GTM Support",
+      "performance": 95,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Achievement 1 for this department",
+        "Achievement 2 for this department",
+        "Achievement 3 for this department"
+      ]
+    },
+    {
+      "name": "Strategic Initiatives",
+      "performance": 70,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Achievement 1 for this department",
+        "Achievement 2 for this department",
+        "Achievement 3 for this department"
+      ]
+    }
+  ],
+  "initiatives": [
+    {
+      "name": "Initiative Name 1",
+      "status": "on-track",
+      "progress": 75,
+      "owner": "Owner Name",
+      "impact": "high"
+    },
+    {
+      "name": "Initiative Name 2",
+      "status": "on-track",
+      "progress": 85,
+      "owner": "Owner Name",
+      "impact": "medium"
+    },
+    {
+      "name": "Initiative Name 3",
+      "status": "at-risk",
+      "progress": 35,
+      "owner": "Owner Name",
+      "impact": "high"
+    },
+    {
+      "name": "Initiative Name 4",
+      "status": "on-track",
+      "progress": 60,
+      "owner": "Owner Name",
+      "impact": "high"
+    }
+  ],
+  "risks": [
+    {
+      "description": "Risk description 1",
+      "severity": "medium",
+      "mitigation": "Mitigation plan for risk 1"
+    },
+    {
+      "description": "Risk description 2",
+      "severity": "high",
+      "mitigation": "Mitigation plan for risk 2"
+    }
+  ],
+  "issuesAndBlockers": [
+    {
+      "title": "Issue Title 1",
+      "description": "Brief description of the issue",
+      "impact": "high",
+      "action": "Current action being taken",
+      "remediation": "Remediation plan",
+      "timeline": "Timeline for resolution",
+      "outcome": "Desired outcome",
+      "status": "in-progress"
+    },
+    {
+      "title": "Issue Title 2",
+      "description": "Brief description of the issue",
+      "impact": "medium",
+      "action": "Current action being taken",
+      "remediation": "Remediation plan",
+      "timeline": "Timeline for resolution",
+      "outcome": "Desired outcome",
+      "status": "in-progress"
+    }
+  ],
+  "outlook": "Your outlook paragraph goes here. This is a comprehensive summary of the current state, key wins, challenges, and forward-looking strategic direction for the Demo Services Group."
+}

@@ -1,0 +1,72 @@
+{
+  "id": "int-banking",
+  "name": "International Banking",
+  "lastUpdated": "2024-11-04T17:45:00Z",
+  "keyHighlights": [
+    "International Issuing Hub awaiting E6 asset transfer approval",
+    "VPN alternative for Horizon demo connectivity in progress",
+    "EMEA region demos increased 34% month-over-month"
+  ],
+  "strategicProjects": [
+    {
+      "id": "ib-proj-001",
+      "name": "International Issuing Hub Demo Asset",
+      "status": "at-risk",
+      "progress": 35,
+      "owner": "Demo Enablement",
+      "dueDate": "2024-12-01",
+      "executiveSummary": "Delayed by Money 20/20 and E6/Coast availability; E6 approval expected this week"
+    },
+    {
+      "id": "ib-proj-002",
+      "name": "VPN Alternative for Horizon Connectivity",
+      "status": "on-track",
+      "progress": 70,
+      "owner": "Demo Operations",
+      "dueDate": "2024-11-15",
+      "executiveSummary": "Addressing connectivity issues for international client demos"
+    },
+    {
+      "id": "ib-proj-003",
+      "name": "Multi-Currency Payment Rail Demos",
+      "status": "on-track",
+      "progress": 88,
+      "owner": "Emma Thompson",
+      "dueDate": "2024-11-25",
+      "executiveSummary": "Cross-border payment scenarios for APAC and EMEA markets"
+    }
+  ],
+  "supportActivities": [
+    {
+      "id": "ib-sup-001",
+      "type": "incident",
+      "title": "Horizon demo VPN timeouts during EMEA business hours",
+      "priority": "high",
+      "status": "active",
+      "description": "International connectivity issues impacting client demonstrations",
+      "impact": "Affecting 4 scheduled demos; VPN alternative project addressing root cause"
+    },
+    {
+      "id": "ib-sup-002",
+      "type": "request",
+      "title": "Localization for Japanese market demos",
+      "priority": "medium",
+      "status": "active",
+      "description": "UI translation and local regulatory compliance scenarios",
+      "impact": "Required for APAC expansion; delivery by Nov 20"
+    }
+  ],
+  "demoInsights": {
+    "demosThisWeek": 14,
+    "hoursInvested": 156,
+    "topRequests": [
+      "Cross-border payment processing",
+      "Multi-currency account management",
+      "SWIFT integration demos"
+    ],
+    "wins": [
+      "UK challenger bank advancing to final vendor selection",
+      "APAC regional bank requesting pilot program"
+    ]
+  }
+}

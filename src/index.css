@@ -1,0 +1,111 @@
+/* Roobert Font Faces - Corporate Font */
+@font-face {
+  font-family: 'Roobert';
+  src: url('/RoobertFont/Roobert-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roobert Light';
+  src: url('/RoobertFont/Roobert-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roobert Medium';
+  src: url('/RoobertFont/Roobert-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roobert';
+  src: url('/RoobertFont/Roobert-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roobert';
+  src: url('/RoobertFont/Roobert-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roobert Heavy';
+  src: url('/RoobertFont/Roobert-Heavy.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-roobert antialiased;
+  }
+}
+
+/* Glassmorphism utilities */
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-glass bg-white/10 dark:bg-black/20 border border-white/20 dark:border-white/10;
+  }
+  
+  .glass-strong {
+    @apply backdrop-blur-xl bg-white/20 dark:bg-black/40 border border-white/30 dark:border-white/20;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-fis-eggplant to-fis-navy;
+  }
+
+  .card-shadow {
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+
+  .card-shadow-hover {
+    box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.25);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500 dark:bg-gray-500;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

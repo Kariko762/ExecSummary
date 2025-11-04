@@ -1,0 +1,189 @@
+{
+  "id": "week-oct-31-2024",
+  "quarter": "Week of Oct 31",
+  "year": 2024,
+  "date": "2024-10-31",
+  "title": "Demo Services Group - Weekly Executive Update",
+  "highlights": [
+    "Banking NA Tiled Microsite – First Draft Published and endorsed by Michael Driscoll",
+    "GTM Team Support – Office of the CFO Template Completed, moving to Figma conversion",
+    "SNOW Migration – Built comprehensive reports, dashboard launch by Nov 14",
+    "Demo Studio YTD: 263 demos registered, 126 linked to deals, $1.23M won ACV (48% conversion)",
+    "Capital Markets leads activity: 2.1× Support, 2.6× Prep, 1.7× Demo hours vs Banking"
+  ],
+  "keyMetrics": {
+    "revenue": 1230000,
+    "growth": 48,
+    "customers": 263,
+    "satisfaction": 0
+  },
+  "activityMetrics": {
+    "demoStudio": {
+      "demosRegistered": 263,
+      "demosLinkedToDeals": 126,
+      "wonACV": 1230000,
+      "conversionRate": 48
+    },
+    "hoursByLOB": {
+      "capitalMarkets": {
+        "support": 1464,
+        "prep": 23358,
+        "demo": 11057
+      },
+      "banking": {
+        "support": 684,
+        "prep": 8953,
+        "demo": 6528
+      }
+    },
+    "activityMixPercentages": {
+      "capitalMarkets": {
+        "support": 4,
+        "prep": 65,
+        "demo": 31
+      },
+      "banking": {
+        "support": 4,
+        "prep": 55,
+        "demo": 41
+      }
+    }
+  },
+  "topAssets": [
+    { "name": "D1 Flex", "count": 73, "category": "Banking" },
+    { "name": "D1 Flex Mobile 6.0", "count": 43, "category": "Banking" },
+    { "name": "D1 Flex Mobile (Beacon)", "count": 35, "category": "Banking" },
+    { "name": "D1 Business", "count": 33, "category": "Banking" },
+    { "name": "D1 Banker", "count": 20, "category": "Banking" }
+  ],
+  "weeklyFocus": [
+    "NPS Forms & Feedback Collection",
+    "SNOW Migration – Operations Dashboard Finalization",
+    "VPN Alternative for Horizon Demo Connectivity (Int. Banking)",
+    "Strategic Calls with Pre-Sales Leadership & Coast to define deliverables and timelines",
+    "Banking 'Run, Grow, Connect, Protect' Microsite – Deploy changes from Michael Driscoll & Richard Chapman",
+    "Coast MSA Renewal Discussions – Review requirements and platform ownership (Lance Tapper departed)"
+  ],
+  "departments": [
+    {
+      "name": "Demo Enablement",
+      "performance": 65,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "International Issuing Hub – E6 expected to approve asset transfer this week",
+        "Coast engaged Matthew Little (E6 Product Owner) to expedite process",
+        "Demo build kickoff pending asset transfer approval"
+      ]
+    },
+    {
+      "name": "Demo Operations",
+      "performance": 85,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Built SNOW reports: Open/Closed Requests & Incidents by Engineer",
+        "Created Monthly Ticket Trends dashboard",
+        "Identified BU data gap in forms – remediation in progress",
+        "Public dashboard launch target: November 14"
+      ]
+    },
+    {
+      "name": "GTM Support",
+      "performance": 95,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Completed PowerPoint template for Office of the CFO",
+        "Next step: Convert to Figma design for Tiled.co import",
+        "Banking NA Tiled Microsite first draft endorsed by leadership"
+      ]
+    },
+    {
+      "name": "Strategic Initiatives",
+      "performance": 70,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Agentic AI – Demo Insight Hub awaiting Pre-Sales feedback",
+        "Banking Microsite presented to Michael Driscoll with strong endorsement",
+        "Expansion to Sales Leadership and client socialization planned"
+      ]
+    }
+  ],
+  "initiatives": [
+    {
+      "name": "Banking NA Tiled Microsite",
+      "status": "on-track",
+      "progress": 75,
+      "owner": "Demo Services",
+      "impact": "high"
+    },
+    {
+      "name": "SNOW Migration Dashboard",
+      "status": "on-track",
+      "progress": 85,
+      "owner": "Demo Operations",
+      "impact": "medium"
+    },
+    {
+      "name": "International Issuing Hub",
+      "status": "at-risk",
+      "progress": 35,
+      "owner": "Demo Enablement",
+      "impact": "high"
+    },
+    {
+      "name": "Agentic AI – Demo Insight Hub",
+      "status": "on-track",
+      "progress": 60,
+      "owner": "Strategic Initiatives",
+      "impact": "high"
+    }
+  ],
+  "risks": [
+    {
+      "description": "International Issuing Hub delayed due to Money 20/20 and E6/Coast availability",
+      "severity": "medium",
+      "mitigation": "E6 expected to approve asset transfer this week; Coast engaged Matthew Little to expedite"
+    },
+    {
+      "description": "Coast MSA Renewal – Owner Lance Tapper has left FIS, unclear ownership",
+      "severity": "high",
+      "mitigation": "Review MSA requirements and platform ownership; define cost and impact ahead of EoY renewal"
+    }
+  ],
+  "issuesAndBlockers": [
+    {
+      "title": "Tiled Performance & Import Failures",
+      "description": "PowerPoint import feature and general Designer performance are unreliable",
+      "impact": "high",
+      "action": "Developing new deployment and design process",
+      "remediation": "Finalize new workflow by end of November",
+      "timeline": "End of November 2024",
+      "outcome": "Documented guidance for scalable delivery of Tiled interactive experiences",
+      "status": "in-progress"
+    },
+    {
+      "title": "Demo Team – Shift Payment Issues",
+      "description": "Team member unpaid for weekend work due to lack of shift audit trail",
+      "impact": "medium",
+      "action": "Implement process to record and approve all shifts, including weekends",
+      "remediation": "Monthly reports and visibility into business justification for shift work",
+      "timeline": "Immediate",
+      "outcome": "Proper compensation and audit trail for all shift work",
+      "status": "in-progress"
+    },
+    {
+      "title": "SNOW BU Data Not Mandatory",
+      "description": "BU data is not mandatory in SNOW forms, limiting ability to segment by org",
+      "impact": "medium",
+      "action": "Reviewing form structure to make BU data mandatory",
+      "remediation": "Update SNOW form requirements to enforce BU data collection",
+      "timeline": "Before Nov 14 dashboard launch",
+      "outcome": "Complete organizational segmentation in reporting",
+      "status": "in-progress"
+    }
+  ],
+  "outlook": "Strong momentum across Demo Services Group with key wins in Banking Microsite and SNOW migration. Focus areas for next week include finalizing operational dashboards, accelerating International Issuing Hub through E6 approval, and addressing platform tooling challenges (Tiled, Coast MSA). Capital Markets continues to dominate activity hours (70% of total workload), indicating opportunity to balance resources or expand Banking team capacity. Demo-to-deal conversion rate of 48% demonstrates strong alignment between demo quality and sales outcomes."
+}

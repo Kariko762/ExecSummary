@@ -1,0 +1,72 @@
+{
+  "id": "banking-na",
+  "name": "Banking (NA)",
+  "lastUpdated": "2024-11-04T17:45:00Z",
+  "keyHighlights": [
+    "Banking NA Tiled Microsite first draft endorsed by Michael Driscoll",
+    "D1 Flex Mobile 6.0 demos drove 43 unique client engagements this month",
+    "Regional bank RFP win attributed to personalized D1 Banker demo"
+  ],
+  "strategicProjects": [
+    {
+      "id": "bn-proj-001",
+      "name": "Banking 'Run, Grow, Connect, Protect' Microsite",
+      "status": "on-track",
+      "progress": 85,
+      "owner": "Demo Services",
+      "dueDate": "2024-11-20",
+      "executiveSummary": "Product-agnostic microsite for Sales Leadership and client presentations"
+    },
+    {
+      "id": "bn-proj-002",
+      "name": "D1 Flex 7.0 Demo Environment",
+      "status": "on-track",
+      "progress": 65,
+      "owner": "Alex Rodriguez",
+      "dueDate": "2024-12-10",
+      "executiveSummary": "Next-gen retail banking platform with enhanced mobile-first experience"
+    },
+    {
+      "id": "bn-proj-003",
+      "name": "Office of the CFO Template",
+      "status": "completed",
+      "progress": 100,
+      "owner": "GTM Team",
+      "dueDate": "2024-11-01",
+      "executiveSummary": "PowerPoint template completed; moving to Figma conversion for Tiled.co"
+    }
+  ],
+  "supportActivities": [
+    {
+      "id": "bn-sup-001",
+      "type": "request",
+      "title": "Custom data scenarios for 5 regional bank prospects",
+      "priority": "high",
+      "status": "active",
+      "description": "Client-specific transaction volumes and user personas",
+      "impact": "Supporting $3.2M pipeline; delivery by Nov 8"
+    },
+    {
+      "id": "bn-sup-002",
+      "type": "incident",
+      "title": "D1 Flex Mobile login issues on Android devices",
+      "priority": "medium",
+      "status": "active",
+      "description": "Authentication errors on Android 13+ devices",
+      "impact": "Affecting 2 scheduled demos; iOS workaround in place"
+    }
+  ],
+  "demoInsights": {
+    "demosThisWeek": 22,
+    "hoursInvested": 189,
+    "topRequests": [
+      "D1 Flex personalization features",
+      "Mobile wallet integrations",
+      "Small business banking workflows"
+    ],
+    "wins": [
+      "Regional bank selected D1 Flex after personalized demo - $890K ACV",
+      "Credit union advancing to pilot phase"
+    ]
+  }
+}

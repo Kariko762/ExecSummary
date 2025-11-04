@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weekly Update - FIS Demo Services Group</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { background: #e6e7e8; margin: 0; font-family: 'Segoe UI', Arial, sans-serif; color: #1d1f48; }
+    .container { max-width: 720px; margin: 40px auto; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 24px rgba(67,28,91,0.10);}
+    .header { background: linear-gradient(90deg, #431c5b 60%, #1d1f48 100%); padding: 36px 44px 28px 44px; color: #fff; }
+    .header h1 { margin: 0; font-size: 2.3em; letter-spacing: 1px; }
+    .header .subtitle { font-size: 1.1em; color: #4bcd3e; margin-top: 10px; }
+    .section { padding: 32px 44px 24px 44px; border-bottom: 1px solid #e6e7e8; }
+    .section:last-child { border-bottom: none; }
+    .section-title { color: #431c5b; font-size: 1.3em; margin-bottom: 14px; font-weight: 700; letter-spacing: 0.5px; }
+    .highlight { color: #4bcd3e; font-weight: 700; }
+    ul, ol { margin: 0 0 0 18px; padding: 0; }
+    ul li { margin-bottom: 8px; }
+    ul li ul { margin-top: 6px; }
+    .stats { display: flex; gap: 24px; margin: 24px 0; }
+    .stat-block { background: #e6e7e8; border-radius: 8px; padding: 18px 24px; flex: 1; text-align: center; }
+    .stat-block .label { color: #1d1f48; font-size: 0.95em; margin-bottom: 6px; }
+    .stat-block .value { color: #431c5b; font-size: 1.6em; font-weight: 700; }
+    .table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+    .table th, .table td { padding: 10px 8px; text-align: left; }
+    .table th { background: #1d1f48; color: #fff; }
+    .table tr:nth-child(even) { background: #f6f6f8; }
+
+    /* --- Data Tiles (added) --- */
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 16px 0 8px;
+    }
+    .tile {
+      background: #f6f6f8;
+      border: 1px solid #e6e7e8;
+      border-radius: 10px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 8px rgba(67,28,91,0.06);
+    }
+    .tile .label {
+      font-size: 0.9em;
+      color: #1d1f48;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+    .tile .value {
+      color: #431c5b;
+      font-size: 1.6em;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .tile .subtext {
+      font-size: 0.8em;
+      color: #6a6e83;
+      margin-top: 6px;
+    }
+    .tile .meter {
+      height: 6px;
+      background: #e6e7e8;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .tile .meter > span {
+      display: block;
+      height: 100%;
+      background: #4bcd3e;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .insight-note {
+      margin-top: 10px;
+      color: #1d1f48;
+      font-size: 0.7em;
+      line-height: 1.5;
+    }
+
+    .footer { background: #431c5b; color: #fff; text-align: center; padding: 18px 44px; font-size: 0.95em; }
+
+    @media (max-width: 600px) {
+      .container, .header, .section, .footer { padding: 16px !important; }
+      .stats { flex-direction: column; gap: 12px; }
+      .tile-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Executive Update</h1>
+      <div class="subtitle">Demo Services Group | Weekly</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Key Highlights</div>
+      <ul>
+        <li><strong>Banking NA Tiled Microsite – First Draft Published</strong>
+          <ul>
+            <li>Delivered a product-agnostic microsite showcasing how Banking can Run, Grow, Connect, and Protect clients.</li>
+            <li>Presented to Michael Driscoll – received strong endorsement.</li>
+            <li><span class="highlight">Next Steps:</span> Expand content, socialize with Sales Leadership and select clients, and route through Brand, Marketing, and Training for feedback.</li>
+          </ul>
+        </li>
+        <li><strong>GTM Team Support – Office of the CFO Template Completed</strong>
+          <ul>
+            <li>Completed PowerPoint template for Office of the CFO.</li>
+            <li><span class="highlight">Next Step:</span> Convert into Figma design for import into Tiled.co.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Demo Operations</div>
+      <ul>
+        <li><strong>SNOW Migration</strong>
+          <ul>
+            <li><span class="highlight">Action:</span> Built SNOW reports covering Open/Closed Requests &amp; Incidents by Engineer, Monthly Ticket Trends.</li>
+            <li><span class="highlight">Issue:</span> BU data is not mandatory in forms, limiting ability to segment by org.</li>
+            <li><span class="highlight">Remediation:</span> Reviewing form structure to make BU data mandatory.</li>
+            <li><span class="highlight">Outcome:</span> Publicly available dashboard by 14th November.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Demo Enablement</div>
+      <ul>
+        <li><strong>International Issuing Hub</strong>
+          <ul>
+            <li><span class="highlight">Issue:</span> Progress delayed due to Money 20/20 and E6/Coast availability.</li>
+            <li><span class="highlight">Action:</span> E6 expected to officially approve demo asset transfer this week. Coast has engaged Matthew Little (E6 Product Owner) to expedite.</li>
+            <li><span class="highlight">Remediation:</span> Follow-up with E6 and Coast this week to confirm timeline.</li>
+            <li><span class="highlight">Outcome:</span> Demo build kickoff once asset transfer is approved.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Strategic Objectives in Progress</div>
+      <ul>
+        <li><strong>Agentic AI – Demo Insight Hub</strong>
+          <ul>
+            <li><span class="highlight">Issue:</span> Awaiting feedback from Pre-Sales on data accuracy.</li>
+            <li><span class="highlight">Action:</span> Continue engagement with SGO and Pre-Sales.</li>
+            <li><span class="highlight">Outcome:</span> Refined AI-generated content for scalable demo creation.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">This Week’s Focus</div>
+      <ul>
+        <li>NPS Forms &amp; Feedback Collection</li>
+        <li>SNOW Migration – Operations Dashboard Finalization</li>
+        <li>VPN Alternative for Horizon Demo Connectivity (Int. Banking)</li>
+        <li>Strategic Calls with Pre-Sales Leadership &amp; Coast
+          <ul>
+            <li><span class="highlight">Outcome:</span> Define deliverables and timelines for new demo assets across Sales Growth Offices.</li>
+          </ul>
+        </li>
+        <li>Banking “Run, Grow, Connect, Protect” Microsite – Next Steps
+          <ul>
+            <li><span class="highlight">Action:</span> Deploy requested changes from Michael Driscoll &amp; Richard Chapman</li>
+            <li><span class="highlight">Outcome:</span> Publish production-ready microsite after 2-week dev cycle.</li>
+          </ul>
+        </li>
+        <li>Coast MSA Renewal Discussions
+          <ul>
+            <li><span class="highlight">Issue:</span> Lance Tapper (MSA owner) has left FIS.</li>
+            <li><span class="highlight">Action:</span> Review MSA requirements and platform ownership.</li>
+            <li><span class="highlight">Outcome:</span> Define cost and impact ahead of EoY renewal.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Issues &amp; Blockers</div>
+      <ul>
+        <li><strong>Tiled Performance &amp; Import Failures</strong>
+          <ul>
+            <li><span class="highlight">Issue:</span> PowerPoint import feature and general Designer performance are unreliable.</li>
+            <li><span class="highlight">Action:</span> Developing new deployment and design process.</li>
+            <li><span class="highlight">Remediation:</span> Finalize new workflow by end of November.</li>
+            <li><span class="highlight">Outcome:</span> Documented guidance for scalable delivery of Tiled interactive experiences.</li>
+          </ul>
+        </li>
+        <li><strong>Demo Team – Shift Payment Issues</strong>
+          <ul>
+            <li><span class="highlight">Issue:</span> Team member unpaid for weekend work due to lack of shift audit trail.</li>
+            <li><span class="highlight">Action:</span> Implement process to record and approve all shifts, including weekends.</li>
+            <li><span class="highlight">Outcome:</span> Monthly reports and visibility into business justification for shift work.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Data Insights</div>
+      <div class="stats">
+        <div class="stat-block">
+          <div class="label">‘Demo Studio’ Demos Registered (YTD)</div>
+          <div class="value">263</div>
+        </div>
+        <div class="stat-block">
+          <div class="label">Demos Linked to Deals (YTD)</div>
+          <div class="value">126</div>
+        </div>
+        <div class="stat-block">
+          <div class="label">‘Won ACV’ Linked to Demo Studio</div>
+          <div class="value">$1.23M</div>
+        </div>
+      </div>
+
+      <!-- Chart Section -->
+        <div style="text-align:center; margin: 30px 0;">
+            <div class="section-title">Top 5 Demo Studio Assets by Unique Demos</div>
+        <table class="table" style="margin:16px auto 0; text-align:left;">
+            <thead>
+            <tr>
+                <th>Application</th>
+                <th>Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr><td>D1 Flex</td><td>73</td></tr>
+            <tr><td>D1 Flex Mobile 6.0</td><td>43</td></tr>
+            <tr><td>D1 Flex Mobile (Beacon)</td><td>35</td></tr>
+            <tr><td>D1 Business</td><td>33</td></tr>
+            <tr><td>D1 Banker</td><td>20</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+      <!-- Key Activity Insights Section -->
+      <div class="section-title" style="margin-top:24px;">Key Activity Insights</div>
+
+      <!-- YTD Hours (by activity & line of business) -->
+      <div class="tile-grid" role="list" aria-label="Key Activity YTD Hours">
+        <!-- Support Hours -->
+        <div class="tile" role="listitem" aria-label="Demo Support Hours YTD, Capital Markets 1,464 hours">
+          <div class="label">Demo Support Hours (YTD)</div>
+          <div class="value">1,464 hrs</div>
+          <div class="subtext">Capital Markets</div>
+        </div>
+        <div class="tile" role="listitem" aria-label="Demo Support Hours YTD, Banking 684 hours">
+          <div class="label">Demo Support Hours (YTD)</div>
+          <div class="value">684 hrs</div>
+          <div class="subtext">Banking</div>
+        </div>
+
+        <!-- Prep Hours -->
+        <div class="tile" role="listitem" aria-label="Demo Prep Hours YTD, Capital Markets 23,358 hours">
+          <div class="label">Demo Prep Hours (YTD)</div>
+          <div class="value">23,358 hrs</div>
+          <div class="subtext">Capital Markets</div>
+        </div>
+        <div class="tile" role="listitem" aria-label="Demo Prep Hours YTD, Banking 8,953 hours">
+          <div class="label">Demo Prep Hours (YTD)</div>
+          <div class="value">8,953 hrs</div>
+          <div class="subtext">Banking</div>
+        </div>
+
+        <!-- Demo Execution Hours -->
+        <div class="tile" role="listitem" aria-label="Demo Hours YTD, Capital Markets 11,057 hours">
+          <div class="label">Demo Hours (YTD)</div>
+          <div class="value">11,057 hrs</div>
+          <div class="subtext">Capital Markets</div>
+        </div>
+        <div class="tile" role="listitem" aria-label="Demo Hours YTD, Banking 6,528 hours">
+          <div class="label">Demo Hours (YTD)</div>
+          <div class="value">6,528 hrs</div>
+          <div class="subtext">Banking</div>
+        </div>
+      </div>
+
+      <!-- Activity Mix % (with mini meters) -->
+      <div class="tile-grid" role="list" aria-label="Key Activity Mix Percentages">
+        <!-- Capital Markets Mix -->
+        <div class="tile" role="listitem" aria-label="Capital Markets Support 4 percent">
+          <div class="label">Support %</div>
+          <div class="value">4%</div>
+          <div class="subtext">Capital Markets</div>
+          <div class="meter"><span style="width: 4%;"></span></div>
+        </div>
+        <div class="tile" role="listitem" aria-label="Capital Markets Prep 65 percent">
+          <div class="label">Prep %</div>
+          <div class="value">65%</div>
+          <div class="subtext">Capital Markets</div>
+          <div class="meter"><span style="width: 65%;"></span></div>
+        </div>
+        <div class="tile" role="listitem" aria-label="Capital Markets Demo 31 percent">
+          <div class="label">Demo %</div>
+          <div class="value">31%</div>
+          <div class="subtext">Capital Markets</div>
+          <div class="meter"><span style="width: 31%;"></span></div>
+        </div>
+
+        <!-- Banking Mix -->
+        <div class="tile" role="listitem" aria-label="Banking Support 4 percent">
+          <div class="label">Support %</div>
+          <div class="value">4%</div>
+          <div class="subtext">Banking</div>
+          <div class="meter"><span style="width: 4%;"></span></div>
+        </div>
+        <div class="tile" role="listitem" aria-label="Banking Prep 55 percent">
+          <div class="label">Prep %</div>
+          <div class="value">55%</div>
+          <div class="subtext">Banking</div>
+          <div class="meter"><span style="width: 55%;"></span></div>
+        </div>
+        <div class="tile" role="listitem" aria-label="Banking Demo 41 percent">
+          <div class="label">Demo %</div>
+          <div class="value">41%</div>
+          <div class="subtext">Banking</div>
+          <div class="meter"><span style="width: 41%;"></span></div>
+        </div>
+      </div>
+
+      <p class="insight-note">
+        <strong>What this shows:</strong><br />
+        Capital Markets commands a larger workload across all activities; ~2.1× Support, ~2.6× Prep, and ~1.7× Demo. <br />
+        Prep is the dominant time sink, indicating higher effort to tailor or ready assets—especially in Capital Markets. <br />
+        Banking allocates a higher percentage of their time demoing (41% vs 31%), suggesting more mature demo assets.
+        Support remains low and stable at ~4% for both.
+      </p>
+    </div>
+
+    <div class="footer">
+      &copy; 2025 FIS Demo Studio | For internal use only
+    </div>
+  </div>
+</body>
+</html>

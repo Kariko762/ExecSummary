@@ -1,0 +1,72 @@
+{
+  "id": "payments",
+  "name": "Payments",
+  "lastUpdated": "2024-11-04T17:45:00Z",
+  "keyHighlights": [
+    "Real-time payments demo suite completed ahead of schedule",
+    "Merchant services integration expanded to include 12 new processors",
+    "Payment orchestration demo drove $1.4M opportunity"
+  ],
+  "strategicProjects": [
+    {
+      "id": "pm-proj-001",
+      "name": "Real-Time Payments (RTP) Demo Suite",
+      "status": "completed",
+      "progress": 100,
+      "owner": "Kevin Zhang",
+      "dueDate": "2024-10-31",
+      "executiveSummary": "Comprehensive RTP and instant payment scenarios for enterprise merchants"
+    },
+    {
+      "id": "pm-proj-002",
+      "name": "Payment Orchestration Platform Demo",
+      "status": "on-track",
+      "progress": 82,
+      "owner": "Lisa Patel",
+      "dueDate": "2024-11-30",
+      "executiveSummary": "Multi-processor routing and optimization demo for high-volume merchants"
+    },
+    {
+      "id": "pm-proj-003",
+      "name": "Fraud Prevention AI Dashboard",
+      "status": "on-track",
+      "progress": 68,
+      "owner": "David Kumar",
+      "dueDate": "2024-12-15",
+      "executiveSummary": "ML-powered fraud detection and prevention visualization for enterprise clients"
+    }
+  ],
+  "supportActivities": [
+    {
+      "id": "pm-sup-001",
+      "type": "request",
+      "title": "Custom payment flow for e-commerce merchant",
+      "priority": "medium",
+      "status": "active",
+      "description": "Tailored checkout experience with 3DS authentication",
+      "impact": "Supporting $750K opportunity; delivery by Nov 10"
+    },
+    {
+      "id": "pm-sup-002",
+      "type": "enhancement",
+      "title": "Add Buy Now Pay Later (BNPL) to payment suite",
+      "priority": "medium",
+      "status": "resolved",
+      "description": "Integrated Affirm, Klarna, and Afterpay payment options",
+      "impact": "Now available for all merchant demos; high client interest"
+    }
+  ],
+  "demoInsights": {
+    "demosThisWeek": 16,
+    "hoursInvested": 142,
+    "topRequests": [
+      "Payment orchestration and routing",
+      "Real-time fraud detection",
+      "Embedded finance integrations"
+    ],
+    "wins": [
+      "Enterprise merchant selected FIS payment orchestration - $1.4M ACV",
+      "Mid-market merchant advancing to contract phase"
+    ]
+  }
+}

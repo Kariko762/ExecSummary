@@ -1,0 +1,81 @@
+{
+  "id": "capital-markets",
+  "name": "Capital Markets",
+  "lastUpdated": "2024-11-04T17:45:00Z",
+  "keyHighlights": [
+    "Delivered Horizon 2.0 demo environment for 3 high-priority prospects",
+    "Completed integration with new Trade Reporting API ahead of Q4 deadline",
+    "Secured $2.1M deal with demo supporting final presentation"
+  ],
+  "strategicProjects": [
+    {
+      "id": "cm-proj-001",
+      "name": "Horizon Multi-Asset Trading Platform Refresh",
+      "status": "on-track",
+      "progress": 78,
+      "owner": "Sarah Chen",
+      "dueDate": "2024-12-15",
+      "executiveSummary": "Complete overhaul of trading demo environment with new UI and real-time data feeds"
+    },
+    {
+      "id": "cm-proj-002",
+      "name": "Regulatory Reporting Demo Suite",
+      "status": "on-track",
+      "progress": 92,
+      "owner": "Marcus Williams",
+      "dueDate": "2024-11-30",
+      "executiveSummary": "MiFID II and SEC compliance demo scenarios for enterprise prospects"
+    },
+    {
+      "id": "cm-proj-003",
+      "name": "AI-Powered Trade Analytics Dashboard",
+      "status": "at-risk",
+      "progress": 45,
+      "owner": "Jennifer Park",
+      "dueDate": "2024-12-31",
+      "executiveSummary": "Machine learning demo for predictive trading insights - delayed by data availability"
+    }
+  ],
+  "supportActivities": [
+    {
+      "id": "cm-sup-001",
+      "type": "incident",
+      "title": "Demo environment connectivity issues during EMEA hours",
+      "priority": "high",
+      "status": "active",
+      "description": "Intermittent VPN timeouts affecting European client demos",
+      "impact": "Impacting 3 scheduled demos this week; workaround via backup environment in place"
+    },
+    {
+      "id": "cm-sup-002",
+      "type": "request",
+      "title": "Custom branding for JP Morgan pitch",
+      "priority": "medium",
+      "status": "active",
+      "description": "Client-specific UI customization and data scenarios",
+      "impact": "Required for Nov 12 executive presentation; on track for delivery"
+    },
+    {
+      "id": "cm-sup-003",
+      "type": "enhancement",
+      "title": "Add crypto trading module to existing platform",
+      "priority": "low",
+      "status": "resolved",
+      "description": "Expanded demo to include digital asset trading capabilities",
+      "impact": "Completed ahead of schedule; now available for all Capital Markets demos"
+    }
+  ],
+  "demoInsights": {
+    "demosThisWeek": 18,
+    "hoursInvested": 247,
+    "topRequests": [
+      "Real-time risk analytics dashboards",
+      "Multi-currency settlement workflows",
+      "Algorithmic trading strategy demos"
+    ],
+    "wins": [
+      "Deutsche Bank selected FIS after Horizon demo - $2.1M ACV",
+      "Goldman Sachs advancing to contract negotiation phase"
+    ]
+  }
+}
