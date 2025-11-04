@@ -68,7 +68,8 @@ export function StickyNav() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="fixed top-16 left-0 right-0 z-40 glass-strong border-b border-white/20 dark:border-white/10"
+          className="fixed top-16 left-0 right-0 z-40 glass-strong"
+          style={{ borderBottom: '2px solid', borderBottomColor: 'rgb(209 213 219)' }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav className="flex items-center justify-center gap-2 py-3">

@@ -4,6 +4,7 @@ import { X, TrendingUp, Users, DollarSign, ThumbsUp, Calendar, Target, AlertTria
 import { RadialBarChart, RadialBar, ResponsiveContainer } from 'recharts';
 import { WeeklyFocus } from './WeeklyFocus';
 import { IssuesBlockers } from './IssuesBlockers';
+import { useState, useEffect } from 'react';
 
 interface SummaryDetailProps {
   summary: ExecutiveSummary;
@@ -11,6 +12,50 @@ interface SummaryDetailProps {
 }
 
 export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }) => {
+  const [activeSection, setActiveSection] = useState('metrics');
+  const [showNav, setShowNav] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLDivElement;
+      if (target.classList.contains('summary-content')) {
+        setShowNav(target.scrollTop > 100);
+        
+        // Update active section based on scroll position
+        const sections = ['metrics', 'performance', 'focus', 'issues', 'risks'];
+        for (const section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            if (rect.top >= 0 && rect.top <= 300) {
+              setActiveSection(section);
+              break;
+            }
+          }
+        }
+      }
+    };
+
+    const contentDiv = document.querySelector('.summary-content');
+    contentDiv?.addEventListener('scroll', handleScroll);
+    return () => contentDiv?.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (sectionId: string) => {
+    const contentDiv = document.querySelector('.summary-content');
+    const element = document.getElementById(sectionId);
+    
+    if (contentDiv && element) {
+      // For the last section (risks), scroll to bottom
+      if (sectionId === 'risks') {
+        contentDiv.scrollTo({ top: contentDiv.scrollHeight, behavior: 'smooth' });
+      } else {
+        // For other sections, scroll to element
+        const elementTop = element.offsetTop - 180; // Account for header + nav
+        contentDiv.scrollTo({ top: elementTop, behavior: 'smooth' });
+      }
+    }
+  };
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -29,11 +74,11 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
       case 'completed':
         return 'text-green-600 dark:text-green-400 bg-green-500/20';
       case 'on-track':
-        return 'text-blue-600 dark:text-blue-400 bg-blue-500/20';
+        return 'text-[#3bcd3e] dark:text-[#3bcd3e] bg-[#3bcd3e]/20';
       case 'at-risk':
-        return 'text-yellow-600 dark:text-yellow-400 bg-yellow-500/20';
+        return 'text-fis-raspberry dark:text-fis-raspberry bg-fis-raspberry/20';
       case 'delayed':
-        return 'text-red-600 dark:text-red-400 bg-red-500/20';
+        return 'text-fis-eggplant dark:text-fis-eggplant bg-fis-eggplant/20';
       default:
         return 'text-gray-600 dark:text-gray-400 bg-gray-500/20';
     }
@@ -92,33 +137,33 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
         onClick={(e) => e.stopPropagation()}
         className="min-h-screen py-8 px-4"
       >
-        <div className="max-w-6xl mx-auto glass-strong rounded-3xl shadow-2xl overflow-hidden">
+        <div className="max-w-6xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
           {/* Header */}
-          <div className="bg-gradient-to-r from-fis-eggplant to-fis-navy p-8 relative">
+          <div className="flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 p-8 relative rounded-t-3xl z-10 border-b border-gray-200 dark:border-gray-800">
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-all no-print"
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all no-print"
             >
-              <X className="w-6 h-6 text-white" />
+              <X className="w-6 h-6 text-gray-700 dark:text-gray-300" />
             </button>
 
             <button
               onClick={handlePrint}
-              className="absolute top-4 right-16 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-all no-print"
+              className="absolute top-4 right-16 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all no-print"
               title="Print Summary"
             >
-              <Printer className="w-6 h-6 text-white" />
+              <Printer className="w-6 h-6 text-gray-700 dark:text-gray-300" />
             </button>
 
             <div className="flex items-center space-x-4 mb-4">
-              <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-fis-eggplant to-fis-navy flex items-center justify-center">
                 <Calendar className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-roobert-heavy text-white mb-2">
+                <h1 className="text-4xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
                   {summary.quarter} {summary.year}
                 </h1>
-                <p className="text-blue-100 font-roobert-light">
+                <p className="text-gray-600 dark:text-gray-400 font-roobert-light">
                   {new Date(summary.date).toLocaleDateString('en-US', {
                     month: 'long',
                     day: 'numeric',
@@ -128,19 +173,50 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
               </div>
             </div>
 
-            <h2 className="text-2xl font-roobert-medium text-white mt-6">
+            <h2 className="text-2xl font-roobert-medium text-gray-700 dark:text-gray-300 mt-6">
               {summary.title}
             </h2>
           </div>
 
-          <div className="p-8 space-y-8">
+          {/* Sticky Navigation */}
+          {showNav && (
+            <motion.nav
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 border-b-2 border-gray-300 dark:border-gray-700 z-10 px-8 py-3 no-print"
+            >
+              <div className="flex items-center gap-2 overflow-x-auto">
+                {[
+                  { id: 'metrics', label: 'Metrics & Highlights' },
+                  { id: 'performance', label: 'Performance & Initiatives' },
+                  { id: 'focus', label: 'This Week\'s Focus' },
+                  { id: 'issues', label: 'Issues & Blockers' },
+                  { id: 'risks', label: 'Risks & Mitigation' },
+                ].map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => scrollToSection(section.id)}
+                    className={`px-4 py-2 rounded-lg text-sm font-roobert-medium whitespace-nowrap transition-all ${
+                      activeSection === section.id
+                        ? 'bg-fis-eggplant text-white'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {section.label}
+                  </button>
+                ))}
+              </div>
+            </motion.nav>
+          )}
+
+          <div className="flex-1 p-8 space-y-8 overflow-y-auto bg-white dark:bg-gray-900 summary-content">
             {/* Key Metrics */}
-            <section>
+            <section id="metrics">
               <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
                 Key Metrics
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="glass rounded-xl p-5">
+                <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-5">
                   <div className="flex items-center space-x-2 mb-3">
                     <div className="w-10 h-10 rounded-lg bg-fis-eggplant/20 flex items-center justify-center">
                       <DollarSign className="w-5 h-5 text-fis-eggplant" />
@@ -154,7 +230,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                   </p>
                 </div>
 
-                <div className="glass rounded-xl p-5">
+                <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-5">
                   <div className="flex items-center space-x-2 mb-3">
                     <div className="w-10 h-10 rounded-lg bg-fis-navy/20 flex items-center justify-center">
                       <Users className="w-5 h-5 text-fis-navy" />
@@ -168,7 +244,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                   </p>
                 </div>
 
-                <div className="glass rounded-xl p-5">
+                <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-5">
                   <div className="flex items-center space-x-2 mb-3">
                     <div className="w-10 h-10 rounded-lg bg-fis-green/20 flex items-center justify-center">
                       <TrendingUp className="w-5 h-5 text-fis-green" />
@@ -182,7 +258,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                   </p>
                 </div>
 
-                <div className="glass rounded-xl p-5">
+                <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-5">
                   <div className="flex items-center space-x-2 mb-3">
                     <div className="w-10 h-10 rounded-lg bg-fis-eggplant/20 flex items-center justify-center">
                       <ThumbsUp className="w-5 h-5 text-fis-eggplant" />
@@ -203,7 +279,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
               <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
                 Key Highlights
               </h3>
-              <div className="glass rounded-xl p-6 space-y-3">
+              <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-6 space-y-3">
                 {summary.highlights.map((highlight, index) => (
                   <motion.div
                     key={index}
@@ -212,7 +288,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                     transition={{ delay: index * 0.1 }}
                     className="flex items-start space-x-3"
                   >
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-fis-eggplant to-fis-navy flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="w-6 h-6 rounded-full bg-fis-raspberry flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs font-roobert-heavy">
                         {index + 1}
                       </span>
@@ -226,13 +302,13 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
             </section>
 
             {/* Departments & Initiatives Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div id="performance" className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Department Performance */}
               <section>
                 <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
                   Department Performance
                 </h3>
-                <div className="glass rounded-xl p-6">
+                <div className="bg-white dark:bg-gray-800/50 rounded-xl p-6">
                   <ResponsiveContainer width="100%" height={250}>
                     <RadialBarChart
                       cx="50%"
@@ -285,61 +361,86 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                   Strategic Initiatives
                 </h3>
                 <div className="space-y-3">
-                  {summary.initiatives.map((initiative) => (
-                    <div key={initiative.name} className="glass rounded-xl p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <h4 className="text-base font-roobert-medium text-gray-900 dark:text-white mb-1">
-                            {initiative.name}
-                          </h4>
-                          <p className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">
-                            {initiative.owner}
-                          </p>
+                  {summary.initiatives.map((initiative) => {
+                    const getProgressBarColor = (status: string) => {
+                      switch (status) {
+                        case 'on-track':
+                          return 'bg-[#3bcd3e]';
+                        case 'at-risk':
+                          return 'bg-fis-raspberry';
+                        case 'delayed':
+                          return 'bg-fis-eggplant';
+                        default:
+                          return 'bg-gradient-to-r from-fis-eggplant to-fis-navy';
+                      }
+                    };
+                    
+                    return (
+                      <div key={initiative.name} className="bg-white dark:bg-gray-800/50 rounded-xl p-4">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex-1">
+                            <h4 className="text-base font-roobert-medium text-gray-900 dark:text-white mb-1">
+                              {initiative.name}
+                            </h4>
+                            <p className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">
+                              {initiative.owner}
+                            </p>
+                          </div>
+                          <div className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-roobert-medium ${getStatusColor(initiative.status)}`}>
+                            {getStatusIcon(initiative.status)}
+                            <span className="capitalize">{initiative.status.replace('-', ' ')}</span>
+                          </div>
                         </div>
-                        <div className={`flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-roobert-medium ${getStatusColor(initiative.status)}`}>
-                          {getStatusIcon(initiative.status)}
-                          <span className="capitalize">{initiative.status.replace('-', ' ')}</span>
+                        <div className="relative w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${initiative.progress}%` }}
+                            transition={{ duration: 1, delay: 0.3 }}
+                            className={`absolute top-0 left-0 h-full rounded-full ${getProgressBarColor(initiative.status)}`}
+                          />
                         </div>
+                        <p className="text-xs font-roobert-medium text-gray-500 dark:text-gray-400 mt-2">
+                          {initiative.progress}% complete
+                        </p>
                       </div>
-                      <div className="relative w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${initiative.progress}%` }}
-                          transition={{ duration: 1, delay: 0.3 }}
-                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-fis-eggplant to-fis-navy rounded-full"
-                        />
-                      </div>
-                      <p className="text-xs font-roobert-medium text-gray-500 dark:text-gray-400 mt-2">
-                        {initiative.progress}% complete
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </section>
             </div>
 
             {/* Weekly Focus - Show if available */}
             {summary.weeklyFocus && summary.weeklyFocus.length > 0 && (
-              <section>
-                <WeeklyFocus focusItems={summary.weeklyFocus} />
-              </section>
+              <>
+                <div className="flex justify-center">
+                  <div className="w-3/5 h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
+                </div>
+                <section id="focus">
+                  <WeeklyFocus focusItems={summary.weeklyFocus} />
+                </section>
+              </>
             )}
 
             {/* Issues & Blockers - Show if available */}
             {summary.issuesAndBlockers && summary.issuesAndBlockers.length > 0 && (
-              <section>
-                <IssuesBlockers issues={summary.issuesAndBlockers} />
-              </section>
+              <>
+                <div className="flex justify-center">
+                  <div className="w-3/5 h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
+                </div>
+                <section id="issues">
+                  <IssuesBlockers issues={summary.issuesAndBlockers} />
+                </section>
+              </>
             )}
 
             {/* Risks & Mitigation */}
-            <section>
+            <section id="risks">
               <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
                 Risks & Mitigation
               </h3>
               <div className="space-y-4">
                 {summary.risks.map((risk, index) => (
-                  <div key={index} className="glass rounded-xl p-5">
+                  <div key={index} className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-5">
                     <div className="flex items-start space-x-4">
                       <div className={`p-2 rounded-lg ${getSeverityColor(risk.severity)}`}>
                         <AlertTriangle className="w-5 h-5" />
@@ -369,12 +470,12 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
               <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
                 Outlook
               </h3>
-              <div className="glass rounded-xl p-6">
+              <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-6">
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fis-eggplant to-fis-navy flex items-center justify-center flex-shrink-0">
                     <Target className="w-6 h-6 text-white" />
                   </div>
-                  <p className="text-lg font-roobert-light text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <p className="text-base font-roobert-light text-gray-700 dark:text-gray-300 leading-relaxed">
                     {summary.outlook}
                   </p>
                 </div>

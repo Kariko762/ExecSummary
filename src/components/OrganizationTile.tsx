@@ -48,7 +48,7 @@ export function OrganizationTile({ organization, onClick, index }: OrganizationT
       transition={{ delay: index * 0.1 }}
       whileHover={{ scale: 1.02, y: -4 }}
       onClick={onClick}
-      className={`glass-strong rounded-2xl p-6 cursor-pointer border-2 ${status.borderColor} hover:border-fis-eggplant transition-all duration-300`}
+      className={`glass-strong card-shadow hover:card-shadow-hover rounded-2xl p-6 cursor-pointer border-2 ${status.borderColor} hover:border-fis-eggplant transition-all duration-300`}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4">

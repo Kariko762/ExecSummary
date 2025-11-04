@@ -3,9 +3,9 @@
   "name": "Payments",
   "lastUpdated": "2024-11-04T17:45:00Z",
   "keyHighlights": [
-    "Real-time payments demo suite completed ahead of schedule",
-    "Merchant services integration expanded to include 12 new processors",
-    "Payment orchestration demo drove $1.4M opportunity"
+    "{{badge:completed}} Real-time payments demo suite completed {{highlight:ahead of schedule}}",
+    "{{trend:up}} Merchant services integration expanded to include {{bold:12 new processors}} {{delta:8}}",
+    "{{icon:award}} Payment orchestration demo drove {{currency:1400000}} opportunity - pipeline now at {{short:8700000}}"
   ],
   "strategicProjects": [
     {
@@ -15,7 +15,7 @@
       "progress": 100,
       "owner": "Kevin Zhang",
       "dueDate": "2024-10-31",
-      "executiveSummary": "Comprehensive RTP and instant payment scenarios for enterprise merchants"
+      "executiveSummary": "{{icon:zap}} Comprehensive RTP and instant payment scenarios for {{bold:enterprise merchants}}. Delivered {{date:2024-10-31}} - {{highlight:2 weeks early}} with full feature set. Client satisfaction {{delta:25}}."
     },
     {
       "id": "pm-proj-002",
@@ -33,7 +33,7 @@
       "progress": 68,
       "owner": "David Kumar",
       "dueDate": "2024-12-15",
-      "executiveSummary": "ML-powered fraud detection and prevention visualization for enterprise clients"
+      "executiveSummary": "{{icon:target}} ML-powered fraud detection showing {{percent:87}} accuracy in testing. Real-time visualization impressing enterprise clients."
     }
   ],
   "supportActivities": [

@@ -46,7 +46,7 @@ export const Timeline: React.FC<TimelineProps> = ({ summaries, onSelectSummary }
               </div>
 
               {/* Card */}
-              <div className="mt-20 glass-strong rounded-xl p-5 hover:card-shadow-hover transition-all">
+              <div className="mt-20 glass-strong card-shadow hover:card-shadow-hover rounded-xl p-5 transition-all">
                 <div className="flex items-center justify-between mb-3">
                   <div>
                     <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">

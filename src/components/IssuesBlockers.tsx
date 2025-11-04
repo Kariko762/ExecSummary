@@ -50,7 +50,7 @@ export function IssuesBlockers({ issues }: IssuesBlockersProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-300 dark:border-gray-700 shadow-md"
             >
               <div className="flex items-start justify-between mb-2">
                 <h5 className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
@@ -72,8 +72,8 @@ export function IssuesBlockers({ issues }: IssuesBlockersProps) {
 
         {/* In Progress Issues */}
         <div className="space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-yellow-200 dark:border-yellow-800">
-            <Clock className="w-5 h-5 text-yellow-500" />
+          <div className="flex items-center gap-2 pb-2 border-b-2 border-blue-400 dark:border-blue-500">
+            <Clock className="w-5 h-5 text-blue-500 dark:text-blue-400" />
             <h4 className="font-roobert-semibold text-gray-900 dark:text-white">
               In Progress ({groupedIssues['in-progress'].length})
             </h4>
@@ -84,7 +84,7 @@ export function IssuesBlockers({ issues }: IssuesBlockersProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-300 dark:border-gray-700 shadow-md"
             >
               <div className="flex items-start justify-between mb-2">
                 <h5 className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
@@ -123,7 +123,7 @@ export function IssuesBlockers({ issues }: IssuesBlockersProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 opacity-75"
+              className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-300 dark:border-gray-700 shadow-md opacity-75"
             >
               <div className="flex items-start justify-between mb-2">
                 <h5 className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
@@ -136,11 +136,6 @@ export function IssuesBlockers({ issues }: IssuesBlockersProps) {
               </p>
             </motion.div>
           ))}
-          {groupedIssues.resolved.length === 0 && (
-            <div className="text-sm text-gray-500 dark:text-gray-500 italic">
-              No resolved issues yet
-            </div>
-          )}
         </div>
       </div>
     </motion.div>

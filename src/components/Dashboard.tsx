@@ -134,11 +134,10 @@ export const Dashboard: React.FC = () => {
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: 'rgba(17, 24, 39, 0.95)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      borderRadius: '12px',
-                      fontFamily: 'Roobert',
-                      backdropFilter: 'blur(12px)'
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      fontFamily: 'Roobert'
                     }}
                     formatter={(value: number) => [`${value} demos`, 'Count']}
                     cursor={false}

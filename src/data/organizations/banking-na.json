@@ -3,9 +3,9 @@
   "name": "Banking (NA)",
   "lastUpdated": "2024-11-04T17:45:00Z",
   "keyHighlights": [
-    "Banking NA Tiled Microsite first draft endorsed by Michael Driscoll",
-    "D1 Flex Mobile 6.0 demos drove 43 unique client engagements this month",
-    "Regional bank RFP win attributed to personalized D1 Banker demo"
+    "{{badge:success}} Banking NA Tiled Microsite first draft endorsed by {{bold:Michael Driscoll}}",
+    "{{trend:up}} D1 Flex Mobile 6.0 demos drove {{metric:43|engagements|users}} this month {{delta:12}}",
+    "{{icon:award}} Regional bank RFP win attributed to personalized D1 Banker demo - {{currency:890000}}"
   ],
   "strategicProjects": [
     {
@@ -15,7 +15,7 @@
       "progress": 85,
       "owner": "Demo Services",
       "dueDate": "2024-11-20",
-      "executiveSummary": "Product-agnostic microsite for Sales Leadership and client presentations"
+      "executiveSummary": "Product-agnostic microsite for {{highlight:Sales Leadership}} and client presentations. {{trend:up}} Early feedback has been overwhelmingly positive."
     },
     {
       "id": "bn-proj-002",
@@ -24,7 +24,7 @@
       "progress": 65,
       "owner": "Alex Rodriguez",
       "dueDate": "2024-12-10",
-      "executiveSummary": "Next-gen retail banking platform with enhanced mobile-first experience"
+      "executiveSummary": "Next-gen retail banking platform with {{highlight:enhanced mobile-first}} experience. {{icon:rocket}} Targeting {{percent:40}} faster transaction times."
     },
     {
       "id": "bn-proj-003",

@@ -3,9 +3,9 @@
   "name": "Capital Markets",
   "lastUpdated": "2024-11-04T17:45:00Z",
   "keyHighlights": [
-    "Delivered Horizon 2.0 demo environment for 3 high-priority prospects",
-    "Completed integration with new Trade Reporting API ahead of Q4 deadline",
-    "Secured $2.1M deal with demo supporting final presentation"
+    "{{icon:rocket}} Delivered Horizon 2.0 demo environment for {{bold:3 high-priority}} prospects",
+    "{{badge:completed}} Completed integration with new Trade Reporting API {{highlight:ahead of Q4 deadline}}",
+    "{{icon:award}} Secured {{currency:2100000}} deal with demo supporting final presentation"
   ],
   "strategicProjects": [
     {
@@ -15,7 +15,7 @@
       "progress": 78,
       "owner": "Sarah Chen",
       "dueDate": "2024-12-15",
-      "executiveSummary": "Complete overhaul of trading demo environment with new UI and real-time data feeds"
+      "executiveSummary": "Complete overhaul of trading demo environment with {{highlight:new UI}} and real-time data feeds. {{trend:up}} Client feedback has been exceptional."
     },
     {
       "id": "cm-proj-002",
@@ -43,8 +43,8 @@
       "title": "Demo environment connectivity issues during EMEA hours",
       "priority": "high",
       "status": "active",
-      "description": "Intermittent VPN timeouts affecting European client demos",
-      "impact": "Impacting 3 scheduled demos this week; workaround via backup environment in place"
+      "description": "{{icon:alert}} Intermittent VPN timeouts affecting {{bold:European}} client demos",
+      "impact": "Impacting {{bold:3 scheduled demos}} this week; workaround via backup environment in place"
     },
     {
       "id": "cm-sup-002",

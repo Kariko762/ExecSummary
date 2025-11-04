@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, TrendingUp, AlertCircle, CheckCircle, Clock, Users, BarChart3, Award } from 'lucide-react';
 import { Organization } from '../types';
+import { RichText } from '../utils/expressionParser';
 
 interface OrganizationModalProps {
   organization: Organization | null;
@@ -71,7 +72,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-6 flex items-center justify-between z-10">
+          <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-6 flex items-center justify-between z-10 rounded-t-3xl">
             <div>
               <h2 className="text-3xl font-roobert-heavy text-gray-900 dark:text-white mb-1">
                 {organization.name}
@@ -92,7 +93,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
             </button>
           </div>
 
-          <div className="p-6 space-y-8">
+          <div className="p-6 space-y-8 overflow-y-auto bg-white dark:bg-gray-900" style={{ maxHeight: 'calc(90vh - 120px)' }}>
             {/* Key Highlights */}
             <section>
               <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -101,9 +102,9 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {organization.keyHighlights.map((highlight, index) => (
-                  <div key={index} className="glass-card p-4 rounded-xl">
+                  <div key={index} className="bg-gradient-to-br from-blue-50 via-blue-100/50 to-fis-navy/10 dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-blue-200/50 dark:border-gray-700">
                     <p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-regular">
-                      {highlight}
+                      <RichText>{highlight}</RichText>
                     </p>
                   </div>
                 ))}
@@ -118,7 +119,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
               </h3>
               <div className="space-y-4">
                 {organization.strategicProjects.map((project) => (
-                  <div key={project.id} className="glass-card p-6 rounded-xl">
+                  <div key={project.id} className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl border border-gray-300 dark:border-gray-700 shadow-md">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
                         <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-1">
@@ -163,7 +164,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
 
                     {/* Executive Summary */}
                     <p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-regular">
-                      {project.executiveSummary}
+                      <RichText>{project.executiveSummary}</RichText>
                     </p>
                   </div>
                 ))}
@@ -178,7 +179,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {organization.supportActivities.map((activity) => (
-                  <div key={activity.id} className="glass-card p-4 rounded-xl">
+                  <div key={activity.id} className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-300 dark:border-gray-700 shadow-md">
                     <div className="flex items-start justify-between mb-2">
                       <span className={`px-2 py-1 rounded text-xs font-roobert-semibold ${
                         activity.type === 'incident' ? 'bg-red-500/20 text-red-500' :
@@ -192,10 +193,10 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
                       </span>
                     </div>
                     <h4 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
-                      {activity.title}
+                      <RichText>{activity.title}</RichText>
                     </h4>
                     <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 font-roobert-regular">
-                      {activity.description}
+                      <RichText>{activity.description}</RichText>
                     </p>
                     <div className="flex items-center justify-between">
                       <span className={`text-xs font-roobert-medium ${getStatusColor(activity.status)}`}>
@@ -217,7 +218,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
                 Demo Studio Insights
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="glass-card p-4 rounded-xl">
+                <div className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-300 dark:border-gray-700 shadow-md">
                   <div className="text-2xl font-roobert-heavy text-fis-raspberry mb-1">
                     {organization.demoInsights.demosThisWeek}
                   </div>
@@ -225,7 +226,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
                     Demos This Week
                   </div>
                 </div>
-                <div className="glass-card p-4 rounded-xl">
+                <div className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-300 dark:border-gray-700 shadow-md">
                   <div className="text-2xl font-roobert-heavy text-fis-eggplant mb-1">
                     {organization.demoInsights.hoursInvested}h
                   </div>
@@ -233,7 +234,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
                     Hours Invested
                   </div>
                 </div>
-                <div className="glass-card p-4 rounded-xl md:col-span-2">
+                <div className="bg-white dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-300 dark:border-gray-700 shadow-md md:col-span-2">
                   <div className="text-xs text-gray-600 dark:text-gray-400 font-roobert-regular mb-2">
                     Top Request
                   </div>
@@ -245,7 +246,7 @@ export const OrganizationModal: React.FC<OrganizationModalProps> = ({ organizati
 
               {/* Wins */}
               {organization.demoInsights.wins.length > 0 && (
-                <div className="mt-4 glass-card p-4 rounded-xl">
+                <div className="mt-4 bg-white dark:bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-gray-300 dark:border-gray-700 shadow-md">
                   <h4 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-fis-green" />
                     Recent Wins

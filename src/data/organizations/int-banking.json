@@ -3,9 +3,9 @@
   "name": "International Banking",
   "lastUpdated": "2024-11-04T17:45:00Z",
   "keyHighlights": [
-    "International Issuing Hub awaiting E6 asset transfer approval",
-    "VPN alternative for Horizon demo connectivity in progress",
-    "EMEA region demos increased 34% month-over-month"
+    "{{icon:flag}} International Issuing Hub awaiting {{highlight:E6 asset transfer}} approval",
+    "{{icon:activity}} VPN alternative for Horizon demo connectivity {{badge:priority}} in progress",
+    "{{trend:up}} EMEA region demos increased {{percent:34}} month-over-month"
   ],
   "strategicProjects": [
     {
@@ -15,7 +15,7 @@
       "progress": 35,
       "owner": "Demo Enablement",
       "dueDate": "2024-12-01",
-      "executiveSummary": "Delayed by Money 20/20 and E6/Coast availability; E6 approval expected this week"
+      "executiveSummary": "{{badge:warning}} Delayed by Money 20/20 and E6/Coast availability. E6 approval {{highlight:expected this week}} - should get us back on track."
     },
     {
       "id": "ib-proj-002",
@@ -33,7 +33,7 @@
       "progress": 88,
       "owner": "Emma Thompson",
       "dueDate": "2024-11-25",
-      "executiveSummary": "Cross-border payment scenarios for APAC and EMEA markets"
+      "executiveSummary": "Cross-border payment scenarios for {{bold:APAC and EMEA}} markets. {{icon:chart}} Demo engagement up {{percent:25}} this quarter."
     }
   ],
   "supportActivities": [
