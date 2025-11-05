@@ -1,13 +1,22 @@
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { executiveSummaries } from '../data/summaries-loader';
-import { Target, Award, Briefcase } from 'lucide-react';
-import { ActivityHoursChart } from './ActivityHoursChart';
+import { performanceData } from '../data/performance-loader';
+import { Target, Award, Briefcase, ChevronLeft, ChevronRight } from 'lucide-react';
+import { KeyActivityInsights } from './KeyActivityInsights';
+import { useState } from 'react';
 
 export const Dashboard: React.FC = () => {
-  // Get the latest summary with activity metrics
-  const latestSummaryWithActivity = executiveSummaries.find(s => s.activityMetrics);
-  const hasActivityMetrics = !!latestSummaryWithActivity;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentPerformance = performanceData[currentIndex];
+  const hasPerformanceData = performanceData.length > 0;
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev < performanceData.length - 1 ? prev + 1 : prev));
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
+  };
 
   return (
     <div className="space-y-6">
@@ -15,7 +24,7 @@ export const Dashboard: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
+        className="text-center mb-6"
       >
         <h2 className="text-4xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
           Performance Dashboard
@@ -25,16 +34,45 @@ export const Dashboard: React.FC = () => {
         </p>
       </motion.div>
 
+      {/* Performance Navigator */}
+      {hasPerformanceData && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex items-center justify-center gap-4 mb-8"
+        >
+          <button
+            onClick={goToPrevious}
+            disabled={currentIndex === performanceData.length - 1}
+            className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+          </button>
+          
+          <div className="text-xl font-roobert-semibold text-gray-900 dark:text-white px-6">
+            {currentPerformance.displayName}
+          </div>
+          
+          <button
+            onClick={goToNext}
+            disabled={currentIndex === 0}
+            className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+          </button>
+        </motion.div>
+      )}
+
       {/* Demo Studio Metrics - Show when available */}
-      {hasActivityMetrics && latestSummaryWithActivity?.activityMetrics && (
+      {hasPerformanceData && currentPerformance && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="glass-strong rounded-2xl p-6"
+            className="glass-strong rounded-2xl p-6 text-center"
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-center mb-4">
               <div className="w-12 h-12 rounded-xl bg-fis-raspberry/20 flex items-center justify-center">
                 <Briefcase className="w-6 h-6 text-fis-raspberry" />
               </div>
@@ -43,7 +81,7 @@ export const Dashboard: React.FC = () => {
               Demos Registered (YTD)
             </h3>
             <p className="text-3xl font-roobert-heavy text-gray-900 dark:text-white">
-              {latestSummaryWithActivity.activityMetrics.demoStudio.demosRegistered}
+              {currentPerformance.demoStudio.demosRegistered}
             </p>
           </motion.div>
 
@@ -51,21 +89,23 @@ export const Dashboard: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="glass-strong rounded-2xl p-6"
+            className="glass-strong rounded-2xl p-6 text-center"
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-center mb-4">
               <div className="w-12 h-12 rounded-xl bg-fis-raspberry/20 flex items-center justify-center">
                 <Target className="w-6 h-6 text-fis-raspberry" />
               </div>
+            </div>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <h3 className="text-sm font-roobert-light text-gray-500 dark:text-gray-400">
+                Linked to Deals (YTD)
+              </h3>
               <span className="text-sm font-roobert-medium text-fis-green">
-                {latestSummaryWithActivity.activityMetrics.demoStudio.conversionRate}%
+                {currentPerformance.demoStudio.conversionRate}%
               </span>
             </div>
-            <h3 className="text-sm font-roobert-light text-gray-500 dark:text-gray-400 mb-2">
-              Linked to Deals (YTD)
-            </h3>
             <p className="text-3xl font-roobert-heavy text-gray-900 dark:text-white">
-              {latestSummaryWithActivity.activityMetrics.demoStudio.demosLinkedToDeals}
+              {currentPerformance.demoStudio.demosLinkedToDeals}
             </p>
           </motion.div>
 
@@ -73,9 +113,9 @@ export const Dashboard: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="glass-strong rounded-2xl p-6"
+            className="glass-strong rounded-2xl p-6 text-center"
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-center mb-4">
               <div className="w-12 h-12 rounded-xl bg-fis-raspberry/20 flex items-center justify-center">
                 <Award className="w-6 h-6 text-fis-raspberry" />
               </div>
@@ -84,16 +124,14 @@ export const Dashboard: React.FC = () => {
               Won ACV
             </h3>
             <p className="text-3xl font-roobert-heavy text-gray-900 dark:text-white">
-              ${(latestSummaryWithActivity.activityMetrics.demoStudio.wonACV / 1000000).toFixed(2)}M
+              ${(currentPerformance.demoStudio.wonACV / 1000000).toFixed(2)}M
             </p>
           </motion.div>
         </div>
       )}
 
-
-
       {/* Demo Studio Charts - Show when available */}
-      {hasActivityMetrics && latestSummaryWithActivity?.activityMetrics && latestSummaryWithActivity?.topAssets && (
+      {hasPerformanceData && currentPerformance.topAssets && (
         <>
           {/* Demos Per Month & Top Products */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -108,19 +146,9 @@ export const Dashboard: React.FC = () => {
                 Demos Per Month (2025)
               </h3>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={[
-                  { month: 'Jan', demos: 37 },
-                  { month: 'Feb', demos: 44 },
-                  { month: 'Mar', demos: 58 },
-                  { month: 'Apr', demos: 27 },
-                  { month: 'May', demos: 21 },
-                  { month: 'Jun', demos: 19 },
-                  { month: 'Jul', demos: 18 },
-                  { month: 'Aug', demos: 16 },
-                  { month: 'Sep', demos: 14 },
-                  { month: 'Oct', demos: 3 }
-                ]}
-                style={{ cursor: 'default' }}
+                <LineChart 
+                  data={currentPerformance.demosPerMonth}
+                  style={{ cursor: 'default' }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.2} />
                   <XAxis 
@@ -165,7 +193,7 @@ export const Dashboard: React.FC = () => {
                 Top 5 Demo Products
               </h3>
               <div className="space-y-3">
-                {latestSummaryWithActivity.topAssets.slice(0, 5).map((asset, index) => (
+                {currentPerformance.topAssets.slice(0, 5).map((asset: { name: string; count: number }, index: number) => (
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center gap-2 flex-1">
                       <div className={`w-6 h-6 rounded flex items-center justify-center text-xs font-roobert-bold text-white`}
@@ -186,24 +214,15 @@ export const Dashboard: React.FC = () => {
               <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div className="text-xs text-gray-500 dark:text-gray-400">
                   Total: <span className="font-roobert-semibold text-fis-raspberry">
-                    {latestSummaryWithActivity.topAssets.reduce((sum, asset) => sum + asset.count, 0)}
+                    {currentPerformance.topAssets.reduce((sum: number, asset: { count: number }) => sum + asset.count, 0)}
                   </span> demos
                 </div>
               </div>
             </motion.div>
           </div>
 
-          {/* Section Divider */}
-          <div className="mb-8">
-            <h3 className="text-2xl font-roobert-semibold text-gray-900 dark:text-white mb-6">
-              Key Activity Insights
-            </h3>
-          </div>
-
-          {/* Activity Hours Chart */}
-          <div className="mb-6">
-            <ActivityHoursChart hoursByLOB={latestSummaryWithActivity.activityMetrics.hoursByLOB} />
-          </div>
+          {/* Key Activity Insights */}
+          <KeyActivityInsights data={currentPerformance} />
         </>
       )}
     </div>

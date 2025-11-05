@@ -1,0 +1,48 @@
+{
+  "id": "performance-oct-24-2024",
+  "date": "2024-10-24",
+  "displayName": "October 24, 2024",
+  "demoStudio": {
+    "demosRegistered": 241,
+    "demosLinkedToDeals": 114,
+    "wonACV": 1080000,
+    "conversionRate": 44
+  },
+  "activityInsights": {
+    "capitalMarkets": {
+      "demoSupportHours": 1389,
+      "demoPrepHours": 22104,
+      "demoHours": 10447,
+      "supportPercentage": 4,
+      "prepPercentage": 65,
+      "demoPercentage": 31
+    },
+    "banking": {
+      "demoSupportHours": 612,
+      "demoPrepHours": 8476,
+      "demoHours": 6182,
+      "supportPercentage": 4,
+      "prepPercentage": 55,
+      "demoPercentage": 40
+    }
+  },
+  "topAssets": [
+    { "name": "D1 Flex", "count": 68, "category": "Banking" },
+    { "name": "D1 Flex Mobile 6.0", "count": 39, "category": "Banking" },
+    { "name": "D1 Flex Mobile (Beacon)", "count": 32, "category": "Banking" },
+    { "name": "D1 Business", "count": 29, "category": "Banking" },
+    { "name": "Horizon", "count": 18, "category": "Capital Markets" }
+  ],
+  "demosPerMonth": [
+    { "month": "Jan", "demos": 37 },
+    { "month": "Feb", "demos": 44 },
+    { "month": "Mar", "demos": 58 },
+    { "month": "Apr", "demos": 27 },
+    { "month": "May", "demos": 21 },
+    { "month": "Jun", "demos": 19 },
+    { "month": "Jul", "demos": 18 },
+    { "month": "Aug", "demos": 16 },
+    { "month": "Sep", "demos": 14 },
+    { "month": "Oct", "demos": 3 }
+  ]
+}

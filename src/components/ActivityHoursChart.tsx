@@ -11,18 +11,22 @@ interface ActivityHoursChartProps {
 export function ActivityHoursChart({ hoursByLOB }: ActivityHoursChartProps) {
   const data = [
     {
-      name: 'Capital Markets',
-      Support: hoursByLOB.capitalMarkets.support,
-      Prep: hoursByLOB.capitalMarkets.prep,
-      Demo: hoursByLOB.capitalMarkets.demo,
-    },
-    {
       name: 'Banking',
       Support: hoursByLOB.banking.support,
       Prep: hoursByLOB.banking.prep,
       Demo: hoursByLOB.banking.demo,
     },
+    {
+      name: 'Capital Markets',
+      Support: hoursByLOB.capitalMarkets.support,
+      Prep: hoursByLOB.capitalMarkets.prep,
+      Demo: hoursByLOB.capitalMarkets.demo,
+    },
   ];
+
+  const capitalMarketsTotal = hoursByLOB.capitalMarkets.support + hoursByLOB.capitalMarkets.prep + hoursByLOB.capitalMarkets.demo;
+  const bankingTotal = hoursByLOB.banking.support + hoursByLOB.banking.prep + hoursByLOB.banking.demo;
+  const grandTotal = capitalMarketsTotal + bankingTotal;
 
   return (
     <motion.div
@@ -34,64 +38,72 @@ export function ActivityHoursChart({ hoursByLOB }: ActivityHoursChartProps) {
         Activity Hours by Line of Business (YTD)
       </h3>
       
-      <ResponsiveContainer width="100%" height={350}>
-        <BarChart data={data} style={{ cursor: 'default' }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis 
-            dataKey="name" 
-            stroke="#6b7280"
-            style={{ fontSize: '14px', fontFamily: 'Roobert' }}
-          />
-          <YAxis 
-            stroke="#6b7280"
-            style={{ fontSize: '14px', fontFamily: 'Roobert' }}
-            tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
-          />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              border: '1px solid #e5e7eb',
-              borderRadius: '8px',
-              fontFamily: 'Roobert'
-            }}
-            formatter={(value: number) => `${value.toLocaleString()} hrs`}
-            cursor={false}
-          />
-          <Legend 
-            wrapperStyle={{ fontFamily: 'Roobert', fontSize: '14px' }}
-          />
-          <Bar dataKey="Support" stackId="a" fill="#B21A53" radius={[0, 0, 0, 0]} activeBar={false} />
-          <Bar dataKey="Prep" stackId="a" fill="#431C5B" radius={[0, 0, 0, 0]} activeBar={false} />
-          <Bar dataKey="Demo" stackId="a" fill="#1D1F48" radius={[4, 4, 0, 0]} activeBar={false} />
-        </BarChart>
-      </ResponsiveContainer>
-
-      <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-        <div className="bg-purple-50 dark:bg-gray-800 rounded-lg p-3">
-          <div className="font-roobert-semibold text-fis-eggplant dark:text-purple-300 mb-1">
-            Capital Markets Total
-          </div>
-          <div className="text-2xl font-roobert-bold text-gray-900 dark:text-white">
-            {(hoursByLOB.capitalMarkets.support + hoursByLOB.capitalMarkets.prep + hoursByLOB.capitalMarkets.demo).toLocaleString()} hrs
-          </div>
-          <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-            Support: {hoursByLOB.capitalMarkets.support.toLocaleString()} | 
-            Prep: {hoursByLOB.capitalMarkets.prep.toLocaleString()} | 
-            Demo: {hoursByLOB.capitalMarkets.demo.toLocaleString()}
-          </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chart - 2/3 width */}
+        <div className="lg:col-span-2">
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={data} style={{ cursor: 'default' }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis 
+                dataKey="name" 
+                stroke="#6b7280"
+                style={{ fontSize: '14px', fontFamily: 'Roobert' }}
+              />
+              <YAxis 
+                stroke="#6b7280"
+                style={{ fontSize: '14px', fontFamily: 'Roobert' }}
+                tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  fontFamily: 'Roobert'
+                }}
+                formatter={(value: number) => `${value.toLocaleString()} hrs`}
+                cursor={false}
+              />
+              <Legend 
+                wrapperStyle={{ fontFamily: 'Roobert', fontSize: '14px' }}
+              />
+              <Bar dataKey="Prep" stackId="a" fill="#431C5B" radius={[0, 0, 0, 0]} activeBar={false} />
+              <Bar dataKey="Demo" stackId="a" fill="#1D1F48" radius={[0, 0, 0, 0]} activeBar={false} />
+              <Bar dataKey="Support" stackId="a" fill="#B21A53" radius={[4, 4, 0, 0]} activeBar={false} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
-        
-        <div className="bg-blue-50 dark:bg-gray-800 rounded-lg p-3">
-          <div className="font-roobert-semibold text-fis-navy dark:text-blue-300 mb-1">
-            Banking Total
+
+        {/* Total Hours - 1/3 width */}
+        <div className="lg:col-span-1 flex flex-col justify-center space-y-3 -mt-8">
+          <div className="bg-blue-50 dark:bg-gray-800 rounded-lg p-4">
+            <div className="font-roobert-semibold text-fis-navy dark:text-blue-300 mb-1">
+              Banking
+            </div>
+            <div className="text-2xl font-roobert-bold text-gray-900 dark:text-white">
+              {bankingTotal.toLocaleString()}
+            </div>
           </div>
-          <div className="text-2xl font-roobert-bold text-gray-900 dark:text-white">
-            {(hoursByLOB.banking.support + hoursByLOB.banking.prep + hoursByLOB.banking.demo).toLocaleString()} hrs
+
+          <div className="bg-purple-50 dark:bg-gray-800 rounded-lg p-4">
+            <div className="font-roobert-semibold text-fis-eggplant dark:text-purple-300 mb-1">
+              Capital Markets
+            </div>
+            <div className="text-2xl font-roobert-bold text-gray-900 dark:text-white">
+              {capitalMarketsTotal.toLocaleString()}
+            </div>
           </div>
-          <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-            Support: {hoursByLOB.banking.support.toLocaleString()} | 
-            Prep: {hoursByLOB.banking.prep.toLocaleString()} | 
-            Demo: {hoursByLOB.banking.demo.toLocaleString()}
+
+          <div className="bg-gradient-to-br from-fis-eggplant/10 to-fis-raspberry/10 dark:from-fis-eggplant/20 dark:to-fis-raspberry/20 rounded-lg p-3 border border-fis-eggplant/20">
+            <div className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-1">
+              Grand Total
+            </div>
+            <div className="text-2xl font-roobert-heavy bg-gradient-to-r from-fis-eggplant to-fis-raspberry bg-clip-text text-transparent">
+              {grandTotal.toLocaleString()}
+            </div>
+            <div className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">
+              hours (YTD)
+            </div>
           </div>
         </div>
       </div>

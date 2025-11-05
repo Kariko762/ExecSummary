@@ -15,16 +15,19 @@ export function StickyNav() {
     // Set up intersection observer for active section tracking
     const observerOptions = {
       root: null,
-      rootMargin: '-100px 0px -66%',
-      threshold: 0
+      rootMargin: '-120px 0px -50%',
+      threshold: 0.1
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
+      // Find the section that's most visible
+      const visibleEntries = entries.filter(entry => entry.isIntersecting);
+      
+      if (visibleEntries.length > 0) {
+        // Sort by intersection ratio (most visible first)
+        visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        setActiveSection(visibleEntries[0].target.id);
+      }
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
