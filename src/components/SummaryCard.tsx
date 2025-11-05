@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ExecutiveSummary } from '../types';
 import { TrendingUp, Users, DollarSign, ThumbsUp, Calendar } from 'lucide-react';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 interface SummaryCardProps {
   summary: ExecutiveSummary;
@@ -116,9 +117,9 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({ summary, onClick, inde
         {summary.highlights.slice(0, 3).map((highlight, i) => (
           <div key={i} className="flex items-start space-x-2">
             <div className="w-1.5 h-1.5 rounded-full bg-fis-eggplant mt-2 flex-shrink-0" />
-            <p className="text-sm font-roobert-light text-gray-600 dark:text-gray-300 line-clamp-1">
-              {highlight}
-            </p>
+            <div className="text-sm font-roobert-light text-gray-600 dark:text-gray-300 line-clamp-1">
+              {renderWithExpressions(highlight)}
+            </div>
           </div>
         ))}
       </div>

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { AlertCircle, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock } from 'lucide-react';
 import { IssueBlocker } from '../types';
 
 interface IssuesBlockersProps {
@@ -28,12 +28,9 @@ export function IssuesBlockers({ issues }: IssuesBlockersProps) {
       animate={{ opacity: 1, y: 0 }}
       className="glass rounded-xl p-6"
     >
-      <div className="flex items-center gap-2 mb-6">
-        <AlertTriangle className="w-6 h-6 text-fis-eggplant" />
-        <h3 className="text-2xl font-roobert-semibold text-gray-900 dark:text-white">
-          Issues & Blockers
-        </h3>
-      </div>
+      <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
+        Issues & Blockers
+      </h3>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Open Issues */}

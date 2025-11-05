@@ -5,6 +5,7 @@ import { RadialBarChart, RadialBar, ResponsiveContainer } from 'recharts';
 import { WeeklyFocus } from './WeeklyFocus';
 import { IssuesBlockers } from './IssuesBlockers';
 import { useState, useEffect } from 'react';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 interface SummaryDetailProps {
   summary: ExecutiveSummary;
@@ -14,12 +15,19 @@ interface SummaryDetailProps {
 export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }) => {
   const [activeSection, setActiveSection] = useState('metrics');
   const [showNav, setShowNav] = useState(false);
+  const [isHeaderCompact, setIsHeaderCompact] = useState(false);
 
   useEffect(() => {
     const handleScroll = (e: Event) => {
       const target = e.target as HTMLDivElement;
       if (target.classList.contains('summary-content')) {
-        setShowNav(target.scrollTop > 100);
+        const scrollTop = target.scrollTop;
+        
+        // Shrink header after 50px scroll
+        setIsHeaderCompact(scrollTop > 50);
+        
+        // Show nav after 100px scroll (after header shrinks)
+        setShowNav(scrollTop > 100);
         
         // Update active section based on scroll position
         const sections = ['metrics', 'performance', 'focus', 'issues', 'risks'];
@@ -46,12 +54,15 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
     const element = document.getElementById(sectionId);
     
     if (contentDiv && element) {
-      // For the last section (risks), scroll to bottom
-      if (sectionId === 'risks') {
+      const elementTop = element.offsetTop - 180; // Account for header + nav
+      const maxScroll = contentDiv.scrollHeight - contentDiv.clientHeight;
+      
+      // If we can't scroll far enough to put the element at the top (high resolution/tall viewport),
+      // scroll to the bottom to show the element
+      if (elementTop > maxScroll) {
         contentDiv.scrollTo({ top: contentDiv.scrollHeight, behavior: 'smooth' });
       } else {
-        // For other sections, scroll to element
-        const elementTop = element.offsetTop - 180; // Account for header + nav
+        // Normal scroll to anchor position
         contentDiv.scrollTo({ top: elementTop, behavior: 'smooth' });
       }
     }
@@ -139,7 +150,15 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
       >
         <div className="max-w-6xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
           {/* Header */}
-          <div className="flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 p-8 relative rounded-t-3xl z-10 border-b border-gray-200 dark:border-gray-800">
+          <motion.div 
+            className="flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 relative rounded-t-3xl z-10 border-b border-gray-200 dark:border-gray-800 transition-all duration-300"
+            animate={{
+              paddingTop: isHeaderCompact ? '1rem' : '2rem',
+              paddingBottom: isHeaderCompact ? '1rem' : '2rem',
+              paddingLeft: '2rem',
+              paddingRight: '2rem'
+            }}
+          >
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all no-print"
@@ -155,28 +174,56 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
               <Printer className="w-6 h-6 text-gray-700 dark:text-gray-300" />
             </button>
 
-            <div className="flex items-center space-x-4 mb-4">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-fis-eggplant to-fis-navy flex items-center justify-center">
-                <Calendar className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-4xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
+            <div className="flex items-center space-x-4">
+              <motion.div 
+                className="rounded-2xl bg-gradient-to-br from-fis-eggplant to-fis-navy flex items-center justify-center"
+                animate={{
+                  width: isHeaderCompact ? '3rem' : '4rem',
+                  height: isHeaderCompact ? '3rem' : '4rem'
+                }}
+              >
+                <Calendar className={isHeaderCompact ? "w-6 h-6 text-white" : "w-8 h-8 text-white"} />
+              </motion.div>
+              <div className="flex-1">
+                <motion.h1 
+                  className="font-roobert-heavy text-gray-900 dark:text-white"
+                  animate={{
+                    fontSize: isHeaderCompact ? '1.5rem' : '2.25rem',
+                    marginBottom: isHeaderCompact ? '0' : '0.5rem'
+                  }}
+                >
                   {summary.quarter} {summary.year}
-                </h1>
-                <p className="text-gray-600 dark:text-gray-400 font-roobert-light">
-                  {new Date(summary.date).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
-                </p>
+                </motion.h1>
+                {!isHeaderCompact && (
+                  <motion.p 
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: isHeaderCompact ? 0 : 1 }}
+                    className="text-gray-600 dark:text-gray-400 font-roobert-light"
+                  >
+                    {new Date(summary.date).toLocaleDateString('en-US', {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </motion.p>
+                )}
               </div>
             </div>
 
-            <h2 className="text-2xl font-roobert-medium text-gray-700 dark:text-gray-300 mt-6">
-              {summary.title}
-            </h2>
-          </div>
+            {!isHeaderCompact && (
+              <motion.h2 
+                initial={{ opacity: 1, height: 'auto' }}
+                animate={{ 
+                  opacity: isHeaderCompact ? 0 : 1,
+                  height: isHeaderCompact ? 0 : 'auto',
+                  marginTop: isHeaderCompact ? 0 : '1.5rem'
+                }}
+                className="text-2xl font-roobert-medium text-gray-700 dark:text-gray-300 overflow-hidden"
+              >
+                {summary.title}
+              </motion.h2>
+            )}
+          </motion.div>
 
           {/* Sticky Navigation */}
           {showNav && (
@@ -209,7 +256,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
             </motion.nav>
           )}
 
-          <div className="flex-1 p-8 space-y-8 overflow-y-auto bg-white dark:bg-gray-900 summary-content">
+          <div className="flex-1 p-8 space-y-6 overflow-y-auto bg-white dark:bg-gray-900 summary-content">
             {/* Key Metrics */}
             <section id="metrics">
               <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
@@ -293,9 +340,9 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                         {index + 1}
                       </span>
                     </div>
-                    <p className="text-base font-roobert-light text-gray-700 dark:text-gray-300 flex-1">
-                      {highlight}
-                    </p>
+                    <div className="text-base font-roobert-light text-gray-700 dark:text-gray-300 flex-1">
+                      {renderWithExpressions(highlight)}
+                    </div>
                   </motion.div>
                 ))}
               </div>

@@ -9,16 +9,16 @@ interface TimelineProps {
 
 export const Timeline: React.FC<TimelineProps> = ({ summaries, onSelectSummary }) => {
   return (
-    <section className="mb-16 overflow-hidden">
+    <section className="mb-12 overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
+        className="mb-6"
       >
-        <h2 className="text-3xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
+        <h2 className="text-2xl md:text-3xl font-roobert-heavy text-gray-900 dark:text-white mb-1">
           Timeline
         </h2>
-        <p className="text-lg font-roobert-light text-gray-600 dark:text-gray-400">
+        <p className="text-base md:text-lg font-roobert-light text-gray-600 dark:text-gray-400">
           Navigate through quarterly milestones
         </p>
       </motion.div>

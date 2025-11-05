@@ -35,7 +35,7 @@ function App() {
             <Header onSearch={setSearchQuery} />
             <StickyNav />
             
-            <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+            <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <AnimatePresence mode="wait">
                   {selectedSummary ? (
@@ -49,18 +49,18 @@ function App() {
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-center mb-12"
+                        className="text-center mb-8"
                       >
-                        <h1 className="text-5xl md:text-6xl font-roobert-heavy text-fis-navy dark:text-white mb-4">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-roobert-heavy text-fis-navy dark:text-white mb-3">
                           Executive Summary Dashboard
                         </h1>
-                        <p className="text-xl font-roobert-medium" style={{ color: '#4bcd3e' }}>
+                        <p className="text-lg md:text-xl font-roobert-medium" style={{ color: '#4bcd3e' }}>
                           Demo Services Group | RevOps
                         </p>
                       </motion.div>
 
                       {/* Timeline */}
-                      <section id="timeline" className="mb-16">
+                      <section id="timeline" className="mb-12">
                         <Timeline
                           summaries={executiveSummaries}
                           onSelectSummary={setSelectedSummary}
@@ -73,17 +73,18 @@ function App() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.3 }}
-                        className="mb-16"
+                        className="mb-12"
                       >
                         <Dashboard />
                       </motion.section>
 
                       {/* Organization Dashboard */}
                       <motion.section
+                        id="organizations"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        className="mb-16"
+                        className="mb-12"
                       >
                         <OrganizationDashboard />
                       </motion.section>
