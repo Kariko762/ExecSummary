@@ -1,8 +1,9 @@
-import { motion } from 'framer-motion';
-import { Moon, Sun, Presentation, Search, Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
   onSearch: (query: string) => void;
@@ -13,6 +14,8 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
   const { isPresentationMode, togglePresentationMode } = usePresentation();
   const [searchQuery, setSearchQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
+  const location = useLocation();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +49,101 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
               </p>
             </div>
           </motion.div>
+
+          {/* Navigation Menu */}
+          <div className="relative hidden md:block ml-6">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsNavDropdownOpen(!isNavDropdownOpen)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg glass hover:glass-strong transition-all"
+            >
+              <Menu className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <ChevronDown className={`w-4 h-4 text-gray-600 dark:text-gray-400 transition-transform duration-300 ${isNavDropdownOpen ? 'rotate-180' : ''}`} />
+            </motion.button>
+
+            <AnimatePresence>
+              {isNavDropdownOpen && (
+                <>
+                  {/* Backdrop */}
+                  <div 
+                    className="fixed inset-0 z-40"
+                    onClick={() => setIsNavDropdownOpen(false)}
+                  />
+                  
+                  {/* Dropdown Menu - SOLID BACKGROUND */}
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+                  >
+                    <div className="p-3">
+                      {/* Demo Services Group Header */}
+                      <div className="px-3 py-2 mb-2">
+                        <div className="text-xs font-roobert-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          Demo Services Group
+                        </div>
+                      </div>
+                      
+                      {/* Divider */}
+                      <div className="h-px bg-gray-200 dark:bg-gray-700 mb-2" />
+
+                      {/* Menu Items */}
+                      <div className="space-y-1">
+                        {/* Executive Summary Dashboard */}
+                        <Link
+                          to="/"
+                          onClick={() => setIsNavDropdownOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/' 
+                              ? 'bg-fis-eggplant/20 text-fis-eggplant dark:bg-fis-eggplant/30 dark:text-purple-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/' 
+                              ? 'bg-fis-eggplant/30 dark:bg-fis-eggplant/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <FileText className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Executive Summary Dashboard</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Performance dashboards & updates</div>
+                          </div>
+                        </Link>
+
+                        {/* Strategic Initiatives */}
+                        <Link
+                          to="/strategic-initiatives"
+                          onClick={() => setIsNavDropdownOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/strategic-initiatives' 
+                              ? 'bg-fis-raspberry/20 text-fis-raspberry dark:bg-fis-raspberry/30 dark:text-pink-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/strategic-initiatives' 
+                              ? 'bg-fis-raspberry/30 dark:bg-fis-raspberry/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <Lightbulb className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Strategic Initiatives</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Executive project summaries</div>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
+          </div>
 
           {/* Desktop Search */}
           <form onSubmit={handleSearch} className="hidden md:block flex-1 max-w-md mx-8">
@@ -109,6 +207,54 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden py-4 border-t border-white/20 dark:border-white/10"
           >
+            {/* Mobile Navigation */}
+            <div className="mb-4">
+              {/* Demo Services Group Header */}
+              <div className="px-4 py-2 mb-2">
+                <div className="text-xs font-roobert-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Demo Services Group
+                </div>
+              </div>
+              
+              {/* Divider */}
+              <div className="h-px bg-gray-200 dark:bg-gray-700 mb-2 mx-4" />
+
+              {/* Menu Items */}
+              <div className="space-y-2">
+                <Link
+                  to="/"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                    location.pathname === '/' 
+                      ? 'bg-fis-eggplant/20 text-fis-eggplant dark:bg-fis-eggplant/30 dark:text-purple-300' 
+                      : 'hover:bg-white/50 dark:hover:bg-gray-800/50 text-gray-900 dark:text-white'
+                  }`}
+                >
+                  <FileText className="w-5 h-5" />
+                  <div className="flex-1">
+                    <div className="font-roobert-semibold text-sm">Executive Summary Dashboard</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">Performance dashboards</div>
+                  </div>
+                </Link>
+
+                <Link
+                  to="/strategic-initiatives"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                    location.pathname === '/strategic-initiatives' 
+                      ? 'bg-fis-raspberry/20 text-fis-raspberry dark:bg-fis-raspberry/30 dark:text-pink-300' 
+                      : 'hover:bg-white/50 dark:hover:bg-gray-800/50 text-gray-900 dark:text-white'
+                  }`}
+                >
+                  <Lightbulb className="w-5 h-5" />
+                  <div className="flex-1">
+                    <div className="font-roobert-semibold text-sm">Strategic Initiatives</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">Executive projects</div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
             <form onSubmit={handleSearch} className="mb-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

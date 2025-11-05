@@ -121,3 +121,226 @@ export interface DemoInsights {
   topRequests: string[];
   wins: string[];
 }
+
+// Strategic Initiative Types
+export interface StrategicInitiative {
+  id: string;
+  title: string;
+  lastUpdated: string;
+  tags: string[]; // e.g., ["AI/ML", "Sales Enablement", "Platform"]
+  currentStatus?: CurrentStatus;
+  executiveSummary?: InitiativeExecutiveSummary;
+  problemStatement?: ProblemStatement;
+  smartGoals?: SmartGoals;
+  proposedSolution?: ProposedSolution;
+  roi?: ReturnOnInvestment;
+  swotAnalysis?: SwotAnalysis;
+  budget?: BudgetRequest;
+  timeline?: ProjectTimeline;
+  resources?: ResourceRequirements;
+  riskAssessment?: RiskAssessment;
+  kpis?: KpisMetrics;
+  governance?: GovernanceOversight;
+  dependencies?: DependenciesAssumptions;
+  appendices?: SupportingAppendices;
+}
+
+export interface CurrentStatus {
+  projectStage: 'concept' | 'pilot' | 'mvp' | 'scaling' | 'production';
+  progressToDate: string[];
+  stakeholderEngagement: StakeholderEngagement[];
+  challengesEncountered: string[];
+  urgencyTiming: string;
+}
+
+export interface StakeholderEngagement {
+  name: string;
+  role: string;
+  supportLevel: 'champion' | 'supportive' | 'neutral' | 'resistant';
+}
+
+export interface InitiativeExecutiveSummary {
+  overview: string;
+  strategicAlignment: string[];
+  benefits: string[];
+  outcomes: string[];
+}
+
+export interface ProblemStatement {
+  issue: string;
+  businessImpact: string;
+  marketContext: string;
+  operationalContext: string;
+}
+
+export interface SmartGoals {
+  specific: string[];
+  measurable: string[];
+  achievable: string[];
+  relevant: string[];
+  timeBound: string[];
+}
+
+export interface ProposedSolution {
+  description: string;
+  keyFeatures: string[];
+  innovations: string[];
+  alternativesConsidered: Alternative[];
+}
+
+export interface Alternative {
+  name: string;
+  pros: string[];
+  cons: string[];
+  rationale: string;
+}
+
+export interface ReturnOnInvestment {
+  financialBenefits: FinancialBenefit[];
+  strategicBenefits: string[];
+  costSavings: string[];
+  revenueImpact: string[];
+  efficiencyGains: string[];
+  paybackPeriod: string;
+  longTermValue: string;
+}
+
+export interface FinancialBenefit {
+  description: string;
+  amount: number;
+  timeframe: string;
+}
+
+export interface SwotAnalysis {
+  strengths: string[];
+  weaknesses: string[];
+  opportunities: string[];
+  threats: string[];
+}
+
+export interface BudgetRequest {
+  totalFunding: number;
+  breakdown: BudgetBreakdown[];
+  oneTimeCosts: number;
+  recurringCosts: number;
+  contingency: number;
+}
+
+export interface BudgetBreakdown {
+  category: string;
+  amount: number;
+  description: string;
+}
+
+export interface ProjectTimeline {
+  startDate: string;
+  endDate: string;
+  phases: TimelinePhase[];
+  milestones: Milestone[];
+  criticalPath: string[];
+}
+
+export interface TimelinePhase {
+  name: string;
+  startDate: string;
+  endDate: string;
+  deliverables: string[];
+  dependencies: string[];
+}
+
+export interface Milestone {
+  name: string;
+  date: string;
+  description: string;
+  status: 'completed' | 'on-track' | 'at-risk' | 'delayed';
+}
+
+export interface ResourceRequirements {
+  internalStaffing: StaffingRequirement[];
+  externalVendors: VendorRequirement[];
+  toolsPlatforms: ToolRequirement[];
+  infrastructure: string[];
+}
+
+export interface StaffingRequirement {
+  role: string;
+  count: number;
+  duration: string;
+  expertise: string[];
+}
+
+export interface VendorRequirement {
+  vendor: string;
+  service: string;
+  cost: number;
+  duration: string;
+}
+
+export interface ToolRequirement {
+  tool: string;
+  purpose: string;
+  cost: number;
+}
+
+export interface RiskAssessment {
+  risks: RiskItem[];
+  overallRiskLevel: 'low' | 'medium' | 'high' | 'critical';
+}
+
+export interface RiskItem {
+  risk: string;
+  likelihood: 'low' | 'medium' | 'high';
+  impact: 'low' | 'medium' | 'high' | 'critical';
+  mitigation: string;
+  contingency: string;
+  owner: string;
+}
+
+export interface KpisMetrics {
+  leadingIndicators: KpiMetric[];
+  laggingIndicators: KpiMetric[];
+  trackingFrequency: string;
+  reportingOwner: string;
+}
+
+export interface KpiMetric {
+  name: string;
+  description: string;
+  target: string;
+  measurement: string;
+}
+
+export interface GovernanceOversight {
+  sponsor: string;
+  stakeholders: string[];
+  decisionMakingStructure: string;
+  reportingCadence: string;
+  escalationPath: string[];
+}
+
+export interface DependenciesAssumptions {
+  externalDependencies: Dependency[];
+  internalDependencies: Dependency[];
+  assumptions: Assumption[];
+}
+
+export interface Dependency {
+  dependency: string;
+  owner: string;
+  requiredBy: string;
+  status: 'secured' | 'pending' | 'at-risk';
+}
+
+export interface Assumption {
+  assumption: string;
+  impact: string;
+  validationStatus: 'validated' | 'unvalidated' | 'invalid';
+}
+
+export interface SupportingAppendices {
+  ganttChartUrl?: string;
+  financialModels?: string[];
+  marketResearch?: string[];
+  technicalDiagrams?: string[];
+  mockups?: string[];
+}

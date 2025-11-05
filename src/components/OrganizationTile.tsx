@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Organization } from '../types';
 import { TrendingUp, AlertTriangle, CheckCircle, Activity } from 'lucide-react';
+import { RichText } from '../utils/expressionParser';
 
 interface OrganizationTileProps {
   organization: Organization;
@@ -108,7 +109,7 @@ export function OrganizationTile({ organization, onClick, index }: OrganizationT
       {organization.keyHighlights.length > 0 && (
         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
           <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
-            🎯 {organization.keyHighlights[0]}
+            🎯 <RichText>{organization.keyHighlights[0]}</RichText>
           </p>
         </div>
       )}
