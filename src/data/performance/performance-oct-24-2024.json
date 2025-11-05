@@ -10,20 +10,20 @@
   },
   "activityInsights": {
     "capitalMarkets": {
-      "demoSupportHours": 1389,
-      "demoPrepHours": 22104,
-      "demoHours": 10447,
+      "demoSupportHours": 1120,
+      "demoPrepHours": 18450,
+      "demoHours": 8730,
       "supportPercentage": 4,
-      "prepPercentage": 65,
-      "demoPercentage": 31
+      "prepPercentage": 66,
+      "demoPercentage": 30
     },
     "banking": {
-      "demoSupportHours": 612,
-      "demoPrepHours": 8476,
-      "demoHours": 6182,
+      "demoSupportHours": 520,
+      "demoPrepHours": 6890,
+      "demoHours": 5210,
       "supportPercentage": 4,
-      "prepPercentage": 55,
-      "demoPercentage": 40
+      "prepPercentage": 54,
+      "demoPercentage": 42
     }
   },
   "topAssets": [
@@ -34,15 +34,15 @@
     { "name": "Horizon", "count": 18, "category": "Capital Markets" }
   ],
   "demosPerMonth": [
-    { "month": "Jan", "demos": 37 },
-    { "month": "Feb", "demos": 44 },
-    { "month": "Mar", "demos": 58 },
-    { "month": "Apr", "demos": 27 },
-    { "month": "May", "demos": 21 },
-    { "month": "Jun", "demos": 19 },
-    { "month": "Jul", "demos": 18 },
-    { "month": "Aug", "demos": 16 },
-    { "month": "Sep", "demos": 14 },
-    { "month": "Oct", "demos": 3 }
+    { "month": "Jan", "demos": 32 },
+    { "month": "Feb", "demos": 38 },
+    { "month": "Mar", "demos": 51 },
+    { "month": "Apr", "demos": 24 },
+    { "month": "May", "demos": 19 },
+    { "month": "Jun", "demos": 17 },
+    { "month": "Jul", "demos": 15 },
+    { "month": "Aug", "demos": 14 },
+    { "month": "Sep", "demos": 12 },
+    { "month": "Oct", "demos": 2 }
   ]
 }
