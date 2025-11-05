@@ -30,7 +30,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({ summary, onClick, inde
       transition={{ delay: index * 0.1 }}
       whileHover={{ y: -8, scale: 1.02 }}
       onClick={onClick}
-      className="glass card-shadow hover:card-shadow-hover rounded-2xl p-6 cursor-pointer transition-all duration-300 group"
+      className="glass card-shadow hover:card-shadow-hover rounded-2xl p-6 cursor-pointer transition-all duration-300 group border-2 border-transparent hover:border-fis-eggplant"
       style={{ transformStyle: 'preserve-3d' }}
     >
       {/* Header */}

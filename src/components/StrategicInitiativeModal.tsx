@@ -9,10 +9,12 @@ import {
   Lightbulb,
   Users,
   CheckCircle,
-  Clock
+  Clock,
+  Download
 } from 'lucide-react';
 import { StrategicInitiative } from '../types';
 import { RichText } from '../utils/expressionParser';
+import html2canvas from 'html2canvas';
 
 interface StrategicInitiativeModalProps {
   initiative: StrategicInitiative | null;
@@ -86,6 +88,59 @@ export const StrategicInitiativeModal: React.FC<StrategicInitiativeModalProps> =
     }
   };
 
+  const handleExportImage = async () => {
+    if (!initiative) return;
+    
+    const contentDiv = document.querySelector('.initiative-content') as HTMLElement;
+    const modalContainer = document.querySelector('.initiative-modal-container') as HTMLElement;
+    
+    if (!contentDiv || !modalContainer) return;
+
+    try {
+      // Temporarily expand the container to full height
+      const originalMaxHeight = modalContainer.style.maxHeight;
+      const originalOverflow = contentDiv.style.overflow;
+      
+      modalContainer.style.maxHeight = 'none';
+      contentDiv.style.overflow = 'visible';
+      contentDiv.style.maxHeight = 'none';
+
+      // Wait for layout to settle
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Capture the full content
+      const canvas = await html2canvas(modalContainer, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        windowHeight: contentDiv.scrollHeight,
+      });
+
+      // Restore original styles
+      modalContainer.style.maxHeight = originalMaxHeight;
+      contentDiv.style.overflow = originalOverflow;
+      contentDiv.style.maxHeight = '';
+
+      // Convert to image and download
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          const fileName = `strategic-initiative-${initiative.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.png`;
+          link.download = fileName;
+          link.href = url;
+          link.click();
+          URL.revokeObjectURL(url);
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error('Failed to export image:', error);
+      alert('Failed to export image. Please try again.');
+    }
+  };
+
   if (!initiative) return null;
 
   // Build navigation menu dynamically based on available sections
@@ -140,7 +195,7 @@ export const StrategicInitiativeModal: React.FC<StrategicInitiativeModalProps> =
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white dark:bg-gray-900 rounded-3xl max-w-7xl w-full max-h-[90vh] flex flex-col shadow-2xl"
+          className="bg-white dark:bg-gray-900 rounded-3xl max-w-7xl w-full max-h-[90vh] flex flex-col shadow-2xl initiative-modal-container"
           onClick={(e) => e.stopPropagation()}
         >
           {/* HEADER */}
@@ -158,6 +213,14 @@ export const StrategicInitiativeModal: React.FC<StrategicInitiativeModalProps> =
               className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
             >
               <X className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+            </button>
+
+            <button
+              onClick={handleExportImage}
+              className="absolute top-4 right-16 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              title="Export as Image"
+            >
+              <Download className="w-6 h-6 text-gray-700 dark:text-gray-300" />
             </button>
 
             <div className="flex items-start gap-4">

@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
-import { ExecutiveSummary } from '../types';
-import { Calendar, TrendingUp } from 'lucide-react';
+import { TimelineItem } from '../types';
+import { TrendingUp, Lightbulb, FileText } from 'lucide-react';
+import { isExecutiveIQ } from '../data/timeline-loader';
 
 interface TimelineProps {
-  summaries: ExecutiveSummary[];
-  onSelectSummary: (summary: ExecutiveSummary) => void;
+  summaries: TimelineItem[];
+  onSelectSummary: (summary: TimelineItem) => void;
 }
 
 export const Timeline: React.FC<TimelineProps> = ({ summaries, onSelectSummary }) => {
@@ -28,59 +29,76 @@ export const Timeline: React.FC<TimelineProps> = ({ summaries, onSelectSummary }
         <div className="absolute top-12 left-0 right-0 h-1 bg-gradient-to-r from-fis-eggplant via-fis-navy to-fis-eggplant rounded-full" />
 
         {/* Timeline Items */}
-        <div className="flex overflow-x-auto pb-8 pt-4 gap-6 hide-scrollbar">
-          {summaries.map((summary, index) => (
-            <motion.div
-              key={summary.id}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              onClick={() => onSelectSummary(summary)}
-              className="flex-shrink-0 cursor-pointer relative"
-              style={{ width: '280px' }}
-            >
-              {/* Timeline Dot */}
-              <div className="absolute top-8 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-fis-eggplant to-fis-navy shadow-lg flex items-center justify-center z-10 ring-4 ring-white dark:ring-gray-900">
-                <Calendar className="w-4 h-4 text-white" />
-              </div>
-
-              {/* Card */}
-              <div className="mt-20 glass-strong card-shadow hover:card-shadow-hover rounded-xl p-5 transition-all">
-                <div className="flex items-center justify-between mb-3">
-                  <div>
-                    <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
-                      {summary.quarter}
-                    </h3>
-                    <p className="text-sm font-roobert-medium text-gray-500 dark:text-gray-400">
-                      {summary.year}
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-1 px-3 py-1 rounded-full bg-green-500/20">
-                    <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
-                    <span className="text-sm font-roobert-heavy text-green-600 dark:text-green-400">
-                      +{summary.keyMetrics.growth}%
-                    </span>
-                  </div>
+        <div className="flex overflow-x-auto pb-8 pt-4 pl-3 gap-6 hide-scrollbar">
+          {summaries.map((summary, index) => {
+            const isIQ = isExecutiveIQ(summary);
+            const TimelineIcon = isIQ ? Lightbulb : FileText;
+            const iconBg = isIQ ? 'from-fis-raspberry to-fis-eggplant' : 'from-fis-eggplant to-fis-navy';
+            
+            return (
+              <motion.div
+                key={summary.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                onClick={() => onSelectSummary(summary)}
+                className="flex-shrink-0 cursor-pointer relative"
+                style={{ width: '280px' }}
+              >
+                {/* Timeline Dot */}
+                <div className={`absolute top-[20px] left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br ${iconBg} shadow-lg flex items-center justify-center z-10 ring-4 ring-white dark:ring-gray-900`}>
+                  <TimelineIcon className="w-4 h-4 text-white" />
                 </div>
 
-                <p className="text-sm font-roobert-light text-gray-600 dark:text-gray-300 line-clamp-2">
-                  {summary.title}
-                </p>
-
-                <div className="mt-4 pt-4 border-t border-white/10">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-roobert-light text-gray-500 dark:text-gray-400">
-                      Revenue
-                    </span>
-                    <span className="font-roobert-heavy text-gray-900 dark:text-white">
-                      ${(summary.keyMetrics.revenue / 1000000).toFixed(1)}M
+                {/* Card */}
+                <div className="mt-20 glass-strong card-shadow hover:card-shadow-hover rounded-xl p-5 transition-all border-2 border-transparent hover:border-fis-eggplant duration-300 h-[200px] flex flex-col">
+                  {/* Type Tag */}
+                  <div className="mb-3">
+                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-roobert-semibold ${isIQ ? 'bg-fis-raspberry/20 text-fis-raspberry' : 'bg-fis-navy/20 text-fis-navy dark:bg-blue-500/20 dark:text-blue-400'}`}>
+                      {isIQ ? 'Executive-IQ' : 'Weekly Summary'}
                     </span>
                   </div>
+                  
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+                        {summary.quarter}
+                      </h3>
+                      <p className="text-sm font-roobert-medium text-gray-500 dark:text-gray-400">
+                        {summary.year}
+                      </p>
+                    </div>
+                    {!isIQ && 'keyMetrics' in summary && summary.keyMetrics && (
+                      <div className="flex items-center space-x-1 px-3 py-1 rounded-full bg-green-500/20">
+                        <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm font-roobert-heavy text-green-600 dark:text-green-400">
+                          +{summary.keyMetrics.growth}%
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="text-sm font-roobert-light text-gray-600 dark:text-gray-300 line-clamp-2 flex-1">
+                    {summary.title}
+                  </p>
+
+                  {!isIQ && 'keyMetrics' in summary && summary.keyMetrics && (
+                    <div className="mt-auto pt-4 border-t border-white/10">
+                      <div className="flex items-center justify-between text-xs">
+                      <span className="font-roobert-light text-gray-500 dark:text-gray-400">
+                        Revenue
+                      </span>
+                      <span className="font-roobert-heavy text-gray-900 dark:text-white">
+                        ${(summary.keyMetrics.revenue / 1000000).toFixed(1)}M
+                      </span>
+                    </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 

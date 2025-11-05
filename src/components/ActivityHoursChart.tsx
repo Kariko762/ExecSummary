@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 
 interface ActivityHoursChartProps {
@@ -7,31 +7,6 @@ interface ActivityHoursChartProps {
     banking: { support: number; prep: number; demo: number; };
   };
 }
-
-const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
-  if (active && payload && payload.length) {
-    // Reverse the payload order for tooltip display (smallest to largest)
-    const reversedPayload = [...payload].reverse();
-    
-    return (
-      <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
-        border: '1px solid #e5e7eb',
-        borderRadius: '8px',
-        padding: '12px',
-        fontFamily: 'Roobert'
-      }}>
-        <p style={{ marginBottom: '8px', fontWeight: 600 }}>{label}</p>
-        {reversedPayload.map((entry, index) => (
-          <p key={`item-${index}`} style={{ color: entry.color, margin: '4px 0' }}>
-            {entry.name}: {entry.value?.toLocaleString()} hrs
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
 
 export function ActivityHoursChart({ hoursByLOB }: ActivityHoursChartProps) {
   const data = [

@@ -7,13 +7,16 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - **🎨 Premium Design**: Glassmorphism effects, 3D card animations, and smooth transitions
 - **📊 Data Visualizations**: Beautiful charts with Recharts showing revenue, growth, and customer metrics
 - **📅 Interactive Timeline**: Horizontal timeline navigation through quarterly summaries
-- **🎭 Presentation Mode**: Full-screen mode perfect for board meetings
+- **� Organization Dashboard**: Track performance across business units with KPIs and insights
+- **🚀 Strategic Initiatives**: Comprehensive initiative tracking with 14+ flexible sections
+- **�🎭 Presentation Mode**: Full-screen mode perfect for board meetings
 - **🌓 Dark/Light Mode**: Elegant theme switching with persistent preferences
 - **🔍 Smart Search**: Instant search across all summaries and highlights
 - **📱 Fully Responsive**: Mobile-first design that looks great on all devices
 - **💾 100% Offline**: All assets bundled locally - no internet required
 - **🖨️ Print Support**: Generate beautiful PDF reports
 - **⚡ Lightning Fast**: Built with Vite for optimal performance
+- **🧩 Flexible Data**: Optional sections - publish incrementally as initiatives mature
 
 ## 🎯 Key Components
 
@@ -32,14 +35,39 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - Visual representation of quarterly progress
 - Quick navigation to any period
 
-### 4. **Detail View**
+### 4. **Organization Dashboard**
+- Track multiple business units (Banking, Capital Markets, Payments, etc.)
+- KPI tiles with status indicators (At Risk, All On Track)
+- Projects, demos, and hours tracking
+- Expression Engine for rich text formatting with badges and icons
+- Modal view with strategic projects and support activities
+
+### 5. **Strategic Initiatives**
+- Comprehensive initiative tracking with 14+ flexible sections
+- **Progressive disclosure**: Publish with partial data, add sections over time
+- Dynamic navigation that adapts to available sections
+- Tag-based filtering (AI/ML, Digital Transformation, etc.)
+- Sections include:
+  - Current Status & Executive Summary
+  - Problem Statement & SMART Goals
+  - Proposed Solution with alternatives analysis
+  - Success Metrics & Timeline with milestones
+  - Risk Assessment & Resource Requirements
+  - Stakeholder Map & Dependencies
+  - Change Management & Governance
+  - Resources & Documentation
+- Rich text support with Expression Engine
+- Conditional rendering - no empty sections shown
+- Example initiatives included (AI Demo Automation, Client Portal Modernization)
+
+### 6. **Detail View**
 - Comprehensive summary information
 - Department performance radial charts
 - Strategic initiatives with progress tracking
 - Risk assessment and mitigation strategies
 - Future outlook section
 
-### 5. **Presentation Mode**
+### 7. **Presentation Mode**
 - Full-screen display
 - Perfect for executive meetings
 - Clean, distraction-free interface
@@ -102,14 +130,43 @@ ExecSummary/
 │   │   ├── Dashboard.tsx
 │   │   ├── SummaryCard.tsx
 │   │   ├── SummaryDetail.tsx
-│   │   └── Timeline.tsx
+│   │   ├── Timeline.tsx
+│   │   ├── OrganizationDashboard.tsx
+│   │   ├── OrganizationTile.tsx
+│   │   ├── OrganizationModal.tsx
+│   │   ├── StrategicInitiativesDashboard.tsx
+│   │   ├── StrategicInitiativeTile.tsx
+│   │   ├── StrategicInitiativeModal.tsx
+│   │   ├── ActivityHoursChart.tsx
+│   │   ├── TopAssetsChart.tsx
+│   │   └── ... more components
 │   ├── contexts/         # React contexts
 │   │   ├── ThemeContext.tsx
 │   │   └── PresentationContext.tsx
-│   ├── data/            # Sample data
-│   │   └── summaries.ts
+│   ├── data/            # JSON data files
+│   │   ├── summaries.ts
+│   │   ├── summaries/
+│   │   │   ├── week-oct-24-2024.json
+│   │   │   └── week-oct-31-2024.json
+│   │   ├── organizations/
+│   │   │   ├── banking-na.json
+│   │   │   ├── capital-markets.json
+│   │   │   ├── payments.json
+│   │   │   └── int-banking.json
+│   │   ├── initiatives/
+│   │   │   ├── ai-demo-automation.json
+│   │   │   └── client-portal-modernization.json
+│   │   ├── performance/
+│   │   │   ├── performance-oct-24-2024.json
+│   │   │   └── performance-oct-31-2024.json
+│   │   ├── summaries-loader.ts
+│   │   ├── organizations-loader.ts
+│   │   ├── initiatives-loader.ts
+│   │   └── performance-loader.ts
 │   ├── types/           # TypeScript types
 │   │   └── index.ts
+│   ├── utils/           # Utility functions
+│   │   └── expressionParser.tsx
 │   ├── App.tsx          # Main app component
 │   ├── main.tsx         # App entry point
 │   └── index.css        # Global styles
@@ -146,6 +203,41 @@ Edit `src/data/summaries.ts` to add or modify executive summaries:
   // ... more fields
 }
 ```
+
+### Adding Strategic Initiatives
+
+Create a new JSON file in `src/data/initiatives/` with any combination of sections. All sections are optional!
+
+**Minimal example** (early-stage initiative):
+```json
+{
+  "id": "my-initiative-2025",
+  "title": "My New Initiative",
+  "lastUpdated": "2025-01-15",
+  "tags": ["Digital Transformation"],
+  "executiveSummary": {
+    "overview": "Brief description...",
+    "benefits": ["Benefit 1", "Benefit 2"]
+  },
+  "problemStatement": {
+    "issue": "The problem we're solving..."
+  }
+}
+```
+
+**Full example** (mature initiative):
+Include all 14 sections: currentStatus, executiveSummary, problemStatement, smartGoals, proposedSolution, successMetrics, timeline, riskAssessment, resourceRequirements, stakeholderMap, dependencies, changeManagement, governance, and resources.
+
+See `src/data/initiatives/ai-demo-automation.json` for a complete example.
+
+### Using Expression Engine
+
+Add rich formatting to text fields:
+- `{{badge:success}}Text{{/badge}}` - Colored badge
+- `{{icon:rocket}}Text` - Icon with text
+- `**Bold text**` - Markdown-style bold
+
+Supported in: Organization highlights, Strategic Initiative sections, and more.
 
 ### Customizing Colors
 

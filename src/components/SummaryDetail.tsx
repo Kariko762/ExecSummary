@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { ExecutiveSummary } from '../types';
-import { X, TrendingUp, Users, DollarSign, ThumbsUp, Calendar, Target, AlertTriangle, CheckCircle2, Clock, Printer } from 'lucide-react';
+import { X, TrendingUp, Users, DollarSign, ThumbsUp, Calendar, Target, AlertTriangle, CheckCircle2, Clock, Download } from 'lucide-react';
 import { RadialBarChart, RadialBar, ResponsiveContainer } from 'recharts';
 import { WeeklyFocus } from './WeeklyFocus';
 import { IssuesBlockers } from './IssuesBlockers';
 import { useState, useEffect } from 'react';
 import { renderWithExpressions } from '../utils/expressionParser';
+import html2canvas from 'html2canvas';
 
 interface SummaryDetailProps {
   summary: ExecutiveSummary;
@@ -129,8 +130,55 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
     fill: dept.performance >= 90 ? '#10B981' : dept.performance >= 80 ? '#3B82F6' : '#F59E0B',
   }));
 
-  const handlePrint = () => {
-    window.print();
+  const handleExportImage = async () => {
+    const contentDiv = document.querySelector('.summary-content') as HTMLElement;
+    const modalContainer = document.querySelector('.summary-modal-container') as HTMLElement;
+    
+    if (!contentDiv || !modalContainer) return;
+
+    try {
+      // Temporarily expand the container to full height
+      const originalMaxHeight = modalContainer.style.maxHeight;
+      const originalOverflow = contentDiv.style.overflow;
+      
+      modalContainer.style.maxHeight = 'none';
+      contentDiv.style.overflow = 'visible';
+      contentDiv.style.maxHeight = 'none';
+
+      // Wait for layout to settle
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Capture the full content
+      const canvas = await html2canvas(modalContainer, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        windowHeight: contentDiv.scrollHeight,
+      });
+
+      // Restore original styles
+      modalContainer.style.maxHeight = originalMaxHeight;
+      contentDiv.style.overflow = originalOverflow;
+      contentDiv.style.maxHeight = '';
+
+      // Convert to image and download
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          const fileName = `executive-summary-${summary.quarter.replace(/\s+/g, '-').toLowerCase()}-${summary.year}.png`;
+          link.download = fileName;
+          link.href = url;
+          link.click();
+          URL.revokeObjectURL(url);
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error('Failed to export image:', error);
+      alert('Failed to export image. Please try again.');
+    }
   };
 
   return (
@@ -138,7 +186,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 overflow-y-auto no-print"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 overflow-y-auto"
       onClick={onClose}
     >
       <motion.div
@@ -148,7 +196,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
         onClick={(e) => e.stopPropagation()}
         className="min-h-screen py-8 px-4"
       >
-        <div className="max-w-6xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+        <div className="max-w-6xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col summary-modal-container">
           {/* Header */}
           <motion.div 
             className="flex-shrink-0 sticky top-0 bg-white dark:bg-gray-900 relative rounded-t-3xl z-10 border-b border-gray-200 dark:border-gray-800 transition-all duration-300"
@@ -161,17 +209,17 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
           >
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all no-print"
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
             >
               <X className="w-6 h-6 text-gray-700 dark:text-gray-300" />
             </button>
 
             <button
-              onClick={handlePrint}
-              className="absolute top-4 right-16 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all no-print"
-              title="Print Summary"
+              onClick={handleExportImage}
+              className="absolute top-4 right-16 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              title="Export as Image"
             >
-              <Printer className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+              <Download className="w-6 h-6 text-gray-700 dark:text-gray-300" />
             </button>
 
             <div className="flex items-center space-x-4">

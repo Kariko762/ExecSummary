@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb } from 'lucide-react';
+import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 
 interface HeaderProps {
   onSearch: (query: string) => void;
@@ -20,6 +21,40 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch(searchQuery);
+  };
+
+  const handleExportDashboard = async () => {
+    const mainContent = document.querySelector('main') as HTMLElement;
+    
+    if (!mainContent) return;
+
+    try {
+      // Capture the full dashboard
+      const canvas = await html2canvas(mainContent, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        windowHeight: mainContent.scrollHeight,
+      });
+
+      // Convert to image and download
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          const timestamp = new Date().toISOString().split('T')[0];
+          link.download = `executive-dashboard-${timestamp}.png`;
+          link.href = url;
+          link.click();
+          URL.revokeObjectURL(url);
+        }
+      }, 'image/png');
+    } catch (error) {
+      console.error('Failed to export dashboard:', error);
+      alert('Failed to export dashboard. Please try again.');
+    }
   };
 
   return (
@@ -164,6 +199,16 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              onClick={handleExportDashboard}
+              className="p-2 rounded-lg glass hover:glass-strong transition-all"
+              title="Export Dashboard as Image"
+            >
+              <Download className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={togglePresentationMode}
               className="p-2 rounded-lg glass hover:glass-strong transition-all"
               title="Toggle Presentation Mode"
@@ -269,6 +314,14 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
             </form>
 
             <div className="flex items-center justify-center space-x-4">
+              <button
+                onClick={handleExportDashboard}
+                className="flex items-center space-x-2 px-4 py-2 rounded-lg glass"
+              >
+                <Download className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <span className="text-sm text-gray-600 dark:text-gray-400">Export</span>
+              </button>
+
               <button
                 onClick={togglePresentationMode}
                 className="flex items-center space-x-2 px-4 py-2 rounded-lg glass"

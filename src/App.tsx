@@ -6,26 +6,30 @@ import { Header } from './components/Header';
 import { SummaryCard } from './components/SummaryCard';
 import { Dashboard } from './components/Dashboard';
 import { SummaryDetail } from './components/SummaryDetail';
+import { ExecutiveIQDetail } from './components/ExecutiveIQDetail';
 import { Timeline } from './components/Timeline';
 import { StickyNav } from './components/StickyNav';
 import { OrganizationDashboard } from './components/OrganizationDashboard';
 import { StrategicInitiativesDashboard } from './components/StrategicInitiativesDashboard';
-import { executiveSummaries } from './data/summaries-loader';
-import { ExecutiveSummary } from './types';
+import { timelineItems, isExecutiveSummary } from './data/timeline-loader';
+import { TimelineItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function App() {
-  const [selectedSummary, setSelectedSummary] = useState<ExecutiveSummary | null>(null);
+  const [selectedSummary, setSelectedSummary] = useState<TimelineItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredSummaries = executiveSummaries.filter(summary => {
+  const filteredSummaries = timelineItems.filter(summary => {
     const searchLower = searchQuery.toLowerCase();
-    return (
+    const baseMatch = 
       summary.title.toLowerCase().includes(searchLower) ||
       summary.quarter.toLowerCase().includes(searchLower) ||
-      summary.year.toString().includes(searchLower) ||
-      summary.highlights.some(h => h.toLowerCase().includes(searchLower))
-    );
+      summary.year.toString().includes(searchLower);
+    
+    if (isExecutiveSummary(summary)) {
+      return baseMatch || summary.highlights.some(h => h.toLowerCase().includes(searchLower));
+    }
+    return baseMatch;
   });
 
   return (
@@ -42,9 +46,14 @@ function App() {
                   {/* Main Dashboard Route */}
                   <Route path="/" element={
                     <AnimatePresence mode="wait">
-                      {selectedSummary ? (
+                      {selectedSummary && isExecutiveSummary(selectedSummary) ? (
                         <SummaryDetail
                           summary={selectedSummary}
+                          onClose={() => setSelectedSummary(null)}
+                        />
+                      ) : selectedSummary ? (
+                        <ExecutiveIQDetail
+                          article={selectedSummary}
                           onClose={() => setSelectedSummary(null)}
                         />
                       ) : (
@@ -65,10 +74,10 @@ function App() {
 
                           {/* Timeline */}
                           <section id="timeline" className="mb-12">
-                            <Timeline
-                              summaries={executiveSummaries}
-                              onSelectSummary={setSelectedSummary}
-                            />
+                          <Timeline
+                            summaries={timelineItems}
+                            onSelectSummary={setSelectedSummary}
+                          />
                           </section>
 
                           {/* Performance Dashboard */}
@@ -109,7 +118,7 @@ function App() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                              {filteredSummaries.map((summary, index) => (
+                              {filteredSummaries.filter(isExecutiveSummary).map((summary, index) => (
                                 <SummaryCard
                                   key={summary.id}
                                   summary={summary}

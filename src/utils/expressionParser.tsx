@@ -51,15 +51,49 @@ interface ParsedElement {
 }
 
 /**
- * Parse a string with {{expression:value}} syntax into structured elements
+ * Parse a string with {{expression:value}} or [[expression]]value[[/expression]] syntax into structured elements
  */
 export function parseExpression(text: string): ParsedElement[] {
   const elements: ParsedElement[] = [];
-  const regex = /\{\{([^}]+)\}\}/g;
+  
+  // Handle both {{}} and [[]] syntax
+  const bracketRegex = /\[\[(\w+)\]\](.*?)\[\[\/\1\]\]/g;
+  const curlyRegex = /\{\{([^}]+)\}\}/g;
+  
   let lastIndex = 0;
   let match;
-
-  while ((match = regex.exec(text)) !== null) {
+  
+  // First, handle bracket syntax [[type]]content[[/type]]
+  const matches: Array<{ index: number; length: number; type: string; value: string }> = [];
+  
+  while ((match = bracketRegex.exec(text)) !== null) {
+    matches.push({
+      index: match.index,
+      length: match[0].length,
+      type: match[1].toLowerCase(),
+      value: match[2]
+    });
+  }
+  
+  // Then handle curly syntax {{type:value}}
+  while ((match = curlyRegex.exec(text)) !== null) {
+    const expression = match[1];
+    const [expressionType, ...params] = expression.split(':');
+    
+    matches.push({
+      index: match.index,
+      length: match[0].length,
+      type: expressionType.toLowerCase(),
+      value: params.join(':')
+    });
+  }
+  
+  // Sort matches by index
+  matches.sort((a, b) => a.index - b.index);
+  
+  // Build elements array
+  lastIndex = 0;
+  for (const match of matches) {
     // Add text before the expression
     if (match.index > lastIndex) {
       elements.push({
@@ -67,22 +101,18 @@ export function parseExpression(text: string): ParsedElement[] {
         content: text.substring(lastIndex, match.index)
       });
     }
-
-    // Parse the expression
-    const expression = match[1];
-    const [expressionType, ...params] = expression.split(':');
     
     elements.push({
       type: 'expression',
-      content: match[0],
-      expressionType: expressionType.toLowerCase(),
-      value: params.join(':'), // Rejoin in case value contains colons
-      params
+      content: text.substring(match.index, match.index + match.length),
+      expressionType: match.type,
+      value: match.value,
+      params: [match.value]
     });
-
-    lastIndex = regex.lastIndex;
+    
+    lastIndex = match.index + match.length;
   }
-
+  
   // Add remaining text
   if (lastIndex < text.length) {
     elements.push({
@@ -211,6 +241,28 @@ function renderBold(text: string): React.ReactNode {
 }
 
 /**
+ * Render a positive expression (green highlight)
+ */
+function renderPositive(text: string): React.ReactNode {
+  return (
+    <span className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-1 rounded font-roobert-medium">
+      {text}
+    </span>
+  );
+}
+
+/**
+ * Render a negative expression (red highlight)
+ */
+function renderNegative(text: string): React.ReactNode {
+  return (
+    <span className="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 px-1 rounded font-roobert-medium">
+      {text}
+    </span>
+  );
+}
+
+/**
  * Render a link expression
  */
 function renderLink(value: string): React.ReactNode {
@@ -314,7 +366,16 @@ function renderMetric(value: string): React.ReactNode {
   const parts = value.split('|');
   const metricValue = parts[0];
   const label = parts[1] || '';
-  const iconName = parts[2] || 'activity';
+  const iconName = parts[2] || '';
+  
+  // If no icon specified, just render as bold text without the box
+  if (!iconName) {
+    return (
+      <span className="font-roobert-bold text-fis-raspberry">
+        {metricValue}
+      </span>
+    );
+  }
   
   const Icon = iconMap[iconName.toLowerCase()] || Activity;
 
@@ -366,6 +427,12 @@ function renderExpressionElement(element: ParsedElement, key: number): React.Rea
     
     case 'bold':
       return <React.Fragment key={key}>{renderBold(element.value)}</React.Fragment>;
+    
+    case 'positive':
+      return <React.Fragment key={key}>{renderPositive(element.value)}</React.Fragment>;
+    
+    case 'negative':
+      return <React.Fragment key={key}>{renderNegative(element.value)}</React.Fragment>;
     
     case 'link':
       return <React.Fragment key={key}>{renderLink(element.value)}</React.Fragment>;

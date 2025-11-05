@@ -45,6 +45,49 @@ export interface ExecutiveSummary {
   issuesAndBlockers?: IssueBlocker[];
 }
 
+export interface ExecutiveIQ {
+  id: string;
+  quarter: string;
+  year: number;
+  date: string;
+  title: string;
+  subtitle?: string;
+  category: 'strategy' | 'innovation' | 'market-insight' | 'thought-leadership' | 'transformation';
+  keyMetrics?: {
+    revenue: number;
+    growth: number;
+    customers: number;
+    satisfaction: number;
+  };
+  executiveSummary: string;
+  keyTakeaways: string[];
+  strategicImplications: string[];
+  recommendations: string[];
+  trendAnalysis?: {
+    title: string;
+    subtitle: string;
+    categories: Array<{
+      name: string;
+      icon: string;
+      trends: Array<{
+        metric: string;
+        value2023: string;
+        value2024: string;
+        change: string;
+        impact: 'critical' | 'high' | 'medium' | 'low';
+      }>;
+    }>;
+  };
+  supportingData?: {
+    chartTitle: string;
+    data: Array<{ label: string; value: number; }>;
+  }[];
+  relatedInitiatives?: string[];
+  outlook: string;
+}
+
+export type TimelineItem = ExecutiveSummary | ExecutiveIQ;
+
 export interface DepartmentData {
   name: string;
   performance: number;
