@@ -279,6 +279,83 @@ app.delete('/api/organizations/:id', async (req, res) => {
 });
 
 // ============================================
+// PERFORMANCE ENDPOINTS
+// ============================================
+
+// GET all performance data
+app.get('/api/performance', async (req, res) => {
+  try {
+    const perfDir = path.join(DATA_DIR, 'performance');
+    const files = await listFiles(perfDir);
+    
+    const performances = await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(perfDir, file);
+        return await readJSONFile(filePath);
+      })
+    );
+    
+    // Sort by date descending
+    performances.sort((a, b) => new Date(b.date) - new Date(a.date));
+    res.json(performances);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET single performance data
+app.get('/api/performance/:id', async (req, res) => {
+  try {
+    const perfDir = path.join(DATA_DIR, 'performance');
+    const filePath = path.join(perfDir, `${req.params.id}.json`);
+    const performance = await readJSONFile(filePath);
+    res.json(performance);
+  } catch (error) {
+    res.status(404).json({ error: 'Performance data not found' });
+  }
+});
+
+// POST create performance data
+app.post('/api/performance', async (req, res) => {
+  try {
+    const performance = req.body;
+    const perfDir = path.join(DATA_DIR, 'performance');
+    const filePath = path.join(perfDir, `${performance.id}.json`);
+    
+    await writeJSONFile(filePath, performance);
+    res.status(201).json({ message: 'Performance data created', data: performance });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update performance data
+app.put('/api/performance/:id', async (req, res) => {
+  try {
+    const performance = req.body;
+    const perfDir = path.join(DATA_DIR, 'performance');
+    const filePath = path.join(perfDir, `${req.params.id}.json`);
+    
+    await writeJSONFile(filePath, performance);
+    res.json({ message: 'Performance data updated', data: performance });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE performance data
+app.delete('/api/performance/:id', async (req, res) => {
+  try {
+    const perfDir = path.join(DATA_DIR, 'performance');
+    const filePath = path.join(perfDir, `${req.params.id}.json`);
+    await fs.unlink(filePath);
+    res.json({ message: 'Performance data deleted' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
 // FILE IMPORT ENDPOINT
 // ============================================
 
@@ -310,6 +387,9 @@ app.post('/api/import/:type', upload.single('file'), async (req, res) => {
         break;
       case 'organizations':
         targetDir = path.join(DATA_DIR, 'organizations');
+        break;
+      case 'performance':
+        targetDir = path.join(DATA_DIR, 'performance');
         break;
       default:
         return res.status(400).json({ error: 'Invalid type' });

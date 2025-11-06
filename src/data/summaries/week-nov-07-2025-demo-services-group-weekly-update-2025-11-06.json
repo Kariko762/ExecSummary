@@ -1,9 +1,9 @@
 {
-  "id": "week-oct-31-2024",
-  "quarter": "Oct 31",
-  "year": 2024,
-  "date": "2024-10-31",
-  "title": "Demo Services Group - Weekly Executive Update",
+  "id": "week-nov-07-2025-demo-services-group-weekly-update-2025-11-06",
+  "quarter": "Nov 6",
+  "year": 2025,
+  "date": "2025-11-06",
+  "title": "Nov 07 2025 - Demo Services Group - Weekly Update",
   "highlights": [
     "Banking NA Tiled Microsite – First Draft Published and endorsed by Michael Driscoll",
     "GTM Team Support – Office of the CFO Template Completed, moving to Figma conversion",
@@ -223,6 +223,6 @@
   "_completed_highlights": false,
   "_completed_risks": false,
   "status": "draft",
-  "_enabled_initiatives": false,
-  "_enabled_departments": false
+  "_enabled_initiatives": true,
+  "_enabled_departments": true
 }

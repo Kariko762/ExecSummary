@@ -11,12 +11,28 @@
     "{{icon:chart}} SNOW Migration - Technical requirements finalized, beginning dashboard development",
     "Capital Markets {{metric:1389|support hours|clock}} leads activity (2.3× Banking intensity)"
   ],
-  "keyMetrics": {
-    "revenue": 1080000,
-    "growth": 44,
-    "customers": 241,
-    "satisfaction": 0
-  },
+  "keyMetrics": [
+    {
+      "label": "Revenue",
+      "value": "1080000",
+      "unit": "$"
+    },
+    {
+      "label": "Growth",
+      "value": "44",
+      "unit": "%"
+    },
+    {
+      "label": "Customers",
+      "value": "241",
+      "unit": ""
+    },
+    {
+      "label": "Satisfaction",
+      "value": "0",
+      "unit": "%"
+    }
+  ],
   "activityMetrics": {
     "demoStudio": {
       "demosRegistered": 241,
@@ -50,11 +66,31 @@
     }
   },
   "topAssets": [
-    { "name": "D1 Flex", "count": 68, "category": "Banking" },
-    { "name": "D1 Flex Mobile 6.0", "count": 39, "category": "Banking" },
-    { "name": "D1 Flex Mobile (Beacon)", "count": 32, "category": "Banking" },
-    { "name": "D1 Business", "count": 29, "category": "Banking" },
-    { "name": "Horizon", "count": 18, "category": "Capital Markets" }
+    {
+      "name": "D1 Flex",
+      "count": 68,
+      "category": "Banking"
+    },
+    {
+      "name": "D1 Flex Mobile 6.0",
+      "count": 39,
+      "category": "Banking"
+    },
+    {
+      "name": "D1 Flex Mobile (Beacon)",
+      "count": 32,
+      "category": "Banking"
+    },
+    {
+      "name": "D1 Business",
+      "count": 29,
+      "category": "Banking"
+    },
+    {
+      "name": "Horizon",
+      "count": 18,
+      "category": "Capital Markets"
+    }
   ],
   "weeklyFocus": [
     "Banking NA Microsite - Incorporate feedback from Michael Driscoll, prepare second draft",
@@ -199,5 +235,8 @@
       "status": "resolved"
     }
   ],
-  "outlook": "Demo Services Group making steady progress across strategic initiatives with Banking NA Microsite advancing to second draft review and SNOW migration entering active development phase. International Issuing Hub timeline remains fluid pending Money 20/20 coordination with E6, but relationship is strong and path forward is clear. Capital Markets continues to dominate workload at 2.3× Banking intensity, suggesting opportunity for resource rebalancing or targeted hiring. Key focus areas for next week include incorporating leadership feedback on Banking Microsite, completing SNOW dashboard prototype, and resolving shift compensation process to ensure team morale and compliance. Tiled platform challenges being actively managed with workaround documentation to de-risk client deliverables. Demo-to-deal conversion holding steady at 44%, reflecting consistent quality and sales alignment."
+  "outlook": "Demo Services Group making steady progress across strategic initiatives with Banking NA Microsite advancing to second draft review and SNOW migration entering active development phase. International Issuing Hub timeline remains fluid pending Money 20/20 coordination with E6, but relationship is strong and path forward is clear. Capital Markets continues to dominate workload at 2.3× Banking intensity, suggesting opportunity for resource rebalancing or targeted hiring. Key focus areas for next week include incorporating leadership feedback on Banking Microsite, completing SNOW dashboard prototype, and resolving shift compensation process to ensure team morale and compliance. Tiled platform challenges being actively managed with workaround documentation to de-risk client deliverables. Demo-to-deal conversion holding steady at 44%, reflecting consistent quality and sales alignment.",
+  "_enabled_departments": false,
+  "_enabled_initiatives": false,
+  "status": "draft"
 }
