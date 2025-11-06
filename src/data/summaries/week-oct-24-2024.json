@@ -238,5 +238,6 @@
   "outlook": "Demo Services Group making steady progress across strategic initiatives with Banking NA Microsite advancing to second draft review and SNOW migration entering active development phase. International Issuing Hub timeline remains fluid pending Money 20/20 coordination with E6, but relationship is strong and path forward is clear. Capital Markets continues to dominate workload at 2.3× Banking intensity, suggesting opportunity for resource rebalancing or targeted hiring. Key focus areas for next week include incorporating leadership feedback on Banking Microsite, completing SNOW dashboard prototype, and resolving shift compensation process to ensure team morale and compliance. Tiled platform challenges being actively managed with workaround documentation to de-risk client deliverables. Demo-to-deal conversion holding steady at 44%, reflecting consistent quality and sales alignment.",
   "_enabled_departments": false,
   "_enabled_initiatives": false,
-  "status": "draft"
+  "status": "draft",
+  "protectionEnabled": true
 }

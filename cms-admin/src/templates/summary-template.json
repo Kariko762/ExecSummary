@@ -150,6 +150,7 @@
   "_completed_highlights": false,
   "_completed_risks": false,
   "status": "draft",
+  "protectionEnabled": true,
   "_enabled_initiatives": true,
   "_enabled_departments": true
 }

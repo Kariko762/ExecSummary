@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save, Eye, EyeOff, Lock, Unlock, ChevronDown, ChevronRight, Upload, Check, Plus, Pencil, Trash2 } from 'lucide-react';
+import { X, Save, Eye, EyeOff, Lock, Unlock, ChevronDown, ChevronRight, Upload, Check, Plus, Pencil, Trash2, Shield, ShieldOff } from 'lucide-react';
 
 interface Section {
   id: string;
@@ -8,6 +8,7 @@ interface Section {
   locked: boolean;
   enabled: boolean;
   completed: boolean;
+  weight: number;
   content: any;
 }
 
@@ -29,15 +30,51 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
   const [editingItem, setEditingItem] = useState<{ sectionId: string; index: number; value: string } | null>(null);
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [editingArrayItems, setEditingArrayItems] = useState<Set<string>>(new Set());
+  const [protectionEnabled, setProtectionEnabled] = useState(true);
 
   // List sections that should use the add/edit/delete UI
   const listManagementSections = ['highlights', 'weeklyFocus', 'initiatives', 'risks', 'issuesAndBlockers', 'keyMetrics', 'departments', 'header'];
+
+  // Section weights (complexity/time required, 1-10)
+  const sectionWeights: { [key: string]: number } = {
+    header: 2,
+    highlights: 5,
+    keyMetrics: 3,
+    activityMetrics: 8,
+    topAssets: 4,
+    weeklyFocus: 5,
+    departments: 9,
+    initiatives: 8,
+    risks: 6,
+    issuesAndBlockers: 10,
+    outlook: 7,
+    sections: 6,
+    content: 7,
+    keyTakeaways: 5,
+    recommendations: 6
+  };
+
+  // Calculate weighted completion percentage
+  const calculateCompletion = (): number => {
+    const enabledSections = sections.filter(s => s.enabled);
+    if (enabledSections.length === 0) return 0;
+
+    const totalWeight = enabledSections.reduce((sum, s) => sum + s.weight, 0);
+    const completedWeight = enabledSections
+      .filter(s => s.completed)
+      .reduce((sum, s) => sum + s.weight, 0);
+
+    return Math.round((completedWeight / totalWeight) * 100);
+  };
+
+  const completionPercentage = calculateCompletion();
 
   useEffect(() => {
     if (data) {
       setEditedData(data);
       initializeSections(data);
       setStatus(data.status || 'draft');
+      setProtectionEnabled(data.protectionEnabled !== false); // Default to true
     }
   }, [data]);
 
@@ -93,6 +130,7 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
         locked: false,
         enabled: true,
         completed: jsonData._completed_header === true,
+        weight: sectionWeights['header'] || 2,
         content: headerFields
       });
     }
@@ -111,6 +149,7 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
           locked: isCompleted, // Auto-lock if completed
           enabled: isEnabled,
           completed: isCompleted,
+          weight: sectionWeights[key] || 5,
           content: jsonData[key]
         });
       }
@@ -345,14 +384,20 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
   };
 
   const handleSaveDraft = () => {
-    onSave({ ...editedData, status: 'draft' }, 'draft');
+    onSave({ ...editedData, status: 'draft', protectionEnabled }, 'draft');
     setStatus('draft');
     setIsDirty(false);
   };
 
   const handlePublish = () => {
+    // Check if protection is enabled and completion is not 100%
+    if (protectionEnabled && completionPercentage < 100) {
+      alert(`⚠️ Cannot Publish: Protection is enabled and completion is ${completionPercentage}%.\n\nYou must complete all enabled sections (100%) before publishing, or disable protection mode.`);
+      return;
+    }
+
     if (window.confirm('Are you sure you want to publish? This will make the changes live.')) {
-      onSave({ ...editedData, status: 'published' }, 'published');
+      onSave({ ...editedData, status: 'published', protectionEnabled }, 'published');
       setStatus('published');
       setIsDirty(false);
     }
@@ -663,12 +708,86 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
                 )}
               </div>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              <X className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-            </button>
+            
+            <div className="flex items-center gap-4">
+              {/* Completion Donut Chart */}
+              <div className="flex items-center gap-3">
+                <div className="relative w-16 h-16">
+                  {/* Background circle */}
+                  <svg className="w-16 h-16 transform -rotate-90">
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r="28"
+                      stroke="currentColor"
+                      strokeWidth="6"
+                      fill="none"
+                      className="text-gray-200 dark:text-gray-700"
+                    />
+                    {/* Progress circle */}
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r="28"
+                      stroke="currentColor"
+                      strokeWidth="6"
+                      fill="none"
+                      strokeDasharray={`${2 * Math.PI * 28}`}
+                      strokeDashoffset={`${2 * Math.PI * 28 * (1 - completionPercentage / 100)}`}
+                      className={`transition-all duration-500 ${
+                        completionPercentage === 100 
+                          ? 'text-green-500' 
+                          : completionPercentage >= 50 
+                          ? 'text-yellow-500' 
+                          : 'text-red-500'
+                      }`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  {/* Percentage text */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-sm font-roobert-bold text-gray-900 dark:text-white">
+                      {completionPercentage}%
+                    </span>
+                  </div>
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-roobert-semibold text-gray-900 dark:text-white">Completion</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {sections.filter(s => s.enabled && s.completed).length}/{sections.filter(s => s.enabled).length} sections
+                  </p>
+                </div>
+              </div>
+
+              {/* Protection Toggle */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setProtectionEnabled(!protectionEnabled)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all ${
+                    protectionEnabled
+                      ? 'bg-green-500/10 border-green-500/50 text-green-600 dark:text-green-400'
+                      : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400'
+                  }`}
+                  title={protectionEnabled ? 'Protection ON: Must reach 100% to publish' : 'Protection OFF: Can publish anytime'}
+                >
+                  {protectionEnabled ? (
+                    <Shield className="w-4 h-4" />
+                  ) : (
+                    <ShieldOff className="w-4 h-4" />
+                  )}
+                  <span className="text-xs font-roobert-semibold">
+                    {protectionEnabled ? 'Protected' : 'Unprotected'}
+                  </span>
+                </button>
+              </div>
+
+              <button
+                onClick={onClose}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <X className="w-6 h-6 text-gray-600 dark:text-gray-400" />
+              </button>
+            </div>
           </div>
 
           {/* Live Warning Banner */}

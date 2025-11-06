@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw, CheckCircle, AlertCircle, TrendingUp, Plus } from 'lucide-react';
+import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw, CheckCircle, AlertCircle, TrendingUp, Plus, Shield, ShieldOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
@@ -175,6 +175,54 @@ function App() {
     setSelectedItem(item);
     setModalDataType(type);
     setModalOpen(true);
+  };
+
+  // Calculate completion percentage for a summary
+  const calculateSummaryCompletion = (summary: any): number => {
+    const sectionWeights: { [key: string]: number } = {
+      header: 2,
+      highlights: 5,
+      keyMetrics: 3,
+      activityMetrics: 8,
+      topAssets: 4,
+      weeklyFocus: 5,
+      departments: 9,
+      initiatives: 8,
+      risks: 6,
+      issuesAndBlockers: 10,
+      outlook: 7,
+      sections: 6,
+      content: 7,
+      keyTakeaways: 5,
+      recommendations: 6
+    };
+
+    const keys = Object.keys(summary).filter(
+      key => !key.startsWith('_') && key !== 'id' && key !== 'status' && 
+             key !== 'quarter' && key !== 'year' && key !== 'date' && 
+             key !== 'title' && key !== 'displayName' && key !== 'name' && 
+             key !== 'category' && key !== 'lastUpdated' && key !== 'protectionEnabled'
+    );
+
+    let totalWeight = 0;
+    let completedWeight = 0;
+
+    keys.forEach(key => {
+      const enabledKey = `_enabled_${key}`;
+      const completedKey = `_completed_${key}`;
+      const isEnabled = summary[enabledKey] !== false;
+      const isCompleted = summary[completedKey] === true;
+      const weight = sectionWeights[key] || 5;
+
+      if (isEnabled) {
+        totalWeight += weight;
+        if (isCompleted) {
+          completedWeight += weight;
+        }
+      }
+    });
+
+    return totalWeight > 0 ? Math.round((completedWeight / totalWeight) * 100) : 0;
   };
 
   const handleSaveItem = async (data: any, status: 'draft' | 'published') => {
@@ -477,11 +525,28 @@ function App() {
                   <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
                     {item.title || (item.demoStudio ? `${item.demoStudio.demosRegistered} Demos Registered` : `Updated: ${item.lastUpdated}`)}
                   </p>
-                  {item.date && (
-                    <div className="inline-flex items-center px-2 py-1 rounded-md bg-gray-500/10 text-gray-600 dark:text-gray-400 text-xs font-roobert-medium">
-                      {item.date}
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {item.date && (
+                      <div className="inline-flex items-center px-2 py-1 rounded-md bg-gray-500/10 text-gray-600 dark:text-gray-400 text-xs font-roobert-medium">
+                        {item.date}
+                      </div>
+                    )}
+                    {activeSection === 'summaries' && (
+                      <>
+                        {item.protectionEnabled !== false ? (
+                          <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-roobert-medium">
+                            <Shield className="w-3 h-3" />
+                            Protected {calculateSummaryCompletion(item)}%
+                          </div>
+                        ) : (
+                          <div className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-gray-500/10 text-gray-600 dark:text-gray-400 text-xs font-roobert-medium">
+                            <ShieldOff className="w-3 h-3" />
+                            Unprotected
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
 
