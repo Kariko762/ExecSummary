@@ -1,15 +1,16 @@
 # Executive Summary Dashboard 🚀
 
-A premium, modern executive summary website built with React, TypeScript, and cutting-edge UI/UX design. Features include 3D cards, glassmorphism effects, smooth animations, interactive data visualizations, and full offline capability.
+A premium, modern executive summary website built with React, TypeScript, and cutting-edge UI/UX design. Features include 3D cards, glassmorphism effects, smooth animations, interactive data visualizations, full offline capability, and a powerful ContentIQ CMS for managing all content.
 
 ## ✨ Features
 
+### Dashboard Features
 - **🎨 Premium Design**: Glassmorphism effects, 3D card animations, and smooth transitions
 - **📊 Data Visualizations**: Beautiful charts with Recharts showing revenue, growth, and customer metrics
 - **📅 Interactive Timeline**: Horizontal timeline navigation through quarterly summaries
-- **� Organization Dashboard**: Track performance across business units with KPIs and insights
+- **🏢 Organization Dashboard**: Track performance across business units with KPIs and insights
 - **🚀 Strategic Initiatives**: Comprehensive initiative tracking with 14+ flexible sections
-- **�🎭 Presentation Mode**: Full-screen mode perfect for board meetings
+- **🎭 Presentation Mode**: Full-screen mode perfect for board meetings
 - **🌓 Dark/Light Mode**: Elegant theme switching with persistent preferences
 - **🔍 Smart Search**: Instant search across all summaries and highlights
 - **📱 Fully Responsive**: Mobile-first design that looks great on all devices
@@ -17,6 +18,21 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - **🖨️ Print Support**: Generate beautiful PDF reports
 - **⚡ Lightning Fast**: Built with Vite for optimal performance
 - **🧩 Flexible Data**: Optional sections - publish incrementally as initiatives mature
+
+### ContentIQ CMS Features 🎯
+- **📝 Visual Editor**: Beautiful modal-based content editor with real-time preview
+- **🛡️ Protection System**: Weighted completion tracking prevents incomplete publishing
+- **📊 Completion Donut**: Visual progress indicator with color-coded status (Green/Yellow/Red)
+- **🎨 Section Management**: Enable/disable, lock/unlock, and mark sections complete
+- **📋 Template System**: Create from instructional templates or clone existing summaries
+- **🔄 Draft/Live Status**: Clear visual indicators (badges, warnings) for content state
+- **⚖️ Weighted Sections**: Smart completion calculation based on section complexity (1-10)
+- **🎯 List Management**: Dynamic add/edit/delete for highlights, risks, issues, initiatives, departments
+- **🔢 Smart Forms**: Auto-detected field types (text, numeric, arrays) with specialized inputs
+- **✨ Card-Based UI**: Consistent, beautiful card styling across all sections
+- **🎨 FIS Branding**: Purple/raspberry gradients, Roobert font, corporate colors
+- **💾 Auto-Save**: Draft saving with dirty state tracking
+- **🚨 Live Warnings**: Multiple protection layers when editing published content
 
 ## 🎯 Key Components
 
@@ -72,6 +88,70 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - Perfect for executive meetings
 - Clean, distraction-free interface
 
+### 8. **ContentIQ CMS** 🎯
+A powerful, user-friendly content management system for non-technical users:
+
+#### Protection & Quality Control
+- **Weighted Completion System**: Each section assigned complexity weight (1-10)
+  - `issuesAndBlockers`: 10 (most time-consuming)
+  - `departments`: 9, `initiatives`: 8, `activityMetrics`: 8
+  - `outlook`: 7, `risks`: 6, `highlights`: 5, etc.
+- **Completion Donut Chart**: Beautiful SVG circular indicator with percentage
+  - Green (100%), Yellow (50-99%), Red (0-49%)
+  - Shows X/Y sections completed count
+- **Protection Toggle**: Shield icon in editor header (ON by default)
+  - Blocks publishing when protection ON and completion < 100%
+  - Flexible override for power users
+  - Alert shows current completion % when blocked
+
+#### Content Creation & Management
+- **Template System**: 
+  - Create new summaries from instructional templates
+  - Clone existing summaries as new drafts
+  - Auto-generates unique IDs with timestamps
+  - All new content starts as "Draft" status
+- **Section Management**:
+  - Enable/disable sections (show/hide from dashboard)
+  - Lock/unlock sections (prevent editing)
+  - Mark sections complete (updates completion %)
+  - Purple label styling for consistency
+- **List Management**: Dynamic UI for array-based sections
+  - Add/Edit/Delete buttons for highlights, risks, issues
+  - Specialized card-based rendering
+  - Special handling for nested arrays (department achievements)
+
+#### Visual Indicators & Warnings
+- **Status Badges**: LIVE (green) and DRAFT (yellow) on all tiles
+- **Protection Badges**: Shield icons with completion % on tiles
+- **Warning Systems**:
+  - Confirmation dialog when editing live content
+  - Red warning banner in editor for published summaries
+  - Multiple protection layers prevent accidents
+
+#### Editor Features
+- **Smart Forms**: Auto-detected field types
+  - Text inputs for strings
+  - Numeric inputs for performance/budget/headcount
+  - Array management for lists (add/remove dynamically)
+  - Nested object rendering with proper spacing
+- **Card-Based UI**: Consistent styling across sections
+  - Solid borders and backgrounds
+  - Purple/raspberry labels
+  - Edit/Delete buttons (hidden when not needed)
+- **Modal Interface**: 
+  - Full-screen modal with sticky navigation
+  - Scroll spy (highlights active section)
+  - Collapsible sections for large documents
+  - Dark/light mode support
+
+#### Backend Integration
+- **Express.js API**: RESTful endpoints for all data types
+  - Summaries, ExecutiveIQ, Organizations, Performance
+  - Full CRUD operations (Create, Read, Update, Delete)
+  - File-based JSON storage for simplicity
+- **Import System**: Upload JSON templates directly
+- **Real-time Updates**: Changes reflect immediately on dashboard
+
 ## 🛠️ Tech Stack
 
 - **React 18** - Modern React with hooks
@@ -90,7 +170,7 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - Node.js 18+ installed
 - npm or yarn package manager
 
-### Installation
+### Dashboard Installation
 
 1. **Install dependencies:**
    ```bash
@@ -105,13 +185,57 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 3. **Open in browser:**
    Navigate to `http://localhost:5173`
 
+### ContentIQ CMS Installation
+
+1. **Install backend dependencies:**
+   ```bash
+   cd backend
+   npm install
+   ```
+
+2. **Start backend server:**
+   ```bash
+   npm start
+   ```
+   Backend runs on `http://localhost:3001`
+
+3. **Install CMS frontend dependencies:**
+   ```bash
+   cd cms-admin
+   npm install
+   ```
+
+4. **Start CMS development server:**
+   ```bash
+   npm run dev
+   ```
+   CMS runs on `http://localhost:5173`
+
+5. **Access the CMS:**
+   - Navigate to `http://localhost:5173`
+   - Click "New Summary" to create from template or clone existing
+   - Edit sections, mark complete, and publish when ready
+
 ### Build for Production
 
+**Dashboard:**
 ```bash
 npm run build
 ```
 
-The production build will be in the `dist` folder, ready for deployment to your offline server.
+**CMS:**
+```bash
+cd cms-admin
+npm run build
+```
+
+**Backend:**
+```bash
+cd backend
+npm start
+```
+
+The production builds will be in the `dist` folders, ready for deployment.
 
 ### Preview Production Build
 
