@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save, Eye, EyeOff, Lock, Unlock, ChevronDown, ChevronRight, Upload, Check, Plus, Pencil, Trash2, Shield, ShieldOff } from 'lucide-react';
+import { X, Save, Eye, EyeOff, Lock, Unlock, ChevronDown, ChevronRight, Upload, Check, Plus, Pencil, Trash2, Shield, ShieldOff, Code, Copy, CheckCheck, CheckCircle } from 'lucide-react';
 
 interface Section {
   id: string;
@@ -31,6 +31,8 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [editingArrayItems, setEditingArrayItems] = useState<Set<string>>(new Set());
   const [protectionEnabled, setProtectionEnabled] = useState(true);
+  const [showExpressionMenu, setShowExpressionMenu] = useState(false);
+  const [copiedExpression, setCopiedExpression] = useState<string | null>(null);
 
   // List sections that should use the add/edit/delete UI
   const listManagementSections = ['highlights', 'weeklyFocus', 'initiatives', 'risks', 'issuesAndBlockers', 'keyMetrics', 'departments', 'header'];
@@ -77,6 +79,19 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
       setProtectionEnabled(data.protectionEnabled !== false); // Default to true
     }
   }, [data]);
+
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (isOpen || isItemModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, isItemModalOpen]);
 
   // Scroll spy effect to update active section
   useEffect(() => {
@@ -406,6 +421,50 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
   const handlePreview = () => {
     // TODO: Implement preview functionality
     console.log('Preview data:', editedData);
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedExpression(text);
+      // Auto-close the expression panel after a brief delay
+      setTimeout(() => {
+        setShowExpressionMenu(false);
+        setCopiedExpression(null);
+      }, 800);
+    });
+  };
+
+  const renderExpressionCategory = (title: string, expressions: Array<{ syntax: string; desc: string; preview: string }>) => {
+    return (
+      <div className="mb-3">
+        <h4 className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 px-2 py-1">{title}</h4>
+        <div className="space-y-1">
+          {expressions.map((expr, idx) => (
+            <button
+              key={idx}
+              onClick={() => copyToClipboard(expr.syntax)}
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all group text-left"
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-roobert-medium text-gray-900 dark:text-white">{expr.desc}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">→</span>
+                  <span className="text-xs text-gray-600 dark:text-gray-400">{expr.preview}</span>
+                </div>
+                <code className="text-xs text-fis-raspberry dark:text-fis-raspberry font-mono">{expr.syntax}</code>
+              </div>
+              <div className="flex-shrink-0 ml-2">
+                {copiedExpression === expr.syntax ? (
+                  <CheckCheck className="w-4 h-4 text-green-500" />
+                ) : (
+                  <Copy className="w-4 h-4 text-gray-400 group-hover:text-fis-raspberry transition-colors" />
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   const renderValue = (sectionId: string, key: string, value: any, path: string[] = []): React.ReactElement => {
@@ -834,6 +893,99 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
               <Upload className="w-4 h-4" />
               Publish
             </button>
+
+            {/* Spacer to push Expression button to the right */}
+            <div className="flex-1" />
+
+            {/* Expression Engine Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setShowExpressionMenu(!showExpressionMenu)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-fis-eggplant/30 bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry transition-all font-roobert-medium"
+                title="Expression Engine - Insert formatted expressions"
+              >
+                <Code className="w-4 h-4" />
+                <span className="text-sm">Expressions</span>
+                <ChevronDown className={`w-4 h-4 transition-transform ${showExpressionMenu ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Expression Menu Dropdown */}
+              <AnimatePresence>
+                {showExpressionMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full right-0 mt-2 w-96 max-h-[70vh] overflow-y-auto bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-2 border-gray-200 dark:border-gray-700 z-[1000]"
+                  >
+                    {/* Header */}
+                    <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 z-10">
+                      <h3 className="text-sm font-roobert-bold text-gray-900 dark:text-white">Expression Engine</h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Click to copy expressions</p>
+                    </div>
+
+                    {/* Expression Categories */}
+                    <div className="p-2">
+                      {renderExpressionCategory('Currency & Numbers', [
+                        { syntax: '{{currency:1500000}}', desc: 'Currency', preview: '$1.5M' },
+                        { syntax: '{{short:2500}}', desc: 'Short Number', preview: '2.5K' },
+                        { syntax: '{{percent:15.5}}', desc: 'Percentage', preview: '↗ 15.5%' },
+                        { syntax: '{{delta:+12}}', desc: 'Delta/Change', preview: '↗ +12' },
+                      ])}
+
+                      {renderExpressionCategory('Badges', [
+                        { syntax: '{{badge:success}}', desc: 'Success', preview: '✓ Success' },
+                        { syntax: '{{badge:completed}}', desc: 'Completed', preview: '✓ Completed' },
+                        { syntax: '{{badge:warning}}', desc: 'Warning', preview: '⚠ Warning' },
+                        { syntax: '{{badge:critical}}', desc: 'Critical', preview: '● Critical' },
+                        { syntax: '{{badge:info}}', desc: 'Info', preview: 'ℹ Info' },
+                        { syntax: '{{badge:new}}', desc: 'New', preview: '⚡ New' },
+                        { syntax: '{{badge:priority}}', desc: 'Priority', preview: '🚩 Priority' },
+                      ])}
+
+                      {renderExpressionCategory('Trends', [
+                        { syntax: '{{trend:up}}', desc: 'Trending Up', preview: '↗' },
+                        { syntax: '{{trend:down}}', desc: 'Trending Down', preview: '↘' },
+                        { syntax: '{{trend:flat}}', desc: 'Flat', preview: '→' },
+                      ])}
+
+                      {renderExpressionCategory('Icons', [
+                        { syntax: '{{icon:check}}', desc: 'Check', preview: '✓' },
+                        { syntax: '{{icon:alert}}', desc: 'Alert', preview: '⚠' },
+                        { syntax: '{{icon:star}}', desc: 'Star', preview: '⭐' },
+                        { syntax: '{{icon:rocket}}', desc: 'Rocket', preview: '🚀' },
+                        { syntax: '{{icon:target}}', desc: 'Target', preview: '🎯' },
+                        { syntax: '{{icon:zap}}', desc: 'Lightning', preview: '⚡' },
+                      ])}
+
+                      {renderExpressionCategory('Text Styling', [
+                        { syntax: '[[bold]]text[[/bold]]', desc: 'Bold Text', preview: 'Bold' },
+                        { syntax: '[[highlight]]text[[/highlight]]', desc: 'Highlight', preview: 'Highlight' },
+                        { syntax: '[[positive]]text[[/positive]]', desc: 'Positive (Green)', preview: 'Positive' },
+                        { syntax: '[[negative]]text[[/negative]]', desc: 'Negative (Red)', preview: 'Negative' },
+                      ])}
+
+                      {renderExpressionCategory('Links & Dates', [
+                        { syntax: '{{link:url|text}}', desc: 'Link', preview: 'Link Text' },
+                        { syntax: '{{date:2024-10-31}}', desc: 'Date', preview: 'Oct 31' },
+                        { syntax: '{{metric:263|demos|chart}}', desc: 'Metric Box', preview: '📊 263 demos' },
+                      ])}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="sticky bottom-0 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-3 z-10">
+                      <button
+                        onClick={() => setShowExpressionMenu(false)}
+                        className="w-full text-xs text-fis-raspberry hover:text-fis-eggplant font-roobert-medium"
+                      >
+                        Close Menu
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           <div className="flex flex-1 overflow-hidden">
@@ -1469,7 +1621,16 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
               {/* Divider */}
               <div className="h-px bg-gradient-to-r from-transparent via-fis-eggplant/30 to-transparent my-4" />
 
-              <div className="flex justify-end gap-2">
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  onClick={() => setShowExpressionMenu(true)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-fis-eggplant/30 bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry transition-all mr-auto"
+                  title="Expression Engine - Insert formatted expressions"
+                >
+                  <Code className="w-4 h-4" />
+                  <span className="text-xs font-roobert-semibold">Expressions</span>
+                </button>
+
                 <button
                   onClick={() => {
                     setIsItemModalOpen(false);
@@ -1489,6 +1650,119 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Expression Engine Side Panel */}
+      <AnimatePresence>
+        {showExpressionMenu && (
+          <div className="fixed inset-0 z-[70] flex items-center justify-end">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setShowExpressionMenu(false)}
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="relative h-full w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl overflow-y-auto"
+            >
+              {/* Header */}
+              <div className="sticky top-0 z-10 bg-gradient-to-r from-fis-eggplant to-fis-raspberry p-4 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-roobert-bold text-white">Expression Engine</h3>
+                  <p className="text-xs text-white/80 mt-0.5">Click any expression to copy</p>
+                </div>
+                <button
+                  onClick={() => setShowExpressionMenu(false)}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-all"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
+              </div>
+
+              {/* Expression Categories */}
+              <div className="p-4 space-y-4">
+                {renderExpressionCategory('Currency & Numbers', [
+                  { syntax: '{{currency:1500000}}', desc: 'Currency', preview: '$1.5M' },
+                  { syntax: '{{short:2500}}', desc: 'Short Number', preview: '2.5K' },
+                  { syntax: '{{percent:15.5}}', desc: 'Percentage', preview: '↗ 15.5%' },
+                  { syntax: '{{delta:+12}}', desc: 'Delta/Change', preview: '↗ +12' },
+                ])}
+
+                {renderExpressionCategory('Badges', [
+                  { syntax: '{{badge:success}}', desc: 'Success', preview: '✓ Success' },
+                  { syntax: '{{badge:completed}}', desc: 'Completed', preview: '✓ Completed' },
+                  { syntax: '{{badge:warning}}', desc: 'Warning', preview: '⚠ Warning' },
+                  { syntax: '{{badge:critical}}', desc: 'Critical', preview: '● Critical' },
+                  { syntax: '{{badge:info}}', desc: 'Info', preview: 'ℹ Info' },
+                  { syntax: '{{badge:new}}', desc: 'New', preview: '⚡ New' },
+                  { syntax: '{{badge:priority}}', desc: 'Priority', preview: '🚩 Priority' },
+                ])}
+
+                {renderExpressionCategory('Trends', [
+                  { syntax: '{{trend:up}}', desc: 'Trending Up', preview: '↗' },
+                  { syntax: '{{trend:down}}', desc: 'Trending Down', preview: '↘' },
+                  { syntax: '{{trend:flat}}', desc: 'Flat', preview: '→' },
+                ])}
+
+                {renderExpressionCategory('Icons', [
+                  { syntax: '{{icon:check}}', desc: 'Check', preview: '✓' },
+                  { syntax: '{{icon:alert}}', desc: 'Alert', preview: '⚠' },
+                  { syntax: '{{icon:star}}', desc: 'Star', preview: '⭐' },
+                  { syntax: '{{icon:rocket}}', desc: 'Rocket', preview: '🚀' },
+                  { syntax: '{{icon:target}}', desc: 'Target', preview: '🎯' },
+                  { syntax: '{{icon:zap}}', desc: 'Lightning', preview: '⚡' },
+                  { syntax: '{{icon:award}}', desc: 'Award', preview: '🏆' },
+                  { syntax: '{{icon:heart}}', desc: 'Heart', preview: '❤️' },
+                  { syntax: '{{icon:thumbsup}}', desc: 'Thumbs Up', preview: '👍' },
+                  { syntax: '{{icon:bell}}', desc: 'Bell', preview: '🔔' },
+                  { syntax: '{{icon:flag}}', desc: 'Flag', preview: '🚩' },
+                  { syntax: '{{icon:activity}}', desc: 'Activity', preview: '📊' },
+                  { syntax: '{{icon:chart}}', desc: 'Chart', preview: '📈' },
+                  { syntax: '{{icon:trending}}', desc: 'Trending', preview: '📈' },
+                ])}
+
+                {renderExpressionCategory('Text Styling', [
+                  { syntax: '[[bold]]text[[/bold]]', desc: 'Bold Text', preview: 'Bold' },
+                  { syntax: '[[highlight]]text[[/highlight]]', desc: 'Highlight', preview: 'Highlight' },
+                  { syntax: '[[positive]]text[[/positive]]', desc: 'Positive (Green)', preview: 'Positive' },
+                  { syntax: '[[negative]]text[[/negative]]', desc: 'Negative (Red)', preview: 'Negative' },
+                ])}
+
+                {renderExpressionCategory('Links & Dates', [
+                  { syntax: '{{link:url|text}}', desc: 'Link', preview: 'Link Text' },
+                  { syntax: '{{date:2024-10-31}}', desc: 'Date', preview: 'Oct 31' },
+                  { syntax: '{{metric:263|demos|chart}}', desc: 'Metric Box', preview: '📊 263 demos' },
+                ])}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Copy Confirmation Toast */}
+      <AnimatePresence>
+        {copiedExpression && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-[100] bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl px-6 py-4 shadow-2xl border-2 border-green-400/50"
+          >
+            <div className="flex items-center gap-3">
+              <CheckCircle className="w-6 h-6 flex-shrink-0" />
+              <div>
+                <p className="font-roobert-semibold text-sm">Expression Copied!</p>
+                <code className="text-xs font-mono opacity-90">{copiedExpression}</code>
+              </div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </AnimatePresence>
