@@ -103,6 +103,20 @@ A powerful, user-friendly content management system for non-technical users:
   - Blocks publishing when protection ON and completion < 100%
   - Flexible override for power users
   - Alert shows current completion % when blocked
+- **JSON Validation System**: 🆕 Comprehensive 12-section validation
+  - Auto-scroll to active check during validation
+  - Two-column layout: Test results (30%) | JSON snippet (70%)
+  - Expand/collapse "Show More" for detailed results
+  - Section-specific checks:
+    * Header: ID format, quarter format, date validation
+    * Highlights: Array validation (no count requirement)
+    * Key Metrics: Type checking for all metric fields
+    * Activity Metrics: Nested structure validation
+    * Departments: Performance range checks (0-100)
+    * Initiatives: Status values and progress validation
+    * And more...
+  - Color-coded results: Green (passed), Yellow (warning), Red (error)
+  - Smart handling of disabled sections (blue info icon)
 
 #### Content Creation & Management
 - **Template System**: 
@@ -110,8 +124,11 @@ A powerful, user-friendly content management system for non-technical users:
   - Clone existing summaries as new drafts
   - Auto-generates unique IDs with timestamps
   - All new content starts as "Draft" status
-- **Section Management**:
-  - Enable/disable sections (show/hide from dashboard)
+- **Section Management**: 🆕 Enhanced with visual feedback
+  - **Enable/disable sections** (`_enabled_[section]` flags)
+    - Disabled sections hidden from visual preview
+    - Validation skips disabled sections
+    - Blue info indicator: "Section is disabled in CMS"
   - Lock/unlock sections (prevent editing)
   - Mark sections complete (updates completion %)
   - Purple label styling for consistency
@@ -119,6 +136,11 @@ A powerful, user-friendly content management system for non-technical users:
   - Add/Edit/Delete buttons for highlights, risks, issues
   - Specialized card-based rendering
   - Special handling for nested arrays (department achievements)
+- **Draft Mode Preview**: 🆕
+  - Three-tab interface: Visual | JSON | Validate
+  - Download button hidden in draft mode
+  - Draft preview bar with sticky navigation
+  - Real-time JSON inspection
 
 #### Visual Indicators & Warnings
 - **Status Badges**: LIVE (green) and DRAFT (yellow) on all tiles
@@ -143,12 +165,23 @@ A powerful, user-friendly content management system for non-technical users:
   - Scroll spy (highlights active section)
   - Collapsible sections for large documents
   - Dark/light mode support
+- **Navigation Integration**: 🆕
+  - CMS Admin link in main app header menu
+  - Main app link in CMS header
+  - API Dashboard for health checks
+  - Seamless switching between apps
 
 #### Backend Integration
 - **Express.js API**: RESTful endpoints for all data types
   - Summaries, ExecutiveIQ, Organizations, Performance
   - Full CRUD operations (Create, Read, Update, Delete)
   - File-based JSON storage for simplicity
+- **API Dashboard**: 🆕 Built-in testing tool
+  - File System Health checks
+  - API Endpoint testing
+  - Auto-scroll to active test
+  - Response time monitoring
+  - Expandable response data
 - **Import System**: Upload JSON templates directly
 - **Real-time Updates**: Changes reflect immediately on dashboard
 
@@ -451,13 +484,46 @@ npm run lint     # Run ESLint
 ## 📝 Data Structure
 
 Each executive summary includes:
-- **Basic Info**: Quarter, year, date, title
-- **Key Metrics**: Revenue, growth, customers, satisfaction
+- **Basic Info**: Quarter, year, date, title, status (draft/published)
+- **Key Metrics**: Revenue, growth, customers, satisfaction (object format with numbers)
 - **Highlights**: Major achievements (array)
-- **Departments**: Performance data for each department
-- **Initiatives**: Strategic initiatives with progress
-- **Risks**: Risk assessment and mitigation
-- **Outlook**: Future expectations and goals
+- **Activity Metrics**: 🆕 Demo Studio data with keyActivityInsights
+  - demoStudio: registered, linked to deals, won ACV, conversion rate
+  - keyActivityInsights: Banking and Capital Markets activity hours and percentages
+- **Top Assets**: 🆕 Most-used demo assets with counts and categories
+- **Weekly Focus**: 🆕 Array of focus items for the week
+- **Departments**: Performance data for each department (array)
+- **Initiatives**: Strategic initiatives with progress (array)
+- **Risks**: Risk assessment and mitigation (array)
+- **Issues & Blockers**: 🆕 Detailed issue tracking with status and impact
+- **Outlook**: Future expectations and goals (string)
+- **CMS Metadata**: 🆕 Content enablement and completion flags
+  - `_enabled_[section]`: boolean flags to show/hide sections
+  - `_completed_[section]`: boolean flags for completion tracking
+  - `status`: "draft" or "published"
+  - `protectionEnabled`: boolean for CMS protection
+
+### Data Type Requirements
+**Important:** All `keyMetrics` values must be numbers, not strings:
+```json
+"keyMetrics": {
+  "revenue": 1230000,        // ✓ Correct (number)
+  "growth": 48,              // ✓ Correct (number)
+  "customers": 263,          // ✓ Correct (number)
+  "satisfaction": 92         // ✓ Correct (number)
+}
+```
+
+**Not this:**
+```json
+"keyMetrics": {
+  "revenue": "1230000",      // ✗ Wrong (string)
+  "growth": "48",            // ✗ Wrong (string)
+  ...
+}
+```
+
+The validation system will catch these type errors and provide specific feedback.
 
 ## 🎨 Design System
 
