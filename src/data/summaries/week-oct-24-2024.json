@@ -11,44 +11,114 @@
     "{{icon:chart}} SNOW Migration - Technical requirements finalized, beginning dashboard development",
     "Capital Markets {{metric:1389|support hours|clock}} leads activity (2.3× Banking intensity)"
   ],
-  "keyMetrics": {
-    "revenue": 1080000,
-    "growth": 44,
-    "customers": 241,
-    "satisfaction": 0
-  },
-  "activityMetrics": {
-    "demoStudio": {
-      "demosRegistered": 241,
-      "demosLinkedToDeals": 114,
-      "wonACV": 1080000,
-      "conversionRate": 44
+  "keyMetrics": [
+    {
+      "label": "Won ACV",
+      "value": 1080000,
+      "type": "currency"
     },
-    "hoursByLOB": {
-      "capitalMarkets": {
-        "support": 1389,
-        "prep": 22104,
-        "demo": 10447
-      },
-      "banking": {
-        "support": 612,
-        "prep": 8476,
-        "demo": 6182
-      }
+    {
+      "label": "Conversion Rate",
+      "value": 44,
+      "type": "percentage"
     },
-    "activityMixPercentages": {
-      "capitalMarkets": {
-        "support": 4,
-        "prep": 65,
-        "demo": 31
-      },
-      "banking": {
-        "support": 4,
-        "prep": 55,
-        "demo": 40
-      }
+    {
+      "label": "Demos Registered",
+      "value": 241,
+      "type": "number"
     }
-  },
+  ],
+  "activityMetrics": [
+    {
+      "category": "Demo Studio",
+      "metrics": [
+        {
+          "label": "Demos Registered",
+          "value": 241
+        },
+        {
+          "label": "Demos Linked To Deals",
+          "value": 114
+        },
+        {
+          "label": "Won ACV",
+          "value": 1080000
+        },
+        {
+          "label": "Conversion Rate",
+          "value": 44
+        }
+      ]
+    },
+    {
+      "category": "Capital Markets Hours",
+      "metrics": [
+        {
+          "label": "Support",
+          "value": 1389
+        },
+        {
+          "label": "Prep",
+          "value": 22104
+        },
+        {
+          "label": "Demo",
+          "value": 10447
+        }
+      ]
+    },
+    {
+      "category": "Banking Hours",
+      "metrics": [
+        {
+          "label": "Support",
+          "value": 612
+        },
+        {
+          "label": "Prep",
+          "value": 8476
+        },
+        {
+          "label": "Demo",
+          "value": 6182
+        }
+      ]
+    },
+    {
+      "category": "Capital Markets Activity %",
+      "metrics": [
+        {
+          "label": "Support",
+          "value": 4
+        },
+        {
+          "label": "Prep",
+          "value": 65
+        },
+        {
+          "label": "Demo",
+          "value": 31
+        }
+      ]
+    },
+    {
+      "category": "Banking Activity %",
+      "metrics": [
+        {
+          "label": "Support",
+          "value": 4
+        },
+        {
+          "label": "Prep",
+          "value": 55
+        },
+        {
+          "label": "Demo",
+          "value": 40
+        }
+      ]
+    }
+  ],
   "topAssets": [
     {
       "name": "D1 Flex",
@@ -162,16 +232,19 @@
   ],
   "risks": [
     {
+      "title": "Tiled Platform Performance",
       "description": "Tiled platform performance inconsistencies may impact Banking Microsite delivery timeline",
       "severity": "medium",
       "mitigation": "Documenting workarounds and evaluating alternative deployment strategies"
     },
     {
+      "title": "Money 20/20 Scheduling Conflicts",
       "description": "Money 20/20 scheduling conflicts with E6 may delay International Issuing Hub kickoff",
       "severity": "medium",
       "mitigation": "Flexible meeting schedule post-conference; Coast engaged as backup contact"
     },
     {
+      "title": "SNOW Form Customization",
       "description": "SNOW form customization may require additional IT approval cycles",
       "severity": "low",
       "mitigation": "Early engagement with IT governance team; fallback to manual BU tagging if needed"

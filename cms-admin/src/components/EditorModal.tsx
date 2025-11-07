@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save, Eye, EyeOff, Lock, Unlock, ChevronDown, ChevronRight, Upload, Check, Plus, Pencil, Trash2, Shield, ShieldOff, Code, Copy, CheckCheck, CheckCircle } from 'lucide-react';
 import PreviewModal from './PreviewModal';
+import { getClasses } from '@design-system';
+import { summarySchema } from '@shared/schemas/summarySchema';
+import { RenderFactory } from '@renderers/RenderFactory';
 
 interface Section {
   id: string;
@@ -464,6 +467,39 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
             </button>
           ))}
         </div>
+      </div>
+    );
+  };
+
+  /**
+   * Schema-Driven Section Renderer
+   * Uses summarySchema to automatically generate forms
+   */
+  const renderSchemaSection = (sectionId: string): React.ReactElement | null => {
+    const schemaSection = summarySchema.sections?.find(s => s.id === sectionId);
+    if (!schemaSection) return null;
+
+    const sectionData = editedData[sectionId];
+
+    return (
+      <div className="space-y-4">
+        {Object.entries(schemaSection.fields).map(([fieldKey, fieldSchema]) => (
+          <div key={fieldKey}>
+            <RenderFactory
+              fieldKey={fieldKey}
+              schema={fieldSchema as any}
+              value={sectionData}
+              onChange={(newValue) => {
+                setEditedData(prev => ({
+                  ...prev,
+                  [sectionId]: newValue
+                }));
+                setIsDirty(true);
+              }}
+              mode="edit"
+            />
+          </div>
+        ))}
       </div>
     );
   };
@@ -1139,6 +1175,17 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
                         className="p-3"
                       >
                         {Array.isArray(section.content) ? (
+                          // Check if this array section should use schema rendering
+                          (() => {
+                            const schemaSection = summarySchema.sections?.find(s => s.id === section.id);
+                            
+                            // Only use schema for array sections with object items (keyMetrics, activityMetrics)
+                            if (schemaSection && section.content.length > 0 && typeof section.content[0] === 'object') {
+                              return renderSchemaSection(section.id);
+                            }
+                            
+                            // Default array rendering for string arrays (highlights, weeklyFocus, etc.)
+                            return (
                           <div className={
                             section.id === 'topAssets'
                               ? 'space-y-2'
@@ -1338,6 +1385,8 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
                               </div>
                             ))}
                           </div>
+                            );
+                          })()
                         ) : typeof section.content === 'object' && !Array.isArray(section.content) ? (
                           section.id === 'header' ? (
                             // Header section - display fields with purple labels and edit button
@@ -1377,9 +1426,20 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
                             </div>
                           ) : (
                             <div className="space-y-1.5">
-                              {Object.entries(section.content).map(([key, value]) => 
-                                renderValue(section.id, key, value, [section.id])
-                              )}
+                              {(() => {
+                                // Check if schema exists for this section
+                                const schemaSection = summarySchema.sections?.find(s => s.id === section.id);
+                                
+                                if (schemaSection) {
+                                  // Use schema-driven rendering
+                                  return renderSchemaSection(section.id);
+                                } else {
+                                  // Fallback to existing renderValue logic
+                                  return Object.entries(section.content).map(([key, value]) => 
+                                    renderValue(section.id, key, value, [section.id])
+                                  );
+                                }
+                              })()}
                             </div>
                           )
                         ) : typeof section.content === 'string' ? (

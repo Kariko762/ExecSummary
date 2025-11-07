@@ -1,0 +1,115 @@
+// Schema-driven renderer type definitions
+
+export type RenderType = 
+  | 'text'              // Simple text input
+  | 'textarea'          // Multi-line text
+  | 'number'            // Numeric input
+  | 'list'              // Array with add/remove (like highlights)
+  | 'listNoTitle'       // List without section header
+  | 'metricCards'       // Grid of metric cards
+  | 'nestedCards'       // Array of objects as cards (departments)
+  | 'objectForm'        // Object with labeled fields
+  | 'richText'          // WYSIWYG editor
+  | 'dateRange'         // Timeline/date picker
+  | 'statusBadge'       // Dropdown with badge preview
+  | 'progressBar'       // Number with visual bar
+  | 'pieChart'          // Pie chart visualization
+  | 'barChart'          // Bar chart visualization
+  | 'lineChart'         // Line chart visualization
+  | 'radialChart';      // Radial/donut chart
+
+export type ValidationRule = {
+  rule: 'required' | 'min' | 'max' | 'pattern' | 'email' | 'url' | 'custom';
+  value?: any;
+  message?: string;
+  validator?: (value: any) => boolean;
+};
+
+export interface ChartConfig {
+  dataKey?: string;
+  xAxisKey?: string;
+  yAxisKey?: string;
+  colors?: string[];
+  showLegend?: boolean;
+  showGrid?: boolean;
+  responsive?: boolean;
+}
+
+export interface FieldSchema {
+  renderAs: RenderType;
+  label?: string;
+  type?: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'date';
+  weight?: number;
+  enabled?: boolean;
+  required?: boolean;
+  validation?: ValidationRule[];
+  placeholder?: string;
+  helpText?: string;
+  defaultValue?: any;
+  
+  // For sections
+  id?: string;
+  title?: string;
+  description?: string;
+  locked?: boolean;
+  
+  // For nested structures (objects)
+  fields?: Record<string, FieldSchema>;
+  
+  // For arrays
+  itemSchema?: FieldSchema;
+  minItems?: number;
+  maxItems?: number;
+  
+  // For charts
+  chartConfig?: ChartConfig;
+  
+  // For conditional rendering
+  showIf?: (data: any) => boolean;
+  
+  // For grouping fields
+  group?: string;
+}
+
+export interface SectionSchema extends FieldSchema {
+  id: string;
+  title: string;
+  description?: string;
+  required?: boolean;
+  enabled?: boolean;
+  locked?: boolean;
+  weight?: number;
+  fields: Record<string, FieldSchema>;
+}
+
+export interface ContentSchema {
+  id: string;
+  title: string;
+  version: string;
+  sections?: SectionSchema[];
+}
+
+export interface SchemaDefinition {
+  type: 'summaries' | 'executive-iq' | 'organizations' | 'performance';
+  version: string;
+  schema: ContentSchema;
+  metadata?: {
+    title?: string;
+    description?: string;
+    icon?: string;
+  };
+}
+
+// Render mode for components
+export type RenderMode = 'edit' | 'display' | 'preview';
+
+// Props interface for renderers
+export interface RendererProps {
+  fieldKey: string;
+  schema: FieldSchema;
+  value: any;
+  onChange?: (value: any) => void;
+  mode: RenderMode;
+  disabled?: boolean;
+  error?: string;
+}

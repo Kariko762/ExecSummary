@@ -12,7 +12,17 @@ export default {
         'roobert': ['Roobert', 'sans-serif'],
         'roobert-light': ['Roobert Light', 'sans-serif'],
         'roobert-medium': ['Roobert Medium', 'sans-serif'],
+        'roobert-semibold': ['Roobert', 'sans-serif'],  // weight 600
+        'roobert-bold': ['Roobert', 'sans-serif'],      // weight 700
         'roobert-heavy': ['Roobert Heavy', 'sans-serif'],
+      },
+      fontWeight: {
+        'light': '300',
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
+        'heavy': '800',
       },
       colors: {
         'fis': {
@@ -33,6 +43,37 @@ export default {
             700: '#1d8e21',
             800: '#147918',
             900: '#0b6410',
+          }
+        },
+        // Dark Mode Color Scheme (extracted from infographic designs)
+        'dark': {
+          'bg': {
+            'primary': '#1a1a1a',      // Main canvas background
+            'secondary': '#2d2d2d',    // Cards, panels
+            'tertiary': '#3a3a3a',     // Hover states
+          },
+          'text': {
+            'primary': '#ffffff',      // Headings, important text
+            'secondary': '#b0b0b0',    // Body text, descriptions
+            'tertiary': '#808080',     // Labels, captions
+            'muted': '#5a5a5a',        // Disabled, placeholder
+          },
+          'accent': {
+            'orange': '#ff8c42',       // Primary accent (buttons, highlights)
+            'coral': '#ff5252',        // Warnings, alerts
+            'teal': '#42d4f4',         // Info, links
+            'purple': '#a855f7',       // Secondary accent
+            'amber': '#fbbf24',        // Success states
+            'green': '#10b981',        // Positive metrics
+          },
+          'chart': {
+            'orange': '#ff8c42',
+            'blue': '#3b82f6',
+            'purple': '#9333ea',
+            'teal': '#06b6d4',
+            'yellow': '#f59e0b',
+            'green': '#22c55e',
+            'red': '#ef4444',
           }
         },
         'glass': {

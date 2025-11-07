@@ -8,6 +8,17 @@
     "types": ["vite/client"],
     "skipLibCheck": true,
 
+    /* Path Aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["../src/*"],
+      "@design-system": ["../src/design-system"],
+      "@design-system/*": ["../src/design-system/*"],
+      "@renderers/*": ["../src/renderers/*"],
+      "@types/*": ["../src/types/*"],
+      "@schemas/*": ["../src/schemas/*"]
+    },
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

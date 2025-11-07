@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
 import { CMSHeader } from './components/CMSHeader';
-import EditorModal from './components/EditorModal';
+import EditorModal from './components/EditorModalV2';
+import EngineGlossaryModal from './components/EngineGlossaryModal';
 import summaryTemplate from './templates/summary-template.json';
 import './App.css';
 
@@ -64,6 +65,7 @@ function App() {
   const [newSummaryName, setNewSummaryName] = useState('');
   const [creationMode, setCreationMode] = useState<'template' | 'clone'>('template');
   const [selectedSourceId, setSelectedSourceId] = useState<string>('');
+  const [showEngineGlossary, setShowEngineGlossary] = useState(false);
 
   useEffect(() => {
     if (activeSection !== 'import') {
@@ -239,7 +241,8 @@ function App() {
 
       if (response.ok) {
         showNotification('success', `Saved as ${status}!`);
-        setModalOpen(false);
+        // Don't close modal here - let EditorModalV2 decide when to close
+        // setModalOpen(false);
         fetchData();
       } else {
         showNotification('error', 'Failed to save');
@@ -586,7 +589,7 @@ function App() {
     <ThemeProvider>
       <PresentationProvider>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
-          <CMSHeader />
+          <CMSHeader onOpenEngineGlossary={() => setShowEngineGlossary(true)} />
           
           {/* Notification */}
           <AnimatePresence>
@@ -875,6 +878,12 @@ function App() {
             data={selectedItem}
             dataType={modalDataType}
             onSave={handleSaveItem}
+          />
+
+          {/* Engine Glossary Modal */}
+          <EngineGlossaryModal
+            isOpen={showEngineGlossary}
+            onClose={() => setShowEngineGlossary(false)}
           />
         </div>
       </PresentationProvider>

@@ -11,42 +11,54 @@
     "Demo Studio YTD: 263 demos registered, 126 linked to deals, $1.23M won ACV (48% conversion)",
     "Capital Markets leads activity: 2.1× Support, 2.6× Prep, 1.7× Demo hours vs Banking"
   ],
-  "keyMetrics": {
-    "revenue": 1230000,
-    "growth": 48,
-    "customers": 263,
-    "satisfaction": 0
-  },
-  "activityMetrics": {
-    "demoStudio": {
-      "demosRegistered": 263,
-      "demosLinkedToDeals": 126,
-      "wonACV": 1230000,
-      "conversionRate": 48
+  "keyMetrics": [
+    { "label": "Won ACV", "value": 1230000, "type": "currency" },
+    { "label": "Conversion Rate", "value": 48, "type": "percentage" },
+    { "label": "Demos Registered", "value": 263, "type": "number" }
+  ],
+  "activityMetrics": [
+    {
+      "category": "Demo Studio",
+      "metrics": [
+        { "label": "Demos Registered", "value": 263 },
+        { "label": "Demos Linked To Deals", "value": 126 },
+        { "label": "Won ACV", "value": 1230000 },
+        { "label": "Conversion Rate", "value": 48 }
+      ]
     },
-    "keyActivityInsights": {
-      "bankingActivityHours": {
-        "support": 684,
-        "prep": 8953,
-        "demo": 6528
-      },
-      "capitalMarketsActivityHours": {
-        "support": 1464,
-        "prep": 23358,
-        "demo": 11057
-      },
-      "bankingActivityPercentageDistribution": {
-        "support": 4,
-        "prep": 55,
-        "demo": 41
-      },
-      "capitalMarketsActivityPercentageDistribution": {
-        "support": 4,
-        "prep": 65,
-        "demo": 31
-      }
+    {
+      "category": "Banking Activity Hours",
+      "metrics": [
+        { "label": "Support", "value": 684 },
+        { "label": "Prep", "value": 8953 },
+        { "label": "Demo", "value": 6528 }
+      ]
+    },
+    {
+      "category": "Capital Markets Activity Hours",
+      "metrics": [
+        { "label": "Support", "value": 1464 },
+        { "label": "Prep", "value": 23358 },
+        { "label": "Demo", "value": 11057 }
+      ]
+    },
+    {
+      "category": "Banking Activity %",
+      "metrics": [
+        { "label": "Support", "value": 4 },
+        { "label": "Prep", "value": 55 },
+        { "label": "Demo", "value": 41 }
+      ]
+    },
+    {
+      "category": "Capital Markets Activity %",
+      "metrics": [
+        { "label": "Support", "value": 4 },
+        { "label": "Prep", "value": 65 },
+        { "label": "Demo", "value": 31 }
+      ]
     }
-  },
+  ],
   "topAssets": [
     {
       "name": "D1 Flex",
@@ -161,11 +173,13 @@
   ],
   "risks": [
     {
+      "title": "International Issuing Hub Delayed",
       "description": "International Issuing Hub delayed due to Money 20/20 and E6/Coast availability",
       "severity": "medium",
       "mitigation": "E6 expected to approve asset transfer this week; Coast engaged Matthew Little to expedite"
     },
     {
+      "title": "Coast MSA Renewal Ownership",
       "description": "Coast MSA Renewal – Owner Lance Tapper has left FIS, unclear ownership",
       "severity": "high",
       "mitigation": "Review MSA requirements and platform ownership; define cost and impact ahead of EoY renewal"

@@ -11,6 +11,7 @@ import { Timeline } from './components/Timeline';
 import { StickyNav } from './components/StickyNav';
 import { OrganizationDashboard } from './components/OrganizationDashboard';
 import { StrategicInitiativesDashboard } from './components/StrategicInitiativesDashboard';
+import { SchemaTest } from './components/SchemaTest';
 import { timelineItems, isExecutiveSummary } from './data/timeline-loader';
 import { TimelineItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -148,6 +149,11 @@ function App() {
                   {/* Strategic Initiatives Route */}
                   <Route path="/strategic-initiatives" element={
                     <StrategicInitiativesDashboard />
+                  } />
+
+                  {/* Schema Test Route */}
+                  <Route path="/schema-test" element={
+                    <SchemaTest />
                   } />
                 </Routes>
               </div>

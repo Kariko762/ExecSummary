@@ -1,13 +1,18 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
 import APIDashboardModal from './APIDashboardModal';
 
-export const CMSHeader = () => {
+interface CMSHeaderProps {
+  onOpenEngineGlossary?: () => void;
+}
+
+export const CMSHeader = ({ onOpenEngineGlossary }: CMSHeaderProps) => {
   const { theme, toggleTheme } = useTheme();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
+  const [engineSubmenuOpen, setEngineSubmenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
@@ -72,7 +77,7 @@ export const CMSHeader = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute left-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+                    className="absolute left-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-visible z-50"
                   >
                     <div className="p-3">
                       {/* Demo Services Group Header */}
@@ -152,23 +157,87 @@ export const CMSHeader = () => {
                           </div>
                         </button>
 
-                        {/* System Settings Placeholder */}
-                        <button
-                          onClick={() => {
-                            setIsNavDropdownOpen(false);
-                            // TODO: Open system settings modal
-                          }}
-                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left opacity-50 cursor-not-allowed"
-                          disabled
-                        >
-                          <div className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
-                            <Settings className="w-5 h-5 text-gray-400" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-roobert-semibold text-sm text-gray-500 dark:text-gray-500">System Settings</div>
-                            <div className="text-xs text-gray-400">Coming soon</div>
-                          </div>
-                        </button>
+                        {/* Engine & Templates - WITH SUBMENU */}
+                        <div className="relative">
+                          <button
+                            onMouseEnter={() => setEngineSubmenuOpen(true)}
+                            onMouseLeave={() => setEngineSubmenuOpen(false)}
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white text-left"
+                          >
+                            <div className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
+                              <Wrench className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-roobert-semibold text-sm">Engine & Templates</div>
+                              <div className="text-xs text-gray-600 dark:text-gray-400">Render engine & builders</div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-gray-400" />
+                          </button>
+
+                          {/* Submenu - Slides out to the right */}
+                          <AnimatePresence>
+                            {engineSubmenuOpen && (
+                              <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                transition={{ duration: 0.15 }}
+                                onMouseEnter={() => setEngineSubmenuOpen(true)}
+                                onMouseLeave={() => setEngineSubmenuOpen(false)}
+                                className="absolute left-full top-0 ml-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[60]"
+                              >
+                                <div className="p-2">
+                                  {/* Engine Glossary */}
+                                  <button
+                                    onClick={() => {
+                                      console.log('Engine Glossary clicked!');
+                                      setIsNavDropdownOpen(false);
+                                      setEngineSubmenuOpen(false);
+                                      onOpenEngineGlossary?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-fis-eggplant/10 dark:hover:bg-fis-eggplant/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-fis-eggplant/10 dark:bg-fis-eggplant/20">
+                                      <BookOpen className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Engine Glossary</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">All render types & examples</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Template Builder - Coming Soon */}
+                                  <button
+                                    disabled
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-left opacity-50 cursor-not-allowed"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-gray-200 dark:bg-gray-700">
+                                      <Settings className="w-4 h-4 text-gray-400" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm text-gray-500 dark:text-gray-500">Template Builder</div>
+                                      <div className="text-xs text-gray-400">Coming soon</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Schema Validator - Coming Soon */}
+                                  <button
+                                    disabled
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-left opacity-50 cursor-not-allowed"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-gray-200 dark:bg-gray-700">
+                                      <Database className="w-4 h-4 text-gray-400" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm text-gray-500 dark:text-gray-500">Schema Validator</div>
+                                      <div className="text-xs text-gray-400">Coming soon</div>
+                                    </div>
+                                  </button>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
