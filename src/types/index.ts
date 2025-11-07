@@ -25,11 +25,34 @@ export interface ExecutiveSummary {
       wonACV: number;
       conversionRate: number;
     };
-    hoursByLOB: {
+    keyActivityInsights?: {
+      bankingActivityHours?: {
+        support: number;
+        prep: number;
+        demo: number;
+      };
+      capitalMarketsActivityHours?: {
+        support: number;
+        prep: number;
+        demo: number;
+      };
+      bankingActivityPercentageDistribution?: {
+        support: number;
+        prep: number;
+        demo: number;
+      };
+      capitalMarketsActivityPercentageDistribution?: {
+        support: number;
+        prep: number;
+        demo: number;
+      };
+    };
+    // Legacy field names (for backwards compatibility)
+    hoursByLOB?: {
       capitalMarkets: { support: number; prep: number; demo: number; };
       banking: { support: number; prep: number; demo: number; };
     };
-    activityMixPercentages: {
+    activityMixPercentages?: {
       capitalMarkets: { support: number; prep: number; demo: number; };
       banking: { support: number; prep: number; demo: number; };
     };

@@ -890,11 +890,11 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
     }
   };
 
-  const departmentChartData = summary.departments.map((dept) => ({
+  const departmentChartData = summary.departments?.map((dept) => ({
     name: dept.name,
     performance: dept.performance,
     fill: dept.performance >= 90 ? '#10B981' : dept.performance >= 80 ? '#3B82F6' : '#F59E0B',
-  }));
+  })) || [];
 
   const handleExportImage = async () => {
     const contentDiv = document.querySelector('.summary-content') as HTMLElement;
@@ -1162,9 +1162,9 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                                     transition={{ duration: 0.2 }}
                                     className="mt-2 p-3 rounded-lg bg-white/50 dark:bg-black/20 border border-gray-200 dark:border-gray-700"
                                   >
-                                    <div className="grid grid-cols-3 gap-4">
-                                      {/* Column 1: Test Results (30% width) */}
-                                      <div className="col-span-1 space-y-1 border-r border-gray-300 dark:border-gray-600 pr-4">
+                                    <div className="flex gap-4">
+                                      {/* Left: Test Results (30% width) */}
+                                      <div className="w-[30%] flex-shrink-0 space-y-1 border-r border-gray-300 dark:border-gray-600 pr-4">
                                         <div className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
                                           Test Results
                                         </div>
@@ -1182,19 +1182,21 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                                               isInfo ? 'text-blue-600 dark:text-blue-400' :
                                               'text-gray-600 dark:text-gray-400'
                                             }`}>
-                                              <span className="font-mono">{detail.charAt(0)}</span>
-                                              <span className="flex-1">{detail.substring(2)}</span>
+                                              <span className="font-mono flex-shrink-0">{detail.charAt(0)}</span>
+                                              <span className="flex-1 break-words">{detail.substring(2)}</span>
                                             </div>
                                           );
                                         })}
                                       </div>
                                       
-                                      {/* Column 2: JSON Section (70% width) */}
-                                      <div className="col-span-2 space-y-2">
+                                      {/* Right: JSON Section (70% width) */}
+                                      <div className="flex-1 min-w-0">
                                         <div className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 uppercase tracking-wide">
                                           JSON Section Being Validated
                                         </div>
-                                        {getJsonSnippet(check.section)}
+                                        <div className="w-full overflow-hidden">
+                                          {getJsonSnippet(check.section)}
+                                        </div>
                                       </div>
                                     </div>
                                   </motion.div>
@@ -1457,62 +1459,67 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
             </section>
 
             {/* Highlights */}
-            <section>
-              <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
-                Key Highlights
-              </h3>
-              <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-6 space-y-3">
-                {summary.highlights.map((highlight, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex items-start space-x-3"
-                  >
-                    <div className="w-6 h-6 rounded-full bg-fis-raspberry flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-white text-xs font-roobert-heavy">
-                        {index + 1}
-                      </span>
-                    </div>
-                    <div className="text-base font-roobert-light text-gray-700 dark:text-gray-300 flex-1">
-                      {renderWithExpressions(highlight)}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </section>
-
-            {/* Departments & Initiatives Grid */}
-            <div id="performance" className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Department Performance */}
+            {summary._enabled_highlights !== false && summary.highlights && summary.highlights.length > 0 && (
               <section>
                 <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
-                  Department Performance
+                  Key Highlights
                 </h3>
-                <div className="bg-white dark:bg-gray-800/50 rounded-xl p-6">
-                  <ResponsiveContainer width="100%" height={250}>
-                    <RadialBarChart
-                      cx="50%"
-                      cy="50%"
-                      innerRadius="20%"
-                      outerRadius="90%"
-                      data={departmentChartData}
-                      startAngle={90}
-                      endAngle={-270}
+                <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-6 space-y-3">
+                  {summary.highlights.map((highlight, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-start space-x-3"
                     >
-                      <RadialBar
-                        background
-                        dataKey="performance"
-                        cornerRadius={10}
-                      />
-                    </RadialBarChart>
-                  </ResponsiveContainer>
+                      <div className="w-6 h-6 rounded-full bg-fis-raspberry flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-white text-xs font-roobert-heavy">
+                          {index + 1}
+                        </span>
+                      </div>
+                      <div className="text-base font-roobert-light text-gray-700 dark:text-gray-300 flex-1">
+                        {renderWithExpressions(highlight)}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+            )}
 
-                  <div className="space-y-3 mt-6">
-                    {summary.departments.map((dept) => (
-                      <div key={dept.name} className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
+            {/* Departments & Initiatives Grid */}
+            {((summary._enabled_departments !== false && summary.departments && summary.departments.length > 0) || 
+              (summary._enabled_initiatives !== false && summary.initiatives && summary.initiatives.length > 0)) && (
+              <div id="performance" className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Department Performance */}
+                {summary._enabled_departments !== false && summary.departments && summary.departments.length > 0 && (
+                  <section>
+                    <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
+                      Department Performance
+                    </h3>
+                    <div className="bg-white dark:bg-gray-800/50 rounded-xl p-6">
+                      <ResponsiveContainer width="100%" height={250}>
+                        <RadialBarChart
+                          cx="50%"
+                          cy="50%"
+                          innerRadius="20%"
+                          outerRadius="90%"
+                          data={departmentChartData}
+                          startAngle={90}
+                          endAngle={-270}
+                        >
+                          <RadialBar
+                            background
+                            dataKey="performance"
+                            cornerRadius={10}
+                          />
+                        </RadialBarChart>
+                      </ResponsiveContainer>
+
+                      <div className="space-y-3 mt-6">
+                        {summary.departments.map((dept) => (
+                          <div key={dept.name} className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
                           <div
                             className="w-3 h-3 rounded-full"
                             style={{
@@ -1536,8 +1543,10 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                   </div>
                 </div>
               </section>
+            )}
 
-              {/* Strategic Initiatives */}
+            {/* Strategic Initiatives */}
+            {summary._enabled_initiatives !== false && summary.initiatives && summary.initiatives.length > 0 && (
               <section>
                 <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
                   Strategic Initiatives
@@ -1589,10 +1598,12 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                   })}
                 </div>
               </section>
+            )}
             </div>
+            )}
 
             {/* Weekly Focus - Show if available */}
-            {summary.weeklyFocus && summary.weeklyFocus.length > 0 && (
+            {summary._enabled_weeklyFocus !== false && summary.weeklyFocus && summary.weeklyFocus.length > 0 && (
               <>
                 <div className="flex justify-center">
                   <div className="w-3/5 h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
@@ -1604,7 +1615,7 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
             )}
 
             {/* Issues & Blockers - Show if available */}
-            {summary.issuesAndBlockers && summary.issuesAndBlockers.length > 0 && (
+            {summary._enabled_issuesAndBlockers !== false && summary.issuesAndBlockers && summary.issuesAndBlockers.length > 0 && (
               <>
                 <div className="flex justify-center">
                   <div className="w-3/5 h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
@@ -1616,12 +1627,13 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
             )}
 
             {/* Risks & Mitigation */}
-            <section id="risks">
-              <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
-                Risks & Mitigation
-              </h3>
-              <div className="space-y-4">
-                {summary.risks.map((risk, index) => (
+            {summary._enabled_risks !== false && summary.risks && summary.risks.length > 0 && (
+              <section id="risks">
+                <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
+                  Risks & Mitigation
+                </h3>
+                <div className="space-y-4">
+                  {summary.risks.map((risk, index) => (
                   <div key={index} className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-5">
                     <div className="flex items-start space-x-4">
                       <div className={`p-2 rounded-lg ${getSeverityColor(risk.severity)}`}>
@@ -1646,23 +1658,26 @@ export const SummaryDetail: React.FC<SummaryDetailProps> = ({ summary, onClose }
                 ))}
               </div>
             </section>
+            )}
 
             {/* Outlook */}
-            <section>
-              <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
-                Outlook
-              </h3>
-              <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-6">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fis-eggplant to-fis-navy flex items-center justify-center flex-shrink-0">
-                    <Target className="w-6 h-6 text-white" />
+            {summary._enabled_outlook !== false && summary.outlook && (
+              <section>
+                <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-6">
+                  Outlook
+                </h3>
+                <div className="bg-white dark:bg-gray-800/50 border border-gray-300 dark:border-gray-700 shadow-md rounded-xl p-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fis-eggplant to-fis-navy flex items-center justify-center flex-shrink-0">
+                      <Target className="w-6 h-6 text-white" />
+                    </div>
+                    <p className="text-base font-roobert-light text-gray-700 dark:text-gray-300 leading-relaxed">
+                      {summary.outlook}
+                    </p>
                   </div>
-                  <p className="text-base font-roobert-light text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {summary.outlook}
-                  </p>
                 </div>
-              </div>
-            </section>
+              </section>
+            )}
           </div>
             </>
           )}
