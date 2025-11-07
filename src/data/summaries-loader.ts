@@ -5,4 +5,5 @@ const summaryModules = import.meta.glob('./summaries/*.json', { eager: true });
 
 export const executiveSummaries: ExecutiveSummary[] = Object.values(summaryModules)
   .map((module: any) => module.default)
+  .filter((summary: any) => summary.status !== 'draft') // Hide draft summaries in main public app
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Sort by date, newest first

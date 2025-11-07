@@ -461,7 +461,7 @@ function App() {
     }
 
     let items: any[] = [];
-    if (activeSection === 'summaries') items = summaries;
+    if (activeSection === 'summaries') items = summaries; // Show ALL summaries in CMS (including drafts)
     if (activeSection === 'executive-iq') items = executiveIQ;
     if (activeSection === 'organizations') items = organizations;
     if (activeSection === 'performance') items = performances;

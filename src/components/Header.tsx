@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download } from 'lucide-react';
+import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download, Settings } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState } from 'react';
@@ -172,6 +172,25 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
                             <div className="text-xs text-gray-600 dark:text-gray-400">Executive project summaries</div>
                           </div>
                         </Link>
+
+                        {/* Divider */}
+                        <div className="h-px bg-gradient-to-r from-transparent via-fis-eggplant/30 to-transparent my-2" />
+
+                        {/* CMS Admin Link */}
+                        <a
+                          href="http://localhost:5173"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
+                        >
+                          <div className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
+                            <Settings className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">CMS Admin</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Content management system</div>
+                          </div>
+                        </a>
                       </div>
                     </div>
                   </motion.div>
@@ -297,6 +316,23 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
                     <div className="text-xs text-gray-600 dark:text-gray-400">Executive projects</div>
                   </div>
                 </Link>
+
+                {/* Divider */}
+                <div className="h-px bg-gradient-to-r from-transparent via-fis-eggplant/30 to-transparent my-2 mx-4" />
+
+                {/* CMS Admin Link */}
+                <a
+                  href="http://localhost:5173"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-white/50 dark:hover:bg-gray-800/50 text-gray-900 dark:text-white"
+                >
+                  <Settings className="w-5 h-5" />
+                  <div className="flex-1">
+                    <div className="font-roobert-semibold text-sm">CMS Admin</div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400">Content management</div>
+                  </div>
+                </a>
               </div>
             </div>
 

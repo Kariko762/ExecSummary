@@ -11,28 +11,12 @@
     "Demo Studio YTD: 263 demos registered, 126 linked to deals, $1.23M won ACV (48% conversion)",
     "Capital Markets leads activity: 2.1× Support, 2.6× Prep, 1.7× Demo hours vs Banking"
   ],
-  "keyMetrics": [
-    {
-      "label": "Revenue",
-      "value": "1230000",
-      "unit": "$"
-    },
-    {
-      "label": "Growth",
-      "value": "48",
-      "unit": "%"
-    },
-    {
-      "label": "Customers",
-      "value": "263",
-      "unit": ""
-    },
-    {
-      "label": "Satisfaction",
-      "value": "0",
-      "unit": "%"
-    }
-  ],
+  "keyMetrics": {
+    "revenue": 1230000,
+    "growth": 48,
+    "customers": 263,
+    "satisfaction": 0
+  },
   "activityMetrics": {
     "demoStudio": {
       "demosRegistered": 263,

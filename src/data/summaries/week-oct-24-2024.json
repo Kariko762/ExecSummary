@@ -11,28 +11,12 @@
     "{{icon:chart}} SNOW Migration - Technical requirements finalized, beginning dashboard development",
     "Capital Markets {{metric:1389|support hours|clock}} leads activity (2.3× Banking intensity)"
   ],
-  "keyMetrics": [
-    {
-      "label": "Revenue",
-      "value": "1080000",
-      "unit": "$"
-    },
-    {
-      "label": "Growth",
-      "value": "44",
-      "unit": "%"
-    },
-    {
-      "label": "Customers",
-      "value": "241",
-      "unit": ""
-    },
-    {
-      "label": "Satisfaction",
-      "value": "0",
-      "unit": "%"
-    }
-  ],
+  "keyMetrics": {
+    "revenue": 1080000,
+    "growth": 44,
+    "customers": 241,
+    "satisfaction": 0
+  },
   "activityMetrics": {
     "demoStudio": {
       "demosRegistered": 241,

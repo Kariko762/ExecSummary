@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save, Eye, EyeOff, Lock, Unlock, ChevronDown, ChevronRight, Upload, Check, Plus, Pencil, Trash2, Shield, ShieldOff, Code, Copy, CheckCheck, CheckCircle } from 'lucide-react';
+import PreviewModal from './PreviewModal';
 
 interface Section {
   id: string;
@@ -33,6 +34,7 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
   const [protectionEnabled, setProtectionEnabled] = useState(true);
   const [showExpressionMenu, setShowExpressionMenu] = useState(false);
   const [copiedExpression, setCopiedExpression] = useState<string | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   // List sections that should use the add/edit/delete UI
   const listManagementSections = ['highlights', 'weeklyFocus', 'initiatives', 'risks', 'issuesAndBlockers', 'keyMetrics', 'departments', 'header'];
@@ -419,8 +421,7 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
   };
 
   const handlePreview = () => {
-    // TODO: Implement preview functionality
-    console.log('Preview data:', editedData);
+    setShowPreview(true);
   };
 
   const copyToClipboard = (text: string) => {
@@ -1765,6 +1766,14 @@ export default function EditorModal({ isOpen, onClose, data, dataType, onSave }:
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Preview Modal */}
+      <PreviewModal
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+        data={editedData}
+        dataType={dataType}
+      />
     </AnimatePresence>
   );
 }

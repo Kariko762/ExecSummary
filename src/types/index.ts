@@ -4,6 +4,7 @@ export interface ExecutiveSummary {
   year: number;
   date: string;
   title: string;
+  status?: 'draft' | 'published'; // Optional status field for CMS
   highlights: string[];
   keyMetrics: {
     revenue: number;
@@ -43,6 +44,22 @@ export interface ExecutiveSummary {
   weeklyFocus?: string[];
   
   issuesAndBlockers?: IssueBlocker[];
+  
+  // CMS Content Enablement Flags
+  _enabled_highlights?: boolean;
+  _enabled_keyMetrics?: boolean;
+  _enabled_activityMetrics?: boolean;
+  _enabled_topAssets?: boolean;
+  _enabled_weeklyFocus?: boolean;
+  _enabled_departments?: boolean;
+  _enabled_initiatives?: boolean;
+  _enabled_risks?: boolean;
+  _enabled_issuesAndBlockers?: boolean;
+  _enabled_outlook?: boolean;
+  
+  // CMS Completion Tracking
+  _completed_highlights?: boolean;
+  _completed_risks?: boolean;
 }
 
 export interface ExecutiveIQ {

@@ -27,3 +27,32 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Preview Modal - Override fixed positioning from imported components */
+.preview-summary-wrapper > div,
+.preview-org-wrapper > div {
+  position: relative !important;
+  inset: auto !important;
+  z-index: auto !important;
+  height: 100% !important;
+}
+
+/* Ensure the summary content scrolls properly within preview */
+.preview-summary-wrapper .summary-content,
+.preview-org-wrapper .summary-content {
+  overflow-y: auto !important;
+  height: 100% !important;
+}
+
+/* Push down the fixed summary detail div to account for preview control bar */
+.preview-content-wrapper > div > div > div.fixed {
+  top: 5rem !important;
+  height: calc(100vh - 5rem) !important;
+}
+
+/* Hide the backdrop overlay in preview mode */
+.preview-content-wrapper .fixed.bg-black\/50 {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+

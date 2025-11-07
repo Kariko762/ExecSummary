@@ -3,7 +3,8 @@ import { ExecutiveSummary, ExecutiveIQ, TimelineItem } from '../types';
 // Import summaries
 const summaryModules = import.meta.glob('./summaries/*.json', { eager: true });
 const summaries: ExecutiveSummary[] = Object.values(summaryModules)
-  .map((module: any) => ({ ...module.default, type: 'summary' as const }));
+  .map((module: any) => ({ ...module.default, type: 'summary' as const }))
+  .filter((summary: any) => summary.status !== 'draft'); // Filter out draft summaries from main app
 
 // Import ExecutiveIQ articles
 const execIQModules = import.meta.glob('./executive-iq/*.json', { eager: true });

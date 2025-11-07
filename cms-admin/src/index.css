@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Preview Mode - Global Override */
+body.preview-mode div.fixed {
+  top: 5rem !important;
+}
+
 /* Tailwind v4 Theme Configuration */
 @theme {
   --color-fis-eggplant: #431C5B;
@@ -138,5 +143,28 @@ html {
 @media print {
   .no-print {
     display: none !important;
+  }
+  
+  /* Hide preview modal header and tabs when printing */
+  body > div:first-child {
+    position: static !important;
+  }
+  
+  /* Optimize for print */
+  * {
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  /* Better page breaks */
+  .glass-strong {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  
+  /* White background for print */
+  body {
+    background: white !important;
   }
 }
