@@ -7,6 +7,9 @@
     "{{badge:completed}} Completed integration with new Trade Reporting API {{highlight:ahead of Q4 deadline}}",
     "{{icon:award}} Secured {{currency:2100000}} deal with demo supporting final presentation"
   ],
+  "_keyHighlights_type": "list",
+  "_enabled_keyHighlights": true,
+  "_completed_keyHighlights": false,
   "strategicProjects": [
     {
       "id": "cm-proj-001",
@@ -36,6 +39,17 @@
       "executiveSummary": "Machine learning demo for predictive trading insights - delayed by data availability"
     }
   ],
+  "_strategicProjects_type": "nestedCards",
+  "_strategicProjects_fields": {
+    "name": { "type": "text", "label": "Project Name", "required": true },
+    "status": { "type": "select", "label": "Status", "options": ["on-track", "at-risk", "delayed", "completed"] },
+    "progress": { "type": "number", "label": "Progress %", "min": 0, "max": 100 },
+    "owner": { "type": "text", "label": "Owner" },
+    "dueDate": { "type": "date", "label": "Due Date" },
+    "executiveSummary": { "type": "textarea", "label": "Executive Summary" }
+  },
+  "_enabled_strategicProjects": true,
+  "_completed_strategicProjects": false,
   "supportActivities": [
     {
       "id": "cm-sup-001",
@@ -65,6 +79,17 @@
       "impact": "Completed ahead of schedule; now available for all Capital Markets demos"
     }
   ],
+  "_supportActivities_type": "nestedCards",
+  "_supportActivities_fields": {
+    "type": { "type": "select", "label": "Type", "options": ["incident", "request", "enhancement"] },
+    "title": { "type": "text", "label": "Title", "required": true },
+    "priority": { "type": "select", "label": "Priority", "options": ["critical", "high", "medium", "low"] },
+    "status": { "type": "select", "label": "Status", "options": ["active", "resolved", "blocked"] },
+    "description": { "type": "textarea", "label": "Description" },
+    "impact": { "type": "text", "label": "Impact" }
+  },
+  "_enabled_supportActivities": true,
+  "_completed_supportActivities": false,
   "demoInsights": {
     "demosThisWeek": 18,
     "hoursInvested": 247,
@@ -77,5 +102,14 @@
       "Deutsche Bank selected FIS after Horizon demo - $2.1M ACV",
       "Goldman Sachs advancing to contract negotiation phase"
     ]
-  }
+  },
+  "_demoInsights_type": "objectForm",
+  "_demoInsights_fields": {
+    "demosThisWeek": { "type": "number", "label": "Demos This Week" },
+    "hoursInvested": { "type": "number", "label": "Hours Invested" },
+    "topRequests": { "type": "list", "label": "Top Requests" },
+    "wins": { "type": "list", "label": "Wins" }
+  },
+  "_enabled_demoInsights": true,
+  "_completed_demoInsights": false
 }

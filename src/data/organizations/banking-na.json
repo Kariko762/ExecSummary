@@ -2,11 +2,17 @@
   "id": "banking-na",
   "name": "Banking (NA)",
   "lastUpdated": "2024-11-04T17:45:00Z",
+  
   "keyHighlights": [
     "{{badge:success}} Banking NA Tiled Microsite first draft endorsed by {{bold:Michael Driscoll}}",
     "{{trend:up}} D1 Flex Mobile 6.0 demos drove {{metric:43|engagements|users}} this month {{delta:12}}",
     "{{icon:award}} Regional bank RFP win attributed to personalized D1 Banker demo - {{currency:890000}}"
   ],
+  "_keyHighlights_type": "list",
+  "_enabled_keyHighlights": true,
+  "_completed_keyHighlights": false,
+  
+
   "strategicProjects": [
     {
       "id": "bn-proj-001",
@@ -36,6 +42,40 @@
       "executiveSummary": "PowerPoint template completed; moving to Figma conversion for Tiled.co"
     }
   ],
+  "_strategicProjects_type": "nestedCards",
+  "_strategicProjects_fields": {
+    "name": {
+      "type": "text",
+      "label": "Project Name",
+      "required": true
+    },
+    "status": {
+      "type": "select",
+      "label": "Status",
+      "options": ["on-track", "at-risk", "delayed", "completed"]
+    },
+    "progress": {
+      "type": "number",
+      "label": "Progress (%)",
+      "min": 0,
+      "max": 100
+    },
+    "owner": {
+      "type": "text",
+      "label": "Owner"
+    },
+    "dueDate": {
+      "type": "date",
+      "label": "Due Date"
+    },
+    "executiveSummary": {
+      "type": "textarea",
+      "label": "Executive Summary"
+    }
+  },
+  "_enabled_strategicProjects": true,
+  "_completed_strategicProjects": false,
+  
   "supportActivities": [
     {
       "id": "bn-sup-001",
@@ -56,6 +96,40 @@
       "impact": "Affecting 2 scheduled demos; iOS workaround in place"
     }
   ],
+  "_supportActivities_type": "nestedCards",
+  "_supportActivities_fields": {
+    "type": {
+      "type": "select",
+      "label": "Type",
+      "options": ["request", "incident", "enhancement"]
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "priority": {
+      "type": "select",
+      "label": "Priority",
+      "options": ["high", "medium", "low"]
+    },
+    "status": {
+      "type": "select",
+      "label": "Status",
+      "options": ["active", "resolved"]
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "impact": {
+      "type": "textarea",
+      "label": "Impact"
+    }
+  },
+  "_enabled_supportActivities": true,
+  "_completed_supportActivities": false,
+  
   "demoInsights": {
     "demosThisWeek": 22,
     "hoursInvested": 189,
@@ -68,5 +142,26 @@
       "Regional bank selected D1 Flex after personalized demo - $890K ACV",
       "Credit union advancing to pilot phase"
     ]
-  }
+  },
+  "_demoInsights_type": "objectForm",
+  "_demoInsights_fields": {
+    "demosThisWeek": {
+      "type": "number",
+      "label": "Demos This Week"
+    },
+    "hoursInvested": {
+      "type": "number",
+      "label": "Hours Invested"
+    },
+    "topRequests": {
+      "type": "list",
+      "label": "Top Requests"
+    },
+    "wins": {
+      "type": "list",
+      "label": "Wins"
+    }
+  },
+  "_enabled_demoInsights": true,
+  "_completed_demoInsights": false
 }

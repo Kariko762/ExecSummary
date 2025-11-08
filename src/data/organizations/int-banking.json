@@ -7,6 +7,9 @@
     "{{icon:activity}} VPN alternative for Horizon demo connectivity {{badge:priority}} in progress",
     "{{trend:up}} EMEA region demos increased {{percent:34}} month-over-month"
   ],
+  "_keyHighlights_type": "list",
+  "_enabled_keyHighlights": true,
+  "_completed_keyHighlights": false,
   "strategicProjects": [
     {
       "id": "ib-proj-001",
@@ -36,6 +39,17 @@
       "executiveSummary": "Cross-border payment scenarios for {{bold:APAC and EMEA}} markets. {{icon:chart}} Demo engagement up {{percent:25}} this quarter."
     }
   ],
+  "_strategicProjects_type": "nestedCards",
+  "_strategicProjects_fields": {
+    "name": { "type": "text", "label": "Project Name", "required": true },
+    "status": { "type": "select", "label": "Status", "options": ["on-track", "at-risk", "delayed", "completed"] },
+    "progress": { "type": "number", "label": "Progress %", "min": 0, "max": 100 },
+    "owner": { "type": "text", "label": "Owner" },
+    "dueDate": { "type": "date", "label": "Due Date" },
+    "executiveSummary": { "type": "textarea", "label": "Executive Summary" }
+  },
+  "_enabled_strategicProjects": true,
+  "_completed_strategicProjects": false,
   "supportActivities": [
     {
       "id": "ib-sup-001",
@@ -56,6 +70,17 @@
       "impact": "Required for APAC expansion; delivery by Nov 20"
     }
   ],
+  "_supportActivities_type": "nestedCards",
+  "_supportActivities_fields": {
+    "type": { "type": "select", "label": "Type", "options": ["incident", "request", "enhancement"] },
+    "title": { "type": "text", "label": "Title", "required": true },
+    "priority": { "type": "select", "label": "Priority", "options": ["critical", "high", "medium", "low"] },
+    "status": { "type": "select", "label": "Status", "options": ["active", "resolved", "blocked"] },
+    "description": { "type": "textarea", "label": "Description" },
+    "impact": { "type": "text", "label": "Impact" }
+  },
+  "_enabled_supportActivities": true,
+  "_completed_supportActivities": false,
   "demoInsights": {
     "demosThisWeek": 14,
     "hoursInvested": 156,
@@ -68,5 +93,14 @@
       "UK challenger bank advancing to final vendor selection",
       "APAC regional bank requesting pilot program"
     ]
-  }
+  },
+  "_demoInsights_type": "objectForm",
+  "_demoInsights_fields": {
+    "demosThisWeek": { "type": "number", "label": "Demos This Week" },
+    "hoursInvested": { "type": "number", "label": "Hours Invested" },
+    "topRequests": { "type": "list", "label": "Top Requests" },
+    "wins": { "type": "list", "label": "Wins" }
+  },
+  "_enabled_demoInsights": true,
+  "_completed_demoInsights": false
 }

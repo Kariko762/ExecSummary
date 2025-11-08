@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { RendererProps } from '../types/schema';
 import { Plus, Trash2 } from 'lucide-react';
 import { getClasses } from '../design-system';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export const ListRenderer: React.FC<RendererProps> = ({
   schema,
@@ -44,7 +45,7 @@ export const ListRenderer: React.FC<RendererProps> = ({
           items.map((item, idx) => (
             <div key={idx} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
               <span className="text-fis-raspberry">•</span>
-              <span>{item}</span>
+              <span>{renderWithExpressions(item)}</span>
             </div>
           ))
         ) : (

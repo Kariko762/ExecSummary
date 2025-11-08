@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { RendererProps, FieldSchema } from '../types/schema';
 import { Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export const NestedCardsRenderer: React.FC<RendererProps> = ({
   schema,
@@ -82,8 +83,10 @@ export const NestedCardsRenderer: React.FC<RendererProps> = ({
                         </p>
                         <p className="text-sm text-gray-900 dark:text-white">
                           {Array.isArray(fieldValue) 
-                            ? fieldValue.join(', ') 
-                            : String(fieldValue)}
+                            ? fieldValue.map((v, i) => (
+                                <span key={i}>{renderWithExpressions(String(v))}{i < fieldValue.length - 1 ? ', ' : ''}</span>
+                              ))
+                            : renderWithExpressions(String(fieldValue))}
                         </p>
                       </div>
                     );
