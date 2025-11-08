@@ -1,6 +1,7 @@
 import React from 'react';
 import { RendererProps } from '../types/schema';
 import { getClasses, DesignSystem } from '../design-system';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export const TextareaRenderer: React.FC<RendererProps> = ({
   schema,
@@ -13,7 +14,7 @@ export const TextareaRenderer: React.FC<RendererProps> = ({
   if (mode === 'display') {
     return (
       <div className={`${getClasses.text()} whitespace-pre-wrap`}>
-        {value || <span className="text-gray-400 italic">Not set</span>}
+        {value ? renderWithExpressions(value) : <span className="text-gray-400 italic">Not set</span>}
       </div>
     );
   }

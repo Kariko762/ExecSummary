@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { strategicInitiatives } from '../data/initiatives-loader';
 import { StrategicInitiativeTile } from './StrategicInitiativeTile';
-import { StrategicInitiativeModal } from './StrategicInitiativeModal';
+import { ContentModal } from './ContentModal';
 import { StrategicInitiative } from '../types';
 
 export function StrategicInitiativesDashboard() {
@@ -108,11 +108,13 @@ export function StrategicInitiativesDashboard() {
         </motion.div>
       )}
 
-      {/* Initiative Modal */}
-      <StrategicInitiativeModal 
-        initiative={selectedInitiative}
-        onClose={() => setSelectedInitiative(null)}
-      />
+      {/* Content Modal */}
+      {selectedInitiative && (
+        <ContentModal 
+          content={selectedInitiative}
+          onClose={() => setSelectedInitiative(null)}
+        />
+      )}
     </div>
   );
 }

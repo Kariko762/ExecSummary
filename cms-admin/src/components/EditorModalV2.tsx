@@ -212,7 +212,7 @@ export default function EditorModalV2({
       };
       
       return (
-        <div className="space-y-4 p-4">
+        <div className="space-y-4">
           <RenderFactory
             fieldKey={sectionId}
             schema={factorySchema}
@@ -247,7 +247,7 @@ export default function EditorModalV2({
       }
       
       return (
-        <div className="space-y-4 p-4">
+        <div className="space-y-4">
           <RenderFactory
             fieldKey={sectionId}
             schema={factorySchema}
@@ -682,10 +682,9 @@ export default function EditorModalV2({
                 Save Draft
               </button>
               <button
-                disabled
                 onClick={() => setShowPreview(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 font-roobert-medium transition-colors opacity-50 cursor-not-allowed"
-                title="Preview temporarily disabled - validation integration in progress"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 font-roobert-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                title="Preview content with validation checks"
               >
                 <Eye className="w-4 h-4" />
                 Preview
@@ -787,7 +786,7 @@ export default function EditorModalV2({
                     className="max-w-5xl mx-auto"
                   >
                     {/* Section Header */}
-                    <div className="mb-6">
+                    <div className="mb-2">
                       <div className="flex items-start justify-between mb-3">
                         <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
                           {activeSection.title}
@@ -849,7 +848,7 @@ export default function EditorModalV2({
                     </div>
 
                     {/* Schema-Driven Content */}
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-[5px] border border-gray-200 dark:border-gray-700">
                       {activeSection.locked ? (
                         <div className="text-center py-12">
                           <Lock className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-3" />

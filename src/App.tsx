@@ -5,8 +5,7 @@ import { PresentationProvider } from './contexts/PresentationContext';
 import { Header } from './components/Header';
 import { SummaryCard } from './components/SummaryCard';
 import { Dashboard } from './components/Dashboard';
-import { SummaryDetail } from './components/SummaryDetail';
-import { ExecutiveIQDetail } from './components/ExecutiveIQDetail';
+import { ContentModal } from './components/ContentModal';
 import { Timeline } from './components/Timeline';
 import { StickyNav } from './components/StickyNav';
 import { OrganizationDashboard } from './components/OrganizationDashboard';
@@ -47,14 +46,9 @@ function App() {
                   {/* Main Dashboard Route */}
                   <Route path="/" element={
                     <AnimatePresence mode="wait">
-                      {selectedSummary && isExecutiveSummary(selectedSummary) ? (
-                        <SummaryDetail
-                          summary={selectedSummary}
-                          onClose={() => setSelectedSummary(null)}
-                        />
-                      ) : selectedSummary ? (
-                        <ExecutiveIQDetail
-                          article={selectedSummary}
+                      {selectedSummary ? (
+                        <ContentModal
+                          content={selectedSummary}
                           onClose={() => setSelectedSummary(null)}
                         />
                       ) : (

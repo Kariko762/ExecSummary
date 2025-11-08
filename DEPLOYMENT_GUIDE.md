@@ -320,37 +320,381 @@ aws s3 cp dist/index.html s3://executive-summary-prod/ \
 
 ### Azure Static Web Apps
 
-Simple deployment with built-in CI/CD.
+Complete Azure deployment with custom domain and static IP.
 
-#### Step 1: Create Static Web App
+#### Prerequisites
+- Azure account (free tier available)
+- Domain name (for custom DNS)
+- Azure CLI installed (optional, can use Portal)
+
+---
+
+#### Step 1: Create Azure Account
+
+1. **Sign up for Azure**:
+   - Visit [https://azure.microsoft.com/free/](https://azure.microsoft.com/free/)
+   - Click **Start free** or **Pay as you go**
+   - Sign in with Microsoft account (or create one)
+   - Complete verification (credit card required, but won't be charged on free tier)
+
+2. **Free Tier Includes**:
+   - 12 months of free services
+   - $200 credit for 30 days
+   - Static Web Apps: 100 GB bandwidth/month (FREE forever)
+   - Azure Front Door Standard (if needed): First 5 custom domains free
+
+3. **Access Azure Portal**:
+   - Go to [https://portal.azure.com](https://portal.azure.com)
+   - Sign in with your Microsoft account
+
+---
+
+#### Step 2: Create Resource Group
+
+Using Azure Portal:
+1. Click **Resource groups** in left menu
+2. Click **+ Create**
+3. Fill in:
+   - **Subscription**: Select your subscription
+   - **Resource group**: `ExecutiveSummary-RG`
+   - **Region**: Choose closest to your users (e.g., `East US`, `West Europe`)
+4. Click **Review + create** → **Create**
+
+Using Azure CLI:
 ```bash
-# Install Azure CLI
+# Login to Azure
 az login
 
 # Create resource group
-az group create --name ExecutiveSummary --location eastus
+az group create \
+  --name ExecutiveSummary-RG \
+  --location eastus
+```
 
-# Create static web app
+---
+
+#### Step 3: Create Static Web App
+
+**Option A: Using Azure Portal** (Recommended for first deployment)
+
+1. **Navigate to Static Web Apps**:
+   - In Azure Portal, search for "Static Web Apps"
+   - Click **+ Create**
+
+2. **Basics Tab**:
+   - **Subscription**: Your subscription
+   - **Resource Group**: `ExecutiveSummary-RG`
+   - **Name**: `executive-summary-prod`
+   - **Plan type**: `Free` (sufficient for most use cases)
+   - **Region**: `East US 2` or closest to you
+   - **Deployment source**: `GitHub` (or `Other` for manual)
+
+3. **GitHub Integration** (if using GitHub):
+   - Click **Sign in with GitHub**
+   - Authorize Azure Static Web Apps
+   - **Organization**: Your GitHub account
+   - **Repository**: `ExecSummary`
+   - **Branch**: `main`
+
+4. **Build Details**:
+   - **Build Presets**: `React`
+   - **App location**: `/` (root)
+   - **Api location**: `` (leave empty - no API)
+   - **Output location**: `dist`
+
+5. Click **Review + create** → **Create**
+
+**Option B: Using Azure CLI**
+
+```bash
+# Install Azure Static Web Apps CLI
+npm install -g @azure/static-web-apps-cli
+
+# Create Static Web App with GitHub
 az staticwebapp create \
-  --name executive-summary \
-  --resource-group ExecutiveSummary \
+  --name executive-summary-prod \
+  --resource-group ExecutiveSummary-RG \
   --source https://github.com/Kariko762/ExecSummary \
-  --location eastus \
+  --location eastus2 \
   --branch main \
   --app-location "/" \
-  --output-location "dist"
+  --output-location "dist" \
+  --login-with-github
 ```
 
-#### Step 2: Configure Build
-Azure will create a GitHub Actions workflow automatically. Verify `.github/workflows/azure-static-web-apps-*.yml` includes:
+**Option C: Manual Deployment (No GitHub)**
+
+```bash
+# Build your app locally
+npm run build
+
+# Deploy using Azure CLI
+az staticwebapp upload \
+  --name executive-summary-prod \
+  --resource-group ExecutiveSummary-RG \
+  --app dist
+```
+
+---
+
+#### Step 4: Get Your Azure URL
+
+1. **In Azure Portal**:
+   - Go to your Static Web App resource
+   - Look for **URL** in Overview (e.g., `https://brave-ocean-xxxxx.azurestaticapps.net`)
+   - Click to test your deployment
+
+2. **Verify deployment**:
+   - Homepage loads ✅
+   - Routes work ✅
+   - Dark mode works ✅
+
+---
+
+#### Step 5: Add Custom Domain & Get Static IP
+
+Azure Static Web Apps don't directly provide a static IP (they use CDN), but you have two options:
+
+**Option A: Custom Domain with Azure DNS (Recommended)**
+
+1. **Add Custom Domain**:
+   - In your Static Web App, click **Custom domains** (left menu)
+   - Click **+ Add**
+   - **Domain provider**: Choose your provider
+   - **Hostname**: `executive-summary.yourdomain.com`
+   - Click **Next**
+
+2. **Configure DNS**:
+   Azure will show you CNAME record to add:
+   ```
+   Type: CNAME
+   Name: executive-summary (or www)
+   Value: brave-ocean-xxxxx.azurestaticapps.net
+   TTL: 3600
+   ```
+
+3. **Add DNS Record at Your Domain Provider**:
+   - Go to your domain registrar (GoDaddy, Namecheap, Cloudflare, etc.)
+   - Navigate to DNS settings
+   - Add the CNAME record
+   - Wait for propagation (5 min - 48 hours, usually <1 hour)
+
+4. **Validate in Azure**:
+   - Click **Validate** in Azure Portal
+   - Azure will check DNS and issue free SSL certificate
+   - Status changes to **Ready**
+
+**Option B: Azure Front Door with Static IP (For VIP requirement)**
+
+If you need a dedicated static IP (VIP):
+
+1. **Create Azure Front Door**:
+   - In Azure Portal, search "Front Door and CDN profiles"
+   - Click **+ Create**
+   - **Tier**: `Standard` (has static IP support)
+   - **Resource group**: `ExecutiveSummary-RG`
+   - **Name**: `executive-summary-frontdoor`
+   - **Endpoint name**: `executive-summary`
+   - Click **Create**
+
+2. **Add Static Web App as Origin**:
+   - Go to Front Door → **Origins**
+   - Click **+ Add origin group**
+     - **Name**: `static-web-app`
+   - Click **+ Add an origin**:
+     - **Name**: `executive-summary-origin`
+     - **Origin type**: `Custom`
+     - **Host name**: `brave-ocean-xxxxx.azurestaticapps.net`
+     - **HTTP port**: 80
+     - **HTTPS port**: 443
+   - Click **Add** → **Save**
+
+3. **Configure Route**:
+   - Go to **Routes**
+   - Edit default route:
+     - **Domains**: Add your custom domain
+     - **Origin group**: Select your origin group
+     - **Forwarding protocol**: HTTPS only
+   - Click **Update**
+
+4. **Get Static IP Address**:
+   ```bash
+   # Using Azure CLI
+   az network front-door frontend-endpoint list \
+     --front-door-name executive-summary-frontdoor \
+     --resource-group ExecutiveSummary-RG \
+     --query "[].{name:name, hostName:hostName}" -o table
+   ```
+
+   Or in Portal:
+   - Go to Front Door → **Frontend hosts**
+   - The endpoint will show (e.g., `executive-summary.azurefd.net`)
+   - To get the IP, use `nslookup` or `dig`:
+     ```bash
+     nslookup executive-summary.azurefd.net
+     ```
+
+5. **Configure DNS with A Record**:
+   At your domain provider:
+   ```
+   Type: A
+   Name: @ (or subdomain)
+   Value: <Front Door IP address>
+   TTL: 3600
+   ```
+
+   Or use CNAME to Front Door endpoint:
+   ```
+   Type: CNAME
+   Name: executive-summary
+   Value: executive-summary.azurefd.net
+   TTL: 3600
+   ```
+
+6. **Add Custom Domain to Front Door**:
+   - In Front Door → **Domains**
+   - Click **+ Add**
+   - Enter: `executive-summary.yourdomain.com`
+   - **Domain ownership validation**: Add TXT record shown
+   - Wait for validation
+   - **HTTPS**: Enable (automatic Let's Encrypt cert)
+
+---
+
+#### Step 6: SSL/HTTPS Configuration
+
+Azure handles SSL automatically:
+
+1. **For Static Web Apps**:
+   - Free SSL certificate auto-issued by Azure
+   - Auto-renewal managed by Azure
+   - No configuration needed
+
+2. **For Front Door**:
+   - Navigate to **Domains** → your domain
+   - **HTTPS**: Select `Azure managed certificate`
+   - Click **Update**
+   - Certificate issued in ~15 minutes
+
+---
+
+#### Step 7: Configure CI/CD (GitHub Actions)
+
+Azure automatically creates `.github/workflows/azure-static-web-apps-*.yml`:
 
 ```yaml
-app_build_command: 'npm run build'
-output_location: 'dist'
+name: Azure Static Web Apps CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+jobs:
+  build_and_deploy_job:
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Build And Deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "/" # App source code path
+          api_location: "" # API source code path - optional
+          output_location: "dist" # Built app content directory
 ```
 
-#### Step 3: Deploy
-Push to main branch - GitHub Actions will automatically build and deploy.
+**Every push to `main` branch automatically deploys!**
+
+---
+
+#### Step 8: Verify Deployment
+
+1. **Check Azure URL**: `https://executive-summary.yourdomain.com`
+2. **Test Functionality**:
+   - ✅ All pages load
+   - ✅ Custom domain works
+   - ✅ HTTPS enabled
+   - ✅ Charts render
+   - ✅ Dark mode persists
+
+3. **Performance Check**:
+   ```bash
+   # Test with Lighthouse
+   lighthouse https://executive-summary.yourdomain.com --view
+   ```
+
+---
+
+#### Pricing Summary
+
+**Static Web Apps (Free Tier)**:
+- ✅ 100 GB bandwidth/month
+- ✅ Unlimited custom domains
+- ✅ Free SSL certificates
+- ✅ GitHub integration
+- ✅ **Cost**: $0/month
+
+**Front Door (if using for VIP)**:
+- Standard tier: ~$35/month base
+- Outbound data transfer: ~$0.081/GB
+- Requests: $0.0075 per 10,000
+- **Total estimate**: $35-50/month for low traffic
+
+**Recommended**: Start with Static Web Apps (free), only add Front Door if you absolutely need static IP.
+
+---
+
+#### Quick Reference: DNS Configuration
+
+For most cases, use CNAME (simpler, more flexible):
+
+```
+# At your domain provider (GoDaddy, Namecheap, etc.)
+
+# Option 1: CNAME to Static Web App
+Type: CNAME
+Name: executive-summary (or www)
+Value: brave-ocean-xxxxx.azurestaticapps.net
+TTL: 3600
+
+# Option 2: CNAME to Front Door
+Type: CNAME  
+Name: executive-summary
+Value: executive-summary.azurefd.net
+TTL: 3600
+
+# SSL/TLS: Automatically handled by Azure
+```
+
+---
+
+#### Troubleshooting Azure Deployment
+
+**Issue**: Custom domain shows "Not configured"
+- **Solution**: Wait for DNS propagation (check with `nslookup yourdomain.com`)
+
+**Issue**: SSL certificate pending
+- **Solution**: Verify DNS CNAME points to Azure endpoint, wait 15-30 minutes
+
+**Issue**: 404 on routes
+- **Solution**: Already handled by Static Web Apps - no configuration needed!
+
+**Issue**: Build fails in GitHub Actions
+- **Solution**: 
+  - Check `package.json` has `"build": "vite build"`
+  - Verify `output_location: "dist"` in workflow
+  - Check build logs in GitHub Actions tab
 
 ---
 

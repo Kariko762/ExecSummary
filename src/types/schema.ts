@@ -16,7 +16,8 @@ export type RenderType =
   | 'pieChart'          // Pie chart visualization
   | 'barChart'          // Bar chart visualization
   | 'lineChart'         // Line chart visualization
-  | 'radialChart';      // Radial/donut chart
+  | 'radialChart'       // Radial/donut chart
+  | 'hr';               // Horizontal rule/divider
 
 export type ValidationRule = {
   rule: 'required' | 'min' | 'max' | 'pattern' | 'email' | 'url' | 'custom';
@@ -26,13 +27,51 @@ export type ValidationRule = {
 };
 
 export interface ChartConfig {
+  // Common chart properties
   dataKey?: string;
+  nameKey?: string;
   xAxisKey?: string;
   yAxisKey?: string;
   colors?: string[];
   showLegend?: boolean;
+  showTooltip?: boolean;
   showGrid?: boolean;
   responsive?: boolean;
+  
+  // Pie Chart specific
+  innerRadius?: number;
+  outerRadius?: number;
+  
+  // Bar Chart specific
+  bars?: Array<{
+    dataKey: string;
+    fill: string;
+    name: string;
+  }>;
+  orientation?: 'vertical' | 'horizontal';
+  stacked?: boolean;
+  
+  // Line Chart specific
+  lines?: Array<{
+    dataKey: string;
+    stroke: string;
+    name: string;
+  }>;
+  showDots?: boolean;
+  curved?: boolean;
+  
+  // Radial Chart specific
+  maxValue?: number;
+  showPercentage?: boolean;
+  thickness?: number;
+}
+
+export interface HRConfig {
+  thickness?: number;       // Line thickness in pixels (default: 1)
+  color?: string;          // Line color (default: #E5E7EB)
+  marginTop?: number;      // Top margin in pixels (default: 24)
+  marginBottom?: number;   // Bottom margin in pixels (default: 24)
+  style?: 'solid' | 'dashed' | 'dotted';  // Line style (default: solid)
 }
 
 export interface FieldSchema {
@@ -63,6 +102,9 @@ export interface FieldSchema {
   
   // For charts
   chartConfig?: ChartConfig;
+  
+  // For horizontal rules
+  hrConfig?: HRConfig;
   
   // For conditional rendering
   showIf?: (data: any) => boolean;

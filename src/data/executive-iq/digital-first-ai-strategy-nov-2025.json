@@ -7,6 +7,9 @@
   "subtitle": "AI-Powered Demo Intelligence & On-Demand Personalization",
   "category": "strategy",
   "executiveSummary": "The future of enterprise sales demands AI-powered, prospect-centric engagement. By leveraging AI to understand prospect intent, automatically assemble tailored narratives, and deliver on-demand interactive experiences, we eliminate friction in the buyer journey while capturing rich telemetry that guides sellers to focus on high-value conversations. This isn't just operational efficiency—it's a [[highlight]]fundamental competitive advantage[[/highlight]].",
+  "_executiveSummary_type": "textarea",
+  "_enabled_executiveSummary": true,
+  "_completed_executiveSummary": false,
   "keyTakeaways": [
     "AI enables [[highlight]]hyper-personalized demo experiences[[/highlight]] that adapt to prospect needs in real-time",
     "Digital-First strategy allows prospects to engage with interactive content [[metric]]24/7[[/metric]] without sales rep dependency",
@@ -14,6 +17,9 @@
     "AI-driven engagement telemetry captures [[highlight]]buyer intent signals[[/highlight]] for intelligent next-best-action recommendations",
     "Prospect-centric personalization at scale: AI assembles tailored demo narratives by [[highlight]]industry, role, and use case[[/highlight]]"
   ],
+  "_keyTakeaways_type": "list",
+  "_enabled_keyTakeaways": true,
+  "_completed_keyTakeaways": false,
   "strategicImplications": [
     "[[bold]]Market Differentiation[[/bold]]: First-mover advantage in AI-powered demo intelligence positions FIS as [[highlight]]innovation leader[[/highlight]]",
     "[[bold]]Competitive Pressure[[/bold]]: Buyers expect banking-grade digital experiences; laggards risk [[negative]]market share erosion[[/negative]]",
@@ -21,6 +27,9 @@
     "[[bold]]Data as Asset[[/bold]]: Telemetry database becomes valuable training corpus for [[highlight]]continuous AI model improvement[[/highlight]]",
     "[[bold]]Ecosystem Opportunity[[/bold]]: Platform foundation enables future AI-powered RevOps capabilities beyond demos"
   ],
+  "_strategicImplications_type": "list",
+  "_enabled_strategicImplications": true,
+  "_completed_strategicImplications": false,
   "recommendations": [
     "[[bold]]Accelerate AI Adoption[[/bold]]: Prioritize AI narrative generation and telemetry instrumentation for [[highlight]]Capital Markets pilot[[/highlight]]",
     "[[bold]]Privacy-by-Design[[/bold]]: Establish transparent consent framework and [[highlight]]GDPR/CCPA compliance[[/highlight]] before production deployment",
@@ -28,6 +37,9 @@
     "[[bold]]Platform Investment[[/bold]]: Build extensible architecture supporting future use cases (partner enablement, training, validation)",
     "[[bold]]Executive Sponsorship[[/bold]]: Secure CRO commitment for Digital-First transformation as [[highlight]]strategic imperative[[/highlight]], not tactical project"
   ],
+  "_recommendations_type": "list",
+  "_enabled_recommendations": true,
+  "_completed_recommendations": false,
   "trendAnalysis": {
     "title": "B2B Digital Buyer Trends: 2023 → 2024",
     "subtitle": "Market data validates Digital-First imperative",
@@ -161,6 +173,14 @@
       }
     ]
   },
+  "_trendAnalysis_type": "nestedCards",
+  "_trendAnalysis_fields": {
+    "name": { "type": "text", "label": "Category Name", "required": true },
+    "icon": { "type": "text", "label": "Icon" },
+    "trends": { "type": "list", "label": "Trends" }
+  },
+  "_enabled_trendAnalysis": true,
+  "_completed_trendAnalysis": false,
   "supportingData": [
     {
       "chartTitle": "Demo Automation Impact",
@@ -172,11 +192,24 @@
       ]
     }
   ],
+  "_supportingData_type": "nestedCards",
+  "_supportingData_fields": {
+    "chartTitle": { "type": "text", "label": "Chart Title", "required": true },
+    "data": { "type": "list", "label": "Data Points" }
+  },
+  "_enabled_supportingData": true,
+  "_completed_supportingData": false,
   "relatedInitiatives": [
     "AI Hyper-Personalization Engine",
     "On-Demand Prospect Engagement Platform",
     "Telemetry-Driven Intent Scoring",
     "AI-Powered Demo Automation Platform"
   ],
-  "outlook": "Prospects engage on their terms, at their pace, with content that speaks directly to their business challenges. The [[metric]]37% efficiency gain[[/metric]] is proof of concept; the real opportunity is transforming how we demonstrate value to prospects [[highlight]]before the first human conversation[[/highlight]]. AI gives us the ability to be everywhere, always relevant, infinitely scalable—turning demos from a cost center into an [[positive]]intelligent revenue engine[[/positive]] that learns and improves with every interaction. This Digital-First strategy isn't optional—it's the [[highlight]]price of admission for enterprise sales leadership[[/highlight]] in 2026 and beyond."
+  "_relatedInitiatives_type": "list",
+  "_enabled_relatedInitiatives": true,
+  "_completed_relatedInitiatives": false,
+  "outlook": "Prospects engage on their terms, at their pace, with content that speaks directly to their business challenges. The [[metric]]37% efficiency gain[[/metric]] is proof of concept; the real opportunity is transforming how we demonstrate value to prospects [[highlight]]before the first human conversation[[/highlight]]. AI gives us the ability to be everywhere, always relevant, infinitely scalable—turning demos from a cost center into an [[positive]]intelligent revenue engine[[/positive]] that learns and improves with every interaction. This Digital-First strategy isn't optional—it's the [[highlight]]price of admission for enterprise sales leadership[[/highlight]] in 2026 and beyond.",
+  "_outlook_type": "textarea",
+  "_enabled_outlook": true,
+  "_completed_outlook": false
 }

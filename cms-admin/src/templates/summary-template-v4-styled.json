@@ -1,0 +1,528 @@
+{
+  "id": "template-styled-executive-summary",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-01-01",
+  "title": "Executive Summary - Template-Driven Styling Example",
+  
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  
+  "highlights": [
+    "Example: Key achievement or milestone accomplished this week",
+    "Example: Important project completion or major progress update"
+  ],
+  "_highlights_type": "listNoTitle",
+  "_highlights_columnSpan": 4,
+  "_highlights_typography": {
+    "listItem": "body"
+  },
+  "_highlights_colors": {
+    "text": "text.primary",
+    "bullet": "brand.primary"
+  },
+  "_highlights_spacing": {
+    "container": "card",
+    "itemGap": "component.tight"
+  },
+  "_highlights_style": {
+    "variant": "flat",
+    "rounded": "lg"
+  },
+  "_enabled_highlights": true,
+  "_completed_highlights": false,
+  
+  "keyMetrics": [
+    {
+      "label": "Revenue",
+      "value": "$2.5M",
+      "unit": ""
+    },
+    {
+      "label": "Growth",
+      "value": "15",
+      "unit": "%"
+    },
+    {
+      "label": "Customer Satisfaction",
+      "value": "95",
+      "unit": "%"
+    },
+    {
+      "label": "Team Velocity",
+      "value": "42",
+      "unit": "pts"
+    }
+  ],
+  "_keyMetrics_type": "metricCards",
+  "_keyMetrics_columnSpan": 4,
+  "_keyMetrics_fields": {
+    "label": {
+      "type": "text",
+      "label": "Metric Name"
+    },
+    "value": {
+      "type": "text",
+      "label": "Value"
+    },
+    "unit": {
+      "type": "text",
+      "label": "Unit"
+    }
+  },
+  "_keyMetrics_typography": {
+    "cardLabel": "label",
+    "cardValue": "chartValue",
+    "cardUnit": "bodySmall"
+  },
+  "_keyMetrics_colors": {
+    "background": "surface.card",
+    "label": "text.secondary",
+    "value": "text.primary",
+    "border": "border.subtle"
+  },
+  "_keyMetrics_spacing": {
+    "container": "card",
+    "cardGap": "component.gap",
+    "cardPadding": "tight"
+  },
+  "_keyMetrics_layout": {
+    "columnSpan": 4,
+    "gridCols": 4,
+    "cardMinWidth": "200px"
+  },
+  "_keyMetrics_style": {
+    "variant": "elevated",
+    "shadow": "sm",
+    "rounded": "lg",
+    "border": "subtle"
+  },
+  "_enabled_keyMetrics": true,
+  "_completed_keyMetrics": false,
+  
+  "budgetAllocation": [
+    {
+      "name": "Engineering",
+      "value": 450000
+    },
+    {
+      "name": "Marketing",
+      "value": 250000
+    },
+    {
+      "name": "Operations",
+      "value": 180000
+    },
+    {
+      "name": "Sales",
+      "value": 320000
+    }
+  ],
+  "_budgetAllocation_type": "pieChart",
+  "_budgetAllocation_columnSpan": 2,
+  "_budgetAllocation_chartConfig": {
+    "nameKey": "name",
+    "dataKey": "value"
+  },
+  "_budgetAllocation_fields": {
+    "name": {
+      "type": "text",
+      "label": "Category",
+      "required": true
+    },
+    "value": {
+      "type": "number",
+      "label": "Amount",
+      "required": true
+    }
+  },
+  "_budgetAllocation_typography": {
+    "sectionTitle": "header",
+    "chartLabel": "chartLabel",
+    "chartValue": "chartValue",
+    "tableHeader": "tableHeader",
+    "tableBody": "tableBody"
+  },
+  "_budgetAllocation_colors": {
+    "background": "surface.card",
+    "border": "border.subtle",
+    "title": "text.primary",
+    "chartColors": ["brand.primary", "brand.secondary", "accent.blue", "accent.green"]
+  },
+  "_budgetAllocation_spacing": {
+    "container": "card",
+    "sectionGap": "section.gap",
+    "contentGap": "component.gap",
+    "chartTableGap": "component.tight"
+  },
+  "_budgetAllocation_layout": {
+    "columnSpan": 2,
+    "gridCols": 1,
+    "alignment": "start"
+  },
+  "_budgetAllocation_style": {
+    "variant": "elevated",
+    "shadow": "md",
+    "rounded": "lg",
+    "border": "subtle"
+  },
+  "_enabled_budgetAllocation": true,
+  "_completed_budgetAllocation": false,
+  
+  "quarterlyRevenue": [
+    {
+      "month": "Jan",
+      "revenue": 1200000
+    },
+    {
+      "month": "Feb",
+      "revenue": 1450000
+    },
+    {
+      "month": "Mar",
+      "revenue": 1680000
+    },
+    {
+      "month": "Apr",
+      "revenue": 1520000
+    }
+  ],
+  "_quarterlyRevenue_type": "barChart",
+  "_quarterlyRevenue_columnSpan": 2,
+  "_quarterlyRevenue_chartConfig": {
+    "xAxisKey": "month",
+    "dataKey": "revenue",
+    "barColor": "#6B1B5E"
+  },
+  "_quarterlyRevenue_fields": {
+    "month": {
+      "type": "text",
+      "label": "Month",
+      "required": true
+    },
+    "revenue": {
+      "type": "number",
+      "label": "Revenue",
+      "required": true
+    }
+  },
+  "_quarterlyRevenue_typography": {
+    "sectionTitle": "header",
+    "chartLabel": "chartLabel",
+    "chartValue": "chartValue",
+    "tableHeader": "tableHeader",
+    "tableBody": "tableBody"
+  },
+  "_quarterlyRevenue_colors": {
+    "background": "surface.card",
+    "border": "border.subtle",
+    "title": "text.primary",
+    "chartColor": "brand.primary"
+  },
+  "_quarterlyRevenue_spacing": {
+    "container": "card",
+    "sectionGap": "section.gap",
+    "contentGap": "component.gap"
+  },
+  "_quarterlyRevenue_layout": {
+    "columnSpan": 2,
+    "gridCols": 1
+  },
+  "_quarterlyRevenue_style": {
+    "variant": "elevated",
+    "shadow": "md",
+    "rounded": "lg",
+    "border": "subtle"
+  },
+  "_enabled_quarterlyRevenue": true,
+  "_completed_quarterlyRevenue": false,
+  
+  "divider1": null,
+  "_divider1_type": "hr",
+  "_divider1_columnSpan": 4,
+  "_divider1_hrConfig": {
+    "thickness": 1,
+    "color": "#E5E7EB",
+    "marginTop": 24,
+    "marginBottom": 24,
+    "style": "solid"
+  },
+  "_divider1_colors": {
+    "divider": "border.default"
+  },
+  "_divider1_spacing": {
+    "marginTop": "6",
+    "marginBottom": "6"
+  },
+  "_enabled_divider1": true,
+  "_completed_divider1": false,
+  
+  "departments": [
+    {
+      "name": "Engineering",
+      "performance": 92,
+      "budget": 450000,
+      "headcount": 45,
+      "achievements": [
+        "Completed Q1 infrastructure upgrade",
+        "Reduced deployment time by 40%"
+      ]
+    },
+    {
+      "name": "Marketing",
+      "performance": 88,
+      "budget": 250000,
+      "headcount": 18,
+      "achievements": [
+        "Launched new brand campaign",
+        "Increased social engagement by 65%"
+      ]
+    }
+  ],
+  "_departments_type": "nestedCards",
+  "_departments_columnSpan": 2,
+  "_departments_fields": {
+    "name": {
+      "type": "text",
+      "label": "Department Name"
+    },
+    "performance": {
+      "type": "number",
+      "label": "Performance Score"
+    },
+    "budget": {
+      "type": "number",
+      "label": "Budget"
+    },
+    "headcount": {
+      "type": "number",
+      "label": "Headcount"
+    },
+    "achievements": {
+      "type": "list",
+      "label": "Achievements"
+    }
+  },
+  "_departments_typography": {
+    "sectionTitle": "header",
+    "cardTitle": "title",
+    "cardLabel": "label",
+    "cardValue": "body",
+    "listItem": "bodySmall"
+  },
+  "_departments_colors": {
+    "background": "surface.card",
+    "cardBackground": "surface.elevated",
+    "border": "border.default",
+    "title": "text.primary",
+    "label": "text.secondary",
+    "value": "text.primary",
+    "accent": "brand.primary"
+  },
+  "_departments_spacing": {
+    "container": "card",
+    "sectionGap": "section.gap",
+    "cardGap": "component.gap",
+    "cardPadding": "card",
+    "listGap": "component.tight"
+  },
+  "_departments_layout": {
+    "columnSpan": 2,
+    "gridCols": 2,
+    "cardMinWidth": "280px",
+    "alignment": "stretch"
+  },
+  "_departments_style": {
+    "variant": "elevated",
+    "shadow": "sm",
+    "rounded": "lg",
+    "border": "none",
+    "cardVariant": "elevated",
+    "cardShadow": "md",
+    "cardRounded": "md"
+  },
+  "_enabled_departments": true,
+  "_completed_departments": false,
+  
+  "initiatives": [
+    {
+      "name": "Cloud Migration",
+      "status": "on-track",
+      "progress": 75,
+      "owner": "Infrastructure Team",
+      "impact": "high"
+    },
+    {
+      "name": "AI Integration",
+      "status": "on-track",
+      "progress": 60,
+      "owner": "Product Team",
+      "impact": "high"
+    }
+  ],
+  "_initiatives_type": "nestedCards",
+  "_initiatives_columnSpan": 2,
+  "_initiatives_fields": {
+    "name": {
+      "type": "text",
+      "label": "Initiative Name"
+    },
+    "status": {
+      "type": "text",
+      "label": "Status"
+    },
+    "progress": {
+      "type": "number",
+      "label": "Progress %"
+    },
+    "owner": {
+      "type": "text",
+      "label": "Owner"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact Level"
+    }
+  },
+  "_initiatives_typography": {
+    "sectionTitle": "header",
+    "cardTitle": "title",
+    "cardLabel": "label",
+    "cardValue": "body"
+  },
+  "_initiatives_colors": {
+    "background": "surface.card",
+    "cardBackground": "surface.elevated",
+    "border": "border.subtle",
+    "title": "text.primary",
+    "label": "text.secondary"
+  },
+  "_initiatives_spacing": {
+    "container": "card",
+    "sectionGap": "section.gap",
+    "cardGap": "component.gap",
+    "cardPadding": "card"
+  },
+  "_initiatives_layout": {
+    "columnSpan": 2,
+    "gridCols": 2,
+    "cardMinWidth": "280px"
+  },
+  "_initiatives_style": {
+    "variant": "elevated",
+    "shadow": "sm",
+    "rounded": "lg"
+  },
+  "_enabled_initiatives": true,
+  "_completed_initiatives": false,
+  
+  "weeklyFocus": [
+    "Finalize Q2 roadmap and resource allocation",
+    "Complete security audit and address critical findings",
+    "Review and approve new hiring plan for H2"
+  ],
+  "_weeklyFocus_type": "listNoTitle",
+  "_weeklyFocus_columnSpan": 4,
+  "_weeklyFocus_typography": {
+    "listItem": "body"
+  },
+  "_weeklyFocus_colors": {
+    "text": "text.primary"
+  },
+  "_weeklyFocus_spacing": {
+    "container": "card",
+    "itemGap": "component.tight"
+  },
+  "_weeklyFocus_style": {
+    "variant": "flat",
+    "rounded": "lg"
+  },
+  "_enabled_weeklyFocus": true,
+  "_completed_weeklyFocus": false,
+  
+  "risks": [
+    {
+      "description": "Potential delay in vendor deliverables for cloud migration",
+      "severity": "medium",
+      "mitigation": "Identified backup vendors and internal resources to accelerate timeline if needed"
+    }
+  ],
+  "_risks_type": "nestedCards",
+  "_risks_columnSpan": 4,
+  "_risks_fields": {
+    "description": {
+      "type": "textarea",
+      "label": "Risk Description"
+    },
+    "severity": {
+      "type": "text",
+      "label": "Severity"
+    },
+    "mitigation": {
+      "type": "textarea",
+      "label": "Mitigation Strategy"
+    }
+  },
+  "_risks_typography": {
+    "sectionTitle": "header",
+    "cardTitle": "title",
+    "cardLabel": "label",
+    "cardValue": "body"
+  },
+  "_risks_colors": {
+    "background": "surface.card",
+    "border": "border.default"
+  },
+  "_risks_spacing": {
+    "container": "card",
+    "sectionGap": "section.gap",
+    "cardGap": "component.gap"
+  },
+  "_risks_layout": {
+    "columnSpan": 4,
+    "gridCols": 1
+  },
+  "_risks_style": {
+    "variant": "elevated",
+    "shadow": "md",
+    "rounded": "lg"
+  },
+  "_enabled_risks": true,
+  "_completed_risks": false,
+  
+  "outlook": "Next week focuses on finalizing Q2 planning, completing the security audit, and advancing our strategic initiatives. All major projects remain on track with strong momentum heading into the quarter.",
+  "_outlook_type": "textarea",
+  "_outlook_columnSpan": 4,
+  "_outlook_typography": {
+    "sectionTitle": "header",
+    "bodyText": "body"
+  },
+  "_outlook_colors": {
+    "background": "surface.card",
+    "text": "text.primary"
+  },
+  "_outlook_spacing": {
+    "container": "card",
+    "contentGap": "component.gap"
+  },
+  "_outlook_layout": {
+    "columnSpan": 4
+  },
+  "_outlook_style": {
+    "variant": "elevated",
+    "shadow": "sm",
+    "rounded": "lg"
+  },
+  "_enabled_outlook": true,
+  "_completed_outlook": false,
+  
+  "status": "draft",
+  "protectionEnabled": false,
+  
+  "_template_name": "Styled Executive Summary Template",
+  "_template_description": "Executive summary template with complete template-driven styling metadata. All visual decisions are defined in the template, not during content creation.",
+  "_template_version": "4.0.0",
+  "_template_created": "2025-11-08T12:00:00.000Z",
+  "_template_updated": "2025-11-08T12:00:00.000Z",
+  "_template_styling_schema": "1.0.0"
+}

@@ -4,6 +4,61 @@
   "year": 2025,
   "date": "2025-11-06",
   "title": "Nov 07 2025 - Demo Services Group - Weekly Update",
+  "_highlights_type": "list",
+  "_enabled_highlights": true,
+  "_keyMetrics_type": "metricCards",
+  "_enabled_keyMetrics": true,
+  "_activityMetrics_type": "nestedCards",
+  "_enabled_activityMetrics": true,
+  "_activityMetrics_fields": {
+    "category": { "type": "text", "label": "Category", "required": true },
+    "metrics": { "type": "list", "label": "Metrics" }
+  },
+  "_topAssets_type": "nestedCards",
+  "_enabled_topAssets": true,
+  "_topAssets_fields": {
+    "name": { "type": "text", "label": "Asset Name", "required": true },
+    "count": { "type": "number", "label": "Count" },
+    "category": { "type": "text", "label": "Category" }
+  },
+  "_weeklyFocus_type": "list",
+  "_enabled_weeklyFocus": true,
+  "_departments_type": "nestedCards",
+  "_enabled_departments": false,
+  "_departments_fields": {
+    "name": { "type": "text", "label": "Department", "required": true },
+    "performance": { "type": "number", "label": "Performance" },
+    "achievements": { "type": "list", "label": "Achievements" }
+  },
+  "_initiatives_type": "nestedCards",
+  "_enabled_initiatives": false,
+  "_initiatives_fields": {
+    "name": { "type": "text", "label": "Initiative", "required": true },
+    "status": { "type": "text", "label": "Status" },
+    "progress": { "type": "number", "label": "Progress" },
+    "owner": { "type": "text", "label": "Owner" },
+    "impact": { "type": "text", "label": "Impact" }
+  },
+  "_risks_type": "nestedCards",
+  "_enabled_risks": true,
+  "_risks_fields": {
+    "title": { "type": "text", "label": "Risk Title", "required": true },
+    "description": { "type": "textarea", "label": "Description" },
+    "severity": { "type": "text", "label": "Severity" },
+    "mitigation": { "type": "textarea", "label": "Mitigation" }
+  },
+  "_issuesAndBlockers_type": "nestedCards",
+  "_enabled_issuesAndBlockers": true,
+  "_issuesAndBlockers_fields": {
+    "title": { "type": "text", "label": "Issue Title", "required": true },
+    "description": { "type": "textarea", "label": "Description" },
+    "impact": { "type": "text", "label": "Impact" },
+    "action": { "type": "textarea", "label": "Action" },
+    "timeline": { "type": "text", "label": "Timeline" },
+    "status": { "type": "text", "label": "Status" }
+  },
+  "_outlook_type": "textarea",
+  "_enabled_outlook": true,
   "highlights": [
     "Banking NA Tiled Microsite – First Draft Published and endorsed by Michael Driscoll",
     "GTM Team Support – Office of the CFO Template Completed, moving to Figma conversion",
@@ -220,7 +275,5 @@
   "outlook": "Strong momentum across Demo Services Group with key wins in Banking Microsite and SNOW migration. Focus areas for next week include finalizing operational dashboards, accelerating International Issuing Hub through E6 approval, and addressing platform tooling challenges (Tiled, Coast MSA). Capital Markets continues to dominate activity hours (70% of total workload), indicating opportunity to balance resources or expand Banking team capacity. Demo-to-deal conversion rate of 48% demonstrates strong alignment between demo quality and sales outcomes.",
   "_completed_highlights": false,
   "_completed_risks": false,
-  "status": "draft",
-  "_enabled_initiatives": true,
-  "_enabled_departments": true
+  "status": "draft"
 }

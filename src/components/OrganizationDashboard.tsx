@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { organizations } from '../data/organizations-loader';
 import { OrganizationTile } from './OrganizationTile';
-import { OrganizationModal } from './OrganizationModal';
+import { ContentModal } from './ContentModal';
 import { Organization } from '../types';
 import { Building2 } from 'lucide-react';
 
@@ -40,11 +40,13 @@ export function OrganizationDashboard() {
         ))}
       </div>
 
-      {/* Organization Modal */}
-      <OrganizationModal 
-        organization={selectedOrg}
-        onClose={() => setSelectedOrg(null)}
-      />
+      {/* Content Modal */}
+      {selectedOrg && (
+        <ContentModal 
+          content={selectedOrg}
+          onClose={() => setSelectedOrg(null)}
+        />
+      )}
     </div>
   );
 }

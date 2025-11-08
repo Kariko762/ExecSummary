@@ -7,6 +7,11 @@ import { ListRenderer } from './ListRenderer';
 import { MetricCardsRenderer } from './MetricCardsRenderer';
 import { NestedCardsRenderer } from './NestedCardsRenderer';
 import { ObjectFormRenderer } from './ObjectFormRenderer';
+import { PieChartRenderer } from './PieChartRenderer';
+import { BarChartRenderer } from './BarChartRenderer';
+import { LineChartRenderer } from './LineChartRenderer';
+import { RadialChartRenderer } from './RadialChartRenderer';
+import { HorizontalRuleRenderer } from './HorizontalRuleRenderer';
 
 /**
  * Factory component that routes to the appropriate renderer based on schema type
@@ -46,11 +51,19 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
       return <NumberRenderer {...props} />; // Fallback to number for now
     
     case 'pieChart':
+      return <PieChartRenderer {...props} />;
+    
     case 'barChart':
+      return <BarChartRenderer {...props} />;
+    
     case 'lineChart':
+      return <LineChartRenderer {...props} />;
+    
     case 'radialChart':
-      // TODO: Implement ChartRenderer
-      return <div className="text-blue-600">Chart renderer coming soon</div>;
+      return <RadialChartRenderer {...props} />;
+    
+    case 'hr':
+      return <HorizontalRuleRenderer {...props} />;
     
     default:
       return (
