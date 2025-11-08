@@ -33,6 +33,10 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - **🎨 FIS Branding**: Purple/raspberry gradients, Roobert font, corporate colors
 - **💾 Auto-Save**: Draft saving with dirty state tracking
 - **🚨 Live Warnings**: Multiple protection layers when editing published content
+- **🔐 Authentication System**: JWT-based login with role-based permissions (admin, editor, viewer)
+- **👥 User Management**: JSON file-based user storage with bcrypt password hashing
+- **⚙️ System Settings**: Configure authentication requirements per app via UI
+- **🎨 Design System Manager**: Centralized color, typography, and spacing configuration
 
 ## 🎯 Key Components
 
@@ -176,6 +180,11 @@ A powerful, user-friendly content management system for non-technical users:
   - Summaries, ExecutiveIQ, Organizations, Performance
   - Full CRUD operations (Create, Read, Update, Delete)
   - File-based JSON storage for simplicity
+- **Authentication API**: JWT-based authentication with bcrypt password hashing
+  - User login/logout with token management
+  - Role-based permissions (admin, editor, viewer)
+  - User CRUD operations (admin only)
+  - Session management with 24h token expiry
 - **API Dashboard**: 🆕 Built-in testing tool
   - File System Health checks
   - API Endpoint testing
@@ -187,6 +196,7 @@ A powerful, user-friendly content management system for non-technical users:
 
 ## 🛠️ Tech Stack
 
+### Frontend
 - **React 18** - Modern React with hooks
 - **TypeScript** - Type-safe code
 - **Vite** - Lightning-fast build tool
@@ -196,6 +206,15 @@ A powerful, user-friendly content management system for non-technical users:
 - **React Router** - Navigation
 - **Lucide React** - Beautiful icons
 - **Roobert Font** - Corporate typography
+
+### Backend
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web framework
+- **bcryptjs** - Password hashing
+- **jsonwebtoken** - JWT authentication
+- **multer** - File upload handling
+- **express-validator** - Request validation
+- **CORS** - Cross-origin resource sharing
 
 ## 🚀 Getting Started
 
@@ -228,7 +247,7 @@ A powerful, user-friendly content management system for non-technical users:
 
 2. **Start backend server:**
    ```bash
-   npm start
+   npm run dev
    ```
    Backend runs on `http://localhost:3001`
 
@@ -242,12 +261,50 @@ A powerful, user-friendly content management system for non-technical users:
    ```bash
    npm run dev
    ```
-   CMS runs on `http://localhost:5173`
+   CMS runs on `http://localhost:5174`
 
 5. **Access the CMS:**
-   - Navigate to `http://localhost:5173`
+   - Navigate to `http://localhost:5174`
+   - **Default login**: username `admin` / password `admin123`
+   - Enable authentication via **Menu → System Settings → Authentication**
    - Click "New Summary" to create from template or clone existing
    - Edit sections, mark complete, and publish when ready
+
+### Authentication Setup (Optional)
+
+The CMS includes a complete JWT-based authentication system:
+
+1. **Enable authentication:**
+   - Open CMS → **Menu → System Settings**
+   - Toggle "Require Login" for **Executive Summary App** and/or **CMS Admin Panel**
+   - Click **Save Changes**
+
+2. **Default credentials:**
+   - Username: `admin`
+   - Password: `admin123`
+   - Role: Administrator (full access)
+
+3. **Change admin password:**
+   ```bash
+   cd backend
+   node generate-password.js your-new-password
+   # Copy the generated hash
+   ```
+   Then update `cms-admin/src/data/users.json` with the new hash.
+
+4. **User roles:**
+   - **Admin**: Full access, user management, system settings
+   - **Editor**: Content creation/editing, no admin features
+   - **Viewer**: Read-only access
+
+5. **API endpoints:**
+   - `POST /api/auth/login` - Login with credentials
+   - `POST /api/auth/verify` - Verify JWT token
+   - `GET /api/auth/users` - List users (admin only)
+   - `POST /api/auth/users` - Create user (admin only)
+   - More endpoints documented in `backend/README_AUTH.md`
+
+For detailed authentication setup, see `LOGIN_SETUP_GUIDE.md`.
 
 ### Build for Production
 
@@ -280,14 +337,43 @@ npm run preview
 
 ```
 ExecSummary/
-├── RoobertFont/          # Corporate fonts
-├── src/
-│   ├── components/       # React components
+├── backend/                    # Backend API server
+│   ├── api/
+│   │   └── auth.js            # Authentication endpoints
+│   ├── server.js              # Express server
+│   ├── generate-password.js   # Password hash generator
+│   ├── package.json
+│   └── README_AUTH.md         # Auth API documentation
+├── cms-admin/                  # CMS Admin Panel
+│   ├── src/
+│   │   ├── components/        # CMS React components
+│   │   │   ├── CMSHeader.tsx
+│   │   │   ├── EditorModalV2.tsx
+│   │   │   ├── LoginPage.tsx         # 🆕 CMS login UI
+│   │   │   ├── ProtectedRoute.tsx    # 🆕 Route protection
+│   │   │   ├── SystemSettingsManager.tsx  # 🆕 System config
+│   │   │   ├── StyleSchemeManagerV2.tsx   # 🆕 Design system
+│   │   │   └── ... more CMS components
+│   │   ├── contexts/
+│   │   │   ├── AuthContext.tsx       # 🆕 Auth state management
+│   │   │   ├── ThemeContext.tsx
+│   │   │   └── PresentationContext.tsx
+│   │   ├── data/
+│   │   │   └── users.json            # 🆕 User database
+│   │   ├── types/
+│   │   │   ├── auth.ts               # 🆕 Auth TypeScript types
+│   │   │   └── index.ts
+│   │   └── App.tsx
+│   └── package.json
+├── RoobertFont/                # Corporate fonts
+├── src/                        # Main Dashboard App
+│   ├── components/             # React components
 │   │   ├── Header.tsx
 │   │   ├── Dashboard.tsx
 │   │   ├── SummaryCard.tsx
 │   │   ├── SummaryDetail.tsx
 │   │   ├── Timeline.tsx
+│   │   ├── LoginPage.tsx             # 🆕 Parent app login
 │   │   ├── OrganizationDashboard.tsx
 │   │   ├── OrganizationTile.tsx
 │   │   ├── OrganizationModal.tsx
@@ -297,10 +383,10 @@ ExecSummary/
 │   │   ├── ActivityHoursChart.tsx
 │   │   ├── TopAssetsChart.tsx
 │   │   └── ... more components
-│   ├── contexts/         # React contexts
+│   ├── contexts/               # React contexts
 │   │   ├── ThemeContext.tsx
 │   │   └── PresentationContext.tsx
-│   ├── data/            # JSON data files
+│   ├── data/                   # JSON data files
 │   │   ├── summaries.ts
 │   │   ├── summaries/
 │   │   │   ├── week-oct-24-2024.json
@@ -320,13 +406,19 @@ ExecSummary/
 │   │   ├── organizations-loader.ts
 │   │   ├── initiatives-loader.ts
 │   │   └── performance-loader.ts
-│   ├── types/           # TypeScript types
+│   ├── design-system/          # Centralized design tokens
+│   │   ├── colors.ts
+│   │   ├── typography.ts
+│   │   ├── spacing.ts
 │   │   └── index.ts
-│   ├── utils/           # Utility functions
+│   ├── types/                  # TypeScript types
+│   │   └── index.ts
+│   ├── utils/                  # Utility functions
 │   │   └── expressionParser.tsx
-│   ├── App.tsx          # Main app component
-│   ├── main.tsx         # App entry point
-│   └── index.css        # Global styles
+│   ├── App.tsx                 # Main app component
+│   ├── main.tsx                # App entry point
+│   └── index.css               # Global styles
+├── LOGIN_SETUP_GUIDE.md        # 🆕 Authentication setup guide
 ├── index.html
 ├── package.json
 ├── tailwind.config.js
