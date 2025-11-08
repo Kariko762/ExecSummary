@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
@@ -11,6 +11,7 @@ import { StickyNav } from './components/StickyNav';
 import { OrganizationDashboard } from './components/OrganizationDashboard';
 import { StrategicInitiativesDashboard } from './components/StrategicInitiativesDashboard';
 import { SchemaTest } from './components/SchemaTest';
+import LoginPage from './components/LoginPage';
 import { timelineItems, isExecutiveSummary } from './data/timeline-loader';
 import { TimelineItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,6 +19,44 @@ import { motion, AnimatePresence } from 'framer-motion';
 function App() {
   const [selectedSummary, setSelectedSummary] = useState<TimelineItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [requireAuth, setRequireAuth] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  // Check system settings for auth requirement and authentication status
+  useEffect(() => {
+    const settings = localStorage.getItem('system-settings');
+    if (settings) {
+      const parsed = JSON.parse(settings);
+      const authRequired = parsed.authentication?.parentApp?.requireLogin || false;
+      setRequireAuth(authRequired);
+      
+      if (authRequired) {
+        // Check if user is authenticated
+        const token = localStorage.getItem('auth_token');
+        const session = localStorage.getItem('auth_session');
+        
+        if (token && session) {
+          const sessionData = JSON.parse(session);
+          // Check if session is not expired
+          if (new Date(sessionData.expiresAt) > new Date()) {
+            setIsAuthenticated(true);
+          }
+        }
+      } else {
+        // If auth not required, mark as authenticated
+        setIsAuthenticated(true);
+      }
+    } else {
+      // No settings, allow access
+      setIsAuthenticated(true);
+    }
+    setIsCheckingAuth(false);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
 
   const filteredSummaries = timelineItems.filter(summary => {
     const searchLower = searchQuery.toLowerCase();
@@ -31,6 +70,25 @@ function App() {
     }
     return baseMatch;
   });
+
+  // Show loading while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-fis-eggplant border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-400 font-roobert-medium">
+            Loading...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login page if auth is required and user is not authenticated
+  if (requireAuth && !isAuthenticated) {
+    return <LoginPage onLoginSuccess={handleLoginSuccess} />;
+  }
 
   return (
     <Router>

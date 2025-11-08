@@ -3,11 +3,14 @@ import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
+import { AuthProvider } from './contexts/AuthContext';
 import CMSHeader from './components/CMSHeader';
 import EditorModal from './components/EditorModalV2';
 import EngineAssetsModal from './components/EngineAssetsModal';
-import StyleSchemeManager from './components/StyleSchemeManager';
+import StyleSchemeManagerV2 from './components/StyleSchemeManagerV2';
+import SystemSettingsManager from './components/SystemSettingsManager';
 import TemplateBuilder from './components/TemplateBuilder';
+import ProtectedRoute from './components/ProtectedRoute';
 import summaryTemplate from './templates/summary-template-v2.json';
 import summaryTemplateWithCharts from './templates/summary_default_charts.json';
 import './App.css';
@@ -70,8 +73,19 @@ function App() {
   const [selectedSourceId, setSelectedSourceId] = useState<string>('');
   const [showEngineAssets, setShowEngineAssets] = useState(false);
   const [showStyleScheme, setShowStyleScheme] = useState(false);
+  const [showSystemSettings, setShowSystemSettings] = useState(false);
   const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
   const [availableTemplates, setAvailableTemplates] = useState<any[]>([]);
+  const [requireAuth, setRequireAuth] = useState(false);
+
+  // Check system settings for auth requirement
+  useEffect(() => {
+    const settings = localStorage.getItem('system-settings');
+    if (settings) {
+      const parsed = JSON.parse(settings);
+      setRequireAuth(parsed.authentication?.cmsAdmin?.requireLogin || false);
+    }
+  }, []);
 
   useEffect(() => {
     if (activeSection !== 'import') {
@@ -623,16 +637,19 @@ function App() {
 
   return (
     <ThemeProvider>
-      <PresentationProvider>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
-          <CMSHeader 
-            onOpenEngineAssets={() => setShowEngineAssets(true)}
-            onOpenStyleScheme={() => setShowStyleScheme(true)}
-            onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
-          />
+      <AuthProvider>
+        <PresentationProvider>
+          <ProtectedRoute requireAuth={requireAuth} appName="CMS Admin">
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
+              <CMSHeader 
+                onOpenEngineAssets={() => setShowEngineAssets(true)}
+                onOpenStyleScheme={() => setShowStyleScheme(true)}
+                onOpenSystemSettings={() => setShowSystemSettings(true)}
+                onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
+              />
           
-          {/* Notification */}
-          <AnimatePresence>
+              {/* Notification */}
+              <AnimatePresence>
             {notification && (
               <motion.div
                 initial={{ opacity: 0, y: -50 }}
@@ -944,20 +961,27 @@ function App() {
 
           {/* Style Scheme Manager */}
           {showStyleScheme && (
-            <div className="fixed inset-0 z-[100]">
-              <div className="absolute top-4 right-4 z-10">
-                <button
-                  onClick={() => setShowStyleScheme(false)}
-                  className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-roobert-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-lg"
-                >
-                  ← Back to CMS
-                </button>
-              </div>
-              <StyleSchemeManager />
+            <div className="fixed inset-0 z-[60]">
+              <StyleSchemeManagerV2 
+                onClose={() => setShowStyleScheme(false)}
+                onNotification={showNotification}
+              />
             </div>
           )}
-        </div>
-      </PresentationProvider>
+
+          {/* System Settings Manager */}
+          {showSystemSettings && (
+            <div className="fixed inset-0 z-[60]">
+              <SystemSettingsManager 
+                onClose={() => setShowSystemSettings(false)}
+                onNotification={showNotification}
+              />
+            </div>
+          )}
+            </div>
+          </ProtectedRoute>
+        </PresentationProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

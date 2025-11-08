@@ -4,6 +4,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
+import authRoutes from './api/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +16,9 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+
+// Authentication routes
+app.use('/api/auth', authRoutes);
 
 // Path to data directory
 const DATA_DIR = path.join(__dirname, '../src/data');
@@ -579,5 +583,12 @@ app.listen(PORT, () => {
   console.log(`  PUT    /api/templates/:id`);
   console.log(`  DELETE /api/templates/:id`);
   console.log(`  POST   /api/import/:type (with file upload)`);
+  console.log(`  POST   /api/auth/login`);
+  console.log(`  POST   /api/auth/verify`);
+  console.log(`  POST   /api/auth/logout`);
+  console.log(`  GET    /api/auth/users (admin)`);
+  console.log(`  POST   /api/auth/users (admin)`);
+  console.log(`  PUT    /api/auth/users/:id (admin)`);
+  console.log(`  DELETE /api/auth/users/:id (admin)`);
   console.log(`  GET    /api/health`);
 });

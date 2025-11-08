@@ -1,0 +1,78 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "passwordHash": "$2a$10$UUkjuAK2WQcgCYlEdP7JBuS6ycs0iLnWYPkoZkXSNvYIE6/VHcR7y",
+      "email": "admin@example.com",
+      "role": "admin",
+      "permissions": {
+        "parentApp": {
+          "canView": true,
+          "canEdit": false
+        },
+        "cmsAdmin": {
+          "canView": true,
+          "canEdit": true,
+          "canManageUsers": true,
+          "canManageSettings": true
+        }
+      },
+      "createdAt": "2025-01-01T00:00:00.000Z",
+      "lastLogin": "2025-11-08T22:09:57.214Z",
+      "isActive": true
+    }
+  ],
+  "roles": {
+    "admin": {
+      "name": "Administrator",
+      "description": "Full access to all features and settings",
+      "defaultPermissions": {
+        "parentApp": {
+          "canView": true,
+          "canEdit": false
+        },
+        "cmsAdmin": {
+          "canView": true,
+          "canEdit": true,
+          "canManageUsers": true,
+          "canManageSettings": true
+        }
+      }
+    },
+    "editor": {
+      "name": "Editor",
+      "description": "Can create and edit content",
+      "defaultPermissions": {
+        "parentApp": {
+          "canView": true,
+          "canEdit": false
+        },
+        "cmsAdmin": {
+          "canView": true,
+          "canEdit": true,
+          "canManageUsers": false,
+          "canManageSettings": false
+        }
+      }
+    },
+    "viewer": {
+      "name": "Viewer",
+      "description": "Read-only access",
+      "defaultPermissions": {
+        "parentApp": {
+          "canView": true,
+          "canEdit": false
+        },
+        "cmsAdmin": {
+          "canView": true,
+          "canEdit": false,
+          "canManageUsers": false,
+          "canManageSettings": false
+        }
+      }
+    }
+  },
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-08T22:09:57.214Z"
+}

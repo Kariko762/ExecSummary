@@ -18,6 +18,9 @@ export const typography = {
   // Field labels and small headers
   label: 'text-sm font-medium text-gray-600 dark:text-gray-400',
   
+  // Small field labels (Description:, Severity:, etc.) - Roobert Light, 8px, Purple
+  fieldLabel: 'text-xs font-roobert-light text-fis-eggplant dark:text-fis-raspberry',
+  
   // Body text
   body: 'text-base text-gray-700 dark:text-gray-300',
   
