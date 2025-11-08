@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, Type, List, Grid, Layers, FileText, BarChart3 } from 'lucide-react';
-import { RenderFactory } from '../../../src/renderers/RenderFactory';
+import { X, Type, List, Grid, Layers, FileText, BarChart3, PlayCircle } from 'lucide-react';
+import { RenderFactory } from '@renderers/RenderFactory';
 import type { FieldSchema } from '../../../src/types/schema';
+import EngineAssetsPreview from './EngineAssetsPreview';
 
 interface EngineAssetsModalProps {
   isOpen: boolean;
@@ -181,6 +182,146 @@ const EXAMPLES: RenderExample[] = [
       description: 'Migrate legacy systems to cloud infrastructure',
     },
   },
+
+  // CHARTS
+  {
+    id: 'pieChart',
+    name: 'Pie Chart',
+    category: 'charts',
+    description: 'Circular chart showing proportions',
+    useCase: 'Market share, budget allocation, category distribution',
+    schema: {
+      renderAs: 'pieChart',
+      label: 'Budget Allocation',
+      chartConfig: {
+        dataKey: 'value',
+        nameKey: 'name',
+        colors: ['#6B1B5E', '#B21A53', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
+        showLegend: true,
+        showTooltip: true,
+        innerRadius: 0,
+        outerRadius: 80,
+      },
+      fields: {
+        name: { renderAs: 'text', label: 'Label', required: true },
+        value: { renderAs: 'number', label: 'Value', required: true },
+      },
+    },
+    sampleData: [
+      { name: 'Engineering', value: 450000 },
+      { name: 'Marketing', value: 250000 },
+      { name: 'Sales', value: 180000 },
+      { name: 'Operations', value: 120000 },
+    ],
+  },
+  {
+    id: 'barChart',
+    name: 'Bar Chart',
+    category: 'charts',
+    description: 'Vertical or horizontal bars for comparison',
+    useCase: 'Revenue by quarter, team performance, feature adoption',
+    schema: {
+      renderAs: 'barChart',
+      label: 'Quarterly Revenue',
+      chartConfig: {
+        xAxisKey: 'name',
+        bars: [{ dataKey: 'value', fill: '#6B1B5E', name: 'Revenue' }],
+        orientation: 'vertical',
+        showGrid: true,
+        showLegend: true,
+        stacked: false,
+      },
+      fields: {
+        name: { renderAs: 'text', label: 'Quarter', required: true },
+        value: { renderAs: 'number', label: 'Revenue ($M)', required: true },
+      },
+    },
+    sampleData: [
+      { name: 'Q1', value: 2.5 },
+      { name: 'Q2', value: 3.2 },
+      { name: 'Q3', value: 3.8 },
+      { name: 'Q4', value: 4.5 },
+    ],
+  },
+  {
+    id: 'lineChart',
+    name: 'Line Chart',
+    category: 'charts',
+    description: 'Line graph for trends over time',
+    useCase: 'Growth trends, KPI tracking, temporal analysis',
+    schema: {
+      renderAs: 'lineChart',
+      label: 'User Growth',
+      chartConfig: {
+        xAxisKey: 'name',
+        lines: [{ dataKey: 'value', stroke: '#6B1B5E', name: 'Active Users' }],
+        showGrid: true,
+        showLegend: true,
+        showDots: true,
+        curved: true,
+      },
+      fields: {
+        name: { renderAs: 'text', label: 'Month', required: true },
+        value: { renderAs: 'number', label: 'Users', required: true },
+      },
+    },
+    sampleData: [
+      { name: 'Jan', value: 1200 },
+      { name: 'Feb', value: 1800 },
+      { name: 'Mar', value: 2400 },
+      { name: 'Apr', value: 3100 },
+      { name: 'May', value: 3800 },
+      { name: 'Jun', value: 4500 },
+    ],
+  },
+  {
+    id: 'radialChart',
+    name: 'Radial Chart',
+    category: 'charts',
+    description: 'Circular progress or donut chart',
+    useCase: 'Completion rates, progress tracking, goal achievement',
+    schema: {
+      renderAs: 'radialChart',
+      label: 'Project Completion',
+      chartConfig: {
+        dataKey: 'value',
+        maxValue: 100,
+        colors: ['#6B1B5E', '#B21A53', '#3B82F6'],
+        showPercentage: true,
+        thickness: 20,
+      },
+      fields: {
+        name: { renderAs: 'text', label: 'Project', required: true },
+        value: { renderAs: 'number', label: 'Progress (%)', required: true },
+      },
+    },
+    sampleData: [
+      { name: 'Infrastructure', value: 85 },
+      { name: 'Frontend', value: 92 },
+      { name: 'Backend', value: 78 },
+    ],
+  },
+  
+  // LAYOUT
+  {
+    id: 'hr',
+    name: 'Horizontal Rule',
+    category: 'rich',
+    description: 'Visual divider between sections',
+    useCase: 'Section separators, visual breaks, content organization',
+    schema: {
+      renderAs: 'hr',
+      label: 'Section Divider',
+      hrConfig: {
+        thickness: 1,
+        color: '#E5E7EB',
+        marginTop: 24,
+        marginBottom: 24,
+        style: 'solid',
+      },
+    },
+    sampleData: null,
+  },
 ];
 
 const CATEGORIES = [
@@ -194,6 +335,7 @@ const CATEGORIES = [
 export const EngineAssetsModal: React.FC<EngineAssetsModalProps> = ({ isOpen, onClose }) => {
   const [activeCategory, setActiveCategory] = useState<Category>('basic');
   const [expandedSchemas, setExpandedSchemas] = useState<Set<string>>(new Set());
+  const [showPreview, setShowPreview] = useState(false);
 
   const filteredExamples = EXAMPLES.filter(ex => ex.category === activeCategory);
 
@@ -267,13 +409,35 @@ export const EngineAssetsModal: React.FC<EngineAssetsModalProps> = ({ isOpen, on
                 Display-only reference for all render types
               </p>
             </div>
-            <button
-              onClick={onClose}
-              style={{ padding: '0.5rem', borderRadius: '0.5rem', border: 'none', background: 'transparent', cursor: 'pointer' }}
-              className="hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              <X className="w-5 h-5 text-gray-500" />
-            </button>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <button
+                onClick={() => setShowPreview(true)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.5rem',
+                  border: 'none',
+                  backgroundColor: '#6B1B5E',
+                  color: 'white',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+                className="hover:bg-opacity-90 font-roobert-semibold"
+              >
+                <PlayCircle className="w-4 h-4" />
+                Interactive Preview
+              </button>
+              <button
+                onClick={onClose}
+                style={{ padding: '0.5rem', borderRadius: '0.5rem', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                className="hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
           </div>
 
           {/* Category Tabs */}
@@ -382,6 +546,12 @@ export const EngineAssetsModal: React.FC<EngineAssetsModalProps> = ({ isOpen, on
           </div>
         </motion.div>
       </div>
+
+      {/* Interactive Preview Modal */}
+      <EngineAssetsPreview
+        isOpen={showPreview}
+        onClose={() => setShowPreview(false)}
+      />
     </>
   );
 };

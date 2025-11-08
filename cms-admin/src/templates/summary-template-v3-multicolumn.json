@@ -1,0 +1,292 @@
+{
+  "id": "template-summary-v3-multicolumn",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-01-01",
+  "title": "Your Organization Name - Weekly Executive Update",
+  
+  "highlights": [
+    "Example: Key achievement or milestone accomplished this week",
+    "Example: Important project completion or major progress update"
+  ],
+  "_highlights_type": "listNoTitle",
+  "_highlights_columnSpan": 4,
+  "_enabled_highlights": true,
+  "_completed_highlights": false,
+  
+  "keyMetrics": [
+    {
+      "label": "Revenue",
+      "value": "$2.5M",
+      "unit": ""
+    },
+    {
+      "label": "Growth",
+      "value": "15",
+      "unit": "%"
+    },
+    {
+      "label": "Customer Satisfaction",
+      "value": "95",
+      "unit": "%"
+    },
+    {
+      "label": "Team Velocity",
+      "value": "42",
+      "unit": "pts"
+    }
+  ],
+  "_keyMetrics_type": "nestedCards",
+  "_keyMetrics_columnSpan": 4,
+  "_keyMetrics_fields": {
+    "label": {
+      "type": "text",
+      "label": "Metric Name"
+    },
+    "value": {
+      "type": "text",
+      "label": "Value"
+    },
+    "unit": {
+      "type": "text",
+      "label": "Unit"
+    }
+  },
+  "_enabled_keyMetrics": true,
+  "_completed_keyMetrics": false,
+  
+  "budgetAllocation": [
+    {
+      "name": "Engineering",
+      "value": 450000
+    },
+    {
+      "name": "Marketing",
+      "value": 250000
+    },
+    {
+      "name": "Operations",
+      "value": 180000
+    },
+    {
+      "name": "Sales",
+      "value": 320000
+    }
+  ],
+  "_budgetAllocation_type": "pieChart",
+  "_budgetAllocation_columnSpan": 2,
+  "_budgetAllocation_chartConfig": {
+    "nameKey": "name",
+    "dataKey": "value",
+    "colors": ["#6B1B5E", "#B21A53", "#3B82F6", "#10B981"]
+  },
+  "_budgetAllocation_fields": {
+    "name": {
+      "type": "text",
+      "label": "Category",
+      "required": true
+    },
+    "value": {
+      "type": "number",
+      "label": "Amount",
+      "required": true
+    }
+  },
+  "_enabled_budgetAllocation": true,
+  "_completed_budgetAllocation": false,
+  
+  "quarterlyRevenue": [
+    {
+      "month": "Jan",
+      "revenue": 1200000
+    },
+    {
+      "month": "Feb",
+      "revenue": 1450000
+    },
+    {
+      "month": "Mar",
+      "revenue": 1680000
+    },
+    {
+      "month": "Apr",
+      "revenue": 1520000
+    }
+  ],
+  "_quarterlyRevenue_type": "barChart",
+  "_quarterlyRevenue_columnSpan": 2,
+  "_quarterlyRevenue_chartConfig": {
+    "xAxisKey": "month",
+    "dataKey": "revenue",
+    "barColor": "#6B1B5E"
+  },
+  "_quarterlyRevenue_fields": {
+    "month": {
+      "type": "text",
+      "label": "Month",
+      "required": true
+    },
+    "revenue": {
+      "type": "number",
+      "label": "Revenue",
+      "required": true
+    }
+  },
+  "_enabled_quarterlyRevenue": true,
+  "_completed_quarterlyRevenue": false,
+  
+  "divider1": null,
+  "_divider1_type": "hr",
+  "_divider1_columnSpan": 4,
+  "_divider1_hrConfig": {
+    "thickness": 1,
+    "color": "#E5E7EB",
+    "marginTop": 24,
+    "marginBottom": 24,
+    "style": "solid"
+  },
+  "_enabled_divider1": true,
+  "_completed_divider1": false,
+  
+  "departments": [
+    {
+      "name": "Engineering",
+      "performance": 92,
+      "budget": 450000,
+      "headcount": 45,
+      "achievements": [
+        "Completed Q1 infrastructure upgrade",
+        "Reduced deployment time by 40%"
+      ]
+    },
+    {
+      "name": "Marketing",
+      "performance": 88,
+      "budget": 250000,
+      "headcount": 18,
+      "achievements": [
+        "Launched new brand campaign",
+        "Increased social engagement by 65%"
+      ]
+    }
+  ],
+  "_departments_type": "nestedCards",
+  "_departments_columnSpan": 2,
+  "_departments_fields": {
+    "name": {
+      "type": "text",
+      "label": "Department Name"
+    },
+    "performance": {
+      "type": "number",
+      "label": "Performance Score"
+    },
+    "budget": {
+      "type": "number",
+      "label": "Budget"
+    },
+    "headcount": {
+      "type": "number",
+      "label": "Headcount"
+    },
+    "achievements": {
+      "type": "list",
+      "label": "Achievements"
+    }
+  },
+  "_enabled_departments": true,
+  "_completed_departments": false,
+  
+  "initiatives": [
+    {
+      "name": "Cloud Migration",
+      "status": "on-track",
+      "progress": 75,
+      "owner": "Infrastructure Team",
+      "impact": "high"
+    },
+    {
+      "name": "AI Integration",
+      "status": "on-track",
+      "progress": 60,
+      "owner": "Product Team",
+      "impact": "high"
+    }
+  ],
+  "_initiatives_type": "nestedCards",
+  "_initiatives_columnSpan": 2,
+  "_initiatives_fields": {
+    "name": {
+      "type": "text",
+      "label": "Initiative Name"
+    },
+    "status": {
+      "type": "text",
+      "label": "Status"
+    },
+    "progress": {
+      "type": "number",
+      "label": "Progress %"
+    },
+    "owner": {
+      "type": "text",
+      "label": "Owner"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact Level"
+    }
+  },
+  "_enabled_initiatives": true,
+  "_completed_initiatives": false,
+  
+  "weeklyFocus": [
+    "Finalize Q2 roadmap and resource allocation",
+    "Complete security audit and address critical findings",
+    "Review and approve new hiring plan for H2"
+  ],
+  "_weeklyFocus_type": "listNoTitle",
+  "_weeklyFocus_columnSpan": 4,
+  "_enabled_weeklyFocus": true,
+  "_completed_weeklyFocus": false,
+  
+  "risks": [
+    {
+      "description": "Potential delay in vendor deliverables for cloud migration",
+      "severity": "medium",
+      "mitigation": "Identified backup vendors and internal resources to accelerate timeline if needed"
+    }
+  ],
+  "_risks_type": "nestedCards",
+  "_risks_columnSpan": 4,
+  "_risks_fields": {
+    "description": {
+      "type": "textarea",
+      "label": "Risk Description"
+    },
+    "severity": {
+      "type": "text",
+      "label": "Severity"
+    },
+    "mitigation": {
+      "type": "textarea",
+      "label": "Mitigation Strategy"
+    }
+  },
+  "_enabled_risks": true,
+  "_completed_risks": false,
+  
+  "outlook": "Next week focuses on finalizing Q2 planning, completing the security audit, and advancing our strategic initiatives. All major projects remain on track with strong momentum heading into the quarter.",
+  "_outlook_type": "textarea",
+  "_outlook_columnSpan": 4,
+  "_enabled_outlook": true,
+  "_completed_outlook": false,
+  
+  "status": "draft",
+  "protectionEnabled": false,
+  
+  "_template_name": "Executive Summary Template V3 - Multi-Column Layout",
+  "_template_description": "Advanced executive summary template with multi-column grid layout featuring charts, metrics, and responsive design. Includes 2-column side-by-side sections and full-width sections.",
+  "_template_created": "2025-11-08T12:00:00.000Z",
+  "_template_updated": "2025-11-08T12:00:00.000Z"
+}

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, Plus, Trash2, GripVertical, ChevronRight, ChevronDown, 
   Type, List, Grid, Layers, FileText, BarChart3, Settings,
-  Eye, Code, Save, Download, Upload, PlayCircle
+  Eye, Code, Save, Download, Upload, PlayCircle, TrendingUp
 } from 'lucide-react';
 import type { FieldSchema } from '../../../src/types/schema';
 import EditorModalV2 from './EditorModalV2';
@@ -17,6 +17,14 @@ interface TemplateSection {
   name: string;
   expanded: boolean;
   fields: TemplateField[];
+  columnSpan?: number; // 1-4 columns for grid layout
+}
+
+interface LayoutElement {
+  id: string;
+  type: 'hr';
+  position: number; // Position in the template (between sections)
+  config?: any;
 }
 
 interface TemplateField {
@@ -166,6 +174,132 @@ const ASSET_LIBRARY: AssetCategory[] = [
         schema: { type: 'expression', label: 'New Expression' }
       }
     ]
+  },
+  {
+    id: 'charts',
+    name: 'Charts',
+    icon: TrendingUp,
+    color: 'pink',
+    assets: [
+      {
+        id: 'pieChart',
+        name: 'Pie Chart',
+        renderType: 'pieChart',
+        description: 'Circular proportional chart',
+        schema: { 
+          type: 'pieChart', 
+          label: 'New Pie Chart',
+          renderAs: 'pieChart',
+          chartConfig: {
+            dataKey: 'value',
+            nameKey: 'name',
+            colors: ['#6B1B5E', '#B21A53', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
+            showLegend: true,
+            showTooltip: true,
+            innerRadius: 0,
+            outerRadius: 80
+          },
+          fields: {
+            name: { label: 'Label', renderAs: 'text', required: true },
+            value: { label: 'Value', renderAs: 'number', required: true }
+          }
+        }
+      },
+      {
+        id: 'barChart',
+        name: 'Bar Chart',
+        renderType: 'barChart',
+        description: 'Vertical or horizontal bars',
+        schema: { 
+          type: 'barChart', 
+          label: 'New Bar Chart',
+          renderAs: 'barChart',
+          chartConfig: {
+            xAxisKey: 'name',
+            bars: [{ dataKey: 'value', fill: '#6B1B5E', name: 'Value' }],
+            orientation: 'vertical',
+            showGrid: true,
+            showLegend: true,
+            stacked: false
+          },
+          fields: {
+            name: { label: 'Label', renderAs: 'text', required: true },
+            value: { label: 'Value', renderAs: 'number', required: true }
+          }
+        }
+      },
+      {
+        id: 'lineChart',
+        name: 'Line Chart',
+        renderType: 'lineChart',
+        description: 'Trend lines over time',
+        schema: { 
+          type: 'lineChart', 
+          label: 'New Line Chart',
+          renderAs: 'lineChart',
+          chartConfig: {
+            xAxisKey: 'name',
+            lines: [{ dataKey: 'value', stroke: '#6B1B5E', name: 'Value' }],
+            showGrid: true,
+            showLegend: true,
+            showDots: true,
+            curved: true
+          },
+          fields: {
+            name: { label: 'Label', renderAs: 'text', required: true },
+            value: { label: 'Value', renderAs: 'number', required: true }
+          }
+        }
+      },
+      {
+        id: 'radialChart',
+        name: 'Radial Chart',
+        renderType: 'radialChart',
+        description: 'Circular progress/donut',
+        schema: { 
+          type: 'radialChart', 
+          label: 'New Radial Chart',
+          renderAs: 'radialChart',
+          chartConfig: {
+            dataKey: 'value',
+            maxValue: 100,
+            colors: ['#6B1B5E', '#B21A53'],
+            showPercentage: true,
+            thickness: 20
+          },
+          fields: {
+            name: { label: 'Label', renderAs: 'text', required: true },
+            value: { label: 'Value', renderAs: 'number', required: true }
+          }
+        }
+      }
+    ]
+  },
+  {
+    id: 'layout',
+    name: 'Layout',
+    icon: Grid,
+    color: 'gray',
+    assets: [
+      {
+        id: 'hr',
+        name: 'Horizontal Rule',
+        renderType: 'hr',
+        description: 'Visual divider line',
+        schema: { 
+          type: 'hr', 
+          label: 'Divider',
+          renderAs: 'hr',
+          hrConfig: {
+            thickness: 1,
+            color: '#E5E7EB',
+            marginTop: 24,
+            marginBottom: 24,
+            style: 'solid'
+          }
+        }
+      }
+    ]
   }
 ];
 
@@ -219,6 +353,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('basic');
   const [draggedAsset, setDraggedAsset] = useState<AssetItem | null>(null);
   const [draggedField, setDraggedField] = useState<{ sectionId: string; fieldId: string } | null>(null);
+  const [draggedSection, setDraggedSection] = useState<string | null>(null);
   const [dragOverSection, setDragOverSection] = useState<string | null>(null);
   const [selectedField, setSelectedField] = useState<{ sectionId: string; fieldId: string } | null>(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
@@ -308,6 +443,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         
         const sectionType = templateData[`_${key}_type`];
         const sectionFields = templateData[`_${key}_fields`];
+        const sectionColumnSpan = templateData[`_${key}_columnSpan`];
         const exampleData = templateData[key];
         
         if (sectionType) {
@@ -328,7 +464,8 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
             id: `section-${Date.now()}-${key}`,
             name: formatSectionTitle(key),
             expanded: true,
-            fields: [field]
+            fields: [field],
+            columnSpan: sectionColumnSpan || 1 // Load columnSpan from metadata
           });
         }
       });
@@ -414,6 +551,35 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     setDragOverSection(null);
   };
 
+  // Section drag and drop for reordering
+  const handleSectionDragStart = (sectionId: string) => {
+    if (sectionId === 'section-header') return; // Don't allow dragging header
+    setDraggedSection(sectionId);
+  };
+
+  const handleSectionDragEnd = () => {
+    setDraggedSection(null);
+  };
+
+  const handleSectionDragOverSection = (e: React.DragEvent, targetSectionId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!draggedSection || draggedSection === targetSectionId) return;
+    if (targetSectionId === 'section-header') return; // Don't allow dropping on header
+    
+    const draggedIndex = sections.findIndex(s => s.id === draggedSection);
+    const targetIndex = sections.findIndex(s => s.id === targetSectionId);
+    
+    if (draggedIndex === -1 || targetIndex === -1) return;
+    
+    // Reorder sections
+    const newSections = [...sections];
+    const [removed] = newSections.splice(draggedIndex, 1);
+    newSections.splice(targetIndex, 0, removed);
+    setSections(newSections);
+  };
+
   // Section management
   const addSection = () => {
     const newSection: TemplateSection = {
@@ -441,6 +607,36 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     if (window.confirm('Remove this section and all its fields?')) {
       setSections(prev => prev.filter(s => s.id !== sectionId));
     }
+  };
+
+  // Add HR divider as a section
+  const addHorizontalRule = () => {
+    const hrSection: TemplateSection = {
+      id: `hr-${Date.now()}`,
+      name: `Divider ${sections.filter(s => s.fields[0]?.renderType === 'hr').length + 1}`,
+      expanded: false,
+      columnSpan: 4, // Full width by default
+      fields: [{
+        id: `hr-field-${Date.now()}`,
+        key: `divider${Date.now()}`,
+        label: 'Horizontal Rule',
+        renderType: 'hr',
+        schema: {
+          type: 'hr',
+          label: 'Divider',
+          renderAs: 'hr',
+          hrConfig: {
+            thickness: 1,
+            color: '#E5E7EB',
+            marginTop: 24,
+            marginBottom: 24,
+            style: 'solid'
+          }
+        } as any
+      }]
+    };
+    setSections([...sections, hrSection]);
+    setNotification({ type: 'success', message: 'Horizontal rule added' });
   };
 
   // Field management
@@ -674,6 +870,11 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           // Enable the section by default
           templateData[`_enabled_${sectionKey}`] = true;
           templateData[`_completed_${sectionKey}`] = false;
+          
+          // Add column span if specified (defaults to 1 if not set)
+          if (section.columnSpan) {
+            templateData[`_${sectionKey}_columnSpan`] = section.columnSpan;
+          }
         }
       });
       
@@ -808,7 +1009,37 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
 
             {/* Assets in Selected Category */}
             <div className="space-y-2">
-              {selectedCategory?.assets.map(asset => (
+              {selectedCategory?.assets.map(asset => {
+                const isLayoutAsset = selectedCategoryId === 'layout';
+                
+                if (isLayoutAsset) {
+                  // Layout assets get an "Add" button instead of drag
+                  return (
+                    <div
+                      key={asset.id}
+                      className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                          {asset.name}
+                        </div>
+                        <button
+                          onClick={addHorizontalRule}
+                          className="px-3 py-1 rounded bg-fis-eggplant hover:bg-fis-eggplant/90 text-white text-xs font-roobert-medium flex items-center gap-1 transition-colors"
+                        >
+                          <Plus className="w-3 h-3" />
+                          Add
+                        </button>
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        {asset.description}
+                      </div>
+                    </div>
+                  );
+                }
+                
+                // Regular draggable assets
+                return (
                 <div
                   key={asset.id}
                   draggable
@@ -826,7 +1057,8 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                     {asset.renderType}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
@@ -850,11 +1082,15 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                 return (
                 <div
                   key={section.id}
+                  draggable={!isHeaderSection}
+                  onDragStart={() => handleSectionDragStart(section.id)}
+                  onDragEnd={handleSectionDragEnd}
+                  onDragOver={(e) => handleSectionDragOverSection(e, section.id)}
                   className={`rounded-xl border-2 shadow-sm overflow-hidden ${
                     isHeaderSection 
                       ? 'bg-fis-eggplant/5 dark:bg-fis-eggplant/10 border-fis-eggplant dark:border-fis-raspberry' 
-                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
-                  }`}
+                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 cursor-move'
+                  } ${draggedSection === section.id ? 'opacity-50' : ''}`}
                 >
                   {/* Section Header */}
                   <div 
@@ -869,6 +1105,9 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                     }}
                   >
                     <div className="flex items-center gap-2">
+                      {!isHeaderSection && (
+                        <GripVertical className="w-4 h-4 text-gray-400 cursor-move" />
+                      )}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -902,6 +1141,28 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                       <span className="text-xs text-gray-500 dark:text-gray-500">
                         ({section.fields.length} fields)
                       </span>
+                      
+                      {/* Column Span Selector */}
+                      {!isHeaderSection && (
+                        <div className="flex items-center gap-2 ml-4" onClick={(e) => e.stopPropagation()}>
+                          <span className="text-xs text-gray-500 dark:text-gray-500">Width:</span>
+                          <select
+                            value={section.columnSpan || 1}
+                            onChange={(e) => {
+                              const newSpan = parseInt(e.target.value);
+                              setSections(prev => prev.map(s =>
+                                s.id === section.id ? { ...s, columnSpan: newSpan } : s
+                              ));
+                            }}
+                            className="text-xs px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-fis-eggplant"
+                          >
+                            <option value={1}>1 col</option>
+                            <option value={2}>2 cols</option>
+                            <option value={3}>3 cols</option>
+                            <option value={4}>4 cols (full)</option>
+                          </select>
+                        </div>
+                      )}
                     </div>
                     <button
                       onClick={(e) => {

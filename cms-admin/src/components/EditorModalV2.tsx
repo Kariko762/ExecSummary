@@ -329,7 +329,8 @@ export default function EditorModalV2({
     
     const metadataKeys = ['id', 'quarter', 'year', 'date', 'title', 'displayName', 'name', 'category', 'lastUpdated', 'status', 'protectionEnabled'];
     const excludePrefixes = ['_enabled_', '_completed_', '_locked_', '_template_'];
-    const excludeSuffixes = ['_schema', '_type', '_fields'];
+    const excludeSuffixes = ['_schema', '_type', '_fields', '_config'];
+    const excludeContains = ['_chartConfig']; // Exclude dynamic chart config keys
     
     const contentSections = Object.keys(sourceData)
       .filter(key => {
@@ -339,6 +340,8 @@ export default function EditorModalV2({
         if (excludePrefixes.some(prefix => key.startsWith(prefix))) return false;
         // Exclude keys with metadata suffixes (like _schema, _type, _fields)
         if (excludeSuffixes.some(suffix => key.endsWith(suffix))) return false;
+        // Exclude keys that contain certain patterns (like _chartConfig)
+        if (excludeContains.some(pattern => key.includes(pattern))) return false;
         return true;
       })
       .map(key => {

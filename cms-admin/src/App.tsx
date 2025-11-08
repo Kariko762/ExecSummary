@@ -8,7 +8,8 @@ import EditorModal from './components/EditorModalV2';
 import EngineAssetsModal from './components/EngineAssetsModal';
 import StyleSchemeManager from './components/StyleSchemeManager';
 import TemplateBuilder from './components/TemplateBuilder';
-import summaryTemplate from './templates/summary-template.json';
+import summaryTemplate from './templates/summary-template-v2.json';
+import summaryTemplateWithCharts from './templates/summary_default_charts.json';
 import './App.css';
 
 const API_URL = 'http://localhost:3001/api';
@@ -128,9 +129,10 @@ function App() {
       const response = await fetch(`${API_URL}/templates`);
       if (!response.ok) throw new Error('Failed to fetch templates');
       const data = await response.json();
-      setAvailableTemplates(data);
+      setAvailableTemplates(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch templates:', error);
+      setAvailableTemplates([]); // Ensure it's always an array
     }
   };
 
@@ -300,6 +302,9 @@ function App() {
         if (selectedSourceId === 'default' || !selectedSourceId) {
           // Use built-in default template
           sourceData = summaryTemplate;
+        } else if (selectedSourceId === 'default-with-charts') {
+          // Use built-in template with charts
+          sourceData = summaryTemplateWithCharts;
         } else {
           // Fetch custom template
           const response = await fetch(`${API_URL}/templates/${selectedSourceId}`);
@@ -837,6 +842,7 @@ function App() {
                         >
                           <option value="">-- Select a template --</option>
                           <option value="default">Default Template (Built-in)</option>
+                          <option value="default-with-charts">Default Template with Charts (Built-in)</option>
                           {availableTemplates.map((template) => (
                             <option key={template.id} value={template.id}>
                               {template.name} {template.description && `- ${template.description}`}
