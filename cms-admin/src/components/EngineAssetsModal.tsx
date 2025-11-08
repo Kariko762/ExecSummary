@@ -5,7 +5,7 @@ import { X, Type, List, Grid, Layers, FileText, BarChart3 } from 'lucide-react';
 import { RenderFactory } from '../../../src/renderers/RenderFactory';
 import type { FieldSchema } from '../../../src/types/schema';
 
-interface EngineGlossaryModalProps {
+interface EngineAssetsModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
@@ -191,7 +191,7 @@ const CATEGORIES = [
   { id: 'charts' as Category, name: 'Charts', icon: BarChart3, color: 'pink' },
 ];
 
-export const EngineGlossaryModal: React.FC<EngineGlossaryModalProps> = ({ isOpen, onClose }) => {
+export const EngineAssetsModal: React.FC<EngineAssetsModalProps> = ({ isOpen, onClose }) => {
   const [activeCategory, setActiveCategory] = useState<Category>('basic');
   const [expandedSchemas, setExpandedSchemas] = useState<Set<string>>(new Set());
 
@@ -261,7 +261,7 @@ export const EngineGlossaryModal: React.FC<EngineGlossaryModalProps> = ({ isOpen
             <div>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }} className="text-gray-900 dark:text-white font-roobert-bold">
                 <Grid className="w-5 h-5 text-fis-eggplant dark:text-fis-raspberry" />
-                Engine Glossary
+                Engine Assets
               </h2>
               <p style={{ fontSize: '0.75rem', marginTop: '0.125rem' }} className="text-gray-600 dark:text-gray-400">
                 Display-only reference for all render types
@@ -386,4 +386,4 @@ export const EngineGlossaryModal: React.FC<EngineGlossaryModalProps> = ({ isOpen
   );
 };
 
-export default EngineGlossaryModal;
+export default EngineAssetsModal;

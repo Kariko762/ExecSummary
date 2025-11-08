@@ -1,14 +1,16 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useState } from 'react';
 import APIDashboardModal from './APIDashboardModal';
 
 interface CMSHeaderProps {
-  onOpenEngineGlossary?: () => void;
+  onOpenEngineAssets?: () => void;
+  onOpenStyleScheme?: () => void;
+  onOpenTemplateBuilder?: () => void;
 }
 
-export const CMSHeader = ({ onOpenEngineGlossary }: CMSHeaderProps) => {
+export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpenTemplateBuilder }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
@@ -187,13 +189,13 @@ export const CMSHeader = ({ onOpenEngineGlossary }: CMSHeaderProps) => {
                                 className="absolute left-full top-0 ml-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[60]"
                               >
                                 <div className="p-2">
-                                  {/* Engine Glossary */}
+                                  {/* Engine Assets */}
                                   <button
                                     onClick={() => {
-                                      console.log('Engine Glossary clicked!');
+                                      console.log('Engine Assets clicked!');
                                       setIsNavDropdownOpen(false);
                                       setEngineSubmenuOpen(false);
-                                      onOpenEngineGlossary?.();
+                                      onOpenEngineAssets?.();
                                     }}
                                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-fis-eggplant/10 dark:hover:bg-fis-eggplant/20 text-gray-900 dark:text-white text-left"
                                   >
@@ -201,22 +203,27 @@ export const CMSHeader = ({ onOpenEngineGlossary }: CMSHeaderProps) => {
                                       <BookOpen className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
                                     </div>
                                     <div className="flex-1">
-                                      <div className="font-roobert-semibold text-sm">Engine Glossary</div>
+                                      <div className="font-roobert-semibold text-sm">Engine Assets</div>
                                       <div className="text-xs text-gray-600 dark:text-gray-400">All render types & examples</div>
                                     </div>
                                   </button>
 
-                                  {/* Template Builder - Coming Soon */}
+                                  {/* Template Builder */}
                                   <button
-                                    disabled
-                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-left opacity-50 cursor-not-allowed"
+                                    onClick={() => {
+                                      console.log('Template Builder clicked!');
+                                      setIsNavDropdownOpen(false);
+                                      setEngineSubmenuOpen(false);
+                                      onOpenTemplateBuilder?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-fis-eggplant/10 dark:hover:bg-fis-eggplant/20 text-gray-900 dark:text-white text-left"
                                   >
-                                    <div className="p-1.5 rounded-lg bg-gray-200 dark:bg-gray-700">
-                                      <Settings className="w-4 h-4 text-gray-400" />
+                                    <div className="p-1.5 rounded-lg bg-fis-eggplant/10 dark:bg-fis-eggplant/20">
+                                      <Grid className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
                                     </div>
                                     <div className="flex-1">
-                                      <div className="font-roobert-semibold text-sm text-gray-500 dark:text-gray-500">Template Builder</div>
-                                      <div className="text-xs text-gray-400">Coming soon</div>
+                                      <div className="font-roobert-semibold text-sm">Template Builder</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Drag & drop template designer</div>
                                     </div>
                                   </button>
 
@@ -231,6 +238,24 @@ export const CMSHeader = ({ onOpenEngineGlossary }: CMSHeaderProps) => {
                                     <div className="flex-1">
                                       <div className="font-roobert-semibold text-sm text-gray-500 dark:text-gray-500">Schema Validator</div>
                                       <div className="text-xs text-gray-400">Coming soon</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Style Scheme Manager */}
+                                  <button
+                                    onClick={() => {
+                                      onOpenStyleScheme?.();
+                                      setIsNavDropdownOpen(false);
+                                      setIsEngineMenuOpen(false);
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-fis-raspberry/10">
+                                      <Palette className="w-4 h-4 text-fis-raspberry" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Style Scheme Manager</div>
+                                      <div className="text-xs text-gray-500 dark:text-gray-400">Configure design system</div>
                                     </div>
                                   </button>
                                 </div>

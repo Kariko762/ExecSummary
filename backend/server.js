@@ -412,6 +412,142 @@ app.post('/api/import/:type', upload.single('file'), async (req, res) => {
 });
 
 // ============================================
+// TEMPLATES
+// ============================================
+
+// Get all templates
+app.get('/api/templates', async (req, res) => {
+  try {
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const files = await listFiles(templatesDir);
+    
+    const templates = await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(templatesDir, file);
+        const data = await readJSONFile(filePath);
+        
+        // Count non-metadata keys as sections
+        const sectionCount = Object.keys(data).filter(key => 
+          !key.startsWith('_template_') && 
+          !key.startsWith('_enabled_') && 
+          !key.startsWith('_completed_') &&
+          !['id', 'status', 'protectionEnabled', 'quarter', 'year', 'date', 'title'].includes(key)
+        ).length;
+        
+        return {
+          id: file.replace('.json', ''),
+          name: data._template_name || file.replace('.json', '').replace(/-/g, ' '),
+          description: data._template_description || '',
+          fileName: file,
+          sectionCount: sectionCount,
+          createdAt: data._template_created || new Date().toISOString(),
+          updatedAt: data._template_updated || new Date().toISOString()
+        };
+      })
+    );
+    
+    res.json({ success: true, templates });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get a specific template
+app.get('/api/templates/:id', async (req, res) => {
+  try {
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const filePath = path.join(templatesDir, `${req.params.id}.json`);
+    const data = await readJSONFile(filePath);
+    res.json({ success: true, template: data });
+  } catch (error) {
+    res.status(404).json({ error: 'Template not found' });
+  }
+});
+
+// Save a new template
+app.post('/api/templates', async (req, res) => {
+  try {
+    const { name, description, template } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ error: 'Template name is required' });
+    }
+    
+    // Generate template ID from name
+    const templateId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const filePath = path.join(templatesDir, `${templateId}.json`);
+    
+    // Create templates directory if it doesn't exist
+    await fs.mkdir(templatesDir, { recursive: true });
+    
+    // Save template data directly (already in correct format from frontend)
+    // Add metadata
+    const templateWithMetadata = {
+      ...template,
+      _template_name: name,
+      _template_description: description || '',
+      _template_created: new Date().toISOString(),
+      _template_updated: new Date().toISOString()
+    };
+    
+    await writeJSONFile(filePath, templateWithMetadata);
+    
+    res.json({ 
+      success: true, 
+      id: templateId,
+      message: `Template "${name}" saved successfully`,
+      template: templateWithMetadata
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update an existing template
+app.put('/api/templates/:id', async (req, res) => {
+  try {
+    const { name, description, sections } = req.body;
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const filePath = path.join(templatesDir, `${req.params.id}.json`);
+    
+    // Read existing template
+    const existing = await readJSONFile(filePath);
+    
+    // Update template
+    const template = {
+      ...existing,
+      name: name || existing.name,
+      description: description || existing.description,
+      sections: sections || existing.sections,
+      updatedAt: new Date().toISOString()
+    };
+    
+    await writeJSONFile(filePath, template);
+    
+    res.json({ 
+      success: true, 
+      message: `Template "${template.name}" updated successfully`,
+      template
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete a template
+app.delete('/api/templates/:id', async (req, res) => {
+  try {
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const filePath = path.join(templatesDir, `${req.params.id}.json`);
+    await fs.unlink(filePath);
+    res.json({ success: true, message: 'Template deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
 // HEALTH CHECK
 // ============================================
 
@@ -437,6 +573,11 @@ app.listen(PORT, () => {
   console.log(`  POST   /api/organizations`);
   console.log(`  PUT    /api/organizations/:id`);
   console.log(`  DELETE /api/organizations/:id`);
+  console.log(`  GET    /api/templates`);
+  console.log(`  GET    /api/templates/:id`);
+  console.log(`  POST   /api/templates`);
+  console.log(`  PUT    /api/templates/:id`);
+  console.log(`  DELETE /api/templates/:id`);
   console.log(`  POST   /api/import/:type (with file upload)`);
   console.log(`  GET    /api/health`);
 });

@@ -3,9 +3,11 @@ import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
-import { CMSHeader } from './components/CMSHeader';
+import CMSHeader from './components/CMSHeader';
 import EditorModal from './components/EditorModalV2';
-import EngineGlossaryModal from './components/EngineGlossaryModal';
+import EngineAssetsModal from './components/EngineAssetsModal';
+import StyleSchemeManager from './components/StyleSchemeManager';
+import TemplateBuilder from './components/TemplateBuilder';
 import summaryTemplate from './templates/summary-template.json';
 import './App.css';
 
@@ -65,7 +67,10 @@ function App() {
   const [newSummaryName, setNewSummaryName] = useState('');
   const [creationMode, setCreationMode] = useState<'template' | 'clone'>('template');
   const [selectedSourceId, setSelectedSourceId] = useState<string>('');
-  const [showEngineGlossary, setShowEngineGlossary] = useState(false);
+  const [showEngineAssets, setShowEngineAssets] = useState(false);
+  const [showStyleScheme, setShowStyleScheme] = useState(false);
+  const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
+  const [availableTemplates, setAvailableTemplates] = useState<any[]>([]);
 
   useEffect(() => {
     if (activeSection !== 'import') {
@@ -79,6 +84,13 @@ function App() {
       return () => clearTimeout(timer);
     }
   }, [notification]);
+
+  // Load templates when modal opens
+  useEffect(() => {
+    if (showNewSummaryModal) {
+      fetchTemplates();
+    }
+  }, [showNewSummaryModal]);
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
@@ -108,6 +120,17 @@ function App() {
       showNotification('error', 'Failed to load data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTemplates = async () => {
+    try {
+      const response = await fetch(`${API_URL}/templates`);
+      if (!response.ok) throw new Error('Failed to fetch templates');
+      const data = await response.json();
+      setAvailableTemplates(data);
+    } catch (error) {
+      console.error('Failed to fetch templates:', error);
     }
   };
 
@@ -274,7 +297,15 @@ function App() {
       
       if (creationMode === 'template') {
         // Use template
-        sourceData = summaryTemplate;
+        if (selectedSourceId === 'default' || !selectedSourceId) {
+          // Use built-in default template
+          sourceData = summaryTemplate;
+        } else {
+          // Fetch custom template
+          const response = await fetch(`${API_URL}/templates/${selectedSourceId}`);
+          if (!response.ok) throw new Error('Failed to fetch template');
+          sourceData = await response.json();
+        }
       } else {
         // Fetch the selected summary to clone
         const response = await fetch(`${API_URL}/summaries/${selectedSourceId}`);
@@ -589,7 +620,11 @@ function App() {
     <ThemeProvider>
       <PresentationProvider>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
-          <CMSHeader onOpenEngineGlossary={() => setShowEngineGlossary(true)} />
+          <CMSHeader 
+            onOpenEngineAssets={() => setShowEngineAssets(true)}
+            onOpenStyleScheme={() => setShowStyleScheme(true)}
+            onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
+          />
           
           {/* Notification */}
           <AnimatePresence>
@@ -796,15 +831,23 @@ function App() {
                           Select Template
                         </label>
                         <select
-                          disabled
-                          value="default"
-                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white cursor-not-allowed opacity-75"
+                          value={selectedSourceId}
+                          onChange={(e) => setSelectedSourceId(e.target.value)}
+                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
                         >
-                          <option value="default">Default Template</option>
+                          <option value="">-- Select a template --</option>
+                          <option value="default">Default Template (Built-in)</option>
+                          {availableTemplates.map((template) => (
+                            <option key={template.id} value={template.id}>
+                              {template.name} {template.description && `- ${template.description}`}
+                            </option>
+                          ))}
                         </select>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                          Additional templates coming soon
-                        </p>
+                        {availableTemplates.length === 0 && (
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            No custom templates yet. Use Template Builder to create one.
+                          </p>
+                        )}
                       </div>
                     )}
 
@@ -880,11 +923,33 @@ function App() {
             onSave={handleSaveItem}
           />
 
-          {/* Engine Glossary Modal */}
-          <EngineGlossaryModal
-            isOpen={showEngineGlossary}
-            onClose={() => setShowEngineGlossary(false)}
+          {/* Engine Assets Modal */}
+          <EngineAssetsModal
+            isOpen={showEngineAssets}
+            onClose={() => setShowEngineAssets(false)}
           />
+
+          {/* Template Builder */}
+          {showTemplateBuilder && (
+            <div className="fixed inset-0 z-[100]">
+              <TemplateBuilder onBack={() => setShowTemplateBuilder(false)} />
+            </div>
+          )}
+
+          {/* Style Scheme Manager */}
+          {showStyleScheme && (
+            <div className="fixed inset-0 z-[100]">
+              <div className="absolute top-4 right-4 z-10">
+                <button
+                  onClick={() => setShowStyleScheme(false)}
+                  className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-roobert-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-lg"
+                >
+                  ← Back to CMS
+                </button>
+              </div>
+              <StyleSchemeManager />
+            </div>
+          )}
         </div>
       </PresentationProvider>
     </ThemeProvider>

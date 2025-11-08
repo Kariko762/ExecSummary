@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save, Eye, Upload, ChevronLeft, ChevronRight, Check, Lock, Unlock, EyeOff, Code2, Copy, CheckCheck, CheckCircle, Shield, ShieldOff } from 'lucide-react';
 import { summarySchema } from '@shared/schemas/summarySchema';
+import { buildFieldSchema } from '@shared/schemas/assetTypeRegistry';
 import { RenderFactory } from '@renderers/RenderFactory';
 import { ConfirmationModal } from './ConfirmationModal';
 import PreviewModal from './PreviewModal';
@@ -103,20 +104,176 @@ export default function EditorModalV2({
 
   /**
    * Schema-Driven Section Renderer
-   * Core engine: Reads schema → picks renderer → handles data
+   * Core engine: Reads _<sectionId>_type metadata → looks up in assetTypeRegistry → renders
+   * 
+   * Architecture:
+   * - First checks for dynamic type in editedData[`_${sectionId}_type`]
+   * - Looks up base schema from assetTypeRegistry
+   * - Applies custom fields from editedData[`_${sectionId}_fields`] if present
+   * - Falls back to hardcoded summarySchema for backwards compatibility
    */
   const renderSchemaSection = (sectionId: string): React.ReactElement | null => {
-    const schemaSection = summarySchema.sections?.find(s => s.id === sectionId);
-    if (!schemaSection) {
-      // No schema found - render generic fallback
+    const sectionData = editedData[sectionId];
+    const sectionType = editedData[`_${sectionId}_type`];
+    const customFields = editedData[`_${sectionId}_fields`];
+    
+    // Special handling for standard_header - render metadata fields
+    if (sectionId === 'standard_header') {
       return (
-        <div className="p-4 text-sm text-gray-500 dark:text-gray-400 italic">
-          No schema defined for "{sectionId}". Add to schema to enable rendering.
+        <div className="space-y-4 p-4">
+          <div>
+            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Document ID
+              <span className="ml-2 text-xs font-normal text-gray-500">(read-only)</span>
+            </label>
+            <input
+              type="text"
+              value={editedData.id || ''}
+              disabled
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-500 font-mono text-sm cursor-not-allowed"
+              placeholder="week-mmm-dd-yyyy"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Quarter/Period
+            </label>
+            <input
+              type="text"
+              value={editedData.quarter || ''}
+              onChange={(e) => {
+                setEditedData((prev: any) => ({ ...prev, quarter: e.target.value }));
+                setIsDirty(true);
+              }}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              placeholder="Oct 31 or Q4"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Year
+            </label>
+            <input
+              type="number"
+              value={editedData.year || new Date().getFullYear()}
+              onChange={(e) => {
+                setEditedData((prev: any) => ({ ...prev, year: parseInt(e.target.value) || new Date().getFullYear() }));
+                setIsDirty(true);
+              }}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Date
+            </label>
+            <input
+              type="date"
+              value={editedData.date || ''}
+              onChange={(e) => {
+                setEditedData((prev: any) => ({ ...prev, date: e.target.value }));
+                setIsDirty(true);
+              }}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Title
+            </label>
+            <input
+              type="text"
+              value={editedData.title || ''}
+              onChange={(e) => {
+                setEditedData((prev: any) => ({ ...prev, title: e.target.value }));
+                setIsDirty(true);
+              }}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              placeholder="Organization - Weekly Executive Update"
+            />
+          </div>
         </div>
       );
     }
-
-    const sectionData = editedData[sectionId];
+    
+    // Try dynamic schema first (from templates) - NEW APPROACH
+    if (sectionType) {
+      // Build schema from asset type registry + custom fields
+      const baseSchema = buildFieldSchema(sectionType, customFields ? { fields: customFields } : {});
+      
+      const factorySchema: any = {
+        label: formatSectionTitle(sectionId),
+        renderAs: sectionType,
+        ...baseSchema
+      };
+      
+      return (
+        <div className="space-y-4 p-4">
+          <RenderFactory
+            fieldKey={sectionId}
+            schema={factorySchema}
+            value={sectionData}
+            onChange={(newValue) => {
+              setEditedData((prev: any) => ({
+                ...prev,
+                [sectionId]: newValue
+              }));
+              setIsDirty(true);
+            }}
+            mode="edit"
+          />
+        </div>
+      );
+    }
+    
+    // Try old embedded schema format for backwards compatibility
+    const legacySchema = editedData[`_${sectionId}_schema`];
+    if (legacySchema) {
+      const factorySchema: any = {
+        label: legacySchema.label || formatSectionTitle(sectionId),
+        renderAs: legacySchema.renderAs || legacySchema.type,
+        helpText: legacySchema.helpText,
+        required: legacySchema.required
+      };
+      
+      if (legacySchema.itemSchema?.fields) {
+        factorySchema.fields = legacySchema.itemSchema.fields;
+      } else if (legacySchema.fields) {
+        factorySchema.fields = legacySchema.fields;
+      }
+      
+      return (
+        <div className="space-y-4 p-4">
+          <RenderFactory
+            fieldKey={sectionId}
+            schema={factorySchema}
+            value={sectionData}
+            onChange={(newValue) => {
+              setEditedData((prev: any) => ({
+                ...prev,
+                [sectionId]: newValue
+              }));
+              setIsDirty(true);
+            }}
+            mode="edit"
+          />
+        </div>
+      );
+    }
+    
+    // Fallback to hardcoded summarySchema for legacy summaries
+    const schemaSection = summarySchema.sections?.find(s => s.id === sectionId);
+    if (!schemaSection) {
+      return (
+        <div className="p-4 text-sm text-gray-500 dark:text-gray-400 italic">
+          No schema defined for "{sectionId}". Add type metadata to enable rendering.
+        </div>
+      );
+    }
 
     return (
       <div className="space-y-4 p-4">
@@ -148,11 +305,42 @@ export default function EditorModalV2({
   const getSectionsFromData = (sourceData: any) => {
     if (!sourceData) return [];
     
-    const metadataKeys = ['id', 'quarter', 'year', 'date', 'title', 'displayName', 'name', 'category', 'lastUpdated', 'status'];
-    const excludeKeys = [...metadataKeys, '_enabled_', '_completed_', '_locked_'];
+    console.log('getSectionsFromData called with:', sourceData);
     
-    return Object.keys(sourceData)
-      .filter(key => !excludeKeys.some(exclude => key.startsWith(exclude)))
+    const sections = [];
+    
+    // Always add Standard Header section first if we have header fields
+    if (sourceData.id || sourceData.quarter || sourceData.year || sourceData.date || sourceData.title) {
+      sections.push({
+        id: 'standard_header',
+        title: 'Standard Header',
+        enabled: true,
+        completed: sourceData._completed_standard_header === true,
+        locked: sourceData._completed_standard_header === true || sourceData._locked_standard_header === true,
+        content: {
+          id: sourceData.id,
+          quarter: sourceData.quarter,
+          year: sourceData.year,
+          date: sourceData.date,
+          title: sourceData.title
+        }
+      });
+    }
+    
+    const metadataKeys = ['id', 'quarter', 'year', 'date', 'title', 'displayName', 'name', 'category', 'lastUpdated', 'status', 'protectionEnabled'];
+    const excludePrefixes = ['_enabled_', '_completed_', '_locked_', '_template_'];
+    const excludeSuffixes = ['_schema', '_type', '_fields'];
+    
+    const contentSections = Object.keys(sourceData)
+      .filter(key => {
+        // Exclude metadata keys
+        if (metadataKeys.includes(key)) return false;
+        // Exclude keys with metadata prefixes
+        if (excludePrefixes.some(prefix => key.startsWith(prefix))) return false;
+        // Exclude keys with metadata suffixes (like _schema, _type, _fields)
+        if (excludeSuffixes.some(suffix => key.endsWith(suffix))) return false;
+        return true;
+      })
       .map(key => {
         const completed = sourceData[`_completed_${key}`] === true;
         const manuallyLocked = sourceData[`_locked_${key}`] === true;
@@ -165,6 +353,10 @@ export default function EditorModalV2({
           content: sourceData[key]
         };
       });
+    
+    console.log('Sections generated:', [...sections, ...contentSections]);
+    
+    return [...sections, ...contentSections];
   };
 
   /**

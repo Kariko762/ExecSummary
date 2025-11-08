@@ -1,0 +1,34 @@
+{
+  "id": "template-new",
+  "quarter": "Q4",
+  "year": 2025,
+  "date": "2025-11-08",
+  "title": "Testing Templates",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_next_step_actions_type": "nestedCards",
+  "_next_step_actions_fields": {
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "text",
+      "label": "Value"
+    }
+  },
+  "next_step_actions": [
+    {
+      "title": "Congratulate CoPilot, aka. BoB",
+      "value": "Buy CoPilot a virtual beer."
+    }
+  ],
+  "_enabled_next_step_actions": true,
+  "_completed_next_step_actions": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "Action-Cardsv2",
+  "_template_description": "",
+  "_template_created": "2025-11-08T07:17:50.553Z",
+  "_template_updated": "2025-11-08T07:17:50.553Z"
+}
