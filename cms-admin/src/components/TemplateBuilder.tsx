@@ -3,11 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, Plus, Trash2, GripVertical, ChevronRight, ChevronDown, 
   Type, List, Grid, Layers, FileText, BarChart3, Settings,
-  Eye, Code, Save, Download, Upload, PlayCircle, TrendingUp, AlertTriangle
+  Eye, Code, Save, Download, Upload, PlayCircle, TrendingUp, AlertTriangle,
+  PieChart, LineChart, Activity, Hash, Calendar, MessageSquare, Palette,
+  Key, Quote, Terminal, AlignLeft, Minus
 } from 'lucide-react';
 import type { FieldSchema } from '../../../src/types/schema';
 import { ChartColors } from '../../../src/design-system';
 import EditorModalV2 from './EditorModalV2';
+import AssetPreviewModal from './AssetPreviewModal';
 
 interface TemplateBuilderProps {
   onBack: () => void;
@@ -36,6 +39,9 @@ interface TemplateField {
   exampleData?: any; // Example data for lists, arrays, or nested cards
 }
 
+// Type alias for compatibility
+type Field = TemplateField;
+
 interface AssetCategory {
   id: string;
   name: string;
@@ -50,6 +56,10 @@ interface AssetItem {
   renderType: string;
   description: string;
   schema: FieldSchema;
+  icon?: typeof Type; // Optional icon for the asset
+  iconColor?: string; // Optional color for the icon
+  exampleData?: any; // Example data for preview
+  supportsMultiColumn?: boolean; // Whether this asset can be used in multi-column layouts
 }
 
 // Asset Library - Available drag sources
@@ -65,28 +75,49 @@ const ASSET_LIBRARY: AssetCategory[] = [
         name: 'Text Input',
         renderType: 'text',
         description: 'Simple single-line text',
-        schema: { type: 'text', label: 'New Text Field' }
+        schema: { type: 'string', renderAs: 'text', label: 'New Text Field' },
+        icon: Type,
+        iconColor: 'text-blue-500',
+        exampleData: 'Revenue Operations Team',
+        supportsMultiColumn: true
       },
       {
         id: 'textarea',
         name: 'Text Area',
         renderType: 'textarea',
         description: 'Multi-line text input',
-        schema: { type: 'textarea', label: 'New Text Area', rows: 3 }
+        schema: { 
+          type: 'string', 
+          renderAs: 'textarea', 
+          label: 'New Text Area',
+          placeholder: 'Enter detailed description...'
+        },
+        icon: AlignLeft,
+        iconColor: 'text-blue-600',
+        exampleData: 'This quarter we focused on streamlining our sales pipeline and improving customer engagement metrics. Key achievements include 25% reduction in sales cycle time and 40% increase in qualified leads.',
+        supportsMultiColumn: true
       },
       {
         id: 'number',
         name: 'Number',
         renderType: 'number',
         description: 'Numeric input',
-        schema: { type: 'number', label: 'New Number' }
+        schema: { type: 'number', renderAs: 'number', label: 'New Number' },
+        icon: Hash,
+        iconColor: 'text-blue-700',
+        exampleData: 42500,
+        supportsMultiColumn: true
       },
       {
         id: 'date',
         name: 'Date Picker',
-        renderType: 'date',
+        renderType: 'text',
         description: 'Date selection',
-        schema: { type: 'date', label: 'New Date' }
+        schema: { type: 'date', renderAs: 'text', label: 'New Date' },
+        icon: Calendar,
+        iconColor: 'text-blue-800',
+        exampleData: '2025-01-15',
+        supportsMultiColumn: true
       }
     ]
   },
@@ -101,7 +132,11 @@ const ASSET_LIBRARY: AssetCategory[] = [
         name: 'Simple List',
         renderType: 'array',
         description: 'Basic array of items',
-        schema: { type: 'array', label: 'New List', itemSchema: { type: 'text' } }
+        schema: { type: 'array', renderAs: 'list', label: 'New List', itemSchema: { type: 'string', renderAs: 'text' } },
+        icon: List,
+        iconColor: 'text-green-500',
+        exampleData: ['Closed 15 enterprise deals', 'Launched new product feature', 'Expanded into EMEA region', 'Achieved 98% customer satisfaction'],
+        supportsMultiColumn: true
       },
       {
         id: 'nestedCards',
@@ -109,16 +144,27 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'nestedCards',
         description: 'Array of card objects',
         schema: { 
-          type: 'nestedCards', 
+          type: 'array',
+          renderAs: 'metricCards',
           label: 'New Cards',
           itemSchema: {
             type: 'object',
+            renderAs: 'objectForm',
             fields: {
-              title: { type: 'text', label: 'Title' },
-              value: { type: 'text', label: 'Value' }
+              title: { type: 'string', renderAs: 'text', label: 'Title' },
+              value: { type: 'string', renderAs: 'text', label: 'Value' }
             }
           }
-        }
+        },
+        icon: Grid,
+        iconColor: 'text-green-600',
+        exampleData: [
+          { title: 'Revenue', value: '$2.4M' },
+          { title: 'Growth', value: '+35%' },
+          { title: 'Customers', value: '1,250' },
+          { title: 'Retention', value: '94%' }
+        ],
+        supportsMultiColumn: false
       }
     ]
   },
@@ -134,10 +180,19 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'object',
         description: 'Nested object structure',
         schema: { 
-          type: 'object', 
+          type: 'object',
+          renderAs: 'objectForm',
           label: 'New Object',
-          fields: {}
-        }
+          fields: {
+            team: { type: 'string', renderAs: 'text', label: 'Team' },
+            lead: { type: 'string', renderAs: 'text', label: 'Lead' },
+            members: { type: 'number', renderAs: 'number', label: 'Members' }
+          }
+        },
+        icon: Layers,
+        iconColor: 'text-purple-500',
+        exampleData: { team: 'RevOps', lead: 'Sarah Johnson', members: 12 },
+        supportsMultiColumn: true
       },
       {
         id: 'keyValue',
@@ -145,11 +200,18 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'keyValue',
         description: 'Key and value fields',
         schema: { 
-          type: 'keyValue', 
+          type: 'object',
+          renderAs: 'objectForm',
           label: 'New Key-Value',
-          keyLabel: 'Key',
-          valueLabel: 'Value'
-        }
+          fields: {
+            key: { type: 'string', renderAs: 'text', label: 'Key' },
+            value: { type: 'string', renderAs: 'text', label: 'Value' }
+          }
+        },
+        icon: Key,
+        iconColor: 'text-purple-600',
+        exampleData: { key: 'Status', value: 'On Track' },
+        supportsMultiColumn: true
       }
     ]
   },
@@ -162,30 +224,46 @@ const ASSET_LIBRARY: AssetCategory[] = [
       {
         id: 'markdown',
         name: 'Markdown Editor',
-        renderType: 'markdown',
+        renderType: 'richText',
         description: 'Rich markdown content',
-        schema: { type: 'markdown', label: 'New Markdown' }
+        schema: { type: 'string', renderAs: 'richText', label: 'New Markdown' },
+        icon: FileText,
+        iconColor: 'text-orange-500',
+        exampleData: '## Q1 2025 Highlights\n\nWe achieved **record-breaking growth** this quarter:\n\n- Revenue up 35% YoY\n- Customer base expanded to 1,250+\n- Launched 3 major features\n\n> "Best quarter in company history" - CEO',
+        supportsMultiColumn: true
       },
       {
         id: 'expression',
         name: 'Expression',
         renderType: 'expression',
         description: 'Dynamic expressions',
-        schema: { type: 'expression', label: 'New Expression' }
+        schema: { type: 'string', renderAs: 'text', label: 'New Expression' },
+        icon: Code,
+        iconColor: 'text-orange-600',
+        exampleData: '{{ revenue.current }} / {{ revenue.target }} = {{ (revenue.current / revenue.target * 100).toFixed(1) }}%',
+        supportsMultiColumn: true
       },
       {
         id: 'codeBlock',
         name: 'Code Block',
         renderType: 'codeBlock',
         description: 'Code snippet with copy button',
-        schema: { type: 'codeBlock', label: 'New Code Block', renderAs: 'codeBlock' }
+        schema: { type: 'string', renderAs: 'codeBlock', label: 'New Code Block' },
+        icon: Terminal,
+        iconColor: 'text-orange-700',
+        exampleData: 'const calculateGrowth = (current, previous) => {\n  return ((current - previous) / previous * 100).toFixed(2);\n};\n\nconsole.log(calculateGrowth(2400000, 1800000)); // 33.33%',
+        supportsMultiColumn: true
       },
       {
         id: 'quote',
         name: 'Quote',
         renderType: 'quote',
         description: 'Blockquote with glassmorphism',
-        schema: { type: 'quote', label: 'New Quote', renderAs: 'quote' }
+        schema: { type: 'string', renderAs: 'quote', label: 'New Quote' },
+        icon: Quote,
+        iconColor: 'text-orange-800',
+        exampleData: 'Our team executed flawlessly this quarter. The dedication and innovation demonstrated by everyone has positioned us perfectly for continued success.',
+        supportsMultiColumn: true
       }
     ]
   },
@@ -201,7 +279,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'pieChart',
         description: 'Circular proportional chart',
         schema: { 
-          type: 'pieChart', 
+          type: 'array',
           label: 'New Pie Chart',
           renderAs: 'pieChart',
           chartConfig: {
@@ -213,11 +291,23 @@ const ASSET_LIBRARY: AssetCategory[] = [
             innerRadius: 0,
             outerRadius: 80
           },
-          fields: {
-            name: { label: 'Label', renderAs: 'text', required: true },
-            value: { label: 'Value', renderAs: 'number', required: true }
+          itemSchema: {
+            type: 'object',
+            renderAs: 'objectForm',
+            fields: {
+              name: { type: 'string', renderAs: 'text', label: 'Label', required: true },
+              value: { type: 'number', renderAs: 'number', label: 'Value', required: true }
+            }
           }
-        }
+        },
+        icon: PieChart,
+        iconColor: 'text-pink-500',
+        exampleData: [
+          { name: 'Enterprise', value: 45 },
+          { name: 'Mid-Market', value: 30 },
+          { name: 'SMB', value: 25 }
+        ],
+        supportsMultiColumn: true
       },
       {
         id: 'barChart',
@@ -225,7 +315,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'barChart',
         description: 'Vertical or horizontal bars',
         schema: { 
-          type: 'barChart', 
+          type: 'array',
           label: 'New Bar Chart',
           renderAs: 'barChart',
           chartConfig: {
@@ -236,11 +326,24 @@ const ASSET_LIBRARY: AssetCategory[] = [
             showLegend: true,
             stacked: false
           },
-          fields: {
-            name: { label: 'Label', renderAs: 'text', required: true },
-            value: { label: 'Value', renderAs: 'number', required: true }
+          itemSchema: {
+            type: 'object',
+            renderAs: 'objectForm',
+            fields: {
+              name: { type: 'string', renderAs: 'text', label: 'Label', required: true },
+              value: { type: 'number', renderAs: 'number', label: 'Value', required: true }
+            }
           }
-        }
+        },
+        icon: BarChart3,
+        iconColor: 'text-pink-600',
+        exampleData: [
+          { name: 'Q1', value: 2400 },
+          { name: 'Q2', value: 3100 },
+          { name: 'Q3', value: 2800 },
+          { name: 'Q4', value: 3500 }
+        ],
+        supportsMultiColumn: true
       },
       {
         id: 'lineChart',
@@ -248,7 +351,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'lineChart',
         description: 'Trend lines over time',
         schema: { 
-          type: 'lineChart', 
+          type: 'array',
           label: 'New Line Chart',
           renderAs: 'lineChart',
           chartConfig: {
@@ -259,11 +362,26 @@ const ASSET_LIBRARY: AssetCategory[] = [
             showDots: true,
             curved: true
           },
-          fields: {
-            name: { label: 'Label', renderAs: 'text', required: true },
-            value: { label: 'Value', renderAs: 'number', required: true }
+          itemSchema: {
+            type: 'object',
+            renderAs: 'objectForm',
+            fields: {
+              name: { type: 'string', renderAs: 'text', label: 'Label', required: true },
+              value: { type: 'number', renderAs: 'number', label: 'Value', required: true }
+            }
           }
-        }
+        },
+        icon: LineChart,
+        iconColor: 'text-pink-700',
+        exampleData: [
+          { name: 'Jan', value: 650 },
+          { name: 'Feb', value: 720 },
+          { name: 'Mar', value: 830 },
+          { name: 'Apr', value: 900 },
+          { name: 'May', value: 1050 },
+          { name: 'Jun', value: 1200 }
+        ],
+        supportsMultiColumn: true
       },
       {
         id: 'radialChart',
@@ -271,7 +389,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'radialChart',
         description: 'Circular progress/donut',
         schema: { 
-          type: 'radialChart', 
+          type: 'array',
           label: 'New Radial Chart',
           renderAs: 'radialChart',
           chartConfig: {
@@ -281,11 +399,21 @@ const ASSET_LIBRARY: AssetCategory[] = [
             showPercentage: true,
             thickness: 20
           },
-          fields: {
-            name: { label: 'Label', renderAs: 'text', required: true },
-            value: { label: 'Value', renderAs: 'number', required: true }
+          itemSchema: {
+            type: 'object',
+            renderAs: 'objectForm',
+            fields: {
+              name: { type: 'string', renderAs: 'text', label: 'Label', required: true },
+              value: { type: 'number', renderAs: 'number', label: 'Value', required: true }
+            }
           }
-        }
+        },
+        icon: Activity,
+        iconColor: 'text-pink-800',
+        exampleData: [
+          { name: 'Completion', value: 87 }
+        ],
+        supportsMultiColumn: true
       }
     ]
   },
@@ -301,7 +429,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'hr',
         description: 'Visual divider line',
         schema: { 
-          type: 'hr', 
+          type: 'string', 
           label: 'Divider',
           renderAs: 'hr',
           hrConfig: {
@@ -311,7 +439,11 @@ const ASSET_LIBRARY: AssetCategory[] = [
             marginBottom: 24,
             style: 'solid'
           }
-        }
+        },
+        icon: Minus,
+        iconColor: 'text-gray-500',
+        exampleData: null,
+        supportsMultiColumn: false
       }
     ]
   }
@@ -330,35 +462,35 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           key: 'id',
           label: 'ID',
           renderType: 'text',
-          schema: { type: 'text', label: 'ID', placeholder: 'Auto-generated' }
+          schema: { type: 'string', renderAs: 'text', label: 'ID', placeholder: 'Auto-generated' }
         },
         {
           id: 'field-quarter',
           key: 'quarter',
           label: 'Quarter',
           renderType: 'text',
-          schema: { type: 'text', label: 'Quarter', placeholder: 'e.g., Q1, Jan 15' }
+          schema: { type: 'string', renderAs: 'text', label: 'Quarter', placeholder: 'e.g., Q1, Jan 15' }
         },
         {
           id: 'field-year',
           key: 'year',
           label: 'Year',
           renderType: 'number',
-          schema: { type: 'number', label: 'Year' }
+          schema: { type: 'number', renderAs: 'number', label: 'Year' }
         },
         {
           id: 'field-date',
           key: 'date',
           label: 'Date',
           renderType: 'date',
-          schema: { type: 'date', label: 'Date' }
+          schema: { type: 'date', renderAs: 'text', label: 'Date' }
         },
         {
           id: 'field-title',
           key: 'title',
           label: 'Title',
           renderType: 'text',
-          schema: { type: 'text', label: 'Title', placeholder: 'Organization - Weekly Executive Update' }
+          schema: { type: 'string', renderAs: 'text', label: 'Title', placeholder: 'Organization - Weekly Executive Update' }
         }
       ]
     }
@@ -385,6 +517,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   const [selectedField, setSelectedField] = useState<{ sectionId: string; fieldId: string } | null>(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showValidationModal, setShowValidationModal] = useState(false);
+  const [previewAsset, setPreviewAsset] = useState<AssetItem | null>(null);
   const [validationResults, setValidationResults] = useState<Array<{check: string; passed: boolean; message: string}>>([]);
   const [validationPassed, setValidationPassed] = useState(false);
   const [saveTemplateName, setSaveTemplateName] = useState<string>('');
@@ -445,11 +578,11 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         name: 'Standard Header',
         expanded: false,
         fields: [
-          { id: 'field-id', key: 'id', label: 'ID', renderType: 'text', schema: { type: 'text', label: 'ID', placeholder: templateData.id || 'Auto-generated' } },
-          { id: 'field-quarter', key: 'quarter', label: 'Quarter', renderType: 'text', schema: { type: 'text', label: 'Quarter', placeholder: templateData.quarter || 'e.g., Q1, Jan 15' } },
-          { id: 'field-year', key: 'year', label: 'Year', renderType: 'number', schema: { type: 'number', label: 'Year' } },
-          { id: 'field-date', key: 'date', label: 'Date', renderType: 'date', schema: { type: 'date', label: 'Date' } },
-          { id: 'field-title', key: 'title', label: 'Title', renderType: 'text', schema: { type: 'text', label: 'Title', placeholder: templateData.title || 'Organization - Weekly Executive Update' } }
+          { id: 'field-id', key: 'id', label: 'ID', renderType: 'text', schema: { type: 'string', renderAs: 'text', label: 'ID', placeholder: templateData.id || 'Auto-generated' } },
+          { id: 'field-quarter', key: 'quarter', label: 'Quarter', renderType: 'text', schema: { type: 'string', renderAs: 'text', label: 'Quarter', placeholder: templateData.quarter || 'e.g., Q1, Jan 15' } },
+          { id: 'field-year', key: 'year', label: 'Year', renderType: 'number', schema: { type: 'number', renderAs: 'number', label: 'Year' } },
+          { id: 'field-date', key: 'date', label: 'Date', renderType: 'date', schema: { type: 'date', renderAs: 'text', label: 'Date' } },
+          { id: 'field-title', key: 'title', label: 'Title', renderType: 'text', schema: { type: 'string', renderAs: 'text', label: 'Title', placeholder: templateData.title || 'Organization - Weekly Executive Update' } }
         ]
       });
       
@@ -578,18 +711,24 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           : section
       ));
     } else if (draggedField && draggedField.sectionId !== sectionId) {
-      // Move field to different section
+      // Move field to different section with new unique ID to prevent duplicates
       const sourceSection = sections.find(s => s.id === draggedField.sectionId);
       const fieldToMove = sourceSection?.fields.find(f => f.id === draggedField.fieldId);
       
       if (fieldToMove) {
+        // Create a new field object with a new unique ID
+        const movedField = {
+          ...fieldToMove,
+          id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` // Generate truly unique ID
+        };
+        
         setSections(prev => prev.map(section => {
           if (section.id === draggedField.sectionId) {
             // Remove from source section
             return { ...section, fields: section.fields.filter(f => f.id !== draggedField.fieldId) };
           } else if (section.id === sectionId) {
-            // Add to target section
-            return { ...section, fields: [...section.fields, fieldToMove] };
+            // Add to target section with new ID
+            return { ...section, fields: [...section.fields, movedField] };
           }
           return section;
         }));
@@ -601,7 +740,10 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
 
   const handleSectionDragOver = (e: React.DragEvent, sectionId: string) => {
     e.preventDefault();
-    setDragOverSection(sectionId);
+    // Only set drag over state if dragging from asset library or moving field to empty section
+    if (draggedAsset || (draggedField && draggedField.sectionId !== sectionId)) {
+      setDragOverSection(sectionId);
+    }
   };
 
   const handleSectionDragLeave = () => {
@@ -609,6 +751,13 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   };
 
   const handleFieldDragOver = (e: React.DragEvent, targetSectionId: string, targetFieldId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Just prevent default to allow drop - don't modify state here!
+    // The actual reordering happens in handleFieldDrop
+  };
+
+  const handleFieldDrop = (e: React.DragEvent, targetSectionId: string, targetFieldId: string) => {
     e.preventDefault();
     e.stopPropagation();
     
@@ -635,14 +784,20 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         // Remove from source section
         return { ...section, fields: section.fields.filter(f => f.id !== draggedField.fieldId) };
       } else if (section.id === targetSectionId) {
-        // Add to target section at specific position
+        // Moving to different section - create new field with unique ID
+        const movedField = {
+          ...draggedFieldData,
+          id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        };
         const fields = [...section.fields];
         const targetIndex = fields.findIndex(f => f.id === targetFieldId);
-        fields.splice(targetIndex, 0, draggedFieldData);
+        fields.splice(targetIndex, 0, movedField);
         return { ...section, fields };
       }
       return section;
     }));
+    
+    setDraggedField(null);
   };
 
   // Section drag and drop for reordering
@@ -657,7 +812,12 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
 
   const handleSectionDragOverSection = (e: React.DragEvent, targetSectionId: string) => {
     e.preventDefault();
-    e.stopPropagation();
+    
+    // Don't reorder sections if we're dragging a field
+    if (draggedField) {
+      e.stopPropagation();
+      return;
+    }
     
     if (!draggedSection || draggedSection === targetSectionId) return;
     if (targetSectionId === 'section-header') return; // Don't allow dropping on header
@@ -913,7 +1073,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         } else {
           // For all other sections, process fields normally
           section.fields.forEach((field, fieldIndex) => {
-            const fieldType = field.schema.type;
+            const fieldType = field.schema.renderAs;
             
             // If multiple fields in section, use indexed keys (section2_0, section2_1)
             // If single field, use section name directly (section2)
@@ -934,7 +1094,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
               templateData[`_${fieldKey}_chartConfig`] = field.schema.chartConfig;
             }
             
-            if (fieldType === 'nestedCards') {
+            if (fieldType === 'metricCards') {
               // Use exampleData if provided, otherwise create default
               if (field.exampleData && field.exampleData.length > 0) {
                 templateData[fieldKey] = field.exampleData;
@@ -964,9 +1124,9 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
               if (field.exampleData && field.exampleData.length > 0) {
                 templateData[fieldKey] = field.exampleData;
               } else {
-                // Generate sample chart data based on fields schema
-                const fields = field.schema.fields || field.schema.chartConfig?.fields;
-                if (fields && fields.name && fields.value) {
+                // Generate sample chart data based on itemSchema fields
+                const itemFields = field.schema.itemSchema?.fields;
+                if (itemFields && itemFields.name && itemFields.value) {
                   templateData[fieldKey] = [
                     { name: 'A', value: 10 },
                     { name: 'B', value: 20 },
@@ -982,14 +1142,12 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                 }
               }
             } else if (fieldType === 'number') {
-              templateData[fieldKey] = 0;
-            } else if (fieldType === 'date') {
-              templateData[fieldKey] = new Date().toISOString().split('T')[0];
+              templateData[fieldKey] = field.exampleData !== undefined ? field.exampleData : 0;
             } else if (fieldType === 'textarea') {
-              templateData[fieldKey] = `Example: ${field.schema.placeholder || field.schema.label || section.name}`;
+              templateData[fieldKey] = field.exampleData || `Example: ${field.schema.placeholder || field.schema.label || section.name}`;
             } else {
-              // Default: text field
-              templateData[fieldKey] = field.schema.placeholder || '';
+              // Default: text field and others
+              templateData[fieldKey] = field.exampleData || field.schema.placeholder || '';
             }
           });
           
@@ -1149,6 +1307,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                           <div className="space-y-2 py-2">
                             {category.assets.map(asset => {
                               const isLayoutAsset = category.id === 'layout';
+                              const AssetIcon = asset.icon;
                               
                               if (isLayoutAsset) {
                                 // Layout assets get an "Add" button instead of drag
@@ -1158,8 +1317,15 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                                     className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700"
                                   >
                                     <div className="flex items-center justify-between mb-2">
-                                      <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
-                                        {asset.name}
+                                      <div className="flex items-center gap-2">
+                                        {AssetIcon && (
+                                          <div className={`p-1.5 rounded ${asset.iconColor || 'text-gray-500'} bg-gray-100 dark:bg-gray-700`}>
+                                            <AssetIcon className="w-4 h-4" />
+                                          </div>
+                                        )}
+                                        <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                                          {asset.name}
+                                        </div>
                                       </div>
                                       <button
                                         onClick={addHorizontalRule}
@@ -1180,19 +1346,50 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                               return (
                                 <div
                                   key={asset.id}
-                                  draggable
-                                  onDragStart={() => handleAssetDragStart(asset)}
-                                  onDragEnd={handleAssetDragEnd}
-                                  className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:shadow-md transition-all"
+                                  className="relative group"
                                 >
-                                  <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white mb-1">
-                                    {asset.name}
-                                  </div>
-                                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                                    {asset.description}
-                                  </div>
-                                  <div className="text-xs text-fis-eggplant dark:text-fis-raspberry font-mono mt-1">
-                                    {asset.renderType}
+                                  <div
+                                    draggable
+                                    onDragStart={() => handleAssetDragStart(asset)}
+                                    onDragEnd={handleAssetDragEnd}
+                                    className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:shadow-md transition-all"
+                                  >
+                                    <div className="flex items-center gap-2 mb-2">
+                                      {AssetIcon && (
+                                        <div className={`p-2 rounded-lg ${asset.iconColor || 'text-gray-500'} bg-gray-100 dark:bg-gray-700`}>
+                                          <AssetIcon className="w-5 h-5" />
+                                        </div>
+                                      )}
+                                      <div className="flex-1">
+                                        <div className="flex items-center gap-2">
+                                          <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                                            {asset.name}
+                                          </div>
+                                          {asset.supportsMultiColumn && (
+                                            <div className="px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-roobert-bold" title="Supports Multi-Column">
+                                              MULTI
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className="text-xs text-fis-eggplant dark:text-fis-raspberry font-mono">
+                                          {asset.renderType}
+                                        </div>
+                                      </div>
+                                      {/* Preview Button */}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setPreviewAsset(asset);
+                                        }}
+                                        className="p-2 rounded-lg bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry transition-all opacity-0 group-hover:opacity-100"
+                                        title="Preview Asset"
+                                      >
+                                        <Eye className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                    <div className="text-xs text-gray-600 dark:text-gray-400">
+                                      {asset.description}
+                                    </div>
                                   </div>
                                 </div>
                               );
@@ -1339,6 +1536,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                               onDragStart={() => handleFieldDragStart(section.id, field.id)}
                               onDragEnd={handleFieldDragEnd}
                               onDragOver={(e) => handleFieldDragOver(e, section.id, field.id)}
+                              onDrop={(e) => handleFieldDrop(e, section.id, field.id)}
                               onClick={() => setSelectedField({ sectionId: section.id, fieldId: field.id })}
                               className={`p-3 rounded-lg border-2 cursor-move hover:shadow-md transition-all ${
                                 selectedField?.fieldId === field.id
@@ -2061,6 +2259,18 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
             setTestData(null);
           }}
           isTestMode={true}
+        />
+      )}
+
+      {/* Asset Preview Modal */}
+      {previewAsset && (
+        <AssetPreviewModal
+          isOpen={true}
+          onClose={() => setPreviewAsset(null)}
+          assetName={previewAsset.name}
+          schema={previewAsset.schema}
+          exampleData={previewAsset.exampleData}
+          supportsMultiColumn={previewAsset.supportsMultiColumn}
         />
       )}
     </div>
