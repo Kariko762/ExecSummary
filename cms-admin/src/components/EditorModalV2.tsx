@@ -13,6 +13,7 @@ interface EditorModalV2Props {
   data: any;
   dataType: 'summaries' | 'executive-iq' | 'organizations' | 'performance';
   onSave: (data: any, status: 'draft' | 'published') => void;
+  isTestMode?: boolean; // Flag to indicate testing mode (don't prompt to save)
 }
 
 export default function EditorModalV2({ 
@@ -20,17 +21,22 @@ export default function EditorModalV2({
   onClose, 
   data, 
   dataType, 
-  onSave 
+  onSave,
+  isTestMode = false
 }: EditorModalV2Props) {
   const [editedData, setEditedData] = useState<any>(data);
   const [status, setStatus] = useState<'draft' | 'published'>('draft');
   const [isDirty, setIsDirty] = useState(false);
+  const [hasBeenSaved, setHasBeenSaved] = useState(false); // Track if file has been saved at least once
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
   const [showExpressionMenu, setShowExpressionMenu] = useState(false);
   const [copiedExpression, setCopiedExpression] = useState<string | null>(null);
   const [protectionEnabled, setProtectionEnabled] = useState(false);
   const [showSaveConfirmation, setShowSaveConfirmation] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showCloseConfirmation, setShowCloseConfirmation] = useState(false); // For unsaved changes warning
+  const [showPublishConfirmation, setShowPublishConfirmation] = useState(false); // For publish confirmation
+  const [showUnpublishConfirmation, setShowUnpublishConfirmation] = useState(false); // For unpublish confirmation
 
   // Section weights (complexity/time required, 1-10)
   const sectionWeights: { [key: string]: number } = {
@@ -78,7 +84,11 @@ export default function EditorModalV2({
       setStatus(data.status || 'draft');
       setProtectionEnabled(data.protectionEnabled !== false); // Default to true
       setIsDirty(false); // Reset dirty flag
+      // If _fileExists is explicitly false, it's new content (not yet saved)
+      // If _fileExists is true or undefined, assume it exists (loaded from backend)
+      setHasBeenSaved(data._fileExists !== false);
       setShowSaveConfirmation(false); // Close any open confirmation
+      setShowCloseConfirmation(false); // Close any close confirmation
       setShowExpressionMenu(false); // Close expression menu
       // Set first enabled section as active on load
       const sections = getSectionsFromData(data);
@@ -93,14 +103,30 @@ export default function EditorModalV2({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      
+      // Handle Escape key for modal close
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          // If expression menu is open, close it first
+          if (showExpressionMenu) {
+            setShowExpressionMenu(false);
+            e.stopPropagation(); // Prevent closing the modal
+          } else {
+            handleBeforeClose();
+          }
+        }
+      };
+      
+      window.addEventListener('keydown', handleEscape);
+      
+      return () => {
+        document.body.style.overflow = 'unset';
+        window.removeEventListener('keydown', handleEscape);
+      };
     } else {
       document.body.style.overflow = 'unset';
     }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
+  }, [isOpen, isDirty, hasBeenSaved, showExpressionMenu]); // Add showExpressionMenu to dependencies
 
   /**
    * Schema-Driven Section Renderer
@@ -113,6 +139,64 @@ export default function EditorModalV2({
    * - Falls back to hardcoded summarySchema for backwards compatibility
    */
   const renderSchemaSection = (sectionId: string): React.ReactElement | null => {
+    // Check if this section has multiple indexed fields (section2_0, section2_1, etc.)
+    const indexedFieldPattern = new RegExp(`^${sectionId}_(\\d+)$`);
+    const indexedFields = Object.keys(editedData)
+      .filter(key => indexedFieldPattern.test(key) && !key.startsWith('_'))
+      .sort(); // Sort to ensure consistent order (0, 1, 2, 3)
+    
+    // If multiple indexed fields exist, render them in a grid
+    if (indexedFields.length > 1) {
+      // Map field count to Tailwind grid class (must be exact strings for Tailwind JIT)
+      const gridClass = indexedFields.length === 2 
+        ? 'grid grid-cols-2 gap-4'
+        : indexedFields.length === 3
+        ? 'grid grid-cols-3 gap-4'
+        : indexedFields.length === 4
+        ? 'grid grid-cols-4 gap-4'
+        : 'grid grid-cols-2 gap-4'; // Default to 2 columns if somehow > 4
+      
+      return (
+        <div className={gridClass}>
+          {indexedFields.map(fieldKey => {
+            const fieldData = editedData[fieldKey];
+            const fieldType = editedData[`_${fieldKey}_type`];
+            const customFields = editedData[`_${fieldKey}_fields`];
+            const chartConfig = editedData[`_${fieldKey}_chartConfig`];
+            
+            if (!fieldType) return null;
+            
+            const baseSchema = buildFieldSchema(fieldType, customFields ? { fields: customFields } : {});
+            const factorySchema: any = {
+              label: formatSectionTitle(fieldKey),
+              renderAs: fieldType,
+              ...baseSchema,
+              ...(chartConfig ? { chartConfig } : {})
+            };
+            
+            return (
+              <div key={fieldKey}>
+                <RenderFactory
+                  fieldKey={fieldKey}
+                  schema={factorySchema}
+                  value={fieldData}
+                  onChange={(newValue) => {
+                    setEditedData((prev: any) => ({
+                      ...prev,
+                      [fieldKey]: newValue
+                    }));
+                    setIsDirty(true);
+                  }}
+                  mode="edit"
+                />
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+    
+    // Single field - original logic
     const sectionData = editedData[sectionId];
     const sectionType = editedData[`_${sectionId}_type`];
     const customFields = editedData[`_${sectionId}_fields`];
@@ -203,12 +287,14 @@ export default function EditorModalV2({
     // Try dynamic schema first (from templates) - NEW APPROACH
     if (sectionType) {
       // Build schema from asset type registry + custom fields
+      const chartConfig = editedData[`_${sectionId}_chartConfig`];
       const baseSchema = buildFieldSchema(sectionType, customFields ? { fields: customFields } : {});
       
       const factorySchema: any = {
         label: formatSectionTitle(sectionId),
         renderAs: sectionType,
-        ...baseSchema
+        ...baseSchema,
+        ...(chartConfig ? { chartConfig } : {})
       };
       
       return (
@@ -329,10 +415,10 @@ export default function EditorModalV2({
     
     const metadataKeys = ['id', 'quarter', 'year', 'date', 'title', 'displayName', 'name', 'category', 'lastUpdated', 'status', 'protectionEnabled'];
     const excludePrefixes = ['_enabled_', '_completed_', '_locked_', '_template_'];
-    const excludeSuffixes = ['_schema', '_type', '_fields', '_config'];
+    const excludeSuffixes = ['_schema', '_type', '_fields', '_config', '_columnSpan'];
     const excludeContains = ['_chartConfig']; // Exclude dynamic chart config keys
     
-    const contentSections = Object.keys(sourceData)
+    const allKeys = Object.keys(sourceData)
       .filter(key => {
         // Exclude metadata keys
         if (metadataKeys.includes(key)) return false;
@@ -343,19 +429,51 @@ export default function EditorModalV2({
         // Exclude keys that contain certain patterns (like _chartConfig)
         if (excludeContains.some(pattern => key.includes(pattern))) return false;
         return true;
-      })
-      .map(key => {
-        const completed = sourceData[`_completed_${key}`] === true;
-        const manuallyLocked = sourceData[`_locked_${key}`] === true;
-        return {
-          id: key,
-          title: formatSectionTitle(key),
-          enabled: sourceData[`_enabled_${key}`] !== false,
-          completed: completed,
-          locked: completed || manuallyLocked, // Auto-lock if completed, or manually locked
-          content: sourceData[key]
-        };
       });
+    
+    // Group indexed fields (section2_0, section2_1) under their parent section (section2)
+    // Only treat as indexed if the suffix is a small number (0-9), not a random ID like 1762678245566
+    const sectionGroups = new Map<string, string[]>();
+    const indexedFieldPattern = /^(.+)_(\d+)$/;
+    
+    allKeys.forEach(key => {
+      const match = key.match(indexedFieldPattern);
+      if (match) {
+        const [, baseName, indexStr] = match;
+        const index = parseInt(indexStr, 10);
+        
+        // Only treat as indexed field if index is small (0-9)
+        // Large numbers (like 1762678245566) are random IDs, not indices
+        if (index < 10) {
+          if (!sectionGroups.has(baseName)) {
+            sectionGroups.set(baseName, []);
+          }
+          sectionGroups.get(baseName)!.push(key);
+        } else {
+          // Large index number = random ID, not an indexed field
+          sectionGroups.set(key, [key]);
+        }
+      } else {
+        // Non-indexed field - add as single-item group
+        sectionGroups.set(key, [key]);
+      }
+    });
+    
+    // Create sections from groups
+    const contentSections = Array.from(sectionGroups.entries()).map(([baseName, fieldKeys]) => {
+      // For multi-field sections, use the base name for enabled/completed checks
+      const completed = sourceData[`_completed_${baseName}`] === true;
+      const manuallyLocked = sourceData[`_locked_${baseName}`] === true;
+      
+      return {
+        id: baseName, // Use base name (section2) not indexed key (section2_0)
+        title: formatSectionTitle(baseName),
+        enabled: sourceData[`_enabled_${baseName}`] !== false,
+        completed: completed,
+        locked: completed || manuallyLocked,
+        content: fieldKeys.length === 1 ? sourceData[fieldKeys[0]] : fieldKeys.map(k => sourceData[k])
+      };
+    });
     
     console.log('Sections generated:', [...sections, ...contentSections]);
     
@@ -382,31 +500,100 @@ export default function EditorModalV2({
   };
 
   const handleSaveAndClose = () => {
-    onSave({ ...editedData, status: 'draft' }, 'draft');
+    // Pass the edited data with _fileExists flag if it's new
+    const dataToSave = hasBeenSaved 
+      ? editedData 
+      : { ...editedData, _fileExists: false };
+    
+    onSave({ ...dataToSave, status: 'draft' }, 'draft');
     setStatus('draft');
     setIsDirty(false);
+    setHasBeenSaved(true); // Mark as saved
     onClose();
   };
 
   const handleSaveAndContinue = () => {
-    onSave({ ...editedData, status: 'draft' }, 'draft');
+    // Pass the edited data with _fileExists flag if it's new
+    const dataToSave = hasBeenSaved 
+      ? editedData 
+      : { ...editedData, _fileExists: false };
+    
+    onSave({ ...dataToSave, status: 'draft' }, 'draft');
     setStatus('draft');
     setIsDirty(false);
+    setHasBeenSaved(true); // Mark as saved
   };
 
   const handlePublish = () => {
     const completionPercentage = calculateCompletion();
     
+    // Check protection system
     if (protectionEnabled && completionPercentage < 100) {
-      alert(`Cannot publish: Protection is enabled and completion is only ${completionPercentage}%. Complete all sections to publish.`);
+      // Show modal instead of alert
+      setShowPublishConfirmation(true);
       return;
     }
     
-    if (window.confirm('Publish this content? It will be visible to all users.')) {
-      onSave({ ...editedData, status: 'published', protectionEnabled }, 'published');
-      setStatus('published');
-      setIsDirty(false);
+    // Show confirmation modal
+    setShowPublishConfirmation(true);
+  };
+
+  const handleConfirmPublish = () => {
+    // Pass the edited data with _fileExists flag if it's new
+    const dataToSave = hasBeenSaved 
+      ? editedData 
+      : { ...editedData, _fileExists: false };
+    
+    onSave({ ...dataToSave, status: 'published', protectionEnabled }, 'published');
+    setStatus('published');
+    setIsDirty(false);
+    setHasBeenSaved(true); // Mark as saved
+    setShowPublishConfirmation(false);
+  };
+
+  const handleUnpublish = () => {
+    // Show confirmation before unpublishing
+    setShowUnpublishConfirmation(true);
+  };
+
+  const handleConfirmUnpublish = () => {
+    // Change from published back to draft
+    const dataToSave = editedData;
+    onSave({ ...dataToSave, status: 'draft' }, 'draft');
+    setStatus('draft');
+    setIsDirty(false);
+    setShowUnpublishConfirmation(false);
+  };
+
+  // Handle close with unsaved changes check
+  const handleBeforeClose = () => {
+    // In test mode, close immediately without prompting
+    if (isTestMode) {
+      onClose();
+      return;
     }
+
+    // Warn if:
+    // 1. There are unsaved changes (isDirty = true), OR
+    // 2. It's new content that was never saved (hasBeenSaved = false)
+    // This ensures new content warns even if no edits were made yet
+    if (isDirty || !hasBeenSaved) {
+      setShowCloseConfirmation(true);
+    } else {
+      onClose();
+    }
+  };
+
+  // Confirm close without saving
+  const handleCloseWithoutSaving = () => {
+    setShowCloseConfirmation(false);
+    onClose();
+  };
+
+  // Save and close from confirmation
+  const handleSaveBeforeClose = () => {
+    setShowCloseConfirmation(false);
+    handleSaveAndClose();
   };
 
   const navigateToPrevSection = () => {
@@ -562,9 +749,17 @@ export default function EditorModalV2({
                 }`}>
                   {status === 'published' ? '● LIVE' : '● DRAFT'}
                 </span>
-                {isDirty && (
-                  <span className="px-3 py-1 rounded-full text-xs font-roobert-medium bg-orange-500/20 text-orange-600">
-                    Unsaved Changes
+                {isDirty ? (
+                  <span className="px-3 py-1 rounded-full text-xs font-roobert-medium bg-orange-500/20 text-orange-600 border border-orange-500/30">
+                    ⚠️ Unsaved changes
+                  </span>
+                ) : hasBeenSaved ? (
+                  <span className="px-3 py-1 rounded-full text-xs font-roobert-medium bg-green-500/20 text-green-600">
+                    ✓ Saved
+                  </span>
+                ) : (
+                  <span className="px-3 py-1 rounded-full text-xs font-roobert-medium bg-gray-500/20 text-gray-600">
+                    ● Not yet saved
                   </span>
                 )}
               </div>
@@ -643,8 +838,9 @@ export default function EditorModalV2({
               </div>
 
               <button
-                onClick={onClose}
+                onClick={handleBeforeClose}
                 className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                title="Close editor"
               >
                 <X className="w-6 h-6 text-gray-600 dark:text-gray-400" />
               </button>
@@ -689,13 +885,25 @@ export default function EditorModalV2({
                 <Eye className="w-4 h-4" />
                 Preview
               </button>
-              <button
-                onClick={handlePublish}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-medium hover:shadow-lg transition-all"
-              >
-                <Upload className="w-4 h-4" />
-                Publish
-              </button>
+              {status === 'published' ? (
+                <button
+                  onClick={handleUnpublish}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-roobert-medium transition-all"
+                  title="Return to draft status"
+                >
+                  <Upload className="w-4 h-4 rotate-180" />
+                  Unpublish
+                </button>
+              ) : (
+                <button
+                  onClick={handlePublish}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-medium hover:shadow-lg transition-all"
+                  title={protectionEnabled && calculateCompletion() < 100 ? `Cannot publish: ${calculateCompletion()}% complete` : 'Publish content'}
+                >
+                  <Upload className="w-4 h-4" />
+                  Publish
+                </button>
+              )}
               <button
                 onClick={() => setShowExpressionMenu(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg border border-fis-raspberry text-fis-raspberry font-roobert-medium hover:bg-fis-raspberry/10 transition-colors"
@@ -1009,6 +1217,131 @@ export default function EditorModalV2({
               action: handleSaveAndContinue,
               variant: 'secondary',
               closeAfter: true
+            },
+            {
+              label: 'Cancel',
+              action: () => {},
+              variant: 'secondary',
+              closeAfter: true
+            }
+          ]}
+        />
+
+        {/* Unsaved Changes Warning Modal */}
+        <ConfirmationModal
+          isOpen={showCloseConfirmation}
+          onClose={() => setShowCloseConfirmation(false)}
+          title={!hasBeenSaved ? "Discard New Content?" : "Unsaved Changes"}
+          message={
+            !hasBeenSaved 
+              ? "This content has never been saved. If you close now, it will be lost forever. Are you sure?" 
+              : "You have unsaved changes. Are you sure you want to close without saving?"
+          }
+          type="warning"
+          buttons={
+            !hasBeenSaved 
+              ? [
+                  {
+                    label: 'Save & Close',
+                    action: handleSaveBeforeClose,
+                    variant: 'primary',
+                    closeAfter: true
+                  },
+                  {
+                    label: 'Discard',
+                    action: handleCloseWithoutSaving,
+                    variant: 'danger',
+                    closeAfter: true
+                  },
+                  {
+                    label: 'Keep Editing',
+                    action: () => {},
+                    variant: 'secondary',
+                    closeAfter: true
+                  }
+                ]
+              : [
+                  {
+                    label: 'Save & Close',
+                    action: handleSaveBeforeClose,
+                    variant: 'primary',
+                    closeAfter: true
+                  },
+                  {
+                    label: 'Discard & Close',
+                    action: handleCloseWithoutSaving,
+                    variant: 'danger',
+                    closeAfter: true
+                  },
+                  {
+                    label: 'Cancel',
+                    action: () => {},
+                    variant: 'secondary',
+                    closeAfter: true
+                  }
+                ]
+          }
+        />
+
+        {/* Publish Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showPublishConfirmation}
+          onClose={() => setShowPublishConfirmation(false)}
+          title={
+            protectionEnabled && calculateCompletion() < 100
+              ? "Cannot Publish - Incomplete Content"
+              : "Publish Content?"
+          }
+          message={
+            protectionEnabled && calculateCompletion() < 100
+              ? `Protection is enabled and this content is only ${calculateCompletion()}% complete. You must complete all enabled sections before publishing.`
+              : `This content is ${calculateCompletion()}% complete and ready to publish. It will be immediately visible to all users. Are you sure you want to publish?`
+          }
+          type={
+            protectionEnabled && calculateCompletion() < 100
+              ? "warning"
+              : "info"
+          }
+          buttons={
+            protectionEnabled && calculateCompletion() < 100
+              ? [
+                  {
+                    label: 'OK',
+                    action: () => {},
+                    variant: 'secondary',
+                    closeAfter: true
+                  }
+                ]
+              : [
+                  {
+                    label: 'Publish Now',
+                    action: handleConfirmPublish,
+                    variant: 'primary',
+                    closeAfter: true
+                  },
+                  {
+                    label: 'Cancel',
+                    action: () => {},
+                    variant: 'secondary',
+                    closeAfter: true
+                  }
+                ]
+          }
+        />
+
+        {/* Unpublish Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showUnpublishConfirmation}
+          onClose={() => setShowUnpublishConfirmation(false)}
+          title="⚠️ Unpublish This Content?"
+          message="This will REMOVE this content from the published view immediately. Users will no longer be able to see it. Are you sure you want to unpublish?"
+          type="warning"
+          buttons={[
+            {
+              label: 'Yes, Unpublish Now',
+              action: handleConfirmUnpublish,
+              variant: 'danger',
+              closeAfter: false
             },
             {
               label: 'Cancel',

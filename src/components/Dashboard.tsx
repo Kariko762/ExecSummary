@@ -4,6 +4,7 @@ import { performanceData } from '../data/performance-loader';
 import { Target, Award, Briefcase, ChevronLeft, ChevronRight } from 'lucide-react';
 import { KeyActivityInsights } from './KeyActivityInsights';
 import { useState } from 'react';
+import { ChartColors } from '../design-system';
 
 export const Dashboard: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -150,20 +151,20 @@ export const Dashboard: React.FC = () => {
                   data={currentPerformance.demosPerMonth}
                   style={{ cursor: 'default' }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.2} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} opacity={0.2} />
                   <XAxis 
                     dataKey="month" 
-                    stroke="#9CA3AF"
+                    stroke={ChartColors.ui.axis}
                     style={{ fontSize: '12px', fontFamily: 'Roobert' }}
                   />
                   <YAxis 
-                    stroke="#9CA3AF"
+                    stroke={ChartColors.ui.axis}
                     style={{ fontSize: '12px', fontFamily: 'Roobert' }}
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                      border: '1px solid #e5e7eb',
+                      backgroundColor: ChartColors.ui.tooltip.bg,
+                      border: `1px solid ${ChartColors.ui.tooltip.border}`,
                       borderRadius: '8px',
                       fontFamily: 'Roobert'
                     }}
@@ -173,9 +174,9 @@ export const Dashboard: React.FC = () => {
                   <Line 
                     type="monotone" 
                     dataKey="demos" 
-                    stroke="#B21A53" 
+                    stroke={ChartColors.series.raspberry}
                     strokeWidth={3}
-                    dot={{ fill: '#B21A53', r: 6 }}
+                    dot={{ fill: ChartColors.series.raspberry, r: 6 }}
                     activeDot={false}
                   />
                 </LineChart>
@@ -197,7 +198,7 @@ export const Dashboard: React.FC = () => {
                   <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center gap-2 flex-1">
                       <div className={`w-6 h-6 rounded flex items-center justify-center text-xs font-roobert-bold text-white`}
-                        style={{ backgroundColor: ['#431C5B', '#1D1F48', '#B21A53', '#3bcd3e', '#403040'][index] }}
+                        style={{ backgroundColor: ChartColors.paletteExtended[index] }}
                       >
                         {index + 1}
                       </div>

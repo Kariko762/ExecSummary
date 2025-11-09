@@ -6,7 +6,7 @@ import { PresentationProvider } from './contexts/PresentationContext';
 import { AuthProvider } from './contexts/AuthContext';
 import CMSHeader from './components/CMSHeader';
 import EditorModal from './components/EditorModalV2';
-import EngineAssetsModal from './components/EngineAssetsModal';
+import { EngineAssetsPreview } from './components/EngineAssetsPreview';
 import StyleSchemeManagerV2 from './components/StyleSchemeManagerV2';
 import SystemSettingsManager from './components/SystemSettingsManager';
 import TemplateBuilder from './components/TemplateBuilder';
@@ -270,12 +270,22 @@ function App() {
     const endpoint = modalDataType;
     
     try {
-      const response = await fetch(`${API_URL}/${endpoint}/${data.id}`, {
-        method: 'PUT',
+      // Check if this is a new item (no file exists yet) or an update
+      const isNewItem = !data._fileExists; // We'll add this flag when creating new items
+      const method = isNewItem ? 'POST' : 'PUT';
+      const url = isNewItem 
+        ? `${API_URL}/${endpoint}`
+        : `${API_URL}/${endpoint}/${data.id}`;
+      
+      // Remove the _fileExists flag before saving
+      const { _fileExists, ...dataToSave } = data;
+      
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataToSave),
       });
 
       if (response.ok) {
@@ -340,35 +350,21 @@ function App() {
         date: timestamp,
         quarter: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         year: new Date().getFullYear(),
-        status: 'draft'
+        status: 'draft',
+        _fileExists: false // Mark as new - file will be created on first save
       };
 
-      // POST to create new summary
-      const response = await fetch(`${API_URL}/summaries`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newSummary),
-      });
-
-      if (response.ok) {
-        showNotification('success', `New summary ${creationMode === 'clone' ? 'cloned' : 'created'} successfully!`);
-        setShowNewSummaryModal(false);
-        setNewSummaryName('');
-        setSelectedSourceId('');
-        setCreationMode('template');
-        
-        // Open in editor
-        setSelectedItem(newSummary);
-        setModalDataType('summaries');
-        setModalOpen(true);
-        
-        // Refresh the list
-        fetchData();
-      } else {
-        showNotification('error', 'Failed to create summary');
-      }
+      // Don't POST immediately - open in editor and let user save when ready
+      showNotification('success', `Opening new ${creationMode === 'clone' ? 'cloned' : ''} summary in editor...`);
+      setShowNewSummaryModal(false);
+      setNewSummaryName('');
+      setSelectedSourceId('');
+      setCreationMode('template');
+      
+      // Open in editor
+      setSelectedItem(newSummary);
+      setModalDataType('summaries');
+      setModalOpen(true);
     } catch (error) {
       console.error('Create error:', error);
       showNotification('error', 'Failed to create new summary');
@@ -680,7 +676,7 @@ function App() {
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-roobert-heavy text-fis-navy dark:text-white mb-3">
                   Content Management System
                 </h1>
-                <p className="text-lg md:text-xl font-roobert-medium" style={{ color: '#4bcd3e' }}>
+                <p className="text-lg md:text-xl font-roobert-medium text-fis-green dark:text-green-400">
                   Manage Your Executive Dashboard Data
                 </p>
               </motion.div>
@@ -946,8 +942,8 @@ function App() {
             onSave={handleSaveItem}
           />
 
-          {/* Engine Assets Modal */}
-          <EngineAssetsModal
+          {/* Engine Assets Preview */}
+          <EngineAssetsPreview
             isOpen={showEngineAssets}
             onClose={() => setShowEngineAssets(false)}
           />

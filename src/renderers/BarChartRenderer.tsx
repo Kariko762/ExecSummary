@@ -1,8 +1,8 @@
 import React from 'react';
 import { RendererProps, FieldSchema } from '../types/schema';
 import { Plus, Trash2 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, Tooltip, ResponsiveContainer } from 'recharts';
-import { getClasses } from '../design-system';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { getClasses, ChartColors } from '../design-system';
 
 export const BarChartRenderer: React.FC<RendererProps> = ({
   schema,
@@ -19,7 +19,7 @@ export const BarChartRenderer: React.FC<RendererProps> = ({
   // Default values from chartConfig
   const {
     xAxisKey = 'name',
-    bars = [{ dataKey: 'value', fill: '#6B1B5E', name: 'Value' }],
+    bars = [{ dataKey: 'value', fill: ChartColors.series.eggplantLight, name: 'Value' }],
     orientation = 'vertical',
     showGrid = true,
     showLegend = true,
@@ -27,6 +27,58 @@ export const BarChartRenderer: React.FC<RendererProps> = ({
   } = chartConfig;
 
   const isVertical = orientation === 'vertical';
+  const colorPalette = ChartColors.palette;
+
+  // Custom tooltip component for categorical data
+  const CustomCategoricalTooltip = ({ active, payload }: any) => {
+    if (!active || !payload || !items || items.length === 0) return null;
+
+    // Calculate total for percentages
+    const total = items.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
+
+    return (
+      <div className="bg-white dark:bg-gray-800 border-2 border-fis-eggplant dark:border-fis-raspberry rounded-lg shadow-xl p-4 min-w-[200px]">
+        <p className="text-xs font-roobert-bold text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+          All Values
+        </p>
+        <div className="space-y-2">
+          {items.map((item: any, index: number) => {
+            const percentage = total > 0 ? ((item.value / total) * 100).toFixed(0) : 0;
+            const isCurrentItem = payload[0]?.payload?.name === item.name;
+            return (
+              <div 
+                key={index} 
+                className={`flex items-center justify-between gap-4 ${
+                  isCurrentItem ? 'font-roobert-bold' : 'font-roobert-medium'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-sm flex-shrink-0" 
+                    style={{ backgroundColor: colorPalette[index % colorPalette.length] }}
+                  />
+                  <span className={`text-sm ${
+                    isCurrentItem 
+                      ? 'text-fis-eggplant dark:text-fis-raspberry' 
+                      : 'text-gray-700 dark:text-gray-300'
+                  }`}>
+                    {item.name}:
+                  </span>
+                </div>
+                <span className={`text-sm ${
+                  isCurrentItem 
+                    ? 'text-fis-eggplant dark:text-fis-raspberry' 
+                    : 'text-gray-900 dark:text-white'
+                }`}>
+                  {item.value} ({percentage}%)
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
 
   if (mode === 'display') {
     if (items.length === 0) {
@@ -39,6 +91,14 @@ export const BarChartRenderer: React.FC<RendererProps> = ({
       );
     }
 
+    // For categorical data (simple name/value pairs), color each bar differently
+    const isCategorical = items.length > 0 && 
+      Object.keys(items[0]).length === 2 && 
+      items[0].name !== undefined && 
+      items[0].value !== undefined;
+
+    const colorPalette = ChartColors.palette;
+
     return (
       <div style={{ width: '100%', height: '320px', minHeight: '320px' }}>
         <ResponsiveContainer width="100%" height="100%">
@@ -47,29 +107,50 @@ export const BarChartRenderer: React.FC<RendererProps> = ({
             layout={isVertical ? 'horizontal' : 'vertical'}
             margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
           >
-            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
             {isVertical ? (
               <>
-                <XAxis type="category" dataKey={xAxisKey} stroke="#6b7280" />
-                <YAxis type="number" stroke="#6b7280" />
+                <XAxis type="category" dataKey={xAxisKey} stroke={ChartColors.ui.axis} />
+                <YAxis type="number" stroke={ChartColors.ui.axis} />
               </>
             ) : (
               <>
-                <XAxis type="number" stroke="#6b7280" />
-                <YAxis type="category" dataKey={xAxisKey} stroke="#6b7280" />
+                <XAxis type="number" stroke={ChartColors.ui.axis} />
+                <YAxis type="category" dataKey={xAxisKey} stroke={ChartColors.ui.axis} />
               </>
             )}
-            {bars.map((barConfig, index) => (
-              <Bar
-                key={index}
-                dataKey={barConfig.dataKey}
-                fill={barConfig.fill}
-                name={barConfig.name}
-                stackId={stacked ? 'stack' : undefined}
+            {isCategorical ? (
+              // Categorical data: each bar gets a different color from the palette
+              <Bar 
+                dataKey="value" 
+                radius={8}
+              >
+                {items.map((_entry: any, index: number) => (
+                  <Cell key={`cell-${index}`} fill={colorPalette[index % colorPalette.length]} />
+                ))}
+              </Bar>
+            ) : (
+              // Multi-series data: use configured bars
+              bars.map((barConfig, index) => (
+                <Bar
+                  key={index}
+                  dataKey={barConfig.dataKey}
+                  fill={barConfig.fill}
+                  name={barConfig.name}
+                  stackId={stacked ? 'stack' : undefined}
+                  radius={8}
+                />
+              ))
+            )}
+            {isCategorical ? (
+              <Tooltip 
+                content={<CustomCategoricalTooltip />}
+                cursor={{ fill: 'rgba(148, 77, 230, 0.05)', fillOpacity: 0.5 }}
               />
-            ))}
-            <Tooltip />
-            {showLegend && <Legend />}
+            ) : (
+              <Tooltip cursor={{ fill: 'rgba(148, 77, 230, 0.05)', fillOpacity: 0.5 }} />
+            )}
+            {!isCategorical && showLegend && <Legend />}
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -120,16 +201,16 @@ export const BarChartRenderer: React.FC<RendererProps> = ({
               layout={isVertical ? 'horizontal' : 'vertical'}
               margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
             >
-              {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
+              {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
               {isVertical ? (
                 <>
-                  <XAxis type="category" dataKey={xAxisKey} stroke="#6b7280" tick={{ fontSize: 10 }} />
-                  <YAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} />
+                  <XAxis type="category" dataKey={xAxisKey} stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
+                  <YAxis type="number" stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
                 </>
               ) : (
                 <>
-                  <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 10 }} />
-                  <YAxis type="category" dataKey={xAxisKey} stroke="#6b7280" tick={{ fontSize: 10 }} />
+                  <XAxis type="number" stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
+                  <YAxis type="category" dataKey={xAxisKey} stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
                 </>
               )}
               {bars.map((barConfig, index) => (

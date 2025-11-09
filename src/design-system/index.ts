@@ -6,7 +6,7 @@
  */
 
 // Re-export from existing design system
-export { DesignSystem, getClasses, Colors } from './colors';
+export { DesignSystem, getClasses, Colors, ChartColors } from './colors';
 export type { ColorScheme } from './colors';
 
 // New design system modules

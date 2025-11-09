@@ -2,7 +2,7 @@ import React from 'react';
 import { RendererProps, FieldSchema } from '../types/schema';
 import { Plus, Trash2 } from 'lucide-react';
 import { RadialBarChart, RadialBar, Legend, Tooltip, ResponsiveContainer } from 'recharts';
-import { getClasses } from '../design-system';
+import { getClasses, ChartColors } from '../design-system';
 
 export const RadialChartRenderer: React.FC<RendererProps> = ({
   schema,
@@ -20,9 +20,60 @@ export const RadialChartRenderer: React.FC<RendererProps> = ({
   const {
     dataKey = 'value',
     maxValue = 100,
-    colors = ['#6B1B5E', '#B21A53'],
+    colors = ChartColors.palette,
     showPercentage = true
   } = chartConfig;
+
+  // Custom tooltip component
+  const CustomRadialTooltip = ({ active, payload }: any) => {
+    if (!active || !payload || !items || items.length === 0) return null;
+
+    // Calculate total for percentages
+    const total = items.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
+
+    return (
+      <div className="bg-white dark:bg-gray-800 border-2 border-fis-eggplant dark:border-fis-raspberry rounded-lg shadow-xl p-4 min-w-[200px]">
+        <p className="text-xs font-roobert-bold text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+          All Values
+        </p>
+        <div className="space-y-2">
+          {items.map((item: any, index: number) => {
+            const percentage = total > 0 ? ((item.value / total) * 100).toFixed(0) : 0;
+            const isCurrentItem = payload[0]?.payload?.name === item.name;
+            return (
+              <div 
+                key={index} 
+                className={`flex items-center justify-between gap-4 ${
+                  isCurrentItem ? 'font-roobert-bold' : 'font-roobert-medium'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-sm flex-shrink-0" 
+                    style={{ backgroundColor: colors[index % colors.length] }}
+                  />
+                  <span className={`text-sm ${
+                    isCurrentItem 
+                      ? 'text-fis-eggplant dark:text-fis-raspberry' 
+                      : 'text-gray-700 dark:text-gray-300'
+                  }`}>
+                    {item.name}:
+                  </span>
+                </div>
+                <span className={`text-sm ${
+                  isCurrentItem 
+                    ? 'text-fis-eggplant dark:text-fis-raspberry' 
+                    : 'text-gray-900 dark:text-white'
+                }`}>
+                  {item.value} ({percentage}%)
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
 
   if (mode === 'display') {
     if (items.length === 0) {
@@ -57,6 +108,11 @@ export const RadialChartRenderer: React.FC<RendererProps> = ({
               background
               dataKey={dataKey}
               label={showPercentage ? { position: 'insideStart', fill: '#fff' } : false}
+              activeShape={{
+                fill: undefined, // Keep original color
+                stroke: 'rgba(148, 77, 230, 0.3)',
+                strokeWidth: 3
+              }}
             />
             <Legend 
               iconSize={10} 
@@ -64,7 +120,7 @@ export const RadialChartRenderer: React.FC<RendererProps> = ({
               verticalAlign="middle" 
               align="right"
             />
-            <Tooltip />
+            <Tooltip content={<CustomRadialTooltip />} cursor={{ fill: 'transparent' }} />
           </RadialBarChart>
         </ResponsiveContainer>
       </div>

@@ -120,7 +120,7 @@ function App() {
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-roobert-heavy text-fis-navy dark:text-white mb-3">
                               Executive Summary Dashboard
                             </h1>
-                            <p className="text-lg md:text-xl font-roobert-medium" style={{ color: '#4bcd3e' }}>
+                            <p className="text-lg md:text-xl font-roobert-medium text-fis-green dark:text-green-400">
                               Demo Services Group | RevOps
                             </p>
                           </motion.div>

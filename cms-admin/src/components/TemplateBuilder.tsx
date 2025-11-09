@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, Plus, Trash2, GripVertical, ChevronRight, ChevronDown, 
   Type, List, Grid, Layers, FileText, BarChart3, Settings,
-  Eye, Code, Save, Download, Upload, PlayCircle, TrendingUp
+  Eye, Code, Save, Download, Upload, PlayCircle, TrendingUp, AlertTriangle
 } from 'lucide-react';
 import type { FieldSchema } from '../../../src/types/schema';
+import { ChartColors } from '../../../src/design-system';
 import EditorModalV2 from './EditorModalV2';
 
 interface TemplateBuilderProps {
@@ -17,7 +18,6 @@ interface TemplateSection {
   name: string;
   expanded: boolean;
   fields: TemplateField[];
-  columnSpan?: number; // 1-4 columns for grid layout
 }
 
 interface LayoutElement {
@@ -193,7 +193,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
           chartConfig: {
             dataKey: 'value',
             nameKey: 'name',
-            colors: ['#6B1B5E', '#B21A53', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
+            colors: [...ChartColors.palette],
             showLegend: true,
             showTooltip: true,
             innerRadius: 0,
@@ -216,7 +216,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
           renderAs: 'barChart',
           chartConfig: {
             xAxisKey: 'name',
-            bars: [{ dataKey: 'value', fill: '#6B1B5E', name: 'Value' }],
+            bars: [{ dataKey: 'value', fill: ChartColors.series.eggplantLight, name: 'Value' }],
             orientation: 'vertical',
             showGrid: true,
             showLegend: true,
@@ -239,7 +239,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
           renderAs: 'lineChart',
           chartConfig: {
             xAxisKey: 'name',
-            lines: [{ dataKey: 'value', stroke: '#6B1B5E', name: 'Value' }],
+            lines: [{ dataKey: 'value', stroke: ChartColors.series.eggplantLight, name: 'Value' }],
             showGrid: true,
             showLegend: true,
             showDots: true,
@@ -263,7 +263,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
           chartConfig: {
             dataKey: 'value',
             maxValue: 100,
-            colors: ['#6B1B5E', '#B21A53'],
+            colors: [...ChartColors.palette],
             showPercentage: true,
             thickness: 20
           },
@@ -292,7 +292,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
           renderAs: 'hr',
           hrConfig: {
             thickness: 1,
-            color: '#E5E7EB',
+            color: ChartColors.ui.grid,
             marginTop: 24,
             marginBottom: 24,
             style: 'solid'
@@ -350,7 +350,20 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     }
   ]);
   
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('basic');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('basic'); // Kept for backwards compatibility but not used in tree view
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['basic'])); // Start with basic expanded
+  
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategories(prev => {
+      const newSet = new Set<string>();
+      // Only allow one category open at a time (accordion behavior)
+      if (!prev.has(categoryId)) {
+        newSet.add(categoryId);
+      }
+      // If clicking the already-open category, close it (newSet stays empty)
+      return newSet;
+    });
+  };
   const [draggedAsset, setDraggedAsset] = useState<AssetItem | null>(null);
   const [draggedField, setDraggedField] = useState<{ sectionId: string; fieldId: string } | null>(null);
   const [draggedSection, setDraggedSection] = useState<string | null>(null);
@@ -443,7 +456,6 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         
         const sectionType = templateData[`_${key}_type`];
         const sectionFields = templateData[`_${key}_fields`];
-        const sectionColumnSpan = templateData[`_${key}_columnSpan`];
         const exampleData = templateData[key];
         
         if (sectionType) {
@@ -464,8 +476,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
             id: `section-${Date.now()}-${key}`,
             name: formatSectionTitle(key),
             expanded: true,
-            fields: [field],
-            columnSpan: sectionColumnSpan || 1 // Load columnSpan from metadata
+            fields: [field]
           });
         }
       });
@@ -488,9 +499,27 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   };
 
   // Generate test data from current template for EditorModalV2
-  const handleTestInEditor = async () => {
+  // Export template as JSON file
+  const handleExport = async () => {
     const templateData = await performSave(true); // Get template JSON without saving
-    console.log('Generated template data for testing:', templateData);
+    if (!templateData) return;
+
+    const blob = new Blob([JSON.stringify(templateData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `template-${templateData.id || 'new'}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    setNotification({ type: 'success', message: 'Template exported successfully!' });
+  };
+
+  // Test template in EditorModalV2
+  const handlePreview = async () => {
+    const templateData = await performSave(true); // Get template JSON without saving
     if (templateData) {
       setTestData(templateData);
       setShowTestEditor(true);
@@ -534,9 +563,23 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           ? { ...section, fields: [...section.fields, newField] }
           : section
       ));
-    } else if (draggedField) {
-      // Reorder existing field
-      // TODO: Implement field reordering logic
+    } else if (draggedField && draggedField.sectionId !== sectionId) {
+      // Move field to different section
+      const sourceSection = sections.find(s => s.id === draggedField.sectionId);
+      const fieldToMove = sourceSection?.fields.find(f => f.id === draggedField.fieldId);
+      
+      if (fieldToMove) {
+        setSections(prev => prev.map(section => {
+          if (section.id === draggedField.sectionId) {
+            // Remove from source section
+            return { ...section, fields: section.fields.filter(f => f.id !== draggedField.fieldId) };
+          } else if (section.id === sectionId) {
+            // Add to target section
+            return { ...section, fields: [...section.fields, fieldToMove] };
+          }
+          return section;
+        }));
+      }
     }
     
     setDragOverSection(null);
@@ -549,6 +592,43 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
 
   const handleSectionDragLeave = () => {
     setDragOverSection(null);
+  };
+
+  const handleFieldDragOver = (e: React.DragEvent, targetSectionId: string, targetFieldId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!draggedField || draggedField.fieldId === targetFieldId) return;
+    
+    const sourceSection = sections.find(s => s.id === draggedField.sectionId);
+    const draggedFieldData = sourceSection?.fields.find(f => f.id === draggedField.fieldId);
+    if (!draggedFieldData) return;
+    
+    setSections(prev => prev.map(section => {
+      if (section.id === draggedField.sectionId && section.id === targetSectionId) {
+        // Reordering within same section
+        const fields = [...section.fields];
+        const draggedIndex = fields.findIndex(f => f.id === draggedField.fieldId);
+        const targetIndex = fields.findIndex(f => f.id === targetFieldId);
+        
+        if (draggedIndex === -1 || targetIndex === -1) return section;
+        
+        fields.splice(draggedIndex, 1);
+        fields.splice(targetIndex, 0, draggedFieldData);
+        
+        return { ...section, fields };
+      } else if (section.id === draggedField.sectionId) {
+        // Remove from source section
+        return { ...section, fields: section.fields.filter(f => f.id !== draggedField.fieldId) };
+      } else if (section.id === targetSectionId) {
+        // Add to target section at specific position
+        const fields = [...section.fields];
+        const targetIndex = fields.findIndex(f => f.id === targetFieldId);
+        fields.splice(targetIndex, 0, draggedFieldData);
+        return { ...section, fields };
+      }
+      return section;
+    }));
   };
 
   // Section drag and drop for reordering
@@ -615,7 +695,6 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       id: `hr-${Date.now()}`,
       name: `Divider ${sections.filter(s => s.fields[0]?.renderType === 'hr').length + 1}`,
       expanded: false,
-      columnSpan: 4, // Full width by default
       fields: [{
         id: `hr-field-${Date.now()}`,
         key: `divider${Date.now()}`,
@@ -627,7 +706,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           renderAs: 'hr',
           hrConfig: {
             thickness: 1,
-            color: '#E5E7EB',
+            color: ChartColors.ui.grid,
             marginTop: 24,
             marginBottom: 24,
             style: 'solid'
@@ -819,21 +898,32 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           templateData._completed_standard_header = false;
         } else {
           // For all other sections, process fields normally
-          section.fields.forEach(field => {
+          section.fields.forEach((field, fieldIndex) => {
             const fieldType = field.schema.type;
             
+            // If multiple fields in section, use indexed keys (section2_0, section2_1)
+            // If single field, use section name directly (section2)
+            const fieldKey = section.fields.length > 1 
+              ? `${sectionKey}_${fieldIndex}` 
+              : sectionKey;
+            
             // Save minimal schema metadata - just type and custom fields
-            templateData[`_${sectionKey}_type`] = fieldType;
+            templateData[`_${fieldKey}_type`] = fieldType;
             
             // Only save custom field definitions if they exist (for nestedCards, complex types)
             if (field.schema.itemSchema?.fields) {
-              templateData[`_${sectionKey}_fields`] = field.schema.itemSchema.fields;
+              templateData[`_${fieldKey}_fields`] = field.schema.itemSchema.fields;
+            }
+            
+            // Save chartConfig for chart types
+            if (field.schema.chartConfig && (fieldType === 'pieChart' || fieldType === 'barChart' || fieldType === 'lineChart' || fieldType === 'radialChart')) {
+              templateData[`_${fieldKey}_chartConfig`] = field.schema.chartConfig;
             }
             
             if (fieldType === 'nestedCards') {
               // Use exampleData if provided, otherwise create default
               if (field.exampleData && field.exampleData.length > 0) {
-                templateData[sectionKey] = field.exampleData;
+                templateData[fieldKey] = field.exampleData;
               } else {
                 // Create an array with one example object
                 const exampleItem: Record<string, any> = {};
@@ -846,35 +936,52 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                     }
                   });
                 }
-                templateData[sectionKey] = [exampleItem];
+                templateData[fieldKey] = [exampleItem];
               }
             } else if (fieldType === 'list' || fieldType === 'listNoTitle') {
               // Use exampleData if provided, otherwise create default
               if (field.exampleData && field.exampleData.length > 0) {
-                templateData[sectionKey] = field.exampleData;
+                templateData[fieldKey] = field.exampleData;
               } else {
-                templateData[sectionKey] = [`Example ${field.schema.label || section.name} item`];
+                templateData[fieldKey] = [`Example ${field.schema.label || section.name} item`];
+              }
+            } else if (fieldType === 'pieChart' || fieldType === 'barChart' || fieldType === 'lineChart' || fieldType === 'radialChart') {
+              // Chart types need array data with name/value structure
+              if (field.exampleData && field.exampleData.length > 0) {
+                templateData[fieldKey] = field.exampleData;
+              } else {
+                // Generate sample chart data based on fields schema
+                const fields = field.schema.fields || field.schema.chartConfig?.fields;
+                if (fields && fields.name && fields.value) {
+                  templateData[fieldKey] = [
+                    { name: 'A', value: 10 },
+                    { name: 'B', value: 20 },
+                    { name: 'C', value: 15 },
+                    { name: 'D', value: 30 }
+                  ];
+                } else {
+                  // Fallback if no fields defined
+                  templateData[fieldKey] = [
+                    { label: 'Item 1', value: 10 },
+                    { label: 'Item 2', value: 20 }
+                  ];
+                }
               }
             } else if (fieldType === 'number') {
-              templateData[sectionKey] = 0;
+              templateData[fieldKey] = 0;
             } else if (fieldType === 'date') {
-              templateData[sectionKey] = new Date().toISOString().split('T')[0];
+              templateData[fieldKey] = new Date().toISOString().split('T')[0];
             } else if (fieldType === 'textarea') {
-              templateData[sectionKey] = `Example: ${field.schema.placeholder || field.schema.label || section.name}`;
+              templateData[fieldKey] = `Example: ${field.schema.placeholder || field.schema.label || section.name}`;
             } else {
               // Default: text field
-              templateData[sectionKey] = field.schema.placeholder || '';
+              templateData[fieldKey] = field.schema.placeholder || '';
             }
           });
           
           // Enable the section by default
           templateData[`_enabled_${sectionKey}`] = true;
           templateData[`_completed_${sectionKey}`] = false;
-          
-          // Add column span if specified (defaults to 1 if not set)
-          if (section.columnSpan) {
-            templateData[`_${sectionKey}_columnSpan`] = section.columnSpan;
-          }
         }
       });
       
@@ -950,18 +1057,16 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                 Load Template
               </button>
               <button 
-                onClick={handleTestInEditor}
+                onClick={handleExport}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-roobert-medium transition-colors">
-                <PlayCircle className="w-4 h-4" />
-                Test in Editor
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-roobert-medium transition-colors">
                 <Download className="w-4 h-4" />
                 Export
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-roobert-medium transition-colors">
-                <Eye className="w-4 h-4" />
-                Preview
+              <button 
+                onClick={handlePreview}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-roobert-medium transition-colors">
+                <PlayCircle className="w-4 h-4" />
+                Test
               </button>
               <button 
                 onClick={handleSaveClick}
@@ -985,78 +1090,104 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
               Asset Library
             </h3>
 
-            {/* Category Tabs */}
-            <div className="flex flex-col gap-1 mb-4">
+            {/* Category Tree */}
+            <div className="space-y-1">
               {ASSET_LIBRARY.map(category => {
                 const Icon = category.icon;
-                const isActive = category.id === selectedCategoryId;
+                const isExpanded = expandedCategories.has(category.id);
                 return (
-                  <button
-                    key={category.id}
-                    onClick={() => setSelectedCategoryId(category.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-roobert-medium transition-all ${
-                      isActive
-                        ? 'bg-fis-eggplant text-white shadow-md'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {category.name}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Assets in Selected Category */}
-            <div className="space-y-2">
-              {selectedCategory?.assets.map(asset => {
-                const isLayoutAsset = selectedCategoryId === 'layout';
-                
-                if (isLayoutAsset) {
-                  // Layout assets get an "Add" button instead of drag
-                  return (
-                    <div
-                      key={asset.id}
-                      className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700"
+                  <div key={category.id} className="space-y-1">
+                    {/* Category Header */}
+                    <button
+                      onClick={() => toggleCategory(category.id)}
+                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-roobert-semibold transition-all ${
+                        isExpanded
+                          ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white shadow-md'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      }`}
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
-                          {asset.name}
-                        </div>
-                        <button
-                          onClick={addHorizontalRule}
-                          className="px-3 py-1 rounded bg-fis-eggplant hover:bg-fis-eggplant/90 text-white text-xs font-roobert-medium flex items-center gap-1 transition-colors"
+                      {isExpanded ? (
+                        <ChevronDown className="w-4 h-4" />
+                      ) : (
+                        <ChevronRight className="w-4 h-4" />
+                      )}
+                      <Icon className="w-4 h-4" />
+                      <span className="flex-1 text-left">{category.name}</span>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        isExpanded 
+                          ? 'bg-white/20 text-white' 
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                      }`}>
+                        {category.assets.length}
+                      </span>
+                    </button>
+
+                    {/* Category Assets (Expandable) */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden pl-6"
                         >
-                          <Plus className="w-3 h-3" />
-                          Add
-                        </button>
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400">
-                        {asset.description}
-                      </div>
-                    </div>
-                  );
-                }
-                
-                // Regular draggable assets
-                return (
-                <div
-                  key={asset.id}
-                  draggable
-                  onDragStart={() => handleAssetDragStart(asset)}
-                  onDragEnd={handleAssetDragEnd}
-                  className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:shadow-md transition-all"
-                >
-                  <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white mb-1">
-                    {asset.name}
+                          <div className="space-y-2 py-2">
+                            {category.assets.map(asset => {
+                              const isLayoutAsset = category.id === 'layout';
+                              
+                              if (isLayoutAsset) {
+                                // Layout assets get an "Add" button instead of drag
+                                return (
+                                  <div
+                                    key={asset.id}
+                                    className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700"
+                                  >
+                                    <div className="flex items-center justify-between mb-2">
+                                      <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                                        {asset.name}
+                                      </div>
+                                      <button
+                                        onClick={addHorizontalRule}
+                                        className="px-3 py-1 rounded bg-fis-eggplant hover:bg-fis-eggplant/90 text-white text-xs font-roobert-medium flex items-center gap-1 transition-colors"
+                                      >
+                                        <Plus className="w-3 h-3" />
+                                        Add
+                                      </button>
+                                    </div>
+                                    <div className="text-xs text-gray-600 dark:text-gray-400">
+                                      {asset.description}
+                                    </div>
+                                  </div>
+                                );
+                              }
+                              
+                              // Regular draggable assets
+                              return (
+                                <div
+                                  key={asset.id}
+                                  draggable
+                                  onDragStart={() => handleAssetDragStart(asset)}
+                                  onDragEnd={handleAssetDragEnd}
+                                  className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:shadow-md transition-all"
+                                >
+                                  <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white mb-1">
+                                    {asset.name}
+                                  </div>
+                                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                                    {asset.description}
+                                  </div>
+                                  <div className="text-xs text-fis-eggplant dark:text-fis-raspberry font-mono mt-1">
+                                    {asset.renderType}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                    {asset.description}
-                  </div>
-                  <div className="text-xs text-fis-eggplant dark:text-fis-raspberry font-mono mt-1">
-                    {asset.renderType}
-                  </div>
-                </div>
                 );
               })}
             </div>
@@ -1129,6 +1260,8 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                         onChange={(e) => setSections(prev => prev.map(s =>
                           s.id === section.id ? { ...s, name: e.target.value } : s
                         ))}
+                        placeholder="e.g., Metrics, Summary, Charts"
+                        title="Use descriptive names like 'Metrics', 'KPIs', 'Summary' instead of generic 'Section 1'"
                         className={`font-roobert-bold text-gray-900 dark:text-white bg-transparent border-none outline-none focus:ring-2 focus:ring-fis-eggplant rounded px-2 py-1 ${
                           isHeaderSection ? 'cursor-not-allowed opacity-75' : ''
                         }`}
@@ -1138,31 +1271,18 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                           REQUIRED
                         </span>
                       )}
+                      {!isHeaderSection && /^Section\s+\d+$/i.test(section.name) && (
+                        <span 
+                          className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-xs font-roobert-semibold"
+                          title="Please provide a descriptive section name like 'Metrics', 'Summary', 'KPIs', or 'Charts'"
+                        >
+                          <AlertTriangle className="w-3 h-3" />
+                          Rename Section
+                        </span>
+                      )}
                       <span className="text-xs text-gray-500 dark:text-gray-500">
                         ({section.fields.length} fields)
                       </span>
-                      
-                      {/* Column Span Selector */}
-                      {!isHeaderSection && (
-                        <div className="flex items-center gap-2 ml-4" onClick={(e) => e.stopPropagation()}>
-                          <span className="text-xs text-gray-500 dark:text-gray-500">Width:</span>
-                          <select
-                            value={section.columnSpan || 1}
-                            onChange={(e) => {
-                              const newSpan = parseInt(e.target.value);
-                              setSections(prev => prev.map(s =>
-                                s.id === section.id ? { ...s, columnSpan: newSpan } : s
-                              ));
-                            }}
-                            className="text-xs px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-fis-eggplant"
-                          >
-                            <option value={1}>1 col</option>
-                            <option value={2}>2 cols</option>
-                            <option value={3}>3 cols</option>
-                            <option value={4}>4 cols (full)</option>
-                          </select>
-                        </div>
-                      )}
                     </div>
                     <button
                       onClick={(e) => {
@@ -1204,6 +1324,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                               draggable
                               onDragStart={() => handleFieldDragStart(section.id, field.id)}
                               onDragEnd={handleFieldDragEnd}
+                              onDragOver={(e) => handleFieldDragOver(e, section.id, field.id)}
                               onClick={() => setSelectedField({ sectionId: section.id, fieldId: field.id })}
                               className={`p-3 rounded-lg border-2 cursor-move hover:shadow-md transition-all ${
                                 selectedField?.fieldId === field.id
@@ -1490,6 +1611,81 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                             {(!field.exampleData || field.exampleData.length === 0) && (
                               <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
                                 No example cards. Click "+ Add Card" to add some.
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Example Data for Charts */}
+                      {(field.renderType === 'pieChart' || field.renderType === 'barChart' || field.renderType === 'lineChart' || field.renderType === 'radialChart') && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <div className="flex items-center justify-between mb-2">
+                            <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
+                              Chart Data Points
+                            </label>
+                            <button
+                              onClick={() => {
+                                const newDataPoint = { name: 'New', value: 0 };
+                                const newExamples = [...(field.exampleData || []), newDataPoint];
+                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                              }}
+                              className="text-xs px-2 py-1 rounded bg-fis-eggplant/10 text-fis-eggplant hover:bg-fis-eggplant/20 font-roobert-medium"
+                            >
+                              + Add Point
+                            </button>
+                          </div>
+                          <div className="space-y-2">
+                            {(field.exampleData || []).map((dataPoint: any, idx: number) => (
+                              <div key={idx} className="flex items-center gap-2 p-2 rounded bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                                <div className="flex-1 grid grid-cols-2 gap-2">
+                                  <div>
+                                    <label className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">
+                                      Label
+                                    </label>
+                                    <input
+                                      type="text"
+                                      value={dataPoint.name || ''}
+                                      onChange={(e) => {
+                                        const newExamples = [...(field.exampleData || [])];
+                                        newExamples[idx] = { ...newExamples[idx], name: e.target.value };
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                      }}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                      placeholder="Label"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">
+                                      Value
+                                    </label>
+                                    <input
+                                      type="number"
+                                      value={dataPoint.value || 0}
+                                      onChange={(e) => {
+                                        const newExamples = [...(field.exampleData || [])];
+                                        newExamples[idx] = { ...newExamples[idx], value: parseFloat(e.target.value) || 0 };
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                      }}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                      placeholder="0"
+                                    />
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => {
+                                    const newExamples = (field.exampleData || []).filter((_: any, i: number) => i !== idx);
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                  }}
+                                  className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 self-end mb-1"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            ))}
+                            {(!field.exampleData || field.exampleData.length === 0) && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
+                                No data points. Click "+ Add Point" to add some.
                               </div>
                             )}
                           </div>
@@ -1850,6 +2046,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
             setShowTestEditor(false);
             setTestData(null);
           }}
+          isTestMode={true}
         />
       )}
     </div>

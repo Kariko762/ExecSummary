@@ -1,5 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { motion } from 'framer-motion';
+import { ChartColors } from '../design-system';
 
 interface TopAssetsChartProps {
   topAssets: Array<{
@@ -10,7 +11,7 @@ interface TopAssetsChartProps {
 }
 
 export function TopAssetsChart({ topAssets }: TopAssetsChartProps) {
-  const colors = ['#431C5B', '#1D1F48', '#B21A53', '#3bcd3e', '#403040'];
+  const colors = ChartColors.paletteExtended;
 
   return (
     <motion.div
@@ -30,23 +31,23 @@ export function TopAssetsChart({ topAssets }: TopAssetsChartProps) {
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           style={{ cursor: 'default' }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />
           <XAxis 
             type="number"
-            stroke="#6b7280"
+            stroke={ChartColors.ui.axis}
             style={{ fontSize: '14px', fontFamily: 'Roobert' }}
           />
           <YAxis 
             type="category"
             dataKey="name" 
-            stroke="#6b7280"
+            stroke={ChartColors.ui.axis}
             style={{ fontSize: '12px', fontFamily: 'Roobert' }}
             width={150}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              border: '1px solid #e5e7eb',
+              backgroundColor: ChartColors.ui.tooltip.bg,
+              border: `1px solid ${ChartColors.ui.tooltip.border}`,
               borderRadius: '8px',
               fontFamily: 'Roobert'
             }}

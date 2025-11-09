@@ -209,7 +209,16 @@ export const NestedCardsRenderer: React.FC<RendererProps> = ({
                       const fieldValue = item[fieldKey];
 
                       // Handle nested array of objects (like metrics)
-                      if (fs.renderAs === 'list' && fs.fields && Array.isArray(fieldValue)) {
+                      // Check if fieldSchema has explicit fields OR if the data contains objects
+                      const isObjectArray = Array.isArray(fieldValue) && 
+                                          fieldValue.length > 0 && 
+                                          typeof fieldValue[0] === 'object' &&
+                                          fieldValue[0] !== null;
+                      
+                      const hasFieldsSchema = fs.fields && typeof fs.fields === 'object';
+                      
+                      // Render as nested cards if: has explicit fields schema OR data shows it's object array
+                      if ((fs.renderAs === 'list' || fs.renderAs === 'listNoTitle') && (isObjectArray || hasFieldsSchema)) {
                         const metricItems = fieldValue || [];
                         
                         return (
@@ -288,7 +297,7 @@ export const NestedCardsRenderer: React.FC<RendererProps> = ({
                       }
 
                       if (fs.renderAs === 'list' || fs.renderAs === 'listNoTitle') {
-                        // Simple string list
+                        // Simple string list (not objects)
                         const listItems = fieldValue || [];
                         const [newListItem, setNewListItem] = useState('');
 

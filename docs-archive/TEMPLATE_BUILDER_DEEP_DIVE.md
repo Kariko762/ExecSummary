@@ -993,6 +993,142 @@ const validateTemplate = () => {
 
 ---
 
+## Recent Enhancements (November 2025)
+
+### Chart Rendering Improvements
+
+**Fixed Issues:**
+1. ✅ Chart config persistence - chartConfig now saved with `_${fieldKey}_chartConfig`
+2. ✅ Chart labels showing "Value" - now correctly use xAxisKey from chartConfig
+3. ✅ Section naming bug - regex pattern now excludes random IDs (only treats suffix < 10 as index)
+4. ✅ Bar chart coloring - categorical data gets unique colors from ChartColors.palette
+5. ✅ Chart tooltips - custom tooltips show ALL values with percentages on hover
+6. ✅ Hover effects - soft purple background (rgba(148, 77, 230, 0.05)) on all charts
+
+**Implementation Details:**
+
+**Chart Config Persistence:**
+```typescript
+// TemplateBuilder.tsx - Save chartConfig
+if (field.schema.chartConfig && (fieldType === 'pieChart' || fieldType === 'barChart' || fieldType === 'lineChart' || fieldType === 'radialChart')) {
+  templateData[`_${fieldKey}_chartConfig`] = field.schema.chartConfig;
+}
+
+// EditorModalV2.tsx - Load chartConfig
+const chartConfig = editedData[`_${fieldKey}_chartConfig`];
+const factorySchema: any = {
+  label: formatSectionTitle(fieldKey),
+  renderAs: fieldType,
+  ...baseSchema,
+  ...(chartConfig ? { chartConfig } : {})
+};
+```
+
+**Section Grouping Fix:**
+```typescript
+// Only treat suffix as index if < 10 (exclude random IDs like 1762678245566)
+const indexedFieldPattern = /^(.+)_(\d+)$/;
+const match = key.match(indexedFieldPattern);
+if (match) {
+  const [, baseName, indexStr] = match;
+  const index = parseInt(indexStr, 10);
+  
+  if (index < 10) {
+    // Group as indexed field (section2_0, section2_1)
+    sectionGroups.set(baseName, [...]);
+  } else {
+    // Treat as standalone field with random ID
+    sectionGroups.set(key, [key]);
+  }
+}
+```
+
+**Categorical Chart Coloring:**
+```typescript
+// BarChartRenderer.tsx - Detect categorical data and apply colors
+const isCategorical = items.every((item: any) => 
+  Object.keys(item).length === 2 && 'name' in item && 'value' in item
+);
+
+{isCategorical ? (
+  <Bar dataKey="value" radius={8}>
+    {items.map((_entry: any, index: number) => (
+      <Cell key={`cell-${index}`} fill={colorPalette[index % colorPalette.length]} />
+    ))}
+  </Bar>
+) : (
+  <Bar dataKey="value" fill={ChartColors.primary} radius={8} />
+)}
+```
+
+**Custom Tooltips:**
+```typescript
+// Show all values with percentages
+const CustomCategoricalTooltip = ({ active, payload }: any) => {
+  if (!active || !payload || !items || items.length === 0) return null;
+  
+  const total = items.reduce((sum: number, item: any) => sum + (item.value || 0), 0);
+  
+  return (
+    <div className="bg-white dark:bg-gray-800 border-2 border-fis-eggplant dark:border-fis-raspberry rounded-lg shadow-xl p-4">
+      <p className="text-xs font-roobert-bold text-gray-900 dark:text-white mb-3">
+        All Values
+      </p>
+      {items.map((item: any, index: number) => {
+        const percentage = total > 0 ? ((item.value / total) * 100).toFixed(0) : 0;
+        return (
+          <div key={index} className="flex items-center justify-between gap-4">
+            <span className="text-sm">{item.name}:</span>
+            <span className="text-sm">{item.value} ({percentage}%)</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+```
+
+### Template Builder UX Improvements
+
+**UI Enhancements:**
+1. ✅ Removed "Test in Editor" button - consolidated with "Preview" renamed to "Test"
+2. ✅ Test mode flag - EditorModalV2 skips save prompts when `isTestMode={true}`
+3. ✅ Inline validation - section headers show warning badges for generic names
+4. ✅ Removed centralized warning banner - replaced with contextual feedback
+
+**Inline Validation:**
+```typescript
+// TemplateBuilder.tsx - Warn about generic section names
+{!isHeaderSection && /^Section\s+\d+$/i.test(section.name) && (
+  <span 
+    className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-xs font-roobert-semibold"
+    title="Please provide a descriptive section name like 'Metrics', 'Summary', 'KPIs', or 'Charts'"
+  >
+    <AlertTriangle className="w-3 h-3" />
+    Rename Section
+  </span>
+)}
+```
+
+**Test Mode:**
+```typescript
+// EditorModalV2.tsx - Skip save confirmation in test mode
+const handleClose = () => {
+  if (isTestMode) {
+    onClose();
+    return;
+  }
+  
+  if (isDirty || !hasBeenSaved) {
+    setShowCloseConfirmation(true);
+  } else {
+    onClose();
+  }
+};
+```
+
+---
+
 ## Current Issues & Solutions
 
 ### Issue 1: Old Templates Not Properly Structured

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, ChevronRight, ChevronDown, RefreshCw } from 'lucide-react';
 import { RenderFactory } from '@renderers/RenderFactory';
+import { ChartColors } from '../../../src/design-system';
 import type { FieldSchema } from '../../../src/types/schema';
 
 interface EngineAssetsPreviewProps {
@@ -204,7 +205,7 @@ const EXAMPLES: RenderExample[] = [
       chartConfig: {
         dataKey: 'value',
         nameKey: 'name',
-        colors: ['#6B1B5E', '#B21A53', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
+        colors: [...ChartColors.palette],
         showLegend: true,
         showTooltip: true,
         innerRadius: 0,
@@ -234,7 +235,7 @@ const EXAMPLES: RenderExample[] = [
       label: 'Quarterly Revenue',
       chartConfig: {
         xAxisKey: 'name',
-        bars: [{ dataKey: 'value', fill: '#6B1B5E', name: 'Revenue' }],
+        bars: [{ dataKey: 'value', fill: ChartColors.series.eggplantLight, name: 'Revenue' }],
         orientation: 'vertical',
         showGrid: true,
         showLegend: true,
@@ -264,7 +265,7 @@ const EXAMPLES: RenderExample[] = [
       label: 'User Growth',
       chartConfig: {
         xAxisKey: 'name',
-        lines: [{ dataKey: 'value', stroke: '#6B1B5E', name: 'Active Users' }],
+        lines: [{ dataKey: 'value', stroke: ChartColors.series.eggplantLight, name: 'Active Users' }],
         showGrid: true,
         showLegend: true,
         showDots: true,
@@ -297,7 +298,7 @@ const EXAMPLES: RenderExample[] = [
       chartConfig: {
         dataKey: 'value',
         maxValue: 100,
-        colors: ['#6B1B5E', '#B21A53', '#3B82F6'],
+        colors: [...ChartColors.palette],
         showPercentage: true,
         thickness: 20,
       },
@@ -326,7 +327,7 @@ const EXAMPLES: RenderExample[] = [
       label: 'Section Divider',
       hrConfig: {
         thickness: 1,
-        color: '#E5E7EB',
+        color: ChartColors.ui.grid,
         marginTop: 24,
         marginBottom: 24,
         style: 'solid',

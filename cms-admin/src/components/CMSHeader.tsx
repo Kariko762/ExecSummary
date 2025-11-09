@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import APIDashboardModal from './APIDashboardModal';
 
 interface CMSHeaderProps {
@@ -17,6 +17,45 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
   const [engineSubmenuOpen, setEngineSubmenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Handle clicks outside the menu to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsNavDropdownOpen(false);
+        setEngineSubmenuOpen(false);
+      }
+    };
+
+    if (isNavDropdownOpen) {
+      // Small delay to prevent immediate closure when opening
+      setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 100);
+      
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isNavDropdownOpen]);
+
+  // Handle ESC key to close navigation menu
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (isNavDropdownOpen) {
+          setIsNavDropdownOpen(false);
+          setEngineSubmenuOpen(false);
+        }
+      }
+    };
+
+    if (isNavDropdownOpen) {
+      window.addEventListener('keydown', handleEscape);
+      return () => window.removeEventListener('keydown', handleEscape);
+    }
+  }, [isNavDropdownOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +93,7 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
           </motion.div>
 
           {/* Navigation Menu */}
-          <div className="relative ml-6">
+          <div className="relative ml-6" ref={menuRef}>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -67,21 +106,13 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
 
             <AnimatePresence>
               {isNavDropdownOpen && (
-                <>
-                  {/* Backdrop */}
-                  <div 
-                    className="fixed inset-0 z-40" 
-                    onClick={() => setIsNavDropdownOpen(false)}
-                  />
-                  
-                  {/* Dropdown Menu - SOLID BACKGROUND */}
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute left-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-visible z-50"
-                  >
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-visible z-[52]"
+                >
                     <div className="p-3">
                       {/* Demo Services Group Header */}
                       <div className="px-3 py-2 mb-2">
@@ -187,7 +218,7 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
                                 transition={{ duration: 0.15 }}
                                 onMouseEnter={() => setEngineSubmenuOpen(true)}
                                 onMouseLeave={() => setEngineSubmenuOpen(false)}
-                                className="absolute left-full top-0 ml-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[60]"
+                                className="absolute left-full top-0 ml-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[53]"
                               >
                                 <div className="p-2">
                                   {/* Engine Assets */}
@@ -271,7 +302,6 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
                       </div>
                     </div>
                   </motion.div>
-                </>
               )}
             </AnimatePresence>
           </div>

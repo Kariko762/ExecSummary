@@ -1,5 +1,6 @@
 import React from 'react';
 import { RendererProps } from '../types/schema';
+import { Colors } from '../design-system';
 
 /**
  * Horizontal Rule Renderer - Displays a divider line
@@ -10,7 +11,7 @@ export const HorizontalRuleRenderer: React.FC<RendererProps> = ({
 }) => {
   const config = schema.hrConfig || {};
   const thickness = config.thickness || 1;
-  const color = config.color || '#E5E7EB'; // Default gray-200
+  const color = config.color || Colors.gray200; // Default gray-200
   const marginTop = config.marginTop || 24;
   const marginBottom = config.marginBottom || 24;
   const style = config.style || 'solid'; // solid, dashed, dotted

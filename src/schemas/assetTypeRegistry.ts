@@ -11,6 +11,8 @@
  * - EditorModalV2 reads the schema and uses RenderFactory
  */
 
+import { ChartColors } from '../design-system';
+
 export interface AssetTypeDefinition {
   type: string;
   label: string;
@@ -189,7 +191,7 @@ export const assetTypeRegistry: AssetTypeDefinition[] = [
       chartConfig: {
         dataKey: 'value',
         nameKey: 'name',
-        colors: ['#6B1B5E', '#B21A53', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
+        colors: [...ChartColors.palette],
         showLegend: true,
         showTooltip: true,
         innerRadius: 0,
@@ -223,7 +225,7 @@ export const assetTypeRegistry: AssetTypeDefinition[] = [
         xAxisKey: 'name',
         yAxisKey: 'value',
         bars: [
-          { dataKey: 'value', fill: '#6B1B5E', name: 'Value' }
+          { dataKey: 'value', fill: ChartColors.series.eggplantLight, name: 'Value' }
         ],
         orientation: 'vertical',
         showGrid: true,
@@ -257,7 +259,7 @@ export const assetTypeRegistry: AssetTypeDefinition[] = [
       chartConfig: {
         xAxisKey: 'name',
         lines: [
-          { dataKey: 'value', stroke: '#6B1B5E', name: 'Value' }
+          { dataKey: 'value', stroke: ChartColors.series.eggplantLight, name: 'Value' }
         ],
         showGrid: true,
         showLegend: true,
@@ -291,7 +293,7 @@ export const assetTypeRegistry: AssetTypeDefinition[] = [
       chartConfig: {
         dataKey: 'value',
         maxValue: 100,
-        colors: ['#6B1B5E', '#B21A53'],
+        colors: [...ChartColors.palette],
         showPercentage: true,
         thickness: 20
       },

@@ -37,6 +37,11 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - **👥 User Management**: JSON file-based user storage with bcrypt password hashing
 - **⚙️ System Settings**: Configure authentication requirements per app via UI
 - **🎨 Design System Manager**: Centralized color, typography, and spacing configuration
+- **📐 Template Builder**: 🆕 Visual drag-and-drop template creation with validation
+- **📊 Chart Rendering**: 🆕 Beautiful charts with custom tooltips showing all values and percentages
+- **🎨 Categorical Coloring**: 🆕 Unique colors for chart data (A, B, C, D) from design system palette
+- **⚠️ Inline Validation**: 🆕 Contextual warnings on section headers for generic names
+- **🧪 Test Mode**: 🆕 Preview templates without save prompts during testing
 
 ## 🎯 Key Components
 
@@ -128,6 +133,15 @@ A powerful, user-friendly content management system for non-technical users:
   - Clone existing summaries as new drafts
   - Auto-generates unique IDs with timestamps
   - All new content starts as "Draft" status
+- **Template Builder**: 🆕 Visual drag-and-drop interface
+  - Drag assets from library into sections
+  - Configure field properties in inspector
+  - Add example data for preview
+  - 6-point validation system (header, fields, schemas)
+  - Inline warnings for generic section names ("Section 2", "Section 3")
+  - Test mode with no save prompts
+  - Chart config persistence (labels, colors, tooltips)
+  - Multi-field grid detection and rendering
 - **Section Management**: 🆕 Enhanced with visual feedback
   - **Enable/disable sections** (`_enabled_[section]` flags)
     - Disabled sections hidden from visual preview
@@ -145,26 +159,32 @@ A powerful, user-friendly content management system for non-technical users:
   - Download button hidden in draft mode
   - Draft preview bar with sticky navigation
   - Real-time JSON inspection
-
-#### Visual Indicators & Warnings
-- **Status Badges**: LIVE (green) and DRAFT (yellow) on all tiles
-- **Protection Badges**: Shield icons with completion % on tiles
-- **Warning Systems**:
-  - Confirmation dialog when editing live content
-  - Red warning banner in editor for published summaries
-  - Multiple protection layers prevent accidents
-
 #### Editor Features
 - **Smart Forms**: Auto-detected field types
   - Text inputs for strings
   - Numeric inputs for performance/budget/headcount
   - Array management for lists (add/remove dynamically)
   - Nested object rendering with proper spacing
+- **Chart Rendering**: 🆕 Beautiful, interactive data visualizations
+  - **Custom Tooltips**: Show all values with percentages on hover
+  - **Categorical Coloring**: Unique colors for each bar (A, B, C, D) from palette
+  - **Soft Hover Effects**: Subtle purple background (rgba(148, 77, 230, 0.05))
+  - **Chart Config Persistence**: Labels, colors, and settings preserved across saves
+  - **Chart Types**: Bar, Line, Pie, Radial - all with consistent UX
 - **Card-Based UI**: Consistent styling across sections
   - Solid borders and backgrounds
   - Purple/raspberry labels
   - Edit/Delete buttons (hidden when not needed)
 - **Modal Interface**: 
+  - Full-screen modal with sticky navigation
+  - Scroll spy (highlights active section)
+  - Collapsible sections for large documents
+  - Dark/light mode support
+- **Navigation Integration**: 🆕
+  - CMS Admin link in main app header menu
+  - Main app link in CMS header
+  - API Dashboard for health checks
+  - Seamless switching between apps
   - Full-screen modal with sticky navigation
   - Scroll spy (highlights active section)
   - Collapsible sections for large documents

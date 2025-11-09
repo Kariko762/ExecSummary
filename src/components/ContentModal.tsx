@@ -133,33 +133,63 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   const date = content.date || content.lastUpdated || content.updatedAt;
   
   // Get all sections by finding keys that have corresponding _type metadata
-  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; subtitle?: string }> = [];
+  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; chartConfig?: any; subtitle?: string; isMultiField?: boolean; multiFieldData?: any[] }> = [];
   
-  Object.keys(content).forEach((key) => {
-    // Skip metadata fields and system fields
-    if (key.startsWith('_') || ['id', 'title', 'name', 'date', 'lastUpdated', 'updatedAt', 'tags', 'category', 'quarter', 'year'].includes(key)) {
-      return;
+  // First pass: Identify all data keys with _type metadata
+  const allDataKeys = Object.keys(content).filter((key) => {
+    if (key.startsWith('_') || ['id', 'title', 'name', 'date', 'lastUpdated', 'updatedAt', 'tags', 'category', 'quarter', 'year', 'status', 'protectionEnabled'].includes(key)) {
+      return false;
     }
-    
     const typeKey = `_${key}_type`;
     const enabledKey = `_enabled_${key}`;
-    const fieldsKey = `_${key}_fields`;
-    
-    // Only include if it has a type defined and is enabled
-    if (content[typeKey] && content[enabledKey] !== false) {
+    return content[typeKey] && content[enabledKey] !== false;
+  });
+  
+  // Group indexed fields (section2_0, section2_1) under their parent section (section2)
+  // Only treat as indexed if the suffix is a small number (0-9), not a random ID like 1762678245566
+  const sectionGroups = new Map<string, string[]>();
+  const indexedFieldPattern = /^(.+)_(\d+)$/;
+  
+  allDataKeys.forEach(key => {
+    const match = key.match(indexedFieldPattern);
+    if (match) {
+      const [, baseName, indexStr] = match;
+      const index = parseInt(indexStr, 10);
+      
+      // Only treat as indexed field if index is small (0-9)
+      // Large numbers (like 1762678245566) are random IDs, not indices
+      if (index < 10) {
+        if (!sectionGroups.has(baseName)) {
+          sectionGroups.set(baseName, []);
+        }
+        sectionGroups.get(baseName)!.push(key);
+      } else {
+        // Large index number = random ID, not an indexed field
+        sectionGroups.set(key, [key]);
+      }
+    } else {
+      // Non-indexed field - add as single-item group
+      sectionGroups.set(key, [key]);
+    }
+  });
+  
+  // Build sections from groups
+  sectionGroups.forEach((fieldKeys, baseName) => {
+    if (fieldKeys.length === 1) {
+      // Single field - original logic
+      const key = fieldKeys[0];
+      const typeKey = `_${key}_type`;
+      const fieldsKey = `_${key}_fields`;
+      const chartConfigKey = `_${key}_chartConfig`;
       const rawData = content[key];
       let actualData = rawData;
       let subtitle: string | undefined;
       
-      // Handle special object structures that contain arrays (like trendAnalysis, supportingData)
+      // Handle special object structures that contain arrays
       if (rawData && typeof rawData === 'object' && !Array.isArray(rawData)) {
-        // Check if it has a nested array structure (e.g., trendAnalysis.categories)
         if (rawData.categories && Array.isArray(rawData.categories)) {
           actualData = rawData.categories;
           subtitle = rawData.subtitle;
-        } else if (rawData.title && !rawData.label) {
-          // It's a structured object with title/subtitle, likely needs the whole object
-          // Keep as-is for objectForm renderer
         }
       }
       
@@ -169,7 +199,26 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         data: actualData,
         type: content[typeKey],
         fields: content[fieldsKey],
+        chartConfig: content[chartConfigKey],
         subtitle
+      });
+    } else {
+      // Multiple fields - create multi-field section
+      const multiFieldData = fieldKeys.sort().map(fieldKey => ({
+        key: fieldKey,
+        type: content[`_${fieldKey}_type`],
+        data: content[fieldKey],
+        fields: content[`_${fieldKey}_fields`],
+        chartConfig: content[`_${fieldKey}_chartConfig`]
+      }));
+      
+      sections.push({
+        key: baseName,
+        label: formatLabel(baseName),
+        data: null, // Not used for multi-field
+        type: 'multiField', // Special type
+        isMultiField: true,
+        multiFieldData
       });
     }
   });
@@ -470,16 +519,48 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                         {section.subtitle}
                       </p>
                     )}
-                    <RenderFactory
-                      fieldKey={section.key}
-                      value={section.data}
-                      onChange={() => {}}
-                      mode="display"
-                      schema={{
-                        renderAs: section.type as any,
-                        fields: section.fields
-                      }}
-                    />
+                    
+                    {/* Multi-field section: Render in grid */}
+                    {section.isMultiField && section.multiFieldData ? (
+                      <div className={
+                        section.multiFieldData.length === 2 
+                          ? 'grid grid-cols-2 gap-6'
+                          : section.multiFieldData.length === 3
+                          ? 'grid grid-cols-3 gap-6'
+                          : section.multiFieldData.length === 4
+                          ? 'grid grid-cols-4 gap-6'
+                          : 'grid grid-cols-2 gap-6'
+                      }>
+                        {section.multiFieldData.map((field: any) => (
+                          <div key={field.key}>
+                            <RenderFactory
+                              fieldKey={field.key}
+                              value={field.data}
+                              onChange={() => {}}
+                              mode="display"
+                              schema={{
+                                renderAs: field.type as any,
+                                fields: field.fields,
+                                ...(field.chartConfig ? { chartConfig: field.chartConfig } : {})
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      /* Single field section: Render normally */
+                      <RenderFactory
+                        fieldKey={section.key}
+                        value={section.data}
+                        onChange={() => {}}
+                        mode="display"
+                        schema={{
+                          renderAs: section.type as any,
+                          fields: section.fields,
+                          ...(section.chartConfig ? { chartConfig: section.chartConfig } : {})
+                        }}
+                      />
+                    )}
                   </section>
                 ))}
                 

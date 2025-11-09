@@ -2,7 +2,7 @@ import React from 'react';
 import { RendererProps, FieldSchema } from '../types/schema';
 import { Plus, Trash2 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, Tooltip, ResponsiveContainer } from 'recharts';
-import { getClasses } from '../design-system';
+import { getClasses, ChartColors } from '../design-system';
 
 export const LineChartRenderer: React.FC<RendererProps> = ({
   schema,
@@ -19,7 +19,7 @@ export const LineChartRenderer: React.FC<RendererProps> = ({
   // Default values from chartConfig
   const {
     xAxisKey = 'name',
-    lines = [{ dataKey: 'value', stroke: '#6B1B5E', name: 'Value' }],
+    lines = [{ dataKey: 'value', stroke: ChartColors.series.eggplantLight, name: 'Value' }],
     showGrid = true,
     showLegend = true,
     showDots = true,
@@ -44,9 +44,9 @@ export const LineChartRenderer: React.FC<RendererProps> = ({
             data={items}
             margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
           >
-            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
-            <XAxis dataKey={xAxisKey} stroke="#6b7280" />
-            <YAxis stroke="#6b7280" />
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
+            <XAxis dataKey={xAxisKey} stroke={ChartColors.ui.axis} />
+            <YAxis stroke={ChartColors.ui.axis} />
             {lines.map((lineConfig, index) => (
               <Line
                 key={index}
@@ -110,9 +110,9 @@ export const LineChartRenderer: React.FC<RendererProps> = ({
               data={items}
               margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
             >
-              {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />}
-              <XAxis dataKey={xAxisKey} stroke="#6b7280" tick={{ fontSize: 10 }} />
-              <YAxis stroke="#6b7280" tick={{ fontSize: 10 }} />
+              {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
+              <XAxis dataKey={xAxisKey} stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
+              <YAxis stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
               {lines.map((lineConfig, index) => (
                 <Line
                   key={index}
