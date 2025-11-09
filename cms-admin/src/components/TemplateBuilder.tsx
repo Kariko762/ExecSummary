@@ -16,6 +16,19 @@ interface TemplateBuilderProps {
   onBack: () => void;
 }
 
+// Layout zone types for snap layout feature
+type LayoutZone = 
+  | 'full'        // 100% width
+  | 'left-50'     // Left half (50%)
+  | 'right-50'    // Right half (50%)
+  | 'left-70'     // Left 70%
+  | 'right-30'    // Right 30%
+  | 'left-30'     // Left 30%
+  | 'right-70'    // Right 70%
+  | 'left-33'     // Left third
+  | 'middle-33'   // Middle third
+  | 'right-33';   // Right third
+
 interface TemplateSection {
   id: string;
   name: string;
@@ -37,6 +50,10 @@ interface TemplateField {
   renderType: string;
   schema: FieldSchema;
   exampleData?: any; // Example data for lists, arrays, or nested cards
+  
+  // NEW: Snap layout properties (optional - backward compatible)
+  layoutZone?: LayoutZone;
+  rowIndex?: number;  // Which row in the section (0, 1, 2...)
 }
 
 // Type alias for compatibility
@@ -449,6 +466,171 @@ const ASSET_LIBRARY: AssetCategory[] = [
   }
 ];
 
+// Snap Zone Overlay Component - Shows layout zones when dragging
+interface SnapZoneOverlayProps {
+  sectionId: string;
+  onZoneDrop: (zone: LayoutZone) => void;
+  hoveredZone: LayoutZone | null;
+  onZoneHover: (zone: LayoutZone | null) => void;
+}
+
+const SnapZoneOverlay = ({ sectionId, onZoneDrop, hoveredZone, onZoneHover }: SnapZoneOverlayProps) => {
+  const zones: { zone: LayoutZone; label: string; gridClass: string }[] = [
+    { zone: 'full', label: 'Full Width', gridClass: 'col-span-12' },
+    { zone: 'left-50', label: '← 50%', gridClass: 'col-span-6' },
+    { zone: 'right-50', label: '50% →', gridClass: 'col-span-6' },
+    { zone: 'left-70', label: '← 70%', gridClass: 'col-span-7' },
+    { zone: 'right-30', label: '30% →', gridClass: 'col-span-5' },
+    { zone: 'left-30', label: '← 30%', gridClass: 'col-span-4' },
+    { zone: 'right-70', label: '70% →', gridClass: 'col-span-8' },
+    { zone: 'left-33', label: '← 33%', gridClass: 'col-span-4' },
+    { zone: 'middle-33', label: '33%', gridClass: 'col-span-4' },
+    { zone: 'right-33', label: '33% →', gridClass: 'col-span-4' },
+  ];
+
+  return (
+    <div className="absolute inset-0 z-20 pointer-events-auto">
+      {/* Full width zone at top */}
+      <div
+        onDragOver={(e) => { e.preventDefault(); onZoneHover('full'); }}
+        onDragLeave={() => onZoneHover(null)}
+        onDrop={(e) => { e.preventDefault(); onZoneDrop('full'); }}
+        className={`h-16 mb-2 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+          hoveredZone === 'full'
+            ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+            : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+        }`}
+      >
+        <span className="text-sm font-roobert-semibold text-gray-700">Full Width</span>
+      </div>
+
+      {/* Two column layouts */}
+      <div className="grid grid-cols-12 gap-2 mb-2">
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('left-50'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('left-50'); }}
+          className={`col-span-6 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'left-50'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">← 50%</span>
+        </div>
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('right-50'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('right-50'); }}
+          className={`col-span-6 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'right-50'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">50% →</span>
+        </div>
+      </div>
+
+      {/* 70/30 layouts */}
+      <div className="grid grid-cols-12 gap-2 mb-2">
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('left-70'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('left-70'); }}
+          className={`col-span-7 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'left-70'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">← 70%</span>
+        </div>
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('right-30'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('right-30'); }}
+          className={`col-span-5 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'right-30'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">30% →</span>
+        </div>
+      </div>
+
+      {/* 30/70 layouts */}
+      <div className="grid grid-cols-12 gap-2 mb-2">
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('left-30'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('left-30'); }}
+          className={`col-span-4 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'left-30'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">← 30%</span>
+        </div>
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('right-70'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('right-70'); }}
+          className={`col-span-8 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'right-70'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">70% →</span>
+        </div>
+      </div>
+
+      {/* Three column layout */}
+      <div className="grid grid-cols-12 gap-2">
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('left-33'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('left-33'); }}
+          className={`col-span-4 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'left-33'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">← 33%</span>
+        </div>
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('middle-33'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('middle-33'); }}
+          className={`col-span-4 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'middle-33'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">33%</span>
+        </div>
+        <div
+          onDragOver={(e) => { e.preventDefault(); onZoneHover('right-33'); }}
+          onDragLeave={() => onZoneHover(null)}
+          onDrop={(e) => { e.preventDefault(); onZoneDrop('right-33'); }}
+          className={`col-span-4 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
+            hoveredZone === 'right-33'
+              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
+              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
+          }`}
+        >
+          <span className="text-xs font-roobert-semibold text-gray-700">33% →</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   // Initialize with standard header section
   const [sections, setSections] = useState<TemplateSection[]>([
@@ -532,6 +714,12 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   const [showTestEditor, setShowTestEditor] = useState(false);
   const [testData, setTestData] = useState<any>(null);
   
+  // NEW: Snap layout feature states
+  const [useSnapLayout, setUseSnapLayout] = useState(false);
+  const [showSnapZones, setShowSnapZones] = useState(false);
+  const [hoveredZone, setHoveredZone] = useState<LayoutZone | null>(null);
+  const [targetDropSection, setTargetDropSection] = useState<string | null>(null);
+  
   // Standard header default values
   const [headerDefaults, setHeaderDefaults] = useState({
     id: 'template-new',
@@ -542,6 +730,50 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   });
 
   const selectedCategory = ASSET_LIBRARY.find(cat => cat.id === selectedCategoryId);
+
+  // Helper: Convert layout zone to Tailwind width class
+  const getWidthClass = (zone?: LayoutZone): string => {
+    const widthMap: Record<LayoutZone, string> = {
+      'full': 'w-full',
+      'left-50': 'w-1/2',
+      'right-50': 'w-1/2',
+      'left-70': 'w-[70%]',
+      'right-30': 'w-[30%]',
+      'left-30': 'w-[30%]',
+      'right-70': 'w-[70%]',
+      'left-33': 'w-1/3',
+      'middle-33': 'w-1/3',
+      'right-33': 'w-1/3',
+    };
+    return widthMap[zone || 'full'] || 'w-full';
+  };
+
+  // Helper: Get zone display name
+  const getZoneLabel = (zone: LayoutZone): string => {
+    const labelMap: Record<LayoutZone, string> = {
+      'full': 'Full Width',
+      'left-50': 'Left 50%',
+      'right-50': 'Right 50%',
+      'left-70': 'Left 70%',
+      'right-30': 'Right 30%',
+      'left-30': 'Left 30%',
+      'right-70': 'Right 70%',
+      'left-33': 'Left 33%',
+      'middle-33': 'Middle 33%',
+      'right-33': 'Right 33%',
+    };
+    return labelMap[zone];
+  };
+
+  // Helper: Group fields by row index
+  const groupFieldsByRow = (fields: TemplateField[]): Record<number, TemplateField[]> => {
+    return fields.reduce((acc, field) => {
+      const row = field.rowIndex ?? 0;
+      if (!acc[row]) acc[row] = [];
+      acc[row].push(field);
+      return acc;
+    }, {} as Record<number, TemplateField[]>);
+  };
 
   // Auto-hide notification after 5 seconds
   useEffect(() => {
@@ -676,11 +908,17 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   // Drag handlers for assets
   const handleAssetDragStart = (asset: AssetItem) => {
     setDraggedAsset(asset);
+    if (useSnapLayout) {
+      setShowSnapZones(true);
+    }
   };
 
   const handleAssetDragEnd = () => {
     setDraggedAsset(null);
     setDragOverSection(null);
+    setShowSnapZones(false);
+    setHoveredZone(null);
+    setTargetDropSection(null);
   };
 
   // Drag handlers for existing fields (reordering)
@@ -693,16 +931,25 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     setDragOverSection(null);
   };
 
-  // Drop handler for section
+  // Drop handler for section (Classic mode - no zones)
   const handleSectionDrop = (sectionId: string) => {
+    // In snap layout mode, dropping is handled by zone handlers
+    if (useSnapLayout && draggedAsset) {
+      return; // Don't handle here, wait for zone drop
+    }
+
     if (draggedAsset) {
-      // Add new field from asset
+      // Add new field from asset (classic mode - full width)
       const newField: TemplateField = {
         id: `field-${Date.now()}`,
         key: draggedAsset.id + '_' + Date.now(),
         label: draggedAsset.schema.label || draggedAsset.name,
         renderType: draggedAsset.renderType,
-        schema: { ...draggedAsset.schema }
+        schema: { ...draggedAsset.schema },
+        exampleData: draggedAsset.exampleData,
+        // Classic mode: no layout zone
+        layoutZone: 'full',
+        rowIndex: 0
       };
 
       setSections(prev => prev.map(section => 
@@ -736,6 +983,48 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     }
     
     setDragOverSection(null);
+  };
+
+  // NEW: Snap layout zone drop handler
+  const handleZoneDrop = (sectionId: string, zone: LayoutZone) => {
+    if (!draggedAsset) return;
+
+    const section = sections.find(s => s.id === sectionId);
+    if (!section) return;
+
+    // Calculate target row based on zone conflicts
+    const fieldsByRow = groupFieldsByRow(section.fields);
+    let targetRow = 0;
+
+    // Find the first available row for this zone
+    // For now, we'll use a simple strategy: add to new row if any field exists
+    // More sophisticated logic can check for zone conflicts
+    const maxRow = Math.max(...Object.keys(fieldsByRow).map(Number), -1);
+    targetRow = maxRow + 1;
+
+    // Create new field with zone and row
+    const newField: TemplateField = {
+      id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      key: draggedAsset.id + '_' + Date.now(),
+      label: draggedAsset.schema.label || draggedAsset.name,
+      renderType: draggedAsset.renderType,
+      schema: { ...draggedAsset.schema },
+      exampleData: draggedAsset.exampleData,
+      layoutZone: zone,
+      rowIndex: targetRow
+    };
+
+    setSections(prev => prev.map(section =>
+      section.id === sectionId
+        ? { ...section, fields: [...section.fields, newField] }
+        : section
+    ));
+
+    // Clean up
+    setDraggedAsset(null);
+    setShowSnapZones(false);
+    setHoveredZone(null);
+    setTargetDropSection(null);
   };
 
   const handleSectionDragOver = (e: React.DragEvent, sectionId: string) => {
@@ -1228,6 +1517,22 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                 <Upload className="w-4 h-4" />
                 Load Template
               </button>
+              
+              {/* NEW: Snap Layout Toggle */}
+              <button 
+                onClick={() => setUseSnapLayout(!useSnapLayout)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-roobert-medium transition-all ${
+                  useSnapLayout
+                    ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white border-transparent shadow-md'
+                    : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700'
+                }`}
+                title="Toggle snap layout zones (Windows-style)"
+              >
+                <Grid className="w-4 h-4" />
+                {useSnapLayout ? '✓ Snap Layout' : 'Snap Layout'}
+                {useSnapLayout && <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px]">BETA</span>}
+              </button>
+              
               <button 
                 onClick={handleExport}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-roobert-medium transition-colors">
@@ -1514,20 +1819,84 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                   {/* Section Content */}
                   {section.expanded && (
                     <div
-                      onDrop={() => handleSectionDrop(section.id)}
+                      onDrop={() => !useSnapLayout && handleSectionDrop(section.id)}
                       onDragOver={(e) => handleSectionDragOver(e, section.id)}
                       onDragLeave={handleSectionDragLeave}
-                      className={`p-4 min-h-[120px] transition-colors ${
+                      className={`p-4 min-h-[120px] transition-colors relative ${
                         dragOverSection === section.id
                           ? 'bg-fis-eggplant/10 dark:bg-fis-raspberry/10'
                           : ''
                       }`}
                     >
+                      {/* NEW: Snap Zone Overlay (only in snap mode when dragging asset) */}
+                      {useSnapLayout && showSnapZones && draggedAsset && dragOverSection === section.id && (
+                        <SnapZoneOverlay
+                          sectionId={section.id}
+                          onZoneDrop={(zone) => handleZoneDrop(section.id, zone)}
+                          hoveredZone={hoveredZone}
+                          onZoneHover={setHoveredZone}
+                        />
+                      )}
+                      
                       {section.fields.length === 0 ? (
                         <div className="text-center text-gray-500 dark:text-gray-500 py-8 text-sm">
-                          Drag assets here to add fields
+                          {useSnapLayout ? 'Drag assets here - snap zones will appear' : 'Drag assets here to add fields'}
+                        </div>
+                      ) : useSnapLayout ? (
+                        /* NEW: Snap Layout - Render fields in rows */
+                        <div className="space-y-4">
+                          {Object.entries(groupFieldsByRow(section.fields))
+                            .sort(([a], [b]) => Number(a) - Number(b))
+                            .map(([rowIndex, rowFields]) => (
+                            <div key={rowIndex} className="flex gap-4">
+                              {rowFields.map(field => (
+                                <div
+                                  key={field.id}
+                                  className={`${getWidthClass(field.layoutZone)}`}
+                                >
+                                  <div
+                                    draggable
+                                    onDragStart={() => handleFieldDragStart(section.id, field.id)}
+                                    onDragEnd={handleFieldDragEnd}
+                                    onClick={() => setSelectedField({ sectionId: section.id, fieldId: field.id })}
+                                    className={`p-3 rounded-lg border-2 cursor-move hover:shadow-md transition-all ${
+                                      selectedField?.fieldId === field.id
+                                        ? 'border-fis-eggplant dark:border-fis-raspberry bg-fis-eggplant/5 dark:bg-fis-raspberry/5'
+                                        : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <GripVertical className="w-4 h-4 text-gray-400" />
+                                      <div className="flex-1 min-w-0">
+                                        <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white truncate">
+                                          {field.label}
+                                        </div>
+                                        <div className="text-xs text-gray-500 dark:text-gray-500 font-mono truncate">
+                                          {field.key} • {field.renderType}
+                                        </div>
+                                        {/* Zone badge */}
+                                        <div className="text-[10px] text-fis-eggplant dark:text-fis-raspberry font-roobert-medium mt-1">
+                                          {getZoneLabel(field.layoutZone || 'full')}
+                                        </div>
+                                      </div>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          removeField(section.id, field.id);
+                                        }}
+                                        className="p-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition-colors flex-shrink-0"
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ))}
                         </div>
                       ) : (
+                        /* Classic Layout - Single column */
                         <div className="space-y-2">
                           {section.fields.map(field => (
                             <div
