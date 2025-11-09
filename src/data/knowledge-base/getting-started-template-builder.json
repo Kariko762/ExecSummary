@@ -1,0 +1,233 @@
+{
+  "id": "getting-started-template-builder",
+  "quarter": "KB Article",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Getting Started with Template Builder",
+  
+  "category": "development",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  
+  "tags": [
+    "template-builder",
+    "getting-started",
+    "cms"
+  ],
+  "_tags_type": "listNoTitle",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  
+  "author": "System Administrator",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  
+  "publishDate": "2025-11-09",
+  "_publishDate_type": "text",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  
+  "overview": "Learn how to create custom templates using the visual Template Builder. This guide covers dragging assets, configuring fields, adding sections, and saving templates for reuse across your organization.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  
+  "prerequisites": [
+    "Access to the CMS Admin panel",
+    "Basic understanding of JSON structure",
+    "Familiarity with the content types in your organization"
+  ],
+  "_prerequisites_type": "listNoTitle",
+  "_enabled_prerequisites": true,
+  "_completed_prerequisites": true,
+  
+  "steps": [
+    {
+      "title": "Step 1: Open Template Builder",
+      "description": "Navigate to the CMS Admin panel and click the 'Template Builder' button in the top navigation.",
+      "codeExample": ""
+    },
+    {
+      "title": "Step 2: Add Sections",
+      "description": "Click '+ Add Section' to create a new content section. Give it a descriptive name like 'Key Metrics' or 'Project Updates'.",
+      "codeExample": ""
+    },
+    {
+      "title": "Step 3: Drag Assets",
+      "description": "Browse the Asset Library on the left. Drag assets like 'Card List', 'Text Input', or 'Bar Chart' into your section.",
+      "codeExample": ""
+    },
+    {
+      "title": "Step 4: Configure Properties",
+      "description": "Select a field to edit its properties in the right sidebar. Set the field key (JSON property name), label, and example data.",
+      "codeExample": "{\n  \"keyMetrics\": [\n    {\"label\": \"Revenue\", \"value\": \"0\", \"unit\": \"$\"}\n  ]\n}"
+    },
+    {
+      "title": "Step 5: Test Template",
+      "description": "Click the 'Test' button to preview how the template will look in the editor. Make adjustments as needed.",
+      "codeExample": ""
+    },
+    {
+      "title": "Step 6: Save Template",
+      "description": "Click 'Save Template', enter a name and description, and the system will validate your template before saving.",
+      "codeExample": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "title": {
+      "type": "text",
+      "label": "Step Title"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "codeExample": {
+      "type": "codeBlock",
+      "label": "Code Example",
+      "renderAs": "codeBlock"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  
+  "keyPoints": [
+    "Section names should be descriptive (avoid 'Section 2', 'Section 3')",
+    "Field keys become JSON property names - use camelCase",
+    "Chart assets require chartConfig to specify labels and colors",
+    "All templates must include the Standard Header section",
+    "Test your template before using it to create content"
+  ],
+  "_keyPoints_type": "listNoTitle",
+  "_enabled_keyPoints": true,
+  "_completed_keyPoints": true,
+  
+  "codeExamples": [
+    {
+      "title": "Example Template JSON Structure",
+      "description": "This shows how the Template Builder generates JSON metadata for a simple section",
+      "code": "{\n  \"keyMetrics\": [\n    {\"label\": \"Revenue\", \"value\": \"0\", \"unit\": \"$\"},\n    {\"label\": \"Growth\", \"value\": \"0\", \"unit\": \"%\"}\n  ],\n  \"_keyMetrics_type\": \"nestedCards\",\n  \"_keyMetrics_fields\": {\n    \"label\": {\"type\": \"text\", \"label\": \"Metric Name\"},\n    \"value\": {\"type\": \"text\", \"label\": \"Value\"},\n    \"unit\": {\"type\": \"text\", \"label\": \"Unit\"}\n  },\n  \"_enabled_keyMetrics\": true,\n  \"_completed_keyMetrics\": false\n}"
+    }
+  ],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "title": {
+      "type": "text",
+      "label": "Example Title"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "code": {
+      "type": "codeBlock",
+      "label": "Code",
+      "renderAs": "codeBlock"
+    }
+  },
+  "_enabled_codeExamples": true,
+  "_completed_codeExamples": true,
+  
+  "importantNote": "Always test your templates before using them in production. The validation system will catch structural issues, but testing ensures the user experience is optimal.",
+  "_importantNote_type": "quote",
+  "_enabled_importantNote": true,
+  "_completed_importantNote": true,
+  
+  "troubleshooting": [
+    {
+      "issue": "Template validation fails with 'Generic section names' error",
+      "solution": "Rename any sections called 'Section 2' or 'Section 3' to descriptive names like 'Metrics', 'Updates', or 'KPIs'. The inline warning badge on each section header will guide you."
+    },
+    {
+      "issue": "Charts show 'Value' on x-axis instead of data labels",
+      "solution": "Ensure the chartConfig includes xAxisKey set to the correct field name (usually 'name'). The Properties tab lets you edit chart data directly."
+    }
+  ],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue / Error"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution"
+    }
+  },
+  "_enabled_troubleshooting": true,
+  "_completed_troubleshooting": true,
+  
+  "faqs": [
+    {
+      "question": "Can I edit templates after saving them?",
+      "answer": "Yes! Load the template in Template Builder, make your changes, and save again. Existing content created from the template won't be affected."
+    },
+    {
+      "question": "What asset types are available?",
+      "answer": "The Asset Library includes: Basic Inputs (text, textarea, number, date), Lists & Arrays (simple list, card list), Complex (object, key-value), Rich Content (markdown, expression, code block, quote), and Charts (pie, bar, line, radial)."
+    },
+    {
+      "question": "How do I create multi-field grids?",
+      "answer": "Add multiple assets to the same section. The Template Builder automatically creates indexed keys (section_0, section_1) and EditorModalV2 renders them in a CSS grid layout."
+    }
+  ],
+  "_faqs_type": "nestedCards",
+  "_faqs_fields": {
+    "question": {
+      "type": "text",
+      "label": "Question"
+    },
+    "answer": {
+      "type": "textarea",
+      "label": "Answer"
+    }
+  },
+  "_enabled_faqs": true,
+  "_completed_faqs": true,
+  
+  "relatedArticles": [],
+  "_relatedArticles_type": "listNoTitle",
+  "_enabled_relatedArticles": true,
+  "_completed_relatedArticles": false,
+  
+  "additionalResources": [
+    {
+      "title": "Template Builder Deep Dive",
+      "url": "/docs/template-builder-deep-dive",
+      "description": "Comprehensive documentation covering the Template Builder architecture"
+    },
+    {
+      "title": "Template System Documentation",
+      "url": "/docs/template-system",
+      "description": "Overview of the template-based content creation workflow"
+    }
+  ],
+  "_additionalResources_type": "nestedCards",
+  "_additionalResources_fields": {
+    "title": {
+      "type": "text",
+      "label": "Resource Title"
+    },
+    "url": {
+      "type": "text",
+      "label": "URL"
+    },
+    "description": {
+      "type": "text",
+      "label": "Description"
+    }
+  },
+  "_enabled_additionalResources": true,
+  "_completed_additionalResources": true,
+  
+  "status": "published",
+  "protectionEnabled": false,
+  
+  "_template_name": "Knowledge Base Article Template",
+  "_template_description": "Comprehensive article template for technical documentation and guides",
+  "_template_created": "2025-11-09T00:00:00.000Z",
+  "_template_updated": "2025-11-09T00:00:00.000Z"
+}

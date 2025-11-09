@@ -1,0 +1,331 @@
+{
+  "id": "kb-engine-assets-preview-summary",
+  "quarter": "Engine Assets Preview - Feature Summary",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Engine Assets Preview - Feature Summary",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "support",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "support",
+    "charts",
+    "templates",
+    "rendering",
+    "layout"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "troubleshooting",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "intermediate",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "5 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "System Generated",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:01:35.670Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:01:35.670Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "An interactive playground for testing and experimenting with all render types in the Executive Summary application.",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "An interactive playground for testing and experimenting with all render types in the Executive Summary application.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "keyPoints": [],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": false,
+  "_completed_keyPoints": false,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "What We Built",
+      "description": "An interactive playground for testing and experimenting with all render types in the Executive Summary application.",
+      "instructions": "An interactive playground for testing and experimenting with all render types in the Executive Summary application.",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "Features at a Glance",
+      "description": "### 📋 Two-Modal System\r\n\r\n**1. Engine Assets Modal** (Original - Enhanced)\r\n- Static documentation view\r\n- Category tabs (Basic, Lists, Complex, Rich Content, Charts)\r\n- Schema viewing (collapsible)\r\n- **NEW:** \"Interactive Preview\" button to launch the playground\r\n\r\n**2. Engine Assets Preview** (NEW - Interactive Playground)\r\n- Three-panel layout\r\n- Live editing and testing\r\n- Real-time preview updates\r\n- Copy schema to clipboard",
+      "instructions": "### 📋 Two-Modal System\r\n\r\n**1. Engine Assets Modal** (Original - Enhanced)\r\n- Static documentation view\r\n- Category tabs (Basic, Lists, Complex, Rich Content, Charts)\r\n- Schema viewing (collapsible)\r\n- **NEW:** \"Interactive Preview\" button to launch the playground\r\n\r\n**2. Engine Assets Preview** (NEW - Interactive Playground)\r\n- Three-panel layout\r\n- Live editing and testing\r\n- Real-time preview updates\r\n- Copy schema to clipboard",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "Layout Design",
+      "description": "```\r\n┌────────────────────────────────────────────────────────────────┐\r\n│  🎨 Engine Assets Preview                              [X]     │\r\n│  Interactive playground for testing render types               │\r\n├──────────────┬─────────────────────────────────────────────────┤\r\n│              │  📊 Bar Chart                    [Copy Schema]  │\r\n│ Categories   │  Vertical or horizontal bars for comparison     │\r\n│              │  Use: Revenue by quarter, team performance      │\r\n│ ▼ Basic      ├───",
+      "instructions": "```\r\n┌────────────────────────────────────────────────────────────────┐\r\n│  🎨 Engine Assets Preview                              [X]     │\r\n│  Interactive playground for testing render types               │\r\n├──────────────┬─────────────────────────────────────────────────┤\r\n│              │  📊 Bar Chart                    [Copy Schema]  │\r\n│ Categories   │  Vertical or horizontal bars for comparison     │\r\n│              │  Use: Revenue by quarter, team performance      │\r\n│ ▼ Basic      ├─────────────────────────────────────────────────┤\r\n│   Text       │                                                 │\r\n│   Number     │         RENDERED PREVIEW (60%)                  │\r\n│ ▼ Charts     │                                                 │\r\n│   Pie Chart  │     [Live render of selected asset]            │\r\n│ → Bar Chart  │     [Updates on refresh]                       │\r\n│   Line Chart │                                                 │\r\n│   Radial     │                                                 │\r\n│              ├─────────────────────────────────────────────────┤\r\n│              │  SAMPLE DATA (EDIT & REFRESH)  [Refresh Preview]│\r\n│              │  ┌─────────────────────────────────────────┐   │\r\n│              │  │ [                               (40%)   │   │\r\n│              │  │   { \"name\": \"Q1\", \"value\": 2.5 },      │   │\r\n│              │  │   { \"name\": \"Q2\", \"value\": 3.2 }       │   │\r\n│              │  │ ]                                       │   │\r\n│              │  └─────────────────────────────────────────┘   │\r\n└──────────────┴─────────────────────────────────────────────────┘\r\n```",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "User Workflow",
+      "description": "### 1. Access the Preview\r\n```\r\nCMS Admin → Engine Assets Button → Interactive Preview Button\r\n```\r\n\r\n### 2. Select an Asset\r\n- Browse tree navigation on left\r\n- Click any render type to load it\r\n- View information and use case\r\n\r\n### 3. Test with Data\r\n- Edit JSON in bottom panel\r\n- Click \"Refresh Preview\"\r\n- See live changes in preview area\r\n\r\n### 4. Copy Schema\r\n- Click \"Copy Schema\" button\r\n- Paste into Template Builder\r\n- Use in your own templates",
+      "instructions": "### 1. Access the Preview\r\n```\r\nCMS Admin → Engine Assets Button → Interactive Preview Button\r\n```\r\n\r\n### 2. Select an Asset\r\n- Browse tree navigation on left\r\n- Click any render type to load it\r\n- View information and use case\r\n\r\n### 3. Test with Data\r\n- Edit JSON in bottom panel\r\n- Click \"Refresh Preview\"\r\n- See live changes in preview area\r\n\r\n### 4. Copy Schema\r\n- Click \"Copy Schema\" button\r\n- Paste into Template Builder\r\n- Use in your own templates",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 5,
+      "title": "Key Capabilities",
+      "description": "### ✅ Interactive Testing\r\n- Edit sample data in real-time\r\n- Test edge cases and different data structures\r\n- See immediate visual feedback\r\n\r\n### ✅ Schema Reference\r\n- One-click copy to clipboard\r\n- Complete schema with all options\r\n- Ready to use in templates\r\n\r\n### ✅ Visual Feedback\r\n- JSON validation with error messages\r\n- \"Copied!\" confirmation\r\n- Live preview updates\r\n\r\n### ✅ Organized Navigation\r\n- Collapsible category tree\r\n- Visual selection highlighting\r\n- Smooth transitions",
+      "instructions": "### ✅ Interactive Testing\r\n- Edit sample data in real-time\r\n- Test edge cases and different data structures\r\n- See immediate visual feedback\r\n\r\n### ✅ Schema Reference\r\n- One-click copy to clipboard\r\n- Complete schema with all options\r\n- Ready to use in templates\r\n\r\n### ✅ Visual Feedback\r\n- JSON validation with error messages\r\n- \"Copied!\" confirmation\r\n- Live preview updates\r\n\r\n### ✅ Organized Navigation\r\n- Collapsible category tree\r\n- Visual selection highlighting\r\n- Smooth transitions",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 6,
+      "title": "Technical Implementation",
+      "description": "### Components Created\r\n\r\n**File:** `cms-admin/src/components/EngineAssetsPreview.tsx`\r\n- 500+ lines of React + TypeScript\r\n- Full-screen modal with three-panel layout\r\n- State management for editing and preview\r\n- JSON validation and error handling\r\n\r\n### Components Modified\r\n\r\n**File:** `cms-admin/src/components/EngineAssetsModal.tsx`\r\n- Added \"Interactive Preview\" button\r\n- Integrated EngineAssetsPreview modal\r\n- Import statements updated\r\n\r\n### State Management\r\n\r\n```typescript\r\n// Selected ",
+      "instructions": "### Components Created\r\n\r\n**File:** `cms-admin/src/components/EngineAssetsPreview.tsx`\r\n- 500+ lines of React + TypeScript\r\n- Full-screen modal with three-panel layout\r\n- State management for editing and preview\r\n- JSON validation and error handling\r\n\r\n### Components Modified\r\n\r\n**File:** `cms-admin/src/components/EngineAssetsModal.tsx`\r\n- Added \"Interactive Preview\" button\r\n- Integrated EngineAssetsPreview modal\r\n- Import statements updated\r\n\r\n### State Management\r\n\r\n```typescript\r\n// Selected asset and UI state\r\nconst [selectedExample, setSelectedExample] = useState<RenderExample>();\r\nconst [expandedCategories, setExpandedCategories] = useState<Set<Category>>();\r\n\r\n// Data editing state\r\nconst [editableData, setEditableData] = useState<string>(); // JSON text\r\nconst [currentData, setCurrentData] = useState<any>();      // Parsed data\r\nconst [jsonError, setJsonError] = useState<string>();       // Validation errors\r\n\r\n// UI feedback\r\nconst [copied, setCopied] = useState(false);                // Copy confirmation\r\n```\r\n\r\n### Data Flow\r\n\r\n```\r\nUser Selects Asset\r\n    ↓\r\nLoad Example Data\r\n    ↓\r\nDisplay in Preview + Editor\r\n    ↓\r\nUser Edits JSON\r\n    ↓\r\nClick \"Refresh\"\r\n    ↓\r\nParse & Validate JSON\r\n    ↓\r\nUpdate Preview (or show error)\r\n```",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 7,
+      "title": "Use Cases",
+      "description": "### 🎯 For Content Creators\r\n- Preview how data will look before adding to template\r\n- Test different data values\r\n- Understand render type capabilities\r\n\r\n### 🎯 For Developers\r\n- Quick reference for schema structure\r\n- Test new render types during development\r\n- Debug rendering issues with specific data\r\n\r\n### 🎯 For Template Designers\r\n- Explore available assets\r\n- Copy exact schemas for templates\r\n- Plan multi-column layouts",
+      "instructions": "### 🎯 For Content Creators\r\n- Preview how data will look before adding to template\r\n- Test different data values\r\n- Understand render type capabilities\r\n\r\n### 🎯 For Developers\r\n- Quick reference for schema structure\r\n- Test new render types during development\r\n- Debug rendering issues with specific data\r\n\r\n### 🎯 For Template Designers\r\n- Explore available assets\r\n- Copy exact schemas for templates\r\n- Plan multi-column layouts",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 8,
+      "title": "Examples",
+      "description": "### Testing a Pie Chart\r\n\r\n1. **Select:** Charts → Pie Chart\r\n2. **View:** Default budget allocation example\r\n3. **Edit Data:**\r\n```json\r\n[\r\n  { \"name\": \"Development\", \"value\": 60000 },\r\n  { \"name\": \"Marketing\", \"value\": 40000 }\r\n]\r\n```\r\n4. **Refresh:** See updated chart\r\n5. **Copy Schema:** Get JSON for template\r\n\r\n### Testing Nested Cards\r\n\r\n1. **Select:** Complex → Nested Cards\r\n2. **View:** Team members example\r\n3. **Edit Data:**\r\n```json\r\n[\r\n  {\r\n    \"name\": \"Alice\",\r\n    \"role\": \"Engineer\"",
+      "instructions": "### Testing a Pie Chart\r\n\r\n1. **Select:** Charts → Pie Chart\r\n2. **View:** Default budget allocation example\r\n3. **Edit Data:**\r\n```json\r\n[\r\n  { \"name\": \"Development\", \"value\": 60000 },\r\n  { \"name\": \"Marketing\", \"value\": 40000 }\r\n]\r\n```\r\n4. **Refresh:** See updated chart\r\n5. **Copy Schema:** Get JSON for template\r\n\r\n### Testing Nested Cards\r\n\r\n1. **Select:** Complex → Nested Cards\r\n2. **View:** Team members example\r\n3. **Edit Data:**\r\n```json\r\n[\r\n  {\r\n    \"name\": \"Alice\",\r\n    \"role\": \"Engineer\",\r\n    \"responsibilities\": [\"Backend\", \"API\"]\r\n  }\r\n]\r\n```\r\n4. **Refresh:** See single card\r\n5. **Experiment:** Add more team members",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 9,
+      "title": "Benefits",
+      "description": "### ⚡ Faster Development\r\n- No need to create test templates\r\n- Instant feedback on changes\r\n- Quick schema reference\r\n\r\n### 📚 Better Documentation\r\n- Visual examples of all render types\r\n- Interactive learning experience\r\n- Self-service for users\r\n\r\n### 🎨 Improved Design\r\n- Test before implementing\r\n- Explore possibilities\r\n- Make informed choices\r\n\r\n### 🐛 Easier Debugging\r\n- Isolate render issues\r\n- Test edge cases\r\n- Validate data structures",
+      "instructions": "### ⚡ Faster Development\r\n- No need to create test templates\r\n- Instant feedback on changes\r\n- Quick schema reference\r\n\r\n### 📚 Better Documentation\r\n- Visual examples of all render types\r\n- Interactive learning experience\r\n- Self-service for users\r\n\r\n### 🎨 Improved Design\r\n- Test before implementing\r\n- Explore possibilities\r\n- Make informed choices\r\n\r\n### 🐛 Easier Debugging\r\n- Isolate render issues\r\n- Test edge cases\r\n- Validate data structures",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 10,
+      "title": "Future Enhancements",
+      "description": "### Potential Features\r\n- Save custom test data sets\r\n- Export preview as image\r\n- Side-by-side comparison\r\n- Schema validation hints\r\n- Keyboard shortcuts\r\n- Search/filter assets\r\n- Undo/redo in editor\r\n- Format JSON button",
+      "instructions": "### Potential Features\r\n- Save custom test data sets\r\n- Export preview as image\r\n- Side-by-side comparison\r\n- Schema validation hints\r\n- Keyboard shortcuts\r\n- Search/filter assets\r\n- Undo/redo in editor\r\n- Format JSON button",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 11,
+      "title": "Documentation",
+      "description": "**Complete Guide:** `knowledge-base/user-guides/engine-assets-preview.md`\r\n\r\nIncludes:\r\n- Detailed component documentation\r\n- Technical implementation details\r\n- Troubleshooting guide\r\n- Best practices\r\n- Code examples",
+      "instructions": "**Complete Guide:** `knowledge-base/user-guides/engine-assets-preview.md`\r\n\r\nIncludes:\r\n- Detailed component documentation\r\n- Technical implementation details\r\n- Troubleshooting guide\r\n- Best practices\r\n- Code examples",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 12,
+      "title": "Success Metrics",
+      "description": "### Before (Engine Assets Modal Only)\r\n- ❌ Static documentation only\r\n- ❌ Can't test with custom data\r\n- ❌ Must copy schema manually from text\r\n- ❌ No way to experiment\r\n\r\n### After (With Interactive Preview)\r\n- ✅ Live interactive testing\r\n- ✅ Edit and refresh with custom data\r\n- ✅ One-click schema copying\r\n- ✅ Full experimentation playground\r\n\r\n---\r\n\r\n**Created:** December 2024  \r\n**Status:** ✅ Complete and Ready to Use",
+      "instructions": "### Before (Engine Assets Modal Only)\r\n- ❌ Static documentation only\r\n- ❌ Can't test with custom data\r\n- ❌ Must copy schema manually from text\r\n- ❌ No way to experiment\r\n\r\n### After (With Interactive Preview)\r\n- ✅ Live interactive testing\r\n- ✅ Edit and refresh with custom data\r\n- ✅ One-click schema copying\r\n- ✅ Full experimentation playground\r\n\r\n---\r\n\r\n**Created:** December 2024  \r\n**Status:** ✅ Complete and Ready to Use",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "relatedArticles": [],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": false,
+  "_completed_relatedArticles": false,
+  "_template_name": "KB Article Import",
+  "_template_description": "Imported from Markdown",
+  "_template_created": "2025-11-09T13:01:35.670Z",
+  "_template_updated": "2025-11-09T13:01:35.670Z"
+}

@@ -172,6 +172,20 @@ const ASSET_LIBRARY: AssetCategory[] = [
         renderType: 'expression',
         description: 'Dynamic expressions',
         schema: { type: 'expression', label: 'New Expression' }
+      },
+      {
+        id: 'codeBlock',
+        name: 'Code Block',
+        renderType: 'codeBlock',
+        description: 'Code snippet with copy button',
+        schema: { type: 'codeBlock', label: 'New Code Block', renderAs: 'codeBlock' }
+      },
+      {
+        id: 'quote',
+        name: 'Quote',
+        renderType: 'quote',
+        description: 'Blockquote with glassmorphism',
+        schema: { type: 'quote', label: 'New Quote', renderAs: 'quote' }
       }
     ]
   },

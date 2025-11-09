@@ -101,14 +101,14 @@ const DEFAULT_TYPOGRAPHY: Record<string, TypographyStyle> = {
 };
 
 const DEFAULT_COLORS: ColorDefinition[] = [
-  // Brand Colors
-  { key: 'brand.primary', label: 'Brand Primary', value: '#6B1B5E', description: 'Primary brand color (Eggplant)' },
+  // Brand Colors - FIS Official Brand Palette
+  { key: 'brand.primary', label: 'Brand Primary', value: '#431C5B', description: 'Primary brand color (Eggplant)' },
   { key: 'brand.secondary', label: 'Brand Secondary', value: '#B21A53', description: 'Secondary brand color (Raspberry)' },
-  { key: 'brand.tertiary', label: 'Brand Tertiary', value: '#8B2F5E', description: 'Tertiary brand color' },
+  { key: 'brand.tertiary', label: 'Brand Tertiary', value: '#1D1F48', description: 'Tertiary brand color (Navy)' },
   
   // Accent Colors
   { key: 'accent.blue', label: 'Accent Blue', value: '#3B82F6', description: 'Blue accent' },
-  { key: 'accent.green', label: 'Accent Green', value: '#10B981', description: 'Green accent' },
+  { key: 'accent.green', label: 'Accent Green', value: '#4BCD3E', description: 'FIS Brand Green accent' },
   { key: 'accent.yellow', label: 'Accent Yellow', value: '#F59E0B', description: 'Yellow accent' },
   { key: 'accent.red', label: 'Accent Red', value: '#EF4444', description: 'Red accent' },
   
@@ -416,6 +416,8 @@ function TabButton({ active, onClick, icon, label }: { active: boolean; onClick:
 
 // Colors Panel
 function ColorsPanel({ colors, onUpdate }: { colors: ColorDefinition[]; onUpdate: (key: string, value: string) => void }) {
+  const [brandTheme, setBrandTheme] = useState<'light' | 'dark'>('light');
+  
   const categories = {
     'Brand Colors': colors.filter(c => c.key.startsWith('brand.')),
     'Accent Colors': colors.filter(c => c.key.startsWith('accent.')),
@@ -429,9 +431,37 @@ function ColorsPanel({ colors, onUpdate }: { colors: ColorDefinition[]; onUpdate
     <div className="space-y-6">
       {Object.entries(categories).map(([category, items]) => (
         <div key={category}>
-          <h2 className="text-base font-roobert-semibold text-gray-900 dark:text-white mb-3">
-            {category}
-          </h2>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-base font-roobert-semibold text-gray-900 dark:text-white">
+              {category}
+            </h2>
+            
+            {/* Light/Dark toggle for Brand Colors */}
+            {category === 'Brand Colors' && (
+              <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                <button
+                  onClick={() => setBrandTheme('light')}
+                  className={`px-3 py-1 text-xs font-roobert-medium rounded transition-all ${
+                    brandTheme === 'light'
+                      ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  Light
+                </button>
+                <button
+                  onClick={() => setBrandTheme('dark')}
+                  className={`px-3 py-1 text-xs font-roobert-medium rounded transition-all ${
+                    brandTheme === 'dark'
+                      ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  Dark
+                </button>
+              </div>
+            )}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
             {items.map(color => (
               <div

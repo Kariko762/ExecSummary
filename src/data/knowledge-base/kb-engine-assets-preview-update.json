@@ -1,0 +1,235 @@
+{
+  "id": "kb-engine-assets-preview-update",
+  "quarter": "Engine Assets Preview - Layout Update",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Engine Assets Preview - Layout Update",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "support",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "support",
+    "charts",
+    "rendering",
+    "layout",
+    "components"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "how-to",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "intermediate",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "2 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "System Generated",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:01:35.671Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:01:35.671Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "```typescript",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "```typescript",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "keyPoints": [],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": false,
+  "_completed_keyPoints": false,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "Changes Made",
+      "description": "### 1. **Categories Collapsed by Default**\r\n```typescript\r\nconst [expandedCategories, setExpandedCategories] = useState<Set<Category>>(new Set([]));\r\n// Was: new Set(['basic', 'lists', 'complex', 'rich', 'charts'])\r\n```\r\n\r\n### 2. **New Two-Column Layout**\r\n\r\n**Previous Layout:**\r\n```\r\n[        Rendered Preview        ]\r\n[     Sample Data (Bottom 40%)   ]\r\n```\r\n\r\n**New Layout:**\r\n```\r\n┌─────────────────────────────────────────────────────┐\r\n│  [  Sample Data Editor  ] [ Rendered Output    ]    │\r",
+      "instructions": "### 1. **Categories Collapsed by Default**\r\n```typescript\r\nconst [expandedCategories, setExpandedCategories] = useState<Set<Category>>(new Set([]));\r\n// Was: new Set(['basic', 'lists', 'complex', 'rich', 'charts'])\r\n```\r\n\r\n### 2. **New Two-Column Layout**\r\n\r\n**Previous Layout:**\r\n```\r\n[        Rendered Preview        ]\r\n[     Sample Data (Bottom 40%)   ]\r\n```\r\n\r\n**New Layout:**\r\n```\r\n┌─────────────────────────────────────────────────────┐\r\n│  [  Sample Data Editor  ] [ Rendered Output    ]    │\r\n│  [   with Refresh      ] [  (Live Preview)    ]     │\r\n├─────────────────────────────────────────────────────┤\r\n│  ▶ JSON Schema (Collapsible - Full Width)          │\r\n└─────────────────────────────────────────────────────┘\r\n```\r\n\r\n### 3. **Chart Rendering Fixed**\r\n- **Problem:** Recharts library was not installed in cms-admin package\r\n- **Solution:** Added `recharts` to cms-admin dependencies\r\n- **Command:** `npm install recharts`\r\n\r\n### 4. **Improved Space Utilization**\r\n- **Left Column (50%):** JSON editor with 300px height + Refresh button\r\n- **Right Column (50%):** Rendered preview with centered content\r\n- **Bottom:** Collapsible JSON schema section (full width)",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "Layout Breakdown",
+      "description": "### Left Panel - Sample Data Editor\r\n- Background: Light gray (#f9fafb)\r\n- Contains:\r\n  - Title: \"Sample Data Editor\"\r\n  - Textarea (300px height, monospace, dark theme)\r\n  - Error display (if JSON invalid)\r\n  - Full-width \"Refresh Preview\" button\r\n\r\n### Right Panel - Rendered Output\r\n- Background: White\r\n- Contains:\r\n  - Live rendered asset\r\n  - Centered display\r\n  - Matches height of left panel (300px min)\r\n\r\n### Bottom Panel - JSON Schema\r\n- Collapsible section\r\n- Click to expand/collapse\r\n- ",
+      "instructions": "### Left Panel - Sample Data Editor\r\n- Background: Light gray (#f9fafb)\r\n- Contains:\r\n  - Title: \"Sample Data Editor\"\r\n  - Textarea (300px height, monospace, dark theme)\r\n  - Error display (if JSON invalid)\r\n  - Full-width \"Refresh Preview\" button\r\n\r\n### Right Panel - Rendered Output\r\n- Background: White\r\n- Contains:\r\n  - Live rendered asset\r\n  - Centered display\r\n  - Matches height of left panel (300px min)\r\n\r\n### Bottom Panel - JSON Schema\r\n- Collapsible section\r\n- Click to expand/collapse\r\n- Shows complete schema when expanded\r\n- Full width across both columns\r\n- Dark code block styling",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "Benefits",
+      "description": "✅ **Better Space Usage** - Side-by-side editing and preview\r\n✅ **Cleaner Navigation** - Collapsed categories by default\r\n✅ **Charts Working** - Recharts dependency installed\r\n✅ **Less Scrolling** - Content fits better on screen\r\n✅ **Clear Workflow** - Edit → Refresh → See Result",
+      "instructions": "✅ **Better Space Usage** - Side-by-side editing and preview\r\n✅ **Cleaner Navigation** - Collapsed categories by default\r\n✅ **Charts Working** - Recharts dependency installed\r\n✅ **Less Scrolling** - Content fits better on screen\r\n✅ **Clear Workflow** - Edit → Refresh → See Result",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "Files Modified",
+      "description": "1. **`cms-admin/src/components/EngineAssetsPreview.tsx`**\r\n   - Changed default expanded categories to empty set\r\n   - Added `jsonExpanded` state\r\n   - Restructured preview area with grid layout\r\n   - Moved JSON editor to left column\r\n   - Added collapsible schema section\r\n\r\n2. **`cms-admin/package.json`**\r\n   - Added `recharts` dependency\r\n\r\n---\r\n\r\n**Status:** ✅ Complete - Charts now render, better layout",
+      "instructions": "1. **`cms-admin/src/components/EngineAssetsPreview.tsx`**\r\n   - Changed default expanded categories to empty set\r\n   - Added `jsonExpanded` state\r\n   - Restructured preview area with grid layout\r\n   - Moved JSON editor to left column\r\n   - Added collapsible schema section\r\n\r\n2. **`cms-admin/package.json`**\r\n   - Added `recharts` dependency\r\n\r\n---\r\n\r\n**Status:** ✅ Complete - Charts now render, better layout",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "relatedArticles": [],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": false,
+  "_completed_relatedArticles": false,
+  "_template_name": "KB Article Import",
+  "_template_description": "Imported from Markdown",
+  "_template_created": "2025-11-09T13:01:35.671Z",
+  "_template_updated": "2025-11-09T13:01:35.671Z"
+}

@@ -1,0 +1,331 @@
+{
+  "id": "kb-engine-assets-preview",
+  "quarter": "Engine Assets Preview System",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Engine Assets Preview System",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "support",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "support",
+    "charts",
+    "templates",
+    "rendering",
+    "layout"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "tutorial",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "intermediate",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "7 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "System Generated",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:01:35.673Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:01:35.673Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "The Engine Assets Preview System provides an interactive playground for testing and experimenting with all available render types in the Executive Summary application. It consists of two complementary modals:",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "The Engine Assets Preview System provides an interactive playground for testing and experimenting with all available render types in the Executive Summary application. It consists of two complementary modals:",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "keyPoints": [],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": false,
+  "_completed_keyPoints": false,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "Overview",
+      "description": "The Engine Assets Preview System provides an interactive playground for testing and experimenting with all available render types in the Executive Summary application. It consists of two complementary modals:\r\n\r\n1. **Engine Assets Modal** - Static documentation and schema reference\r\n2. **Engine Assets Preview** - Interactive playground with live editing",
+      "instructions": "The Engine Assets Preview System provides an interactive playground for testing and experimenting with all available render types in the Executive Summary application. It consists of two complementary modals:\r\n\r\n1. **Engine Assets Modal** - Static documentation and schema reference\r\n2. **Engine Assets Preview** - Interactive playground with live editing",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "Components",
+      "description": "### 1. Engine Assets Modal\r\n\r\n**Location:** `cms-admin/src/components/EngineAssetsModal.tsx`\r\n\r\n**Purpose:** Display-only reference documentation for all render types.\r\n\r\n**Features:**\r\n- Category-based navigation (Basic, Lists, Complex, Rich Content, Charts)\r\n- Display examples of each render type\r\n- JSON schema viewing (collapsible)\r\n- Use case descriptions\r\n- Launch button for Interactive Preview\r\n\r\n**When to use:**\r\n- Quick reference for available render types\r\n- View JSON schema structure\r\n",
+      "instructions": "### 1. Engine Assets Modal\r\n\r\n**Location:** `cms-admin/src/components/EngineAssetsModal.tsx`\r\n\r\n**Purpose:** Display-only reference documentation for all render types.\r\n\r\n**Features:**\r\n- Category-based navigation (Basic, Lists, Complex, Rich Content, Charts)\r\n- Display examples of each render type\r\n- JSON schema viewing (collapsible)\r\n- Use case descriptions\r\n- Launch button for Interactive Preview\r\n\r\n**When to use:**\r\n- Quick reference for available render types\r\n- View JSON schema structure\r\n- Understand use cases for each asset type\r\n\r\n### 2. Engine Assets Preview (NEW)\r\n\r\n**Location:** `cms-admin/src/components/EngineAssetsPreview.tsx`\r\n\r\n**Purpose:** Interactive testing environment for render types.\r\n\r\n**Layout:**\r\n```\r\n┌─────────────────────────────────────────────────────┐\r\n│  Header: Engine Assets Preview                     │\r\n├───────────┬─────────────────────────────────────────┤\r\n│           │  Asset Info Bar                         │\r\n│  Tree     ├─────────────────────────────────────────┤\r\n│  Nav      │                                         │\r\n│           │  Rendered Preview                       │\r\n│  ● Basic  │  (Live display of selected asset)      │\r\n│  ● Lists  │                                         │\r\n│  ● Charts │                                         │\r\n│           ├─────────────────────────────────────────┤\r\n│           │  Sample Data (JSON Editor)              │\r\n│           │  [Refresh Preview] button               │\r\n└───────────┴─────────────────────────────────────────┘\r\n```\r\n\r\n**Features:**\r\n\r\n#### Left Sidebar - Tree Navigation\r\n- Expandable/collapsible categories\r\n- All render types organized by category\r\n- Click to select and preview\r\n- Visual highlight for active selection\r\n\r\n#### Top Section - Rendered Preview\r\n- Asset information (name, description, use case)\r\n- **Copy Schema** button (copies JSON schema to clipboard)\r\n- Live rendered output of selected asset\r\n- Updates when you refresh with edited data\r\n\r\n#### Bottom Section - Data Editor\r\n- Editable JSON textarea\r\n- Syntax highlighting (dark theme)\r\n- **Refresh Preview** button to apply changes\r\n- Real-time JSON validation with error messages\r\n- Edit sample data and see how it affects rendering",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "User Workflow",
+      "description": "### Exploring Assets\r\n\r\n1. Open **CMS Admin**\r\n2. Click **Engine Assets** button in header\r\n3. Browse through categories to see all available render types\r\n4. Click **Interactive Preview** button\r\n\r\n### Testing Assets\r\n\r\n1. In the **Interactive Preview** modal:\r\n   - Select an asset from the left sidebar tree\r\n   - View how it renders in the preview area\r\n   - Click **Copy Schema** to get the JSON schema\r\n   - Edit the sample data in the bottom editor\r\n   - Click **Refresh Preview** to see chang",
+      "instructions": "### Exploring Assets\r\n\r\n1. Open **CMS Admin**\r\n2. Click **Engine Assets** button in header\r\n3. Browse through categories to see all available render types\r\n4. Click **Interactive Preview** button\r\n\r\n### Testing Assets\r\n\r\n1. In the **Interactive Preview** modal:\r\n   - Select an asset from the left sidebar tree\r\n   - View how it renders in the preview area\r\n   - Click **Copy Schema** to get the JSON schema\r\n   - Edit the sample data in the bottom editor\r\n   - Click **Refresh Preview** to see changes\r\n\r\n### Example Use Cases\r\n\r\n#### Testing a Chart Configuration\r\n\r\n```javascript\r\n// 1. Select \"Pie Chart\" from Charts category\r\n// 2. See default rendering with sample data\r\n// 3. Edit the data:\r\n[\r\n  { name: 'Q1', value: 100 },\r\n  { name: 'Q2', value: 150 },\r\n  { name: 'Q3', value: 200 },\r\n  { name: 'Q4', value: 250 }\r\n]\r\n// 4. Click \"Refresh Preview\" to see updated chart\r\n// 5. Click \"Copy Schema\" to use in your template\r\n```\r\n\r\n#### Testing Metric Cards\r\n\r\n```javascript\r\n// 1. Select \"Metric Cards\" from Complex category\r\n// 2. View default KPI display\r\n// 3. Edit values to match your data:\r\n{\r\n  revenue: 5000000,\r\n  satisfaction: 88,\r\n  growth: 22\r\n}\r\n// 4. Refresh to see how large numbers format\r\n// 5. Copy schema to implement in your section\r\n```",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "Technical Details",
+      "description": "### State Management\r\n\r\n**EngineAssetsPreview State:**\r\n```typescript\r\nconst [selectedExample, setSelectedExample] = useState<RenderExample>(EXAMPLES[0]);\r\nconst [expandedCategories, setExpandedCategories] = useState<Set<Category>>(new Set(['basic', 'lists', 'complex', 'rich', 'charts']));\r\nconst [editableData, setEditableData] = useState<string>(JSON.stringify(EXAMPLES[0].sampleData, null, 2));\r\nconst [currentData, setCurrentData] = useState<any>(EXAMPLES[0].sampleData);\r\nconst [jsonError, setJ",
+      "instructions": "### State Management\r\n\r\n**EngineAssetsPreview State:**\r\n```typescript\r\nconst [selectedExample, setSelectedExample] = useState<RenderExample>(EXAMPLES[0]);\r\nconst [expandedCategories, setExpandedCategories] = useState<Set<Category>>(new Set(['basic', 'lists', 'complex', 'rich', 'charts']));\r\nconst [editableData, setEditableData] = useState<string>(JSON.stringify(EXAMPLES[0].sampleData, null, 2));\r\nconst [currentData, setCurrentData] = useState<any>(EXAMPLES[0].sampleData);\r\nconst [jsonError, setJsonError] = useState<string>('');\r\nconst [copied, setCopied] = useState(false);\r\n```\r\n\r\n### Key Functions\r\n\r\n#### selectExample()\r\nSwitches to a new asset and resets editor state:\r\n```typescript\r\nconst selectExample = (example: RenderExample) => {\r\n  setSelectedExample(example);\r\n  setEditableData(JSON.stringify(example.sampleData, null, 2));\r\n  setCurrentData(example.sampleData);\r\n  setJsonError('');\r\n};\r\n```\r\n\r\n#### refreshPreview()\r\nParses edited JSON and updates the rendered preview:\r\n```typescript\r\nconst refreshPreview = () => {\r\n  try {\r\n    const parsed = JSON.parse(editableData);\r\n    setCurrentData(parsed);\r\n    setJsonError('');\r\n  } catch (err) {\r\n    setJsonError((err as Error).message);\r\n  }\r\n};\r\n```\r\n\r\n#### copySchema()\r\nCopies the schema to clipboard with visual feedback:\r\n```typescript\r\nconst copySchema = () => {\r\n  navigator.clipboard.writeText(JSON.stringify(selectedExample.schema, null, 2));\r\n  setCopied(true);\r\n  setTimeout(() => setCopied(false), 2000);\r\n};\r\n```\r\n\r\n### Data Flow\r\n\r\n```\r\nUser Selects Asset\r\n    ↓\r\nselectExample() called\r\n    ↓\r\nUpdates: selectedExample, editableData, currentData\r\n    ↓\r\nRenderFactory renders currentData\r\n    ↓\r\nUser Edits JSON in textarea\r\n    ↓\r\nUser Clicks \"Refresh Preview\"\r\n    ↓\r\nrefreshPreview() parses JSON\r\n    ↓\r\nUpdates currentData (or shows error)\r\n    ↓\r\nRenderFactory re-renders with new data\r\n```",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 5,
+      "title": "Examples Data Structure",
+      "description": "Each example includes:\r\n\r\n```typescript\r\ninterface RenderExample {\r\n  id: string;              // Unique identifier\r\n  name: string;            // Display name (e.g., \"Pie Chart\")\r\n  category: Category;      // 'basic' | 'lists' | 'complex' | 'rich' | 'charts'\r\n  categoryLabel: string;   // Display label for category\r\n  description: string;     // What it does\r\n  useCase: string;         // When to use it\r\n  schema: FieldSchema;     // Complete JSON schema for Template Builder\r\n  sampleData: any",
+      "instructions": "Each example includes:\r\n\r\n```typescript\r\ninterface RenderExample {\r\n  id: string;              // Unique identifier\r\n  name: string;            // Display name (e.g., \"Pie Chart\")\r\n  category: Category;      // 'basic' | 'lists' | 'complex' | 'rich' | 'charts'\r\n  categoryLabel: string;   // Display label for category\r\n  description: string;     // What it does\r\n  useCase: string;         // When to use it\r\n  schema: FieldSchema;     // Complete JSON schema for Template Builder\r\n  sampleData: any;         // Example data to demonstrate rendering\r\n}\r\n```",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 6,
+      "title": "Integration Points",
+      "description": "### Opening the Preview\r\n\r\nFrom **Engine Assets Modal**:\r\n```tsx\r\n<button onClick={() => setShowPreview(true)}>\r\n  <PlayCircle className=\"w-4 h-4\" />\r\n  Interactive Preview\r\n</button>\r\n\r\n<EngineAssetsPreview\r\n  isOpen={showPreview}\r\n  onClose={() => setShowPreview(false)}\r\n/>\r\n```\r\n\r\n### Using Copied Schema\r\n\r\nAfter copying a schema from the preview:\r\n\r\n1. **In Template Builder:**\r\n   - Paste into the JSON schema field when adding a section\r\n   \r\n2. **In Custom Templates:**\r\n   - Add to your `su",
+      "instructions": "### Opening the Preview\r\n\r\nFrom **Engine Assets Modal**:\r\n```tsx\r\n<button onClick={() => setShowPreview(true)}>\r\n  <PlayCircle className=\"w-4 h-4\" />\r\n  Interactive Preview\r\n</button>\r\n\r\n<EngineAssetsPreview\r\n  isOpen={showPreview}\r\n  onClose={() => setShowPreview(false)}\r\n/>\r\n```\r\n\r\n### Using Copied Schema\r\n\r\nAfter copying a schema from the preview:\r\n\r\n1. **In Template Builder:**\r\n   - Paste into the JSON schema field when adding a section\r\n   \r\n2. **In Custom Templates:**\r\n   - Add to your `summary-template-*.json` file\r\n   - Use in `_fields` metadata\r\n\r\n3. **In Code:**\r\n   - Reference in custom renderers\r\n   - Use for validation",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 7,
+      "title": "Styling",
+      "description": "### Dark Mode Support\r\nBoth modals support dark mode with proper theme classes:\r\n```tsx\r\nclassName=\"dark:bg-gray-900 dark:text-white dark:border-gray-700\"\r\n```\r\n\r\n### FIS Branding\r\n- Purple accent color: `#6B1B5E`\r\n- Raspberry accent: `#B21A53`\r\n- Roobert font family\r\n- Consistent card styling\r\n\r\n### Layout Dimensions\r\n- **Modal Size:** Full screen with 2rem margin\r\n- **Sidebar Width:** 280px fixed\r\n- **Preview Height:** 60% of modal height\r\n- **Editor Height:** 40% of modal height",
+      "instructions": "### Dark Mode Support\r\nBoth modals support dark mode with proper theme classes:\r\n```tsx\r\nclassName=\"dark:bg-gray-900 dark:text-white dark:border-gray-700\"\r\n```\r\n\r\n### FIS Branding\r\n- Purple accent color: `#6B1B5E`\r\n- Raspberry accent: `#B21A53`\r\n- Roobert font family\r\n- Consistent card styling\r\n\r\n### Layout Dimensions\r\n- **Modal Size:** Full screen with 2rem margin\r\n- **Sidebar Width:** 280px fixed\r\n- **Preview Height:** 60% of modal height\r\n- **Editor Height:** 40% of modal height",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 8,
+      "title": "Error Handling",
+      "description": "### JSON Validation\r\n```tsx\r\ntry {\r\n  const parsed = JSON.parse(editableData);\r\n  setCurrentData(parsed);\r\n  setJsonError('');\r\n} catch (err) {\r\n  setJsonError((err as Error).message);\r\n}\r\n```\r\n\r\nError display:\r\n```tsx\r\n{jsonError && (\r\n  <div className=\"bg-red-50 border border-red-200 text-red-600\">\r\n    <strong>JSON Error:</strong> {jsonError}\r\n  </div>\r\n)}\r\n```\r\n\r\n### Render Failures\r\nIf RenderFactory fails to render:\r\n- Check console for detailed error\r\n- Verify schema matches render type\r\n-",
+      "instructions": "### JSON Validation\r\n```tsx\r\ntry {\r\n  const parsed = JSON.parse(editableData);\r\n  setCurrentData(parsed);\r\n  setJsonError('');\r\n} catch (err) {\r\n  setJsonError((err as Error).message);\r\n}\r\n```\r\n\r\nError display:\r\n```tsx\r\n{jsonError && (\r\n  <div className=\"bg-red-50 border border-red-200 text-red-600\">\r\n    <strong>JSON Error:</strong> {jsonError}\r\n  </div>\r\n)}\r\n```\r\n\r\n### Render Failures\r\nIf RenderFactory fails to render:\r\n- Check console for detailed error\r\n- Verify schema matches render type\r\n- Ensure data structure matches schema expectations",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 9,
+      "title": "Best Practices",
+      "description": "### For Users\r\n\r\n1. **Start with Examples:** Use the provided sample data as a template\r\n2. **Test Incrementally:** Make small changes and refresh often\r\n3. **Copy Schema First:** Get the schema before customizing data\r\n4. **Check JSON Syntax:** Use the error message to fix JSON formatting\r\n5. **Explore Categories:** Try different render types to find the best fit\r\n\r\n### For Developers\r\n\r\n1. **Add New Examples:** Update `EXAMPLES` array in both modals\r\n2. **Maintain Consistency:** Keep example d",
+      "instructions": "### For Users\r\n\r\n1. **Start with Examples:** Use the provided sample data as a template\r\n2. **Test Incrementally:** Make small changes and refresh often\r\n3. **Copy Schema First:** Get the schema before customizing data\r\n4. **Check JSON Syntax:** Use the error message to fix JSON formatting\r\n5. **Explore Categories:** Try different render types to find the best fit\r\n\r\n### For Developers\r\n\r\n1. **Add New Examples:** Update `EXAMPLES` array in both modals\r\n2. **Maintain Consistency:** Keep example data realistic and useful\r\n3. **Document Use Cases:** Clear descriptions help users choose correctly\r\n4. **Test Edge Cases:** Include examples with edge case data\r\n5. **Schema Completeness:** Ensure schemas include all required fields",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 10,
+      "title": "Future Enhancements",
+      "description": "### Potential Features\r\n\r\n1. **Save Custom Examples:** Allow users to save their own test data\r\n2. **Export Options:** Export rendered preview as image or PDF\r\n3. **Schema Editor:** Visual schema builder instead of JSON editing\r\n4. **Diff View:** Compare changes between original and edited data\r\n5. **History:** Undo/redo for data edits\r\n6. **Split View:** Side-by-side comparison of multiple renders\r\n7. **Keyboard Shortcuts:** Quick navigation and actions\r\n8. **Search:** Filter assets by name or ",
+      "instructions": "### Potential Features\r\n\r\n1. **Save Custom Examples:** Allow users to save their own test data\r\n2. **Export Options:** Export rendered preview as image or PDF\r\n3. **Schema Editor:** Visual schema builder instead of JSON editing\r\n4. **Diff View:** Compare changes between original and edited data\r\n5. **History:** Undo/redo for data edits\r\n6. **Split View:** Side-by-side comparison of multiple renders\r\n7. **Keyboard Shortcuts:** Quick navigation and actions\r\n8. **Search:** Filter assets by name or description",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 11,
+      "title": "Troubleshooting",
+      "description": "### Preview Not Updating\r\n**Symptom:** Changes to JSON don't reflect in preview\r\n**Solution:** Click \"Refresh Preview\" button (automatic update disabled for performance)\r\n\r\n### JSON Parse Error\r\n**Symptom:** Red error message below editor\r\n**Solution:** Check JSON syntax - missing commas, quotes, brackets\r\n\r\n### Render Not Displaying\r\n**Symptom:** Blank preview area\r\n**Solution:** \r\n- Verify render type is registered in RenderFactory\r\n- Check browser console for errors\r\n- Ensure data structure m",
+      "instructions": "### Preview Not Updating\r\n**Symptom:** Changes to JSON don't reflect in preview\r\n**Solution:** Click \"Refresh Preview\" button (automatic update disabled for performance)\r\n\r\n### JSON Parse Error\r\n**Symptom:** Red error message below editor\r\n**Solution:** Check JSON syntax - missing commas, quotes, brackets\r\n\r\n### Render Not Displaying\r\n**Symptom:** Blank preview area\r\n**Solution:** \r\n- Verify render type is registered in RenderFactory\r\n- Check browser console for errors\r\n- Ensure data structure matches schema\r\n\r\n### Copy Schema Not Working\r\n**Symptom:** Schema doesn't copy to clipboard\r\n**Solution:** \r\n- Ensure browser has clipboard permissions\r\n- Try clicking the button again\r\n- Check browser console for errors",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 12,
+      "title": "See Also",
+      "description": "- [Adding New Assets](./adding-new-assets.md) - How to add new render types\r\n- [Chart System](./chart-system.md) - Chart-specific documentation\r\n- [Metadata Schema](../reference/metadata-schema.md) - Complete schema reference\r\n- [Template System](../../TEMPLATE_SYSTEM.md) - Template building guide\r\n\r\n---\r\n\r\n**Last Updated:** December 2024",
+      "instructions": "- [Adding New Assets](./adding-new-assets.md) - How to add new render types\r\n- [Chart System](./chart-system.md) - Chart-specific documentation\r\n- [Metadata Schema](../reference/metadata-schema.md) - Complete schema reference\r\n- [Template System](../../TEMPLATE_SYSTEM.md) - Template building guide\r\n\r\n---\r\n\r\n**Last Updated:** December 2024",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "relatedArticles": [],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": false,
+  "_completed_relatedArticles": false,
+  "_template_name": "KB Article Import",
+  "_template_description": "Imported from Markdown",
+  "_template_created": "2025-11-09T13:01:35.673Z",
+  "_template_updated": "2025-11-09T13:01:35.673Z"
+}

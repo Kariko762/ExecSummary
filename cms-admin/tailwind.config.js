@@ -27,22 +27,22 @@ export default {
       colors: {
         'fis': {
           'eggplant': '#431C5B',      // Primary - Eggplant
-          'navy': '#1D1F48',           // Primary - Navy
-          'raspberry': '#B21A53',      // Secondary - Raspberry
-          'charcoal': '#403040',       // Secondary - Charcoal
+          'navy': '#1D1F48',           // Primary - Navy  
+          'raspberry': '#B21A53',      // Primary - Raspberry
+          'charcoal': '#3D3D40',       // Secondary - Charcoal
           'gray': '#E6E7E8',           // Secondary - Gray
           'green': {
-            DEFAULT: '#3bcd3e',        // Accent - Core Green
-            50: '#e6f9e6',
-            100: '#b3ecb3',
-            200: '#80df80',
-            300: '#4dd24d',
-            400: '#3bcd3e',
-            500: '#2fb831',
-            600: '#26a329',
-            700: '#1d8e21',
-            800: '#147918',
-            900: '#0b6410',
+            DEFAULT: '#4BCD3E',        // Accent - FIS Brand Green
+            50: '#e8f9e6',
+            100: '#c5efc0',
+            200: '#a2e59a',
+            300: '#7fdb74',
+            400: '#5cd14e',
+            500: '#4BCD3E',
+            600: '#3ca632',
+            700: '#2d7f26',
+            800: '#1e581a',
+            900: '#0f310e',
           }
         },
         // Dark Mode Color Scheme (extracted from infographic designs)

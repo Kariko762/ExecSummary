@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw, CheckCircle, AlertCircle, TrendingUp, Plus, Shield, ShieldOff } from 'lucide-react';
+import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw, CheckCircle, AlertCircle, TrendingUp, Plus, Shield, ShieldOff, BookOpen, FolderOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
@@ -17,7 +17,7 @@ import './App.css';
 
 const API_URL = 'http://localhost:3001/api';
 
-type Section = 'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'import';
+type Section = 'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories' | 'import';
 
 interface Summary {
   id: string;
@@ -60,13 +60,15 @@ function App() {
   const [executiveIQ, setExecutiveIQ] = useState<ExecutiveIQ[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [performances, setPerformances] = useState<Performance[]>([]);
+  const [kbArticles, setKbArticles] = useState<any[]>([]);
+  const [kbCategories, setKbCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [importType, setImportType] = useState<'summaries' | 'executive-iq' | 'organizations' | 'performance'>('summaries');
   const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [modalDataType, setModalDataType] = useState<'summaries' | 'executive-iq' | 'organizations' | 'performance'>('summaries');
+  const [modalDataType, setModalDataType] = useState<'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories'>('summaries');
   const [showNewSummaryModal, setShowNewSummaryModal] = useState(false);
   const [newSummaryName, setNewSummaryName] = useState('');
   const [creationMode, setCreationMode] = useState<'template' | 'clone'>('template');
@@ -90,6 +92,10 @@ function App() {
   useEffect(() => {
     if (activeSection !== 'import') {
       fetchData();
+    }
+    // Load templates when on KB section
+    if (activeSection === 'knowledge-base' || activeSection === 'kb-categories') {
+      fetchTemplates();
     }
   }, [activeSection]);
 
@@ -117,6 +123,8 @@ function App() {
       const endpoint = activeSection === 'summaries' ? 'summaries' 
         : activeSection === 'executive-iq' ? 'executive-iq' 
         : activeSection === 'performance' ? 'performance'
+        : activeSection === 'knowledge-base' ? 'knowledge-base'
+        : activeSection === 'kb-categories' ? 'kb-categories'
         : 'organizations';
       
       const response = await fetch(`${API_URL}/${endpoint}`);
@@ -128,6 +136,8 @@ function App() {
       if (activeSection === 'executive-iq') setExecutiveIQ(data);
       if (activeSection === 'organizations') setOrganizations(data);
       if (activeSection === 'performance') setPerformances(data);
+      if (activeSection === 'knowledge-base') setKbArticles(data);
+      if (activeSection === 'kb-categories') setKbCategories(data);
       
       showNotification('success', 'Data loaded successfully');
     } catch (error) {
@@ -186,6 +196,8 @@ function App() {
     const endpoint = activeSection === 'summaries' ? 'summaries' 
       : activeSection === 'executive-iq' ? 'executive-iq' 
       : activeSection === 'performance' ? 'performance'
+      : activeSection === 'knowledge-base' ? 'knowledge-base'
+      : activeSection === 'kb-categories' ? 'kb-categories'
       : 'organizations';
 
     try {
@@ -205,7 +217,7 @@ function App() {
     }
   };
 
-  const handleEditItem = (item: any, type: 'summaries' | 'executive-iq' | 'organizations' | 'performance') => {
+  const handleEditItem = (item: any, type: 'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories') => {
     // Warn if editing a live summary
     if (type === 'summaries' && item.status === 'published') {
       if (!confirm('⚠️ WARNING: This summary is LIVE and published.\n\nAny changes you make will be immediately visible to users.\n\nDo you want to continue editing?')) {
@@ -376,6 +388,8 @@ function App() {
     { id: 'executive-iq' as Section, label: 'Executive IQ', icon: Lightbulb },
     { id: 'organizations' as Section, label: 'Organizations', icon: Building2 },
     { id: 'performance' as Section, label: 'Performance', icon: TrendingUp },
+    { id: 'knowledge-base' as Section, label: 'Knowledge Base', icon: BookOpen },
+    { id: 'kb-categories' as Section, label: 'KB Categories', icon: FolderOpen },
     { id: 'import' as Section, label: 'Import Data', icon: Upload },
   ];
 
@@ -514,6 +528,8 @@ function App() {
     if (activeSection === 'executive-iq') items = executiveIQ;
     if (activeSection === 'organizations') items = organizations;
     if (activeSection === 'performance') items = performances;
+    if (activeSection === 'knowledge-base') items = kbArticles;
+    if (activeSection === 'kb-categories') items = kbCategories;
 
     if (items.length === 0) {
       return (
@@ -553,6 +569,8 @@ function App() {
                       {activeSection === 'executive-iq' && <Lightbulb className="w-5 h-5 text-white" />}
                       {activeSection === 'organizations' && <Building2 className="w-5 h-5 text-white" />}
                       {activeSection === 'performance' && <TrendingUp className="w-5 h-5 text-white" />}
+                      {activeSection === 'knowledge-base' && <BookOpen className="w-5 h-5 text-white" />}
+                      {activeSection === 'kb-categories' && <FolderOpen className="w-5 h-5 text-white" />}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
@@ -601,14 +619,14 @@ function App() {
 
               <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/10">
                 <button
-                  onClick={() => handleEditItem(item, activeSection as 'summaries' | 'executive-iq' | 'organizations' | 'performance')}
+                  onClick={() => handleEditItem(item, activeSection as 'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories')}
                   className="flex-1 px-4 py-2 rounded-lg bg-gradient-to-r from-fis-navy to-fis-eggplant text-white text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2 font-roobert-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Edit
                 </button>
                 <a
-                  href={`${API_URL}/${activeSection === 'summaries' ? 'summaries' : activeSection === 'executive-iq' ? 'executive-iq' : activeSection === 'performance' ? 'performance' : 'organizations'}/${item.id}`}
+                  href={`${API_URL}/${activeSection === 'summaries' ? 'summaries' : activeSection === 'executive-iq' ? 'executive-iq' : activeSection === 'performance' ? 'performance' : activeSection === 'knowledge-base' ? 'knowledge-base' : activeSection === 'kb-categories' ? 'kb-categories' : 'organizations'}/${item.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg glass border border-white/20 hover:border-fis-eggplant hover:scale-110 transition-all"
@@ -757,6 +775,93 @@ function App() {
                           >
                             <Plus className="w-4 h-4" />
                             New Summary
+                          </button>
+                        )}
+                        {activeSection === 'knowledge-base' && (
+                          <button
+                            onClick={async () => {
+                              // Fetch and load the KB article template
+                              try {
+                                const response = await fetch(`${API_URL}/templates/kb-article-template`);
+                                if (response.ok) {
+                                  const result = await response.json();
+                                  if (result.success && result.template) {
+                                    // Create a new article with unique ID
+                                    const newArticle = {
+                                      ...result.template,
+                                      id: `kb-article-${Date.now()}`,
+                                      status: 'draft'
+                                    };
+                                    setSelectedItem(newArticle);
+                                    setModalDataType('knowledge-base' as any);
+                                    setModalOpen(true);
+                                  }
+                                } else {
+                                  showNotification('error', 'KB article template not found');
+                                }
+                              } catch (error) {
+                                console.error('Failed to load KB template:', error);
+                                showNotification('error', 'Failed to load template');
+                              }
+                            }}
+                            className="px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white hover:shadow-lg transition-all flex items-center gap-2 font-roobert-semibold"
+                          >
+                            <Plus className="w-4 h-4" />
+                            New Article
+                          </button>
+                        )}
+                        {activeSection === 'kb-categories' && (
+                          <button
+                            onClick={() => {
+                              // Create new KB category with proper schema
+                              const newCategory = {
+                                id: `kb-cat-${Date.now()}`,
+                                name: {
+                                  _type: 'text',
+                                  _enabled: true,
+                                  _completed: false,
+                                  value: '',
+                                  label: 'Category Name'
+                                },
+                                type: {
+                                  _type: 'select',
+                                  _enabled: true,
+                                  _completed: false,
+                                  value: 'technical',
+                                  label: 'Category Type',
+                                  options: ['technical', 'support', 'business', 'training']
+                                },
+                                description: {
+                                  _type: 'textarea',
+                                  _enabled: true,
+                                  _completed: false,
+                                  value: '',
+                                  label: 'Description'
+                                },
+                                icon: {
+                                  _type: 'text',
+                                  _enabled: true,
+                                  _completed: false,
+                                  value: 'BookOpen',
+                                  label: 'Icon Name (Lucide)'
+                                },
+                                color: {
+                                  _type: 'text',
+                                  _enabled: true,
+                                  _completed: false,
+                                  value: '#3B82F6',
+                                  label: 'Color (Hex)'
+                                },
+                                status: 'draft'
+                              };
+                              setSelectedItem(newCategory);
+                              setModalDataType('kb-categories' as any);
+                              setModalOpen(true);
+                            }}
+                            className="px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white hover:shadow-lg transition-all flex items-center gap-2 font-roobert-semibold"
+                          >
+                            <Plus className="w-4 h-4" />
+                            New Category
                           </button>
                         )}
                         <button

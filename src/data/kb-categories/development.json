@@ -1,0 +1,11 @@
+{
+  "id": "development",
+  "name": "Development",
+  "type": "technical",
+  "description": "Articles related to software development, coding practices, and technical implementations",
+  "icon": "Code",
+  "color": "#3B82F6",
+  "status": "published",
+  "_enabled": true,
+  "_completed": true
+}

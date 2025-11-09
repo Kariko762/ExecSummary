@@ -1,0 +1,319 @@
+{
+  "id": "kb-multi-column-layout",
+  "quarter": "Multi-Column Layout System",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Multi-Column Layout System",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "development",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "development",
+    "charts",
+    "templates",
+    "rendering",
+    "layout"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "troubleshooting",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "intermediate",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "8 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "System Generated",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:01:35.661Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:01:35.661Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "Learn how the multi-column layout works, how to use it, and how it's implemented.",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "Learn how the multi-column layout works, how to use it, and how it's implemented.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "keyPoints": [],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": false,
+  "_completed_keyPoints": false,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "Overview",
+      "description": "The multi-column layout system allows sections to span 1-4 columns in a responsive grid, enabling sophisticated layouts like side-by-side charts, multi-column metrics, and full-width headers.\r\n\r\n### Key Features\r\n- ✅ 1-4 column spans per section\r\n- ✅ Automatic row wrapping\r\n- ✅ Responsive (stacks on mobile)\r\n- ✅ Visual column selector in Template Builder\r\n- ✅ Works with all render types\r\n\r\n---",
+      "instructions": "The multi-column layout system allows sections to span 1-4 columns in a responsive grid, enabling sophisticated layouts like side-by-side charts, multi-column metrics, and full-width headers.\r\n\r\n### Key Features\r\n- ✅ 1-4 column spans per section\r\n- ✅ Automatic row wrapping\r\n- ✅ Responsive (stacks on mobile)\r\n- ✅ Visual column selector in Template Builder\r\n- ✅ Works with all render types\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "How It Works",
+      "description": "### Grid System\r\n\r\nThe layout uses a **4-column grid**:\r\n\r\n```\r\n┌───────────────────────────────────────┐\r\n│  Col 1   │  Col 2   │  Col 3   │  Col 4  │\r\n└───────────────────────────────────────┘\r\n```\r\n\r\n**Column Span Values:**\r\n- `1` = 25% width (quarter)\r\n- `2` = 50% width (half)\r\n- `3` = 75% width (three-quarters)\r\n- `4` = 100% width (full)\r\n\r\n### Row Algorithm\r\n\r\nSections fill rows from left to right. When total span exceeds 4, a new row starts:\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"section1_column",
+      "instructions": "### Grid System\r\n\r\nThe layout uses a **4-column grid**:\r\n\r\n```\r\n┌───────────────────────────────────────┐\r\n│  Col 1   │  Col 2   │  Col 3   │  Col 4  │\r\n└───────────────────────────────────────┘\r\n```\r\n\r\n**Column Span Values:**\r\n- `1` = 25% width (quarter)\r\n- `2` = 50% width (half)\r\n- `3` = 75% width (three-quarters)\r\n- `4` = 100% width (full)\r\n\r\n### Row Algorithm\r\n\r\nSections fill rows from left to right. When total span exceeds 4, a new row starts:\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"section1_columnSpan\": 4,  // Row 1: Full width\r\n  \"section2_columnSpan\": 2,  // Row 2: Left half\r\n  \"section3_columnSpan\": 2,  // Row 2: Right half (same row)\r\n  \"section4_columnSpan\": 3,  // Row 3: Left 3/4\r\n  \"section5_columnSpan\": 1   // Row 3: Right 1/4 (same row)\r\n}\r\n```\r\n\r\n**Visual Layout:**\r\n```\r\n┌─────────────────────────────────────┐\r\n│         Section 1 (4)                │ Row 1\r\n├──────────────────┬──────────────────┤\r\n│   Section 2 (2)  │   Section 3 (2)  │ Row 2\r\n├─────────────────────────┬───────────┤\r\n│    Section 4 (3)         │ Sec 5 (1) │ Row 3\r\n└─────────────────────────┴───────────┘\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "Using Multi-Column Layouts",
+      "description": "### Method 1: Via JSON Metadata\r\n\r\nAdd `_sectionName_columnSpan` to your summary JSON:\r\n\r\n```json\r\n{\r\n  \"highlights\": [\"...\"],\r\n  \"_highlights_type\": \"listNoTitle\",\r\n  \"_highlights_columnSpan\": 4,  // Full width\r\n  \r\n  \"budgetChart\": [/*...*/],\r\n  \"_budgetChart_type\": \"pieChart\",\r\n  \"_budgetChart_columnSpan\": 2,  // Half width\r\n  \r\n  \"revenueChart\": [/*...*/],\r\n  \"_revenueChart_type\": \"barChart\",\r\n  \"_revenueChart_columnSpan\": 2  // Half width (side-by-side)\r\n}\r\n```\r\n\r\n### Method 2: Via Template",
+      "instructions": "### Method 1: Via JSON Metadata\r\n\r\nAdd `_sectionName_columnSpan` to your summary JSON:\r\n\r\n```json\r\n{\r\n  \"highlights\": [\"...\"],\r\n  \"_highlights_type\": \"listNoTitle\",\r\n  \"_highlights_columnSpan\": 4,  // Full width\r\n  \r\n  \"budgetChart\": [/*...*/],\r\n  \"_budgetChart_type\": \"pieChart\",\r\n  \"_budgetChart_columnSpan\": 2,  // Half width\r\n  \r\n  \"revenueChart\": [/*...*/],\r\n  \"_revenueChart_type\": \"barChart\",\r\n  \"_revenueChart_columnSpan\": 2  // Half width (side-by-side)\r\n}\r\n```\r\n\r\n### Method 2: Via Template Builder\r\n\r\n1. Open CMS Admin → Template Builder\r\n2. Add sections to canvas\r\n3. In each section header, use the **Width** dropdown:\r\n   ```\r\n   Width: [1 col ▼]\r\n          2 cols\r\n          3 cols\r\n          4 cols (full)\r\n   ```\r\n4. Select desired width\r\n5. Save template\r\n\r\n### Method 3: Via Template Import\r\n\r\nWhen you import a summary, its columnSpan values are preserved:\r\n\r\n1. CMS Admin → Summaries → Import\r\n2. Select file with columnSpan metadata\r\n3. Template Builder loads with correct widths\r\n4. Modify as needed\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "Layout Patterns",
+      "description": "### Pattern 1: Dashboard Layout\r\n\r\n**Use Case:** Executive summary with key metrics and charts\r\n\r\n```json\r\n{\r\n  \"_highlights_columnSpan\": 4,      // Full-width header\r\n  \"_keyMetrics_columnSpan\": 4,      // Full-width metrics bar\r\n  \"_budgetChart_columnSpan\": 2,     // Left chart\r\n  \"_revenueChart_columnSpan\": 2,    // Right chart (same row)\r\n  \"_weeklyFocus_columnSpan\": 4      // Full-width footer\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\n┌─────────────────────────────────────┐\r\n│         Highlights        ",
+      "instructions": "### Pattern 1: Dashboard Layout\r\n\r\n**Use Case:** Executive summary with key metrics and charts\r\n\r\n```json\r\n{\r\n  \"_highlights_columnSpan\": 4,      // Full-width header\r\n  \"_keyMetrics_columnSpan\": 4,      // Full-width metrics bar\r\n  \"_budgetChart_columnSpan\": 2,     // Left chart\r\n  \"_revenueChart_columnSpan\": 2,    // Right chart (same row)\r\n  \"_weeklyFocus_columnSpan\": 4      // Full-width footer\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\n┌─────────────────────────────────────┐\r\n│         Highlights                   │\r\n├─────────────────────────────────────┤\r\n│         Key Metrics                  │\r\n├──────────────────┬──────────────────┤\r\n│  Budget Chart    │  Revenue Chart   │\r\n├─────────────────────────────────────┤\r\n│         Weekly Focus                 │\r\n└─────────────────────────────────────┘\r\n```\r\n\r\n---\r\n\r\n### Pattern 2: Sidebar Layout\r\n\r\n**Use Case:** Main content with sidebar metrics\r\n\r\n```json\r\n{\r\n  \"_mainContent_columnSpan\": 3,     // Main content (75%)\r\n  \"_sidebar_columnSpan\": 1,         // Sidebar metrics (25%)\r\n  \"_footer_columnSpan\": 4           // Full-width footer\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\n┌──────────────────────────┬─────────┐\r\n│                          │         │\r\n│    Main Content          │ Side    │\r\n│                          │ bar     │\r\n├──────────────────────────┴─────────┤\r\n│            Footer                   │\r\n└─────────────────────────────────────┘\r\n```\r\n\r\n---\r\n\r\n### Pattern 3: Triple Column\r\n\r\n**Use Case:** Three equal-width sections\r\n\r\n```json\r\n{\r\n  \"_metric1_columnSpan\": 1,   // 25%\r\n  \"_metric2_columnSpan\": 1,   // 25%\r\n  \"_metric3_columnSpan\": 1,   // 25%\r\n  \"_metric4_columnSpan\": 1    // 25% (fills row)\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\n┌────────┬────────┬────────┬────────┐\r\n│Metric 1│Metric 2│Metric 3│Metric 4│\r\n└────────┴────────┴────────┴────────┘\r\n```\r\n\r\n---\r\n\r\n### Pattern 4: Mixed Widths\r\n\r\n**Use Case:** Varied content importance\r\n\r\n```json\r\n{\r\n  \"_mainChart_columnSpan\": 3,      // Emphasized (75%)\r\n  \"_sideNote_columnSpan\": 1,       // De-emphasized (25%)\r\n  \"_detail1_columnSpan\": 2,        // Equal weight (50%)\r\n  \"_detail2_columnSpan\": 2         // Equal weight (50%)\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\n┌─────────────────────────┬──────────┐\r\n│     Main Chart          │ Side     │\r\n│                          │ Note     │\r\n├─────────────────┬────────┴──────────┤\r\n│    Detail 1     │     Detail 2      │\r\n└─────────────────┴───────────────────┘\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 5,
+      "title": "Implementation Details",
+      "description": "### Frontend Rendering (`SummaryDetailV2.tsx`)\r\n\r\n#### 1. Extract Column Spans\r\n\r\n```typescript\r\nconst getContentSections = () => {\r\n  return Object.keys(data)\r\n    .filter(key => !key.startsWith('_') && !excludeKeys.includes(key))\r\n    .map(key => {\r\n      const columnSpan = data[`_${key}_columnSpan`] || 1;\r\n      return {\r\n        key,\r\n        type: data[`_${key}_type`],\r\n        columnSpan,\r\n        data: data[key]\r\n      };\r\n    });\r\n};\r\n```\r\n\r\n#### 2. Organize into Rows\r\n\r\n```typescript\r\nc",
+      "instructions": "### Frontend Rendering (`SummaryDetailV2.tsx`)\r\n\r\n#### 1. Extract Column Spans\r\n\r\n```typescript\r\nconst getContentSections = () => {\r\n  return Object.keys(data)\r\n    .filter(key => !key.startsWith('_') && !excludeKeys.includes(key))\r\n    .map(key => {\r\n      const columnSpan = data[`_${key}_columnSpan`] || 1;\r\n      return {\r\n        key,\r\n        type: data[`_${key}_type`],\r\n        columnSpan,\r\n        data: data[key]\r\n      };\r\n    });\r\n};\r\n```\r\n\r\n#### 2. Organize into Rows\r\n\r\n```typescript\r\nconst organizeSectionsIntoRows = (sections: Section[]) => {\r\n  const rows: Section[][] = [];\r\n  let currentRow: Section[] = [];\r\n  let currentRowSpan = 0;\r\n\r\n  sections.forEach(section => {\r\n    const span = section.columnSpan || 1;\r\n    \r\n    // If adding this section exceeds 4 columns, start new row\r\n    if (currentRowSpan + span > 4 && currentRow.length > 0) {\r\n      rows.push(currentRow);\r\n      currentRow = [];\r\n      currentRowSpan = 0;\r\n    }\r\n    \r\n    currentRow.push(section);\r\n    currentRowSpan += span;\r\n  });\r\n  \r\n  // Add final row\r\n  if (currentRow.length > 0) {\r\n    rows.push(currentRow);\r\n  }\r\n  \r\n  return rows;\r\n};\r\n```\r\n\r\n#### 3. Render Grid\r\n\r\n```typescript\r\nconst rows = organizeSectionsIntoRows(sections);\r\n\r\nreturn (\r\n  <div className=\"space-y-4\">\r\n    {rows.map((row, rowIndex) => (\r\n      <div key={rowIndex} className=\"grid grid-cols-4 gap-4\">\r\n        {row.map(section => (\r\n          <div \r\n            key={section.key}\r\n            className={`col-span-${section.columnSpan} md:col-span-${section.columnSpan}`}\r\n          >\r\n            <RenderFactory\r\n              fieldKey={section.key}\r\n              value={section.data}\r\n              schema={/* ... */}\r\n              mode=\"display\"\r\n            />\r\n          </div>\r\n        ))}\r\n      </div>\r\n    ))}\r\n  </div>\r\n);\r\n```\r\n\r\n### Tailwind Column Classes\r\n\r\nThe system uses Tailwind's grid column span utilities:\r\n\r\n```css\r\n.col-span-1 { grid-column: span 1 / span 1; }  /* 25% */\r\n.col-span-2 { grid-column: span 2 / span 2; }  /* 50% */\r\n.col-span-3 { grid-column: span 3 / span 3; }  /* 75% */\r\n.col-span-4 { grid-column: span 4 / span 4; }  /* 100% */\r\n```\r\n\r\n### Responsive Behavior\r\n\r\nOn mobile (`< md` breakpoint), all sections stack vertically:\r\n\r\n```typescript\r\nclassName={`\r\n  col-span-4          // Mobile: full width (stack)\r\n  md:col-span-${section.columnSpan}  // Desktop: specified span\r\n`}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 6,
+      "title": "Template Builder Integration",
+      "description": "### Section Header UI\r\n\r\nEach section has a width selector:\r\n\r\n```typescript\r\n{!isHeaderSection && (\r\n  <div className=\"flex items-center gap-2 ml-4\">\r\n    <span className=\"text-xs text-gray-500\">Width:</span>\r\n    <select\r\n      value={section.columnSpan || 1}\r\n      onChange={(e) => {\r\n        const newSpan = parseInt(e.target.value);\r\n        setSections(prev => prev.map(s =>\r\n          s.id === section.id ? { ...s, columnSpan: newSpan } : s\r\n        ));\r\n      }}\r\n      className=\"text-xs px",
+      "instructions": "### Section Header UI\r\n\r\nEach section has a width selector:\r\n\r\n```typescript\r\n{!isHeaderSection && (\r\n  <div className=\"flex items-center gap-2 ml-4\">\r\n    <span className=\"text-xs text-gray-500\">Width:</span>\r\n    <select\r\n      value={section.columnSpan || 1}\r\n      onChange={(e) => {\r\n        const newSpan = parseInt(e.target.value);\r\n        setSections(prev => prev.map(s =>\r\n          s.id === section.id ? { ...s, columnSpan: newSpan } : s\r\n        ));\r\n      }}\r\n      className=\"text-xs px-2 py-1 rounded border\"\r\n    >\r\n      <option value={1}>1 col</option>\r\n      <option value={2}>2 cols</option>\r\n      <option value={3}>3 cols</option>\r\n      <option value={4}>4 cols (full)</option>\r\n    </select>\r\n  </div>\r\n)}\r\n```\r\n\r\n### Template Generation\r\n\r\nWhen saving, columnSpan is written to metadata:\r\n\r\n```typescript\r\n// Enable the section by default\r\ntemplateData[`_enabled_${sectionKey}`] = true;\r\ntemplateData[`_completed_${sectionKey}`] = false;\r\n\r\n// Add column span if specified\r\nif (section.columnSpan) {\r\n  templateData[`_${sectionKey}_columnSpan`] = section.columnSpan;\r\n}\r\n```\r\n\r\n### Template Loading\r\n\r\nWhen loading a template, columnSpan is restored:\r\n\r\n```typescript\r\nconst sectionColumnSpan = templateData[`_${key}_columnSpan`];\r\n\r\nnewSections.push({\r\n  id: `section-${Date.now()}-${key}`,\r\n  name: formatSectionTitle(key),\r\n  expanded: true,\r\n  fields: [field],\r\n  columnSpan: sectionColumnSpan || 1  // Restore or default to 1\r\n});\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 7,
+      "title": "Advanced Techniques",
+      "description": "### Conditional Column Spans\r\n\r\nAdjust spans based on content:\r\n\r\n```typescript\r\nconst columnSpan = section.data.length > 5 ? 4 : 2;\r\n```\r\n\r\n### Dynamic Grids\r\n\r\nChange layout based on viewport:\r\n\r\n```typescript\r\n<div className={`\r\n  grid \r\n  grid-cols-1           // Mobile: 1 column\r\n  md:grid-cols-2        // Tablet: 2 columns\r\n  lg:grid-cols-4        // Desktop: 4 columns\r\n  gap-4\r\n`}>\r\n```\r\n\r\n### Nested Grids\r\n\r\nGrid within a grid section:\r\n\r\n```typescript\r\n<div className=\"col-span-4\">\r\n  <d",
+      "instructions": "### Conditional Column Spans\r\n\r\nAdjust spans based on content:\r\n\r\n```typescript\r\nconst columnSpan = section.data.length > 5 ? 4 : 2;\r\n```\r\n\r\n### Dynamic Grids\r\n\r\nChange layout based on viewport:\r\n\r\n```typescript\r\n<div className={`\r\n  grid \r\n  grid-cols-1           // Mobile: 1 column\r\n  md:grid-cols-2        // Tablet: 2 columns\r\n  lg:grid-cols-4        // Desktop: 4 columns\r\n  gap-4\r\n`}>\r\n```\r\n\r\n### Nested Grids\r\n\r\nGrid within a grid section:\r\n\r\n```typescript\r\n<div className=\"col-span-4\">\r\n  <div className=\"grid grid-cols-2 gap-2\">\r\n    <SubComponent />\r\n    <SubComponent />\r\n  </div>\r\n</div>\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 8,
+      "title": "Best Practices",
+      "description": "### 1. Plan Your Layout\r\n\r\nSketch the grid before coding:\r\n\r\n```\r\nRow 1: [====== 4 ======]\r\nRow 2: [== 2 ==][== 2 ==]\r\nRow 3: [= 1 =][= 1 =][= 1 =][= 1 =]\r\n```\r\n\r\n### 2. Use Semantic Widths\r\n\r\nMatch span to content importance:\r\n- Full width (4): Headers, summaries, major sections\r\n- Half width (2): Charts, metrics (side-by-side)\r\n- Quarter width (1): Small metrics, indicators\r\n\r\n### 3. Test Responsiveness\r\n\r\nAlways check mobile view:\r\n- Sections stack vertically\r\n- Charts remain readable\r\n- Text",
+      "instructions": "### 1. Plan Your Layout\r\n\r\nSketch the grid before coding:\r\n\r\n```\r\nRow 1: [====== 4 ======]\r\nRow 2: [== 2 ==][== 2 ==]\r\nRow 3: [= 1 =][= 1 =][= 1 =][= 1 =]\r\n```\r\n\r\n### 2. Use Semantic Widths\r\n\r\nMatch span to content importance:\r\n- Full width (4): Headers, summaries, major sections\r\n- Half width (2): Charts, metrics (side-by-side)\r\n- Quarter width (1): Small metrics, indicators\r\n\r\n### 3. Test Responsiveness\r\n\r\nAlways check mobile view:\r\n- Sections stack vertically\r\n- Charts remain readable\r\n- Text doesn't overflow\r\n\r\n### 4. Consistent Gaps\r\n\r\nUse the same gap throughout:\r\n\r\n```typescript\r\n<div className=\"grid grid-cols-4 gap-4\">  // Always gap-4\r\n```\r\n\r\n### 5. Default to 1\r\n\r\nIf uncertain, start with 1 column and expand:\r\n\r\n```json\r\n{\r\n  \"_section_columnSpan\": 1  // Conservative default\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 9,
+      "title": "Troubleshooting",
+      "description": "### Sections Not Aligning\r\n\r\n**Issue:** Sections in same row don't align\r\n\r\n**Cause:** Row spans don't add up correctly\r\n\r\n**Fix:** Verify total span per row ≤ 4:\r\n```typescript\r\nconsole.log('Row total:', row.reduce((sum, s) => sum + s.columnSpan, 0));\r\n```\r\n\r\n---\r\n\r\n### Mobile View Broken\r\n\r\n**Issue:** Sections overlap on mobile\r\n\r\n**Cause:** Missing responsive classes\r\n\r\n**Fix:** Use `col-span-4` for mobile, `md:col-span-*` for desktop:\r\n```typescript\r\nclassName=\"col-span-4 md:col-span-2\"\r\n```",
+      "instructions": "### Sections Not Aligning\r\n\r\n**Issue:** Sections in same row don't align\r\n\r\n**Cause:** Row spans don't add up correctly\r\n\r\n**Fix:** Verify total span per row ≤ 4:\r\n```typescript\r\nconsole.log('Row total:', row.reduce((sum, s) => sum + s.columnSpan, 0));\r\n```\r\n\r\n---\r\n\r\n### Mobile View Broken\r\n\r\n**Issue:** Sections overlap on mobile\r\n\r\n**Cause:** Missing responsive classes\r\n\r\n**Fix:** Use `col-span-4` for mobile, `md:col-span-*` for desktop:\r\n```typescript\r\nclassName=\"col-span-4 md:col-span-2\"\r\n```\r\n\r\n---\r\n\r\n### Template Not Saving Spans\r\n\r\n**Issue:** ColumnSpan values not in generated JSON\r\n\r\n**Cause:** Not added to template generation\r\n\r\n**Fix:** Check `performSave()` includes columnSpan logic:\r\n```typescript\r\nif (section.columnSpan) {\r\n  templateData[`_${sectionKey}_columnSpan`] = section.columnSpan;\r\n}\r\n```\r\n\r\n---\r\n\r\n### Rows Too Tall\r\n\r\n**Issue:** Short content in wide sections leaves whitespace\r\n\r\n**Solution:** Use narrower spans or fill with content:\r\n```json\r\n{\r\n  \"_shortSection_columnSpan\": 2  // Instead of 4\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 10,
+      "title": "Examples",
+      "description": "### Example 1: Classic Dashboard\r\n\r\n```json\r\n{\r\n  \"title\": \"Executive Dashboard\",\r\n  \"_title_columnSpan\": 4,\r\n  \r\n  \"kpi1\": \"Revenue: $2.5M\",\r\n  \"_kpi1_columnSpan\": 1,\r\n  \r\n  \"kpi2\": \"Growth: 15%\",\r\n  \"_kpi2_columnSpan\": 1,\r\n  \r\n  \"kpi3\": \"Customers: 450\",\r\n  \"_kpi3_columnSpan\": 1,\r\n  \r\n  \"kpi4\": \"NPS: 92\",\r\n  \"_kpi4_columnSpan\": 1,\r\n  \r\n  \"mainChart\": [/* data */],\r\n  \"_mainChart_type\": \"lineChart\",\r\n  \"_mainChart_columnSpan\": 3,\r\n  \r\n  \"sideMetrics\": [/* data */],\r\n  \"_sideMetrics_type\": \"nest",
+      "instructions": "### Example 1: Classic Dashboard\r\n\r\n```json\r\n{\r\n  \"title\": \"Executive Dashboard\",\r\n  \"_title_columnSpan\": 4,\r\n  \r\n  \"kpi1\": \"Revenue: $2.5M\",\r\n  \"_kpi1_columnSpan\": 1,\r\n  \r\n  \"kpi2\": \"Growth: 15%\",\r\n  \"_kpi2_columnSpan\": 1,\r\n  \r\n  \"kpi3\": \"Customers: 450\",\r\n  \"_kpi3_columnSpan\": 1,\r\n  \r\n  \"kpi4\": \"NPS: 92\",\r\n  \"_kpi4_columnSpan\": 1,\r\n  \r\n  \"mainChart\": [/* data */],\r\n  \"_mainChart_type\": \"lineChart\",\r\n  \"_mainChart_columnSpan\": 3,\r\n  \r\n  \"sideMetrics\": [/* data */],\r\n  \"_sideMetrics_type\": \"nestedCards\",\r\n  \"_sideMetrics_columnSpan\": 1\r\n}\r\n```\r\n\r\n---\r\n\r\n### Example 2: Report Layout\r\n\r\n```json\r\n{\r\n  \"executiveSummary\": \"Summary text...\",\r\n  \"_executiveSummary_columnSpan\": 4,\r\n  \r\n  \"leftChart\": [/* data */],\r\n  \"_leftChart_type\": \"barChart\",\r\n  \"_leftChart_columnSpan\": 2,\r\n  \r\n  \"rightChart\": [/* data */],\r\n  \"_rightChart_type\": \"pieChart\",\r\n  \"_rightChart_columnSpan\": 2,\r\n  \r\n  \"divider\": null,\r\n  \"_divider_type\": \"hr\",\r\n  \"_divider_columnSpan\": 4,\r\n  \r\n  \"details\": \"Detailed analysis...\",\r\n  \"_details_columnSpan\": 4\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 11,
+      "title": "Related Documentation",
+      "description": "- [Metadata Schema Reference](../reference/metadata-schema.md) - Metadata patterns\r\n- [Template System](./template-system.md) - Template creation\r\n- [Adding New Assets](./adding-new-assets.md) - Custom components\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*",
+      "instructions": "- [Metadata Schema Reference](../reference/metadata-schema.md) - Metadata patterns\r\n- [Template System](./template-system.md) - Template creation\r\n- [Adding New Assets](./adding-new-assets.md) - Custom components\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "relatedArticles": [],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": false,
+  "_completed_relatedArticles": false,
+  "_template_name": "KB Article Import",
+  "_template_description": "Imported from Markdown",
+  "_template_created": "2025-11-09T13:01:35.661Z",
+  "_template_updated": "2025-11-09T13:01:35.661Z"
+}

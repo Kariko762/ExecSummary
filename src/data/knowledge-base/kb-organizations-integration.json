@@ -1,0 +1,307 @@
+{
+  "id": "kb-organizations-integration",
+  "quarter": "Organizations Integration Guide",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Organizations Integration Guide",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "development",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "development",
+    "charts",
+    "templates",
+    "rendering",
+    "layout"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "troubleshooting",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "intermediate",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "7 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "System Generated",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:01:35.664Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:01:35.664Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "This document explains the Organizations integration architecture and how it shares rendering infrastructure with Executive Summaries.",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "This document explains the Organizations integration architecture and how it shares rendering infrastructure with Executive Summaries.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "keyPoints": [],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": false,
+  "_completed_keyPoints": false,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "Overview",
+      "description": "**Goal:** Unify Organizations and Executive Summaries to use the same metadata-driven rendering system.\r\n\r\n**Before CR-001:**\r\n- Organizations used custom rendering in `OrganizationModal.tsx`\r\n- 271 lines of custom JSX for rendering 4 sections\r\n- No expression parsing support\r\n- Separate styling and layout logic from Summaries\r\n\r\n**After CR-001:**\r\n- Organizations use RenderFactory (same as SummaryDetailV2)\r\n- 151 lines (-44% reduction)\r\n- Full expression parsing support\r\n- Shared rendering, sty",
+      "instructions": "**Goal:** Unify Organizations and Executive Summaries to use the same metadata-driven rendering system.\r\n\r\n**Before CR-001:**\r\n- Organizations used custom rendering in `OrganizationModal.tsx`\r\n- 271 lines of custom JSX for rendering 4 sections\r\n- No expression parsing support\r\n- Separate styling and layout logic from Summaries\r\n\r\n**After CR-001:**\r\n- Organizations use RenderFactory (same as SummaryDetailV2)\r\n- 151 lines (-44% reduction)\r\n- Full expression parsing support\r\n- Shared rendering, styling, and expression engine\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "Architecture Changes",
+      "description": "### Data Structure\r\n\r\nOrganizations now follow the same metadata pattern as Summaries:\r\n\r\n```json\r\n{\r\n  \"id\": \"banking-na\",\r\n  \"name\": \"Banking - North America\",\r\n  \"lastUpdated\": \"2024-11-04T17:45:00Z\",\r\n  \r\n  \"keyHighlights\": [\"Item 1\", \"Item 2\"],\r\n  \"_keyHighlights_type\": \"list\",\r\n  \"_enabled_keyHighlights\": true,\r\n  \"_completed_keyHighlights\": false,\r\n  \r\n  \"strategicProjects\": [\r\n    {\r\n      \"id\": \"proj-001\",\r\n      \"name\": \"Project Name\",\r\n      \"status\": \"on-track\",\r\n      \"progress\": 75",
+      "instructions": "### Data Structure\r\n\r\nOrganizations now follow the same metadata pattern as Summaries:\r\n\r\n```json\r\n{\r\n  \"id\": \"banking-na\",\r\n  \"name\": \"Banking - North America\",\r\n  \"lastUpdated\": \"2024-11-04T17:45:00Z\",\r\n  \r\n  \"keyHighlights\": [\"Item 1\", \"Item 2\"],\r\n  \"_keyHighlights_type\": \"list\",\r\n  \"_enabled_keyHighlights\": true,\r\n  \"_completed_keyHighlights\": false,\r\n  \r\n  \"strategicProjects\": [\r\n    {\r\n      \"id\": \"proj-001\",\r\n      \"name\": \"Project Name\",\r\n      \"status\": \"on-track\",\r\n      \"progress\": 75,\r\n      \"owner\": \"John Doe\",\r\n      \"dueDate\": \"2024-12-31\",\r\n      \"executiveSummary\": \"Summary text with {{expressions}}\"\r\n    }\r\n  ],\r\n  \"_strategicProjects_type\": \"nestedCards\",\r\n  \"_strategicProjects_fields\": {\r\n    \"name\": { \"type\": \"text\", \"label\": \"Project Name\", \"required\": true },\r\n    \"status\": { \"type\": \"select\", \"label\": \"Status\", \"options\": [...] },\r\n    \"progress\": { \"type\": \"number\", \"label\": \"Progress %\", \"min\": 0, \"max\": 100 },\r\n    \"owner\": { \"type\": \"text\", \"label\": \"Owner\" },\r\n    \"dueDate\": { \"type\": \"date\", \"label\": \"Due Date\" },\r\n    \"executiveSummary\": { \"type\": \"textarea\", \"label\": \"Executive Summary\" }\r\n  },\r\n  \"_enabled_strategicProjects\": true,\r\n  \"_completed_strategicProjects\": false,\r\n  \r\n  \"supportActivities\": [ /* nestedCards */ ],\r\n  \"_supportActivities_type\": \"nestedCards\",\r\n  \"_supportActivities_fields\": { /* ... */ },\r\n  \r\n  \"demoInsights\": {\r\n    \"demosThisWeek\": 16,\r\n    \"hoursInvested\": 142,\r\n    \"topRequests\": [\"Request 1\", \"Request 2\"],\r\n    \"wins\": [\"Win 1\", \"Win 2\"]\r\n  },\r\n  \"_demoInsights_type\": \"objectForm\",\r\n  \"_demoInsights_fields\": {\r\n    \"demosThisWeek\": { \"type\": \"number\", \"label\": \"Demos This Week\" },\r\n    \"hoursInvested\": { \"type\": \"number\", \"label\": \"Hours Invested\" },\r\n    \"topRequests\": { \"type\": \"list\", \"label\": \"Top Requests\" },\r\n    \"wins\": { \"type\": \"list\", \"label\": \"Wins\" }\r\n  }\r\n}\r\n```\r\n\r\n### Component Architecture\r\n\r\n**Before (Custom Rendering):**\r\n\r\n```tsx\r\n// OrganizationModal.tsx - OLD\r\n<section>\r\n  <h3>Strategic Projects</h3>\r\n  <div className=\"space-y-4\">\r\n    {organization.strategicProjects.map(project => (\r\n      <div className=\"bg-white...\">\r\n        <h4>{project.name}</h4>\r\n        <span className={getStatusColor(project.status)}>{project.status}</span>\r\n        <div className=\"progress-bar\">\r\n          <div style={{ width: `${project.progress}%` }} />\r\n        </div>\r\n        <RichText>{project.executiveSummary}</RichText>\r\n      </div>\r\n    ))}\r\n  </div>\r\n</section>\r\n```\r\n\r\n**After (RenderFactory):**\r\n\r\n```tsx\r\n// OrganizationModal.tsx - NEW\r\n<section>\r\n  <h3>Strategic Projects</h3>\r\n  <RenderFactory\r\n    fieldKey=\"strategicProjects\"\r\n    value={organization.strategicProjects}\r\n    onChange={() => {}} // Read-only in display mode\r\n    mode=\"display\"\r\n    schema={{\r\n      renderAs: organization._strategicProjects_type || 'nestedCards',\r\n      fields: organization._strategicProjects_fields\r\n    }}\r\n  />\r\n</section>\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "Section Types",
+      "description": "### 1. Key Highlights (List)\r\n\r\n**Type:** `list`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"keyHighlights\": [\r\n    \"{{badge:success}} Achievement with {{bold:formatting}}\",\r\n    \"{{trend:up}} Metric increased {{delta:15}}%\"\r\n  ],\r\n  \"_keyHighlights_type\": \"list\",\r\n  \"_enabled_keyHighlights\": true\r\n}\r\n```\r\n\r\n**Renderer:** `ListRenderer`\r\n\r\n**Expressions Supported:** All (badge, icon, trend, delta, bold, highlight, currency, etc.)\r\n\r\n---\r\n\r\n### 2. Strategic Projects (Nested Cards)\r\n\r\n**Type:** `nested",
+      "instructions": "### 1. Key Highlights (List)\r\n\r\n**Type:** `list`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"keyHighlights\": [\r\n    \"{{badge:success}} Achievement with {{bold:formatting}}\",\r\n    \"{{trend:up}} Metric increased {{delta:15}}%\"\r\n  ],\r\n  \"_keyHighlights_type\": \"list\",\r\n  \"_enabled_keyHighlights\": true\r\n}\r\n```\r\n\r\n**Renderer:** `ListRenderer`\r\n\r\n**Expressions Supported:** All (badge, icon, trend, delta, bold, highlight, currency, etc.)\r\n\r\n---\r\n\r\n### 2. Strategic Projects (Nested Cards)\r\n\r\n**Type:** `nestedCards`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"strategicProjects\": [\r\n    {\r\n      \"id\": \"proj-001\",\r\n      \"name\": \"Project Name\",\r\n      \"status\": \"on-track\" | \"at-risk\" | \"delayed\" | \"completed\",\r\n      \"progress\": 75,\r\n      \"owner\": \"Owner Name\",\r\n      \"dueDate\": \"2024-12-31\",\r\n      \"executiveSummary\": \"Description with {{expressions}}\"\r\n    }\r\n  ],\r\n  \"_strategicProjects_type\": \"nestedCards\",\r\n  \"_strategicProjects_fields\": {\r\n    \"name\": { \"type\": \"text\", \"label\": \"Project Name\", \"required\": true },\r\n    \"status\": { \r\n      \"type\": \"select\", \r\n      \"label\": \"Status\", \r\n      \"options\": [\"on-track\", \"at-risk\", \"delayed\", \"completed\"] \r\n    },\r\n    \"progress\": { \"type\": \"number\", \"label\": \"Progress %\", \"min\": 0, \"max\": 100 },\r\n    \"owner\": { \"type\": \"text\", \"label\": \"Owner\" },\r\n    \"dueDate\": { \"type\": \"date\", \"label\": \"Due Date\" },\r\n    \"executiveSummary\": { \"type\": \"textarea\", \"label\": \"Executive Summary\" }\r\n  }\r\n}\r\n```\r\n\r\n**Renderer:** `NestedCardsRenderer`\r\n\r\n**Features:**\r\n- Card header shows `name` field\r\n- All other fields displayed in card body\r\n- Expression parsing in text fields\r\n- Status badges automatically styled\r\n\r\n---\r\n\r\n### 3. Support Activities (Nested Cards)\r\n\r\n**Type:** `nestedCards`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"supportActivities\": [\r\n    {\r\n      \"id\": \"sup-001\",\r\n      \"type\": \"incident\" | \"request\" | \"enhancement\",\r\n      \"title\": \"Activity title\",\r\n      \"priority\": \"critical\" | \"high\" | \"medium\" | \"low\",\r\n      \"status\": \"active\" | \"resolved\" | \"blocked\",\r\n      \"description\": \"Description text\",\r\n      \"impact\": \"Impact statement\"\r\n    }\r\n  ],\r\n  \"_supportActivities_type\": \"nestedCards\",\r\n  \"_supportActivities_fields\": {\r\n    \"type\": { \r\n      \"type\": \"select\", \r\n      \"label\": \"Type\", \r\n      \"options\": [\"incident\", \"request\", \"enhancement\"] \r\n    },\r\n    \"title\": { \"type\": \"text\", \"label\": \"Title\", \"required\": true },\r\n    \"priority\": { \r\n      \"type\": \"select\", \r\n      \"label\": \"Priority\", \r\n      \"options\": [\"critical\", \"high\", \"medium\", \"low\"] \r\n    },\r\n    \"status\": { \r\n      \"type\": \"select\", \r\n      \"label\": \"Status\", \r\n      \"options\": [\"active\", \"resolved\", \"blocked\"] \r\n    },\r\n    \"description\": { \"type\": \"textarea\", \"label\": \"Description\" },\r\n    \"impact\": { \"type\": \"text\", \"label\": \"Impact\" }\r\n  }\r\n}\r\n```\r\n\r\n**Renderer:** `NestedCardsRenderer`\r\n\r\n---\r\n\r\n### 4. Demo Insights (Object Form)\r\n\r\n**Type:** `objectForm`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"demoInsights\": {\r\n    \"demosThisWeek\": 16,\r\n    \"hoursInvested\": 142,\r\n    \"topRequests\": [\r\n      \"Request type 1\",\r\n      \"Request type 2\"\r\n    ],\r\n    \"wins\": [\r\n      \"Win description 1\",\r\n      \"Win description 2\"\r\n    ]\r\n  },\r\n  \"_demoInsights_type\": \"objectForm\",\r\n  \"_demoInsights_fields\": {\r\n    \"demosThisWeek\": { \"type\": \"number\", \"label\": \"Demos This Week\" },\r\n    \"hoursInvested\": { \"type\": \"number\", \"label\": \"Hours Invested\" },\r\n    \"topRequests\": { \"type\": \"list\", \"label\": \"Top Requests\" },\r\n    \"wins\": { \"type\": \"list\", \"label\": \"Wins\" }\r\n  }\r\n}\r\n```\r\n\r\n**Renderer:** `ObjectFormRenderer`\r\n\r\n**Note:** Uses `objectForm` instead of `nestedCards` because the data is a single object, not an array.\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "Expression Parsing Integration",
+      "description": "### Renderer Updates\r\n\r\nThree renderers were updated to parse expressions in display mode:\r\n\r\n#### ListRenderer\r\n\r\n```tsx\r\n// Before\r\n<span>{item}</span>\r\n\r\n// After\r\n<span>{renderWithExpressions(item)}</span>\r\n```\r\n\r\n#### NestedCardsRenderer\r\n\r\n```tsx\r\n// Before\r\n<p>{String(fieldValue)}</p>\r\n\r\n// After\r\n<p>{renderWithExpressions(String(fieldValue))}</p>\r\n```\r\n\r\n#### ObjectFormRenderer\r\n\r\n```tsx\r\n// Before\r\n<p>{String(fieldValue)}</p>\r\n\r\n// After\r\n<p>{renderWithExpressions(String(fieldValue))}</",
+      "instructions": "### Renderer Updates\r\n\r\nThree renderers were updated to parse expressions in display mode:\r\n\r\n#### ListRenderer\r\n\r\n```tsx\r\n// Before\r\n<span>{item}</span>\r\n\r\n// After\r\n<span>{renderWithExpressions(item)}</span>\r\n```\r\n\r\n#### NestedCardsRenderer\r\n\r\n```tsx\r\n// Before\r\n<p>{String(fieldValue)}</p>\r\n\r\n// After\r\n<p>{renderWithExpressions(String(fieldValue))}</p>\r\n```\r\n\r\n#### ObjectFormRenderer\r\n\r\n```tsx\r\n// Before\r\n<p>{String(fieldValue)}</p>\r\n\r\n// After\r\n<p>{renderWithExpressions(String(fieldValue))}</p>\r\n```\r\n\r\n### Expression Parser\r\n\r\nThe expression parser (`src/utils/expressionParser.tsx`) already supported both syntaxes:\r\n- `{{type:value}}` - Organizations syntax\r\n- `[[type]]value[[/type]]` - Summaries syntax\r\n\r\n**No converter needed** - both syntaxes work in the same files.\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 5,
+      "title": "Migration Process",
+      "description": "### Step 1: Add Metadata to JSON Files\r\n\r\nFor each organization file, add metadata after each data section:\r\n\r\n```json\r\n{\r\n  \"keyHighlights\": [ /* data */ ],\r\n  \"_keyHighlights_type\": \"list\",\r\n  \"_enabled_keyHighlights\": true,\r\n  \"_completed_keyHighlights\": false,\r\n  \r\n  \"strategicProjects\": [ /* data */ ],\r\n  \"_strategicProjects_type\": \"nestedCards\",\r\n  \"_strategicProjects_fields\": { /* field definitions */ },\r\n  \"_enabled_strategicProjects\": true,\r\n  \"_completed_strategicProjects\": false\r\n}\r\n`",
+      "instructions": "### Step 1: Add Metadata to JSON Files\r\n\r\nFor each organization file, add metadata after each data section:\r\n\r\n```json\r\n{\r\n  \"keyHighlights\": [ /* data */ ],\r\n  \"_keyHighlights_type\": \"list\",\r\n  \"_enabled_keyHighlights\": true,\r\n  \"_completed_keyHighlights\": false,\r\n  \r\n  \"strategicProjects\": [ /* data */ ],\r\n  \"_strategicProjects_type\": \"nestedCards\",\r\n  \"_strategicProjects_fields\": { /* field definitions */ },\r\n  \"_enabled_strategicProjects\": true,\r\n  \"_completed_strategicProjects\": false\r\n}\r\n```\r\n\r\n### Step 2: Update Component\r\n\r\nReplace custom rendering with RenderFactory:\r\n\r\n```tsx\r\n{/* Old: Custom rendering */}\r\n<div className=\"grid grid-cols-1 md:grid-cols-2 gap-4\">\r\n  {organization.keyHighlights.map((highlight, index) => (\r\n    <div key={index} className=\"...\">\r\n      <p><RichText>{highlight}</RichText></p>\r\n    </div>\r\n  ))}\r\n</div>\r\n\r\n{/* New: RenderFactory */}\r\n<RenderFactory\r\n  fieldKey=\"keyHighlights\"\r\n  value={organization.keyHighlights}\r\n  onChange={() => {}}\r\n  mode=\"display\"\r\n  schema={{\r\n    renderAs: organization._keyHighlights_type || 'list',\r\n    fields: organization._keyHighlights_fields\r\n  }}\r\n/>\r\n```\r\n\r\n### Step 3: Test\r\n\r\n1. Open organization in browser\r\n2. Verify all sections render correctly\r\n3. Check expression parsing works (badges, icons, etc.)\r\n4. Test all 4 organizations\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 6,
+      "title": "Files Modified",
+      "description": "### Data Files (4)\r\n- `src/data/organizations/banking-na.json`\r\n- `src/data/organizations/payments.json`\r\n- `src/data/organizations/int-banking.json`\r\n- `src/data/organizations/capital-markets.json`\r\n\r\n### Components (1)\r\n- `src/components/OrganizationModal.tsx` (271 → 151 lines)\r\n\r\n### Renderers (3)\r\n- `src/renderers/ListRenderer.tsx` (added expression parsing)\r\n- `src/renderers/NestedCardsRenderer.tsx` (added expression parsing)\r\n- `src/renderers/ObjectFormRenderer.tsx` (added expression parsi",
+      "instructions": "### Data Files (4)\r\n- `src/data/organizations/banking-na.json`\r\n- `src/data/organizations/payments.json`\r\n- `src/data/organizations/int-banking.json`\r\n- `src/data/organizations/capital-markets.json`\r\n\r\n### Components (1)\r\n- `src/components/OrganizationModal.tsx` (271 → 151 lines)\r\n\r\n### Renderers (3)\r\n- `src/renderers/ListRenderer.tsx` (added expression parsing)\r\n- `src/renderers/NestedCardsRenderer.tsx` (added expression parsing)\r\n- `src/renderers/ObjectFormRenderer.tsx` (added expression parsing)\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 7,
+      "title": "Benefits",
+      "description": "### Code Reduction\r\n- **44% reduction** in OrganizationModal code\r\n- Removed duplicate rendering logic\r\n- Removed helper functions (getStatusColor, getPriorityColor)\r\n\r\n### Unified Architecture\r\n- Organizations and Summaries use same renderers\r\n- One change updates both systems\r\n- Consistent styling and behavior\r\n\r\n### Expression Support\r\n- All expression types now work in Organizations\r\n- Badges, icons, trends, deltas, metrics, currency\r\n- Same parser handles both `{{}}` and `[[]]` syntax\r\n\r\n##",
+      "instructions": "### Code Reduction\r\n- **44% reduction** in OrganizationModal code\r\n- Removed duplicate rendering logic\r\n- Removed helper functions (getStatusColor, getPriorityColor)\r\n\r\n### Unified Architecture\r\n- Organizations and Summaries use same renderers\r\n- One change updates both systems\r\n- Consistent styling and behavior\r\n\r\n### Expression Support\r\n- All expression types now work in Organizations\r\n- Badges, icons, trends, deltas, metrics, currency\r\n- Same parser handles both `{{}}` and `[[]]` syntax\r\n\r\n### Future-Proof\r\n- New render types automatically available\r\n- Chart support ready to add\r\n- Template Builder integration possible\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 8,
+      "title": "Future Enhancements",
+      "description": "### CMS Integration (Optional)\r\n\r\nOrganizations could be edited via CMS Admin:\r\n\r\n1. **Create Template:** `organization-template-v1.json`\r\n2. **Add to Template Builder:** Organization asset type\r\n3. **Enable Editing:** Add organizations to CMS editor\r\n\r\n### Additional Render Types\r\n\r\nOrganizations could use other render types:\r\n\r\n```json\r\n{\r\n  \"projectTimeline\": [ /* data */ ],\r\n  \"_projectTimeline_type\": \"lineChart\",\r\n  \"_projectTimeline_chartConfig\": { /* ... */ }\r\n}\r\n```\r\n\r\n### Custom Fields\r",
+      "instructions": "### CMS Integration (Optional)\r\n\r\nOrganizations could be edited via CMS Admin:\r\n\r\n1. **Create Template:** `organization-template-v1.json`\r\n2. **Add to Template Builder:** Organization asset type\r\n3. **Enable Editing:** Add organizations to CMS editor\r\n\r\n### Additional Render Types\r\n\r\nOrganizations could use other render types:\r\n\r\n```json\r\n{\r\n  \"projectTimeline\": [ /* data */ ],\r\n  \"_projectTimeline_type\": \"lineChart\",\r\n  \"_projectTimeline_chartConfig\": { /* ... */ }\r\n}\r\n```\r\n\r\n### Custom Fields\r\n\r\nAdd organization-specific fields:\r\n\r\n```json\r\n{\r\n  \"region\": \"North America\",\r\n  \"_region_type\": \"text\",\r\n  \r\n  \"teamSize\": 45,\r\n  \"_teamSize_type\": \"number\"\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 9,
+      "title": "Troubleshooting",
+      "description": "### Section Not Rendering\r\n\r\n**Check:**\r\n1. `_enabled_sectionName` is not `false`\r\n2. `_sectionName_type` is specified\r\n3. Data structure matches render type (array for nestedCards, object for objectForm)\r\n\r\n### Expressions Not Parsing\r\n\r\n**Check:**\r\n1. Renderer calls `renderWithExpressions()` in display mode\r\n2. Expression syntax is valid: `{{type:value}}`\r\n3. Import statement: `import { renderWithExpressions } from '../utils/expressionParser'`\r\n\r\n### Fields Not Displaying\r\n\r\n**Check:**\r\n1. `_s",
+      "instructions": "### Section Not Rendering\r\n\r\n**Check:**\r\n1. `_enabled_sectionName` is not `false`\r\n2. `_sectionName_type` is specified\r\n3. Data structure matches render type (array for nestedCards, object for objectForm)\r\n\r\n### Expressions Not Parsing\r\n\r\n**Check:**\r\n1. Renderer calls `renderWithExpressions()` in display mode\r\n2. Expression syntax is valid: `{{type:value}}`\r\n3. Import statement: `import { renderWithExpressions } from '../utils/expressionParser'`\r\n\r\n### Fields Not Displaying\r\n\r\n**Check:**\r\n1. `_sectionName_fields` is defined for complex types\r\n2. Field names in `_fields` match data keys\r\n3. Field types are valid (text, number, date, textarea, list)\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 10,
+      "title": "Related Documentation",
+      "description": "- [Metadata Schema Reference](../reference/metadata-schema.md)\r\n- [Render Type Catalog](../reference/render-types.md)\r\n- [Expression Syntax Reference](../user-guides/expression-syntax.md)\r\n- [Adding New Assets](./adding-new-assets.md)\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*\r\n*Change Request: CR-001*",
+      "instructions": "- [Metadata Schema Reference](../reference/metadata-schema.md)\r\n- [Render Type Catalog](../reference/render-types.md)\r\n- [Expression Syntax Reference](../user-guides/expression-syntax.md)\r\n- [Adding New Assets](./adding-new-assets.md)\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*\r\n*Change Request: CR-001*",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "relatedArticles": [],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": false,
+  "_completed_relatedArticles": false,
+  "_template_name": "KB Article Import",
+  "_template_description": "Imported from Markdown",
+  "_template_created": "2025-11-09T13:01:35.664Z",
+  "_template_updated": "2025-11-09T13:01:35.664Z"
+}

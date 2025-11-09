@@ -1,0 +1,11 @@
+{
+  "id": "deployment",
+  "name": "Deployment",
+  "type": "technical",
+  "description": "Guides for deploying applications, infrastructure setup, and production workflows",
+  "icon": "Rocket",
+  "color": "#10B981",
+  "status": "published",
+  "_enabled": true,
+  "_completed": true
+}

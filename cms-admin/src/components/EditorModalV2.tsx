@@ -11,7 +11,7 @@ interface EditorModalV2Props {
   isOpen: boolean;
   onClose: () => void;
   data: any;
-  dataType: 'summaries' | 'executive-iq' | 'organizations' | 'performance';
+  dataType: 'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories';
   onSave: (data: any, status: 'draft' | 'published') => void;
   isTestMode?: boolean; // Flag to indicate testing mode (don't prompt to save)
 }
@@ -417,11 +417,14 @@ export default function EditorModalV2({
     const excludePrefixes = ['_enabled_', '_completed_', '_locked_', '_template_'];
     const excludeSuffixes = ['_schema', '_type', '_fields', '_config', '_columnSpan'];
     const excludeContains = ['_chartConfig']; // Exclude dynamic chart config keys
+    const excludeExact = ['_enabled', '_completed', '_locked']; // Exclude these exact keys
     
     const allKeys = Object.keys(sourceData)
       .filter(key => {
         // Exclude metadata keys
         if (metadataKeys.includes(key)) return false;
+        // Exclude exact matches
+        if (excludeExact.includes(key)) return false;
         // Exclude keys with metadata prefixes
         if (excludePrefixes.some(prefix => key.startsWith(prefix))) return false;
         // Exclude keys with metadata suffixes (like _schema, _type, _fields)
@@ -1056,22 +1059,44 @@ export default function EditorModalV2({
                     </div>
 
                     {/* Schema-Driven Content */}
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-[5px] border border-gray-200 dark:border-gray-700">
-                      {activeSection.locked ? (
-                        <div className="text-center py-12">
-                          <Lock className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-3" />
-                          <p className="text-gray-600 dark:text-gray-400 font-roobert-medium">
-                            This section is locked
-                          </p>
-                          <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
-                            {activeSection.completed 
-                              ? 'Mark as incomplete to unlock and edit'
-                              : 'Unlock this section to make changes'
-                            }
-                          </p>
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-[5px] border border-gray-200 dark:border-gray-700 relative">
+                      {renderSchemaSection(activeSection.id)}
+                      
+                      {/* Overlay for locked sections - Adaptive design */}
+                      {activeSection.locked && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-fis-navy/90 via-fis-eggplant/80 to-fis-navy/90 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                          {/* Large sections: Full overlay with icon */}
+                          <div className="hidden sm:block text-center px-6 py-8 glass-strong rounded-2xl border-2 border-fis-raspberry/50 backdrop-blur-md shadow-2xl max-w-md">
+                            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-fis-raspberry to-fis-eggplant flex items-center justify-center shadow-lg">
+                              <Lock className="w-8 h-8 text-white" />
+                            </div>
+                            <p className="text-lg font-roobert-bold text-white mb-2">
+                              {activeSection.completed ? 'Section Marked Complete' : 'Section Locked'}
+                            </p>
+                            <p className="text-sm text-white/90 font-roobert-medium">
+                              {activeSection.completed 
+                                ? 'Currently locked for editing'
+                                : 'This section is locked'
+                              }
+                            </p>
+                            <p className="text-xs text-white/70 mt-2">
+                              {activeSection.completed 
+                                ? 'Mark as incomplete to unlock and edit'
+                                : 'Unlock this section to make changes'
+                              }
+                            </p>
+                          </div>
+                          
+                          {/* Small sections: Compact badge overlay */}
+                          <div className="sm:hidden inline-flex items-center gap-2 px-4 py-2 glass-strong rounded-full border-2 border-fis-raspberry/50 shadow-lg">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-fis-raspberry to-fis-eggplant flex items-center justify-center">
+                              <Lock className="w-4 h-4 text-white" />
+                            </div>
+                            <span className="text-sm font-roobert-bold text-white">
+                              {activeSection.completed ? 'Complete' : 'Locked'}
+                            </span>
+                          </div>
                         </div>
-                      ) : (
-                        renderSchemaSection(activeSection.id)
                       )}
                     </div>
                   </motion.div>

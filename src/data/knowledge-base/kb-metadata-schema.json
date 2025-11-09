@@ -1,0 +1,295 @@
+{
+  "id": "kb-metadata-schema",
+  "quarter": "Metadata Schema Reference",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Metadata Schema Reference",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "technical",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "technical",
+    "charts",
+    "templates",
+    "rendering",
+    "layout"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "reference",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "intermediate",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "9 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "System Generated",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:01:35.667Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:01:35.667Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "This document explains every metadata pattern, convention, and use case.",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "This document explains every metadata pattern, convention, and use case.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "keyPoints": [],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": false,
+  "_completed_keyPoints": false,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "Overview",
+      "description": "The Executive Summary Platform uses a **metadata-driven architecture** where JSON files contain both **data** and **metadata** that defines how the data should be rendered.\r\n\r\n### Core Principle\r\n\r\n```json\r\n{\r\n  \"sectionName\": \"actual data goes here\",\r\n  \"_sectionName_type\": \"metadata about how to render\",\r\n  \"_sectionName_config\": \"configuration for rendering\"\r\n}\r\n```\r\n\r\nAll metadata keys start with underscore (`_`) to distinguish them from actual data.\r\n\r\n---",
+      "instructions": "The Executive Summary Platform uses a **metadata-driven architecture** where JSON files contain both **data** and **metadata** that defines how the data should be rendered.\r\n\r\n### Core Principle\r\n\r\n```json\r\n{\r\n  \"sectionName\": \"actual data goes here\",\r\n  \"_sectionName_type\": \"metadata about how to render\",\r\n  \"_sectionName_config\": \"configuration for rendering\"\r\n}\r\n```\r\n\r\nAll metadata keys start with underscore (`_`) to distinguish them from actual data.\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "Metadata Patterns",
+      "description": "### 1. Render Type (`_*_type`)\r\n\r\n**Purpose:** Defines which renderer component to use\r\n\r\n**Pattern:** `_<sectionKey>_type`\r\n\r\n**Value:** One of the [RenderType values](#render-types)\r\n\r\n**Examples:**\r\n```json\r\n{\r\n  \"highlights\": [\"Item 1\", \"Item 2\"],\r\n  \"_highlights_type\": \"listNoTitle\",\r\n  \r\n  \"description\": \"Some text\",\r\n  \"_description_type\": \"textarea\",\r\n  \r\n  \"budget\": [{\"name\": \"Engineering\", \"value\": 45000}],\r\n  \"_budget_type\": \"pieChart\"\r\n}\r\n```\r\n\r\n**Required:** Yes (defaults to `text` ",
+      "instructions": "### 1. Render Type (`_*_type`)\r\n\r\n**Purpose:** Defines which renderer component to use\r\n\r\n**Pattern:** `_<sectionKey>_type`\r\n\r\n**Value:** One of the [RenderType values](#render-types)\r\n\r\n**Examples:**\r\n```json\r\n{\r\n  \"highlights\": [\"Item 1\", \"Item 2\"],\r\n  \"_highlights_type\": \"listNoTitle\",\r\n  \r\n  \"description\": \"Some text\",\r\n  \"_description_type\": \"textarea\",\r\n  \r\n  \"budget\": [{\"name\": \"Engineering\", \"value\": 45000}],\r\n  \"_budget_type\": \"pieChart\"\r\n}\r\n```\r\n\r\n**Required:** Yes (defaults to `text` if missing)\r\n\r\n---\r\n\r\n### 2. Field Definitions (`_*_fields`)\r\n\r\n**Purpose:** Defines structure for complex types (nestedCards, objectForm)\r\n\r\n**Pattern:** `_<sectionKey>_fields`\r\n\r\n**Value:** Object mapping field names to field schemas\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"departments\": [\r\n    {\r\n      \"name\": \"Engineering\",\r\n      \"headcount\": 45,\r\n      \"budget\": 450000\r\n    }\r\n  ],\r\n  \"_departments_type\": \"nestedCards\",\r\n  \"_departments_fields\": {\r\n    \"name\": {\r\n      \"type\": \"text\",\r\n      \"label\": \"Department Name\",\r\n      \"required\": true\r\n    },\r\n    \"headcount\": {\r\n      \"type\": \"number\",\r\n      \"label\": \"Team Size\"\r\n    },\r\n    \"budget\": {\r\n      \"type\": \"number\",\r\n      \"label\": \"Budget (USD)\"\r\n    }\r\n  }\r\n}\r\n```\r\n\r\n**Required:** Only for `nestedCards`, `objectForm`, and other complex types\r\n\r\n---\r\n\r\n### 3. Type-Specific Config (`_*_config`, `_*_chartConfig`, `_*_hrConfig`)\r\n\r\n**Purpose:** Configuration specific to the render type\r\n\r\n**Patterns:**\r\n- `_<sectionKey>_config` - Generic config\r\n- `_<sectionKey>_chartConfig` - Chart configuration\r\n- `_<sectionKey>_hrConfig` - Horizontal rule configuration\r\n\r\n**Chart Example:**\r\n```json\r\n{\r\n  \"revenue\": [/* data */],\r\n  \"_revenue_type\": \"barChart\",\r\n  \"_revenue_chartConfig\": {\r\n    \"xAxisKey\": \"month\",\r\n    \"dataKey\": \"amount\",\r\n    \"barColor\": \"#6B1B5E\"\r\n  }\r\n}\r\n```\r\n\r\n**HR Example:**\r\n```json\r\n{\r\n  \"divider1\": null,\r\n  \"_divider1_type\": \"hr\",\r\n  \"_divider1_hrConfig\": {\r\n    \"thickness\": 1,\r\n    \"color\": \"#E5E7EB\",\r\n    \"marginTop\": 24,\r\n    \"marginBottom\": 24,\r\n    \"style\": \"solid\"\r\n  }\r\n}\r\n```\r\n\r\n**Required:** Type-dependent (charts require chartConfig, HR requires hrConfig)\r\n\r\n---\r\n\r\n### 4. Column Span (`_*_columnSpan`)\r\n\r\n**Purpose:** Controls grid layout width (1-4 columns)\r\n\r\n**Pattern:** `_<sectionKey>_columnSpan`\r\n\r\n**Value:** Integer (1, 2, 3, or 4)\r\n\r\n**Default:** 1 (if not specified)\r\n\r\n**Examples:**\r\n```json\r\n{\r\n  \"highlights\": [\"...\"],\r\n  \"_highlights_columnSpan\": 4,  // Full width\r\n  \r\n  \"budgetChart\": [/* ... */],\r\n  \"_budgetChart_columnSpan\": 2,  // Half width\r\n  \r\n  \"revenueChart\": [/* ... */],\r\n  \"_revenueChart_columnSpan\": 2  // Half width (side-by-side with budget)\r\n}\r\n```\r\n\r\n**Grid Behavior:**\r\n- Sections fill rows from left to right\r\n- Row wraps when total span exceeds 4\r\n- Responsive: stacks vertically on mobile\r\n\r\n**Rendering:**\r\n```\r\n┌─────────────────────────────────────┐\r\n│  Highlights (columnSpan: 4)         │\r\n├──────────────────┬──────────────────┤\r\n│  Budget (2)      │  Revenue (2)     │\r\n└──────────────────┴──────────────────┘\r\n```\r\n\r\n---\r\n\r\n### 5. Enabled Flag (`_enabled_*`)\r\n\r\n**Purpose:** Controls section visibility\r\n\r\n**Pattern:** `_enabled_<sectionKey>`\r\n\r\n**Value:** Boolean (`true` | `false`)\r\n\r\n**Default:** `true`\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"risks\": [/* data */],\r\n  \"_risks_type\": \"nestedCards\",\r\n  \"_enabled_risks\": false  // Section hidden in display\r\n}\r\n```\r\n\r\n**Usage:**\r\n- Template Builder: Users can toggle sections on/off\r\n- EditorModalV2: Only enabled sections appear\r\n- Frontend: Disabled sections are not rendered\r\n\r\n---\r\n\r\n### 6. Completed Flag (`_completed_*`)\r\n\r\n**Purpose:** Tracks editing workflow state\r\n\r\n**Pattern:** `_completed_<sectionKey>`\r\n\r\n**Value:** Boolean (`true` | `false`)\r\n\r\n**Default:** `false`\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"weeklyFocus\": [\"...\"],\r\n  \"_weeklyFocus_type\": \"listNoTitle\",\r\n  \"_completed_weeklyFocus\": true  // User marked as done editing\r\n}\r\n```\r\n\r\n**Usage:**\r\n- EditorModalV2: Progress tracking\r\n- Visual indicators (checkmarks, progress bars)\r\n- Does NOT affect rendering (only workflow state)\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "Standard Metadata Keys",
+      "description": "### Summary-Level Metadata\r\n\r\nThese apply to the entire summary (not specific sections):\r\n\r\n```json\r\n{\r\n  \"id\": \"week-2025-11-08\",\r\n  \"quarter\": \"Nov 8\",\r\n  \"year\": 2025,\r\n  \"date\": \"2025-11-08\",\r\n  \"title\": \"Organization Name - Weekly Executive Update\",\r\n  \"status\": \"draft\",\r\n  \"protectionEnabled\": false\r\n}\r\n```\r\n\r\n**Field Reference:**\r\n\r\n| Key | Type | Description | Required |\r\n|-----|------|-------------|----------|\r\n| `id` | string | Unique identifier (used for filename) | Yes |\r\n| `quarter`",
+      "instructions": "### Summary-Level Metadata\r\n\r\nThese apply to the entire summary (not specific sections):\r\n\r\n```json\r\n{\r\n  \"id\": \"week-2025-11-08\",\r\n  \"quarter\": \"Nov 8\",\r\n  \"year\": 2025,\r\n  \"date\": \"2025-11-08\",\r\n  \"title\": \"Organization Name - Weekly Executive Update\",\r\n  \"status\": \"draft\",\r\n  \"protectionEnabled\": false\r\n}\r\n```\r\n\r\n**Field Reference:**\r\n\r\n| Key | Type | Description | Required |\r\n|-----|------|-------------|----------|\r\n| `id` | string | Unique identifier (used for filename) | Yes |\r\n| `quarter` | string | Display label (e.g., \"Nov 8\", \"Q4\") | Yes |\r\n| `year` | number | Year | Yes |\r\n| `date` | string | ISO date (YYYY-MM-DD) | Yes |\r\n| `title` | string | Summary title/headline | Yes |\r\n| `status` | string | Workflow state: `draft` \\| `published` | No |\r\n| `protectionEnabled` | boolean | Prevents editing if true | No |\r\n\r\n---\r\n\r\n### Template Metadata\r\n\r\nAdditional metadata for template files:\r\n\r\n```json\r\n{\r\n  \"_template_name\": \"Executive Summary V3\",\r\n  \"_template_description\": \"Multi-column layout with charts\",\r\n  \"_template_created\": \"2025-11-08T12:00:00.000Z\",\r\n  \"_template_updated\": \"2025-11-08T12:00:00.000Z\"\r\n}\r\n```\r\n\r\n**Field Reference:**\r\n\r\n| Key | Type | Description |\r\n|-----|------|-------------|\r\n| `_template_name` | string | Template display name |\r\n| `_template_description` | string | Template description |\r\n| `_template_created` | string | ISO timestamp of creation |\r\n| `_template_updated` | string | ISO timestamp of last update |\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "Render Types",
+      "description": "Complete list of available render types:\r\n\r\n### Basic Types\r\n\r\n| Type | Description | Example Use |\r\n|------|-------------|-------------|\r\n| `text` | Single-line text | Names, titles, labels |\r\n| `textarea` | Multi-line text | Descriptions, summaries |\r\n| `number` | Numeric input | Counts, amounts, scores |\r\n| `date` | Date picker | Deadlines, milestones |\r\n\r\n### List Types\r\n\r\n| Type | Description | Example Use |\r\n|------|-------------|-------------|\r\n| `list` | Key-value pairs with labels | Met",
+      "instructions": "Complete list of available render types:\r\n\r\n### Basic Types\r\n\r\n| Type | Description | Example Use |\r\n|------|-------------|-------------|\r\n| `text` | Single-line text | Names, titles, labels |\r\n| `textarea` | Multi-line text | Descriptions, summaries |\r\n| `number` | Numeric input | Counts, amounts, scores |\r\n| `date` | Date picker | Deadlines, milestones |\r\n\r\n### List Types\r\n\r\n| Type | Description | Example Use |\r\n|------|-------------|-------------|\r\n| `list` | Key-value pairs with labels | Metrics with labels |\r\n| `listNoTitle` | Simple bullet list | Highlights, achievements |\r\n| `nestedCards` | Expandable card array | Departments, projects |\r\n\r\n### Complex Types\r\n\r\n| Type | Description | Example Use |\r\n|------|-------------|-------------|\r\n| `objectForm` | Structured object fields | Configuration, settings |\r\n| `keyValue` | Simple key-value pairs | Metadata, properties |\r\n\r\n### Rich Content\r\n\r\n| Type | Description | Example Use |\r\n|------|-------------|-------------|\r\n| `markdown` | Markdown-formatted text | Long-form content |\r\n| `expression` | Expression syntax text | Formatted highlights |\r\n\r\n### Chart Types\r\n\r\n| Type | Description | Example Use |\r\n|------|-------------|-------------|\r\n| `pieChart` | Pie/donut chart | Budget allocation, market share |\r\n| `barChart` | Bar/column chart | Revenue trends, comparisons |\r\n| `lineChart` | Line graph | Growth over time, trends |\r\n| `radialChart` | Radial/donut progress | Multi-metric progress |\r\n\r\n### Layout Types\r\n\r\n| Type | Description | Example Use |\r\n|------|-------------|-------------|\r\n| `hr` | Horizontal divider | Visual section separators |\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 5,
+      "title": "Field Schema Structure",
+      "description": "For complex types (`nestedCards`, `objectForm`), fields are defined with this schema:\r\n\r\n```typescript\r\n{\r\n  \"fieldName\": {\r\n    \"type\": \"text\" | \"number\" | \"date\" | \"textarea\" | \"list\",\r\n    \"label\": \"Display Label\",\r\n    \"placeholder\"?: \"Placeholder text\",\r\n    \"required\"?: boolean,\r\n    \"helpText\"?: \"Helpful description\",\r\n    \"validation\"?: [\r\n      {\r\n        \"rule\": \"min\" | \"max\" | \"pattern\",\r\n        \"value\": any,\r\n        \"message\": \"Error message\"\r\n      }\r\n    ]\r\n  }\r\n}\r\n```\r\n\r\n**Examp",
+      "instructions": "For complex types (`nestedCards`, `objectForm`), fields are defined with this schema:\r\n\r\n```typescript\r\n{\r\n  \"fieldName\": {\r\n    \"type\": \"text\" | \"number\" | \"date\" | \"textarea\" | \"list\",\r\n    \"label\": \"Display Label\",\r\n    \"placeholder\"?: \"Placeholder text\",\r\n    \"required\"?: boolean,\r\n    \"helpText\"?: \"Helpful description\",\r\n    \"validation\"?: [\r\n      {\r\n        \"rule\": \"min\" | \"max\" | \"pattern\",\r\n        \"value\": any,\r\n        \"message\": \"Error message\"\r\n      }\r\n    ]\r\n  }\r\n}\r\n```\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"_initiatives_fields\": {\r\n    \"name\": {\r\n      \"type\": \"text\",\r\n      \"label\": \"Initiative Name\",\r\n      \"required\": true,\r\n      \"placeholder\": \"Enter initiative name\"\r\n    },\r\n    \"progress\": {\r\n      \"type\": \"number\",\r\n      \"label\": \"Progress %\",\r\n      \"validation\": [\r\n        { \"rule\": \"min\", \"value\": 0, \"message\": \"Must be >= 0\" },\r\n        { \"rule\": \"max\", \"value\": 100, \"message\": \"Must be <= 100\" }\r\n      ]\r\n    },\r\n    \"description\": {\r\n      \"type\": \"textarea\",\r\n      \"label\": \"Description\",\r\n      \"helpText\": \"Provide a detailed description\"\r\n    }\r\n  }\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 6,
+      "title": "Complete Example",
+      "description": "Full summary with all metadata patterns:\r\n\r\n```json\r\n{\r\n  \"id\": \"week-2025-11-08\",\r\n  \"quarter\": \"Nov 8\",\r\n  \"year\": 2025,\r\n  \"date\": \"2025-11-08\",\r\n  \"title\": \"Demo Services - Weekly Update\",\r\n  \"status\": \"draft\",\r\n  \"protectionEnabled\": false,\r\n  \r\n  \"highlights\": [\r\n    \"Completed Q4 infrastructure upgrade\",\r\n    \"Revenue target exceeded by 15%\"\r\n  ],\r\n  \"_highlights_type\": \"listNoTitle\",\r\n  \"_highlights_columnSpan\": 4,\r\n  \"_enabled_highlights\": true,\r\n  \"_completed_highlights\": true,\r\n  \r\n  ",
+      "instructions": "Full summary with all metadata patterns:\r\n\r\n```json\r\n{\r\n  \"id\": \"week-2025-11-08\",\r\n  \"quarter\": \"Nov 8\",\r\n  \"year\": 2025,\r\n  \"date\": \"2025-11-08\",\r\n  \"title\": \"Demo Services - Weekly Update\",\r\n  \"status\": \"draft\",\r\n  \"protectionEnabled\": false,\r\n  \r\n  \"highlights\": [\r\n    \"Completed Q4 infrastructure upgrade\",\r\n    \"Revenue target exceeded by 15%\"\r\n  ],\r\n  \"_highlights_type\": \"listNoTitle\",\r\n  \"_highlights_columnSpan\": 4,\r\n  \"_enabled_highlights\": true,\r\n  \"_completed_highlights\": true,\r\n  \r\n  \"keyMetrics\": [\r\n    { \"label\": \"Revenue\", \"value\": \"$2.5M\", \"unit\": \"\" },\r\n    { \"label\": \"Growth\", \"value\": \"15\", \"unit\": \"%\" }\r\n  ],\r\n  \"_keyMetrics_type\": \"nestedCards\",\r\n  \"_keyMetrics_columnSpan\": 4,\r\n  \"_keyMetrics_fields\": {\r\n    \"label\": { \"type\": \"text\", \"label\": \"Metric Name\" },\r\n    \"value\": { \"type\": \"text\", \"label\": \"Value\" },\r\n    \"unit\": { \"type\": \"text\", \"label\": \"Unit\" }\r\n  },\r\n  \"_enabled_keyMetrics\": true,\r\n  \"_completed_keyMetrics\": true,\r\n  \r\n  \"budgetAllocation\": [\r\n    { \"name\": \"Engineering\", \"value\": 450000 },\r\n    { \"name\": \"Marketing\", \"value\": 250000 }\r\n  ],\r\n  \"_budgetAllocation_type\": \"pieChart\",\r\n  \"_budgetAllocation_columnSpan\": 2,\r\n  \"_budgetAllocation_chartConfig\": {\r\n    \"nameKey\": \"name\",\r\n    \"dataKey\": \"value\",\r\n    \"colors\": [\"#6B1B5E\", \"#B21A53\"]\r\n  },\r\n  \"_budgetAllocation_fields\": {\r\n    \"name\": { \"type\": \"text\", \"label\": \"Category\", \"required\": true },\r\n    \"value\": { \"type\": \"number\", \"label\": \"Amount\", \"required\": true }\r\n  },\r\n  \"_enabled_budgetAllocation\": true,\r\n  \"_completed_budgetAllocation\": false,\r\n  \r\n  \"quarterlyRevenue\": [\r\n    { \"month\": \"Jan\", \"revenue\": 1200000 },\r\n    { \"month\": \"Feb\", \"revenue\": 1450000 }\r\n  ],\r\n  \"_quarterlyRevenue_type\": \"barChart\",\r\n  \"_quarterlyRevenue_columnSpan\": 2,\r\n  \"_quarterlyRevenue_chartConfig\": {\r\n    \"xAxisKey\": \"month\",\r\n    \"dataKey\": \"revenue\",\r\n    \"barColor\": \"#6B1B5E\"\r\n  },\r\n  \"_quarterlyRevenue_fields\": {\r\n    \"month\": { \"type\": \"text\", \"label\": \"Month\" },\r\n    \"revenue\": { \"type\": \"number\", \"label\": \"Revenue\" }\r\n  },\r\n  \"_enabled_quarterlyRevenue\": true,\r\n  \"_completed_quarterlyRevenue\": false,\r\n  \r\n  \"divider1\": null,\r\n  \"_divider1_type\": \"hr\",\r\n  \"_divider1_columnSpan\": 4,\r\n  \"_divider1_hrConfig\": {\r\n    \"thickness\": 1,\r\n    \"color\": \"#E5E7EB\",\r\n    \"marginTop\": 24,\r\n    \"marginBottom\": 24,\r\n    \"style\": \"solid\"\r\n  },\r\n  \"_enabled_divider1\": true,\r\n  \"_completed_divider1\": false,\r\n  \r\n  \"weeklyFocus\": [\r\n    \"Finalize Q1 roadmap\",\r\n    \"Complete security audit\"\r\n  ],\r\n  \"_weeklyFocus_type\": \"listNoTitle\",\r\n  \"_weeklyFocus_columnSpan\": 4,\r\n  \"_enabled_weeklyFocus\": true,\r\n  \"_completed_weeklyFocus\": false,\r\n  \r\n  \"_template_name\": \"Executive Summary V3 - Multi-Column\",\r\n  \"_template_description\": \"Modern layout with charts and metrics\",\r\n  \"_template_created\": \"2025-11-08T12:00:00.000Z\",\r\n  \"_template_updated\": \"2025-11-08T12:00:00.000Z\"\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 7,
+      "title": "Metadata Validation",
+      "description": "### Required Metadata\r\n\r\nEvery section must have:\r\n- `_sectionName_type` (render type)\r\n\r\n### Type-Specific Requirements\r\n\r\n**Charts:**\r\n- Must have `_sectionName_chartConfig`\r\n- Must have `_sectionName_fields` (defines data structure)\r\n\r\n**NestedCards:**\r\n- Must have `_sectionName_fields` (defines card structure)\r\n\r\n**HR:**\r\n- Must have `_sectionName_hrConfig`\r\n- Data value can be `null`\r\n\r\n### Optional Metadata\r\n\r\n- `_sectionName_columnSpan` (defaults to 1)\r\n- `_enabled_sectionName` (defaults ",
+      "instructions": "### Required Metadata\r\n\r\nEvery section must have:\r\n- `_sectionName_type` (render type)\r\n\r\n### Type-Specific Requirements\r\n\r\n**Charts:**\r\n- Must have `_sectionName_chartConfig`\r\n- Must have `_sectionName_fields` (defines data structure)\r\n\r\n**NestedCards:**\r\n- Must have `_sectionName_fields` (defines card structure)\r\n\r\n**HR:**\r\n- Must have `_sectionName_hrConfig`\r\n- Data value can be `null`\r\n\r\n### Optional Metadata\r\n\r\n- `_sectionName_columnSpan` (defaults to 1)\r\n- `_enabled_sectionName` (defaults to true)\r\n- `_completed_sectionName` (defaults to false)\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 8,
+      "title": "Metadata Best Practices",
+      "description": "### 1. Consistent Naming\r\n\r\nUse camelCase for section keys:\r\n```json\r\n// Good\r\n\"weeklyFocus\": [...],\r\n\"_weeklyFocus_type\": \"listNoTitle\"\r\n\r\n// Avoid\r\n\"weekly-focus\": [...],\r\n\"_weekly-focus_type\": \"listNoTitle\"\r\n```\r\n\r\n### 2. Explicit Types\r\n\r\nAlways specify `_type` even if it seems obvious:\r\n```json\r\n{\r\n  \"title\": \"My Summary\",\r\n  \"_title_type\": \"text\"  // Always specify\r\n}\r\n```\r\n\r\n### 3. Complete Field Definitions\r\n\r\nFor `nestedCards`, define all fields:\r\n```json\r\n{\r\n  \"_departments_fields\": {\r",
+      "instructions": "### 1. Consistent Naming\r\n\r\nUse camelCase for section keys:\r\n```json\r\n// Good\r\n\"weeklyFocus\": [...],\r\n\"_weeklyFocus_type\": \"listNoTitle\"\r\n\r\n// Avoid\r\n\"weekly-focus\": [...],\r\n\"_weekly-focus_type\": \"listNoTitle\"\r\n```\r\n\r\n### 2. Explicit Types\r\n\r\nAlways specify `_type` even if it seems obvious:\r\n```json\r\n{\r\n  \"title\": \"My Summary\",\r\n  \"_title_type\": \"text\"  // Always specify\r\n}\r\n```\r\n\r\n### 3. Complete Field Definitions\r\n\r\nFor `nestedCards`, define all fields:\r\n```json\r\n{\r\n  \"_departments_fields\": {\r\n    \"name\": { \"type\": \"text\", \"label\": \"Name\", \"required\": true },\r\n    \"budget\": { \"type\": \"number\", \"label\": \"Budget\" },\r\n    \"headcount\": { \"type\": \"number\", \"label\": \"Headcount\" }\r\n    // Define ALL fields, even simple ones\r\n  }\r\n}\r\n```\r\n\r\n### 4. Default Values\r\n\r\nProvide defaults in config:\r\n```json\r\n{\r\n  \"_chartConfig\": {\r\n    \"barColor\": \"#6B1B5E\",  // Always specify color\r\n    \"width\": 600,            // Explicit dimensions\r\n    \"height\": 300\r\n  }\r\n}\r\n```\r\n\r\n### 5. Column Span Logic\r\n\r\nPlan your layout:\r\n```json\r\n// Row 1: Full width\r\n\"_highlights_columnSpan\": 4,\r\n\r\n// Row 2: Two halves\r\n\"_chart1_columnSpan\": 2,\r\n\"_chart2_columnSpan\": 2,\r\n\r\n// Row 3: Three columns + one\r\n\"_metric1_columnSpan\": 1,\r\n\"_metric2_columnSpan\": 1,\r\n\"_metric3_columnSpan\": 1,\r\n\"_summary_columnSpan\": 1\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 9,
+      "title": "Related Documentation",
+      "description": "- [Adding New Assets](../developer/adding-new-assets.md) - Creating new render types\r\n- [Chart System](../developer/chart-system.md) - Chart-specific metadata\r\n- [Multi-Column Layout](../developer/multi-column-layout.md) - Grid system details\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*",
+      "instructions": "- [Adding New Assets](../developer/adding-new-assets.md) - Creating new render types\r\n- [Chart System](../developer/chart-system.md) - Chart-specific metadata\r\n- [Multi-Column Layout](../developer/multi-column-layout.md) - Grid system details\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "relatedArticles": [],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": false,
+  "_completed_relatedArticles": false,
+  "_template_name": "KB Article Import",
+  "_template_description": "Imported from Markdown",
+  "_template_created": "2025-11-09T13:01:35.667Z",
+  "_template_updated": "2025-11-09T13:01:35.667Z"
+}

@@ -17,6 +17,8 @@ export type RenderType =
   | 'barChart'          // Bar chart visualization
   | 'lineChart'         // Line chart visualization
   | 'radialChart'       // Radial/donut chart
+  | 'codeBlock'         // Code block with syntax highlighting
+  | 'quote'             // Blockquote with glassmorphism styling
   | 'hr';               // Horizontal rule/divider
 
 export type ValidationRule = {

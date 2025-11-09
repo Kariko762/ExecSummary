@@ -10,6 +10,7 @@ import { Timeline } from './components/Timeline';
 import { StickyNav } from './components/StickyNav';
 import { OrganizationDashboard } from './components/OrganizationDashboard';
 import { StrategicInitiativesDashboard } from './components/StrategicInitiativesDashboard';
+import { KnowledgeBaseDashboard } from './components/KnowledgeBaseDashboard';
 import { SchemaTest } from './components/SchemaTest';
 import LoginPage from './components/LoginPage';
 import { timelineItems, isExecutiveSummary } from './data/timeline-loader';
@@ -201,6 +202,11 @@ function App() {
                   {/* Strategic Initiatives Route */}
                   <Route path="/strategic-initiatives" element={
                     <StrategicInitiativesDashboard />
+                  } />
+
+                  {/* Knowledge Base Route */}
+                  <Route path="/knowledge-base" element={
+                    <KnowledgeBaseDashboard />
                   } />
 
                   {/* Schema Test Route */}

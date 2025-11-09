@@ -1,0 +1,327 @@
+{
+  "id": "kb-platform-overview",
+  "quarter": "Nov 9",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Executive Summary Platform - Complete Overview",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "support",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "getting-started",
+    "overview",
+    "platform",
+    "architecture"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "tutorial",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "beginner",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "5 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "Platform Team",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:00:00.000Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:00:00.000Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "Comprehensive overview of the Executive Summary Platform - your complete guide to creating beautiful, data-driven executive summaries and organization dashboards.",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "Welcome to the Executive Summary Platform knowledge base! This modern React application enables you to create stunning executive summaries, manage organizations, and build custom templates with a metadata-driven architecture.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "whatYouWillLearn": [
+    "Core platform components (Viewer, CMS Admin, Template Builder)",
+    "How the metadata-driven rendering system works",
+    "Available render types and when to use them",
+    "How to create and edit executive summaries",
+    "How to build custom templates visually",
+    "Expression syntax for rich text formatting"
+  ],
+  "_whatYouWillLearn_type": "list",
+  "_enabled_whatYouWillLearn": true,
+  "_completed_whatYouWillLearn": true,
+  "keyPoints": [
+    "Dynamic rendering system - content adapts based on metadata patterns",
+    "Multi-column layouts - responsive 1-4 column grid system",
+    "Chart visualizations - Pie, Bar, Line, and Radial charts with Recharts",
+    "Template Builder - visual drag-and-drop template creation",
+    "Expression Engine - rich text formatting with custom syntax",
+    "Unified architecture - Organizations and Summaries share the same rendering engine"
+  ],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": true,
+  "_completed_keyPoints": true,
+  "quickStart": "Open the main application at http://localhost:5173 to view published summaries and organizations. Access the CMS Admin to create and edit content. Use the Template Builder to create custom summary templates.",
+  "_quickStart_type": "textarea",
+  "_enabled_quickStart": true,
+  "_completed_quickStart": true,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "Platform Components",
+      "description": "The platform consists of three main components: Frontend Viewer (React + Vite), CMS Admin (Editor), and Template Builder",
+      "instructions": "Frontend Viewer - Public-facing display of executive summaries and organization dashboards\nCMS Admin - Content editor with full CRUD operations\nTemplate Builder - Visual template creation tool",
+      "expectedOutcome": "Understanding of the three-tier architecture",
+      "screenshot": "",
+      "duration": "2 min"
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "Architecture Components",
+      "description": "Backend API (Node.js + Express) provides CRUD operations, file management, and image uploads. Data is stored as JSON files.",
+      "instructions": "The backend serves:\n- CRUD operations for summaries, templates, uploads\n- File system management\n- Image upload handling\n- JSON data storage in src/data/summaries/*.json and cms-admin/src/templates/*.json",
+      "expectedOutcome": "Understanding how data flows through the system",
+      "screenshot": "",
+      "duration": "2 min"
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "Core Concepts",
+      "description": "Learn the metadata-driven architecture where every content section uses metadata to define its structure and rendering",
+      "instructions": "Every section follows this pattern:\n{\n  \"sectionName\": [\"actual\", \"data\"],\n  \"_sectionName_type\": \"listNoTitle\",\n  \"_sectionName_fields\": { /* field definitions */ },\n  \"_sectionName_columnSpan\": 2,\n  \"_enabled_sectionName\": true,\n  \"_completed_sectionName\": false\n}",
+      "expectedOutcome": "Understanding metadata patterns",
+      "screenshot": "",
+      "duration": "3 min"
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "Render Factory Pattern",
+      "description": "The RenderFactory routes data to appropriate renderers based on type",
+      "instructions": "Available renderers:\n- TextRenderer (text, textarea)\n- NumberRenderer (number)\n- ListRenderer (list, listNoTitle)\n- NestedCardsRenderer (nestedCards)\n- ChartRenderer (pieChart, barChart, lineChart, radialChart)\n- HorizontalRuleRenderer (hr)\n- CodeBlockRenderer (codeBlock)\n- QuoteRenderer (quote)",
+      "expectedOutcome": "Knowledge of available render types",
+      "screenshot": "",
+      "duration": "2 min"
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 5,
+      "title": "Key Features",
+      "description": "Explore the platform's powerful features",
+      "instructions": "Dynamic Rendering - Content sections adapt based on metadata\nMulti-Column Layouts - Responsive grid system (1-4 columns)\nChart Visualizations - Beautiful data viz with Recharts\nTemplate Builder - Visual template creation\nExpression Engine - Rich text formatting\nLive Preview - Real-time preview while editing",
+      "expectedOutcome": "Awareness of platform capabilities",
+      "screenshot": "",
+      "duration": "3 min"
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "bestPractices": [
+    {
+      "_type": "practice",
+      "_enabled": true,
+      "_completed": false,
+      "title": "Use Metadata-Driven Approach",
+      "description": "Always define render types and field schemas to ensure consistent rendering",
+      "reason": "Enables dynamic rendering without code changes"
+    },
+    {
+      "_type": "practice",
+      "_enabled": true,
+      "_completed": false,
+      "title": "Plan Your Layouts",
+      "description": "Sketch column spans before implementing multi-column layouts",
+      "reason": "Prevents alignment issues and ensures responsive design"
+    },
+    {
+      "_type": "practice",
+      "_enabled": true,
+      "_completed": false,
+      "title": "Test Expressions",
+      "description": "Use the Expression Editor to preview formatting before deploying",
+      "reason": "Catches syntax errors early"
+    }
+  ],
+  "_bestPractices_type": "nestedCards",
+  "_bestPractices_fields": {
+    "title": {
+      "type": "text",
+      "label": "Practice",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "reason": {
+      "type": "text",
+      "label": "Why This Matters"
+    }
+  },
+  "_enabled_bestPractices": true,
+  "_completed_bestPractices": true,
+  "relatedArticles": [
+    "kb-adding-new-assets",
+    "kb-chart-system",
+    "kb-metadata-schema",
+    "kb-multi-column-layout",
+    "getting-started-template-builder"
+  ],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": true,
+  "_completed_relatedArticles": true,
+  "nextSteps": [
+    "Read the Metadata Schema Reference to understand data patterns",
+    "Explore the Chart System guide to learn about visualizations",
+    "Try the Template Builder to create your first custom template",
+    "Check out Adding New Assets to extend the platform with custom render types"
+  ],
+  "_nextSteps_type": "list",
+  "_enabled_nextSteps": true,
+  "_completed_nextSteps": true,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "_template_name": "KB Article - Platform Overview",
+  "_template_description": "Comprehensive getting started guide",
+  "_template_created": "2025-11-09T13:00:00.000Z",
+  "_template_updated": "2025-11-09T13:00:00.000Z"
+}

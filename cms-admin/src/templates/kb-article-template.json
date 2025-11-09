@@ -1,0 +1,475 @@
+{
+  "id": "template-kb-article",
+  "quarter": "KB Article",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Example Knowledge Base Article Title",
+  
+  "category": "development",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": false,
+  
+  "articleType": "how-to",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": false,
+  
+  "difficulty": "beginner",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": false,
+  
+  "estimatedReadTime": "5 minutes",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": false,
+  
+  "tags": [
+    "example-tag",
+    "getting-started"
+  ],
+  "_tags_type": "listNoTitle",
+  "_enabled_tags": true,
+  "_completed_tags": false,
+  
+  "author": "Your Name",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": false,
+  
+  "contributors": [
+    "Contributor Name 1",
+    "Contributor Name 2"
+  ],
+  "_contributors_type": "listNoTitle",
+  "_enabled_contributors": true,
+  "_completed_contributors": false,
+  
+  "publishDate": "2025-11-09",
+  "_publishDate_type": "text",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": false,
+  
+  "lastUpdated": "2025-11-09",
+  "_lastUpdated_type": "text",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": false,
+  
+  "version": "1.0.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": false,
+  
+  "summary": "A brief one-sentence summary that appears in search results and article listings.",
+  "_summary_type": "text",
+  "_enabled_summary": true,
+  "_completed_summary": false,
+  
+  "overview": "Provide a comprehensive overview of what this article covers. This should be 2-4 paragraphs that give readers a clear understanding of the topic, what they'll learn, and why it matters. Include the business value or use case where applicable.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": false,
+  
+  "whatYouWillLearn": [
+    "Key learning outcome 1",
+    "Key learning outcome 2",
+    "Key learning outcome 3"
+  ],
+  "_whatYouWillLearn_type": "listNoTitle",
+  "_enabled_whatYouWillLearn": true,
+  "_completed_whatYouWillLearn": false,
+  
+  "prerequisites": [
+    "Example: Basic understanding of TypeScript",
+    "Example: Node.js v18+ installed",
+    "Example: Familiarity with React hooks"
+  ],
+  "_prerequisites_type": "listNoTitle",
+  "_enabled_prerequisites": true,
+  "_completed_prerequisites": false,
+  
+  "requiredTools": [
+    {
+      "name": "Visual Studio Code",
+      "version": "1.80+",
+      "downloadUrl": "https://code.visualstudio.com",
+      "optional": false
+    }
+  ],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name"
+    },
+    "version": {
+      "type": "text",
+      "label": "Version Required"
+    },
+    "downloadUrl": {
+      "type": "text",
+      "label": "Download URL"
+    },
+    "optional": {
+      "type": "text",
+      "label": "Optional (true/false)"
+    }
+  },
+  "_enabled_requiredTools": true,
+  "_completed_requiredTools": false,
+  
+  "quickStart": "For users who want to get started immediately, provide a TL;DR version with the essential steps in a condensed format.",
+  "_quickStart_type": "textarea",
+  "_enabled_quickStart": true,
+  "_completed_quickStart": false,
+  
+  "steps": [
+    {
+      "title": "Step 1: Initial Setup",
+      "description": "Describe what this step accomplishes and provide detailed instructions.",
+      "expectedOutcome": "What the user should see or achieve after completing this step",
+      "codeExample": "// Example code for this step\nnpm install package-name",
+      "screenshot": "",
+      "duration": "2 minutes"
+    },
+    {
+      "title": "Step 2: Configuration",
+      "description": "Explain the configuration process and any important settings.",
+      "expectedOutcome": "Configuration should be complete and validated",
+      "codeExample": "// Example configuration\nconst config = {\n  option: 'value'\n};",
+      "screenshot": "",
+      "duration": "3 minutes"
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "title": {
+      "type": "text",
+      "label": "Step Title"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "codeExample": {
+      "type": "codeBlock",
+      "label": "Code Example",
+      "renderAs": "codeBlock"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL (optional)"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Estimated Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": false,
+  
+  "keyPoints": [
+    "Example: Important concept or best practice to remember",
+    "Example: Common pitfall to avoid",
+    "Example: Performance optimization tip"
+  ],
+  "_keyPoints_type": "listNoTitle",
+  "_enabled_keyPoints": true,
+  "_completed_keyPoints": false,
+  
+  "bestPractices": [
+    {
+      "practice": "Always validate user input",
+      "reason": "Prevents security vulnerabilities and data corruption",
+      "example": "Use Zod or Yup for runtime type checking"
+    }
+  ],
+  "_bestPractices_type": "nestedCards",
+  "_bestPractices_fields": {
+    "practice": {
+      "type": "text",
+      "label": "Best Practice"
+    },
+    "reason": {
+      "type": "textarea",
+      "label": "Why This Matters"
+    },
+    "example": {
+      "type": "text",
+      "label": "Example / How To"
+    }
+  },
+  "_enabled_bestPractices": true,
+  "_completed_bestPractices": false,
+  
+  "codeExamples": [
+    {
+      "title": "Complete Implementation Example",
+      "description": "Full working example demonstrating the concept",
+      "language": "typescript",
+      "code": "// Complete code example\nfunction example() {\n  console.log('Hello World');\n}\n\nexample();",
+      "explanation": "This example demonstrates..."
+    }
+  ],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "title": {
+      "type": "text",
+      "label": "Example Title"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "language": {
+      "type": "text",
+      "label": "Programming Language"
+    },
+    "code": {
+      "type": "codeBlock",
+      "label": "Code",
+      "renderAs": "codeBlock"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Code Explanation"
+    }
+  },
+  "_enabled_codeExamples": true,
+  "_completed_codeExamples": false,
+  
+  "diagrams": [
+    {
+      "title": "System Architecture Diagram",
+      "imageUrl": "",
+      "caption": "Description of what the diagram shows",
+      "altText": "Accessible description for screen readers"
+    }
+  ],
+  "_diagrams_type": "nestedCards",
+  "_diagrams_fields": {
+    "title": {
+      "type": "text",
+      "label": "Diagram Title"
+    },
+    "imageUrl": {
+      "type": "text",
+      "label": "Image URL"
+    },
+    "caption": {
+      "type": "textarea",
+      "label": "Caption"
+    },
+    "altText": {
+      "type": "text",
+      "label": "Alt Text"
+    }
+  },
+  "_enabled_diagrams": true,
+  "_completed_diagrams": false,
+  
+  "importantNote": "Add any critical information, warnings, or important notes that users should be aware of before proceeding. Use this for breaking changes, security considerations, or deprecated features.",
+  "_importantNote_type": "quote",
+  "_enabled_importantNote": true,
+  "_completed_importantNote": false,
+  
+  "warnings": [
+    {
+      "severity": "critical",
+      "title": "Data Loss Warning",
+      "description": "This operation will permanently delete all data. Make sure you have a backup before proceeding."
+    }
+  ],
+  "_warnings_type": "nestedCards",
+  "_warnings_fields": {
+    "severity": {
+      "type": "text",
+      "label": "Severity (critical/warning/info)"
+    },
+    "title": {
+      "type": "text",
+      "label": "Warning Title"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    }
+  },
+  "_enabled_warnings": true,
+  "_completed_warnings": false,
+  
+  "troubleshooting": [
+    {
+      "issue": "Example: Error message or problem description",
+      "symptoms": "What the user sees when this error occurs",
+      "cause": "Root cause of the issue",
+      "solution": "Detailed explanation of how to resolve this issue, including any relevant commands or configuration changes.",
+      "preventionTips": "How to avoid this issue in the future"
+    }
+  ],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue / Error"
+    },
+    "symptoms": {
+      "type": "text",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Root Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution"
+    },
+    "preventionTips": {
+      "type": "text",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": true,
+  "_completed_troubleshooting": false,
+  
+  "commonMistakes": [
+    {
+      "mistake": "Forgetting to install dependencies",
+      "impact": "Application won't run",
+      "fix": "Run 'npm install' before starting the application"
+    }
+  ],
+  "_commonMistakes_type": "nestedCards",
+  "_commonMistakes_fields": {
+    "mistake": {
+      "type": "text",
+      "label": "Common Mistake"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact"
+    },
+    "fix": {
+      "type": "text",
+      "label": "How to Fix"
+    }
+  },
+  "_enabled_commonMistakes": true,
+  "_completed_commonMistakes": false,
+  
+  "faqs": [
+    {
+      "question": "Example: Common question users might have?",
+      "answer": "Clear, concise answer with actionable information.",
+      "category": "general"
+    }
+  ],
+  "_faqs_type": "nestedCards",
+  "_faqs_fields": {
+    "question": {
+      "type": "text",
+      "label": "Question"
+    },
+    "answer": {
+      "type": "textarea",
+      "label": "Answer"
+    },
+    "category": {
+      "type": "text",
+      "label": "Category (general/technical/billing)"
+    }
+  },
+  "_enabled_faqs": true,
+  "_completed_faqs": false,
+  
+  "nextSteps": [
+    "Explore advanced features in Article XYZ",
+    "Learn about optimization techniques",
+    "Join our community forum for support"
+  ],
+  "_nextSteps_type": "listNoTitle",
+  "_enabled_nextSteps": true,
+  "_completed_nextSteps": false,
+  
+  "relatedArticles": [
+    "article-id-1",
+    "article-id-2"
+  ],
+  "_relatedArticles_type": "listNoTitle",
+  "_enabled_relatedArticles": true,
+  "_completed_relatedArticles": false,
+  
+  "additionalResources": [
+    {
+      "title": "Official Documentation",
+      "url": "https://example.com/docs",
+      "type": "documentation",
+      "description": "Link to official documentation or external resource"
+    }
+  ],
+  "_additionalResources_type": "nestedCards",
+  "_additionalResources_fields": {
+    "title": {
+      "type": "text",
+      "label": "Resource Title"
+    },
+    "url": {
+      "type": "text",
+      "label": "URL"
+    },
+    "type": {
+      "type": "text",
+      "label": "Type (documentation/video/blog/tool)"
+    },
+    "description": {
+      "type": "text",
+      "label": "Description"
+    }
+  },
+  "_enabled_additionalResources": true,
+  "_completed_additionalResources": false,
+  
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2025-11-09",
+      "changes": "Initial release"
+    }
+  ],
+  "_changelog_type": "nestedCards",
+  "_changelog_fields": {
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "date": {
+      "type": "text",
+      "label": "Date"
+    },
+    "changes": {
+      "type": "textarea",
+      "label": "Changes Made"
+    }
+  },
+  "_enabled_changelog": true,
+  "_completed_changelog": false,
+  
+  "feedback": "We value your feedback! If you found this article helpful or have suggestions for improvement, please let us know.",
+  "_feedback_type": "textarea",
+  "_enabled_feedback": true,
+  "_completed_feedback": false,
+  
+  "status": "draft",
+  "protectionEnabled": false,
+  
+  "_template_name": "Comprehensive Knowledge Base Article Template",
+  "_template_description": "Enterprise-grade KB article template based on industry best practices. Includes metadata, step-by-step instructions, code examples, troubleshooting, FAQs, and more. Disable unused sections as needed.",
+  "_template_created": "2025-11-09T00:00:00.000Z",
+  "_template_updated": "2025-11-09T00:00:00.000Z"
+}

@@ -12,6 +12,8 @@ import { BarChartRenderer } from './BarChartRenderer';
 import { LineChartRenderer } from './LineChartRenderer';
 import { RadialChartRenderer } from './RadialChartRenderer';
 import { HorizontalRuleRenderer } from './HorizontalRuleRenderer';
+import { CodeBlockRenderer } from './CodeBlockRenderer';
+import { QuoteRenderer } from './QuoteRenderer';
 
 /**
  * Factory component that routes to the appropriate renderer based on schema type
@@ -64,6 +66,12 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
     
     case 'hr':
       return <HorizontalRuleRenderer {...props} />;
+    
+    case 'codeBlock':
+      return <CodeBlockRenderer {...props} />;
+    
+    case 'quote':
+      return <QuoteRenderer {...props} />;
     
     default:
       return (

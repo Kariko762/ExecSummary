@@ -1,0 +1,11 @@
+{
+  "id": "troubleshooting",
+  "name": "Troubleshooting",
+  "type": "support",
+  "description": "Solutions to common issues, debugging guides, and problem resolution strategies",
+  "icon": "Wrench",
+  "color": "#F59E0B",
+  "status": "published",
+  "_enabled": true,
+  "_completed": true
+}

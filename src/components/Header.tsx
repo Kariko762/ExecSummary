@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download, Settings } from 'lucide-react';
+import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download, Settings, BookOpen } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState, useEffect, useRef } from 'react';
@@ -197,6 +197,29 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
                           <div className="flex-1">
                             <div className="font-roobert-semibold text-sm">Strategic Initiatives</div>
                             <div className="text-xs text-gray-600 dark:text-gray-400">Executive project summaries</div>
+                          </div>
+                        </Link>
+
+                        {/* Knowledge Base */}
+                        <Link
+                          to="/knowledge-base"
+                          onClick={() => setIsNavDropdownOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/knowledge-base' 
+                              ? 'bg-fis-raspberry/20 text-fis-raspberry dark:bg-fis-raspberry/30 dark:text-pink-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/knowledge-base' 
+                              ? 'bg-fis-raspberry/30 dark:bg-fis-raspberry/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <BookOpen className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Knowledge Base</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Guides and documentation</div>
                           </div>
                         </Link>
 

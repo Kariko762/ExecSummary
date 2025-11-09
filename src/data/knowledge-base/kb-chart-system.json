@@ -1,0 +1,307 @@
+{
+  "id": "kb-chart-system",
+  "quarter": "Chart System - Developer Guide",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Chart System - Developer Guide",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "development",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "development",
+    "charts",
+    "templates",
+    "rendering",
+    "layout"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "troubleshooting",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "intermediate",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "9 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "System Generated",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:01:35.658Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:01:35.658Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "Learn how charts work, how to modify them, and how to add new chart types.",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "Learn how charts work, how to modify them, and how to add new chart types.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "keyPoints": [],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": false,
+  "_completed_keyPoints": false,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "📋 Table of Contents",
+      "description": "1. [Overview](#overview)\r\n2. [Available Chart Types](#available-chart-types)\r\n3. [Chart Configuration](#chart-configuration)\r\n4. [How Charts Work](#how-charts-work)\r\n5. [Modifying Chart Appearance](#modifying-chart-appearance)\r\n6. [Adding a New Chart Type](#adding-a-new-chart-type)\r\n7. [Troubleshooting](#troubleshooting)\r\n\r\n---",
+      "instructions": "1. [Overview](#overview)\r\n2. [Available Chart Types](#available-chart-types)\r\n3. [Chart Configuration](#chart-configuration)\r\n4. [How Charts Work](#how-charts-work)\r\n5. [Modifying Chart Appearance](#modifying-chart-appearance)\r\n6. [Adding a New Chart Type](#adding-a-new-chart-type)\r\n7. [Troubleshooting](#troubleshooting)\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "Overview",
+      "description": "The Executive Summary Platform uses **Recharts** (React wrapper for D3.js) for data visualizations. Charts are treated as first-class render types with their own metadata and configuration.\r\n\r\n### Architecture\r\n\r\n```\r\nData (JSON) → ChartConfig → ChartRenderer → Recharts Component\r\n```\r\n\r\n### Key Features\r\n- 🎨 Customizable colors, sizes, and styling\r\n- 📊 Four chart types: Pie, Bar, Line, Radial\r\n- 🔧 Configurable via metadata (no code changes needed)\r\n- 📱 Responsive and mobile-friendly\r\n- 🌓 D",
+      "instructions": "The Executive Summary Platform uses **Recharts** (React wrapper for D3.js) for data visualizations. Charts are treated as first-class render types with their own metadata and configuration.\r\n\r\n### Architecture\r\n\r\n```\r\nData (JSON) → ChartConfig → ChartRenderer → Recharts Component\r\n```\r\n\r\n### Key Features\r\n- 🎨 Customizable colors, sizes, and styling\r\n- 📊 Four chart types: Pie, Bar, Line, Radial\r\n- 🔧 Configurable via metadata (no code changes needed)\r\n- 📱 Responsive and mobile-friendly\r\n- 🌓 Dark mode support\r\n- 🎯 Interactive tooltips\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "Available Chart Types",
+      "description": "### 1. Pie Chart\r\n**Use Case:** Part-to-whole relationships, budget allocation, market share\r\n\r\n**Render Type:** `pieChart`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"budgetAllocation\": [\r\n    { \"name\": \"Engineering\", \"value\": 450000 },\r\n    { \"name\": \"Marketing\", \"value\": 250000 },\r\n    { \"name\": \"Operations\", \"value\": 180000 }\r\n  ],\r\n  \"_budgetAllocation_type\": \"pieChart\",\r\n  \"_budgetAllocation_chartConfig\": {\r\n    \"nameKey\": \"name\",\r\n    \"dataKey\": \"value\",\r\n    \"colors\": [\"#6B1B5E\", \"#B21A53\", \"",
+      "instructions": "### 1. Pie Chart\r\n**Use Case:** Part-to-whole relationships, budget allocation, market share\r\n\r\n**Render Type:** `pieChart`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"budgetAllocation\": [\r\n    { \"name\": \"Engineering\", \"value\": 450000 },\r\n    { \"name\": \"Marketing\", \"value\": 250000 },\r\n    { \"name\": \"Operations\", \"value\": 180000 }\r\n  ],\r\n  \"_budgetAllocation_type\": \"pieChart\",\r\n  \"_budgetAllocation_chartConfig\": {\r\n    \"nameKey\": \"name\",\r\n    \"dataKey\": \"value\",\r\n    \"colors\": [\"#6B1B5E\", \"#B21A53\", \"#3B82F6\", \"#10B981\"]\r\n  }\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\n   Engineering (450k)\r\n   ╱────────╲\r\n  │  37.5%  │\r\n   ╲────────╱\r\n```\r\n\r\n---\r\n\r\n### 2. Bar Chart\r\n**Use Case:** Comparing values across categories, revenue trends, performance metrics\r\n\r\n**Render Type:** `barChart`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"quarterlyRevenue\": [\r\n    { \"month\": \"Jan\", \"revenue\": 1200000 },\r\n    { \"month\": \"Feb\", \"revenue\": 1450000 },\r\n    { \"month\": \"Mar\", \"revenue\": 1680000 }\r\n  ],\r\n  \"_quarterlyRevenue_type\": \"barChart\",\r\n  \"_quarterlyRevenue_chartConfig\": {\r\n    \"xAxisKey\": \"month\",\r\n    \"dataKey\": \"revenue\",\r\n    \"barColor\": \"#6B1B5E\"\r\n  }\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\nRevenue\r\n   │     ▆▆\r\n   │     ▆▆\r\n   │  ▆▆ ▆▆\r\n   │  ▆▆ ▆▆\r\n   └────────── Month\r\n    Jan Feb Mar\r\n```\r\n\r\n---\r\n\r\n### 3. Line Chart\r\n**Use Case:** Trends over time, growth patterns, user activity\r\n\r\n**Render Type:** `lineChart`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"userGrowth\": [\r\n    { \"month\": \"Jan\", \"users\": 1500 },\r\n    { \"month\": \"Feb\", \"users\": 2100 },\r\n    { \"month\": \"Mar\", \"users\": 3200 }\r\n  ],\r\n  \"_userGrowth_type\": \"lineChart\",\r\n  \"_userGrowth_chartConfig\": {\r\n    \"xAxisKey\": \"month\",\r\n    \"dataKey\": \"users\",\r\n    \"lineColor\": \"#B21A53\",\r\n    \"strokeWidth\": 2\r\n  }\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\nUsers\r\n   │         ●\r\n   │       ╱\r\n   │     ●\r\n   │   ╱\r\n   │ ●\r\n   └────────── Month\r\n```\r\n\r\n---\r\n\r\n### 4. Radial Chart\r\n**Use Case:** Progress tracking, multi-metric completion, nested percentages\r\n\r\n**Render Type:** `radialChart`\r\n\r\n**Data Structure:**\r\n```json\r\n{\r\n  \"projectCompletion\": [\r\n    { \"name\": \"Infrastructure\", \"value\": 85 },\r\n    { \"name\": \"Frontend\", \"value\": 92 },\r\n    { \"name\": \"Backend\", \"value\": 78 }\r\n  ],\r\n  \"_projectCompletion_type\": \"radialChart\",\r\n  \"_projectCompletion_chartConfig\": {\r\n    \"dataKey\": \"value\",\r\n    \"maxValue\": 100,\r\n    \"colors\": [\"#6B1B5E\", \"#B21A53\", \"#3B82F6\"],\r\n    \"showPercentage\": true\r\n  }\r\n}\r\n```\r\n\r\n**Visual:**\r\n```\r\n    ╭─────────╮\r\n   │  ◉  85%  │  Infrastructure\r\n   │  ◉  92%  │  Frontend\r\n   │  ◉  78%  │  Backend\r\n    ╰─────────╯\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "Chart Configuration",
+      "description": "### Common Configuration Properties\r\n\r\nAll charts support these base properties:\r\n\r\n```typescript\r\ninterface BaseChartConfig {\r\n  // Chart dimensions (optional)\r\n  width?: number;      // Default: responsive\r\n  height?: number;     // Default: 300\r\n\r\n  // Styling\r\n  colors?: string[];   // Color palette (hex codes)\r\n  \r\n  // Interactivity\r\n  showTooltip?: boolean;  // Default: true\r\n  showLegend?: boolean;   // Default: true\r\n}\r\n```\r\n\r\n### Chart-Specific Configuration\r\n\r\n#### Pie Chart Config\r\n`",
+      "instructions": "### Common Configuration Properties\r\n\r\nAll charts support these base properties:\r\n\r\n```typescript\r\ninterface BaseChartConfig {\r\n  // Chart dimensions (optional)\r\n  width?: number;      // Default: responsive\r\n  height?: number;     // Default: 300\r\n\r\n  // Styling\r\n  colors?: string[];   // Color palette (hex codes)\r\n  \r\n  // Interactivity\r\n  showTooltip?: boolean;  // Default: true\r\n  showLegend?: boolean;   // Default: true\r\n}\r\n```\r\n\r\n### Chart-Specific Configuration\r\n\r\n#### Pie Chart Config\r\n```typescript\r\ninterface PieChartConfig extends BaseChartConfig {\r\n  nameKey: string;      // Field for slice labels\r\n  dataKey: string;      // Field for slice values\r\n  innerRadius?: number; // For donut charts (0-100)\r\n  outerRadius?: number; // Pie size (default: 80)\r\n}\r\n```\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"_chartConfig\": {\r\n    \"nameKey\": \"category\",\r\n    \"dataKey\": \"amount\",\r\n    \"colors\": [\"#6B1B5E\", \"#B21A53\"],\r\n    \"innerRadius\": 0,\r\n    \"outerRadius\": 80\r\n  }\r\n}\r\n```\r\n\r\n#### Bar Chart Config\r\n```typescript\r\ninterface BarChartConfig extends BaseChartConfig {\r\n  xAxisKey: string;   // Field for X-axis labels\r\n  dataKey: string;    // Field for bar heights\r\n  barColor: string;   // Bar fill color\r\n  orientation?: 'vertical' | 'horizontal';  // Default: vertical\r\n}\r\n```\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"_chartConfig\": {\r\n    \"xAxisKey\": \"month\",\r\n    \"dataKey\": \"sales\",\r\n    \"barColor\": \"#6B1B5E\",\r\n    \"orientation\": \"vertical\"\r\n  }\r\n}\r\n```\r\n\r\n#### Line Chart Config\r\n```typescript\r\ninterface LineChartConfig extends BaseChartConfig {\r\n  xAxisKey: string;     // Field for X-axis labels\r\n  dataKey: string;      // Field for Y-axis values\r\n  lineColor: string;    // Line stroke color\r\n  strokeWidth?: number; // Line thickness (default: 2)\r\n  showDots?: boolean;   // Show data point markers\r\n}\r\n```\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"_chartConfig\": {\r\n    \"xAxisKey\": \"date\",\r\n    \"dataKey\": \"value\",\r\n    \"lineColor\": \"#B21A53\",\r\n    \"strokeWidth\": 3,\r\n    \"showDots\": true\r\n  }\r\n}\r\n```\r\n\r\n#### Radial Chart Config\r\n```typescript\r\ninterface RadialChartConfig extends BaseChartConfig {\r\n  dataKey: string;          // Field for progress values\r\n  maxValue: number;         // Maximum value (e.g., 100 for percentage)\r\n  showPercentage: boolean;  // Display percentage labels\r\n  thickness?: number;       // Ring thickness (default: 20)\r\n}\r\n```\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"_chartConfig\": {\r\n    \"dataKey\": \"completion\",\r\n    \"maxValue\": 100,\r\n    \"colors\": [\"#6B1B5E\", \"#B21A53\", \"#3B82F6\"],\r\n    \"showPercentage\": true,\r\n    \"thickness\": 25\r\n  }\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 5,
+      "title": "How Charts Work",
+      "description": "### 1. Metadata Structure\r\n\r\nCharts use a specific metadata pattern:\r\n\r\n```json\r\n{\r\n  \"sectionName\": [ /* chart data */ ],\r\n  \"_sectionName_type\": \"pieChart\",\r\n  \"_sectionName_chartConfig\": { /* config */ },\r\n  \"_sectionName_fields\": { /* field definitions */ },\r\n  \"_sectionName_columnSpan\": 2\r\n}\r\n```\r\n\r\n### 2. Rendering Pipeline\r\n\r\n```\r\nJSON Data\r\n  ↓\r\nRenderFactory (checks type === 'pieChart')\r\n  ↓\r\nPieChartRenderer.tsx\r\n  ↓\r\nExtract chartConfig + data\r\n  ↓\r\nRecharts <PieChart> component\r\n  ↓\r",
+      "instructions": "### 1. Metadata Structure\r\n\r\nCharts use a specific metadata pattern:\r\n\r\n```json\r\n{\r\n  \"sectionName\": [ /* chart data */ ],\r\n  \"_sectionName_type\": \"pieChart\",\r\n  \"_sectionName_chartConfig\": { /* config */ },\r\n  \"_sectionName_fields\": { /* field definitions */ },\r\n  \"_sectionName_columnSpan\": 2\r\n}\r\n```\r\n\r\n### 2. Rendering Pipeline\r\n\r\n```\r\nJSON Data\r\n  ↓\r\nRenderFactory (checks type === 'pieChart')\r\n  ↓\r\nPieChartRenderer.tsx\r\n  ↓\r\nExtract chartConfig + data\r\n  ↓\r\nRecharts <PieChart> component\r\n  ↓\r\nRendered chart in browser\r\n```\r\n\r\n### 3. Code Flow Example\r\n\r\n**JSON:**\r\n```json\r\n{\r\n  \"revenue\": [\r\n    { \"month\": \"Jan\", \"amount\": 1200000 }\r\n  ],\r\n  \"_revenue_type\": \"barChart\",\r\n  \"_revenue_chartConfig\": {\r\n    \"xAxisKey\": \"month\",\r\n    \"dataKey\": \"amount\"\r\n  }\r\n}\r\n```\r\n\r\n**RenderFactory routing:**\r\n```typescript\r\ncase 'barChart':\r\n  return <BarChartRenderer value={data} schema={schema} />;\r\n```\r\n\r\n**BarChartRenderer:**\r\n```typescript\r\nconst chartConfig = schema.chartConfig;\r\nconst data = value as Array<any>;\r\n\r\nreturn (\r\n  <BarChart data={data}>\r\n    <XAxis dataKey={chartConfig.xAxisKey} />\r\n    <Bar dataKey={chartConfig.dataKey} fill={chartConfig.barColor} />\r\n  </BarChart>\r\n);\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 6,
+      "title": "Modifying Chart Appearance",
+      "description": "### Change Colors\r\n\r\n**Location:** `_sectionName_chartConfig.colors` or `barColor`/`lineColor`\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"_budgetAllocation_chartConfig\": {\r\n    \"colors\": [\r\n      \"#6B1B5E\",  // FIS Eggplant\r\n      \"#B21A53\",  // FIS Raspberry\r\n      \"#3B82F6\",  // Blue\r\n      \"#10B981\"   // Green\r\n    ]\r\n  }\r\n}\r\n```\r\n\r\n**Brand Colors:**\r\n- FIS Eggplant: `#6B1B5E`\r\n- FIS Raspberry: `#B21A53`\r\n- FIS Cream: `#FAF6F1`\r\n\r\n### Change Chart Size\r\n\r\n**Method 1: Config (affects all instances)**\r\n``",
+      "instructions": "### Change Colors\r\n\r\n**Location:** `_sectionName_chartConfig.colors` or `barColor`/`lineColor`\r\n\r\n**Example:**\r\n```json\r\n{\r\n  \"_budgetAllocation_chartConfig\": {\r\n    \"colors\": [\r\n      \"#6B1B5E\",  // FIS Eggplant\r\n      \"#B21A53\",  // FIS Raspberry\r\n      \"#3B82F6\",  // Blue\r\n      \"#10B981\"   // Green\r\n    ]\r\n  }\r\n}\r\n```\r\n\r\n**Brand Colors:**\r\n- FIS Eggplant: `#6B1B5E`\r\n- FIS Raspberry: `#B21A53`\r\n- FIS Cream: `#FAF6F1`\r\n\r\n### Change Chart Size\r\n\r\n**Method 1: Config (affects all instances)**\r\n```json\r\n{\r\n  \"_chartConfig\": {\r\n    \"width\": 600,\r\n    \"height\": 400\r\n  }\r\n}\r\n```\r\n\r\n**Method 2: Renderer (affects all charts of this type)**\r\n\r\nEdit `src/renderers/[ChartType]Renderer.tsx`:\r\n\r\n```typescript\r\n<BarChart \r\n  width={chartConfig.width || 800}   // Default width\r\n  height={chartConfig.height || 350} // Default height\r\n  data={data}\r\n>\r\n```\r\n\r\n### Customize Tooltips\r\n\r\n**Edit:** Chart renderer component\r\n\r\n```typescript\r\n// Add custom tooltip component\r\nconst CustomTooltip = ({ active, payload }: any) => {\r\n  if (active && payload && payload.length) {\r\n    return (\r\n      <div className=\"bg-white dark:bg-gray-800 p-2 rounded shadow\">\r\n        <p className=\"text-sm\">{`${payload[0].name}: ${payload[0].value}`}</p>\r\n      </div>\r\n    );\r\n  }\r\n  return null;\r\n};\r\n\r\n// Use in chart\r\n<BarChart data={data}>\r\n  <Tooltip content={<CustomTooltip />} />\r\n</BarChart>\r\n```\r\n\r\n### Add Grid Lines\r\n\r\n**Edit:** Chart renderer\r\n\r\n```typescript\r\nimport { CartesianGrid } from 'recharts';\r\n\r\n<BarChart data={data}>\r\n  <CartesianGrid strokeDasharray=\"3 3\" />  {/* Add this */}\r\n  <XAxis dataKey=\"month\" />\r\n  <Bar dataKey=\"value\" />\r\n</BarChart>\r\n```\r\n\r\n### Dark Mode Styling\r\n\r\nAll chart renderers support dark mode through Tailwind classes:\r\n\r\n```typescript\r\n<div className=\"bg-white dark:bg-gray-900\">\r\n  <BarChart>\r\n    {/* Charts automatically adapt colors */}\r\n  </BarChart>\r\n</div>\r\n```\r\n\r\n**Axis styling:**\r\n```typescript\r\n<XAxis \r\n  stroke={isDarkMode ? '#9CA3AF' : '#374151'}  // Gray for dark mode\r\n  tick={{ fill: isDarkMode ? '#D1D5DB' : '#1F2937' }}\r\n/>\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 7,
+      "title": "Adding a New Chart Type",
+      "description": "### Example: Adding a Scatter Plot\r\n\r\n#### Step 1: Define Config Interface\r\n\r\n**File:** `src/types/schema.ts`\r\n\r\n```typescript\r\nexport interface ScatterPlotConfig {\r\n  xAxisKey: string;\r\n  yAxisKey: string;\r\n  dotColor: string;\r\n  dotSize?: number;\r\n}\r\n\r\nexport interface ChartConfig {\r\n  // ... existing types\r\n  scatterPlot?: ScatterPlotConfig;\r\n}\r\n```\r\n\r\n#### Step 2: Create Renderer\r\n\r\n**File:** `src/renderers/ScatterPlotRenderer.tsx`\r\n\r\n```typescript\r\nimport React from 'react';\r\nimport { Scatt",
+      "instructions": "### Example: Adding a Scatter Plot\r\n\r\n#### Step 1: Define Config Interface\r\n\r\n**File:** `src/types/schema.ts`\r\n\r\n```typescript\r\nexport interface ScatterPlotConfig {\r\n  xAxisKey: string;\r\n  yAxisKey: string;\r\n  dotColor: string;\r\n  dotSize?: number;\r\n}\r\n\r\nexport interface ChartConfig {\r\n  // ... existing types\r\n  scatterPlot?: ScatterPlotConfig;\r\n}\r\n```\r\n\r\n#### Step 2: Create Renderer\r\n\r\n**File:** `src/renderers/ScatterPlotRenderer.tsx`\r\n\r\n```typescript\r\nimport React from 'react';\r\nimport { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';\r\nimport type { RendererProps } from '../types';\r\n\r\nexport const ScatterPlotRenderer: React.FC<RendererProps> = ({ value, schema }) => {\r\n  const data = value as Array<any>;\r\n  const config = schema.chartConfig?.scatterPlot || {\r\n    xAxisKey: 'x',\r\n    yAxisKey: 'y',\r\n    dotColor: '#6B1B5E',\r\n    dotSize: 5\r\n  };\r\n\r\n  return (\r\n    <div className=\"w-full\">\r\n      {schema.label && (\r\n        <h3 className=\"text-lg font-roobert-semibold mb-4\">{schema.label}</h3>\r\n      )}\r\n      <ScatterChart width={600} height={300} data={data}>\r\n        <CartesianGrid strokeDasharray=\"3 3\" />\r\n        <XAxis dataKey={config.xAxisKey} />\r\n        <YAxis dataKey={config.yAxisKey} />\r\n        <Tooltip cursor={{ strokeDasharray: '3 3' }} />\r\n        <Scatter \r\n          data={data} \r\n          fill={config.dotColor}\r\n          radius={config.dotSize}\r\n        />\r\n      </ScatterChart>\r\n    </div>\r\n  );\r\n};\r\n```\r\n\r\n#### Step 3: Add to RenderFactory\r\n\r\n```typescript\r\nimport { ScatterPlotRenderer } from './ScatterPlotRenderer';\r\n\r\ncase 'scatterPlot':\r\n  return <ScatterPlotRenderer {...props} />;\r\n```\r\n\r\n#### Step 4: Add to Template Builder\r\n\r\n```typescript\r\n{\r\n  id: 'scatterPlot',\r\n  name: 'Scatter Plot',\r\n  renderType: 'scatterPlot',\r\n  description: 'X-Y data point visualization',\r\n  schema: {\r\n    type: 'scatterPlot',\r\n    label: 'Scatter Plot',\r\n    renderAs: 'scatterPlot',\r\n    chartConfig: {\r\n      scatterPlot: {\r\n        xAxisKey: 'x',\r\n        yAxisKey: 'y',\r\n        dotColor: '#6B1B5E'\r\n      }\r\n    }\r\n  } as any\r\n}\r\n```\r\n\r\n#### Step 5: Add Example\r\n\r\n```typescript\r\n{\r\n  id: 'scatterPlot',\r\n  name: 'Scatter Plot',\r\n  category: 'charts',\r\n  description: 'X-Y coordinate visualization',\r\n  useCase: 'Correlation analysis, data distribution',\r\n  schema: {\r\n    renderAs: 'scatterPlot',\r\n    label: 'Performance vs Budget',\r\n    chartConfig: {\r\n      scatterPlot: {\r\n        xAxisKey: 'budget',\r\n        yAxisKey: 'performance',\r\n        dotColor: '#B21A53'\r\n      }\r\n    }\r\n  },\r\n  sampleData: [\r\n    { budget: 100000, performance: 85 },\r\n    { budget: 150000, performance: 92 },\r\n    { budget: 200000, performance: 78 }\r\n  ]\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 8,
+      "title": "Troubleshooting",
+      "description": "### Chart doesn't render\r\n\r\n**Check:**\r\n- Is data an array? `console.log(Array.isArray(data))`\r\n- Are dataKey fields present in objects?\r\n- Is Recharts imported correctly?\r\n\r\n**Debug:**\r\n```typescript\r\nconsole.log('Chart data:', data);\r\nconsole.log('Chart config:', chartConfig);\r\n```\r\n\r\n### Colors not applying\r\n\r\n**Issue:** Wrong config property name\r\n\r\n**Fix:**\r\n```typescript\r\n// Wrong:\r\nchartConfig.color  \r\n\r\n// Right:\r\nchartConfig.barColor    // For bar charts\r\nchartConfig.lineColor   // For ",
+      "instructions": "### Chart doesn't render\r\n\r\n**Check:**\r\n- Is data an array? `console.log(Array.isArray(data))`\r\n- Are dataKey fields present in objects?\r\n- Is Recharts imported correctly?\r\n\r\n**Debug:**\r\n```typescript\r\nconsole.log('Chart data:', data);\r\nconsole.log('Chart config:', chartConfig);\r\n```\r\n\r\n### Colors not applying\r\n\r\n**Issue:** Wrong config property name\r\n\r\n**Fix:**\r\n```typescript\r\n// Wrong:\r\nchartConfig.color  \r\n\r\n// Right:\r\nchartConfig.barColor    // For bar charts\r\nchartConfig.lineColor   // For line charts\r\nchartConfig.colors      // For multi-color charts (array)\r\n```\r\n\r\n### Chart too small/large\r\n\r\n**Solution 1:** Set responsive width\r\n```typescript\r\n<ResponsiveContainer width=\"100%\" height={300}>\r\n  <BarChart data={data}>\r\n    ...\r\n  </BarChart>\r\n</ResponsiveContainer>\r\n```\r\n\r\n**Solution 2:** Configure in metadata\r\n```json\r\n{\r\n  \"_chartConfig\": {\r\n    \"width\": 800,\r\n    \"height\": 400\r\n  }\r\n}\r\n```\r\n\r\n### Tooltip not showing\r\n\r\n**Fix:** Add Tooltip component\r\n```typescript\r\nimport { Tooltip } from 'recharts';\r\n\r\n<BarChart>\r\n  <Tooltip />  {/* Add this */}\r\n  <Bar ... />\r\n</BarChart>\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 9,
+      "title": "Best Practices",
+      "description": "### 1. Use Responsive Containers\r\n```typescript\r\nimport { ResponsiveContainer } from 'recharts';\r\n\r\n<ResponsiveContainer width=\"100%\" height={300}>\r\n  <BarChart>{/* ... */}</BarChart>\r\n</ResponsiveContainer>\r\n```\r\n\r\n### 2. Provide Default Configs\r\n```typescript\r\nconst config = schema.chartConfig?.barChart || {\r\n  xAxisKey: 'name',\r\n  dataKey: 'value',\r\n  barColor: '#6B1B5E'  // Always provide defaults\r\n};\r\n```\r\n\r\n### 3. Handle Empty Data\r\n```typescript\r\nif (!data || data.length === 0) {\r\n  retur",
+      "instructions": "### 1. Use Responsive Containers\r\n```typescript\r\nimport { ResponsiveContainer } from 'recharts';\r\n\r\n<ResponsiveContainer width=\"100%\" height={300}>\r\n  <BarChart>{/* ... */}</BarChart>\r\n</ResponsiveContainer>\r\n```\r\n\r\n### 2. Provide Default Configs\r\n```typescript\r\nconst config = schema.chartConfig?.barChart || {\r\n  xAxisKey: 'name',\r\n  dataKey: 'value',\r\n  barColor: '#6B1B5E'  // Always provide defaults\r\n};\r\n```\r\n\r\n### 3. Handle Empty Data\r\n```typescript\r\nif (!data || data.length === 0) {\r\n  return (\r\n    <div className=\"text-gray-500 text-center p-8\">\r\n      No data available\r\n    </div>\r\n  );\r\n}\r\n```\r\n\r\n### 4. Format Tooltip Values\r\n```typescript\r\nconst CustomTooltip = ({ active, payload }: any) => {\r\n  if (active && payload[0]) {\r\n    return (\r\n      <div className=\"bg-white p-2 rounded shadow\">\r\n        <p>${payload[0].value.toLocaleString()}</p>  {/* Format currency */}\r\n      </div>\r\n    );\r\n  }\r\n};\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 10,
+      "title": "Related Documentation",
+      "description": "- [Adding New Assets](./adding-new-assets.md) - General asset creation guide\r\n- [Metadata Schema Reference](../reference/metadata-schema.md) - Metadata patterns\r\n- [Multi-Column Layout](./multi-column-layout.md) - Layout system for charts\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*",
+      "instructions": "- [Adding New Assets](./adding-new-assets.md) - General asset creation guide\r\n- [Metadata Schema Reference](../reference/metadata-schema.md) - Metadata patterns\r\n- [Multi-Column Layout](./multi-column-layout.md) - Layout system for charts\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "relatedArticles": [],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": false,
+  "_completed_relatedArticles": false,
+  "_template_name": "KB Article Import",
+  "_template_description": "Imported from Markdown",
+  "_template_created": "2025-11-09T13:01:35.658Z",
+  "_template_updated": "2025-11-09T13:01:35.658Z"
+}

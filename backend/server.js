@@ -552,6 +552,160 @@ app.delete('/api/templates/:id', async (req, res) => {
 });
 
 // ============================================
+// KNOWLEDGE BASE CATEGORIES ENDPOINTS
+// ============================================
+
+// GET all KB categories
+app.get('/api/kb-categories', async (req, res) => {
+  try {
+    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
+    const files = await listFiles(categoriesDir);
+    
+    const categories = await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(categoriesDir, file);
+        return await readJSONFile(filePath);
+      })
+    );
+    
+    categories.sort((a, b) => a.name.localeCompare(b.name));
+    res.json(categories);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET single KB category by ID
+app.get('/api/kb-categories/:id', async (req, res) => {
+  try {
+    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
+    const filePath = path.join(categoriesDir, `${req.params.id}.json`);
+    const category = await readJSONFile(filePath);
+    res.json(category);
+  } catch (error) {
+    res.status(404).json({ error: 'Category not found' });
+  }
+});
+
+// POST create new KB category
+app.post('/api/kb-categories', async (req, res) => {
+  try {
+    const category = req.body;
+    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
+    const filePath = path.join(categoriesDir, `${category.id}.json`);
+    
+    await writeJSONFile(filePath, category);
+    res.json({ success: true, message: 'Category created successfully', category });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing KB category
+app.put('/api/kb-categories/:id', async (req, res) => {
+  try {
+    const category = req.body;
+    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
+    const filePath = path.join(categoriesDir, `${req.params.id}.json`);
+    
+    await writeJSONFile(filePath, category);
+    res.json({ success: true, message: 'Category updated successfully', category });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE KB category
+app.delete('/api/kb-categories/:id', async (req, res) => {
+  try {
+    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
+    const filePath = path.join(categoriesDir, `${req.params.id}.json`);
+    
+    await fs.unlink(filePath);
+    res.json({ success: true, message: 'Category deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
+// KNOWLEDGE BASE ARTICLES ENDPOINTS
+// ============================================
+
+// GET all KB articles
+app.get('/api/knowledge-base', async (req, res) => {
+  try {
+    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
+    const files = await listFiles(articlesDir);
+    
+    const articles = await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(articlesDir, file);
+        return await readJSONFile(filePath);
+      })
+    );
+    
+    articles.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+    res.json(articles);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET single KB article by ID
+app.get('/api/knowledge-base/:id', async (req, res) => {
+  try {
+    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
+    const filePath = path.join(articlesDir, `${req.params.id}.json`);
+    const article = await readJSONFile(filePath);
+    res.json(article);
+  } catch (error) {
+    res.status(404).json({ error: 'Article not found' });
+  }
+});
+
+// POST create new KB article
+app.post('/api/knowledge-base', async (req, res) => {
+  try {
+    const article = req.body;
+    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
+    const filePath = path.join(articlesDir, `${article.id}.json`);
+    
+    await writeJSONFile(filePath, article);
+    res.json({ success: true, message: 'Article created successfully', article });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing KB article
+app.put('/api/knowledge-base/:id', async (req, res) => {
+  try {
+    const article = req.body;
+    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
+    const filePath = path.join(articlesDir, `${req.params.id}.json`);
+    
+    await writeJSONFile(filePath, article);
+    res.json({ success: true, message: 'Article updated successfully', article });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE KB article
+app.delete('/api/knowledge-base/:id', async (req, res) => {
+  try {
+    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
+    const filePath = path.join(articlesDir, `${req.params.id}.json`);
+    
+    await fs.unlink(filePath);
+    res.json({ success: true, message: 'Article deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
 // HEALTH CHECK
 // ============================================
 
@@ -582,6 +736,16 @@ app.listen(PORT, () => {
   console.log(`  POST   /api/templates`);
   console.log(`  PUT    /api/templates/:id`);
   console.log(`  DELETE /api/templates/:id`);
+  console.log(`  GET    /api/kb-categories`);
+  console.log(`  GET    /api/kb-categories/:id`);
+  console.log(`  POST   /api/kb-categories`);
+  console.log(`  PUT    /api/kb-categories/:id`);
+  console.log(`  DELETE /api/kb-categories/:id`);
+  console.log(`  GET    /api/knowledge-base`);
+  console.log(`  GET    /api/knowledge-base/:id`);
+  console.log(`  POST   /api/knowledge-base`);
+  console.log(`  PUT    /api/knowledge-base/:id`);
+  console.log(`  DELETE /api/knowledge-base/:id`);
   console.log(`  POST   /api/import/:type (with file upload)`);
   console.log(`  POST   /api/auth/login`);
   console.log(`  POST   /api/auth/verify`);

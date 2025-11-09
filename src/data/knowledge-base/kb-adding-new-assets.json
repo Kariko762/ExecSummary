@@ -1,0 +1,295 @@
+{
+  "id": "kb-adding-new-assets",
+  "quarter": "Adding New Asset Types - Complete Guide",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Adding New Asset Types - Complete Guide",
+  "status": "published",
+  "protectionEnabled": false,
+  "category": "development",
+  "_category_type": "text",
+  "_enabled_category": true,
+  "_completed_category": true,
+  "tags": [
+    "development",
+    "charts",
+    "templates",
+    "rendering",
+    "layout"
+  ],
+  "_tags_type": "list",
+  "_enabled_tags": true,
+  "_completed_tags": true,
+  "articleType": "tutorial",
+  "_articleType_type": "text",
+  "_enabled_articleType": true,
+  "_completed_articleType": true,
+  "difficulty": "intermediate",
+  "_difficulty_type": "text",
+  "_enabled_difficulty": true,
+  "_completed_difficulty": true,
+  "estimatedReadTime": "9 min",
+  "_estimatedReadTime_type": "text",
+  "_enabled_estimatedReadTime": true,
+  "_completed_estimatedReadTime": true,
+  "author": "System Generated",
+  "_author_type": "text",
+  "_enabled_author": true,
+  "_completed_author": true,
+  "publishDate": "2025-11-09T13:01:35.655Z",
+  "_publishDate_type": "date",
+  "_enabled_publishDate": true,
+  "_completed_publishDate": true,
+  "lastUpdated": "2025-11-09T13:01:35.655Z",
+  "_lastUpdated_type": "date",
+  "_enabled_lastUpdated": true,
+  "_completed_lastUpdated": true,
+  "version": "1.0",
+  "_version_type": "text",
+  "_enabled_version": true,
+  "_completed_version": true,
+  "summary": "This guide walks through every step required to add a new asset type to both the frontend viewer and CMS admin.",
+  "_summary_type": "textarea",
+  "_enabled_summary": true,
+  "_completed_summary": true,
+  "overview": "This guide walks through every step required to add a new asset type to both the frontend viewer and CMS admin.",
+  "_overview_type": "textarea",
+  "_enabled_overview": true,
+  "_completed_overview": true,
+  "keyPoints": [],
+  "_keyPoints_type": "list",
+  "_enabled_keyPoints": false,
+  "_completed_keyPoints": false,
+  "steps": [
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 1,
+      "title": "📋 Table of Contents",
+      "description": "1. [Overview](#overview)\r\n2. [Prerequisites](#prerequisites)\r\n3. [Step-by-Step Process](#step-by-step-process)\r\n4. [Example: Adding a Progress Bar Asset](#example-adding-a-progress-bar-asset)\r\n5. [Testing Your New Asset](#testing-your-new-asset)\r\n6. [Troubleshooting](#troubleshooting)\r\n\r\n---",
+      "instructions": "1. [Overview](#overview)\r\n2. [Prerequisites](#prerequisites)\r\n3. [Step-by-Step Process](#step-by-step-process)\r\n4. [Example: Adding a Progress Bar Asset](#example-adding-a-progress-bar-asset)\r\n5. [Testing Your New Asset](#testing-your-new-asset)\r\n6. [Troubleshooting](#troubleshooting)\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 2,
+      "title": "Overview",
+      "description": "### What is an Asset Type?\r\n\r\nAn **asset type** (also called a \"render type\") defines how a piece of content is displayed. Examples:\r\n- `text` - Simple text input\r\n- `nestedCards` - Expandable card list\r\n- `pieChart` - Pie chart visualization\r\n- `hr` - Horizontal divider line\r\n\r\n### System Components to Update\r\n\r\nWhen adding a new asset type, you'll need to update **5 key areas**:\r\n\r\n```\r\n1. Type Definitions (TypeScript interfaces)\r\n   ↓\r\n2. Renderer Component (React component)\r\n   ↓\r\n3. RenderF",
+      "instructions": "### What is an Asset Type?\r\n\r\nAn **asset type** (also called a \"render type\") defines how a piece of content is displayed. Examples:\r\n- `text` - Simple text input\r\n- `nestedCards` - Expandable card list\r\n- `pieChart` - Pie chart visualization\r\n- `hr` - Horizontal divider line\r\n\r\n### System Components to Update\r\n\r\nWhen adding a new asset type, you'll need to update **5 key areas**:\r\n\r\n```\r\n1. Type Definitions (TypeScript interfaces)\r\n   ↓\r\n2. Renderer Component (React component)\r\n   ↓\r\n3. RenderFactory (Routing logic)\r\n   ↓\r\n4. Template Builder (Asset Library)\r\n   ↓\r\n5. Engine Assets Modal (Examples)\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 3,
+      "title": "Prerequisites",
+      "description": "**Required Knowledge:**\r\n- React functional components\r\n- TypeScript interfaces\r\n- JSON schema structure\r\n\r\n**Files You'll Be Editing:**\r\n- `src/types/schema.ts`\r\n- `src/renderers/[YourRenderer].tsx`\r\n- `src/renderers/RenderFactory.tsx`\r\n- `cms-admin/src/components/TemplateBuilder.tsx`\r\n- `cms-admin/src/components/EngineAssetsModal.tsx`\r\n\r\n---",
+      "instructions": "**Required Knowledge:**\r\n- React functional components\r\n- TypeScript interfaces\r\n- JSON schema structure\r\n\r\n**Files You'll Be Editing:**\r\n- `src/types/schema.ts`\r\n- `src/renderers/[YourRenderer].tsx`\r\n- `src/renderers/RenderFactory.tsx`\r\n- `cms-admin/src/components/TemplateBuilder.tsx`\r\n- `cms-admin/src/components/EngineAssetsModal.tsx`\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 4,
+      "title": "Step-by-Step Process",
+      "description": "### Step 1: Define Type Interfaces\r\n\r\n**File:** `src/types/schema.ts`\r\n\r\nAdd your new render type to the `RenderType` union and create a config interface if needed.\r\n\r\n```typescript\r\n// 1. Add to RenderType union\r\nexport type RenderType = \r\n  | 'text'\r\n  | 'textarea'\r\n  | 'number'\r\n  // ... existing types\r\n  | 'progressBar'  // ← Your new type\r\n  | 'hr';\r\n\r\n// 2. Create a config interface (if your type needs configuration)\r\nexport interface ProgressBarConfig {\r\n  max: number;\r\n  showPercentage: ",
+      "instructions": "### Step 1: Define Type Interfaces\r\n\r\n**File:** `src/types/schema.ts`\r\n\r\nAdd your new render type to the `RenderType` union and create a config interface if needed.\r\n\r\n```typescript\r\n// 1. Add to RenderType union\r\nexport type RenderType = \r\n  | 'text'\r\n  | 'textarea'\r\n  | 'number'\r\n  // ... existing types\r\n  | 'progressBar'  // ← Your new type\r\n  | 'hr';\r\n\r\n// 2. Create a config interface (if your type needs configuration)\r\nexport interface ProgressBarConfig {\r\n  max: number;\r\n  showPercentage: boolean;\r\n  color?: string;\r\n  height?: number;\r\n}\r\n\r\n// 3. Add config to FieldSchema interface\r\nexport interface FieldSchema {\r\n  // ... existing properties\r\n  progressBarConfig?: ProgressBarConfig;  // ← Add this\r\n}\r\n```\r\n\r\n**When to create a config interface:**\r\n- If your asset needs customization options\r\n- Examples: chart colors, bar height, display format\r\n- Simple types (like plain text) don't need configs\r\n\r\n---\r\n\r\n### Step 2: Create the Renderer Component\r\n\r\n**File:** `src/renderers/ProgressBarRenderer.tsx` (new file)\r\n\r\nCreate a React component that renders your asset type.\r\n\r\n```typescript\r\nimport React from 'react';\r\nimport type { RendererProps } from '../types';\r\n\r\nexport const ProgressBarRenderer: React.FC<RendererProps> = ({\r\n  value,\r\n  schema,\r\n  mode = 'display'\r\n}) => {\r\n  // Extract configuration\r\n  const config = schema.progressBarConfig || {\r\n    max: 100,\r\n    showPercentage: true,\r\n    color: '#6B1B5E',\r\n    height: 24\r\n  };\r\n\r\n  // Parse value (could be number or string)\r\n  const numValue = typeof value === 'number' ? value : parseInt(value || '0');\r\n  const percentage = Math.min((numValue / config.max) * 100, 100);\r\n\r\n  // Edit mode: Show input\r\n  if (mode === 'edit') {\r\n    return (\r\n      <div className=\"space-y-2\">\r\n        <label className=\"text-sm font-roobert-medium text-gray-700 dark:text-gray-300\">\r\n          {schema.label}\r\n        </label>\r\n        <input\r\n          type=\"number\"\r\n          value={numValue}\r\n          className=\"w-full px-3 py-2 rounded border\"\r\n          readOnly\r\n        />\r\n      </div>\r\n    );\r\n  }\r\n\r\n  // Display mode: Show progress bar\r\n  return (\r\n    <div className=\"space-y-2\">\r\n      {schema.label && (\r\n        <div className=\"text-sm font-roobert-medium text-gray-700 dark:text-gray-300\">\r\n          {schema.label}\r\n        </div>\r\n      )}\r\n      <div \r\n        className=\"w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden\"\r\n        style={{ height: config.height }}\r\n      >\r\n        <div\r\n          className=\"h-full transition-all duration-300\"\r\n          style={{\r\n            width: `${percentage}%`,\r\n            backgroundColor: config.color\r\n          }}\r\n        />\r\n      </div>\r\n      {config.showPercentage && (\r\n        <div className=\"text-xs text-gray-600 dark:text-gray-400 text-right\">\r\n          {numValue} / {config.max} ({percentage.toFixed(0)}%)\r\n        </div>\r\n      )}\r\n    </div>\r\n  );\r\n};\r\n```\r\n\r\n**Key Points:**\r\n- Accept `RendererProps` with `value`, `schema`, `mode`\r\n- Support both `edit` and `display` modes\r\n- Use Tailwind classes for styling\r\n- Extract config with defaults\r\n- Handle dark mode with `dark:` classes\r\n\r\n---\r\n\r\n### Step 3: Register in RenderFactory\r\n\r\n**File:** `src/renderers/RenderFactory.tsx`\r\n\r\nAdd routing logic to send your render type to the correct component.\r\n\r\n```typescript\r\n// 1. Import your renderer\r\nimport { ProgressBarRenderer } from './ProgressBarRenderer';\r\n\r\n// 2. Add case in the switch statement\r\nexport const RenderFactory: React.FC<RendererProps> = (props) => {\r\n  const renderType = props.schema.renderAs;\r\n\r\n  switch (renderType) {\r\n    case 'text':\r\n      return <TextRenderer {...props} />;\r\n    \r\n    // ... existing cases\r\n    \r\n    case 'progressBar':\r\n      return <ProgressBarRenderer {...props} />;  // ← Add this\r\n    \r\n    case 'hr':\r\n      return <HorizontalRuleRenderer {...props} />;\r\n    \r\n    default:\r\n      return <TextRenderer {...props} />;\r\n  }\r\n};\r\n```\r\n\r\n---\r\n\r\n### Step 4: Add to Template Builder Asset Library\r\n\r\n**File:** `cms-admin/src/components/TemplateBuilder.tsx`\r\n\r\nAdd your asset to the drag-and-drop library so users can add it to templates.\r\n\r\n```typescript\r\nconst ASSET_LIBRARY: AssetCategory[] = [\r\n  // ... existing categories\r\n  {\r\n    id: 'basic',\r\n    name: 'Basic Inputs',\r\n    icon: Type,\r\n    color: 'blue',\r\n    assets: [\r\n      // ... existing assets\r\n      {\r\n        id: 'progressBar',\r\n        name: 'Progress Bar',\r\n        renderType: 'progressBar',\r\n        description: 'Visual progress indicator',\r\n        schema: {\r\n          type: 'number',\r\n          label: 'Progress',\r\n          renderAs: 'progressBar',\r\n          progressBarConfig: {\r\n            max: 100,\r\n            showPercentage: true,\r\n            color: '#6B1B5E',\r\n            height: 24\r\n          }\r\n        } as any  // Type assertion for custom schemas\r\n      }\r\n    ]\r\n  }\r\n];\r\n```\r\n\r\n**Choosing a Category:**\r\n- `basic` - Simple inputs (text, number, date)\r\n- `lists` - Array-based types (lists, nested cards)\r\n- `complex` - Advanced structures (objects, key-value pairs)\r\n- `rich` - Rich content (markdown, expressions)\r\n- `charts` - Data visualizations\r\n- `layout` - Structural elements (HR)\r\n\r\n---\r\n\r\n### Step 5: Add Example to Engine Assets Modal\r\n\r\n**File:** `cms-admin/src/components/EngineAssetsModal.tsx`\r\n\r\nAdd a working example so users can see how your asset looks.\r\n\r\n```typescript\r\nconst EXAMPLES: RenderExample[] = [\r\n  // ... existing examples\r\n  {\r\n    id: 'progressBar',\r\n    name: 'Progress Bar',\r\n    category: 'basic',\r\n    description: 'Visual progress indicator with percentage',\r\n    useCase: 'Project completion, goals, milestones',\r\n    schema: {\r\n      renderAs: 'progressBar',\r\n      label: 'Project Completion',\r\n      progressBarConfig: {\r\n        max: 100,\r\n        showPercentage: true,\r\n        color: '#6B1B5E',\r\n        height: 24\r\n      }\r\n    },\r\n    sampleData: 75  // Progress value\r\n  }\r\n];\r\n```\r\n\r\nThe modal will automatically render your example using RenderFactory.\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 5,
+      "title": "Example: Adding a Progress Bar Asset",
+      "description": "Let's walk through a complete real-world example.\r\n\r\n### Goal\r\nAdd a progress bar component that shows completion percentage with a colored bar.\r\n\r\n### Implementation\r\n\r\n#### 1. Type Definition (`src/types/schema.ts`)\r\n\r\n```typescript\r\nexport type RenderType = \r\n  | 'text'\r\n  | 'progressBar'  // NEW\r\n  | 'hr';\r\n\r\nexport interface ProgressBarConfig {\r\n  max: number;\r\n  showPercentage: boolean;\r\n  color?: string;\r\n  height?: number;\r\n}\r\n\r\nexport interface FieldSchema {\r\n  // ... existing\r\n  progre",
+      "instructions": "Let's walk through a complete real-world example.\r\n\r\n### Goal\r\nAdd a progress bar component that shows completion percentage with a colored bar.\r\n\r\n### Implementation\r\n\r\n#### 1. Type Definition (`src/types/schema.ts`)\r\n\r\n```typescript\r\nexport type RenderType = \r\n  | 'text'\r\n  | 'progressBar'  // NEW\r\n  | 'hr';\r\n\r\nexport interface ProgressBarConfig {\r\n  max: number;\r\n  showPercentage: boolean;\r\n  color?: string;\r\n  height?: number;\r\n}\r\n\r\nexport interface FieldSchema {\r\n  // ... existing\r\n  progressBarConfig?: ProgressBarConfig;  // NEW\r\n}\r\n```\r\n\r\n#### 2. Create Renderer (`src/renderers/ProgressBarRenderer.tsx`)\r\n\r\n```typescript\r\nimport React from 'react';\r\nimport type { RendererProps } from '../types';\r\n\r\nexport const ProgressBarRenderer: React.FC<RendererProps> = ({\r\n  value,\r\n  schema,\r\n  mode = 'display'\r\n}) => {\r\n  const config = schema.progressBarConfig || {\r\n    max: 100,\r\n    showPercentage: true,\r\n    color: '#6B1B5E',\r\n    height: 24\r\n  };\r\n\r\n  const numValue = typeof value === 'number' ? value : parseInt(value || '0');\r\n  const percentage = Math.min((numValue / config.max) * 100, 100);\r\n\r\n  if (mode === 'edit') {\r\n    return (\r\n      <input\r\n        type=\"number\"\r\n        value={numValue}\r\n        className=\"w-full px-3 py-2 rounded border\"\r\n        readOnly\r\n      />\r\n    );\r\n  }\r\n\r\n  return (\r\n    <div className=\"space-y-2\">\r\n      <div className=\"text-sm font-medium\">{schema.label}</div>\r\n      <div \r\n        className=\"w-full bg-gray-200 rounded-full\"\r\n        style={{ height: config.height }}\r\n      >\r\n        <div\r\n          className=\"h-full transition-all\"\r\n          style={{\r\n            width: `${percentage}%`,\r\n            backgroundColor: config.color\r\n          }}\r\n        />\r\n      </div>\r\n      {config.showPercentage && (\r\n        <div className=\"text-xs text-gray-600\">\r\n          {numValue} / {config.max}\r\n        </div>\r\n      )}\r\n    </div>\r\n  );\r\n};\r\n```\r\n\r\n#### 3. Update RenderFactory\r\n\r\n```typescript\r\nimport { ProgressBarRenderer } from './ProgressBarRenderer';\r\n\r\n// In switch statement:\r\ncase 'progressBar':\r\n  return <ProgressBarRenderer {...props} />;\r\n```\r\n\r\n#### 4. Add to Template Builder\r\n\r\n```typescript\r\n{\r\n  id: 'progressBar',\r\n  name: 'Progress Bar',\r\n  renderType: 'progressBar',\r\n  description: 'Visual progress indicator',\r\n  schema: {\r\n    type: 'number',\r\n    label: 'Progress',\r\n    renderAs: 'progressBar',\r\n    progressBarConfig: {\r\n      max: 100,\r\n      showPercentage: true\r\n    }\r\n  } as any\r\n}\r\n```\r\n\r\n#### 5. Add Example to Engine Assets Modal\r\n\r\n```typescript\r\n{\r\n  id: 'progressBar',\r\n  name: 'Progress Bar',\r\n  category: 'basic',\r\n  description: 'Visual progress indicator',\r\n  useCase: 'Completion tracking',\r\n  schema: {\r\n    renderAs: 'progressBar',\r\n    label: 'Project Progress',\r\n    progressBarConfig: { max: 100, showPercentage: true }\r\n  },\r\n  sampleData: 75\r\n}\r\n```\r\n\r\n### Testing\r\n\r\n1. **Template Builder:**\r\n   - Open CMS Admin → Template Builder\r\n   - Drag \"Progress Bar\" onto canvas\r\n   - Verify it appears in section\r\n\r\n2. **Editor:**\r\n   - Create a test summary with progress bar\r\n   - Enter a value (e.g., 75)\r\n   - Verify it saves correctly\r\n\r\n3. **Frontend:**\r\n   - View the summary\r\n   - Confirm progress bar displays correctly\r\n   - Check dark mode rendering\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 6,
+      "title": "Testing Your New Asset",
+      "description": "### Checklist\r\n\r\n- [ ] TypeScript compiles without errors\r\n- [ ] Asset appears in Template Builder asset library\r\n- [ ] Can drag asset into template\r\n- [ ] Example appears in Engine Assets Modal with live preview\r\n- [ ] Edit mode works in EditorModalV2\r\n- [ ] Display mode works in frontend viewer\r\n- [ ] Dark mode styling looks correct\r\n- [ ] Responsive design works on mobile\r\n- [ ] JSON saves with correct metadata structure\r\n\r\n### Test JSON Structure\r\n\r\nYour asset should produce this metadata pa",
+      "instructions": "### Checklist\r\n\r\n- [ ] TypeScript compiles without errors\r\n- [ ] Asset appears in Template Builder asset library\r\n- [ ] Can drag asset into template\r\n- [ ] Example appears in Engine Assets Modal with live preview\r\n- [ ] Edit mode works in EditorModalV2\r\n- [ ] Display mode works in frontend viewer\r\n- [ ] Dark mode styling looks correct\r\n- [ ] Responsive design works on mobile\r\n- [ ] JSON saves with correct metadata structure\r\n\r\n### Test JSON Structure\r\n\r\nYour asset should produce this metadata pattern:\r\n\r\n```json\r\n{\r\n  \"projectProgress\": 75,\r\n  \"_projectProgress_type\": \"progressBar\",\r\n  \"_projectProgress_config\": {\r\n    \"max\": 100,\r\n    \"showPercentage\": true,\r\n    \"color\": \"#6B1B5E\"\r\n  },\r\n  \"_enabled_projectProgress\": true,\r\n  \"_completed_projectProgress\": false\r\n}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 7,
+      "title": "Troubleshooting",
+      "description": "### Common Issues\r\n\r\n#### Asset doesn't appear in Template Builder\r\n- Check: Did you add it to `ASSET_LIBRARY` array?\r\n- Check: Is the category ID correct?\r\n- Check: Did you restart the dev server?\r\n\r\n#### \"Cannot find module\" error\r\n- Check: Did you export the renderer component?\r\n- Check: Is the import path correct in RenderFactory?\r\n- Check: Are there TypeScript errors in the renderer file?\r\n\r\n#### Asset renders as plain text\r\n- Check: Did you add the case to RenderFactory switch statement?\r\n",
+      "instructions": "### Common Issues\r\n\r\n#### Asset doesn't appear in Template Builder\r\n- Check: Did you add it to `ASSET_LIBRARY` array?\r\n- Check: Is the category ID correct?\r\n- Check: Did you restart the dev server?\r\n\r\n#### \"Cannot find module\" error\r\n- Check: Did you export the renderer component?\r\n- Check: Is the import path correct in RenderFactory?\r\n- Check: Are there TypeScript errors in the renderer file?\r\n\r\n#### Asset renders as plain text\r\n- Check: Did you add the case to RenderFactory switch statement?\r\n- Check: Is `schema.renderAs` set correctly?\r\n- Check: Does the renderType match exactly (case-sensitive)?\r\n\r\n#### Edit mode doesn't work\r\n- Check: Does your renderer handle `mode === 'edit'`?\r\n- Check: Are you using RendererProps correctly?\r\n\r\n#### Dark mode styling broken\r\n- Check: Did you add `dark:` variants to Tailwind classes?\r\n- Check: Are colors defined for both light and dark modes?\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 8,
+      "title": "Advanced Topics",
+      "description": "### Supporting CMS-Specific Renderers\r\n\r\nSome assets need different behavior in the CMS. Create a separate CMS renderer:\r\n\r\n**File:** `cms-admin/src/renderers/ProgressBarRenderer.tsx`\r\n\r\n```typescript\r\nimport React from 'react';\r\n\r\ninterface Props {\r\n  value: any;\r\n  onChange: (value: any) => void;\r\n  schema: any;\r\n  isEditMode: boolean;\r\n}\r\n\r\nexport const ProgressBarRenderer: React.FC<Props> = ({\r\n  value,\r\n  onChange,\r\n  schema,\r\n  isEditMode\r\n}) => {\r\n  // CMS-specific implementation with onC",
+      "instructions": "### Supporting CMS-Specific Renderers\r\n\r\nSome assets need different behavior in the CMS. Create a separate CMS renderer:\r\n\r\n**File:** `cms-admin/src/renderers/ProgressBarRenderer.tsx`\r\n\r\n```typescript\r\nimport React from 'react';\r\n\r\ninterface Props {\r\n  value: any;\r\n  onChange: (value: any) => void;\r\n  schema: any;\r\n  isEditMode: boolean;\r\n}\r\n\r\nexport const ProgressBarRenderer: React.FC<Props> = ({\r\n  value,\r\n  onChange,\r\n  schema,\r\n  isEditMode\r\n}) => {\r\n  // CMS-specific implementation with onChange support\r\n  if (isEditMode) {\r\n    return (\r\n      <input\r\n        type=\"number\"\r\n        value={value}\r\n        onChange={(e) => onChange(parseInt(e.target.value))}\r\n        max={schema.progressBarConfig?.max || 100}\r\n      />\r\n    );\r\n  }\r\n  \r\n  // Display mode (same as frontend)\r\n  return <div>...</div>;\r\n};\r\n```\r\n\r\nThen import the CMS version in CMS components.\r\n\r\n### Configuration UI in Template Builder\r\n\r\nAllow users to configure your asset in Template Builder:\r\n\r\n```typescript\r\n// Add configuration UI when field is selected\r\n{selectedField && selectedField.renderType === 'progressBar' && (\r\n  <div className=\"space-y-2\">\r\n    <label>Max Value</label>\r\n    <input\r\n      type=\"number\"\r\n      value={selectedField.schema.progressBarConfig?.max || 100}\r\n      onChange={(e) => updateFieldConfig('max', parseInt(e.target.value))}\r\n    />\r\n    <label>\r\n      <input\r\n        type=\"checkbox\"\r\n        checked={selectedField.schema.progressBarConfig?.showPercentage}\r\n        onChange={(e) => updateFieldConfig('showPercentage', e.target.checked)}\r\n      />\r\n      Show Percentage\r\n    </label>\r\n  </div>\r\n)}\r\n```\r\n\r\n---",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    },
+    {
+      "_type": "step",
+      "_enabled": true,
+      "_completed": false,
+      "stepNumber": 9,
+      "title": "Summary",
+      "description": "Adding a new asset type requires updating **5 key files**:\r\n\r\n1. ✅ **Type definitions** - `src/types/schema.ts`\r\n2. ✅ **Renderer component** - `src/renderers/[Type]Renderer.tsx`\r\n3. ✅ **RenderFactory routing** - `src/renderers/RenderFactory.tsx`\r\n4. ✅ **Template Builder asset** - `cms-admin/src/components/TemplateBuilder.tsx`\r\n5. ✅ **Engine Assets example** - `cms-admin/src/components/EngineAssetsModal.tsx`\r\n\r\nFollow this pattern consistently and your new assets will integrate seamlessly!\r\n\r\n---",
+      "instructions": "Adding a new asset type requires updating **5 key files**:\r\n\r\n1. ✅ **Type definitions** - `src/types/schema.ts`\r\n2. ✅ **Renderer component** - `src/renderers/[Type]Renderer.tsx`\r\n3. ✅ **RenderFactory routing** - `src/renderers/RenderFactory.tsx`\r\n4. ✅ **Template Builder asset** - `cms-admin/src/components/TemplateBuilder.tsx`\r\n5. ✅ **Engine Assets example** - `cms-admin/src/components/EngineAssetsModal.tsx`\r\n\r\nFollow this pattern consistently and your new assets will integrate seamlessly!\r\n\r\n---\r\n\r\n**Related Guides:**\r\n- [Metadata Schema Reference](../reference/metadata-schema.md)\r\n- [Render Types Catalog](../reference/render-types.md)\r\n- [Component Library](../reference/component-library.md)\r\n\r\n---\r\n\r\n*Last Updated: November 8, 2025*",
+      "expectedOutcome": "",
+      "screenshot": "",
+      "duration": ""
+    }
+  ],
+  "_steps_type": "nestedCards",
+  "_steps_fields": {
+    "stepNumber": {
+      "type": "number",
+      "label": "Step #",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "instructions": {
+      "type": "textarea",
+      "label": "Instructions"
+    },
+    "expectedOutcome": {
+      "type": "text",
+      "label": "Expected Outcome"
+    },
+    "screenshot": {
+      "type": "text",
+      "label": "Screenshot URL"
+    },
+    "duration": {
+      "type": "text",
+      "label": "Duration"
+    }
+  },
+  "_enabled_steps": true,
+  "_completed_steps": true,
+  "codeExamples": [],
+  "_codeExamples_type": "nestedCards",
+  "_codeExamples_fields": {
+    "language": {
+      "type": "text",
+      "label": "Language",
+      "required": true
+    },
+    "code": {
+      "type": "textarea",
+      "label": "Code",
+      "required": true
+    },
+    "title": {
+      "type": "text",
+      "label": "Title"
+    },
+    "explanation": {
+      "type": "textarea",
+      "label": "Explanation"
+    }
+  },
+  "_enabled_codeExamples": false,
+  "_completed_codeExamples": false,
+  "prerequisites": [],
+  "_prerequisites_type": "list",
+  "_enabled_prerequisites": false,
+  "_completed_prerequisites": false,
+  "requiredTools": [],
+  "_requiredTools_type": "nestedCards",
+  "_requiredTools_fields": {
+    "name": {
+      "type": "text",
+      "label": "Tool Name",
+      "required": true
+    },
+    "version": {
+      "type": "text",
+      "label": "Version"
+    },
+    "downloadLink": {
+      "type": "text",
+      "label": "Download Link"
+    },
+    "purpose": {
+      "type": "text",
+      "label": "Purpose"
+    }
+  },
+  "_enabled_requiredTools": false,
+  "_completed_requiredTools": false,
+  "troubleshooting": [],
+  "_troubleshooting_type": "nestedCards",
+  "_troubleshooting_fields": {
+    "issue": {
+      "type": "text",
+      "label": "Issue",
+      "required": true
+    },
+    "symptoms": {
+      "type": "textarea",
+      "label": "Symptoms"
+    },
+    "cause": {
+      "type": "text",
+      "label": "Cause"
+    },
+    "solution": {
+      "type": "textarea",
+      "label": "Solution",
+      "required": true
+    },
+    "preventionTips": {
+      "type": "textarea",
+      "label": "Prevention Tips"
+    }
+  },
+  "_enabled_troubleshooting": false,
+  "_completed_troubleshooting": false,
+  "relatedArticles": [],
+  "_relatedArticles_type": "list",
+  "_enabled_relatedArticles": false,
+  "_completed_relatedArticles": false,
+  "_template_name": "KB Article Import",
+  "_template_description": "Imported from Markdown",
+  "_template_created": "2025-11-09T13:01:35.655Z",
+  "_template_updated": "2025-11-09T13:01:35.655Z"
+}
