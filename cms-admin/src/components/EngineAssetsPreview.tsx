@@ -10,7 +10,7 @@ interface EngineAssetsPreviewProps {
   onClose: () => void;
 }
 
-type Category = 'basic' | 'lists' | 'complex' | 'rich' | 'charts';
+type Category = 'basic' | 'lists' | 'complex' | 'rich' | 'charts' | 'media' | 'layout';
 
 interface RenderExample {
   id: string;
@@ -314,12 +314,100 @@ const EXAMPLES: RenderExample[] = [
     ],
   },
   
+  // MEDIA
+  {
+    id: 'image',
+    name: 'Image',
+    category: 'media',
+    categoryLabel: 'Media',
+    description: 'Image with auto-scaling and caption support',
+    useCase: 'Charts, diagrams, screenshots, visualizations',
+    schema: {
+      renderAs: 'image',
+      label: 'Dashboard Screenshot',
+      fields: {
+        src: { renderAs: 'text', label: 'Image URL', required: true },
+        alt: { renderAs: 'text', label: 'Alt Text' },
+        autoScale: { renderAs: 'checkbox', label: 'Auto Scale', defaultValue: true },
+        width: { renderAs: 'number', label: 'Width (px)' },
+        height: { renderAs: 'number', label: 'Height (px)' },
+        caption: { renderAs: 'text', label: 'Caption' },
+      },
+    },
+    sampleData: {
+      src: 'https://via.placeholder.com/800x400/6b46c1/ffffff?text=Executive+Summary+Dashboard',
+      alt: 'Q4 Performance Dashboard',
+      autoScale: true,
+      caption: 'Q4 2024 Revenue Performance Dashboard',
+    },
+  },
+  {
+    id: 'video',
+    name: 'Video',
+    category: 'media',
+    categoryLabel: 'Media',
+    description: 'Video player with controls and settings',
+    useCase: 'Presentations, demos, training materials',
+    schema: {
+      renderAs: 'video',
+      label: 'Team Presentation',
+      fields: {
+        src: { renderAs: 'text', label: 'Video URL', required: true },
+        poster: { renderAs: 'text', label: 'Poster Image' },
+        autoScale: { renderAs: 'checkbox', label: 'Auto Scale', defaultValue: true },
+        width: { renderAs: 'number', label: 'Width (px)' },
+        height: { renderAs: 'number', label: 'Height (px)' },
+        controls: { renderAs: 'checkbox', label: 'Show Controls', defaultValue: true },
+        autoplay: { renderAs: 'checkbox', label: 'Autoplay', defaultValue: false },
+        loop: { renderAs: 'checkbox', label: 'Loop', defaultValue: false },
+        muted: { renderAs: 'checkbox', label: 'Muted', defaultValue: false },
+      },
+    },
+    sampleData: {
+      src: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      poster: 'https://via.placeholder.com/800x450/6b46c1/ffffff?text=Video+Preview',
+      autoScale: true,
+      controls: true,
+      autoplay: false,
+      loop: false,
+      muted: false,
+    },
+  },
+  {
+    id: 'embeddedVideo',
+    name: 'Embedded Video',
+    category: 'media',
+    categoryLabel: 'Media',
+    description: 'YouTube, Vimeo, or custom iframe embed',
+    useCase: 'External videos, presentations, webinars',
+    schema: {
+      renderAs: 'embeddedVideo',
+      label: 'Quarterly Review Video',
+      fields: {
+        embedUrl: { renderAs: 'text', label: 'Embed URL', required: true },
+        platform: { renderAs: 'select', label: 'Platform', options: ['youtube', 'vimeo', 'custom'], defaultValue: 'youtube' },
+        autoScale: { renderAs: 'checkbox', label: 'Auto Scale (16:9)', defaultValue: true },
+        width: { renderAs: 'number', label: 'Width (px)' },
+        height: { renderAs: 'number', label: 'Height (px)' },
+        allowFullscreen: { renderAs: 'checkbox', label: 'Allow Fullscreen', defaultValue: true },
+        title: { renderAs: 'text', label: 'Title' },
+      },
+    },
+    sampleData: {
+      embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      platform: 'youtube',
+      autoScale: true,
+      allowFullscreen: true,
+      title: 'Q4 Executive Presentation',
+    },
+  },
+
   // LAYOUT
   {
     id: 'hr',
     name: 'Horizontal Rule',
-    category: 'rich',
-    categoryLabel: 'Rich Content',
+    category: 'layout',
+    categoryLabel: 'Layout',
     description: 'Visual divider between sections',
     useCase: 'Section separators, visual breaks, content organization',
     schema: {
@@ -327,13 +415,140 @@ const EXAMPLES: RenderExample[] = [
       label: 'Section Divider',
       hrConfig: {
         thickness: 1,
-        color: ChartColors.ui.grid,
+        color: '#6B1B5E', // FIS Eggplant color
         marginTop: 24,
         marginBottom: 24,
         style: 'solid',
       },
     },
     sampleData: null,
+  },
+  {
+    id: 'statusBoard',
+    name: 'Table Layout',
+    category: 'layout',
+    categoryLabel: 'Layout',
+    description: 'Generic column layout - configurable for any grouped data',
+    useCase: 'Issues tracking, project phases, status boards, categorized content, workflow stages',
+    schema: {
+      renderAs: 'statusBoard',
+      label: 'Issues & Blockers',
+      groupByField: 'status',
+      columns: [
+        { key: 'open', label: 'Open', color: 'text-red-600 dark:text-red-400' },
+        { key: 'in-progress', label: 'In Progress', color: 'text-blue-600 dark:text-blue-400' },
+        { key: 'resolved', label: 'Resolved', color: 'text-green-600 dark:text-green-400' }
+      ],
+      itemSchema: {
+        type: 'object',
+        renderAs: 'objectForm',
+        fields: {
+          title: { 
+            type: 'string', 
+            renderAs: 'text', 
+            label: 'Title', 
+            required: true,
+            displayAs: 'title'
+          },
+          description: { 
+            type: 'string', 
+            renderAs: 'textarea', 
+            label: 'Description',
+            displayAs: 'subtitle'
+          },
+          priority: { 
+            type: 'string', 
+            renderAs: 'select', 
+            label: 'Priority', 
+            options: ['low', 'medium', 'high', 'critical'],
+            displayAs: 'badge',
+            badgeColors: {
+              'critical': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800',
+              'high': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border-orange-200 dark:border-orange-800',
+              'medium': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800',
+              'low': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800'
+            }
+          },
+          action: { 
+            type: 'string', 
+            renderAs: 'textarea', 
+            label: 'Action',
+            displayAs: 'label-value'
+          },
+          timeline: { 
+            type: 'string', 
+            renderAs: 'text', 
+            label: 'Timeline',
+            displayAs: 'detail'
+          },
+          status: { 
+            type: 'string', 
+            renderAs: 'select', 
+            label: 'Status', 
+            options: ['open', 'in-progress', 'resolved'], 
+            required: true 
+          }
+        }
+      }
+    },
+    sampleData: [
+      {
+        title: 'Database Migration Performance',
+        description: 'Legacy database queries causing 5-10 second page load times during peak hours',
+        priority: 'critical',
+        action: 'Implementing query optimization and adding database indexes',
+        timeline: 'Nov 15, 2024',
+        status: 'open'
+      },
+      {
+        title: 'API Rate Limiting Issues',
+        description: 'Third-party API calls occasionally hitting rate limits, causing service disruptions',
+        priority: 'high',
+        action: 'Implementing retry logic with exponential backoff and caching layer',
+        timeline: 'End of Q4 2024',
+        status: 'in-progress'
+      },
+      {
+        title: 'Mobile App Crash on Startup',
+        description: 'iOS app crashing for users on iOS 16.x when opening from background',
+        priority: 'high',
+        action: 'Testing fix across all iOS versions, deploying hotfix',
+        timeline: 'Nov 20, 2024',
+        status: 'in-progress'
+      },
+      {
+        title: 'Payment Gateway Timeout',
+        description: 'Users experiencing timeout errors during checkout process approximately 2% of transactions',
+        priority: 'medium',
+        action: 'Coordinating with payment provider to increase timeout thresholds',
+        timeline: 'Dec 1, 2024',
+        status: 'in-progress'
+      },
+      {
+        title: 'Email Delivery Delays',
+        description: 'Transactional emails arriving 15-30 minutes late during high-volume periods',
+        priority: 'medium',
+        action: 'Migrating to new email service provider with better infrastructure',
+        timeline: 'Q1 2025',
+        status: 'open'
+      },
+      {
+        title: 'Authentication Token Expiry Bug',
+        description: 'Users being logged out randomly despite having valid sessions',
+        priority: 'high',
+        action: 'Fixed token refresh mechanism and deployed to production',
+        timeline: 'Completed Nov 5, 2024',
+        status: 'resolved'
+      },
+      {
+        title: 'CSV Export Memory Leak',
+        description: 'Large dataset exports causing server memory issues',
+        priority: 'medium',
+        action: 'Implemented streaming export to handle large files efficiently',
+        timeline: 'Completed Nov 8, 2024',
+        status: 'resolved'
+      }
+    ],
   },
 ];
 

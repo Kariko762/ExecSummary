@@ -5,7 +5,8 @@ import {
   Type, List, Grid, Layers, FileText, BarChart3, Settings,
   Eye, Code, Save, Download, Upload, PlayCircle, TrendingUp, AlertTriangle,
   PieChart, LineChart, Activity, Hash, Calendar, MessageSquare, Palette,
-  Key, Quote, Terminal, AlignLeft, Minus
+  Key, Quote, Terminal, AlignLeft, AlignCenter, AlignRight, Minus, AlertCircle, Image, Video, Film,
+  Columns, ArrowLeft
 } from 'lucide-react';
 import type { FieldSchema } from '../../../src/types/schema';
 import { ChartColors } from '../../../src/design-system';
@@ -34,6 +35,7 @@ interface TemplateSection {
   name: string;
   expanded: boolean;
   fields: TemplateField[];
+  sectionLayoutType?: LayoutZone; // NEW: Track the layout type set by first asset
 }
 
 interface LayoutElement {
@@ -50,6 +52,7 @@ interface TemplateField {
   renderType: string;
   schema: FieldSchema;
   exampleData?: any; // Example data for lists, arrays, or nested cards
+  alignment?: 'left' | 'center' | 'right'; // Text alignment (default: 'left')
   
   // NEW: Snap layout properties (optional - backward compatible)
   layoutZone?: LayoutZone;
@@ -147,12 +150,23 @@ const ASSET_LIBRARY: AssetCategory[] = [
       {
         id: 'array',
         name: 'Simple List',
-        renderType: 'array',
-        description: 'Basic array of items',
+        renderType: 'list',
+        description: 'Basic array of items with labels',
         schema: { type: 'array', renderAs: 'list', label: 'New List', itemSchema: { type: 'string', renderAs: 'text' } },
         icon: List,
         iconColor: 'text-green-500',
         exampleData: ['Closed 15 enterprise deals', 'Launched new product feature', 'Expanded into EMEA region', 'Achieved 98% customer satisfaction'],
+        supportsMultiColumn: true
+      },
+      {
+        id: 'arrayNoLabels',
+        name: 'List (No Labels)',
+        renderType: 'listNoTitle',
+        description: 'Simple bullet list without labels',
+        schema: { type: 'array', renderAs: 'listNoTitle', label: 'New List', itemSchema: { type: 'string', renderAs: 'text' } },
+        icon: List,
+        iconColor: 'text-green-400',
+        exampleData: ['Completed Phase 1 ahead of schedule', 'Reduced operational costs by 30%', 'Hired 5 new team members'],
         supportsMultiColumn: true
       },
       {
@@ -162,7 +176,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
         description: 'Array of card objects',
         schema: { 
           type: 'array',
-          renderAs: 'metricCards',
+          renderAs: 'nestedCards',
           label: 'New Cards',
           itemSchema: {
             type: 'object',
@@ -435,6 +449,106 @@ const ASSET_LIBRARY: AssetCategory[] = [
     ]
   },
   {
+    id: 'media',
+    name: 'Media',
+    icon: Image,
+    color: 'cyan',
+    assets: [
+      {
+        id: 'image',
+        name: 'Image',
+        renderType: 'image',
+        description: 'Image upload or URL',
+        schema: { 
+          type: 'object',
+          renderAs: 'image', 
+          label: 'New Image',
+          fields: {
+            src: { type: 'string', renderAs: 'text', label: 'Image URL', placeholder: 'https://example.com/image.jpg', required: true },
+            alt: { type: 'string', renderAs: 'text', label: 'Alt Text', placeholder: 'Description for accessibility' },
+            autoScale: { type: 'boolean', renderAs: 'checkbox', label: 'Auto Scale', defaultValue: true },
+            width: { type: 'number', renderAs: 'number', label: 'Width (px)', placeholder: 'Leave empty for auto' },
+            height: { type: 'number', renderAs: 'number', label: 'Height (px)', placeholder: 'Leave empty for auto' },
+            caption: { type: 'string', renderAs: 'text', label: 'Caption', placeholder: 'Optional image caption' }
+          }
+        },
+        icon: Image,
+        iconColor: 'text-cyan-500',
+        exampleData: {
+          src: 'https://via.placeholder.com/800x400/6b46c1/ffffff?text=Executive+Summary+Image',
+          alt: 'Executive Summary Visualization',
+          autoScale: true,
+          caption: 'Q4 2024 Performance Dashboard'
+        },
+        supportsMultiColumn: true
+      },
+      {
+        id: 'video',
+        name: 'Video',
+        renderType: 'video',
+        description: 'Video file upload or URL',
+        schema: { 
+          type: 'object',
+          renderAs: 'video', 
+          label: 'New Video',
+          fields: {
+            src: { type: 'string', renderAs: 'text', label: 'Video URL', placeholder: 'https://example.com/video.mp4', required: true },
+            poster: { type: 'string', renderAs: 'text', label: 'Poster Image', placeholder: 'Thumbnail/preview image URL' },
+            autoScale: { type: 'boolean', renderAs: 'checkbox', label: 'Auto Scale', defaultValue: true },
+            width: { type: 'number', renderAs: 'number', label: 'Width (px)', placeholder: 'Leave empty for auto' },
+            height: { type: 'number', renderAs: 'number', label: 'Height (px)', placeholder: 'Leave empty for auto' },
+            controls: { type: 'boolean', renderAs: 'checkbox', label: 'Show Controls', defaultValue: true },
+            autoplay: { type: 'boolean', renderAs: 'checkbox', label: 'Autoplay', defaultValue: false },
+            loop: { type: 'boolean', renderAs: 'checkbox', label: 'Loop', defaultValue: false },
+            muted: { type: 'boolean', renderAs: 'checkbox', label: 'Muted', defaultValue: false }
+          }
+        },
+        icon: Video,
+        iconColor: 'text-cyan-600',
+        exampleData: {
+          src: 'https://www.w3schools.com/html/mov_bbb.mp4',
+          poster: 'https://via.placeholder.com/800x450/6b46c1/ffffff?text=Video+Preview',
+          autoScale: true,
+          controls: true,
+          autoplay: false,
+          loop: false,
+          muted: false
+        },
+        supportsMultiColumn: true
+      },
+      {
+        id: 'embeddedVideo',
+        name: 'Embedded Video',
+        renderType: 'embeddedVideo',
+        description: 'YouTube, Vimeo, or iframe embed',
+        schema: { 
+          type: 'object',
+          renderAs: 'embeddedVideo', 
+          label: 'New Embedded Video',
+          fields: {
+            embedUrl: { type: 'string', renderAs: 'text', label: 'Embed URL', placeholder: 'https://www.youtube.com/embed/...', required: true },
+            platform: { type: 'string', renderAs: 'select', label: 'Platform', options: ['youtube', 'vimeo', 'custom'], defaultValue: 'youtube' },
+            autoScale: { type: 'boolean', renderAs: 'checkbox', label: 'Auto Scale (16:9)', defaultValue: true },
+            width: { type: 'number', renderAs: 'number', label: 'Width (px)', placeholder: 'Leave empty for auto' },
+            height: { type: 'number', renderAs: 'number', label: 'Height (px)', placeholder: 'Leave empty for auto' },
+            allowFullscreen: { type: 'boolean', renderAs: 'checkbox', label: 'Allow Fullscreen', defaultValue: true },
+            title: { type: 'string', renderAs: 'text', label: 'Title', placeholder: 'Video title for accessibility' }
+          }
+        },
+        icon: Film,
+        iconColor: 'text-cyan-700',
+        exampleData: {
+          embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          platform: 'youtube',
+          autoScale: true,
+          allowFullscreen: true,
+          title: 'Executive Presentation Video'
+        },
+        supportsMultiColumn: true
+      }
+    ]
+  },
+  {
     id: 'layout',
     name: 'Layout',
     icon: Grid,
@@ -461,12 +575,109 @@ const ASSET_LIBRARY: AssetCategory[] = [
         iconColor: 'text-gray-500',
         exampleData: null,
         supportsMultiColumn: false
+      },
+      {
+        id: 'statusBoard',
+        name: 'Table Layout',
+        renderType: 'statusBoard',
+        description: 'Generic column layout with grouped cards - configurable for any data',
+        schema: { 
+          type: 'object',
+          renderAs: 'statusBoard',
+          label: 'Issues & Blockers',
+          groupByField: 'status',
+          columns: [
+            { key: 'open', label: 'Open', color: 'text-red-600 dark:text-red-400' },
+            { key: 'in-progress', label: 'In Progress', color: 'text-blue-600 dark:text-blue-400' },
+            { key: 'resolved', label: 'Resolved', color: 'text-green-600 dark:text-green-400' }
+          ],
+          itemSchema: {
+            type: 'object',
+            renderAs: 'objectForm',
+            fields: {
+              title: { 
+                type: 'string', 
+                renderAs: 'text', 
+                label: 'Title', 
+                required: true,
+                displayAs: 'title'
+              },
+              description: { 
+                type: 'string', 
+                renderAs: 'textarea', 
+                label: 'Description',
+                displayAs: 'subtitle'
+              },
+              priority: { 
+                type: 'string', 
+                renderAs: 'select', 
+                label: 'Priority', 
+                options: ['low', 'medium', 'high', 'critical'],
+                displayAs: 'badge',
+                badgeColors: {
+                  'critical': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800',
+                  'high': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border-orange-200 dark:border-orange-800',
+                  'medium': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800',
+                  'low': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800'
+                }
+              },
+              action: { 
+                type: 'string', 
+                renderAs: 'textarea', 
+                label: 'Action',
+                displayAs: 'label-value'
+              },
+              timeline: { 
+                type: 'string', 
+                renderAs: 'text', 
+                label: 'Timeline',
+                displayAs: 'detail'
+              },
+              status: { 
+                type: 'string', 
+                renderAs: 'select', 
+                label: 'Status', 
+                options: ['open', 'in-progress', 'resolved'], 
+                required: true 
+              }
+            }
+          }
+        },
+        icon: Columns,
+        iconColor: 'text-purple-700',
+        exampleData: [
+          {
+            title: 'Tiled Performance & Import Failures',
+            description: 'PowerPoint import features and general Designer performance are unreliable',
+            priority: 'high',
+            action: 'Developing new deployment and design process',
+            timeline: 'End of November 2024',
+            status: 'in-progress'
+          },
+          {
+            title: 'Demo Team – Shift Payment Issues',
+            description: 'Team member unpaid for weekend work due to lack of shift audit trail',
+            priority: 'medium',
+            action: 'Implement process to record and approve all shifts including weekends',
+            timeline: 'Immediate',
+            status: 'in-progress'
+          },
+          {
+            title: 'SNOW BU Data Not Mandatory',
+            description: 'BU data is not mandatory in SNOW forms, limiting ability to segment by org',
+            priority: 'medium',
+            action: 'Reviewing form structure to make BU data collection mandatory',
+            timeline: 'Before Nov 14 dashboard launch',
+            status: 'in-progress'
+          }
+        ],
+        supportsMultiColumn: false
       }
     ]
   }
 ];
 
-// Snap Zone Overlay Component - Shows layout zones when dragging
+// Snap Zone Overlay Component - Shows layout CHOICES when dragging first asset into empty section
 interface SnapZoneOverlayProps {
   sectionId: string;
   onZoneDrop: (zone: LayoutZone) => void;
@@ -475,157 +686,106 @@ interface SnapZoneOverlayProps {
 }
 
 const SnapZoneOverlay = ({ sectionId, onZoneDrop, hoveredZone, onZoneHover }: SnapZoneOverlayProps) => {
-  const zones: { zone: LayoutZone; label: string; gridClass: string }[] = [
-    { zone: 'full', label: 'Full Width', gridClass: 'col-span-12' },
-    { zone: 'left-50', label: '← 50%', gridClass: 'col-span-6' },
-    { zone: 'right-50', label: '50% →', gridClass: 'col-span-6' },
-    { zone: 'left-70', label: '← 70%', gridClass: 'col-span-7' },
-    { zone: 'right-30', label: '30% →', gridClass: 'col-span-5' },
-    { zone: 'left-30', label: '← 30%', gridClass: 'col-span-4' },
-    { zone: 'right-70', label: '70% →', gridClass: 'col-span-8' },
-    { zone: 'left-33', label: '← 33%', gridClass: 'col-span-4' },
-    { zone: 'middle-33', label: '33%', gridClass: 'col-span-4' },
-    { zone: 'right-33', label: '33% →', gridClass: 'col-span-4' },
+  // Each layout choice represents a complete pattern
+  const layoutChoices: Array<{ zone: LayoutZone; label: string; preview: React.ReactNode }> = [
+    {
+      zone: 'full',
+      label: 'Full Width',
+      preview: <div className="w-full h-16 border-2 border-gray-400 rounded bg-gray-200/50"></div>
+    },
+    {
+      zone: 'left-50',
+      label: '50 / 50',
+      preview: (
+        <div className="flex gap-2 w-full">
+          <div className="flex-1 h-16 border-2 border-gray-400 rounded bg-gray-200/50"></div>
+          <div className="flex-1 h-16 border-2 border-gray-300 rounded bg-gray-100/50"></div>
+        </div>
+      )
+    },
+    {
+      zone: 'left-70',
+      label: '70 / 30',
+      preview: (
+        <div className="flex gap-2 w-full">
+          <div className="w-[70%] h-16 border-2 border-gray-400 rounded bg-gray-200/50"></div>
+          <div className="w-[30%] h-16 border-2 border-gray-300 rounded bg-gray-100/50"></div>
+        </div>
+      )
+    },
+    {
+      zone: 'left-30',
+      label: '30 / 70',
+      preview: (
+        <div className="flex gap-2 w-full">
+          <div className="w-[30%] h-16 border-2 border-gray-400 rounded bg-gray-200/50"></div>
+          <div className="w-[70%] h-16 border-2 border-gray-300 rounded bg-gray-100/50"></div>
+        </div>
+      )
+    },
+    {
+      zone: 'left-33',
+      label: '33 / 33 / 33',
+      preview: (
+        <div className="flex gap-2 w-full">
+          <div className="flex-1 h-16 border-2 border-gray-400 rounded bg-gray-200/50"></div>
+          <div className="flex-1 h-16 border-2 border-gray-300 rounded bg-gray-100/50"></div>
+          <div className="flex-1 h-16 border-2 border-gray-300 rounded bg-gray-100/50"></div>
+        </div>
+      )
+    }
   ];
 
   return (
-    <div className="absolute inset-0 z-20 pointer-events-auto">
-      {/* Full width zone at top */}
-      <div
-        onDragOver={(e) => { e.preventDefault(); onZoneHover('full'); }}
-        onDragLeave={() => onZoneHover(null)}
-        onDrop={(e) => { e.preventDefault(); onZoneDrop('full'); }}
-        className={`h-16 mb-2 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-          hoveredZone === 'full'
-            ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-            : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-        }`}
-      >
-        <span className="text-sm font-roobert-semibold text-gray-700">Full Width</span>
+    <div className="absolute inset-0 z-20 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-lg p-6 flex flex-col items-center justify-center pointer-events-auto">
+      <div className="text-center mb-6">
+        <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white mb-2">
+          Choose Section Layout
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Select a layout pattern for this section
+        </p>
       </div>
-
-      {/* Two column layouts */}
-      <div className="grid grid-cols-12 gap-2 mb-2">
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('left-50'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('left-50'); }}
-          className={`col-span-6 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'left-50'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">← 50%</span>
-        </div>
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('right-50'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('right-50'); }}
-          className={`col-span-6 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'right-50'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">50% →</span>
-        </div>
-      </div>
-
-      {/* 70/30 layouts */}
-      <div className="grid grid-cols-12 gap-2 mb-2">
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('left-70'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('left-70'); }}
-          className={`col-span-7 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'left-70'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">← 70%</span>
-        </div>
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('right-30'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('right-30'); }}
-          className={`col-span-5 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'right-30'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">30% →</span>
-        </div>
-      </div>
-
-      {/* 30/70 layouts */}
-      <div className="grid grid-cols-12 gap-2 mb-2">
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('left-30'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('left-30'); }}
-          className={`col-span-4 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'left-30'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">← 30%</span>
-        </div>
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('right-70'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('right-70'); }}
-          className={`col-span-8 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'right-70'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">70% →</span>
-        </div>
-      </div>
-
-      {/* Three column layout */}
-      <div className="grid grid-cols-12 gap-2">
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('left-33'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('left-33'); }}
-          className={`col-span-4 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'left-33'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">← 33%</span>
-        </div>
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('middle-33'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('middle-33'); }}
-          className={`col-span-4 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'middle-33'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">33%</span>
-        </div>
-        <div
-          onDragOver={(e) => { e.preventDefault(); onZoneHover('right-33'); }}
-          onDragLeave={() => onZoneHover(null)}
-          onDrop={(e) => { e.preventDefault(); onZoneDrop('right-33'); }}
-          className={`col-span-4 h-14 border-2 border-dashed rounded-lg flex items-center justify-center transition-all ${
-            hoveredZone === 'right-33'
-              ? 'bg-fis-eggplant/30 border-fis-eggplant scale-[1.02]'
-              : 'bg-white/60 border-gray-300 hover:bg-purple-100/60'
-          }`}
-        >
-          <span className="text-xs font-roobert-semibold text-gray-700">33% →</span>
-        </div>
+      
+      <div className="grid grid-cols-1 gap-4 w-full max-w-md">
+        {layoutChoices.map(({ zone, label, preview }) => (
+          <div
+            key={zone}
+            onDragOver={(e) => { 
+              e.preventDefault(); 
+              e.stopPropagation(); 
+              onZoneHover(zone); 
+            }}
+            onDragLeave={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onZoneHover(null);
+            }}
+            onDrop={(e) => { 
+              e.preventDefault(); 
+              e.stopPropagation(); 
+              onZoneDrop(zone); 
+              onZoneHover(null);
+            }}
+            className={`p-4 border-2 border-dashed rounded-lg cursor-pointer transition-all ${
+              hoveredZone === zone
+                ? 'bg-fis-eggplant/20 border-fis-eggplant dark:border-fis-raspberry scale-[1.02] shadow-lg'
+                : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:border-fis-eggplant/50 hover:bg-fis-eggplant/5'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-roobert-semibold text-sm text-gray-700 dark:text-gray-300">
+                {label}
+              </span>
+              {hoveredZone === zone && (
+                <span className="text-xs text-fis-eggplant dark:text-fis-raspberry font-roobert-semibold">
+                  Drop here
+                </span>
+              )}
+            </div>
+            {preview}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -704,9 +864,13 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   const [validationPassed, setValidationPassed] = useState(false);
   const [saveTemplateName, setSaveTemplateName] = useState<string>('');
   const [saveTemplateDescription, setSaveTemplateDescription] = useState<string>('');
+  const [loadedTemplateName, setLoadedTemplateName] = useState<string>(''); // Track base template name
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false); // Track if template has been modified
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Track if this is the first load
   const [isSaving, setIsSaving] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [schemaPropertiesOpen, setSchemaPropertiesOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [showLoadTemplateModal, setShowLoadTemplateModal] = useState(false);
@@ -714,11 +878,10 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   const [showTestEditor, setShowTestEditor] = useState(false);
   const [testData, setTestData] = useState<any>(null);
   
-  // NEW: Snap layout feature states
-  const [useSnapLayout, setUseSnapLayout] = useState(false);
-  const [showSnapZones, setShowSnapZones] = useState(false);
-  const [hoveredZone, setHoveredZone] = useState<LayoutZone | null>(null);
-  const [targetDropSection, setTargetDropSection] = useState<string | null>(null);
+  // Layout system - always enabled (sections have layout types)
+  const useSnapLayout = true; // Always use layout system
+  const [showLayoutPicker, setShowLayoutPicker] = useState(false);
+  const [showLayoutGuide, setShowLayoutGuide] = useState(false);
   
   // Standard header default values
   const [headerDefaults, setHeaderDefaults] = useState({
@@ -775,6 +938,67 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     }, {} as Record<number, TemplateField[]>);
   };
 
+  // NEW: Get layout pattern sequence from base zone
+  const getLayoutSequence = (baseZone: LayoutZone): LayoutZone[] => {
+    const sequences: Record<string, LayoutZone[]> = {
+      'full': ['full'],
+      'left-50': ['left-50', 'right-50'],
+      'right-50': ['left-50', 'right-50'],
+      'left-70': ['left-70', 'right-30'],
+      'right-30': ['left-70', 'right-30'],
+      'left-30': ['left-30', 'right-70'],
+      'right-70': ['left-30', 'right-70'],
+      'left-33': ['left-33', 'middle-33', 'right-33'],
+      'middle-33': ['left-33', 'middle-33', 'right-33'],
+      'right-33': ['left-33', 'middle-33', 'right-33'],
+    };
+    return sequences[baseZone] || ['full'];
+  };
+
+  // NEW: Get next available zone in sequence for a section
+  const getNextZoneInSequence = (section: TemplateSection): { zone: LayoutZone; row: number; canAdd: boolean; warning?: string } | null => {
+    if (!section.sectionLayoutType) return null;
+    
+    const sequence = getLayoutSequence(section.sectionLayoutType);
+    const fieldsByRow = groupFieldsByRow(section.fields);
+    
+    // Find the last row
+    const maxRow = Math.max(...Object.keys(fieldsByRow).map(Number), -1);
+    const lastRow = maxRow >= 0 ? fieldsByRow[maxRow] : [];
+    
+    // Check if current row has space
+    if (lastRow.length < sequence.length) {
+      return {
+        zone: sequence[lastRow.length],
+        row: maxRow >= 0 ? maxRow : 0,
+        canAdd: true
+      };
+    }
+    
+    // Current row is full, start new row
+    return {
+      zone: sequence[0],
+      row: maxRow + 1,
+      canAdd: true
+    };
+  };
+
+  // NEW: Get icon for layout type
+  const getLayoutIcon = (layoutType?: LayoutZone) => {
+    if (!layoutType) return null;
+    
+    const sequence = getLayoutSequence(layoutType);
+    if (sequence.length === 1) return '□'; // Full width
+    if (sequence.length === 2) {
+      if (layoutType.includes('70') || layoutType.includes('30')) {
+        return layoutType.includes('70') && layoutType.includes('left') ? '▬▭' : '▭▬'; // 70/30 or 30/70
+      }
+      return '▭▭'; // 50/50
+    }
+    if (sequence.length === 3) return '▭▭▭'; // 33/33/33
+    return null;
+  };
+
   // Auto-hide notification after 5 seconds
   useEffect(() => {
     if (notification) {
@@ -782,6 +1006,19 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       return () => clearTimeout(timer);
     }
   }, [notification]);
+
+  // Track unsaved changes when sections are modified
+  useEffect(() => {
+    // Skip tracking on initial load
+    if (isInitialLoad) {
+      setIsInitialLoad(false);
+      return;
+    }
+    // Mark as dirty whenever sections change after initial load
+    if (sections.length > 0) {
+      setHasUnsavedChanges(true);
+    }
+  }, [sections]);
 
   // Fetch templates when load modal opens
   useEffect(() => {
@@ -794,7 +1031,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   }, [showLoadTemplateModal]);
 
   // Load template into builder
-  const loadTemplate = async (templateId: string) => {
+  const loadTemplate = async (templateId: string, templateName: string = '') => {
     try {
       const response = await fetch(`http://localhost:3001/api/templates/${templateId}`);
       const result = await response.json();
@@ -803,6 +1040,9 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       
       const templateData = result.template;
       const newSections: TemplateSection[] = [];
+      
+      // Set the loaded template name
+      setLoadedTemplateName(templateName);
       
       // Always add standard header first
       newSections.push({
@@ -827,41 +1067,141 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         title: templateData.title || 'Your Organization Name - Weekly Executive Update'
       });
       
-      // Convert template data sections back to builder format
+      // Group fields by base key (handle multi-column sections)
+      const fieldGroups = new Map<string, string[]>();
+      
       Object.keys(templateData).forEach(key => {
         if (key.startsWith('_') || ['id', 'quarter', 'year', 'date', 'title', 'status', 'protectionEnabled'].includes(key)) {
-          return; // Skip metadata
+          return;
         }
         
-        const sectionType = templateData[`_${key}_type`];
-        const sectionFields = templateData[`_${key}_fields`];
-        const exampleData = templateData[key];
+        // Extract base key (remove _0, _1, _2 suffix for multi-column)
+        const baseKey = key.replace(/_\d+$/, '');
         
-        if (sectionType) {
-          const field: Field = {
-            id: `field-${Date.now()}`,
-            key: key,
-            label: formatSectionTitle(key),
-            renderType: sectionType,
-            schema: {
-              type: sectionType,
-              label: formatSectionTitle(key),
-              ...(sectionFields && { itemSchema: { type: 'object', fields: sectionFields } })
-            },
-            exampleData: exampleData
-          };
+        if (!fieldGroups.has(baseKey)) {
+          fieldGroups.set(baseKey, []);
+        }
+        fieldGroups.get(baseKey)!.push(key);
+      });
+      
+      // Helper: Infer layout type from field count
+      const inferLayoutType = (fieldCount: number): LayoutZone => {
+        switch (fieldCount) {
+          case 1: return 'full';
+          case 2: return 'left-50';
+          case 3: return 'left-33';
+          default: return 'full';
+        }
+      };
+      
+      // Helper: Get layout zones for a layout type
+      const getLayoutZones = (layoutType: LayoutZone): LayoutZone[] => {
+        switch (layoutType) {
+          case 'full': return ['full'];
+          case 'left-50': return ['left-50', 'right-50'];
+          case 'left-33': return ['left-33', 'middle-33', 'right-33'];
+          case 'left-70': return ['left-70', 'right-30'];
+          case 'left-30': return ['left-30', 'right-70'];
+          default: return ['full'];
+        }
+      };
+      
+      // Preserve field order from template
+      const fieldOrder: string[] = [];
+      Object.keys(templateData).forEach(key => {
+        if (!key.startsWith('_') && !['id', 'quarter', 'year', 'date', 'title', 'status', 'protectionEnabled'].includes(key)) {
+          fieldOrder.push(key);
+        }
+      });
+      
+      // Create ordered base keys list (deduplicated)
+      const orderedBaseKeys: string[] = [];
+      const seenBaseKeys = new Set<string>();
+      
+      fieldOrder.forEach(key => {
+        const baseKey = key.replace(/_\d+$/, '');
+        if (!seenBaseKeys.has(baseKey)) {
+          orderedBaseKeys.push(baseKey);
+          seenBaseKeys.add(baseKey);
+        }
+      });
+      
+      // Convert template data sections back to builder format
+      orderedBaseKeys.forEach(baseKey => {
+        const fieldKeys = fieldGroups.get(baseKey);
+        if (!fieldKeys) return;
+        
+        const layoutType = inferLayoutType(fieldKeys.length);
+        const zones = getLayoutZones(layoutType);
+        const fields: Field[] = [];
+        
+        fieldKeys.forEach((key, index) => {
+          const itemSchema = templateData[`_${key}_itemSchema`];
+          const sectionType = templateData[`_${key}_type`];
+          const sectionFields = templateData[`_${key}_fields`]; // Legacy
+          const chartConfig = templateData[`_${key}_chartConfig`];
+          const alignment = templateData[`_${key}_alignment`] || 'left';
           
+          // CRITICAL: Use _type metadata as the renderType (NOT itemSchema.renderAs)
+          // itemSchema.renderAs is for editing items, not the field itself
+          const renderType = sectionType || 'text';
+          
+          // Use actual data from template as exampleData (if it exists)
+          // Otherwise fall back to ASSET_LIBRARY defaults
+          let exampleData = templateData[key];
+          if (exampleData === undefined) {
+            for (const category of ASSET_LIBRARY) {
+              const asset = category.assets.find(a => a.renderType === renderType);
+              if (asset) {
+                exampleData = asset.exampleData;
+                break;
+              }
+            }
+          }
+          
+          if (renderType || itemSchema) {
+            const field: Field = {
+              id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+              key: key,
+              label: formatSectionTitle(key),
+              renderType: renderType || 'text',
+              schema: {
+                type: itemSchema?.type || 'string',
+                renderAs: renderType || 'text',
+                label: itemSchema?.label || formatSectionTitle(key),
+                ...(itemSchema?.itemSchema && { itemSchema: itemSchema.itemSchema }),
+                ...(itemSchema?.fields && { fields: itemSchema.fields }), // For object and keyValue types
+                ...(sectionFields && !itemSchema && { fields: sectionFields }), // Legacy support
+                ...(chartConfig && { chartConfig }),
+                ...(itemSchema?.placeholder && { placeholder: itemSchema.placeholder }),
+                ...(itemSchema?.suffix && { suffix: itemSchema.suffix }),
+                ...(itemSchema?.options && { options: itemSchema.options })
+              },
+              layoutZone: zones[index] || zones[0],
+              rowIndex: 0,
+              exampleData: exampleData, // Use actual template data or ASSET_LIBRARY fallback
+              alignment: alignment as 'left' | 'center' | 'right'
+            };
+            
+            fields.push(field);
+          }
+        });
+        
+        if (fields.length > 0) {
           newSections.push({
-            id: `section-${Date.now()}-${key}`,
-            name: formatSectionTitle(key),
+            id: `section-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            name: formatSectionTitle(baseKey),
             expanded: true,
-            fields: [field]
+            fields: fields,
+            sectionLayoutType: layoutType
           });
         }
       });
       
       setSections(newSections);
       setShowLoadTemplateModal(false);
+      setHasUnsavedChanges(false); // Clear unsaved changes after load
+      setIsInitialLoad(true); // Treat loaded template as initial state
       setNotification({ type: 'success', message: `Template loaded! You can now edit and save as a new template.` });
       
     } catch (error) {
@@ -908,17 +1248,11 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   // Drag handlers for assets
   const handleAssetDragStart = (asset: AssetItem) => {
     setDraggedAsset(asset);
-    if (useSnapLayout) {
-      setShowSnapZones(true);
-    }
   };
 
   const handleAssetDragEnd = () => {
     setDraggedAsset(null);
     setDragOverSection(null);
-    setShowSnapZones(false);
-    setHoveredZone(null);
-    setTargetDropSection(null);
   };
 
   // Drag handlers for existing fields (reordering)
@@ -931,15 +1265,81 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     setDragOverSection(null);
   };
 
-  // Drop handler for section (Classic mode - no zones)
+  // Drop handler for section (Classic mode - no zones, or Snap mode sequential placement)
   const handleSectionDrop = (sectionId: string) => {
-    // In snap layout mode, dropping is handled by zone handlers
-    if (useSnapLayout && draggedAsset) {
-      return; // Don't handle here, wait for zone drop
-    }
-
     if (draggedAsset) {
-      // Add new field from asset (classic mode - full width)
+      const section = sections.find(s => s.id === sectionId);
+      if (!section) return;
+
+      // LAYOUT MODE (always enabled)
+      if (useSnapLayout) {
+        // If section is empty, use first zone from section's layout type
+        if (section.fields.length === 0) {
+          if (!section.sectionLayoutType) {
+            setNotification({ type: 'error', message: 'Section has no layout type. Please create section with layout picker.' });
+            return;
+          }
+          
+          const sequence = getLayoutSequence(section.sectionLayoutType);
+          const firstZone = sequence[0];
+          
+          const newField: TemplateField = {
+            id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            key: draggedAsset.id + '_' + Date.now(),
+            label: draggedAsset.schema.label || draggedAsset.name,
+            renderType: draggedAsset.renderType,
+            schema: { ...draggedAsset.schema },
+            exampleData: draggedAsset.exampleData,
+            layoutZone: firstZone,
+            rowIndex: 0
+          };
+
+          setSections(prev => prev.map(s => 
+            s.id === sectionId
+              ? { ...s, fields: [newField] }
+              : s
+          ));
+
+          setDraggedAsset(null);
+          setDragOverSection(null);
+          return;
+        }
+
+        // Sequential placement for non-empty sections
+        const nextPlacement = getNextZoneInSequence(section);
+        if (!nextPlacement) {
+          setNotification({ type: 'error', message: 'Cannot determine next placement zone' });
+          return;
+        }
+
+        if (!nextPlacement.canAdd) {
+          setNotification({ type: 'warning', message: nextPlacement.warning || 'Cannot add more assets to this row' });
+          return;
+        }
+
+        const newField: TemplateField = {
+          id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          key: draggedAsset.id + '_' + Date.now(),
+          label: draggedAsset.schema.label || draggedAsset.name,
+          renderType: draggedAsset.renderType,
+          schema: { ...draggedAsset.schema },
+          exampleData: draggedAsset.exampleData,
+          layoutZone: nextPlacement.zone,
+          rowIndex: nextPlacement.row
+        };
+
+        setSections(prev => prev.map(s => 
+          s.id === sectionId
+            ? { ...s, fields: [...s.fields, newField] }
+            : s
+        ));
+
+        setDraggedAsset(null);
+        setDragOverSection(null);
+        return;
+      }
+
+      // CLASSIC MODE - full width
       const newField: TemplateField = {
         id: `field-${Date.now()}`,
         key: draggedAsset.id + '_' + Date.now(),
@@ -947,7 +1347,6 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         renderType: draggedAsset.renderType,
         schema: { ...draggedAsset.schema },
         exampleData: draggedAsset.exampleData,
-        // Classic mode: no layout zone
         layoutZone: 'full',
         rowIndex: 0
       };
@@ -957,6 +1356,8 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           ? { ...section, fields: [...section.fields, newField] }
           : section
       ));
+
+      setDraggedAsset(null);
     } else if (draggedField && draggedField.sectionId !== sectionId) {
       // Move field to different section with new unique ID to prevent duplicates
       const sourceSection = sections.find(s => s.id === draggedField.sectionId);
@@ -985,24 +1386,24 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     setDragOverSection(null);
   };
 
-  // NEW: Snap layout zone drop handler
+  // NEW: Snap layout zone drop handler - ONLY for first asset (sets section layout)
   const handleZoneDrop = (sectionId: string, zone: LayoutZone) => {
     if (!draggedAsset) return;
 
     const section = sections.find(s => s.id === sectionId);
     if (!section) return;
 
-    // Calculate target row based on zone conflicts
-    const fieldsByRow = groupFieldsByRow(section.fields);
-    let targetRow = 0;
+    // This should only be called for empty sections (first asset)
+    if (section.fields.length > 0) {
+      console.error('handleZoneDrop called on non-empty section - should use handleSectionDrop');
+      return;
+    }
 
-    // Find the first available row for this zone
-    // For now, we'll use a simple strategy: add to new row if any field exists
-    // More sophisticated logic can check for zone conflicts
-    const maxRow = Math.max(...Object.keys(fieldsByRow).map(Number), -1);
-    targetRow = maxRow + 1;
+    // First asset sets the layout type for the entire section
+    const sequence = getLayoutSequence(zone);
+    const targetZone = sequence[0]; // Always start with first zone in sequence
 
-    // Create new field with zone and row
+    // Create new field
     const newField: TemplateField = {
       id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       key: draggedAsset.id + '_' + Date.now(),
@@ -1010,13 +1411,17 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       renderType: draggedAsset.renderType,
       schema: { ...draggedAsset.schema },
       exampleData: draggedAsset.exampleData,
-      layoutZone: zone,
-      rowIndex: targetRow
+      layoutZone: targetZone,
+      rowIndex: 0
     };
 
     setSections(prev => prev.map(section =>
       section.id === sectionId
-        ? { ...section, fields: [...section.fields, newField] }
+        ? { 
+            ...section, 
+            fields: [newField],
+            sectionLayoutType: zone // Set the layout type
+          }
         : section
     ));
 
@@ -1032,6 +1437,15 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     // Only set drag over state if dragging from asset library or moving field to empty section
     if (draggedAsset || (draggedField && draggedField.sectionId !== sectionId)) {
       setDragOverSection(sectionId);
+      
+      // Auto-expand section when dragging over it in snap mode
+      if (useSnapLayout && draggedAsset) {
+        setSections(prev => prev.map(section =>
+          section.id === sectionId
+            ? { ...section, expanded: true }
+            : section
+        ));
+      }
     }
   };
 
@@ -1125,13 +1539,19 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
 
   // Section management
   const addSection = () => {
+    setShowLayoutPicker(true);
+  };
+
+  const createSectionWithLayout = (layoutType: LayoutZone) => {
     const newSection: TemplateSection = {
       id: `section-${Date.now()}`,
-      name: `Section ${sections.length + 1}`,
+      name: `Section ${sections.length}`,
       expanded: true,
-      fields: []
+      fields: [],
+      sectionLayoutType: layoutType
     };
     setSections([...sections, newSection]);
+    setShowLayoutPicker(false);
   };
 
   const toggleSection = (sectionId: string) => {
@@ -1152,33 +1572,31 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     }
   };
 
-  // Add HR divider as a section
-  const addHorizontalRule = () => {
-    const hrSection: TemplateSection = {
-      id: `hr-${Date.now()}`,
-      name: `Divider ${sections.filter(s => s.fields[0]?.renderType === 'hr').length + 1}`,
-      expanded: false,
+  // Add layout asset as a section (generic for all layout assets)
+  const addLayoutAsset = (asset: Asset) => {
+    const layoutSection: TemplateSection = {
+      id: `layout-${Date.now()}`,
+      name: `${asset.name} ${sections.filter(s => s.fields[0]?.renderType === asset.renderType).length + 1}`,
+      expanded: true,
+      sectionLayoutType: 'full', // Layout assets always full width
       fields: [{
-        id: `hr-field-${Date.now()}`,
-        key: `divider${Date.now()}`,
-        label: 'Horizontal Rule',
-        renderType: 'hr',
-        schema: {
-          type: 'hr',
-          label: 'Divider',
-          renderAs: 'hr',
-          hrConfig: {
-            thickness: 1,
-            color: ChartColors.ui.grid,
-            marginTop: 24,
-            marginBottom: 24,
-            style: 'solid'
-          }
-        } as any
+        id: `field-${Date.now()}`,
+        key: `${asset.id}_${Date.now()}`,
+        label: asset.schema.label || asset.name,
+        renderType: asset.renderType,
+        schema: { ...asset.schema },
+        exampleData: asset.exampleData,
+        layoutZone: 'full'
       }]
     };
-    setSections([...sections, hrSection]);
-    setNotification({ type: 'success', message: 'Horizontal rule added' });
+    setSections([...sections, layoutSection]);
+    setNotification({ type: 'success', message: `${asset.name} added` });
+  };
+
+  // Legacy function - now calls generic
+  const addHorizontalRule = () => {
+    const hrAsset = ASSET_CATEGORIES.find(c => c.id === 'layout')?.assets.find(a => a.id === 'hr');
+    if (hrAsset) addLayoutAsset(hrAsset);
   };
 
   // Field management
@@ -1187,11 +1605,15 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       setNotification({ type: 'error', message: 'Cannot remove required header fields' });
       return;
     }
-    setSections(prev => prev.map(section =>
-      section.id === sectionId
-        ? { ...section, fields: section.fields.filter(f => f.id !== fieldId) }
-        : section
-    ));
+    
+    setSections(prev => prev.map(section => {
+      if (section.id === sectionId) {
+        const remainingFields = section.fields.filter(f => f.id !== fieldId);
+        return { ...section, fields: remainingFields };
+      }
+      return section;
+    }));
+    
     if (selectedField?.fieldId === fieldId) {
       setSelectedField(null);
     }
@@ -1204,7 +1626,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
             ...section,
             fields: section.fields.map(field =>
               field.id === fieldId
-                ? property === 'key' || property === 'label' || property === 'exampleData'
+                ? property === 'key' || property === 'label' || property === 'exampleData' || property === 'alignment'
                   ? { ...field, [property]: value }
                   : { ...field, schema: { ...field.schema, [property]: value } }
                 : field
@@ -1321,6 +1743,15 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     setShowSaveModal(true);
   };
 
+  // Handle back button with unsaved changes confirmation
+  const handleBack = () => {
+    if (hasUnsavedChanges) {
+      setShowUnsavedChangesModal(true);
+    } else {
+      onBack();
+    }
+  };
+
   // Start save process with validation
   const saveTemplate = () => {
     if (!saveTemplateName.trim()) {
@@ -1362,7 +1793,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         } else {
           // For all other sections, process fields normally
           section.fields.forEach((field, fieldIndex) => {
-            const fieldType = field.schema.renderAs;
+            const fieldType = field.renderType; // Use field.renderType (object, keyValue) not schema.renderAs (objectForm)
             
             // If multiple fields in section, use indexed keys (section2_0, section2_1)
             // If single field, use section name directly (section2)
@@ -1373,14 +1804,23 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
             // Save minimal schema metadata - just type and custom fields
             templateData[`_${fieldKey}_type`] = fieldType;
             
-            // Only save custom field definitions if they exist (for nestedCards, complex types)
-            if (field.schema.itemSchema?.fields) {
-              templateData[`_${fieldKey}_fields`] = field.schema.itemSchema.fields;
+            // Save full itemSchema for array types (nestedCards, metricCards, charts, lists)
+            if (field.schema.itemSchema) {
+              templateData[`_${fieldKey}_itemSchema`] = field.schema.itemSchema;
+            }
+            // Legacy support: also save just fields if they exist
+            else if (field.schema.fields) {
+              templateData[`_${fieldKey}_fields`] = field.schema.fields;
             }
             
             // Save chartConfig for chart types
             if (field.schema.chartConfig && (fieldType === 'pieChart' || fieldType === 'barChart' || fieldType === 'lineChart' || fieldType === 'radialChart')) {
               templateData[`_${fieldKey}_chartConfig`] = field.schema.chartConfig;
+            }
+            
+            // Save alignment if not default (left)
+            if (field.alignment && field.alignment !== 'left') {
+              templateData[`_${fieldKey}_alignment`] = field.alignment;
             }
             
             if (fieldType === 'metricCards') {
@@ -1469,6 +1909,9 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
 
       if (result.success) {
         setNotification({ type: 'success', message: `Template "${saveTemplateName}" saved successfully!` });
+        setLoadedTemplateName(''); // Clear base template name
+        setHasUnsavedChanges(false); // Clear unsaved changes flag
+        setIsInitialLoad(true); // Treat saved template as initial state
         setSaveTemplateName('');
         setSaveTemplateDescription('');
         setValidationResults([]);
@@ -1493,10 +1936,10 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
-                onClick={onBack}
-                className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-roobert-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+                onClick={handleBack}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
-                ← Back to CMS
+                <ArrowLeft className="w-5 h-5" />
               </button>
               <div>
                 <h1 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white flex items-center gap-3">
@@ -1504,7 +1947,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                   Template Builder
                 </h1>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Drag and drop assets to build your template
+                  {loadedTemplateName ? `Base Template: ${loadedTemplateName}` : 'Drag and drop assets to build your template'}
                 </p>
               </div>
             </div>
@@ -1516,21 +1959,6 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-roobert-medium transition-colors">
                 <Upload className="w-4 h-4" />
                 Load Template
-              </button>
-              
-              {/* NEW: Snap Layout Toggle */}
-              <button 
-                onClick={() => setUseSnapLayout(!useSnapLayout)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-roobert-medium transition-all ${
-                  useSnapLayout
-                    ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white border-transparent shadow-md'
-                    : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700'
-                }`}
-                title="Toggle snap layout zones (Windows-style)"
-              >
-                <Grid className="w-4 h-4" />
-                {useSnapLayout ? '✓ Snap Layout' : 'Snap Layout'}
-                {useSnapLayout && <span className="px-1.5 py-0.5 rounded-full bg-white/20 text-[10px]">BETA</span>}
               </button>
               
               <button 
@@ -1633,7 +2061,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                                         </div>
                                       </div>
                                       <button
-                                        onClick={addHorizontalRule}
+                                        onClick={() => addLayoutAsset(asset)}
                                         className="px-3 py-1 rounded bg-fis-eggplant hover:bg-fis-eggplant/90 text-white text-xs font-roobert-medium flex items-center gap-1 transition-colors"
                                       >
                                         <Plus className="w-3 h-3" />
@@ -1796,6 +2224,15 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                           Rename Section
                         </span>
                       )}
+                      {/* Layout Type Icon */}
+                      {section.sectionLayoutType && (
+                        <span 
+                          className="px-2 py-0.5 rounded bg-fis-eggplant/10 dark:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry text-xs font-mono"
+                          title={`Layout: ${section.sectionLayoutType}`}
+                        >
+                          {getLayoutIcon(section.sectionLayoutType)}
+                        </span>
+                      )}
                       <span className="text-xs text-gray-500 dark:text-gray-500">
                         ({section.fields.length} fields)
                       </span>
@@ -1819,28 +2256,18 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                   {/* Section Content */}
                   {section.expanded && (
                     <div
-                      onDrop={() => !useSnapLayout && handleSectionDrop(section.id)}
+                      onDrop={() => handleSectionDrop(section.id)}
                       onDragOver={(e) => handleSectionDragOver(e, section.id)}
                       onDragLeave={handleSectionDragLeave}
-                      className={`p-4 min-h-[120px] transition-colors relative ${
+                      className={`p-4 transition-colors relative min-h-[120px] ${
                         dragOverSection === section.id
                           ? 'bg-fis-eggplant/10 dark:bg-fis-raspberry/10'
                           : ''
                       }`}
                     >
-                      {/* NEW: Snap Zone Overlay (only in snap mode when dragging asset) */}
-                      {useSnapLayout && showSnapZones && draggedAsset && dragOverSection === section.id && (
-                        <SnapZoneOverlay
-                          sectionId={section.id}
-                          onZoneDrop={(zone) => handleZoneDrop(section.id, zone)}
-                          hoveredZone={hoveredZone}
-                          onZoneHover={setHoveredZone}
-                        />
-                      )}
-                      
                       {section.fields.length === 0 ? (
                         <div className="text-center text-gray-500 dark:text-gray-500 py-8 text-sm">
-                          {useSnapLayout ? 'Drag assets here - snap zones will appear' : 'Drag assets here to add fields'}
+                          Drag assets here to add fields
                         </div>
                       ) : useSnapLayout ? (
                         /* NEW: Snap Layout - Render fields in rows */
@@ -2073,6 +2500,131 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                         />
                       </div>
 
+                      {/* Alignment Selector */}
+                      <div>
+                        <label className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 block">
+                          Text Alignment
+                        </label>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'alignment', 'left')}
+                            className={`flex-1 px-3 py-2 text-sm rounded-lg border transition-all ${
+                              (field.alignment || 'left') === 'left'
+                                ? 'bg-fis-eggplant text-white border-fis-eggplant'
+                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-fis-eggplant dark:hover:border-fis-eggplant'
+                            }`}
+                            title="Align Left"
+                          >
+                            <AlignLeft className="w-4 h-4 mx-auto" />
+                          </button>
+                          <button
+                            onClick={() => updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'alignment', 'center')}
+                            className={`flex-1 px-3 py-2 text-sm rounded-lg border transition-all ${
+                              field.alignment === 'center'
+                                ? 'bg-fis-eggplant text-white border-fis-eggplant'
+                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-fis-eggplant dark:hover:border-fis-eggplant'
+                            }`}
+                            title="Align Center"
+                          >
+                            <AlignCenter className="w-4 h-4 mx-auto" />
+                          </button>
+                          <button
+                            onClick={() => updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'alignment', 'right')}
+                            className={`flex-1 px-3 py-2 text-sm rounded-lg border transition-all ${
+                              field.alignment === 'right'
+                                ? 'bg-fis-eggplant text-white border-fis-eggplant'
+                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-fis-eggplant dark:hover:border-fis-eggplant'
+                            }`}
+                            title="Align Right"
+                          >
+                            <AlignRight className="w-4 h-4 mx-auto" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Example Data for Text Input */}
+                      {field.renderType === 'text' && field.schema?.type !== 'date' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-2 block">
+                            Example Text
+                          </label>
+                          <input
+                            type="text"
+                            value={field.exampleData || ''}
+                            onChange={(e) => {
+                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', e.target.value);
+                            }}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                            placeholder="Enter example text..."
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            This example will guide users during content creation
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Example Data for Text Area */}
+                      {field.renderType === 'textarea' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-2 block">
+                            Example Text
+                          </label>
+                          <textarea
+                            value={field.exampleData || ''}
+                            onChange={(e) => {
+                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', e.target.value);
+                            }}
+                            rows={4}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none"
+                            placeholder="Enter example text..."
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            This example will guide users during content creation
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Example Data for Number */}
+                      {field.renderType === 'number' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-2 block">
+                            Example Number
+                          </label>
+                          <input
+                            type="number"
+                            value={field.exampleData || 0}
+                            onChange={(e) => {
+                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', parseFloat(e.target.value) || 0);
+                            }}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                            placeholder="Enter example number..."
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            This example will guide users during content creation
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Example Data for Date */}
+                      {field.renderType === 'text' && field.schema?.type === 'date' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-2 block">
+                            Example Date
+                          </label>
+                          <input
+                            type="date"
+                            value={field.exampleData || ''}
+                            onChange={(e) => {
+                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', e.target.value);
+                            }}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            This example will guide users during content creation
+                          </p>
+                        </div>
+                      )}
+
                       {/* Example Data for Lists/Arrays */}
                       {(field.renderType === 'list' || field.renderType === 'listNoTitle') && (
                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
@@ -2124,6 +2676,166 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                         </div>
                       )}
 
+                      {/* Example Data for Markdown/Rich Text */}
+                      {field.renderType === 'richText' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-2 block">
+                            Example Markdown
+                          </label>
+                          <textarea
+                            value={field.exampleData || ''}
+                            onChange={(e) => {
+                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', e.target.value);
+                            }}
+                            rows={6}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono resize-none"
+                            placeholder="## Heading&#10;&#10;Example **markdown** content..."
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            Supports markdown syntax for rich formatting
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Example Data for Expression */}
+                      {field.renderType === 'expression' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-2 block">
+                            Example Expression
+                          </label>
+                          <input
+                            type="text"
+                            value={field.exampleData || ''}
+                            onChange={(e) => {
+                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', e.target.value);
+                            }}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono"
+                            placeholder="{{ variable }} or {{ expression }}"
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            Use {'{{'} {'}}'}  syntax for dynamic expressions
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Example Data for Code Block */}
+                      {field.renderType === 'codeBlock' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-2 block">
+                            Example Code
+                          </label>
+                          <textarea
+                            value={field.exampleData || ''}
+                            onChange={(e) => {
+                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', e.target.value);
+                            }}
+                            rows={6}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono resize-none"
+                            placeholder="const example = 'code';"
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            Code snippet example with syntax highlighting
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Example Data for Quote */}
+                      {field.renderType === 'quote' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-2 block">
+                            Example Quote
+                          </label>
+                          <textarea
+                            value={field.exampleData || ''}
+                            onChange={(e) => {
+                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', e.target.value);
+                            }}
+                            rows={3}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none"
+                            placeholder="Enter an inspiring quote..."
+                          />
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            Blockquote text with glassmorphism styling
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Example Data for Object */}
+                      {field.renderType === 'object' && field.schema?.fields && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-3 block">
+                            Example Object Data
+                          </label>
+                          <div className="space-y-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                            {Object.entries(field.schema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
+                              <div key={fieldKey}>
+                                <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                  {fieldDef.label || fieldKey}
+                                </label>
+                                <input
+                                  type={fieldDef.type === 'number' ? 'number' : 'text'}
+                                  value={(field.exampleData && field.exampleData[fieldKey]) || ''}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}) };
+                                    newExampleData[fieldKey] = fieldDef.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value;
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder={`Enter ${fieldDef.label || fieldKey}`}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                            Example values for object fields
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Example Data for Key-Value Pair */}
+                      {field.renderType === 'keyValue' && field.schema?.fields?.key && field.schema?.fields?.value && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-3 block">
+                            Example Key-Value Pair
+                          </label>
+                          <div className="space-y-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                Key
+                              </label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.key) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), key: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholder="Enter key..."
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                Value
+                              </label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.value) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), value: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholder="Enter value..."
+                              />
+                            </div>
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                            Example key-value pair data
+                          </p>
+                        </div>
+                      )}
+
                       {/* Example Data for Nested Cards */}
                       {field.renderType === 'nestedCards' && (
                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
@@ -2147,48 +2859,68 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                               + Add Card
                             </button>
                           </div>
-                          <div className="space-y-3">
-                            {(field.exampleData || []).map((card: any, cardIdx: number) => (
-                              <div key={cardIdx} className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
-                                <div className="flex items-center justify-between mb-2">
-                                  <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">
-                                    Card {cardIdx + 1}
-                                  </span>
-                                  <button
-                                    onClick={() => {
-                                      const newExamples = (field.exampleData || []).filter((_: any, i: number) => i !== cardIdx);
-                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                                    }}
-                                    className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
-                                  >
-                                    <X className="w-3 h-3" />
-                                  </button>
-                                </div>
-                                <div className="space-y-2">
-                                  {field.schema?.itemSchema?.fields && Object.entries(field.schema.itemSchema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
-                                    <div key={fieldKey}>
-                                      <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
-                                        {fieldDef.label}
-                                      </label>
-                                      <input
-                                        type="text"
-                                        value={card[fieldKey] || ''}
-                                        onChange={(e) => {
-                                          const newExamples = [...(field.exampleData || [])];
-                                          newExamples[cardIdx] = {
-                                            ...newExamples[cardIdx],
-                                            [fieldKey]: e.target.value
-                                          };
-                                          updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                                        }}
-                                        className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                                        placeholder={fieldDef.placeholder || `Enter ${fieldDef.label.toLowerCase()}`}
-                                      />
+                          <div className="space-y-2">
+                            {(field.exampleData || []).map((card: any, cardIdx: number) => {
+                              // Get first two field values for preview
+                              const fieldEntries = field.schema?.itemSchema?.fields ? Object.entries(field.schema.itemSchema.fields) : [];
+                              const firstField = fieldEntries[0] as [string, any] | undefined;
+                              const secondField = fieldEntries[1] as [string, any] | undefined;
+                              const firstValue = firstField ? card[firstField[0]] : '';
+                              const secondValue = secondField ? card[secondField[0]] : '';
+                              const previewText = [firstValue, secondValue].filter(Boolean).join(' - ') || 'Empty Card';
+
+                              return (
+                                <div key={cardIdx} className="rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                                  {/* Card Header - Always Visible */}
+                                  <div className="flex items-center justify-between p-3">
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">
+                                          Card {cardIdx + 1}
+                                        </span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                          {previewText}
+                                        </span>
+                                      </div>
                                     </div>
-                                  ))}
+                                    <button
+                                      onClick={() => {
+                                        const newExamples = (field.exampleData || []).filter((_: any, i: number) => i !== cardIdx);
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                      }}
+                                      className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
+                                    >
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  
+                                  {/* Card Fields - Editable */}
+                                  <div className="px-3 pb-3 space-y-2 border-t border-gray-200 dark:border-gray-700 pt-2">
+                                    {field.schema?.itemSchema?.fields && Object.entries(field.schema.itemSchema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
+                                      <div key={fieldKey}>
+                                        <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                          {fieldDef.label}
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={card[fieldKey] || ''}
+                                          onChange={(e) => {
+                                            const newExamples = [...(field.exampleData || [])];
+                                            newExamples[cardIdx] = {
+                                              ...newExamples[cardIdx],
+                                              [fieldKey]: e.target.value
+                                            };
+                                            updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                          }}
+                                          className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                          placeholder={fieldDef.placeholder || `Enter ${fieldDef.label.toLowerCase()}`}
+                                        />
+                                      </div>
+                                    ))}
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                             {(!field.exampleData || field.exampleData.length === 0) && (
                               <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
                                 No example cards. Click "+ Add Card" to add some.
@@ -2267,6 +2999,438 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                             {(!field.exampleData || field.exampleData.length === 0) && (
                               <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
                                 No data points. Click "+ Add Point" to add some.
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Example Data for Image */}
+                      {field.renderType === 'image' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-3 block">
+                            Example Image Settings
+                          </label>
+                          <div className="space-y-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Image URL</label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.src) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), src: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono"
+                                placeholder="https://example.com/image.jpg"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Alt Text</label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.alt) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), alt: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholder="Image description"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Caption</label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.caption) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), caption: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholder="Optional caption"
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Width (px)</label>
+                                <input
+                                  type="number"
+                                  value={(field.exampleData && field.exampleData.width) || ''}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), width: e.target.value ? parseInt(e.target.value) : undefined };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder="Auto"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Height (px)</label>
+                                <input
+                                  type="number"
+                                  value={(field.exampleData && field.exampleData.height) || ''}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), height: e.target.value ? parseInt(e.target.value) : undefined };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder="Auto"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={(field.exampleData && field.exampleData.autoScale) !== false}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), autoScale: e.target.checked };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="rounded border-gray-300 dark:border-gray-600"
+                              />
+                              <label className="text-xs text-gray-600 dark:text-gray-400">Auto Scale</label>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Example Data for Video */}
+                      {field.renderType === 'video' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-3 block">
+                            Example Video Settings
+                          </label>
+                          <div className="space-y-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Video URL</label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.src) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), src: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono"
+                                placeholder="https://example.com/video.mp4"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Poster Image</label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.poster) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), poster: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono"
+                                placeholder="Thumbnail URL"
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Width (px)</label>
+                                <input
+                                  type="number"
+                                  value={(field.exampleData && field.exampleData.width) || ''}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), width: e.target.value ? parseInt(e.target.value) : undefined };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder="Auto"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Height (px)</label>
+                                <input
+                                  type="number"
+                                  value={(field.exampleData && field.exampleData.height) || ''}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), height: e.target.value ? parseInt(e.target.value) : undefined };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder="Auto"
+                                />
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={(field.exampleData && field.exampleData.autoScale) !== false}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), autoScale: e.target.checked };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="rounded border-gray-300 dark:border-gray-600"
+                                />
+                                <label className="text-xs text-gray-600 dark:text-gray-400">Auto Scale</label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={(field.exampleData && field.exampleData.controls) !== false}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), controls: e.target.checked };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="rounded border-gray-300 dark:border-gray-600"
+                                />
+                                <label className="text-xs text-gray-600 dark:text-gray-400">Show Controls</label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={(field.exampleData && field.exampleData.autoplay) === true}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), autoplay: e.target.checked };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="rounded border-gray-300 dark:border-gray-600"
+                                />
+                                <label className="text-xs text-gray-600 dark:text-gray-400">Autoplay</label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={(field.exampleData && field.exampleData.loop) === true}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), loop: e.target.checked };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="rounded border-gray-300 dark:border-gray-600"
+                                />
+                                <label className="text-xs text-gray-600 dark:text-gray-400">Loop</label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={(field.exampleData && field.exampleData.muted) === true}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), muted: e.target.checked };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="rounded border-gray-300 dark:border-gray-600"
+                                />
+                                <label className="text-xs text-gray-600 dark:text-gray-400">Muted</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Example Data for Embedded Video */}
+                      {field.renderType === 'embeddedVideo' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-3 block">
+                            Example Embedded Video Settings
+                          </label>
+                          <div className="space-y-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Embed URL</label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.embedUrl) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), embedUrl: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono"
+                                placeholder="https://www.youtube.com/embed/..."
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Platform</label>
+                              <select
+                                value={(field.exampleData && field.exampleData.platform) || 'youtube'}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), platform: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                              >
+                                <option value="youtube">YouTube</option>
+                                <option value="vimeo">Vimeo</option>
+                                <option value="custom">Custom</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Title</label>
+                              <input
+                                type="text"
+                                value={(field.exampleData && field.exampleData.title) || ''}
+                                onChange={(e) => {
+                                  const newExampleData = { ...(field.exampleData || {}), title: e.target.value };
+                                  updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                }}
+                                className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholder="Video title"
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Width (px)</label>
+                                <input
+                                  type="number"
+                                  value={(field.exampleData && field.exampleData.width) || ''}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), width: e.target.value ? parseInt(e.target.value) : undefined };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder="Auto"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Height (px)</label>
+                                <input
+                                  type="number"
+                                  value={(field.exampleData && field.exampleData.height) || ''}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), height: e.target.value ? parseInt(e.target.value) : undefined };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder="Auto"
+                                />
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={(field.exampleData && field.exampleData.autoScale) !== false}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), autoScale: e.target.checked };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="rounded border-gray-300 dark:border-gray-600"
+                                />
+                                <label className="text-xs text-gray-600 dark:text-gray-400">Auto Scale (16:9)</label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="checkbox"
+                                  checked={(field.exampleData && field.exampleData.allowFullscreen) !== false}
+                                  onChange={(e) => {
+                                    const newExampleData = { ...(field.exampleData || {}), allowFullscreen: e.target.checked };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                  }}
+                                  className="rounded border-gray-300 dark:border-gray-600"
+                                />
+                                <label className="text-xs text-gray-600 dark:text-gray-400">Allow Fullscreen</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Example Data for Status Board */}
+                      {field.renderType === 'statusBoard' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <div className="flex items-center justify-between mb-2">
+                            <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
+                              Example Items
+                            </label>
+                            <button
+                              onClick={() => {
+                                const emptyItem: any = {};
+                                if (field.schema?.itemSchema?.fields) {
+                                  Object.keys(field.schema.itemSchema.fields).forEach(key => {
+                                    emptyItem[key] = '';
+                                  });
+                                }
+                                const newExamples = [...(field.exampleData || []), emptyItem];
+                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                              }}
+                              className="text-xs px-2 py-1 rounded bg-fis-eggplant/10 text-fis-eggplant hover:bg-fis-eggplant/20 font-roobert-medium"
+                            >
+                              + Add Item
+                            </button>
+                          </div>
+                          <div className="space-y-3 max-h-96 overflow-y-auto">
+                            {(field.exampleData || []).map((item: any, itemIdx: number) => (
+                              <div key={itemIdx} className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                                <div className="flex items-center justify-between mb-2">
+                                  <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">
+                                    Item {itemIdx + 1}
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      const newExamples = (field.exampleData || []).filter((_: any, i: number) => i !== itemIdx);
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                    }}
+                                    className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                                <div className="space-y-2">
+                                  {field.schema?.itemSchema?.fields && Object.entries(field.schema.itemSchema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
+                                    <div key={fieldKey}>
+                                      <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                        {fieldDef.label}
+                                      </label>
+                                      {fieldDef.renderAs === 'textarea' ? (
+                                        <textarea
+                                          value={item[fieldKey] || ''}
+                                          onChange={(e) => {
+                                            const newExamples = [...(field.exampleData || [])];
+                                            newExamples[itemIdx] = {
+                                              ...newExamples[itemIdx],
+                                              [fieldKey]: e.target.value
+                                            };
+                                            updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                          }}
+                                          rows={2}
+                                          className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none"
+                                          placeholder={fieldDef.placeholder || `Enter ${fieldDef.label.toLowerCase()}`}
+                                        />
+                                      ) : fieldDef.renderAs === 'select' ? (
+                                        <select
+                                          value={item[fieldKey] || ''}
+                                          onChange={(e) => {
+                                            const newExamples = [...(field.exampleData || [])];
+                                            newExamples[itemIdx] = {
+                                              ...newExamples[itemIdx],
+                                              [fieldKey]: e.target.value
+                                            };
+                                            updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                          }}
+                                          className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                        >
+                                          <option value="">Select...</option>
+                                          {fieldDef.options && fieldDef.options.map((opt: string) => (
+                                            <option key={opt} value={opt}>{opt}</option>
+                                          ))}
+                                        </select>
+                                      ) : (
+                                        <input
+                                          type="text"
+                                          value={item[fieldKey] || ''}
+                                          onChange={(e) => {
+                                            const newExamples = [...(field.exampleData || [])];
+                                            newExamples[itemIdx] = {
+                                              ...newExamples[itemIdx],
+                                              [fieldKey]: e.target.value
+                                            };
+                                            updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                          }}
+                                          className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                          placeholder={fieldDef.placeholder || `Enter ${fieldDef.label.toLowerCase()}`}
+                                        />
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                            {(!field.exampleData || field.exampleData.length === 0) && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
+                                No example items. Click "+ Add Item" to add some.
                               </div>
                             )}
                           </div>
@@ -2564,7 +3728,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                   {availableTemplates.map((template) => (
                     <button
                       key={template.id}
-                      onClick={() => loadTemplate(template.id)}
+                      onClick={() => loadTemplate(template.id, template.name)}
                       className="w-full text-left p-4 rounded-lg border-2 border-gray-200 dark:border-gray-700 hover:border-fis-raspberry dark:hover:border-fis-raspberry bg-white dark:bg-gray-800 hover:shadow-md transition-all"
                     >
                       <div className="font-roobert-semibold text-gray-900 dark:text-white mb-1">
@@ -2641,6 +3805,274 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           exampleData={previewAsset.exampleData}
           supportsMultiColumn={previewAsset.supportsMultiColumn}
         />
+      )}
+
+      {/* Layout Picker Modal */}
+      {showLayoutPicker && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white mb-2">
+                    Choose Section Layout
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Select how content will be arranged in this section
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowLayoutPicker(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </div>
+
+              <div className="space-y-3 mb-4">
+                {/* Full Width Layout */}
+                <button
+                  onClick={() => createSectionWithLayout('full')}
+                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:bg-fis-eggplant/5 dark:hover:bg-fis-eggplant/10 transition-all group text-left"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center group-hover:bg-fis-eggplant/10">
+                      <div className="w-12 h-10 border-2 border-gray-400 dark:border-gray-500 rounded bg-gray-200 dark:bg-gray-700"></div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-roobert-bold text-gray-900 dark:text-white mb-1">Full Width</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Single column layout - ideal for text, charts, or wide content</div>
+                    </div>
+                    <div className="text-2xl text-gray-400 dark:text-gray-600 group-hover:text-fis-eggplant dark:group-hover:text-fis-raspberry font-mono">□</div>
+                  </div>
+                </button>
+
+                {/* 50/50 Layout */}
+                <button
+                  onClick={() => createSectionWithLayout('left-50')}
+                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:bg-fis-eggplant/5 dark:hover:bg-fis-eggplant/10 transition-all group text-left"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center gap-1 group-hover:bg-fis-eggplant/10">
+                      <div className="w-5 h-10 border-2 border-gray-400 dark:border-gray-500 rounded bg-gray-200 dark:bg-gray-700"></div>
+                      <div className="w-5 h-10 border-2 border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"></div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-roobert-bold text-gray-900 dark:text-white mb-1">50 / 50 Split</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Two equal columns - perfect for side-by-side comparison</div>
+                    </div>
+                    <div className="text-2xl text-gray-400 dark:text-gray-600 group-hover:text-fis-eggplant dark:group-hover:text-fis-raspberry font-mono">▭▭</div>
+                  </div>
+                </button>
+
+                {/* 70/30 Layout */}
+                <button
+                  onClick={() => createSectionWithLayout('left-70')}
+                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:bg-fis-eggplant/5 dark:hover:bg-fis-eggplant/10 transition-all group text-left"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center gap-1 group-hover:bg-fis-eggplant/10">
+                      <div className="w-7 h-10 border-2 border-gray-400 dark:border-gray-500 rounded bg-gray-200 dark:bg-gray-700"></div>
+                      <div className="w-3 h-10 border-2 border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"></div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-roobert-bold text-gray-900 dark:text-white mb-1">70 / 30 Split</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Wide left, narrow right - great for main content with sidebar</div>
+                    </div>
+                    <div className="text-2xl text-gray-400 dark:text-gray-600 group-hover:text-fis-eggplant dark:group-hover:text-fis-raspberry font-mono">▬▭</div>
+                  </div>
+                </button>
+
+                {/* 30/70 Layout */}
+                <button
+                  onClick={() => createSectionWithLayout('left-30')}
+                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:bg-fis-eggplant/5 dark:hover:bg-fis-eggplant/10 transition-all group text-left"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center gap-1 group-hover:bg-fis-eggplant/10">
+                      <div className="w-3 h-10 border-2 border-gray-400 dark:border-gray-500 rounded bg-gray-200 dark:bg-gray-700"></div>
+                      <div className="w-7 h-10 border-2 border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"></div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-roobert-bold text-gray-900 dark:text-white mb-1">30 / 70 Split</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Narrow left, wide right - ideal for labels with large content</div>
+                    </div>
+                    <div className="text-2xl text-gray-400 dark:text-gray-600 group-hover:text-fis-eggplant dark:group-hover:text-fis-raspberry font-mono">▭▬</div>
+                  </div>
+                </button>
+
+                {/* 33/33/33 Layout */}
+                <button
+                  onClick={() => createSectionWithLayout('left-33')}
+                  className="w-full p-4 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:bg-fis-eggplant/5 dark:hover:bg-fis-eggplant/10 transition-all group text-left"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center gap-0.5 group-hover:bg-fis-eggplant/10">
+                      <div className="w-3 h-10 border-2 border-gray-400 dark:border-gray-500 rounded bg-gray-200 dark:bg-gray-700"></div>
+                      <div className="w-3 h-10 border-2 border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"></div>
+                      <div className="w-3 h-10 border-2 border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-800"></div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-roobert-bold text-gray-900 dark:text-white mb-1">33 / 33 / 33 Split</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Three equal columns - perfect for metric cards or KPIs</div>
+                    </div>
+                    <div className="text-2xl text-gray-400 dark:text-gray-600 group-hover:text-fis-eggplant dark:group-hover:text-fis-raspberry font-mono">▭▭▭</div>
+                  </div>
+                </button>
+              </div>
+
+              {/* Layout Guide Button */}
+              <button
+                onClick={() => setShowLayoutGuide(true)}
+                className="w-full py-3 px-4 border-2 border-fis-eggplant/30 dark:border-fis-raspberry/30 rounded-lg hover:bg-fis-eggplant/10 dark:hover:bg-fis-raspberry/10 transition-all flex items-center justify-center gap-2 text-fis-eggplant dark:text-fis-raspberry font-roobert-semibold"
+              >
+                <Grid className="w-4 h-4" />
+                <span>Layout Guide</span>
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Layout Guide Modal */}
+      {showLayoutGuide && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="p-6">
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-fis-eggplant/20 dark:bg-fis-raspberry/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <Grid className="w-5 h-5 text-fis-eggplant dark:text-fis-raspberry" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white mb-2">
+                      How Layout Works
+                    </h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Understanding sequential ordering and automatic row filling
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowLayoutGuide(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="p-4 bg-fis-eggplant/5 dark:bg-fis-eggplant/10 border border-fis-eggplant/20 dark:border-fis-raspberry/20 rounded-lg">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    Assets are placed <strong>sequentially</strong>, left-to-right, automatically filling rows based on your chosen layout:
+                  </p>
+                  
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-4 space-y-3">
+                    <div className="flex items-center gap-3 text-sm">
+                      <span className="w-6 h-6 rounded-full bg-fis-eggplant text-white flex items-center justify-center text-xs font-roobert-bold flex-shrink-0">1</span>
+                      <span className="text-gray-700 dark:text-gray-300">First asset → <strong>Left column</strong></span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <span className="w-6 h-6 rounded-full bg-fis-eggplant text-white flex items-center justify-center text-xs font-roobert-bold flex-shrink-0">2</span>
+                      <span className="text-gray-700 dark:text-gray-300">Second asset → <strong>Middle/Right column</strong> (same row)</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <span className="w-6 h-6 rounded-full bg-fis-eggplant text-white flex items-center justify-center text-xs font-roobert-bold flex-shrink-0">3</span>
+                      <span className="text-gray-700 dark:text-gray-300">Third asset → <strong>Right column</strong> (if 3-col) or <strong>new row</strong></span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      <span className="w-6 h-6 rounded-full bg-fis-raspberry text-white flex items-center justify-center text-xs font-roobert-bold flex-shrink-0">4</span>
+                      <span className="text-gray-700 dark:text-gray-300">Row full → <strong>Start new row</strong> automatically</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="font-roobert-semibold text-gray-900 dark:text-white">Important Notes:</h3>
+                  <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="flex items-start gap-2">
+                      <span className="text-fis-eggplant dark:text-fis-raspberry mt-1 flex-shrink-0">•</span>
+                      <span>The layout icon (□, ▭▭, etc.) appears in the section header to show your chosen layout</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-fis-eggplant dark:text-fis-raspberry mt-1 flex-shrink-0">•</span>
+                      <span>Assets automatically wrap to a new row when the current row is full</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-fis-eggplant dark:text-fis-raspberry mt-1 flex-shrink-0">•</span>
+                      <span>Some assets (like tables) don't support multi-column layouts and always take full width</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-fis-eggplant dark:text-fis-raspberry mt-1 flex-shrink-0">•</span>
+                      <span>Delete the last asset in a section to reset the layout choice</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={() => setShowLayoutGuide(false)}
+                    className="w-full py-3 px-4 bg-fis-eggplant hover:bg-fis-eggplant/90 dark:bg-fis-raspberry dark:hover:bg-fis-raspberry/90 text-white rounded-lg font-roobert-semibold transition-all"
+                  >
+                    Got it!
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Unsaved Changes Confirmation Modal */}
+      {showUnsavedChangesModal && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+          >
+            <div className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0">
+                  <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                    Unsaved Changes
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    You have unsaved changes. Are you sure you want to leave? All changes will be lost.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+              <button
+                onClick={() => setShowUnsavedChangesModal(false)}
+                className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowUnsavedChangesModal(false);
+                  onBack();
+                }}
+                className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-roobert-semibold transition-colors"
+              >
+                Leave Anyway
+              </button>
+            </div>
+          </motion.div>
+        </div>
       )}
     </div>
   );

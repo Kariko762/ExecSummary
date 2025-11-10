@@ -1,0 +1,617 @@
+{
+  "templateName": "Comprehensive Test Template",
+  "templateDescription": "Complete test template with every asset type and layout pattern",
+  "category": "test",
+  "version": "1.0.0",
+  "createdAt": "2025-11-09",
+  "sections": [
+    {
+      "id": "section-header",
+      "name": "Standard Header",
+      "fields": [
+        {
+          "key": "id",
+          "label": "ID",
+          "renderType": "text",
+          "schema": {
+            "type": "string",
+            "renderAs": "text",
+            "label": "ID",
+            "placeholder": "Auto-generated"
+          }
+        },
+        {
+          "key": "quarter",
+          "label": "Quarter",
+          "renderType": "text",
+          "schema": {
+            "type": "string",
+            "renderAs": "text",
+            "label": "Quarter",
+            "placeholder": "e.g., Q1, Month Day"
+          }
+        },
+        {
+          "key": "year",
+          "label": "Year",
+          "renderType": "number",
+          "schema": {
+            "type": "number",
+            "renderAs": "number",
+            "label": "Year"
+          }
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "renderType": "date",
+          "schema": {
+            "type": "string",
+            "renderAs": "date",
+            "label": "Date"
+          }
+        },
+        {
+          "key": "title",
+          "label": "Title",
+          "renderType": "text",
+          "schema": {
+            "type": "string",
+            "renderAs": "text",
+            "label": "Title",
+            "placeholder": "Your Organization Name - Weekly Executive Update"
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-full-width",
+      "name": "Full Width Layout Test",
+      "sectionLayoutType": "full",
+      "fields": [
+        {
+          "key": "richTextTest",
+          "label": "Rich Text Editor",
+          "renderType": "richText",
+          "layoutZone": "full",
+          "rowIndex": 0,
+          "schema": {
+            "type": "string",
+            "renderAs": "richText",
+            "label": "Rich Text Editor",
+            "placeholder": "Enter formatted text here..."
+          }
+        },
+        {
+          "key": "barChartTest",
+          "label": "Bar Chart",
+          "renderType": "barChart",
+          "layoutZone": "full",
+          "rowIndex": 1,
+          "schema": {
+            "type": "array",
+            "renderAs": "barChart",
+            "label": "Bar Chart",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "label": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Label"
+                },
+                "value": {
+                  "type": "number",
+                  "renderAs": "number",
+                  "label": "Value"
+                }
+              }
+            },
+            "chartConfig": {
+              "xKey": "label",
+              "yKey": "value",
+              "color": "#6b46c1"
+            }
+          },
+          "exampleData": [
+            { "label": "Jan", "value": 65 },
+            { "label": "Feb", "value": 78 },
+            { "label": "Mar", "value": 90 }
+          ]
+        },
+        {
+          "key": "pieChartTest",
+          "label": "Pie Chart",
+          "renderType": "pieChart",
+          "layoutZone": "full",
+          "rowIndex": 2,
+          "schema": {
+            "type": "array",
+            "renderAs": "pieChart",
+            "label": "Pie Chart",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "label": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Label"
+                },
+                "value": {
+                  "type": "number",
+                  "renderAs": "number",
+                  "label": "Value"
+                }
+              }
+            },
+            "chartConfig": {
+              "nameKey": "label",
+              "dataKey": "value"
+            }
+          },
+          "exampleData": [
+            { "label": "Enterprise", "value": 45 },
+            { "label": "Mid-Market", "value": 30 },
+            { "label": "SMB", "value": 25 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-50-50",
+      "name": "50/50 Layout Test",
+      "sectionLayoutType": "left-50",
+      "fields": [
+        {
+          "key": "metricCardsLeft",
+          "label": "Metric Cards (Left)",
+          "renderType": "metricCards",
+          "layoutZone": "left-50",
+          "rowIndex": 0,
+          "schema": {
+            "type": "array",
+            "renderAs": "metricCards",
+            "label": "Metric Cards",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "label": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Label"
+                },
+                "value": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Value"
+                },
+                "trend": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Trend"
+                }
+              }
+            }
+          },
+          "exampleData": [
+            { "label": "Revenue", "value": "$2.4M", "trend": "+12%" },
+            { "label": "Customers", "value": "1,234", "trend": "+8%" }
+          ]
+        },
+        {
+          "key": "nestedCardsRight",
+          "label": "Nested Cards (Right)",
+          "renderType": "nestedCards",
+          "layoutZone": "right-50",
+          "rowIndex": 0,
+          "schema": {
+            "type": "array",
+            "renderAs": "nestedCards",
+            "label": "Nested Cards",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "title": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Title"
+                },
+                "description": {
+                  "type": "string",
+                  "renderAs": "textarea",
+                  "label": "Description"
+                },
+                "status": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Status"
+                }
+              }
+            }
+          },
+          "exampleData": [
+            { "title": "Project Alpha", "description": "Main initiative", "status": "On Track" },
+            { "title": "Project Beta", "description": "Secondary priority", "status": "At Risk" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-70-30",
+      "name": "70/30 Layout Test",
+      "sectionLayoutType": "left-70",
+      "fields": [
+        {
+          "key": "listLeft",
+          "label": "List (70% Left)",
+          "renderType": "list",
+          "layoutZone": "left-70",
+          "rowIndex": 0,
+          "schema": {
+            "type": "array",
+            "renderAs": "list",
+            "label": "List",
+            "itemSchema": {
+              "type": "string",
+              "renderAs": "text"
+            }
+          },
+          "exampleData": ["First item", "Second item", "Third item"]
+        },
+        {
+          "key": "numberRight",
+          "label": "Number Display (30% Right)",
+          "renderType": "number",
+          "layoutZone": "right-30",
+          "rowIndex": 0,
+          "schema": {
+            "type": "number",
+            "renderAs": "number",
+            "label": "Number Display",
+            "suffix": "%"
+          },
+          "exampleData": 87
+        }
+      ]
+    },
+    {
+      "id": "section-30-70",
+      "name": "30/70 Layout Test",
+      "sectionLayoutType": "left-30",
+      "fields": [
+        {
+          "key": "textLeft",
+          "label": "Label (30% Left)",
+          "renderType": "text",
+          "layoutZone": "left-30",
+          "rowIndex": 0,
+          "schema": {
+            "type": "string",
+            "renderAs": "text",
+            "label": "Label Text"
+          },
+          "exampleData": "Key Point:"
+        },
+        {
+          "key": "textareaRight",
+          "label": "Textarea (70% Right)",
+          "renderType": "textarea",
+          "layoutZone": "right-70",
+          "rowIndex": 0,
+          "schema": {
+            "type": "string",
+            "renderAs": "textarea",
+            "label": "Description",
+            "placeholder": "Enter detailed description..."
+          },
+          "exampleData": "This is a detailed description that takes up more space."
+        }
+      ]
+    },
+    {
+      "id": "section-33-33-33",
+      "name": "33/33/33 Layout Test",
+      "sectionLayoutType": "left-33",
+      "fields": [
+        {
+          "key": "card1",
+          "label": "Card 1 (Left 33%)",
+          "renderType": "metricCards",
+          "layoutZone": "left-33",
+          "rowIndex": 0,
+          "schema": {
+            "type": "array",
+            "renderAs": "metricCards",
+            "label": "Card 1",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "label": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Label"
+                },
+                "value": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Value"
+                }
+              }
+            }
+          },
+          "exampleData": [{ "label": "Metric A", "value": "100" }]
+        },
+        {
+          "key": "card2",
+          "label": "Card 2 (Middle 33%)",
+          "renderType": "metricCards",
+          "layoutZone": "middle-33",
+          "rowIndex": 0,
+          "schema": {
+            "type": "array",
+            "renderAs": "metricCards",
+            "label": "Card 2",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "label": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Label"
+                },
+                "value": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Value"
+                }
+              }
+            }
+          },
+          "exampleData": [{ "label": "Metric B", "value": "200" }]
+        },
+        {
+          "key": "card3",
+          "label": "Card 3 (Right 33%)",
+          "renderType": "metricCards",
+          "layoutZone": "right-33",
+          "rowIndex": 0,
+          "schema": {
+            "type": "array",
+            "renderAs": "metricCards",
+            "label": "Card 3",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "label": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Label"
+                },
+                "value": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Value"
+                }
+              }
+            }
+          },
+          "exampleData": [{ "label": "Metric C", "value": "300" }]
+        },
+        {
+          "key": "card4",
+          "label": "Card 4 (Row 2, Left 33%)",
+          "renderType": "number",
+          "layoutZone": "left-33",
+          "rowIndex": 1,
+          "schema": {
+            "type": "number",
+            "renderAs": "number",
+            "label": "Number 1"
+          },
+          "exampleData": 42
+        },
+        {
+          "key": "card5",
+          "label": "Card 5 (Row 2, Middle 33%)",
+          "renderType": "number",
+          "layoutZone": "middle-33",
+          "rowIndex": 1,
+          "schema": {
+            "type": "number",
+            "renderAs": "number",
+            "label": "Number 2"
+          },
+          "exampleData": 84
+        },
+        {
+          "key": "card6",
+          "label": "Card 6 (Row 2, Right 33%)",
+          "renderType": "number",
+          "layoutZone": "right-33",
+          "rowIndex": 1,
+          "schema": {
+            "type": "number",
+            "renderAs": "number",
+            "label": "Number 3"
+          },
+          "exampleData": 126
+        }
+      ]
+    },
+    {
+      "id": "section-all-input-types",
+      "name": "All Input Types Test",
+      "sectionLayoutType": "full",
+      "fields": [
+        {
+          "key": "textInput",
+          "label": "Text Input",
+          "renderType": "text",
+          "layoutZone": "full",
+          "rowIndex": 0,
+          "schema": {
+            "type": "string",
+            "renderAs": "text",
+            "label": "Text Input",
+            "placeholder": "Enter text..."
+          }
+        },
+        {
+          "key": "numberInput",
+          "label": "Number Input",
+          "renderType": "number",
+          "layoutZone": "full",
+          "rowIndex": 1,
+          "schema": {
+            "type": "number",
+            "renderAs": "number",
+            "label": "Number Input"
+          }
+        },
+        {
+          "key": "dateInput",
+          "label": "Date Input",
+          "renderType": "date",
+          "layoutZone": "full",
+          "rowIndex": 2,
+          "schema": {
+            "type": "string",
+            "renderAs": "date",
+            "label": "Date Input"
+          }
+        },
+        {
+          "key": "textareaInput",
+          "label": "Textarea Input",
+          "renderType": "textarea",
+          "layoutZone": "full",
+          "rowIndex": 3,
+          "schema": {
+            "type": "string",
+            "renderAs": "textarea",
+            "label": "Textarea Input",
+            "placeholder": "Enter multi-line text..."
+          }
+        },
+        {
+          "key": "selectInput",
+          "label": "Select Input",
+          "renderType": "select",
+          "layoutZone": "full",
+          "rowIndex": 4,
+          "schema": {
+            "type": "string",
+            "renderAs": "select",
+            "label": "Select Input",
+            "options": ["Option 1", "Option 2", "Option 3"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "section-timeline",
+      "name": "Timeline Test",
+      "sectionLayoutType": "full",
+      "fields": [
+        {
+          "key": "timelineTest",
+          "label": "Timeline",
+          "renderType": "timeline",
+          "layoutZone": "full",
+          "rowIndex": 0,
+          "schema": {
+            "type": "array",
+            "renderAs": "timeline",
+            "label": "Timeline",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "date": {
+                  "type": "string",
+                  "renderAs": "date",
+                  "label": "Date"
+                },
+                "title": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Title"
+                },
+                "description": {
+                  "type": "string",
+                  "renderAs": "textarea",
+                  "label": "Description"
+                }
+              }
+            }
+          },
+          "exampleData": [
+            { "date": "2025-11-01", "title": "Milestone 1", "description": "First achievement" },
+            { "date": "2025-11-15", "title": "Milestone 2", "description": "Second achievement" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "section-line-chart",
+      "name": "Line Chart Test",
+      "sectionLayoutType": "full",
+      "fields": [
+        {
+          "key": "lineChartTest",
+          "label": "Line Chart",
+          "renderType": "lineChart",
+          "layoutZone": "full",
+          "rowIndex": 0,
+          "schema": {
+            "type": "array",
+            "renderAs": "lineChart",
+            "label": "Line Chart",
+            "itemSchema": {
+              "type": "object",
+              "renderAs": "objectForm",
+              "fields": {
+                "month": {
+                  "type": "string",
+                  "renderAs": "text",
+                  "label": "Month"
+                },
+                "value": {
+                  "type": "number",
+                  "renderAs": "number",
+                  "label": "Value"
+                }
+              }
+            },
+            "chartConfig": {
+              "xKey": "month",
+              "yKey": "value",
+              "color": "#6b46c1"
+            }
+          },
+          "exampleData": [
+            { "month": "Jan", "value": 65 },
+            { "month": "Feb", "value": 78 },
+            { "month": "Mar", "value": 90 },
+            { "month": "Apr", "value": 81 }
+          ]
+        }
+      ]
+    }
+  ],
+  "_enabled_section-full-width": true,
+  "_enabled_section-50-50": true,
+  "_enabled_section-70-30": true,
+  "_enabled_section-30-70": true,
+  "_enabled_section-33-33-33": true,
+  "_enabled_section-all-input-types": true,
+  "_enabled_section-timeline": true,
+  "_enabled_section-line-chart": true
+}

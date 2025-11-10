@@ -50,21 +50,21 @@ export const MetricCardsRenderer: React.FC<RendererProps> = ({
     if (isArrayFormat) {
       // Display array format: [{ label, value, type }]
       return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           {metrics.map((metric: any, index: number) => (
             <div
               key={index}
-              className="p-5 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm"
+              className="p-5 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm min-w-[200px]"
             >
-              <div className="flex items-center space-x-2 mb-3">
+              <div className="flex items-center justify-center mb-3">
                 <div className="w-10 h-10 rounded-lg bg-fis-eggplant/10 dark:bg-fis-eggplant/20 flex items-center justify-center text-fis-eggplant dark:text-fis-raspberry">
                   {getIcon(metric.label || '')}
                 </div>
               </div>
-              <p className={`${getClasses.textMuted()} mb-1`}>
+              <p className={`${getClasses.textMuted()} mb-1 text-center`}>
                 {metric.label}
               </p>
-              <p className={getClasses.valueHeavy()}>
+              <p className={`${getClasses.valueHeavy()} text-center`}>
                 {metric.value !== null && metric.value !== undefined 
                   ? formatValue(metric.label || '', metric.value) 
                   : '—'}
@@ -77,21 +77,21 @@ export const MetricCardsRenderer: React.FC<RendererProps> = ({
     
     // Display object format: { wonACV: 1230000 }
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {Object.entries(fields).map(([key, fieldSchema]) => (
           <div
             key={key}
-            className="p-5 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm"
+            className="p-5 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm min-w-[200px]"
           >
-            <div className="flex items-center space-x-2 mb-3">
+            <div className="flex items-center justify-center mb-3">
               <div className="w-10 h-10 rounded-lg bg-fis-eggplant/10 dark:bg-fis-eggplant/20 flex items-center justify-center text-fis-eggplant dark:text-fis-raspberry">
                 {getIcon(key)}
               </div>
             </div>
-            <p className={`${getClasses.textMuted()} mb-1`}>
+            <p className={`${getClasses.textMuted()} mb-1 text-center`}>
               {fieldSchema.label || key}
             </p>
-            <p className={getClasses.valueHeavy()}>
+            <p className={`${getClasses.valueHeavy()} text-center`}>
               {metrics[key] !== null && metrics[key] !== undefined 
                 ? formatValue(key, metrics[key]) 
                 : '—'}

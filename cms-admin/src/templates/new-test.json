@@ -1,0 +1,57 @@
+{
+  "id": "template-new",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-10",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_section_1_0_type": "object",
+  "_section_1_0_fields": {
+    "team": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Team"
+    },
+    "lead": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Lead"
+    },
+    "members": {
+      "type": "number",
+      "renderAs": "number",
+      "label": "Members"
+    }
+  },
+  "section_1_0": {
+    "team": "RevOps",
+    "lead": "Sarah Johnson",
+    "members": 12
+  },
+  "_section_1_1_type": "keyValue",
+  "_section_1_1_fields": {
+    "key": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Key"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    }
+  },
+  "section_1_1": {
+    "key": "Status",
+    "value": "On Track"
+  },
+  "_enabled_section_1": true,
+  "_completed_section_1": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "New-Test",
+  "_template_description": "",
+  "_template_created": "2025-11-10T13:43:13.719Z",
+  "_template_updated": "2025-11-10T13:43:13.719Z"
+}

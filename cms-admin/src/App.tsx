@@ -11,8 +11,7 @@ import StyleSchemeManagerV2 from './components/StyleSchemeManagerV2';
 import SystemSettingsManager from './components/SystemSettingsManager';
 import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
-import summaryTemplate from './templates/summary-template-v2.json';
-import summaryTemplateWithCharts from './templates/summary_default_charts.json';
+import masterTemplate from './templates/MASTER-TEMPLATE-ALL-ASSETS.json';
 import './App.css';
 
 const API_URL = 'http://localhost:3001/api';
@@ -336,11 +335,11 @@ function App() {
       if (creationMode === 'template') {
         // Use template
         if (selectedSourceId === 'default' || !selectedSourceId) {
-          // Use built-in default template
-          sourceData = summaryTemplate;
+          // Use built-in default template (Master Template with all assets)
+          sourceData = masterTemplate;
         } else if (selectedSourceId === 'default-with-charts') {
-          // Use built-in template with charts
-          sourceData = summaryTemplateWithCharts;
+          // Use master template (same as default now)
+          sourceData = masterTemplate;
         } else {
           // Fetch custom template
           const response = await fetch(`${API_URL}/templates/${selectedSourceId}`);

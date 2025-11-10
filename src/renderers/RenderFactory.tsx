@@ -14,67 +14,109 @@ import { RadialChartRenderer } from './RadialChartRenderer';
 import { HorizontalRuleRenderer } from './HorizontalRuleRenderer';
 import { CodeBlockRenderer } from './CodeBlockRenderer';
 import { QuoteRenderer } from './QuoteRenderer';
+import { ImageRenderer } from './ImageRenderer';
+import { VideoRenderer } from './VideoRenderer';
+import { EmbeddedVideoRenderer } from './EmbeddedVideoRenderer';
+import { TableLayoutRenderer } from './TableLayoutRenderer';
 
 /**
  * Factory component that routes to the appropriate renderer based on schema type
  */
 export const RenderFactory: React.FC<RendererProps> = (props) => {
   const { schema } = props;
+  
+  // Determine alignment class
+  const alignment = (schema as any).alignment || 'left';
+  const alignmentClass = alignment === 'center' ? 'text-center' : alignment === 'right' ? 'text-right' : 'text-left';
+
+  let renderer: React.ReactElement;
 
   switch (schema.renderAs) {
     case 'text':
-      return <TextRenderer {...props} />;
+      renderer = <TextRenderer {...props} />;
+      break;
     
     case 'textarea':
-      return <TextareaRenderer {...props} />;
+      renderer = <TextareaRenderer {...props} />;
+      break;
     
     case 'number':
-      return <NumberRenderer {...props} />;
+      renderer = <NumberRenderer {...props} />;
+      break;
     
     case 'list':
     case 'listNoTitle':
-      return <ListRenderer {...props} />;
+      renderer = <ListRenderer {...props} />;
+      break;
     
     case 'metricCards':
-      return <MetricCardsRenderer {...props} />;
+      renderer = <MetricCardsRenderer {...props} />;
+      break;
     
     case 'nestedCards':
-      return <NestedCardsRenderer {...props} />;
+      renderer = <NestedCardsRenderer {...props} />;
+      break;
     
     case 'objectForm':
-      return <ObjectFormRenderer {...props} />;
+      renderer = <ObjectFormRenderer {...props} />;
+      break;
     
     case 'richText':
       // TODO: Implement RichTextRenderer
-      return <TextareaRenderer {...props} />; // Fallback to textarea for now
+      renderer = <TextareaRenderer {...props} />; // Fallback to textarea for now
+      break;
     
     case 'progressBar':
       // TODO: Implement ProgressBarRenderer
-      return <NumberRenderer {...props} />; // Fallback to number for now
+      renderer = <NumberRenderer {...props} />; // Fallback to number for now
+      break;
     
     case 'pieChart':
-      return <PieChartRenderer {...props} />;
+      renderer = <PieChartRenderer {...props} />;
+      break;
     
     case 'barChart':
-      return <BarChartRenderer {...props} />;
+      renderer = <BarChartRenderer {...props} />;
+      break;
     
     case 'lineChart':
-      return <LineChartRenderer {...props} />;
+      renderer = <LineChartRenderer {...props} />;
+      break;
     
     case 'radialChart':
-      return <RadialChartRenderer {...props} />;
+      renderer = <RadialChartRenderer {...props} />;
+      break;
     
     case 'hr':
-      return <HorizontalRuleRenderer {...props} />;
+      renderer = <HorizontalRuleRenderer {...props} />;
+      break;
     
     case 'codeBlock':
-      return <CodeBlockRenderer {...props} />;
+      renderer = <CodeBlockRenderer {...props} />;
+      break;
     
     case 'quote':
-      return <QuoteRenderer {...props} />;
+      renderer = <QuoteRenderer {...props} />;
+      break;
+    
+    case 'image':
+      renderer = <ImageRenderer {...props} />;
+      break;
+    
+    case 'video':
+      renderer = <VideoRenderer {...props} />;
+      break;
+    
+    case 'embeddedVideo':
+      renderer = <EmbeddedVideoRenderer {...props} />;
+      break;
+    
+    case 'statusBoard':
+      renderer = <TableLayoutRenderer {...props} />;
+      break;
     
     default:
-      return (
+      renderer = (
         <div className="p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
           <p className="text-sm text-red-700 dark:text-red-400">
             Unknown renderer type: {schema.renderAs}
@@ -82,4 +124,7 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
         </div>
       );
   }
+  
+  // Wrap renderer with alignment class
+  return <div className={alignmentClass}>{renderer}</div>;
 };

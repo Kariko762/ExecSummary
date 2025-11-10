@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff } from 'lucide-react';
+import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X } from 'lucide-react';
 
 /**
  * System Settings Manager
@@ -23,6 +23,7 @@ interface AuthenticationSettings {
 
 interface SystemSettings {
   authentication: AuthenticationSettings;
+  customLogo?: string; // Path to custom logo image
   version: string;
   lastUpdated: string;
 }
@@ -65,6 +66,7 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'authentication' | 'users' | 'security'>('authentication');
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -109,6 +111,62 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
       },
     }));
     setHasChanges(true);
+  };
+
+  const handleLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      onNotification?.('error', 'Please upload an image file');
+      return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      onNotification?.('error', 'Image must be smaller than 2MB');
+      return;
+    }
+
+    setUploadingLogo(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('logo', file);
+
+      const response = await fetch('http://localhost:3001/api/upload-logo', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+      
+      setSettings(prev => ({
+        ...prev,
+        customLogo: data.url,
+      }));
+      setHasChanges(true);
+      onNotification?.('success', 'Logo uploaded successfully!');
+    } catch (error) {
+      console.error('Logo upload failed:', error);
+      onNotification?.('error', 'Failed to upload logo');
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setSettings(prev => ({
+      ...prev,
+      customLogo: undefined,
+    }));
+    setHasChanges(true);
+    onNotification?.('success', 'Logo removed (not saved yet)');
   };
 
   return (
@@ -190,7 +248,11 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
         {activeTab === 'authentication' && (
           <AuthenticationPanel
             settings={settings.authentication}
+            customLogo={settings.customLogo}
             onUpdate={updateAuthSetting}
+            onLogoUpload={handleLogoUpload}
+            onLogoRemove={handleRemoveLogo}
+            uploadingLogo={uploadingLogo}
           />
         )}
         
@@ -244,11 +306,19 @@ function TabButton({
 
 // Authentication Panel
 function AuthenticationPanel({ 
-  settings, 
-  onUpdate 
+  settings,
+  customLogo,
+  onUpdate,
+  onLogoUpload,
+  onLogoRemove,
+  uploadingLogo
 }: { 
-  settings: AuthenticationSettings; 
+  settings: AuthenticationSettings;
+  customLogo?: string;
   onUpdate: (app: 'parentApp' | 'cmsAdmin', value: boolean) => void;
+  onLogoUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onLogoRemove: () => void;
+  uploadingLogo: boolean;
 }) {
   return (
     <div className="space-y-6">
@@ -258,6 +328,67 @@ function AuthenticationPanel({
           <div className="text-sm text-blue-800 dark:text-blue-300">
             <p className="font-roobert-semibold mb-1">Authentication Controls</p>
             <p>Enable login requirements to force user authentication before accessing the application. When disabled, users can access the app directly without logging in.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Custom Logo Upload */}
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+        <div className="mb-4">
+          <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-1">
+            Custom Logo
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Upload a custom logo to replace the FIS logo across both applications
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          {/* Logo Preview */}
+          {customLogo && (
+            <div className="relative inline-block">
+              <img 
+                src={customLogo} 
+                alt="Custom Logo" 
+                className="h-16 w-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2 bg-white dark:bg-gray-900"
+              />
+              <button
+                onClick={onLogoRemove}
+                className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                title="Remove logo"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          )}
+
+          {/* Upload Button */}
+          <div>
+            <label className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg cursor-pointer transition-colors">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onLogoUpload}
+                className="hidden"
+                disabled={uploadingLogo}
+              />
+              {uploadingLogo ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300">Uploading...</span>
+                </>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                  <span className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+                    {customLogo ? 'Replace Logo' : 'Upload Logo'}
+                  </span>
+                </>
+              )}
+            </label>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              Recommended: PNG or SVG, max 2MB. For best results, use a transparent background.
+            </p>
           </div>
         </div>
       </div>

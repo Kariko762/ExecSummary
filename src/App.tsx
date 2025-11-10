@@ -59,6 +59,13 @@ function App() {
     setIsAuthenticated(true);
   };
 
+  const handleLogout = () => {
+    // Clear auth data
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_session');
+    setIsAuthenticated(false);
+  };
+
   const filteredSummaries = timelineItems.filter(summary => {
     const searchLower = searchQuery.toLowerCase();
     const baseMatch = 
@@ -96,7 +103,11 @@ function App() {
       <ThemeProvider>
         <PresentationProvider>
           <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
-            <Header onSearch={setSearchQuery} />
+            <Header 
+              onSearch={setSearchQuery} 
+              isAuthenticated={requireAuth && isAuthenticated}
+              onLogout={handleLogout}
+            />
             <StickyNav />
             
             <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8">

@@ -161,17 +161,25 @@ export default function EditorModalV2({
           {indexedFields.map(fieldKey => {
             const fieldData = editedData[fieldKey];
             const fieldType = editedData[`_${fieldKey}_type`];
-            const customFields = editedData[`_${fieldKey}_fields`];
+            const itemSchema = editedData[`_${fieldKey}_itemSchema`];
+            const customFields = editedData[`_${fieldKey}_fields`]; // Legacy support
             const chartConfig = editedData[`_${fieldKey}_chartConfig`];
+            const alignment = editedData[`_${fieldKey}_alignment`] || 'left';
             
             if (!fieldType) return null;
             
-            const baseSchema = buildFieldSchema(fieldType, customFields ? { fields: customFields } : {});
+            // Use itemSchema if available (new format), otherwise use customFields (legacy)
+            const baseSchema = itemSchema 
+              ? { itemSchema } 
+              : (customFields ? { fields: customFields } : {});
+            
+            const fullBaseSchema = buildFieldSchema(fieldType, baseSchema);
             const factorySchema: any = {
               label: formatSectionTitle(fieldKey),
               renderAs: fieldType,
-              ...baseSchema,
-              ...(chartConfig ? { chartConfig } : {})
+              ...fullBaseSchema,
+              ...(chartConfig ? { chartConfig } : {}),
+              alignment: alignment
             };
             
             return (
@@ -199,7 +207,8 @@ export default function EditorModalV2({
     // Single field - original logic
     const sectionData = editedData[sectionId];
     const sectionType = editedData[`_${sectionId}_type`];
-    const customFields = editedData[`_${sectionId}_fields`];
+    const itemSchema = editedData[`_${sectionId}_itemSchema`];
+    const customFields = editedData[`_${sectionId}_fields`]; // Legacy support
     
     // Special handling for standard_header - render metadata fields
     if (sectionId === 'standard_header') {
@@ -288,13 +297,21 @@ export default function EditorModalV2({
     if (sectionType) {
       // Build schema from asset type registry + custom fields
       const chartConfig = editedData[`_${sectionId}_chartConfig`];
-      const baseSchema = buildFieldSchema(sectionType, customFields ? { fields: customFields } : {});
+      const alignment = editedData[`_${sectionId}_alignment`] || 'left';
+      
+      // Use itemSchema if available (new format), otherwise use customFields (legacy)
+      const baseSchema = itemSchema 
+        ? { itemSchema } 
+        : (customFields ? { fields: customFields } : {});
+      
+      const fullBaseSchema = buildFieldSchema(sectionType, baseSchema);
       
       const factorySchema: any = {
         label: formatSectionTitle(sectionId),
         renderAs: sectionType,
-        ...baseSchema,
-        ...(chartConfig ? { chartConfig } : {})
+        ...fullBaseSchema,
+        ...(chartConfig ? { chartConfig } : {}),
+        alignment: alignment
       };
       
       return (
@@ -415,7 +432,7 @@ export default function EditorModalV2({
     
     const metadataKeys = ['id', 'quarter', 'year', 'date', 'title', 'displayName', 'name', 'category', 'lastUpdated', 'status', 'protectionEnabled'];
     const excludePrefixes = ['_enabled_', '_completed_', '_locked_', '_template_'];
-    const excludeSuffixes = ['_schema', '_type', '_fields', '_config', '_columnSpan'];
+    const excludeSuffixes = ['_schema', '_type', '_fields', '_config', '_columnSpan', '_itemSchema'];
     const excludeContains = ['_chartConfig']; // Exclude dynamic chart config keys
     const excludeExact = ['_enabled', '_completed', '_locked']; // Exclude these exact keys
     

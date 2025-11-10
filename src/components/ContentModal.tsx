@@ -133,7 +133,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   const date = content.date || content.lastUpdated || content.updatedAt;
   
   // Get all sections by finding keys that have corresponding _type metadata
-  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; chartConfig?: any; subtitle?: string; isMultiField?: boolean; multiFieldData?: any[] }> = [];
+  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; itemSchema?: any; chartConfig?: any; subtitle?: string; isMultiField?: boolean; multiFieldData?: any[] }> = [];
   
   // First pass: Identify all data keys with _type metadata
   const allDataKeys = Object.keys(content).filter((key) => {
@@ -198,7 +198,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         label: rawData?.title || formatLabel(key),
         data: actualData,
         type: content[typeKey],
-        fields: content[fieldsKey],
+        fields: content[fieldsKey], // Legacy support
+        itemSchema: content[`_${key}_itemSchema`], // New format
         chartConfig: content[chartConfigKey],
         subtitle
       });
@@ -208,7 +209,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         key: fieldKey,
         type: content[`_${fieldKey}_type`],
         data: content[fieldKey],
-        fields: content[`_${fieldKey}_fields`],
+        fields: content[`_${fieldKey}_fields`], // Legacy support
+        itemSchema: content[`_${fieldKey}_itemSchema`], // New format
         chartConfig: content[`_${fieldKey}_chartConfig`]
       }));
       
@@ -540,7 +542,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                               mode="display"
                               schema={{
                                 renderAs: field.type as any,
-                                fields: field.fields,
+                                ...(field.itemSchema ? { itemSchema: field.itemSchema } : {}),
+                                ...(field.fields ? { fields: field.fields } : {}),
                                 ...(field.chartConfig ? { chartConfig: field.chartConfig } : {})
                               }}
                             />
@@ -556,7 +559,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                         mode="display"
                         schema={{
                           renderAs: section.type as any,
-                          fields: section.fields,
+                          ...(section.itemSchema ? { itemSchema: section.itemSchema } : {}),
+                          ...(section.fields ? { fields: section.fields } : {}),
                           ...(section.chartConfig ? { chartConfig: section.chartConfig } : {})
                         }}
                       />

@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download, Settings, BookOpen } from 'lucide-react';
+import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download, Settings, BookOpen, LogOut } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState, useEffect, useRef } from 'react';
@@ -8,16 +8,28 @@ import html2canvas from 'html2canvas';
 
 interface HeaderProps {
   onSearch: (query: string) => void;
+  isAuthenticated?: boolean;
+  onLogout?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
+export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = false, onLogout }) => {
   const { theme, toggleTheme } = useTheme();
   const { isPresentationMode, togglePresentationMode } = usePresentation();
   const [searchQuery, setSearchQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
+  const [customLogo, setCustomLogo] = useState<string | null>(null);
   const location = useLocation();
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Load custom logo from system settings
+  useEffect(() => {
+    const settings = localStorage.getItem('system-settings');
+    if (settings) {
+      const parsed = JSON.parse(settings);
+      setCustomLogo(parsed.customLogo || null);
+    }
+  }, []);
 
   // Handle clicks outside the menu to close it
   useEffect(() => {
@@ -106,8 +118,8 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
             whileHover={{ scale: 1.05 }}
           >
             <img 
-              src="/FIS-Logo.png" 
-              alt="FIS Logo" 
+              src={customLogo ? `http://localhost:3001${customLogo}` : "/FIS-Logo.png"}
+              alt="Logo" 
               className="h-10 w-auto"
             />
             <div>
@@ -297,6 +309,20 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
                 <Sun className="w-5 h-5 text-yellow-400" />
               )}
             </motion.button>
+
+            {/* Logout Button - Show only when authenticated */}
+            {isAuthenticated && onLogout && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onLogout}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-400 transition-all border border-red-500/30"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="text-sm font-roobert-medium">Logout</span>
+              </motion.button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -429,6 +455,22 @@ export const Header: React.FC<HeaderProps> = ({ onSearch }) => {
                 </span>
               </button>
             </div>
+
+            {/* Mobile Logout Button */}
+            {isAuthenticated && onLogout && (
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  onClick={() => {
+                    onLogout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-400 transition-all border border-red-500/30"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="font-roobert-medium">Logout</span>
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </div>

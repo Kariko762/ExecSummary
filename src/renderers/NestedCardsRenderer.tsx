@@ -16,86 +16,134 @@ export const NestedCardsRenderer: React.FC<RendererProps> = ({
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   if (mode === 'display') {
-    return (
-      <div className="space-y-3">
-        {items.length === 0 ? (
-          <p className="text-sm text-gray-500 dark:text-gray-400 italic">
-            No items
-          </p>
-        ) : (
-          items.map((item: any, index: number) => {
-            // Get the category name (first field that's a string)
-            const categoryField = Object.entries(fields).find(([key]) => typeof item[key] === 'string');
-            const categoryName = categoryField ? item[categoryField[0]] : `Item ${index + 1}`;
+    // Check if this is a simple card list (like title/value pairs) vs complex nested structure
+    const isSimpleCardList = items.length > 0 && 
+                             Object.keys(fields).length <= 3 && 
+                             !Object.values(fields).some((f: any) => 
+                               f.renderAs === 'list' || f.renderAs === 'listNoTitle' || Array.isArray(items[0]?.[Object.keys(fields)[0]])
+                             );
+
+    if (items.length === 0) {
+      return (
+        <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+          No items
+        </p>
+      );
+    }
+
+    // Render simple cards in a horizontal grid (for title/value style cards)
+    if (isSimpleCardList) {
+      return (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {items.map((item: any, index: number) => {
+            const firstField = Object.keys(fields)[0];
+            const secondField = Object.keys(fields)[1];
+            const title = item[firstField] || `Item ${index + 1}`;
+            const value = item[secondField] || '';
 
             return (
               <div
                 key={index}
-                className="rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 overflow-hidden"
+                className="p-5 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-fis-eggplant/40 dark:hover:border-fis-raspberry/40 transition-all"
               >
-                {/* Category Header */}
-                <div className="px-4 py-3 bg-gradient-to-r from-fis-eggplant/10 to-fis-raspberry/10 dark:from-fis-eggplant/20 dark:to-fis-raspberry/20 border-b border-gray-200 dark:border-gray-700">
-                  <h4 className="text-sm font-roobert-heavy text-gray-900 dark:text-white">
-                    {categoryName}
-                  </h4>
-                </div>
-
-                {/* Metrics Grid */}
-                <div className="p-4">
-                  {Object.entries(fields).map(([key, fieldSchema]) => {
-                    const fieldValue = item[key];
-                    
-                    // Skip category field (already shown in header)
-                    if (key === categoryField?.[0]) return null;
-                    
-                    // Skip empty values
-                    if (fieldValue === null || fieldValue === undefined || fieldValue === '') 
-                      return null;
-
-                    // Handle nested metrics array
-                    if (Array.isArray(fieldValue) && fieldValue.length > 0 && typeof fieldValue[0] === 'object') {
-                      return (
-                        <div key={key} className="grid grid-cols-2 gap-3">
-                          {fieldValue.map((metric: any, metricIndex: number) => (
-                            <div
-                              key={metricIndex}
-                              className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700"
-                            >
-                              <p className="text-xs font-roobert-medium text-fis-eggplant dark:text-fis-raspberry mb-1">
-                                {metric.label || `Metric ${metricIndex + 1}`}
-                              </p>
-                              <p className="text-lg font-roobert-semibold text-gray-900 dark:text-white">
-                                {typeof metric.value === 'number' 
-                                  ? metric.value.toLocaleString()
-                                  : metric.value}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      );
-                    }
-
-                    // Regular field rendering
-                    return (
-                      <div key={key} className="mb-2">
-                        <p className="text-xs font-roobert-medium text-fis-eggplant dark:text-fis-raspberry">
-                          {(fieldSchema as FieldSchema).label || key}:
-                        </p>
-                        <p className="text-sm text-gray-900 dark:text-white">
-                          {Array.isArray(fieldValue) 
-                            ? fieldValue.map((v, i) => (
-                                <span key={i}>{renderWithExpressions(String(v))}{i < fieldValue.length - 1 ? ', ' : ''}</span>
-                              ))
-                            : renderWithExpressions(String(fieldValue))}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
+                <p className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry uppercase tracking-wider mb-2">
+                  {title}
+                </p>
+                <p className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+                  {value}
+                </p>
+                {/* Show any additional fields */}
+                {Object.keys(fields).slice(2).map(key => {
+                  const fieldValue = item[key];
+                  if (!fieldValue) return null;
+                  return (
+                    <p key={key} className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                      {fieldValue}
+                    </p>
+                  );
+                })}
               </div>
             );
-          })
-        )}
+          })}
+        </div>
+      );
+    }
+
+    // Render complex cards vertically (for cards with lists, nested data, etc.)
+    return (
+      <div className="space-y-4">
+        {items.map((item: any, index: number) => {
+          // Get the category name (first field that's a string)
+          const categoryField = Object.entries(fields).find(([key]) => typeof item[key] === 'string');
+          const categoryName = categoryField ? item[categoryField[0]] : `Item ${index + 1}`;
+
+          return (
+            <div
+              key={index}
+              className="rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800/70 dark:to-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-lg shadow-fis-eggplant/5 dark:shadow-fis-raspberry/5 overflow-hidden transition-all hover:shadow-xl hover:shadow-fis-eggplant/10 dark:hover:shadow-fis-raspberry/10"
+            >
+              {/* Category Header with gradient */}
+              <div className="px-6 py-5 bg-gradient-to-r from-fis-eggplant via-fis-eggplant/90 to-fis-raspberry border-b border-fis-eggplant/20">
+                <h4 className="text-base font-roobert-heavy text-white tracking-wide">
+                  {categoryName}
+                </h4>
+              </div>
+
+              {/* Metrics Grid */}
+              <div className="p-5">
+                {Object.entries(fields).map(([key, fieldSchema]) => {
+                  const fieldValue = item[key];
+                  
+                  // Skip category field (already shown in header)
+                  if (key === categoryField?.[0]) return null;
+                  
+                  // Skip empty values
+                  if (fieldValue === null || fieldValue === undefined || fieldValue === '') 
+                    return null;
+
+                  // Handle nested metrics array
+                  if (Array.isArray(fieldValue) && fieldValue.length > 0 && typeof fieldValue[0] === 'object') {
+                    return (
+                      <div key={key} className="grid grid-cols-2 gap-4 mb-4">
+                        {fieldValue.map((metric: any, metricIndex: number) => (
+                          <div
+                            key={metricIndex}
+                            className="p-4 rounded-lg bg-white dark:bg-gray-900/60 border border-fis-eggplant/20 dark:border-fis-raspberry/20 shadow-sm hover:border-fis-eggplant/40 dark:hover:border-fis-raspberry/40 transition-all"
+                          >
+                            <p className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry uppercase tracking-wider mb-2">
+                              {metric.label || `Metric ${metricIndex + 1}`}
+                            </p>
+                            <p className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+                              {typeof metric.value === 'number' 
+                                ? metric.value.toLocaleString()
+                                : metric.value}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+
+                  // Regular field rendering
+                  return (
+                    <div key={key} className="mb-3 pb-3 border-b border-fis-eggplant/20 dark:border-fis-raspberry/20 last:border-0 last:mb-0 last:pb-0">
+                      <p className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry uppercase tracking-wider mb-1">
+                        {(fieldSchema as FieldSchema).label || key}
+                      </p>
+                      <p className="text-sm font-roobert-medium text-gray-900 dark:text-white leading-relaxed">
+                        {Array.isArray(fieldValue) 
+                          ? fieldValue.map((v, i) => (
+                              <span key={i}>{renderWithExpressions(String(v))}{i < fieldValue.length - 1 ? ', ' : ''}</span>
+                            ))
+                          : renderWithExpressions(String(fieldValue))}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   }

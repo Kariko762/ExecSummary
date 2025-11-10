@@ -1,0 +1,305 @@
+{
+  "_template_name": "Comprehensive Test Template",
+  "_template_description": "Complete test template with every asset type and layout pattern for testing",
+  "_template_category": "test",
+  "_template_created": "2025-11-09T00:00:00.000Z",
+  "_template_updated": "2025-11-09T00:00:00.000Z",
+  
+  "id": "test-comprehensive",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Comprehensive Test - All Assets & Layouts",
+  
+  "richTextTest": "<p>This is <strong>rich text</strong> with <em>formatting</em>.</p>",
+  "_richTextTest_itemSchema": {
+    "type": "string",
+    "renderAs": "richText",
+    "label": "Rich Text Editor",
+    "placeholder": "Enter formatted text here..."
+  },
+  "_enabled_richTextTest": true,
+  "_completed_richTextTest": false,
+  
+  "barChartTest": [
+    { "label": "Jan", "value": 65 },
+    { "label": "Feb", "value": 78 },
+    { "label": "Mar", "value": 90 }
+  ],
+  "_barChartTest_itemSchema": {
+    "type": "array",
+    "renderAs": "barChart",
+    "label": "Bar Chart",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "label": { "type": "string", "renderAs": "text", "label": "Label" },
+        "value": { "type": "number", "renderAs": "number", "label": "Value" }
+      }
+    },
+    "chartConfig": {
+      "xKey": "label",
+      "yKey": "value",
+      "color": "#6b46c1"
+    }
+  },
+  "_enabled_barChartTest": true,
+  "_completed_barChartTest": false,
+  
+  "pieChartTest": [
+    { "label": "Enterprise", "value": 45 },
+    { "label": "Mid-Market", "value": 30 },
+    { "label": "SMB", "value": 25 }
+  ],
+  "_pieChartTest_itemSchema": {
+    "type": "array",
+    "renderAs": "pieChart",
+    "label": "Pie Chart",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "label": { "type": "string", "renderAs": "text", "label": "Label" },
+        "value": { "type": "number", "renderAs": "number", "label": "Value" }
+      }
+    },
+    "chartConfig": {
+      "nameKey": "label",
+      "dataKey": "value"
+    }
+  },
+  "_enabled_pieChartTest": true,
+  "_completed_pieChartTest": false,
+  
+  "metricCards_50": [
+    { "label": "Revenue", "value": "$2.4M", "trend": "+12%" },
+    { "label": "Customers", "value": "1,234", "trend": "+8%" }
+  ],
+  "_metricCards_50_itemSchema": {
+    "type": "array",
+    "renderAs": "metricCards",
+    "label": "Metric Cards (50% Left)",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "label": { "type": "string", "renderAs": "text", "label": "Label" },
+        "value": { "type": "string", "renderAs": "text", "label": "Value" },
+        "trend": { "type": "string", "renderAs": "text", "label": "Trend" }
+      }
+    }
+  },
+  "_enabled_metricCards_50": true,
+  "_completed_metricCards_50": false,
+  
+  "nestedCards_50": [
+    { "title": "Project Alpha", "description": "Main initiative", "status": "On Track" },
+    { "title": "Project Beta", "description": "Secondary priority", "status": "At Risk" }
+  ],
+  "_nestedCards_50_itemSchema": {
+    "type": "array",
+    "renderAs": "nestedCards",
+    "label": "Nested Cards (50% Right)",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "title": { "type": "string", "renderAs": "text", "label": "Title" },
+        "description": { "type": "string", "renderAs": "textarea", "label": "Description" },
+        "status": { "type": "string", "renderAs": "text", "label": "Status" }
+      }
+    }
+  },
+  "_enabled_nestedCards_50": true,
+  "_completed_nestedCards_50": false,
+  
+  "listTest_70": ["First item", "Second item", "Third item"],
+  "_listTest_70_itemSchema": {
+    "type": "array",
+    "renderAs": "list",
+    "label": "List (70% Left)",
+    "itemSchema": {
+      "type": "string",
+      "renderAs": "text"
+    }
+  },
+  "_enabled_listTest_70": true,
+  "_completed_listTest_70": false,
+  
+  "numberTest_30": 87,
+  "_numberTest_30_itemSchema": {
+    "type": "number",
+    "renderAs": "number",
+    "label": "Number Display (30% Right)",
+    "suffix": "%"
+  },
+  "_enabled_numberTest_30": true,
+  "_completed_numberTest_30": false,
+  
+  "textTest_30": "Key Point:",
+  "_textTest_30_itemSchema": {
+    "type": "string",
+    "renderAs": "text",
+    "label": "Label (30% Left)"
+  },
+  "_enabled_textTest_30": true,
+  "_completed_textTest_30": false,
+  
+  "textareaTest_70": "This is a detailed description that takes up more space.",
+  "_textareaTest_70_itemSchema": {
+    "type": "string",
+    "renderAs": "textarea",
+    "label": "Textarea (70% Right)",
+    "placeholder": "Enter detailed description..."
+  },
+  "_enabled_textareaTest_70": true,
+  "_completed_textareaTest_70": false,
+  
+  "metricCards_33_1": [{ "label": "Metric A", "value": "100" }],
+  "_metricCards_33_1_itemSchema": {
+    "type": "array",
+    "renderAs": "metricCards",
+    "label": "Card 1 (Left 33%)",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "label": { "type": "string", "renderAs": "text", "label": "Label" },
+        "value": { "type": "string", "renderAs": "text", "label": "Value" }
+      }
+    }
+  },
+  "_enabled_metricCards_33_1": true,
+  "_completed_metricCards_33_1": false,
+  
+  "metricCards_33_2": [{ "label": "Metric B", "value": "200" }],
+  "_metricCards_33_2_itemSchema": {
+    "type": "array",
+    "renderAs": "metricCards",
+    "label": "Card 2 (Middle 33%)",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "label": { "type": "string", "renderAs": "text", "label": "Label" },
+        "value": { "type": "string", "renderAs": "text", "label": "Value" }
+      }
+    }
+  },
+  "_enabled_metricCards_33_2": true,
+  "_completed_metricCards_33_2": false,
+  
+  "metricCards_33_3": [{ "label": "Metric C", "value": "300" }],
+  "_metricCards_33_3_itemSchema": {
+    "type": "array",
+    "renderAs": "metricCards",
+    "label": "Card 3 (Right 33%)",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "label": { "type": "string", "renderAs": "text", "label": "Label" },
+        "value": { "type": "string", "renderAs": "text", "label": "Value" }
+      }
+    }
+  },
+  "_enabled_metricCards_33_3": true,
+  "_completed_metricCards_33_3": false,
+  
+  "textInput": "Sample text",
+  "_textInput_itemSchema": {
+    "type": "string",
+    "renderAs": "text",
+    "label": "Text Input",
+    "placeholder": "Enter text..."
+  },
+  "_enabled_textInput": true,
+  "_completed_textInput": false,
+  
+  "numberInput": 42,
+  "_numberInput_itemSchema": {
+    "type": "number",
+    "renderAs": "number",
+    "label": "Number Input"
+  },
+  "_enabled_numberInput": true,
+  "_completed_numberInput": false,
+  
+  "dateInput": "2025-11-09",
+  "_dateInput_itemSchema": {
+    "type": "string",
+    "renderAs": "date",
+    "label": "Date Input"
+  },
+  "_enabled_dateInput": true,
+  "_completed_dateInput": false,
+  
+  "textareaInput": "Multi-line text example",
+  "_textareaInput_itemSchema": {
+    "type": "string",
+    "renderAs": "textarea",
+    "label": "Textarea Input",
+    "placeholder": "Enter multi-line text..."
+  },
+  "_enabled_textareaInput": true,
+  "_completed_textareaInput": false,
+  
+  "selectInput": "Option 1",
+  "_selectInput_itemSchema": {
+    "type": "string",
+    "renderAs": "select",
+    "label": "Select Input",
+    "options": ["Option 1", "Option 2", "Option 3"]
+  },
+  "_enabled_selectInput": true,
+  "_completed_selectInput": false,
+  
+  "timelineTest": [
+    { "date": "2025-11-01", "title": "Milestone 1", "description": "First achievement" },
+    { "date": "2025-11-15", "title": "Milestone 2", "description": "Second achievement" }
+  ],
+  "_timelineTest_itemSchema": {
+    "type": "array",
+    "renderAs": "timeline",
+    "label": "Timeline",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "date": { "type": "string", "renderAs": "date", "label": "Date" },
+        "title": { "type": "string", "renderAs": "text", "label": "Title" },
+        "description": { "type": "string", "renderAs": "textarea", "label": "Description" }
+      }
+    }
+  },
+  "_enabled_timelineTest": true,
+  "_completed_timelineTest": false,
+  
+  "lineChartTest": [
+    { "month": "Jan", "value": 65 },
+    { "month": "Feb", "value": 78 },
+    { "month": "Mar", "value": 90 },
+    { "month": "Apr", "value": 81 }
+  ],
+  "_lineChartTest_itemSchema": {
+    "type": "array",
+    "renderAs": "lineChart",
+    "label": "Line Chart",
+    "itemSchema": {
+      "type": "object",
+      "renderAs": "objectForm",
+      "fields": {
+        "month": { "type": "string", "renderAs": "text", "label": "Month" },
+        "value": { "type": "number", "renderAs": "number", "label": "Value" }
+      }
+    },
+    "chartConfig": {
+      "xKey": "month",
+      "yKey": "value",
+      "color": "#6b46c1"
+    }
+  },
+  "_enabled_lineChartTest": true,
+  "_completed_lineChartTest": false
+}

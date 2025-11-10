@@ -416,6 +416,40 @@ app.post('/api/import/:type', upload.single('file'), async (req, res) => {
 });
 
 // ============================================
+// LOGO UPLOAD
+// ============================================
+
+// POST upload custom logo
+app.post('/api/upload-logo', upload.single('logo'), async (req, res) => {
+  try {
+    const file = req.file;
+    
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    // Create public/logos directory if it doesn't exist
+    const logosDir = path.join(__dirname, 'public', 'logos');
+    await fs.mkdir(logosDir, { recursive: true });
+    
+    // Generate filename with timestamp
+    const ext = path.extname(file.originalname);
+    const filename = `custom-logo-${Date.now()}${ext}`;
+    const targetPath = path.join(logosDir, filename);
+    
+    // Move file from uploads to public/logos
+    await fs.rename(file.path, targetPath);
+    
+    // Return URL
+    const logoUrl = `/logos/${filename}`;
+    res.json({ url: logoUrl });
+  } catch (error) {
+    console.error('Logo upload error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
 // TEMPLATES
 // ============================================
 

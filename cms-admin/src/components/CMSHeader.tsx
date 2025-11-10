@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 import APIDashboardModal from './APIDashboardModal';
 
@@ -13,11 +14,22 @@ interface CMSHeaderProps {
 
 export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpenTemplateBuilder, onOpenSystemSettings }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
+  const { isAuthenticated, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
   const [engineSubmenuOpen, setEngineSubmenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [customLogo, setCustomLogo] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  // Load custom logo from system settings
+  useEffect(() => {
+    const settings = localStorage.getItem('system-settings');
+    if (settings) {
+      const parsed = JSON.parse(settings);
+      setCustomLogo(parsed.customLogo || null);
+    }
+  }, []);
 
   // Handle clicks outside the menu to close it
   useEffect(() => {
@@ -77,8 +89,8 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
             whileHover={{ scale: 1.05 }}
           >
             <img 
-              src="/FIS-Logo.png" 
-              alt="FIS Logo" 
+              src={customLogo ? `http://localhost:3001${customLogo}` : "/FIS-Logo.png"}
+              alt="Logo" 
               className="h-10 w-auto"
             />
             <div>
@@ -319,7 +331,6 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
               />
             </div>
           </form>
-
           {/* Actions */}
           <div className="flex items-center space-x-2">
             <motion.button
@@ -346,6 +357,20 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
                 <Sun className="w-5 h-5 text-yellow-400" />
               )}
             </motion.button>
+
+            {/* Logout Button - Show only when authenticated */}
+            {isAuthenticated && (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={logout}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-400 transition-all border border-red-500/30"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="text-sm font-roobert-medium">Logout</span>
+              </motion.button>
+            )}
           </div>
         </div>
       </div>

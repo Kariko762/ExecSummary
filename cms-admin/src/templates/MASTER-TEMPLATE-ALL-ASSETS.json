@@ -1,0 +1,445 @@
+{
+  "id": "master-template",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-10",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  
+  "_textInput_type": "text",
+  "_textInput_itemSchema": {
+    "type": "string",
+    "renderAs": "text",
+    "label": "Text Input",
+    "placeholder": "Enter text..."
+  },
+  "textInput": "Sample short text",
+  "_enabled_textInput": true,
+  "_completed_textInput": false,
+  
+  "_textareaInput_type": "textarea",
+  "_textareaInput_itemSchema": {
+    "type": "string",
+    "renderAs": "textarea",
+    "label": "Textarea Input",
+    "placeholder": "Enter multi-line text..."
+  },
+  "textareaInput": "This quarter we focused on streamlining our sales pipeline and improving customer engagement metrics.",
+  "_enabled_textareaInput": true,
+  "_completed_textareaInput": false,
+  
+  "_numberInput_type": "number",
+  "_numberInput_itemSchema": {
+    "type": "number",
+    "renderAs": "number",
+    "label": "Number Input"
+  },
+  "numberInput": 42,
+  "_enabled_numberInput": true,
+  "_completed_numberInput": false,
+  
+  "_dateInput_type": "text",
+  "_dateInput_itemSchema": {
+    "type": "date",
+    "renderAs": "text",
+    "label": "Date Input"
+  },
+  "dateInput": "2025-11-10",
+  "_enabled_dateInput": true,
+  "_completed_dateInput": false,
+  
+  "_highlights_type": "list",
+  "_highlights_itemSchema": {
+    "type": "string",
+    "renderAs": "text"
+  },
+  "highlights": [
+    "Closed 15 enterprise deals",
+    "Launched new product feature",
+    "Expanded into EMEA region",
+    "Achieved 98% customer satisfaction"
+  ],
+  "_enabled_highlights": true,
+  "_completed_highlights": false,
+  
+  "_keyPoints_type": "listNoTitle",
+  "_keyPoints_itemSchema": {
+    "type": "string",
+    "renderAs": "text"
+  },
+  "keyPoints": [
+    "Completed Phase 1 ahead of schedule",
+    "Reduced operational costs by 30%",
+    "Hired 5 new team members"
+  ],
+  "_enabled_keyPoints": true,
+  "_completed_keyPoints": false,
+  
+  "_metrics_type": "nestedCards",
+  "_metrics_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": { "type": "string", "renderAs": "text", "label": "Title" },
+      "value": { "type": "string", "renderAs": "text", "label": "Value" }
+    }
+  },
+  "metrics": [
+    { "title": "Revenue", "value": "$2.4M" },
+    { "title": "Growth", "value": "+35%" },
+    { "title": "Customers", "value": "1,250" },
+    { "title": "Retention", "value": "94%" }
+  ],
+  "_enabled_metrics": true,
+  "_completed_metrics": false,
+  
+  "_teamData_type": "object",
+  "_teamData_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "label": "Team Information",
+    "fields": {
+      "team": { "type": "string", "renderAs": "text", "label": "Team Name" },
+      "lead": { "type": "string", "renderAs": "text", "label": "Team Lead" },
+      "members": { "type": "number", "renderAs": "number", "label": "Member Count" }
+    }
+  },
+  "teamData": {
+    "team": "Revenue Operations",
+    "lead": "Sarah Johnson",
+    "members": 12
+  },
+  "_enabled_teamData": true,
+  "_completed_teamData": false,
+  
+  "_projectStatus_type": "keyValue",
+  "_projectStatus_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "label": "Project Status",
+    "fields": {
+      "key": { "type": "string", "renderAs": "text", "label": "Key" },
+      "value": { "type": "string", "renderAs": "text", "label": "Value" }
+    }
+  },
+  "projectStatus": {
+    "key": "Current Status",
+    "value": "On Track"
+  },
+  "_enabled_projectStatus": true,
+  "_completed_projectStatus": false,
+  
+  "_summary_type": "richText",
+  "_summary_itemSchema": {
+    "type": "string",
+    "renderAs": "richText",
+    "label": "Executive Summary",
+    "placeholder": "Enter formatted text..."
+  },
+  "summary": "## Q4 2025 Overview\n\nWe achieved **record-breaking growth** this quarter:\n\n- Revenue up 35% YoY\n- Customer base expanded to 1,250+\n- Launched 3 major features\n\n> \"Best quarter in company history\" - CEO",
+  "_enabled_summary": true,
+  "_completed_summary": false,
+  
+  "_calculation_type": "expression",
+  "_calculation_itemSchema": {
+    "type": "string",
+    "renderAs": "text",
+    "label": "Dynamic Expression"
+  },
+  "calculation": "{{ revenue.current }} / {{ revenue.target }} = {{ (revenue.current / revenue.target * 100).toFixed(1) }}%",
+  "_enabled_calculation": true,
+  "_completed_calculation": false,
+  
+  "_codeSnippet_type": "codeBlock",
+  "_codeSnippet_itemSchema": {
+    "type": "string",
+    "renderAs": "codeBlock",
+    "label": "Code Example"
+  },
+  "codeSnippet": "const calculateGrowth = (current, previous) => {\n  return ((current - previous) / previous * 100).toFixed(2);\n};\n\nconsole.log(calculateGrowth(2400000, 1800000)); // 33.33%",
+  "_enabled_codeSnippet": true,
+  "_completed_codeSnippet": false,
+  
+  "_executiveQuote_type": "quote",
+  "_executiveQuote_itemSchema": {
+    "type": "string",
+    "renderAs": "quote",
+    "label": "Leadership Quote"
+  },
+  "executiveQuote": "Our team executed flawlessly this quarter. The dedication and innovation demonstrated by everyone has positioned us perfectly for continued success.",
+  "_enabled_executiveQuote": true,
+  "_completed_executiveQuote": false,
+  
+  "_revenueChart_type": "pieChart",
+  "_revenueChart_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "name": { "type": "string", "renderAs": "text", "label": "Label", "required": true },
+      "value": { "type": "number", "renderAs": "number", "label": "Value", "required": true }
+    }
+  },
+  "_revenueChart_chartConfig": {
+    "dataKey": "value",
+    "nameKey": "name",
+    "colors": ["#431C5B", "#1D1F48", "#B21A53", "#3bcd3e", "#3B82F6", "#F59E0B"],
+    "showLegend": true,
+    "showTooltip": true,
+    "innerRadius": 0,
+    "outerRadius": 80
+  },
+  "revenueChart": [
+    { "name": "Enterprise", "value": 45 },
+    { "name": "Mid-Market", "value": 30 },
+    { "name": "SMB", "value": 25 }
+  ],
+  "_enabled_revenueChart": true,
+  "_completed_revenueChart": false,
+  
+  "_quarterlyPerformance_type": "barChart",
+  "_quarterlyPerformance_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "name": { "type": "string", "renderAs": "text", "label": "Label", "required": true },
+      "value": { "type": "number", "renderAs": "number", "label": "Value", "required": true }
+    }
+  },
+  "_quarterlyPerformance_chartConfig": {
+    "xAxisKey": "name",
+    "bars": [{ "dataKey": "value", "fill": "#6B1B5E", "name": "Revenue" }],
+    "orientation": "vertical",
+    "showGrid": true,
+    "showLegend": true,
+    "stacked": false
+  },
+  "quarterlyPerformance": [
+    { "name": "Q1", "value": 2400 },
+    { "name": "Q2", "value": 3100 },
+    { "name": "Q3", "value": 2800 },
+    { "name": "Q4", "value": 3500 }
+  ],
+  "_enabled_quarterlyPerformance": true,
+  "_completed_quarterlyPerformance": false,
+  
+  "_growthTrend_type": "lineChart",
+  "_growthTrend_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "name": { "type": "string", "renderAs": "text", "label": "Label", "required": true },
+      "value": { "type": "number", "renderAs": "number", "label": "Value", "required": true }
+    }
+  },
+  "_growthTrend_chartConfig": {
+    "xAxisKey": "name",
+    "lines": [{ "dataKey": "value", "stroke": "#6B1B5E", "name": "Growth" }],
+    "showGrid": true,
+    "showLegend": true,
+    "showDots": true,
+    "curved": true
+  },
+  "growthTrend": [
+    { "name": "Jan", "value": 650 },
+    { "name": "Feb", "value": 720 },
+    { "name": "Mar", "value": 830 },
+    { "name": "Apr", "value": 900 },
+    { "name": "May", "value": 1050 },
+    { "name": "Jun", "value": 1200 }
+  ],
+  "_enabled_growthTrend": true,
+  "_completed_growthTrend": false,
+  
+  "_completionRate_type": "radialChart",
+  "_completionRate_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "name": { "type": "string", "renderAs": "text", "label": "Label", "required": true },
+      "value": { "type": "number", "renderAs": "number", "label": "Value", "required": true }
+    }
+  },
+  "_completionRate_chartConfig": {
+    "dataKey": "value",
+    "maxValue": 100,
+    "colors": ["#431C5B", "#1D1F48", "#B21A53", "#3bcd3e", "#3B82F6", "#F59E0B"],
+    "showPercentage": true,
+    "thickness": 20
+  },
+  "completionRate": [
+    { "name": "Completion", "value": 87 }
+  ],
+  "_enabled_completionRate": true,
+  "_completed_completionRate": false,
+  
+  "_productImage_type": "image",
+  "_productImage_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "label": "Product Screenshot",
+    "fields": {
+      "src": { "type": "string", "renderAs": "text", "label": "Image URL", "required": true },
+      "alt": { "type": "string", "renderAs": "text", "label": "Alt Text" },
+      "caption": { "type": "string", "renderAs": "text", "label": "Caption" },
+      "autoScale": { "type": "boolean", "renderAs": "checkbox", "label": "Auto Scale" },
+      "width": { "type": "number", "renderAs": "number", "label": "Width (px)" },
+      "height": { "type": "number", "renderAs": "number", "label": "Height (px)" }
+    }
+  },
+  "productImage": {
+    "src": "/images/product-dashboard.png",
+    "alt": "New Dashboard Feature",
+    "caption": "Our redesigned analytics dashboard launched in Q4",
+    "autoScale": true
+  },
+  "_enabled_productImage": true,
+  "_completed_productImage": false,
+  
+  "_demoVideo_type": "video",
+  "_demoVideo_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "label": "Product Demo",
+    "fields": {
+      "src": { "type": "string", "renderAs": "text", "label": "Video URL", "required": true },
+      "poster": { "type": "string", "renderAs": "text", "label": "Poster Image" },
+      "controls": { "type": "boolean", "renderAs": "checkbox", "label": "Show Controls" },
+      "autoplay": { "type": "boolean", "renderAs": "checkbox", "label": "Autoplay" },
+      "loop": { "type": "boolean", "renderAs": "checkbox", "label": "Loop" },
+      "muted": { "type": "boolean", "renderAs": "checkbox", "label": "Muted" },
+      "autoScale": { "type": "boolean", "renderAs": "checkbox", "label": "Auto Scale" },
+      "width": { "type": "number", "renderAs": "number", "label": "Width (px)" },
+      "height": { "type": "number", "renderAs": "number", "label": "Height (px)" }
+    }
+  },
+  "demoVideo": {
+    "src": "/videos/product-demo.mp4",
+    "poster": "/images/video-thumbnail.jpg",
+    "controls": true,
+    "autoplay": false,
+    "loop": false,
+    "muted": false,
+    "autoScale": true
+  },
+  "_enabled_demoVideo": true,
+  "_completed_demoVideo": false,
+  
+  "_webinarRecording_type": "embeddedVideo",
+  "_webinarRecording_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "label": "Webinar Recording",
+    "fields": {
+      "embedUrl": { "type": "string", "renderAs": "text", "label": "Embed URL", "required": true },
+      "platform": { "type": "string", "renderAs": "select", "label": "Platform", "options": ["youtube", "vimeo", "custom"] },
+      "autoScale": { "type": "boolean", "renderAs": "checkbox", "label": "Auto Scale (16:9)" },
+      "width": { "type": "number", "renderAs": "number", "label": "Width (px)" },
+      "height": { "type": "number", "renderAs": "number", "label": "Height (px)" },
+      "allowFullscreen": { "type": "boolean", "renderAs": "checkbox", "label": "Allow Fullscreen" },
+      "title": { "type": "string", "renderAs": "text", "label": "Title" }
+    }
+  },
+  "webinarRecording": {
+    "embedUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "platform": "youtube",
+    "autoScale": true,
+    "allowFullscreen": true,
+    "title": "Q4 Strategy Webinar"
+  },
+  "_enabled_webinarRecording": true,
+  "_completed_webinarRecording": false,
+  
+  "_divider_type": "hr",
+  "divider": "",
+  "_enabled_divider": true,
+  "_completed_divider": false,
+  
+  "_issuesBlockers_type": "statusBoard",
+  "_issuesBlockers_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Title",
+        "required": true,
+        "displayAs": "title"
+      },
+      "description": {
+        "type": "string",
+        "renderAs": "textarea",
+        "label": "Description",
+        "displayAs": "subtitle"
+      },
+      "priority": {
+        "type": "string",
+        "renderAs": "select",
+        "label": "Priority",
+        "options": ["low", "medium", "high", "critical"],
+        "displayAs": "badge",
+        "badgeColors": {
+          "critical": "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800",
+          "high": "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border-orange-200 dark:border-orange-800",
+          "medium": "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800",
+          "low": "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800"
+        }
+      },
+      "action": {
+        "type": "string",
+        "renderAs": "textarea",
+        "label": "Action",
+        "displayAs": "label-value"
+      },
+      "timeline": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Timeline",
+        "displayAs": "detail"
+      },
+      "status": {
+        "type": "string",
+        "renderAs": "select",
+        "label": "Status",
+        "options": ["open", "in-progress", "resolved"],
+        "required": true
+      }
+    }
+  },
+  "issuesBlockers": [
+    {
+      "title": "System Performance Issue",
+      "description": "Application response time degraded during peak hours",
+      "priority": "high",
+      "action": "Implementing caching layer and database optimization",
+      "timeline": "End of Q4 2025",
+      "status": "in-progress"
+    },
+    {
+      "title": "Documentation Update",
+      "description": "API documentation needs to be updated with new endpoints",
+      "priority": "medium",
+      "action": "Technical writer assigned, working on updates",
+      "timeline": "Mid-December 2025",
+      "status": "in-progress"
+    },
+    {
+      "title": "Security Audit Complete",
+      "description": "Third-party security audit completed with no critical findings",
+      "priority": "low",
+      "action": "Minor recommendations implemented",
+      "timeline": "Completed Nov 2025",
+      "status": "resolved"
+    }
+  ],
+  "_enabled_issuesBlockers": true,
+  "_completed_issuesBlockers": false,
+  
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "Master Template - All 22 Asset Types",
+  "_template_description": "Comprehensive template showcasing all 22 valid asset types with example data",
+  "_template_created": "2025-11-10T08:00:00.000Z",
+  "_template_updated": "2025-11-10T08:00:00.000Z"
+}

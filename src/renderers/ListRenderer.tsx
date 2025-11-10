@@ -18,12 +18,16 @@ export const ListRenderer: React.FC<RendererProps> = ({
   const isKeyValue = value && typeof value === 'object' && !Array.isArray(value);
   const items = Array.isArray(value) ? value : [];
   const kvPairs = isKeyValue ? Object.entries(value) : [];
+  const showTitle = schema.renderAs !== 'listNoTitle';
 
   if (mode === 'display') {
     if (isKeyValue) {
       // Display key-value pairs
       return (
         <div className="space-y-1.5">
+          {showTitle && schema.label && (
+            <div className={`${getClasses.h2()} mb-2`}>{schema.label}</div>
+          )}
           {kvPairs.length > 0 ? (
             kvPairs.map(([key, val], idx) => (
               <div key={idx} className="flex items-baseline gap-2">
@@ -41,6 +45,9 @@ export const ListRenderer: React.FC<RendererProps> = ({
     // Display simple list
     return (
       <div className="space-y-2">
+        {showTitle && schema.label && (
+          <div className={`${getClasses.h2()} mb-2`}>{schema.label}</div>
+        )}
         {items.length > 0 ? (
           items.map((item, idx) => (
             <div key={idx} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
@@ -74,8 +81,6 @@ export const ListRenderer: React.FC<RendererProps> = ({
       handleAdd();
     }
   };
-
-  const showTitle = schema.renderAs !== 'listNoTitle';
 
   return (
     <div className="space-y-3">

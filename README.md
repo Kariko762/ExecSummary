@@ -38,6 +38,9 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - **⚙️ System Settings**: Configure authentication requirements per app via UI
 - **🎨 Design System Manager**: Centralized color, typography, and spacing configuration
 - **📐 Template Builder**: 🆕 Visual drag-and-drop template creation with validation
+- **🎯 Text Alignment**: 🆕 Left/center/right alignment controls for all asset types
+- **⚠️ Unsaved Changes**: 🆕 Elegant warning modal before losing work
+- **🏷️ Template Tracking**: 🆕 Shows base template name when loaded
 - **📊 Chart Rendering**: 🆕 Beautiful charts with custom tooltips showing all values and percentages
 - **🎨 Categorical Coloring**: 🆕 Unique colors for chart data (A, B, C, D) from design system palette
 - **⚠️ Inline Validation**: 🆕 Contextual warnings on section headers for generic names
