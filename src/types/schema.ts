@@ -6,6 +6,7 @@ export type RenderType =
   | 'number'            // Numeric input
   | 'list'              // Array with add/remove (like highlights)
   | 'listNoTitle'       // List without section header
+  | 'keyValueList'      // Dynamic key-value pairs with custom labels
   | 'metricCards'       // Grid of metric cards
   | 'nestedCards'       // Array of objects as cards (departments)
   | 'objectForm'        // Object with labeled fields
@@ -19,7 +20,12 @@ export type RenderType =
   | 'radialChart'       // Radial/donut chart
   | 'codeBlock'         // Code block with syntax highlighting
   | 'quote'             // Blockquote with glassmorphism styling
-  | 'hr';               // Horizontal rule/divider
+  | 'hr'                // Horizontal rule/divider
+  | 'expression'        // Expression with icon support
+  | 'image'             // Image upload/display
+  | 'video'             // Video upload/display
+  | 'embeddedVideo'     // Embedded video URL
+  | 'statusBoard';      // Table layout
 
 export type ValidationRule = {
   rule: 'required' | 'min' | 'max' | 'pattern' | 'email' | 'url' | 'custom';

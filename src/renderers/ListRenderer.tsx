@@ -22,17 +22,14 @@ export const ListRenderer: React.FC<RendererProps> = ({
 
   if (mode === 'display') {
     if (isKeyValue) {
-      // Display key-value pairs
+      // Display key-value pairs (LABEL : VALUE format)
       return (
         <div className="space-y-1.5">
-          {showTitle && schema.label && (
-            <div className={`${getClasses.h2()} mb-2`}>{schema.label}</div>
-          )}
           {kvPairs.length > 0 ? (
             kvPairs.map(([key, val], idx) => (
-              <div key={idx} className="flex items-baseline gap-2">
-                <span className={getClasses.label()}>{key}:</span>
-                <span className={getClasses.value()}>{String(val)}</span>
+              <div key={idx} className="flex items-start gap-2 text-sm">
+                <span className="text-sm font-roobert-light text-fis-eggplant dark:text-fis-raspberry">{key}:</span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">{renderWithExpressions(String(val))}</span>
               </div>
             ))
           ) : (

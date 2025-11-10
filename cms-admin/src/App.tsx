@@ -1055,7 +1055,10 @@ function App() {
           {/* Template Builder */}
           {showTemplateBuilder && (
             <div className="fixed inset-0 z-[100]">
-              <TemplateBuilder onBack={() => setShowTemplateBuilder(false)} />
+              <TemplateBuilder 
+                onBack={() => setShowTemplateBuilder(false)}
+                showNotification={showNotification}
+              />
             </div>
           )}
 

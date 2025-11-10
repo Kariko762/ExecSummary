@@ -87,7 +87,7 @@ const EXAMPLES: RenderExample[] = [
     description: 'Key-value pairs with labels',
     useCase: 'Metrics, data points with labels',
     schema: {
-      renderAs: 'list',
+      renderAs: 'keyValueList',
       label: 'Key Metrics',
       helpText: 'Important performance indicators',
     },

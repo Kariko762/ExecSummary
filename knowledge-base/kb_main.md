@@ -194,6 +194,28 @@ Process documentation for content publishing, template management, and troublesh
 
 ---
 
+## 🆕 Recent Updates (November 10, 2025)
+
+### KeyValueListRenderer
+- **New Renderer**: Dynamic key-value pair editor with add/remove functionality
+- **Display Mode**: Purple labels with Roobert-light font, expression support
+- **Edit Mode**: Label/Value inputs, Add Pair button, delete on hover
+- **Usage**: Perfect for executive details, contact info, role descriptions
+- **Example**: `{ "Role": "CEO", "Department": "Executive Leadership" }`
+
+### Notification System
+- **Central System**: All notifications now use unified `showNotification()` from App.tsx
+- **Confirmation Modals**: Styled modals for destructive actions (Remove All, Unsaved Changes)
+- **Pattern**: AlertCircle icon, two-button layout, smooth animations
+- **Auto-dismiss**: Success/error messages disappear after 5 seconds
+
+### Template Updates
+- **MASTER Template**: Updated to 23 asset types including keyValueList
+- **Bar Charts**: Added axis labels and custom legends
+- **List Renderer**: Now supports both arrays (bullets) and objects (key-value pairs)
+
+---
+
 ## 📞 Support & Contributing
 
 ### Getting Help
@@ -240,4 +262,4 @@ All knowledge base documents are organized by category:
 
 ---
 
-*Last Updated: November 8, 2025*
+*Last Updated: November 10, 2025*

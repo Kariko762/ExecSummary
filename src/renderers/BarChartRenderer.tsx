@@ -100,59 +100,96 @@ export const BarChartRenderer: React.FC<RendererProps> = ({
     const colorPalette = ChartColors.palette;
 
     return (
-      <div style={{ width: '100%', height: '320px', minHeight: '320px' }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={items}
-            layout={isVertical ? 'horizontal' : 'vertical'}
-            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-          >
-            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
-            {isVertical ? (
-              <>
-                <XAxis type="category" dataKey={xAxisKey} stroke={ChartColors.ui.axis} />
-                <YAxis type="number" stroke={ChartColors.ui.axis} />
-              </>
-            ) : (
-              <>
-                <XAxis type="number" stroke={ChartColors.ui.axis} />
-                <YAxis type="category" dataKey={xAxisKey} stroke={ChartColors.ui.axis} />
-              </>
-            )}
-            {isCategorical ? (
-              // Categorical data: each bar gets a different color from the palette
-              <Bar 
-                dataKey="value" 
-                radius={8}
-              >
-                {items.map((_entry: any, index: number) => (
-                  <Cell key={`cell-${index}`} fill={colorPalette[index % colorPalette.length]} />
-                ))}
-              </Bar>
-            ) : (
-              // Multi-series data: use configured bars
-              bars.map((barConfig, index) => (
-                <Bar
-                  key={index}
-                  dataKey={barConfig.dataKey}
-                  fill={barConfig.fill}
-                  name={barConfig.name}
-                  stackId={stacked ? 'stack' : undefined}
+      <div className="space-y-4">
+        <div style={{ width: '100%', height: '320px', minHeight: '320px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={items}
+              layout={isVertical ? 'horizontal' : 'vertical'}
+              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+            >
+              {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
+              {isVertical ? (
+                <>
+                  <XAxis 
+                    type="category" 
+                    dataKey={xAxisKey} 
+                    stroke={ChartColors.ui.axis}
+                    style={{ fontSize: '12px', fontFamily: 'Roobert-Medium' }}
+                  />
+                  <YAxis 
+                    type="number" 
+                    stroke={ChartColors.ui.axis}
+                    style={{ fontSize: '12px', fontFamily: 'Roobert-Medium' }}
+                  />
+                </>
+              ) : (
+                <>
+                  <XAxis 
+                    type="number" 
+                    stroke={ChartColors.ui.axis}
+                    style={{ fontSize: '12px', fontFamily: 'Roobert-Medium' }}
+                  />
+                  <YAxis 
+                    type="category" 
+                    dataKey={xAxisKey} 
+                    stroke={ChartColors.ui.axis}
+                    style={{ fontSize: '12px', fontFamily: 'Roobert-Medium' }}
+                  />
+                </>
+              )}
+              {isCategorical ? (
+                // Categorical data: each bar gets a different color from the palette
+                <Bar 
+                  dataKey="value" 
                   radius={8}
+                >
+                  {items.map((_entry: any, index: number) => (
+                    <Cell key={`cell-${index}`} fill={colorPalette[index % colorPalette.length]} />
+                  ))}
+                </Bar>
+              ) : (
+                // Multi-series data: use configured bars
+                bars.map((barConfig, index) => (
+                  <Bar
+                    key={index}
+                    dataKey={barConfig.dataKey}
+                    fill={barConfig.fill}
+                    name={barConfig.name}
+                    stackId={stacked ? 'stack' : undefined}
+                    radius={8}
+                  />
+                ))
+              )}
+              {isCategorical ? (
+                <Tooltip 
+                  content={<CustomCategoricalTooltip />}
+                  cursor={{ fill: 'rgba(148, 77, 230, 0.05)', fillOpacity: 0.5 }}
                 />
-              ))
-            )}
-            {isCategorical ? (
-              <Tooltip 
-                content={<CustomCategoricalTooltip />}
-                cursor={{ fill: 'rgba(148, 77, 230, 0.05)', fillOpacity: 0.5 }}
-              />
-            ) : (
-              <Tooltip cursor={{ fill: 'rgba(148, 77, 230, 0.05)', fillOpacity: 0.5 }} />
-            )}
-            {!isCategorical && showLegend && <Legend />}
-          </BarChart>
-        </ResponsiveContainer>
+              ) : (
+                <Tooltip cursor={{ fill: 'rgba(148, 77, 230, 0.05)', fillOpacity: 0.5 }} />
+              )}
+              {!isCategorical && showLegend && <Legend />}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Custom Legend for Categorical Data */}
+        {isCategorical && showLegend && (
+          <div className="flex flex-wrap justify-center gap-4 px-4">
+            {items.map((item: any, index: number) => (
+              <div key={index} className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-sm flex-shrink-0" 
+                  style={{ backgroundColor: colorPalette[index % colorPalette.length] }}
+                />
+                <span className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+                  {item.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }

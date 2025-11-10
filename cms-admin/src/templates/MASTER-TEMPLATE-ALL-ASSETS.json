@@ -76,6 +76,21 @@
   "_enabled_keyPoints": true,
   "_completed_keyPoints": false,
   
+  "_executiveDetails_type": "keyValueList",
+  "_executiveDetails_itemSchema": {
+    "type": "object",
+    "renderAs": "keyValueList",
+    "label": "Executive Details"
+  },
+  "executiveDetails": {
+    "Role": "Chief Executive Officer",
+    "Department": "Executive Leadership",
+    "Location": "New York, NY",
+    "Reports To": "Board of Directors"
+  },
+  "_enabled_executiveDetails": true,
+  "_completed_executiveDetails": false,
+  
   "_metrics_type": "nestedCards",
   "_metrics_itemSchema": {
     "type": "object",
@@ -438,8 +453,8 @@
   
   "status": "draft",
   "protectionEnabled": false,
-  "_template_name": "Master Template - All 22 Asset Types",
-  "_template_description": "Comprehensive template showcasing all 22 valid asset types with example data",
+  "_template_name": "Master Template - All 23 Asset Types",
+  "_template_description": "Comprehensive template showcasing all 23 valid asset types with example data (including keyValueList)",
   "_template_created": "2025-11-10T08:00:00.000Z",
-  "_template_updated": "2025-11-10T08:00:00.000Z"
+  "_template_updated": "2025-11-10T20:00:00.000Z"
 }

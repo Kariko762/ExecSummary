@@ -15,10 +15,12 @@ import { RadialChartRenderer } from './RadialChartRenderer';
 import { HorizontalRuleRenderer } from './HorizontalRuleRenderer';
 import { CodeBlockRenderer } from './CodeBlockRenderer';
 import { QuoteRenderer } from './QuoteRenderer';
+import { ExpressionRenderer } from './ExpressionRenderer';
 import { ImageRenderer } from './ImageRenderer';
 import { VideoRenderer } from './VideoRenderer';
 import { EmbeddedVideoRenderer } from './EmbeddedVideoRenderer';
 import { TableLayoutRenderer } from './TableLayoutRenderer';
+import { KeyValueListRenderer } from './KeyValueListRenderer';
 
 /**
  * Factory component that routes to the appropriate renderer based on schema type
@@ -48,6 +50,10 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
     case 'list':
     case 'listNoTitle':
       renderer = <ListRenderer {...props} />;
+      break;
+    
+    case 'keyValueList':
+      renderer = <KeyValueListRenderer {...props} />;
       break;
     
     case 'metricCards':
@@ -97,6 +103,10 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
     
     case 'quote':
       renderer = <QuoteRenderer {...props} />;
+      break;
+    
+    case 'expression':
+      renderer = <ExpressionRenderer {...props} />;
       break;
     
     case 'image':

@@ -6,7 +6,7 @@ import {
   Eye, Code, Save, Download, Upload, PlayCircle, TrendingUp, AlertTriangle,
   PieChart, LineChart, Activity, Hash, Calendar, MessageSquare, Palette,
   Key, Quote, Terminal, AlignLeft, AlignCenter, AlignRight, Minus, AlertCircle, Image, Video, Film,
-  Columns, ArrowLeft
+  Columns, ArrowLeft, CheckCircle, XCircle
 } from 'lucide-react';
 import type { FieldSchema } from '../../../src/types/schema';
 import { ChartColors } from '../../../src/design-system';
@@ -15,6 +15,7 @@ import AssetPreviewModal from './AssetPreviewModal';
 
 interface TemplateBuilderProps {
   onBack: () => void;
+  showNotification?: (type: 'success' | 'error' | 'warning', message: string) => void;
 }
 
 // Layout zone types for snap layout feature
@@ -149,13 +150,18 @@ const ASSET_LIBRARY: AssetCategory[] = [
     assets: [
       {
         id: 'array',
-        name: 'Simple List',
-        renderType: 'list',
-        description: 'Basic array of items with labels',
-        schema: { type: 'array', renderAs: 'list', label: 'New List', itemSchema: { type: 'string', renderAs: 'text' } },
+        name: 'List with Labels',
+        renderType: 'keyValueList',
+        description: 'Key-value pairs with labels',
+        schema: { type: 'object', renderAs: 'keyValueList', label: 'Details' },
         icon: List,
         iconColor: 'text-green-500',
-        exampleData: ['Closed 15 enterprise deals', 'Launched new product feature', 'Expanded into EMEA region', 'Achieved 98% customer satisfaction'],
+        exampleData: {
+          'Role': 'Chief Executive Officer',
+          'Department': 'Executive Leadership',
+          'Location': 'New York, NY',
+          'Reports To': 'Board of Directors'
+        },
         supportsMultiColumn: true
       },
       {
@@ -268,10 +274,10 @@ const ASSET_LIBRARY: AssetCategory[] = [
         name: 'Expression',
         renderType: 'expression',
         description: 'Dynamic expressions',
-        schema: { type: 'string', renderAs: 'text', label: 'New Expression' },
+        schema: { type: 'string', renderAs: 'expression', label: 'New Expression' },
         icon: Code,
         iconColor: 'text-orange-600',
-        exampleData: '{{ revenue.current }} / {{ revenue.target }} = {{ (revenue.current / revenue.target * 100).toFixed(1) }}%',
+        exampleData: 'Revenue: {{currency:2400000}} ({{percent:33.3}} growth) {{trend:up}}',
         supportsMultiColumn: true
       },
       {
@@ -791,7 +797,7 @@ const SnapZoneOverlay = ({ sectionId, onZoneDrop, hoveredZone, onZoneHover }: Sn
   );
 };
 
-export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
+export default function TemplateBuilder({ onBack, showNotification: showNotificationProp }: TemplateBuilderProps) {
   // Initialize with standard header section
   const [sections, setSections] = useState<TemplateSection[]>([
     {
@@ -869,8 +875,18 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   const [isInitialLoad, setIsInitialLoad] = useState(true); // Track if this is the first load
   const [isSaving, setIsSaving] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
-  const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
+  const [showRemoveAllModal, setShowRemoveAllModal] = useState(false);
+  
+  // Use central notification system or fallback to console
+  const showNotification = (type: 'success' | 'error' | 'warning', message: string) => {
+    if (showNotificationProp) {
+      showNotificationProp(type, message);
+    } else {
+      console.log(`[${type.toUpperCase()}] ${message}`);
+    }
+  };
+  
   const [schemaPropertiesOpen, setSchemaPropertiesOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [showLoadTemplateModal, setShowLoadTemplateModal] = useState(false);
@@ -998,14 +1014,6 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     if (sequence.length === 3) return '▭▭▭'; // 33/33/33
     return null;
   };
-
-  // Auto-hide notification after 5 seconds
-  useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => setNotification(null), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
 
   // Track unsaved changes when sections are modified
   useEffect(() => {
@@ -1202,11 +1210,11 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       setShowLoadTemplateModal(false);
       setHasUnsavedChanges(false); // Clear unsaved changes after load
       setIsInitialLoad(true); // Treat loaded template as initial state
-      setNotification({ type: 'success', message: `Template loaded! You can now edit and save as a new template.` });
+      showNotification('success', `Template loaded! You can now edit and save as a new template.`);
       
     } catch (error) {
       console.error('Failed to load template:', error);
-      setNotification({ type: 'error', message: 'Failed to load template' });
+      showNotification('error', 'Failed to load template');
     }
   };
 
@@ -1233,7 +1241,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     
-    setNotification({ type: 'success', message: 'Template exported successfully!' });
+    showNotification('success', 'Template exported successfully!');
   };
 
   // Test template in EditorModalV2
@@ -1276,7 +1284,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         // If section is empty, use first zone from section's layout type
         if (section.fields.length === 0) {
           if (!section.sectionLayoutType) {
-            setNotification({ type: 'error', message: 'Section has no layout type. Please create section with layout picker.' });
+            showNotification('error', 'Section has no layout type. Please create section with layout picker.');
             return;
           }
           
@@ -1308,12 +1316,12 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         // Sequential placement for non-empty sections
         const nextPlacement = getNextZoneInSequence(section);
         if (!nextPlacement) {
-          setNotification({ type: 'error', message: 'Cannot determine next placement zone' });
+          showNotification('error', 'Cannot determine next placement zone');
           return;
         }
 
         if (!nextPlacement.canAdd) {
-          setNotification({ type: 'warning', message: nextPlacement.warning || 'Cannot add more assets to this row' });
+          showNotification('warning', nextPlacement.warning || 'Cannot add more assets to this row');
           return;
         }
 
@@ -1564,7 +1572,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
 
   const removeSection = (sectionId: string) => {
     if (sectionId === 'section-header') {
-      setNotification({ type: 'error', message: 'Cannot remove the standard header section' });
+      showNotification('error', 'Cannot remove the standard header section');
       return;
     }
     if (window.confirm('Remove this section and all its fields?')) {
@@ -1590,7 +1598,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       }]
     };
     setSections([...sections, layoutSection]);
-    setNotification({ type: 'success', message: `${asset.name} added` });
+    showNotification('success', `${asset.name} added`);
   };
 
   // Legacy function - now calls generic
@@ -1602,7 +1610,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   // Field management
   const removeField = (sectionId: string, fieldId: string) => {
     if (sectionId === 'section-header') {
-      setNotification({ type: 'error', message: 'Cannot remove required header fields' });
+      showNotification('error', 'Cannot remove required header fields');
       return;
     }
     
@@ -1617,6 +1625,19 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
     if (selectedField?.fieldId === fieldId) {
       setSelectedField(null);
     }
+  };
+
+  const removeAllSections = () => {
+    setShowRemoveAllModal(true);
+  };
+
+  // Confirm and execute remove all
+  const confirmRemoveAll = () => {
+    setSections(prev => prev.filter(section => section.id === 'section-header'));
+    setSelectedSection('section-header');
+    setSelectedField(null);
+    setShowRemoveAllModal(false);
+    showNotification('success', 'All sections removed (header retained)');
   };
 
   const updateFieldProperty = (sectionId: string, fieldId: string, property: string, value: any) => {
@@ -1737,7 +1758,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   // Open save modal
   const handleSaveClick = () => {
     if (sections.length === 0 || sections.every(s => s.fields.length === 0)) {
-      setNotification({ type: 'error', message: 'Please add at least one field to your template' });
+      showNotification('error', 'Please add at least one field to your template');
       return;
     }
     setShowSaveModal(true);
@@ -1755,7 +1776,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
   // Start save process with validation
   const saveTemplate = () => {
     if (!saveTemplateName.trim()) {
-      setNotification({ type: 'error', message: 'Please enter a template name' });
+      showNotification('error', 'Please enter a template name');
       return;
     }
     
@@ -1908,7 +1929,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       const result = await response.json();
 
       if (result.success) {
-        setNotification({ type: 'success', message: `Template "${saveTemplateName}" saved successfully!` });
+        showNotification('success', `Template "${saveTemplateName}" saved successfully!`);
         setLoadedTemplateName(''); // Clear base template name
         setHasUnsavedChanges(false); // Clear unsaved changes flag
         setIsInitialLoad(true); // Treat saved template as initial state
@@ -1920,7 +1941,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
       }
     } catch (error) {
       console.error('Error saving template:', error);
-      setNotification({ type: 'error', message: 'Failed to save template: ' + (error as Error).message });
+      showNotification('error', 'Failed to save template: ' + (error as Error).message);
     } finally {
       if (!dryRun) {
         setIsSaving(false);
@@ -1972,6 +1993,12 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-roobert-medium transition-colors">
                 <PlayCircle className="w-4 h-4" />
                 Test
+              </button>
+              <button 
+                onClick={removeAllSections}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-red-300 dark:border-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 font-roobert-medium transition-colors">
+                <Trash2 className="w-4 h-4" />
+                Remove All
               </button>
               <button 
                 onClick={handleSaveClick}
@@ -2043,23 +2070,38 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                               const AssetIcon = asset.icon;
                               
                               if (isLayoutAsset) {
-                                // Layout assets get an "Add" button instead of drag
+                                // Layout assets get an "Add" button + preview
                                 return (
                                   <div
                                     key={asset.id}
-                                    className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700"
+                                    className="relative group p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:shadow-md transition-all"
                                   >
-                                    <div className="flex items-center justify-between mb-2">
-                                      <div className="flex items-center gap-2">
-                                        {AssetIcon && (
-                                          <div className={`p-1.5 rounded ${asset.iconColor || 'text-gray-500'} bg-gray-100 dark:bg-gray-700`}>
-                                            <AssetIcon className="w-4 h-4" />
-                                          </div>
-                                        )}
+                                    <div className="flex items-center gap-2 mb-2">
+                                      {AssetIcon && (
+                                        <div className={`p-2 rounded-lg ${asset.iconColor || 'text-gray-500'} bg-gray-100 dark:bg-gray-700`}>
+                                          <AssetIcon className="w-5 h-5" />
+                                        </div>
+                                      )}
+                                      <div className="flex-1">
                                         <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
                                           {asset.name}
                                         </div>
+                                        <div className="text-xs text-fis-eggplant dark:text-fis-raspberry font-mono">
+                                          {asset.renderType}
+                                        </div>
                                       </div>
+                                      {/* Preview Button */}
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setPreviewAsset(asset);
+                                        }}
+                                        className="p-2 rounded-lg bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry transition-all opacity-0 group-hover:opacity-100"
+                                        title="Preview Asset"
+                                      >
+                                        <Eye className="w-4 h-4" />
+                                      </button>
+                                      {/* Add Button */}
                                       <button
                                         onClick={() => addLayoutAsset(asset)}
                                         className="px-3 py-1 rounded bg-fis-eggplant hover:bg-fis-eggplant/90 text-white text-xs font-roobert-medium flex items-center gap-1 transition-colors"
@@ -2670,6 +2712,75 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                             {(!field.exampleData || field.exampleData.length === 0) && (
                               <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
                                 No example items. Click "+ Add" to add some.
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Example Data for Key-Value Lists */}
+                      {field.renderType === 'keyValueList' && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <div className="flex items-center justify-between mb-2">
+                            <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
+                              Example Key-Value Pairs
+                            </label>
+                            <button
+                              onClick={() => {
+                                const currentData = field.exampleData || {};
+                                const newKey = `New Key ${Object.keys(currentData).length + 1}`;
+                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                  ...currentData,
+                                  [newKey]: 'New value'
+                                });
+                              }}
+                              className="text-xs px-2 py-1 rounded bg-fis-eggplant/10 text-fis-eggplant hover:bg-fis-eggplant/20 font-roobert-medium"
+                            >
+                              + Add Pair
+                            </button>
+                          </div>
+                          <div className="space-y-2">
+                            {Object.entries(field.exampleData || {}).map(([key, value], idx) => (
+                              <div key={idx} className="flex items-start gap-2">
+                                <input
+                                  type="text"
+                                  value={key}
+                                  onChange={(e) => {
+                                    const currentData = { ...(field.exampleData || {}) };
+                                    const oldValue = currentData[key];
+                                    delete currentData[key];
+                                    currentData[e.target.value] = oldValue;
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', currentData);
+                                  }}
+                                  className="flex-1 px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder="Label"
+                                />
+                                <input
+                                  type="text"
+                                  value={String(value)}
+                                  onChange={(e) => {
+                                    const currentData = { ...(field.exampleData || {}) };
+                                    currentData[key] = e.target.value;
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', currentData);
+                                  }}
+                                  className="flex-1 px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  placeholder="Value"
+                                />
+                                <button
+                                  onClick={() => {
+                                    const currentData = { ...(field.exampleData || {}) };
+                                    delete currentData[key];
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', currentData);
+                                  }}
+                                  className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            ))}
+                            {(!field.exampleData || Object.keys(field.exampleData).length === 0) && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
+                                No key-value pairs. Click "+ Add Pair" to add some.
                               </div>
                             )}
                           </div>
@@ -3464,45 +3575,6 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
         </div>
       </div>
 
-      {/* Notification */}
-      <AnimatePresence>
-        {notification && (
-          <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            className="fixed top-4 right-4 z-[200]"
-          >
-            <div className={`px-6 py-4 rounded-xl shadow-2xl border-2 flex items-center gap-3 ${
-              notification.type === 'success'
-                ? 'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-900 dark:text-green-100'
-                : 'bg-red-50 dark:bg-red-900/20 border-red-500 text-red-900 dark:text-red-100'
-            }`}>
-              {notification.type === 'success' ? (
-                <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-              ) : (
-                <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </div>
-              )}
-              <span className="font-roobert-medium">{notification.message}</span>
-              <button
-                onClick={() => setNotification(null)}
-                className="ml-2 hover:opacity-70 transition-opacity"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Save Template Modal */}
       <AnimatePresence>
         {showSaveModal && (
@@ -3787,7 +3859,7 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
           dataType="summaries"
           onSave={(updatedData) => {
             console.log('Test data updated:', updatedData);
-            setNotification({ type: 'success', message: 'Test successful! (Data not saved)' });
+            showNotification('success', 'Test successful! (Data not saved)');
             setShowTestEditor(false);
             setTestData(null);
           }}
@@ -4026,6 +4098,47 @@ export default function TemplateBuilder({ onBack }: TemplateBuilderProps) {
                   </button>
                 </div>
               </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Remove All Sections Confirmation Modal */}
+      {showRemoveAllModal && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+          >
+            <div className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0">
+                  <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                    Remove All Sections
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Are you sure you want to remove all sections? This will keep only the standard header.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+              <button
+                onClick={() => setShowRemoveAllModal(false)}
+                className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmRemoveAll}
+                className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-roobert-semibold transition-colors"
+              >
+                Remove All
+              </button>
             </div>
           </motion.div>
         </div>
