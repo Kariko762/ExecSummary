@@ -1,0 +1,72 @@
+import { useState } from 'react';
+import { ChangeManagementModal } from './ChangeManagementModal';
+import { FileText, ArrowLeft } from 'lucide-react';
+
+export const ChangeManagementTestPage = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
+            Change Management Test
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Click the button below to open the new ContentModalFixedMenu component
+          </p>
+        </div>
+
+        {/* Test Button */}
+        <div className="glass-strong rounded-2xl p-12 border border-white/20 text-center">
+          <FileText className="w-16 h-16 text-fis-eggplant dark:text-fis-raspberry mx-auto mb-6" />
+          
+          <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white mb-4">
+            View Change Management
+          </h2>
+          
+          <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+            See Release Notes, Changelog, and Development Tasks in the new fixed menu modal
+          </p>
+          
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-8 py-4 bg-fis-eggplant hover:bg-fis-eggplant/90 text-white rounded-xl font-roobert-semibold text-lg transition-all transform hover:scale-105 shadow-lg"
+          >
+            Open Change Management
+          </button>
+
+          <div className="mt-8 text-sm text-gray-500 dark:text-gray-400">
+            Features:
+            <ul className="mt-2 space-y-1">
+              <li>✅ Fixed left menu navigation</li>
+              <li>✅ 3 tabs: Release Notes, Changelog, Dev Tasks</li>
+              <li>✅ Full markdown rendering</li>
+              <li>✅ Dark mode support</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Instructions */}
+        <div className="mt-8 glass-strong rounded-xl p-6 border border-white/20">
+          <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white mb-3">
+            Next Steps
+          </h3>
+          <ol className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+            <li>1. Click the button above to test the modal</li>
+            <li>2. Try switching between tabs (Release Notes, Changelog, Dev Tasks)</li>
+            <li>3. Click menu items to navigate sections</li>
+            <li>4. Check dark mode compatibility</li>
+            <li>5. When ready, integrate into System Settings</li>
+          </ol>
+        </div>
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <ChangeManagementModal onClose={() => setShowModal(false)} />
+      )}
+    </div>
+  );
+};

@@ -1,0 +1,222 @@
+/**
+ * INTEGRATION EXAMPLE: How to add Change Management to System Settings
+ * 
+ * This file shows how to integrate the new ContentModalFixedMenu component
+ * into your System Settings page.
+ */
+
+import { useState } from 'react';
+import { ChangeManagementModal } from '../components/ChangeManagementModal';
+import { 
+  FileText, 
+  Settings, 
+  Users, 
+  Database,
+  Palette,
+  Lock
+} from 'lucide-react';
+
+export const SystemSettingsPage = () => {
+  const [showChangeManagement, setShowChangeManagement] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
+            System Settings
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Configure system preferences and access documentation
+          </p>
+        </div>
+
+        {/* Settings Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          {/* General Settings */}
+          <button className="glass-strong p-6 rounded-xl hover:scale-105 transition-all text-left border border-white/20">
+            <Settings className="w-8 h-8 text-fis-eggplant dark:text-fis-raspberry mb-3" />
+            <h3 className="font-roobert-semibold text-lg text-gray-900 dark:text-white mb-2">
+              General Settings
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Application preferences and defaults
+            </p>
+          </button>
+
+          {/* User Management */}
+          <button className="glass-strong p-6 rounded-xl hover:scale-105 transition-all text-left border border-white/20">
+            <Users className="w-8 h-8 text-fis-eggplant dark:text-fis-raspberry mb-3" />
+            <h3 className="font-roobert-semibold text-lg text-gray-900 dark:text-white mb-2">
+              User Management
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Manage users, roles, and permissions
+            </p>
+          </button>
+
+          {/* Data Management */}
+          <button className="glass-strong p-6 rounded-xl hover:scale-105 transition-all text-left border border-white/20">
+            <Database className="w-8 h-8 text-fis-eggplant dark:text-fis-raspberry mb-3" />
+            <h3 className="font-roobert-semibold text-lg text-gray-900 dark:text-white mb-2">
+              Data Management
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Import, export, and backup data
+            </p>
+          </button>
+
+          {/* Design System */}
+          <button className="glass-strong p-6 rounded-xl hover:scale-105 transition-all text-left border border-white/20">
+            <Palette className="w-8 h-8 text-fis-eggplant dark:text-fis-raspberry mb-3" />
+            <h3 className="font-roobert-semibold text-lg text-gray-900 dark:text-white mb-2">
+              Design System
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Colors, typography, and component styles
+            </p>
+          </button>
+
+          {/* Security */}
+          <button className="glass-strong p-6 rounded-xl hover:scale-105 transition-all text-left border border-white/20">
+            <Lock className="w-8 h-8 text-fis-eggplant dark:text-fis-raspberry mb-3" />
+            <h3 className="font-roobert-semibold text-lg text-gray-900 dark:text-white mb-2">
+              Security
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Authentication and security settings
+            </p>
+          </button>
+
+          {/* Change Management - NEW! */}
+          <button 
+            onClick={() => setShowChangeManagement(true)}
+            className="glass-strong p-6 rounded-xl hover:scale-105 transition-all text-left border-2 border-fis-eggplant/30 hover:border-fis-eggplant/50"
+          >
+            <FileText className="w-8 h-8 text-fis-eggplant dark:text-fis-raspberry mb-3" />
+            <h3 className="font-roobert-semibold text-lg text-gray-900 dark:text-white mb-2">
+              Change Management
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Release notes, changelog, development tasks
+            </p>
+            {/* Badge */}
+            <div className="mt-3 inline-block px-3 py-1 bg-fis-eggplant/10 dark:bg-fis-raspberry/10 rounded-full">
+              <span className="text-xs font-roobert-medium text-fis-eggplant dark:text-fis-raspberry">
+                📚 Documentation Hub
+              </span>
+            </div>
+          </button>
+
+        </div>
+
+        {/* Additional Settings Sections */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white mb-6">
+            Advanced Settings
+          </h2>
+          
+          <div className="glass-strong rounded-xl p-6 border border-white/20">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
+                <div>
+                  <h4 className="font-roobert-medium text-gray-900 dark:text-white">
+                    Dark Mode
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Toggle between light and dark themes
+                  </p>
+                </div>
+                <button className="px-4 py-2 bg-fis-eggplant text-white rounded-lg hover:bg-fis-eggplant/90 transition-colors">
+                  Toggle
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700">
+                <div>
+                  <h4 className="font-roobert-medium text-gray-900 dark:text-white">
+                    Notifications
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Configure notification preferences
+                  </p>
+                </div>
+                <button className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                  Configure
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between py-3">
+                <div>
+                  <h4 className="font-roobert-medium text-gray-900 dark:text-white">
+                    Clear Cache
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Clear application cache and temporary files
+                  </p>
+                </div>
+                <button className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors">
+                  Clear
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Change Management Modal */}
+      {showChangeManagement && (
+        <ChangeManagementModal onClose={() => setShowChangeManagement(false)} />
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// ALTERNATIVE: Minimal Integration Example
+// ============================================================
+
+export const MinimalSystemSettings = () => {
+  const [showChangeManagement, setShowChangeManagement] = useState(false);
+
+  return (
+    <div className="p-8">
+      <h1 className="text-3xl font-roobert-heavy mb-6">System Settings</h1>
+      
+      {/* Simple button to open Change Management */}
+      <button
+        onClick={() => setShowChangeManagement(true)}
+        className="px-6 py-3 bg-fis-eggplant text-white rounded-lg hover:bg-fis-eggplant/90 transition-colors flex items-center gap-2"
+      >
+        <FileText className="w-5 h-5" />
+        View Change Management
+      </button>
+
+      {/* Modal */}
+      {showChangeManagement && (
+        <ChangeManagementModal onClose={() => setShowChangeManagement(false)} />
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// USAGE NOTES:
+// ============================================================
+/**
+ * 1. Import the ChangeManagementModal component
+ * 2. Add state for modal open/close: useState(false)
+ * 3. Add button/link to trigger setShowChangeManagement(true)
+ * 4. Render modal conditionally when state is true
+ * 5. Pass onClose handler to reset state to false
+ * 
+ * The modal handles:
+ * - Tab switching (Release Notes, Changelog, Dev Tasks)
+ * - Section navigation with fixed menu
+ * - Markdown rendering with custom styles
+ * - Dark mode support
+ * - Framer Motion animations
+ * - Keyboard navigation (ESC to close)
+ */

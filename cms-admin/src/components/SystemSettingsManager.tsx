@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X } from 'lucide-react';
+import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X, FileText } from 'lucide-react';
+import { ChangeManagementModal } from './ChangeManagementModal';
 
 /**
  * System Settings Manager
@@ -65,8 +66,9 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   const [settings, setSettings] = useState<SystemSettings>(loadSettings());
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'authentication' | 'users' | 'security'>('authentication');
+  const [activeTab, setActiveTab] = useState<'authentication' | 'users' | 'security' | 'documentation'>('authentication');
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [showChangeManagement, setShowChangeManagement] = useState(false);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -239,6 +241,12 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
               label="Security"
               disabled
             />
+            <TabButton
+              active={activeTab === 'documentation'}
+              onClick={() => setActiveTab('documentation')}
+              icon={<FileText className="w-4 h-4" />}
+              label="Documentation"
+            />
           </div>
         </div>
       </div>
@@ -267,7 +275,27 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
             Security settings coming soon...
           </div>
         )}
+
+        {activeTab === 'documentation' && (
+          <div className="space-y-6">
+            <button
+              onClick={() => setShowChangeManagement(true)}
+              className="glass-strong p-6 rounded-xl hover:scale-105 transition-all text-left border-2 border-fis-eggplant/30 w-full"
+            >
+              <FileText className="w-8 h-8 text-fis-eggplant mb-3" />
+              <h3 className="font-roobert-semibold text-lg mb-2">Change Management</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Release notes, changelog, development tasks
+              </p>
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Change Management Modal */}
+      {showChangeManagement && (
+        <ChangeManagementModal onClose={() => setShowChangeManagement(false)} />
+      )}
     </div>
   );
 }

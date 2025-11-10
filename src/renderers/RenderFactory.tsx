@@ -7,6 +7,7 @@ import { ListRenderer } from './ListRenderer';
 import { MetricCardsRenderer } from './MetricCardsRenderer';
 import { NestedCardsRenderer } from './NestedCardsRenderer';
 import { ObjectFormRenderer } from './ObjectFormRenderer';
+import { RichTextRenderer } from './RichTextRenderer';
 import { PieChartRenderer } from './PieChartRenderer';
 import { BarChartRenderer } from './BarChartRenderer';
 import { LineChartRenderer } from './LineChartRenderer';
@@ -62,8 +63,7 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
       break;
     
     case 'richText':
-      // TODO: Implement RichTextRenderer
-      renderer = <TextareaRenderer {...props} />; // Fallback to textarea for now
+      renderer = <RichTextRenderer {...props} />;
       break;
     
     case 'progressBar':
