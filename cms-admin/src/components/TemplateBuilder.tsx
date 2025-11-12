@@ -265,6 +265,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
   const [hoveredZone, setHoveredZone] = useState<LayoutZone | null>(null); // Track which zone is hovered
   const [targetDropSection, setTargetDropSection] = useState<string | null>(null); // Track target section for drop
   const [selectedField, setSelectedField] = useState<{ sectionId: string; fieldId: string } | null>(null);
+  const [expandedExampleItem, setExpandedExampleItem] = useState<number | null>(0); // Track which example item is expanded (accordion)
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showValidationModal, setShowValidationModal] = useState(false);
   const [showAssetReference, setShowAssetReference] = useState(false);
@@ -1769,7 +1770,10 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                     draggable
                                     onDragStart={() => handleFieldDragStart(section.id, field.id)}
                                     onDragEnd={handleFieldDragEnd}
-                                    onClick={() => setSelectedField({ sectionId: section.id, fieldId: field.id })}
+                                    onClick={() => {
+                                      setSelectedField({ sectionId: section.id, fieldId: field.id });
+                                      setExpandedExampleItem(0); // Reset to first item expanded
+                                    }}
                                     className={`p-3 rounded-lg border-2 cursor-move hover:shadow-md transition-all ${
                                       selectedField?.fieldId === field.id
                                         ? 'border-fis-eggplant dark:border-fis-raspberry bg-fis-eggplant/5 dark:bg-fis-raspberry/5'
@@ -1816,7 +1820,10 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                               onDragEnd={handleFieldDragEnd}
                               onDragOver={(e) => handleFieldDragOver(e, section.id, field.id)}
                               onDrop={(e) => handleFieldDrop(e, section.id, field.id)}
-                              onClick={() => setSelectedField({ sectionId: section.id, fieldId: field.id })}
+                              onClick={() => {
+                                setSelectedField({ sectionId: section.id, fieldId: field.id });
+                                setExpandedExampleItem(0); // Reset to first item expanded
+                              }}
                               className={`p-3 rounded-lg border-2 cursor-move hover:shadow-md transition-all ${
                                 selectedField?.fieldId === field.id
                                   ? 'border-fis-eggplant dark:border-fis-raspberry bg-fis-eggplant/5 dark:bg-fis-raspberry/5'
@@ -2517,100 +2524,6 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                         </div>
                       )}
 
-                      {/* Example Data for Nested Cards */}
-                      {field.renderType === 'nestedCards' && (
-                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                          <div className="flex items-center justify-between mb-2">
-                            <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
-                              Example Cards
-                            </label>
-                            <button
-                              onClick={() => {
-                                const emptyCard: any = {};
-                                if (field.schema?.fields) {
-                                  Object.keys(field.schema.fields).forEach(key => {
-                                    emptyCard[key] = '';
-                                  });
-                                }
-                                const newExamples = [...(field.exampleData || []), emptyCard];
-                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                              }}
-                              className="text-xs px-2 py-1 rounded bg-fis-eggplant/10 text-fis-eggplant hover:bg-fis-eggplant/20 font-roobert-medium"
-                            >
-                              + Add Card
-                            </button>
-                          </div>
-                          <div className="space-y-2">
-                            {(field.exampleData || []).map((card: any, cardIdx: number) => {
-                              // Get first two field values for preview
-                              const fieldEntries = field.schema?.fields ? Object.entries(field.schema.fields) : [];
-                              const firstField = fieldEntries[0] as [string, any] | undefined;
-                              const secondField = fieldEntries[1] as [string, any] | undefined;
-                              const firstValue = firstField ? card[firstField[0]] : '';
-                              const secondValue = secondField ? card[secondField[0]] : '';
-                              const previewText = [firstValue, secondValue].filter(Boolean).join(' - ') || 'Empty Card';
-
-                              return (
-                                <div key={cardIdx} className="rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
-                                  {/* Card Header - Always Visible */}
-                                  <div className="flex items-center justify-between p-3">
-                                    <div className="flex-1 min-w-0">
-                                      <div className="flex items-center gap-2">
-                                        <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">
-                                          Card {cardIdx + 1}
-                                        </span>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                          {previewText}
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <button
-                                      onClick={() => {
-                                        const newExamples = (field.exampleData || []).filter((_: any, i: number) => i !== cardIdx);
-                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                                      }}
-                                      className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
-                                    >
-                                      <X className="w-3 h-3" />
-                                    </button>
-                                  </div>
-                                  
-                                  {/* Card Fields - Editable */}
-                                  <div className="px-3 pb-3 space-y-2 border-t border-gray-200 dark:border-gray-700 pt-2">
-                                    {field.schema?.fields && Object.entries(field.schema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
-                                      <div key={fieldKey}>
-                                        <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
-                                          {fieldDef.label}
-                                        </label>
-                                        <input
-                                          type="text"
-                                          value={card[fieldKey] || ''}
-                                          onChange={(e) => {
-                                            const newExamples = [...(field.exampleData || [])];
-                                            newExamples[cardIdx] = {
-                                              ...newExamples[cardIdx],
-                                              [fieldKey]: e.target.value
-                                            };
-                                            updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                                          }}
-                                          className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                                          placeholder={fieldDef.placeholder || `Enter ${fieldDef.label.toLowerCase()}`}
-                                        />
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                            {(!field.exampleData || field.exampleData.length === 0) && (
-                              <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
-                                No example cards. Click "+ Add Card" to add some.
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
                       {/* Example Data for Image */}
                       {field.renderType === 'image' && (
                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
@@ -3031,7 +2944,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                       )}
 
                       {/* Example Data for arrays with object items (charts, metric cards, etc) */}
-                      {['pieChart', 'barChart', 'lineChart', 'radialChart', 'metricCard', 'nestedCards', 'riskCard', 'timeline', 'highlightsList', 'bulletList', 'checklistItems', 'twoColumnComparison', 'radialProgressChart', 'stackedBarChart'].includes(field.renderType) && (
+                      {['pieChart', 'barChart', 'lineChart', 'radialChart', 'metricCard', 'nestedCards', 'riskCard', 'timeline', 'highlightsList', 'bulletList', 'checklistItems', 'twoColumnComparison', 'radialProgressChart', 'stackedBarChart', 'progressBarList', 'listTop5'].includes(field.renderType) && (
                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                           <div className="flex items-center justify-between mb-2">
                             <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
@@ -3218,22 +3131,34 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
 
                             {/* Object Array Editor (for charts, cards, etc) */}
                             {!['highlightsList', 'bulletList', 'checklistItems', 'twoColumnComparison'].includes(field.renderType) && Array.isArray(field.exampleData) && field.exampleData.map((item: any, itemIdx: number) => (
-                              <div key={itemIdx} className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
-                                <div className="flex items-center justify-between mb-2">
-                                  <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">
-                                    Item {itemIdx + 1}
-                                  </span>
+                              <div key={itemIdx} className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                <button
+                                  onClick={() => setExpandedExampleItem(expandedExampleItem === itemIdx ? null : itemIdx)}
+                                  className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <ChevronDown 
+                                      className={`w-4 h-4 text-gray-600 dark:text-gray-400 transition-transform ${expandedExampleItem === itemIdx ? 'rotate-0' : '-rotate-90'}`}
+                                    />
+                                    <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">
+                                      Item {itemIdx + 1}
+                                    </span>
+                                  </div>
                                   <button
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                      e.stopPropagation();
                                       const newExamples = (field.exampleData || []).filter((_: any, i: number) => i !== itemIdx);
                                       updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                      if (expandedExampleItem === itemIdx) setExpandedExampleItem(null);
                                     }}
                                     className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
                                   >
                                     <X className="w-3 h-3" />
                                   </button>
-                                </div>
-                                <div className="space-y-2">
+                                </button>
+                                {expandedExampleItem === itemIdx && (
+                                  <div className="p-3 bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-700">
+                                    <div className="space-y-2">
                                   {/* For stackedBarChart, show all object keys dynamically */}
                                   {field.renderType === 'stackedBarChart' && (
                                     <>
@@ -3366,7 +3291,9 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                       )}
                                     </div>
                                   ))}
-                                </div>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             ))}
                             {(!field.exampleData || field.exampleData.length === 0) && (
