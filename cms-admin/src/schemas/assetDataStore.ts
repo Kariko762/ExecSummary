@@ -834,6 +834,31 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       container: 'grid grid-cols-2 gap-6',
       padding: AssetStyles.spacing.md
     }
+  },
+
+  // ==========================================
+  // SPACER (LAYOUT UTILITY)
+  // ==========================================
+  
+  {
+    id: 'spacer',
+    name: 'Spacer',
+    type: 'spacer',
+    category: 'rich',
+    description: 'Invisible placeholder for multi-column layout control',
+    useCase: 'Use to create empty spaces in multi-column layouts. Example: Put 2 assets on a 3-column row by adding a spacer in the 3rd position.',
+    schema: {
+      type: 'spacer',
+      renderAs: 'spacer',
+      label: 'Spacer',
+      required: false
+    },
+    exampleData: null,
+    supportsMultiColumn: true,
+    styling: {
+      container: 'min-h-[20px]', // Minimal height to ensure visibility in editor
+      padding: '0'
+    }
   }
 ];
 
@@ -884,4 +909,26 @@ export function buildFieldSchema(type: string, customFields?: any): any {
     ...asset.schema,
     ...customFields
   };
+}
+
+/**
+ * Group assets by category for Template Builder
+ * Converts flat asset array into nested structure expected by drag-drop UI
+ */
+export function groupAssetsByCategory() {
+  const categories = [
+    { id: 'basic', name: 'Basic Text', color: 'blue' },
+    { id: 'lists', name: 'Lists & Arrays', color: 'green' },
+    { id: 'charts', name: 'Charts & Metrics', color: 'pink' },
+    { id: 'complex', name: 'Complex Layouts', color: 'purple' },
+    { id: 'rich', name: 'Rich Content', color: 'orange' },
+    { id: 'media', name: 'Media (Coming Soon)', color: 'cyan' },
+  ];
+
+  return categories.map(cat => ({
+    id: cat.id,
+    name: cat.name,
+    color: cat.color,
+    assets: ASSET_LIBRARY.filter(asset => asset.category === cat.id)
+  }));
 }

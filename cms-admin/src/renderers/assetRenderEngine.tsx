@@ -58,7 +58,8 @@ import {
 
 import {
   HrPattern,
-  NumberPattern
+  NumberPattern,
+  SpacerPattern
 } from './assetRenderUtility';
 
 // ==========================================
@@ -152,6 +153,8 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <HrPattern {...props} />;
       case 'number':
         return <NumberPattern {...props} />;
+      case 'spacer':
+        return <SpacerPattern {...props} />;
       case 'listTop5':
         return <Top5ListPattern {...props} />;
       

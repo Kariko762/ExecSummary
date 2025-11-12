@@ -98,6 +98,11 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
       renderer = <HorizontalRuleRenderer {...props} />;
       break;
     
+    case 'spacer':
+      // Spacer is just empty space - render nothing
+      renderer = <div className="spacer" style={{ minHeight: '20px' }}></div>;
+      break;
+    
     case 'codeBlock':
       renderer = <CodeBlockRenderer {...props} />;
       break;

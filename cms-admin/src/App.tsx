@@ -12,7 +12,6 @@ import DesignSystemInjector from './components/DesignSystemInjector';
 import SystemSettingsManager from './components/SystemSettingsManager';
 import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
-import masterTemplate from './templates/MASTER-TEMPLATE-ALL-ASSETS.json';
 import './App.css';
 
 const API_URL = 'http://localhost:3001/api';
@@ -336,12 +335,47 @@ function App() {
       
       if (creationMode === 'template') {
         // Use template
-        if (selectedSourceId === 'default' || !selectedSourceId) {
-          // Use built-in default template (Master Template with all assets)
-          sourceData = masterTemplate;
-        } else if (selectedSourceId === 'default-with-charts') {
-          // Use master template (same as default now)
-          sourceData = masterTemplate;
+        if (selectedSourceId === 'default' || !selectedSourceId || selectedSourceId === 'default-with-charts') {
+          // Fetch the first available template from templates folder
+          try {
+            const templatesResponse = await fetch(`${API_URL}/templates`);
+            if (templatesResponse.ok) {
+              const templatesData = await templatesResponse.json();
+              const templates = templatesData.templates || [];
+              
+              if (templates.length > 0) {
+                // Use first template found
+                const firstTemplateId = templates[0].filename.replace('.json', '');
+                const response = await fetch(`${API_URL}/templates/${firstTemplateId}`);
+                if (!response.ok) throw new Error('Failed to fetch template');
+                const data = await response.json();
+                sourceData = data.template;
+              } else {
+                // No templates found - use minimal fallback
+                sourceData = {
+                  id: 'template-new',
+                  quarter: 'Month Day',
+                  year: new Date().getFullYear(),
+                  date: new Date().toISOString().split('T')[0],
+                  title: 'New Executive Summary',
+                  status: 'draft'
+                };
+              }
+            } else {
+              throw new Error('Failed to fetch templates list');
+            }
+          } catch (error) {
+            console.error('Template fetch error:', error);
+            // Fallback to minimal template
+            sourceData = {
+              id: 'template-new',
+              quarter: 'Month Day',
+              year: new Date().getFullYear(),
+              date: new Date().toISOString().split('T')[0],
+              title: 'New Executive Summary',
+              status: 'draft'
+            };
+          }
         } else {
           // Fetch custom template
           const response = await fetch(`${API_URL}/templates/${selectedSourceId}`);
@@ -674,7 +708,7 @@ function App() {
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
-                className="fixed top-20 right-4 z-[100] glass-strong rounded-xl p-4 border-2 border-white/20 shadow-2xl max-w-md"
+                className="fixed top-20 right-4 z-[200] glass-strong rounded-xl p-4 border-2 border-white/20 shadow-2xl max-w-md"
               >
                 <div className="flex items-start gap-3">
                   {notification.type === 'success' ? (

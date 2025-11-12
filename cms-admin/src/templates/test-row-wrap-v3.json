@@ -1,0 +1,103 @@
+{
+  "id": "template-new",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-12",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_section_1_0_type": "bulletList",
+  "_section_1_0_layoutZone": "left-33",
+  "_section_1_0_rowIndex": 0,
+  "section_1_0": [
+    "First item in the list",
+    "Second item with more detail",
+    "Third item for completion"
+  ],
+  "_section_1_1_type": "checklistItems",
+  "_section_1_1_layoutZone": "middle-33",
+  "_section_1_1_rowIndex": 0,
+  "section_1_1": [
+    "Comprehensive stakeholder interviews with 6 key clients",
+    "Collected competitive analysis of leading financial service portals",
+    "Detailed preliminary requirements document"
+  ],
+  "_section_1_2_type": "progressBarList",
+  "_section_1_2_layoutZone": "right-33",
+  "_section_1_2_rowIndex": 0,
+  "_section_1_2_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Initiative Title"
+    },
+    "subtitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Team/Owner"
+    },
+    "percentage": {
+      "type": "number",
+      "renderAs": "number",
+      "label": "Completion %"
+    },
+    "status": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Status (On Track/At Risk/Blocked)"
+    }
+  },
+  "section_1_2": [
+    {
+      "title": "Banking NA Titled Microsite",
+      "subtitle": "Demo Business",
+      "percentage": 75,
+      "status": "On Track"
+    },
+    {
+      "title": "SNOW Migration Dashboard",
+      "subtitle": "Demo Operations",
+      "percentage": 85,
+      "status": "On Track"
+    },
+    {
+      "title": "International Issuing Hub",
+      "subtitle": "Demo Enablement",
+      "percentage": 30,
+      "status": "At Risk"
+    }
+  ],
+  "_section_1_3_type": "bulletList",
+  "_section_1_3_layoutZone": "left-33",
+  "_section_1_3_rowIndex": 1,
+  "section_1_3": [
+    "First item in the list",
+    "Second item with more detail",
+    "Third item for completion"
+  ],
+  "_section_1_4_type": "bulletList",
+  "_section_1_4_layoutZone": "middle-33",
+  "_section_1_4_rowIndex": 1,
+  "section_1_4": [
+    "First item in the list",
+    "Second item with more detail",
+    "Third item for completion"
+  ],
+  "_section_1_5_type": "bulletList",
+  "_section_1_5_layoutZone": "right-33",
+  "_section_1_5_rowIndex": 1,
+  "section_1_5": [
+    "First item in the list",
+    "Second item with more detail",
+    "Third item for completion"
+  ],
+  "_section_1_sectionLayoutType": "left-33",
+  "_enabled_section_1": true,
+  "_completed_section_1": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "test-row-wrap_v3",
+  "_template_description": "",
+  "_template_created": "2025-11-12T21:30:07.420Z",
+  "_template_updated": "2025-11-12T21:30:07.420Z"
+}

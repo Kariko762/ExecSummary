@@ -1308,6 +1308,42 @@
   margin-top: 0.5rem;
 }
 
+/* Spacer Pattern */
+.asset-wrapper .spacer-display {
+  /* Completely empty in display mode */
+  min-height: 20px;
+  width: 100%;
+}
+
+.asset-wrapper .spacer-edit {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(107, 70, 193, 0.05) 10px,
+    rgba(107, 70, 193, 0.05) 20px
+  );
+  border: 2px dashed var(--brand-primary);
+  border-radius: 0.5rem;
+}
+
+.asset-wrapper .spacer-indicator {
+  padding: 0.5rem 1rem;
+  background: var(--brand-primary);
+  color: white;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
 /* ==========================================
    EDIT MODE STYLES
    ========================================== */

@@ -22,6 +22,7 @@ export type RenderType =
   | 'codeBlock'         // Code block with syntax highlighting
   | 'quote'             // Blockquote with glassmorphism styling
   | 'hr'                // Horizontal rule/divider
+  | 'spacer'            // Empty space for layout control
   | 'expression'        // Expression with icon support
   | 'image'             // Image upload/display
   | 'video'             // Video upload/display

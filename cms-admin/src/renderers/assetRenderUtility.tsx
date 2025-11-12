@@ -85,3 +85,23 @@ export const NumberPattern: React.FC<UtilityPatternProps> = ({ data, onChange, m
     </div>
   );
 };
+
+// ==========================================
+// SPACER PATTERN (Layout Utility)
+// ==========================================
+
+export const SpacerPattern: React.FC<UtilityPatternProps> = ({ mode }) => {
+  if (mode === 'edit') {
+    // In edit mode, show a visual indicator
+    return (
+      <div className="spacer-edit">
+        <div className="spacer-indicator">
+          <span>Empty Space</span>
+        </div>
+      </div>
+    );
+  }
+  
+  // In display mode, render nothing (just empty space)
+  return <div className="spacer-display"></div>;
+};

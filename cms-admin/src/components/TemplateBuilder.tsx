@@ -12,6 +12,10 @@ import type { FieldSchema } from '../../../src/types/schema';
 import { ChartColors } from '../../../src/design-system';
 import EditorModalV2 from './EditorModalV2';
 import AssetLibrary from './AssetLibrary';
+import { groupAssetsByCategory, type AssetDefinition } from '../schemas/assetDataStore';
+
+// Get grouped assets for Template Builder UI
+const ASSET_LIBRARY = groupAssetsByCategory();
 
 interface TemplateBuilderProps {
   onBack: () => void;
@@ -67,626 +71,16 @@ type Field = TemplateField;
 interface AssetCategory {
   id: string;
   name: string;
-  icon: typeof Type;
   color: string;
-  assets: AssetItem[];
+  assets: AssetDefinition[];
 }
 
-interface AssetItem {
-  id: string;
-  name: string;
-  renderType: string;
-  description: string;
-  schema: FieldSchema;
-  icon?: typeof Type; // Optional icon for the asset
-  iconColor?: string; // Optional color for the icon
-  exampleData?: any; // Example data for preview
-  supportsMultiColumn?: boolean; // Whether this asset can be used in multi-column layouts
-}
+// Type alias for AssetItem (now using AssetDefinition from assetDataStore)
+type AssetItem = AssetDefinition;
 
-// Asset Library - Available drag sources
-const ASSET_LIBRARY: AssetCategory[] = [
-  {
-    id: 'basic',
-    name: 'Basic Inputs',
-    icon: Type,
-    color: 'blue',
-    assets: [
-      {
-        id: 'text',
-        name: 'Text Input',
-        renderType: 'text',
-        description: 'Simple single-line text',
-        schema: { type: 'string', renderAs: 'text', label: 'New Text Field' },
-        icon: Type,
-        iconColor: 'text-blue-500',
-        exampleData: 'Revenue Operations Team',
-        supportsMultiColumn: true
-      },
-      {
-        id: 'textarea',
-        name: 'Text Area',
-        renderType: 'textarea',
-        description: 'Multi-line text input',
-        schema: { 
-          type: 'string', 
-          renderAs: 'textarea', 
-          label: 'New Text Area',
-          placeholder: 'Enter detailed description...'
-        },
-        icon: AlignLeft,
-        iconColor: 'text-blue-600',
-        exampleData: 'This quarter we focused on streamlining our sales pipeline and improving customer engagement metrics. Key achievements include 25% reduction in sales cycle time and 40% increase in qualified leads.',
-        supportsMultiColumn: true
-      },
-      {
-        id: 'number',
-        name: 'Number',
-        renderType: 'number',
-        description: 'Numeric input',
-        schema: { type: 'number', renderAs: 'number', label: 'New Number' },
-        icon: Hash,
-        iconColor: 'text-blue-700',
-        exampleData: 42500,
-        supportsMultiColumn: true
-      },
-      {
-        id: 'date',
-        name: 'Date Picker',
-        renderType: 'text',
-        description: 'Date selection',
-        schema: { type: 'date', renderAs: 'text', label: 'New Date' },
-        icon: Calendar,
-        iconColor: 'text-blue-800',
-        exampleData: '2025-01-15',
-        supportsMultiColumn: true
-      }
-    ]
-  },
-  {
-    id: 'lists',
-    name: 'Lists & Arrays',
-    icon: List,
-    color: 'green',
-    assets: [
-      {
-        id: 'array',
-        name: 'List with Labels',
-        renderType: 'keyValueList',
-        description: 'Key-value pairs with labels',
-        schema: { type: 'object', renderAs: 'keyValueList', label: 'Details' },
-        icon: List,
-        iconColor: 'text-green-500',
-        exampleData: {
-          'Role': 'Chief Executive Officer',
-          'Department': 'Executive Leadership',
-          'Location': 'New York, NY',
-          'Reports To': 'Board of Directors'
-        },
-        supportsMultiColumn: true
-      },
-      {
-        id: 'arrayNoLabels',
-        name: 'List (No Labels)',
-        renderType: 'list',
-        description: 'Simple bullet list without labels',
-        schema: { type: 'array', renderAs: 'list', label: 'New List', itemSchema: { type: 'string', renderAs: 'text' } },
-        icon: List,
-        iconColor: 'text-green-400',
-        exampleData: ['Completed Phase 1 ahead of schedule', 'Reduced operational costs by 30%', 'Hired 5 new team members'],
-        supportsMultiColumn: true
-      },
-      {
-        id: 'nestedCards',
-        name: 'Card List',
-        renderType: 'nestedCards',
-        description: 'Array of card objects',
-        schema: { 
-          type: 'array',
-          renderAs: 'nestedCards',
-          label: 'New Cards',
-          itemSchema: {
-            type: 'object',
-            renderAs: 'objectForm',
-            fields: {
-              title: { type: 'string', renderAs: 'text', label: 'Title' },
-              value: { type: 'string', renderAs: 'text', label: 'Value' }
-            }
-          }
-        },
-        icon: Grid,
-        iconColor: 'text-green-600',
-        exampleData: [
-          { title: 'Revenue', value: '$2.4M' },
-          { title: 'Growth', value: '+35%' },
-          { title: 'Customers', value: '1,250' },
-          { title: 'Retention', value: '94%' }
-        ],
-        supportsMultiColumn: false
-      }
-    ]
-  },
-  {
-    id: 'complex',
-    name: 'Complex',
-    icon: Layers,
-    color: 'purple',
-    assets: [
-      {
-        id: 'object',
-        name: 'Object',
-        renderType: 'object',
-        description: 'Nested object structure',
-        schema: { 
-          type: 'object',
-          renderAs: 'objectForm',
-          label: 'New Object',
-          fields: {
-            field1: { type: 'string', renderAs: 'text', label: 'Field 1' },
-            field2: { type: 'string', renderAs: 'text', label: 'Field 2' },
-            field3: { type: 'number', renderAs: 'number', label: 'Field 3' }
-          }
-        },
-        icon: Layers,
-        iconColor: 'text-purple-500',
-        exampleData: { 
-          field1: 'Sample text', 
-          field2: 'Another value', 
-          field3: 42 
-        },
-        supportsMultiColumn: true
-      },
-      {
-        id: 'keyValue',
-        name: 'Key-Value Pair',
-        renderType: 'keyValue',
-        description: 'Key and value fields',
-        schema: { 
-          type: 'object',
-          renderAs: 'objectForm',
-          label: 'New Key-Value',
-          fields: {
-            key: { type: 'string', renderAs: 'text', label: 'Key' },
-            value: { type: 'string', renderAs: 'text', label: 'Value' }
-          }
-        },
-        icon: Key,
-        iconColor: 'text-purple-600',
-        exampleData: { key: 'Status', value: 'On Track' },
-        supportsMultiColumn: true
-      }
-    ]
-  },
-  {
-    id: 'rich',
-    name: 'Rich Content',
-    icon: FileText,
-    color: 'orange',
-    assets: [
-      {
-        id: 'markdown',
-        name: 'Markdown Editor',
-        renderType: 'richText',
-        description: 'Rich markdown content',
-        schema: { type: 'string', renderAs: 'richText', label: 'New Markdown' },
-        icon: FileText,
-        iconColor: 'text-orange-500',
-        exampleData: '## Q1 2025 Highlights\n\nWe achieved **record-breaking growth** this quarter:\n\n- Revenue up 35% YoY\n- Customer base expanded to 1,250+\n- Launched 3 major features\n\n> "Best quarter in company history" - CEO',
-        supportsMultiColumn: true
-      },
-      {
-        id: 'expression',
-        name: 'Expression',
-        renderType: 'expression',
-        description: 'Dynamic expressions',
-        schema: { type: 'string', renderAs: 'expression', label: 'New Expression' },
-        icon: Code,
-        iconColor: 'text-orange-600',
-        exampleData: 'Revenue: {{currency:2400000}} ({{percent:33.3}} growth) {{trend:up}}',
-        supportsMultiColumn: true
-      },
-      {
-        id: 'codeBlock',
-        name: 'Code Block',
-        renderType: 'codeBlock',
-        description: 'Code snippet with copy button',
-        schema: { type: 'string', renderAs: 'codeBlock', label: 'New Code Block' },
-        icon: Terminal,
-        iconColor: 'text-orange-700',
-        exampleData: 'const calculateGrowth = (current, previous) => {\n  return ((current - previous) / previous * 100).toFixed(2);\n};\n\nconsole.log(calculateGrowth(2400000, 1800000)); // 33.33%',
-        supportsMultiColumn: true
-      },
-      {
-        id: 'quote',
-        name: 'Quote',
-        renderType: 'quote',
-        description: 'Blockquote with glassmorphism',
-        schema: { type: 'string', renderAs: 'quote', label: 'New Quote' },
-        icon: Quote,
-        iconColor: 'text-orange-800',
-        exampleData: 'Our team executed flawlessly this quarter. The dedication and innovation demonstrated by everyone has positioned us perfectly for continued success.',
-        supportsMultiColumn: true
-      }
-    ]
-  },
-  {
-    id: 'charts',
-    name: 'Charts',
-    icon: TrendingUp,
-    color: 'pink',
-    assets: [
-      {
-        id: 'pieChart',
-        name: 'Pie Chart',
-        renderType: 'pieChart',
-        description: 'Circular proportional chart',
-        schema: { 
-          type: 'array',
-          label: 'New Pie Chart',
-          renderAs: 'pieChart',
-          chartConfig: {
-            dataKey: 'value',
-            nameKey: 'name',
-            colors: [...ChartColors.palette],
-            showLegend: true,
-            showTooltip: true,
-            innerRadius: 0,
-            outerRadius: 80
-          },
-          itemSchema: {
-            type: 'object',
-            renderAs: 'objectForm',
-            fields: {
-              name: { type: 'string', renderAs: 'text', label: 'Label', required: true },
-              value: { type: 'number', renderAs: 'number', label: 'Value', required: true }
-            }
-          }
-        },
-        icon: PieChart,
-        iconColor: 'text-pink-500',
-        exampleData: [
-          { name: 'Enterprise', value: 45 },
-          { name: 'Mid-Market', value: 30 },
-          { name: 'SMB', value: 25 }
-        ],
-        supportsMultiColumn: true
-      },
-      {
-        id: 'barChart',
-        name: 'Bar Chart',
-        renderType: 'barChart',
-        description: 'Vertical or horizontal bars',
-        schema: { 
-          type: 'array',
-          label: 'New Bar Chart',
-          renderAs: 'barChart',
-          chartConfig: {
-            xAxisKey: 'name',
-            bars: [{ dataKey: 'value', fill: ChartColors.series.eggplantLight, name: 'Value' }],
-            orientation: 'vertical',
-            showGrid: true,
-            showLegend: true,
-            stacked: false
-          },
-          itemSchema: {
-            type: 'object',
-            renderAs: 'objectForm',
-            fields: {
-              name: { type: 'string', renderAs: 'text', label: 'Label', required: true },
-              value: { type: 'number', renderAs: 'number', label: 'Value', required: true }
-            }
-          }
-        },
-        icon: BarChart3,
-        iconColor: 'text-pink-600',
-        exampleData: [
-          { name: 'Q1', value: 2400 },
-          { name: 'Q2', value: 3100 },
-          { name: 'Q3', value: 2800 },
-          { name: 'Q4', value: 3500 }
-        ],
-        supportsMultiColumn: true
-      },
-      {
-        id: 'lineChart',
-        name: 'Line Chart',
-        renderType: 'lineChart',
-        description: 'Trend lines over time',
-        schema: { 
-          type: 'array',
-          label: 'New Line Chart',
-          renderAs: 'lineChart',
-          chartConfig: {
-            xAxisKey: 'name',
-            lines: [{ dataKey: 'value', stroke: ChartColors.series.eggplantLight, name: 'Value' }],
-            showGrid: true,
-            showLegend: true,
-            showDots: true,
-            curved: true
-          },
-          itemSchema: {
-            type: 'object',
-            renderAs: 'objectForm',
-            fields: {
-              name: { type: 'string', renderAs: 'text', label: 'Label', required: true },
-              value: { type: 'number', renderAs: 'number', label: 'Value', required: true }
-            }
-          }
-        },
-        icon: LineChart,
-        iconColor: 'text-pink-700',
-        exampleData: [
-          { name: 'Jan', value: 650 },
-          { name: 'Feb', value: 720 },
-          { name: 'Mar', value: 830 },
-          { name: 'Apr', value: 900 },
-          { name: 'May', value: 1050 },
-          { name: 'Jun', value: 1200 }
-        ],
-        supportsMultiColumn: true
-      },
-      {
-        id: 'radialChart',
-        name: 'Radial Chart',
-        renderType: 'radialChart',
-        description: 'Circular progress/donut',
-        schema: { 
-          type: 'array',
-          label: 'New Radial Chart',
-          renderAs: 'radialChart',
-          chartConfig: {
-            dataKey: 'value',
-            maxValue: 100,
-            colors: [...ChartColors.palette],
-            showPercentage: true,
-            thickness: 20
-          },
-          itemSchema: {
-            type: 'object',
-            renderAs: 'objectForm',
-            fields: {
-              name: { type: 'string', renderAs: 'text', label: 'Label', required: true },
-              value: { type: 'number', renderAs: 'number', label: 'Value', required: true }
-            }
-          }
-        },
-        icon: Activity,
-        iconColor: 'text-pink-800',
-        exampleData: [
-          { name: 'Completion', value: 87 }
-        ],
-        supportsMultiColumn: true
-      }
-    ]
-  },
-  {
-    id: 'media',
-    name: 'Media',
-    icon: Image,
-    color: 'cyan',
-    assets: [
-      {
-        id: 'image',
-        name: 'Image',
-        renderType: 'image',
-        description: 'Image upload or URL',
-        schema: { 
-          type: 'object',
-          renderAs: 'image', 
-          label: 'New Image',
-          fields: {
-            src: { type: 'string', renderAs: 'text', label: 'Image URL', placeholder: 'https://example.com/image.jpg', required: true },
-            alt: { type: 'string', renderAs: 'text', label: 'Alt Text', placeholder: 'Description for accessibility' },
-            autoScale: { type: 'boolean', renderAs: 'checkbox', label: 'Auto Scale', defaultValue: true },
-            width: { type: 'number', renderAs: 'number', label: 'Width (px)', placeholder: 'Leave empty for auto' },
-            height: { type: 'number', renderAs: 'number', label: 'Height (px)', placeholder: 'Leave empty for auto' },
-            caption: { type: 'string', renderAs: 'text', label: 'Caption', placeholder: 'Optional image caption' }
-          }
-        },
-        icon: Image,
-        iconColor: 'text-cyan-500',
-        exampleData: {
-          src: 'https://via.placeholder.com/800x400/6b46c1/ffffff?text=Executive+Summary+Image',
-          alt: 'Executive Summary Visualization',
-          autoScale: true,
-          caption: 'Q4 2024 Performance Dashboard'
-        },
-        supportsMultiColumn: true
-      },
-      {
-        id: 'video',
-        name: 'Video',
-        renderType: 'video',
-        description: 'Video file upload or URL',
-        schema: { 
-          type: 'object',
-          renderAs: 'video', 
-          label: 'New Video',
-          fields: {
-            src: { type: 'string', renderAs: 'text', label: 'Video URL', placeholder: 'https://example.com/video.mp4', required: true },
-            poster: { type: 'string', renderAs: 'text', label: 'Poster Image', placeholder: 'Thumbnail/preview image URL' },
-            autoScale: { type: 'boolean', renderAs: 'checkbox', label: 'Auto Scale', defaultValue: true },
-            width: { type: 'number', renderAs: 'number', label: 'Width (px)', placeholder: 'Leave empty for auto' },
-            height: { type: 'number', renderAs: 'number', label: 'Height (px)', placeholder: 'Leave empty for auto' },
-            controls: { type: 'boolean', renderAs: 'checkbox', label: 'Show Controls', defaultValue: true },
-            autoplay: { type: 'boolean', renderAs: 'checkbox', label: 'Autoplay', defaultValue: false },
-            loop: { type: 'boolean', renderAs: 'checkbox', label: 'Loop', defaultValue: false },
-            muted: { type: 'boolean', renderAs: 'checkbox', label: 'Muted', defaultValue: false }
-          }
-        },
-        icon: Video,
-        iconColor: 'text-cyan-600',
-        exampleData: {
-          src: 'https://www.w3schools.com/html/mov_bbb.mp4',
-          poster: 'https://via.placeholder.com/800x450/6b46c1/ffffff?text=Video+Preview',
-          autoScale: true,
-          controls: true,
-          autoplay: false,
-          loop: false,
-          muted: false
-        },
-        supportsMultiColumn: true
-      },
-      {
-        id: 'embeddedVideo',
-        name: 'Embedded Video',
-        renderType: 'embeddedVideo',
-        description: 'YouTube, Vimeo, or iframe embed',
-        schema: { 
-          type: 'object',
-          renderAs: 'embeddedVideo', 
-          label: 'New Embedded Video',
-          fields: {
-            embedUrl: { type: 'string', renderAs: 'text', label: 'Embed URL', placeholder: 'https://www.youtube.com/embed/...', required: true },
-            platform: { type: 'string', renderAs: 'select', label: 'Platform', options: ['youtube', 'vimeo', 'custom'], defaultValue: 'youtube' },
-            autoScale: { type: 'boolean', renderAs: 'checkbox', label: 'Auto Scale (16:9)', defaultValue: true },
-            width: { type: 'number', renderAs: 'number', label: 'Width (px)', placeholder: 'Leave empty for auto' },
-            height: { type: 'number', renderAs: 'number', label: 'Height (px)', placeholder: 'Leave empty for auto' },
-            allowFullscreen: { type: 'boolean', renderAs: 'checkbox', label: 'Allow Fullscreen', defaultValue: true },
-            title: { type: 'string', renderAs: 'text', label: 'Title', placeholder: 'Video title for accessibility' }
-          }
-        },
-        icon: Film,
-        iconColor: 'text-cyan-700',
-        exampleData: {
-          embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-          platform: 'youtube',
-          autoScale: true,
-          allowFullscreen: true,
-          title: 'Executive Presentation Video'
-        },
-        supportsMultiColumn: true
-      }
-    ]
-  },
-  {
-    id: 'layout',
-    name: 'Layout',
-    icon: Grid,
-    color: 'gray',
-    assets: [
-      {
-        id: 'hr',
-        name: 'Horizontal Rule',
-        renderType: 'hr',
-        description: 'Visual divider line for sections and multi-column layouts',
-        schema: { 
-          type: 'string', 
-          label: 'Divider',
-          renderAs: 'hr',
-          hrConfig: {
-            thickness: 1,
-            color: ChartColors.ui.grid,
-            marginTop: 24,
-            marginBottom: 24,
-            style: 'solid'
-          }
-        },
-        icon: Minus,
-        iconColor: 'text-gray-500',
-        exampleData: null,
-        supportsMultiColumn: true
-      },
-      {
-        id: 'statusBoard',
-        name: 'Table Layout',
-        renderType: 'statusBoard',
-        description: 'Generic column layout with grouped cards - configurable for any data',
-        schema: { 
-          type: 'object',
-          renderAs: 'statusBoard',
-          label: 'Issues & Blockers',
-          groupByField: 'status',
-          columns: [
-            { key: 'open', label: 'Open', color: 'text-red-600 dark:text-red-400' },
-            { key: 'in-progress', label: 'In Progress', color: 'text-blue-600 dark:text-blue-400' },
-            { key: 'resolved', label: 'Resolved', color: 'text-green-600 dark:text-green-400' }
-          ],
-          itemSchema: {
-            type: 'object',
-            renderAs: 'objectForm',
-            fields: {
-              title: { 
-                type: 'string', 
-                renderAs: 'text', 
-                label: 'Title', 
-                required: true,
-                displayAs: 'title'
-              },
-              description: { 
-                type: 'string', 
-                renderAs: 'textarea', 
-                label: 'Description',
-                displayAs: 'subtitle'
-              },
-              priority: { 
-                type: 'string', 
-                renderAs: 'select', 
-                label: 'Priority', 
-                options: ['low', 'medium', 'high', 'critical'],
-                displayAs: 'badge',
-                badgeColors: {
-                  'critical': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800',
-                  'high': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border-orange-200 dark:border-orange-800',
-                  'medium': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800',
-                  'low': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800'
-                }
-              },
-              action: { 
-                type: 'string', 
-                renderAs: 'textarea', 
-                label: 'Action',
-                displayAs: 'label-value'
-              },
-              timeline: { 
-                type: 'string', 
-                renderAs: 'text', 
-                label: 'Timeline',
-                displayAs: 'detail'
-              },
-              status: { 
-                type: 'string', 
-                renderAs: 'select', 
-                label: 'Status', 
-                options: ['open', 'in-progress', 'resolved'], 
-                required: true 
-              }
-            }
-          }
-        },
-        icon: Columns,
-        iconColor: 'text-purple-700',
-        exampleData: [
-          {
-            title: 'Tiled Performance & Import Failures',
-            description: 'PowerPoint import features and general Designer performance are unreliable',
-            priority: 'high',
-            action: 'Developing new deployment and design process',
-            timeline: 'End of November 2024',
-            status: 'in-progress'
-          },
-          {
-            title: 'Demo Team – Shift Payment Issues',
-            description: 'Team member unpaid for weekend work due to lack of shift audit trail',
-            priority: 'medium',
-            action: 'Implement process to record and approve all shifts including weekends',
-            timeline: 'Immediate',
-            status: 'in-progress'
-          },
-          {
-            title: 'SNOW BU Data Not Mandatory',
-            description: 'BU data is not mandatory in SNOW forms, limiting ability to segment by org',
-            priority: 'medium',
-            action: 'Reviewing form structure to make BU data collection mandatory',
-            timeline: 'Before Nov 14 dashboard launch',
-            status: 'in-progress'
-          }
-        ],
-        supportsMultiColumn: false
-      }
-    ]
-  }
-];
+// Asset Library - Now imported from assetDataStore (24 assets with complete rendering patterns)
+
+
 
 // Snap Zone Overlay Component - Shows layout CHOICES when dragging first asset into empty section
 interface SnapZoneOverlayProps {
@@ -867,6 +261,9 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
   const [draggedField, setDraggedField] = useState<{ sectionId: string; fieldId: string } | null>(null);
   const [draggedSection, setDraggedSection] = useState<string | null>(null);
   const [dragOverSection, setDragOverSection] = useState<string | null>(null);
+  const [showSnapZones, setShowSnapZones] = useState(false); // Show snap zones for empty sections
+  const [hoveredZone, setHoveredZone] = useState<LayoutZone | null>(null); // Track which zone is hovered
+  const [targetDropSection, setTargetDropSection] = useState<string | null>(null); // Track target section for drop
   const [selectedField, setSelectedField] = useState<{ sectionId: string; fieldId: string } | null>(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showValidationModal, setShowValidationModal] = useState(false);
@@ -1147,7 +544,9 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
         const fieldKeys = fieldGroups.get(baseKey);
         if (!fieldKeys) return;
         
-        const layoutType = inferLayoutType(fieldKeys.length);
+        // Read saved section layout type, or infer from field count
+        const savedSectionLayoutType = templateData[`_${baseKey}_sectionLayoutType`];
+        const layoutType = savedSectionLayoutType || inferLayoutType(fieldKeys.length);
         const zones = getLayoutZones(layoutType);
         const fields: Field[] = [];
         
@@ -1157,6 +556,8 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
           const sectionFields = templateData[`_${key}_fields`]; // Legacy
           const chartConfig = templateData[`_${key}_chartConfig`];
           const alignment = templateData[`_${key}_alignment`] || 'left';
+          const savedLayoutZone = templateData[`_${key}_layoutZone`];
+          const savedRowIndex = templateData[`_${key}_rowIndex`];
           
           // CRITICAL: Use _type metadata as the renderType (NOT itemSchema.renderAs)
           // itemSchema.renderAs is for editing items, not the field itself
@@ -1167,7 +568,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
           let exampleData = templateData[key];
           if (exampleData === undefined) {
             for (const category of ASSET_LIBRARY) {
-              const asset = category.assets.find(a => a.renderType === renderType);
+              const asset = category.assets.find(a => a.type === renderType);
               if (asset) {
                 exampleData = asset.exampleData;
                 break;
@@ -1193,8 +594,8 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                 ...(itemSchema?.suffix && { suffix: itemSchema.suffix }),
                 ...(itemSchema?.options && { options: itemSchema.options })
               },
-              layoutZone: zones[index] || zones[0],
-              rowIndex: 0,
+              layoutZone: savedLayoutZone || zones[index] || zones[0],
+              rowIndex: savedRowIndex !== undefined ? savedRowIndex : 0,
               exampleData: exampleData, // Use actual template data or ASSET_LIBRARY fallback
               alignment: alignment as 'left' | 'center' | 'right'
             };
@@ -1281,6 +682,13 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
     setDragOverSection(null);
   };
 
+  // Helper: Generate consistent field key like save function does
+  const generateFieldKey = (section: TemplateSection, fieldIndex: number): string => {
+    const sectionKey = section.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    // If section will have multiple fields, use indexed keys
+    return `${sectionKey}_${fieldIndex}`;
+  };
+
   // Drop handler for section (Classic mode - no zones, or Snap mode sequential placement)
   const handleSectionDrop = (sectionId: string) => {
     if (draggedAsset) {
@@ -1289,7 +697,19 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
 
       // LAYOUT MODE (always enabled)
       if (useSnapLayout) {
-        // If section is empty, use first zone from section's layout type
+        // Check if asset supports multi-column for non-full-width sections
+        console.log('Asset drop check:', {
+          assetName: draggedAsset.name,
+          supportsMultiColumn: draggedAsset.supportsMultiColumn,
+          sectionLayoutType: section.sectionLayoutType
+      });
+      
+      if (section.sectionLayoutType && section.sectionLayoutType !== 'full' && !draggedAsset.supportsMultiColumn) {
+        showNotification('warning', `"${draggedAsset.name}" cannot be placed in multi-column layouts. Please use a full-width section.`);
+        setDraggedAsset(null);
+        setDragOverSection(null);
+        return;
+      }        // If section is empty, use first zone from section's layout type
         if (section.fields.length === 0) {
           if (!section.sectionLayoutType) {
             showNotification('error', 'Section has no layout type. Please create section with layout picker.');
@@ -1299,11 +719,12 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
           const sequence = getLayoutSequence(section.sectionLayoutType);
           const firstZone = sequence[0];
           
+          const fieldKey = generateFieldKey(section, section.fields.length);
           const newField: TemplateField = {
             id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            key: draggedAsset.id + '_' + Date.now(),
+            key: fieldKey,
             label: draggedAsset.schema.label || draggedAsset.name,
-            renderType: draggedAsset.renderType,
+            renderType: draggedAsset.type,
             schema: { ...draggedAsset.schema },
             exampleData: draggedAsset.exampleData,
             layoutZone: firstZone,
@@ -1333,11 +754,12 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
           return;
         }
 
+        const fieldKey = generateFieldKey(section, section.fields.length);
         const newField: TemplateField = {
           id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          key: draggedAsset.id + '_' + Date.now(),
+          key: fieldKey,
           label: draggedAsset.schema.label || draggedAsset.name,
-          renderType: draggedAsset.renderType,
+          renderType: draggedAsset.type,
           schema: { ...draggedAsset.schema },
           exampleData: draggedAsset.exampleData,
           layoutZone: nextPlacement.zone,
@@ -1356,11 +778,12 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
       }
 
       // CLASSIC MODE - full width
+      const fieldKey = generateFieldKey(section, section.fields.length);
       const newField: TemplateField = {
         id: `field-${Date.now()}`,
-        key: draggedAsset.id + '_' + Date.now(),
+        key: fieldKey,
         label: draggedAsset.schema.label || draggedAsset.name,
-        renderType: draggedAsset.renderType,
+        renderType: draggedAsset.type,
         schema: { ...draggedAsset.schema },
         exampleData: draggedAsset.exampleData,
         layoutZone: 'full',
@@ -1424,7 +847,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
       id: `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       key: draggedAsset.id + '_' + Date.now(),
       label: draggedAsset.schema.label || draggedAsset.name,
-      renderType: draggedAsset.renderType,
+      renderType: draggedAsset.type,
       schema: { ...draggedAsset.schema },
       exampleData: draggedAsset.exampleData,
       layoutZone: targetZone,
@@ -1597,17 +1020,17 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
   };
 
   // Add layout asset as a section (generic for all layout assets)
-  const addLayoutAsset = (asset: Asset) => {
+  const addLayoutAsset = (asset: AssetItem) => {
     const layoutSection: TemplateSection = {
       id: `layout-${Date.now()}`,
-      name: `${asset.name} ${sections.filter(s => s.fields[0]?.renderType === asset.renderType).length + 1}`,
+      name: `${asset.name} ${sections.filter(s => s.fields[0]?.renderType === asset.type).length + 1}`,
       expanded: true,
       sectionLayoutType: 'full', // Layout assets always full width
       fields: [{
         id: `field-${Date.now()}`,
         key: `${asset.id}_${Date.now()}`,
         label: asset.schema.label || asset.name,
-        renderType: asset.renderType,
+        renderType: asset.type,
         schema: { ...asset.schema },
         exampleData: asset.exampleData,
         layoutZone: 'full'
@@ -1835,6 +1258,14 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
             // Save minimal schema metadata - just type and custom fields
             templateData[`_${fieldKey}_type`] = fieldType;
             
+            // Save layout metadata for snap layout
+            if (field.layoutZone) {
+              templateData[`_${fieldKey}_layoutZone`] = field.layoutZone;
+            }
+            if (field.rowIndex !== undefined) {
+              templateData[`_${fieldKey}_rowIndex`] = field.rowIndex;
+            }
+            
             // Save full itemSchema for array types (nestedCards, metricCards, charts, lists)
             if (field.schema.itemSchema) {
               templateData[`_${fieldKey}_itemSchema`] = field.schema.itemSchema;
@@ -1910,6 +1341,11 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
               templateData[fieldKey] = field.exampleData || field.schema.placeholder || '';
             }
           });
+          
+          // Save section layout type for snap layout
+          if (section.sectionLayoutType) {
+            templateData[`_${sectionKey}_sectionLayoutType`] = section.sectionLayoutType;
+          }
           
           // Enable the section by default
           templateData[`_enabled_${sectionKey}`] = true;
@@ -2035,7 +1471,6 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
             {/* Category Tree */}
             <div className="space-y-1">
               {ASSET_LIBRARY.map(category => {
-                const Icon = category.icon;
                 const isExpanded = expandedCategories.has(category.id);
                 return (
                   <div key={category.id} className="space-y-1">
@@ -2053,7 +1488,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                       ) : (
                         <ChevronRight className="w-4 h-4" />
                       )}
-                      <Icon className="w-4 h-4" />
+                      <Grid className="w-4 h-4" />
                       <span className="flex-1 text-left">{category.name}</span>
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
                         isExpanded 
@@ -2077,7 +1512,6 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                           <div className="space-y-2 py-2">
                             {category.assets.map(asset => {
                               const isLayoutAsset = category.id === 'layout';
-                              const AssetIcon = asset.icon;
                               
                               if (isLayoutAsset) {
                                 // Layout assets get an "Add" button + preview
@@ -2087,24 +1521,22 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                     className="relative group p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:shadow-md transition-all"
                                   >
                                     <div className="flex items-center gap-2 mb-2">
-                                      {AssetIcon && (
-                                        <div className={`p-2 rounded-lg ${asset.iconColor || 'text-gray-500'} bg-gray-100 dark:bg-gray-700`}>
-                                          <AssetIcon className="w-5 h-5" />
-                                        </div>
-                                      )}
+                                      <div className="p-2 rounded-lg text-gray-500 bg-gray-100 dark:bg-gray-700">
+                                        <Layers className="w-5 h-5" />
+                                      </div>
                                       <div className="flex-1">
                                         <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
                                           {asset.name}
                                         </div>
                                         <div className="text-xs text-fis-eggplant dark:text-fis-raspberry font-mono">
-                                          {asset.renderType}
+                                          {asset.type}
                                         </div>
                                       </div>
                                       {/* Preview Button */}
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          setAssetReferenceType(asset.renderType);
+                                          setAssetReferenceType(asset.type);
                                           setShowAssetReference(true);
                                         }}
                                         className="p-2 rounded-lg bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry transition-all opacity-0 group-hover:opacity-100"
@@ -2141,11 +1573,9 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                     className="p-3 rounded-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 cursor-grab active:cursor-grabbing hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:shadow-md transition-all"
                                   >
                                     <div className="flex items-center gap-2 mb-2">
-                                      {AssetIcon && (
-                                        <div className={`p-2 rounded-lg ${asset.iconColor || 'text-gray-500'} bg-gray-100 dark:bg-gray-700`}>
-                                          <AssetIcon className="w-5 h-5" />
-                                        </div>
-                                      )}
+                                      <div className="p-2 rounded-lg text-gray-500 bg-gray-100 dark:bg-gray-700">
+                                        <Type className="w-5 h-5" />
+                                      </div>
                                       <div className="flex-1">
                                         <div className="flex items-center gap-2">
                                           <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
@@ -2158,14 +1588,14 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                           )}
                                         </div>
                                         <div className="text-xs text-fis-eggplant dark:text-fis-raspberry font-mono">
-                                          {asset.renderType}
+                                          {asset.type}
                                         </div>
                                       </div>
                                       {/* Preview Button */}
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          setAssetReferenceType(asset.renderType);
+                                          setAssetReferenceType(asset.type);
                                           setShowAssetReference(true);
                                         }}
                                         className="p-2 rounded-lg bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry transition-all opacity-0 group-hover:opacity-100"
@@ -2349,15 +1779,14 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                     <div className="flex items-center gap-2">
                                       <GripVertical className="w-4 h-4 text-gray-400" />
                                       <div className="flex-1 min-w-0">
-                                        <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white truncate">
+                                        <div className="font-roobert-semibold text-sm truncate" style={{ color: 'var(--text-primary)' }}>
                                           {field.label}
                                         </div>
-                                        <div className="text-xs text-gray-500 dark:text-gray-500 font-mono truncate">
-                                          {field.key} • {field.renderType}
+                                        <div className="text-xs font-mono truncate" style={{ color: 'var(--text-secondary)' }}>
+                                          {field.key}
                                         </div>
-                                        {/* Zone badge */}
-                                        <div className="text-[10px] text-fis-eggplant dark:text-fis-raspberry font-roobert-medium mt-1">
-                                          {getZoneLabel(field.layoutZone || 'full')}
+                                        <div className="text-xs truncate" style={{ color: 'var(--brand-primary)' }}>
+                                          {field.renderType} | {getZoneLabel(field.layoutZone || 'full')}
                                         </div>
                                       </div>
                                       <button
@@ -2397,11 +1826,14 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                               <div className="flex items-center gap-2">
                                 <GripVertical className="w-4 h-4 text-gray-400" />
                                 <div className="flex-1">
-                                  <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                                  <div className="font-roobert-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
                                     {field.label}
                                   </div>
-                                  <div className="text-xs text-gray-500 dark:text-gray-500 font-mono">
-                                    {field.key} • {field.renderType}
+                                  <div className="text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>
+                                    {field.key}
+                                  </div>
+                                  <div className="text-xs" style={{ color: 'var(--brand-primary)' }}>
+                                    {field.renderType} | Full Width
                                   </div>
                                 </div>
                                 <button
@@ -3095,8 +2527,8 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                             <button
                               onClick={() => {
                                 const emptyCard: any = {};
-                                if (field.schema?.itemSchema?.fields) {
-                                  Object.keys(field.schema.itemSchema.fields).forEach(key => {
+                                if (field.schema?.fields) {
+                                  Object.keys(field.schema.fields).forEach(key => {
                                     emptyCard[key] = '';
                                   });
                                 }
@@ -3111,7 +2543,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                           <div className="space-y-2">
                             {(field.exampleData || []).map((card: any, cardIdx: number) => {
                               // Get first two field values for preview
-                              const fieldEntries = field.schema?.itemSchema?.fields ? Object.entries(field.schema.itemSchema.fields) : [];
+                              const fieldEntries = field.schema?.fields ? Object.entries(field.schema.fields) : [];
                               const firstField = fieldEntries[0] as [string, any] | undefined;
                               const secondField = fieldEntries[1] as [string, any] | undefined;
                               const firstValue = firstField ? card[firstField[0]] : '';
@@ -3145,7 +2577,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                   
                                   {/* Card Fields - Editable */}
                                   <div className="px-3 pb-3 space-y-2 border-t border-gray-200 dark:border-gray-700 pt-2">
-                                    {field.schema?.itemSchema?.fields && Object.entries(field.schema.itemSchema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
+                                    {field.schema?.fields && Object.entries(field.schema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
                                       <div key={fieldKey}>
                                         <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
                                           {fieldDef.label}
@@ -3173,81 +2605,6 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                             {(!field.exampleData || field.exampleData.length === 0) && (
                               <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
                                 No example cards. Click "+ Add Card" to add some.
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Example Data for Charts */}
-                      {(field.renderType === 'pieChart' || field.renderType === 'barChart' || field.renderType === 'lineChart' || field.renderType === 'radialChart') && (
-                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                          <div className="flex items-center justify-between mb-2">
-                            <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
-                              Chart Data Points
-                            </label>
-                            <button
-                              onClick={() => {
-                                const newDataPoint = { name: 'New', value: 0 };
-                                const newExamples = [...(field.exampleData || []), newDataPoint];
-                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                              }}
-                              className="text-xs px-2 py-1 rounded bg-fis-eggplant/10 text-fis-eggplant hover:bg-fis-eggplant/20 font-roobert-medium"
-                            >
-                              + Add Point
-                            </button>
-                          </div>
-                          <div className="space-y-2">
-                            {(field.exampleData || []).map((dataPoint: any, idx: number) => (
-                              <div key={idx} className="flex items-center gap-2 p-2 rounded bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
-                                <div className="flex-1 grid grid-cols-2 gap-2">
-                                  <div>
-                                    <label className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">
-                                      Label
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={dataPoint.name || ''}
-                                      onChange={(e) => {
-                                        const newExamples = [...(field.exampleData || [])];
-                                        newExamples[idx] = { ...newExamples[idx], name: e.target.value };
-                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                                      }}
-                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                                      placeholder="Label"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="text-xs text-gray-500 dark:text-gray-400 mb-1 block">
-                                      Value
-                                    </label>
-                                    <input
-                                      type="number"
-                                      value={dataPoint.value || 0}
-                                      onChange={(e) => {
-                                        const newExamples = [...(field.exampleData || [])];
-                                        newExamples[idx] = { ...newExamples[idx], value: parseFloat(e.target.value) || 0 };
-                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                                      }}
-                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                                      placeholder="0"
-                                    />
-                                  </div>
-                                </div>
-                                <button
-                                  onClick={() => {
-                                    const newExamples = (field.exampleData || []).filter((_: any, i: number) => i !== idx);
-                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
-                                  }}
-                                  className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 self-end mb-1"
-                                >
-                                  <X className="w-3 h-3" />
-                                </button>
-                              </div>
-                            ))}
-                            {(!field.exampleData || field.exampleData.length === 0) && (
-                              <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-2">
-                                No data points. Click "+ Add Point" to add some.
                               </div>
                             )}
                           </div>
@@ -3582,17 +2939,133 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                           <div className="flex items-center justify-between mb-2">
                             <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
+                              Status Columns
+                            </label>
+                            <button
+                              onClick={() => {
+                                const data = field.exampleData || { columns: [] };
+                                const newColumns = [...(data.columns || []), { title: 'New Column', items: [] }];
+                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', { columns: newColumns });
+                              }}
+                              className="text-xs px-2 py-1 rounded bg-fis-eggplant/10 text-fis-eggplant hover:bg-fis-eggplant/20 font-roobert-medium"
+                            >
+                              + Add Column
+                            </button>
+                          </div>
+                          <div className="space-y-3 max-h-96 overflow-y-auto">
+                            {((field.exampleData?.columns) || []).map((column: any, colIdx: number) => (
+                              <div key={colIdx} className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                                <div className="flex items-center justify-between mb-2">
+                                  <input
+                                    type="text"
+                                    value={column.title || ''}
+                                    onChange={(e) => {
+                                      const data = field.exampleData || { columns: [] };
+                                      const newColumns = [...(data.columns || [])];
+                                      newColumns[colIdx] = { ...newColumns[colIdx], title: e.target.value };
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', { columns: newColumns });
+                                    }}
+                                    className="flex-1 px-2 py-1 text-sm font-roobert-semibold rounded border border-gray-300 dark:border-gray-600"
+                                    placeholder="Column Title"
+                                  />
+                                  <button
+                                    onClick={() => {
+                                      const data = field.exampleData || { columns: [] };
+                                      const newColumns = (data.columns || []).filter((_: any, i: number) => i !== colIdx);
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', { columns: newColumns });
+                                    }}
+                                    className="ml-2 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                                <div className="space-y-2">
+                                  <label className="text-xs text-gray-600 dark:text-gray-400">Items:</label>
+                                  {(column.items || []).map((item: string, itemIdx: number) => (
+                                    <div key={itemIdx} className="flex gap-2">
+                                      <input
+                                        type="text"
+                                        value={item || ''}
+                                        onChange={(e) => {
+                                          const data = field.exampleData || { columns: [] };
+                                          const newColumns = [...(data.columns || [])];
+                                          const newItems = [...(newColumns[colIdx].items || [])];
+                                          newItems[itemIdx] = e.target.value;
+                                          newColumns[colIdx] = { ...newColumns[colIdx], items: newItems };
+                                          updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', { columns: newColumns });
+                                        }}
+                                        className="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                        placeholder="Item text"
+                                      />
+                                      <button
+                                        onClick={() => {
+                                          const data = field.exampleData || { columns: [] };
+                                          const newColumns = [...(data.columns || [])];
+                                          const newItems = (newColumns[colIdx].items || []).filter((_: any, i: number) => i !== itemIdx);
+                                          newColumns[colIdx] = { ...newColumns[colIdx], items: newItems };
+                                          updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', { columns: newColumns });
+                                        }}
+                                        className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
+                                      >
+                                        <X className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                  <button
+                                    onClick={() => {
+                                      const data = field.exampleData || { columns: [] };
+                                      const newColumns = [...(data.columns || [])];
+                                      const newItems = [...(newColumns[colIdx].items || []), ''];
+                                      newColumns[colIdx] = { ...newColumns[colIdx], items: newItems };
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', { columns: newColumns });
+                                    }}
+                                    className="w-full text-xs px-2 py-1 rounded border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-fis-eggplant hover:text-fis-eggplant"
+                                  >
+                                    + Add Item
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Example Data for arrays with object items (charts, metric cards, etc) */}
+                      {['pieChart', 'barChart', 'lineChart', 'radialChart', 'metricCard', 'nestedCards', 'riskCard', 'timeline', 'highlightsList', 'bulletList', 'checklistItems', 'twoColumnComparison', 'radialProgressChart', 'stackedBarChart'].includes(field.renderType) && (
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <div className="flex items-center justify-between mb-2">
+                            <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
                               Example Items
                             </label>
                             <button
                               onClick={() => {
                                 const emptyItem: any = {};
-                                if (field.schema?.itemSchema?.fields) {
-                                  Object.keys(field.schema.itemSchema.fields).forEach(key => {
+                                if (field.schema?.fields) {
+                                  Object.keys(field.schema.fields).forEach(key => {
                                     emptyItem[key] = '';
                                   });
                                 }
-                                const newExamples = [...(field.exampleData || []), emptyItem];
+                                // Handle different data structures
+                                let newExamples;
+                                if (field.renderType === 'twoColumnComparison') {
+                                  // Four block grid structure
+                                  newExamples = {
+                                    topLeftTitle: '',
+                                    topLeftContent: '',
+                                    topRightTitle: '',
+                                    topRightContent: '',
+                                    bottomLeftTitle: '',
+                                    bottomLeftContent: '',
+                                    bottomRightTitle: '',
+                                    bottomRightContent: ''
+                                  };
+                                } else if (['highlightsList', 'bulletList', 'checklistItems'].includes(field.renderType)) {
+                                  // Simple string arrays
+                                  newExamples = [...(field.exampleData || []), ''];
+                                } else {
+                                  // Object arrays
+                                  newExamples = [...(field.exampleData || []), emptyItem];
+                                }
                                 updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
                               }}
                               className="text-xs px-2 py-1 rounded bg-fis-eggplant/10 text-fis-eggplant hover:bg-fis-eggplant/20 font-roobert-medium"
@@ -3600,8 +3073,151 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                               + Add Item
                             </button>
                           </div>
-                          <div className="space-y-3 max-h-96 overflow-y-auto">
-                            {(field.exampleData || []).map((item: any, itemIdx: number) => (
+                          <div className="space-y-3 max-h-[600px] overflow-y-auto">
+                            {/* Four Block Grid Editor */}
+                            {field.renderType === 'twoColumnComparison' && field.exampleData && typeof field.exampleData === 'object' && (
+                              <div className="space-y-4">
+                                <div className="grid grid-cols-2 gap-3">
+                                  <div>
+                                    <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Top Left Title</label>
+                                    <input
+                                      type="text"
+                                      value={field.exampleData.topLeftTitle || ''}
+                                      onChange={(e) => {
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                          ...(field.exampleData || {}),
+                                          topLeftTitle: e.target.value
+                                        });
+                                      }}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                    />
+                                    <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block mt-2">Content</label>
+                                    <textarea
+                                      value={field.exampleData.topLeftContent || ''}
+                                      onChange={(e) => {
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                          ...(field.exampleData || {}),
+                                          topLeftContent: e.target.value
+                                        });
+                                      }}
+                                      rows={3}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Top Right Title</label>
+                                    <input
+                                      type="text"
+                                      value={field.exampleData.topRightTitle || ''}
+                                      onChange={(e) => {
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                          ...(field.exampleData || {}),
+                                          topRightTitle: e.target.value
+                                        });
+                                      }}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                    />
+                                    <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block mt-2">Content</label>
+                                    <textarea
+                                      value={field.exampleData.topRightContent || ''}
+                                      onChange={(e) => {
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                          ...(field.exampleData || {}),
+                                          topRightContent: e.target.value
+                                        });
+                                      }}
+                                      rows={3}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Bottom Left Title</label>
+                                    <input
+                                      type="text"
+                                      value={field.exampleData.bottomLeftTitle || ''}
+                                      onChange={(e) => {
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                          ...(field.exampleData || {}),
+                                          bottomLeftTitle: e.target.value
+                                        });
+                                      }}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                    />
+                                    <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block mt-2">Content</label>
+                                    <textarea
+                                      value={field.exampleData.bottomLeftContent || ''}
+                                      onChange={(e) => {
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                          ...(field.exampleData || {}),
+                                          bottomLeftContent: e.target.value
+                                        });
+                                      }}
+                                      rows={3}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">Bottom Right Title</label>
+                                    <input
+                                      type="text"
+                                      value={field.exampleData.bottomRightTitle || ''}
+                                      onChange={(e) => {
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                          ...(field.exampleData || {}),
+                                          bottomRightTitle: e.target.value
+                                        });
+                                      }}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                    />
+                                    <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block mt-2">Content</label>
+                                    <textarea
+                                      value={field.exampleData.bottomRightContent || ''}
+                                      onChange={(e) => {
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', {
+                                          ...(field.exampleData || {}),
+                                          bottomRightContent: e.target.value
+                                        });
+                                      }}
+                                      rows={3}
+                                      className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            
+                            {/* String Array Editor (for highlightsList, bulletList, checklistItems) */}
+                            {['highlightsList', 'bulletList', 'checklistItems'].includes(field.renderType) && Array.isArray(field.exampleData) && (
+                              <>
+                                {field.exampleData.map((item: string, itemIdx: number) => (
+                                  <div key={itemIdx} className="flex gap-2">
+                                    <input
+                                      type="text"
+                                      value={item || ''}
+                                      onChange={(e) => {
+                                        const newExamples = [...(field.exampleData || [])];
+                                        newExamples[itemIdx] = e.target.value;
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                      }}
+                                      className="flex-1 px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600"
+                                      placeholder="Item text"
+                                    />
+                                    <button
+                                      onClick={() => {
+                                        const newExamples = (field.exampleData || []).filter((_: any, i: number) => i !== itemIdx);
+                                        updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                      }}
+                                      className="p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
+                                    >
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </>
+                            )}
+
+                            {/* Object Array Editor (for charts, cards, etc) */}
+                            {!['highlightsList', 'bulletList', 'checklistItems', 'twoColumnComparison'].includes(field.renderType) && Array.isArray(field.exampleData) && field.exampleData.map((item: any, itemIdx: number) => (
                               <div key={itemIdx} className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
                                 <div className="flex items-center justify-between mb-2">
                                   <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">
@@ -3618,7 +3234,69 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                   </button>
                                 </div>
                                 <div className="space-y-2">
-                                  {field.schema?.itemSchema?.fields && Object.entries(field.schema.itemSchema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
+                                  {/* For stackedBarChart, show all object keys dynamically */}
+                                  {field.renderType === 'stackedBarChart' && (
+                                    <>
+                                      {Object.keys(item).map((fieldKey: string) => (
+                                        <div key={fieldKey} className="flex gap-2 items-start">
+                                          <div className="flex-1">
+                                            <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                              {fieldKey}
+                                            </label>
+                                            <input
+                                              type={fieldKey === 'name' ? 'text' : 'number'}
+                                              value={item[fieldKey] || ''}
+                                              onChange={(e) => {
+                                                const newExamples = [...(field.exampleData || [])];
+                                                newExamples[itemIdx] = {
+                                                  ...newExamples[itemIdx],
+                                                  [fieldKey]: fieldKey === 'name' ? e.target.value : Number(e.target.value)
+                                                };
+                                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                              }}
+                                              className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                              placeholder={`Enter ${fieldKey}`}
+                                            />
+                                          </div>
+                                          {fieldKey !== 'name' && (
+                                            <button
+                                              onClick={() => {
+                                                const newExamples = (field.exampleData || []).map((dataItem: any, idx: number) => {
+                                                  const { [fieldKey]: removed, ...rest } = dataItem;
+                                                  return rest;
+                                                });
+                                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                              }}
+                                              className="mt-6 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600"
+                                              title="Remove this data series from all items"
+                                            >
+                                              <X className="w-3 h-3" />
+                                            </button>
+                                          )}
+                                        </div>
+                                      ))}
+                                      {itemIdx === 0 && (
+                                        <button
+                                          onClick={() => {
+                                            const seriesName = prompt('Enter new data series name (e.g., "Meetings", "Calls"):');
+                                            if (seriesName && seriesName.trim()) {
+                                              const newExamples = (field.exampleData || []).map((dataItem: any) => ({
+                                                ...dataItem,
+                                                [seriesName.trim()]: 0
+                                              }));
+                                              updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                            }
+                                          }}
+                                          className="w-full text-xs px-2 py-1.5 rounded bg-blue-50 dark:bg-blue-900/20 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 font-roobert-medium"
+                                        >
+                                          + Add Data Series
+                                        </button>
+                                      )}
+                                    </>
+                                  )}
+                                  
+                                  {/* For other types with schema.fields */}
+                                  {field.renderType !== 'stackedBarChart' && field.schema?.fields && Object.entries(field.schema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
                                     <div key={fieldKey}>
                                       <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
                                         {fieldDef.label}
@@ -3656,6 +3334,20 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                             <option key={opt} value={opt}>{opt}</option>
                                           ))}
                                         </select>
+                                      ) : fieldDef.renderAs === 'checkbox' ? (
+                                        <input
+                                          type="checkbox"
+                                          checked={item[fieldKey] || false}
+                                          onChange={(e) => {
+                                            const newExamples = [...(field.exampleData || [])];
+                                            newExamples[itemIdx] = {
+                                              ...newExamples[itemIdx],
+                                              [fieldKey]: e.target.checked
+                                            };
+                                            updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExamples);
+                                          }}
+                                          className="rounded border-gray-300 dark:border-gray-600"
+                                        />
                                       ) : (
                                         <input
                                           type="text"
