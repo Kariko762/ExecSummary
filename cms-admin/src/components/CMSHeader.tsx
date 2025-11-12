@@ -6,13 +6,13 @@ import { useState, useEffect, useRef } from 'react';
 import APIDashboardModal from './APIDashboardModal';
 
 interface CMSHeaderProps {
-  onOpenEngineAssets?: () => void;
+  onOpenAssetReference?: () => void;
   onOpenStyleScheme?: () => void;
   onOpenTemplateBuilder?: () => void;
   onOpenSystemSettings?: () => void;
 }
 
-export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpenTemplateBuilder, onOpenSystemSettings }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenSystemSettings }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
@@ -233,13 +233,13 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
                                 className="absolute left-full top-0 ml-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[53]"
                               >
                                 <div className="p-2">
-                                  {/* Engine Assets */}
+                                  {/* Asset Reference */}
                                   <button
                                     onClick={() => {
-                                      console.log('Engine Assets clicked!');
+                                      console.log('Asset Reference clicked!');
                                       setIsNavDropdownOpen(false);
                                       setEngineSubmenuOpen(false);
-                                      onOpenEngineAssets?.();
+                                      onOpenAssetReference?.();
                                     }}
                                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-fis-eggplant/10 dark:hover:bg-fis-eggplant/20 text-gray-900 dark:text-white text-left"
                                   >
@@ -247,7 +247,7 @@ export default function CMSHeader({ onOpenEngineAssets, onOpenStyleScheme, onOpe
                                       <BookOpen className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
                                     </div>
                                     <div className="flex-1">
-                                      <div className="font-roobert-semibold text-sm">Engine Assets</div>
+                                      <div className="font-roobert-semibold text-sm">Asset Reference</div>
                                       <div className="text-xs text-gray-600 dark:text-gray-400">All render types & examples</div>
                                     </div>
                                   </button>

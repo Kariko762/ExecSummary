@@ -19,21 +19,14 @@ export const QuoteRenderer: React.FC<RendererProps> = ({
             {schema.label}
           </label>
         )}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-50/80 via-white/80 to-blue-50/80 dark:from-purple-900/20 dark:via-gray-800/80 dark:to-blue-900/20 backdrop-blur-sm border-l-4 border-fis-eggplant dark:border-fis-raspberry p-6 shadow-lg">
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-50/80 via-white/80 to-blue-50/80 dark:from-purple-900/20 dark:via-gray-800/80 dark:to-blue-900/20 backdrop-blur-sm border-l-4 border-r-4 border-fis-eggplant dark:border-fis-raspberry p-6 shadow-lg">
           {/* Glassmorphism overlay */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent dark:from-white/5 dark:to-transparent pointer-events-none" />
-          
-          {/* Quote icon */}
-          <Quote className="absolute top-4 right-4 w-8 h-8 text-fis-eggplant/20 dark:text-fis-raspberry/20" />
           
           {/* Content */}
           <div className="relative">
             <blockquote className="text-lg font-roobert-regular text-gray-800 dark:text-gray-200 italic leading-relaxed">
-              {value ? (
-                <>"{value}"</>
-              ) : (
-                <span className="text-gray-400 italic not-italic">No quote provided</span>
-              )}
+              {value || <span className="text-gray-400 italic not-italic">No quote provided</span>}
             </blockquote>
           </div>
         </div>

@@ -63,10 +63,11 @@
   "_enabled_highlights": true,
   "_completed_highlights": false,
   
-  "_keyPoints_type": "listNoTitle",
+  "_keyPoints_type": "list",
   "_keyPoints_itemSchema": {
     "type": "string",
-    "renderAs": "text"
+    "renderAs": "text",
+    "label": "Key Points"
   },
   "keyPoints": [
     "Completed Phase 1 ahead of schedule",
@@ -109,7 +110,7 @@
   "_enabled_metrics": true,
   "_completed_metrics": false,
   
-  "_teamData_type": "object",
+  "_teamData_type": "nestedCards",
   "_teamData_itemSchema": {
     "type": "object",
     "renderAs": "objectForm",
@@ -120,11 +121,23 @@
       "members": { "type": "number", "renderAs": "number", "label": "Member Count" }
     }
   },
-  "teamData": {
-    "team": "Revenue Operations",
-    "lead": "Sarah Johnson",
-    "members": 12
-  },
+  "teamData": [
+    {
+      "team": "Revenue Operations",
+      "lead": "Sarah Johnson",
+      "members": 12
+    },
+    {
+      "team": "Product Development",
+      "lead": "Michael Chen",
+      "members": 8
+    },
+    {
+      "team": "Customer Success",
+      "lead": "Emily Rodriguez",
+      "members": 15
+    }
+  ],
   "_enabled_teamData": true,
   "_completed_teamData": false,
   

@@ -1,9 +1,13 @@
 import React from 'react';
 import { RendererProps } from '../types/schema';
 import { getClasses, DesignSystem } from '../design-system';
+import { renderWithExpressions } from '../utils/expressionParser';
 
-export const TextRenderer: React.FC<RendererProps> = ({
-  fieldKey,
+/**
+ * Expression Renderer - Displays text with expression syntax
+ * Uses expressionParser to render {{currency:1000}}, {{percent:50}}, etc.
+ */
+export const ExpressionRenderer: React.FC<RendererProps> = ({
   schema,
   value,
   onChange,
@@ -11,16 +15,19 @@ export const TextRenderer: React.FC<RendererProps> = ({
   disabled,
   error
 }) => {
-  console.log(`[TextRenderer] Rendering with mode="${mode}", value="${value}", disabled=${disabled}, schema.enabled=${schema.enabled}`);
-  
   if (mode === 'display') {
     return (
       <div className={getClasses.text()}>
-        {value || <span className="text-gray-400 italic">Not set</span>}
+        {value ? (
+          renderWithExpressions(value as string)
+        ) : (
+          <span className="text-gray-400 italic">Not set</span>
+        )}
       </div>
     );
   }
 
+  // Edit mode
   return (
     <div className="space-y-2">
       {schema.label && (
@@ -35,7 +42,7 @@ export const TextRenderer: React.FC<RendererProps> = ({
         value={value || ''}
         onChange={(e) => onChange?.(e.target.value)}
         disabled={disabled || !schema.enabled}
-        placeholder={schema.placeholder}
+        placeholder={schema.placeholder || 'Example: {{currency:1000}} revenue {{trend:up}}'}
         className={`${getClasses.input()} ${
           error 
             ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20' 
@@ -46,6 +53,12 @@ export const TextRenderer: React.FC<RendererProps> = ({
       {schema.helpText && !error && (
         <p className={getClasses.hint()}>
           {schema.helpText}
+        </p>
+      )}
+
+      {!schema.helpText && !error && (
+        <p className={getClasses.hint()}>
+          Supports expressions: {'{{'} currency:value {'}}'}, {'{{'} percent:value {'}}'}, {'{{'} trend:up/down {'}}'}, etc.
         </p>
       )}
       

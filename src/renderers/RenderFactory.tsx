@@ -64,6 +64,7 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
       renderer = <NestedCardsRenderer {...props} />;
       break;
     
+    case 'object':
     case 'objectForm':
       renderer = <ObjectFormRenderer {...props} />;
       break;

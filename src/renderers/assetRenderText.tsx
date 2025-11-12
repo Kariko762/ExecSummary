@@ -99,11 +99,9 @@ export const QuotePattern: React.FC<TextPatternProps> = ({ data, onChange, mode 
   }
   
   return (
-    <div className="quote-wrapper">
-      <blockquote className="quote-display">
-        {data}
-      </blockquote>
-    </div>
+    <blockquote>
+      <p>{data}</p>
+    </blockquote>
   );
 };
 
@@ -125,10 +123,8 @@ export const CodeBlockPattern: React.FC<TextPatternProps> = ({ data, onChange, m
   }
   
   return (
-    <div className="code-wrapper">
-      <pre className="code-display">
-        <code>{data}</code>
-      </pre>
-    </div>
+    <pre>
+      <code>{data}</code>
+    </pre>
   );
 };

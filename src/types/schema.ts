@@ -9,6 +9,7 @@ export type RenderType =
   | 'keyValueList'      // Dynamic key-value pairs with custom labels
   | 'metricCards'       // Grid of metric cards
   | 'nestedCards'       // Array of objects as cards (departments)
+  | 'object'            // Object with labeled fields (alias for objectForm)
   | 'objectForm'        // Object with labeled fields
   | 'richText'          // WYSIWYG editor
   | 'dateRange'         // Timeline/date picker
@@ -129,6 +130,7 @@ export interface SectionSchema extends FieldSchema {
   enabled?: boolean;
   locked?: boolean;
   weight?: number;
+  interAssetBorder?: boolean; // Show vertical borders between assets in multi-column layouts
   fields: Record<string, FieldSchema>;
 }
 

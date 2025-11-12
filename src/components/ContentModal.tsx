@@ -526,15 +526,15 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                     {section.isMultiField && section.multiFieldData ? (
                       <div className={
                         section.multiFieldData.length === 2 
-                          ? 'grid grid-cols-2 gap-6'
+                          ? 'grid grid-cols-2 divide-x divide-fis-eggplant dark:divide-fis-raspberry'
                           : section.multiFieldData.length === 3
-                          ? 'grid grid-cols-3 gap-6'
+                          ? 'grid grid-cols-3 divide-x divide-fis-eggplant dark:divide-fis-raspberry'
                           : section.multiFieldData.length === 4
-                          ? 'grid grid-cols-4 gap-6'
-                          : 'grid grid-cols-2 gap-6'
+                          ? 'grid grid-cols-4 divide-x divide-fis-eggplant dark:divide-fis-raspberry'
+                          : 'grid grid-cols-2 divide-x divide-fis-eggplant dark:divide-fis-raspberry'
                       }>
-                        {section.multiFieldData.map((field: any) => (
-                          <div key={field.key}>
+                        {section.multiFieldData.map((field: any, index: number) => (
+                          <div key={field.key} className="px-6 first:pl-0 last:pr-0">
                             <RenderFactory
                               fieldKey={field.key}
                               value={field.data}

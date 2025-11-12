@@ -22,8 +22,9 @@ This document provides an executive summary of the three-phase change management
 | CR-002 | ExecutiveIQ Articles | Medium | 2-3 days (21h) | Medium | Nov 20-24, 2025 | Pending |
 | CR-003 | Strategic Initiatives | Medium | 3-4 days (29h) | High | Dec 4-9, 2025 | Pending |
 | CR-004 | Docker & Azure Deployment | Medium | 3-4 days (26h) | Medium | Dec 11-16, 2025 | Pending |
+| CR-005 | Asset Definitions Refactoring | Low | 0.5-1 day (8h) | Low | TBD | Pending |
 
-**Total:** 12-14 working days, 82 hours of development effort
+**Total:** 12-15 working days, 90 hours of development effort
 
 ---
 
@@ -103,6 +104,31 @@ The three changes must be implemented **sequentially**, not in parallel:
 **Public URLs:** ✅ Professional cloud deployment
 
 **Note:** Can run in parallel with CR-001/002/003 or after completion
+
+---
+
+### CR-005: Asset Definitions Refactoring (Technical Debt)
+**Approach:** Centralize asset definitions into single source of truth  
+**Key Activities:**
+- Create `/cms-admin/src/data/assetDefinitions.ts`
+- Consolidate `ASSET_LIBRARY` from TemplateBuilder
+- Consolidate `EXAMPLES` from EngineAssetsPreview
+- Update imports in both components
+- Create comprehensive documentation on adding new assets
+
+**Complexity:** ⭐ Low  
+**Impact:** Prevents duplication bugs, improves maintainability
+
+**Subtasks:**
+1. **Refactor Asset Definitions** - Create single source of truth file
+2. **Document Asset Creation Process** - Step-by-step guide for adding new assets including:
+   - Asset definition structure
+   - RenderType registration
+   - Renderer component creation
+   - TemplateBuilder integration
+   - Testing checklist
+
+**Note:** Can be implemented anytime, recommended before CR-001 to prevent future duplication issues
 
 ---
 

@@ -30,6 +30,28 @@
 
 /* Display mode has no border styling */
 
+/* Multi-Column Inter-Asset Border */
+.inter-asset-border {
+  border-right: 2px solid var(--brand-primary);
+  padding-right: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.inter-asset-border:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+/* Responsive border removal for mobile */
+@media (max-width: 768px) {
+  .inter-asset-border {
+    border-right: none;
+    padding-right: 0;
+    margin-right: 0;
+  }
+}
+
 /* ==========================================
    TEXT PATTERNS
    ========================================== */
@@ -90,14 +112,22 @@
 }
 
 /* Quote Pattern */
+.asset-wrapper .quote-wrapper {
+  background: var(--surface-base);
+  border: 1px solid var(--border-default);
+  border-left: 4px solid var(--brand-primary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 0.5rem 0;
+}
+
 .asset-wrapper .quote-display {
-  border-left: 4px solid var(--brand-secondary);
-  border-right: 4px solid var(--brand-secondary);
-  padding: 1rem;
   font-family: var(--font-quote);
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-style: italic;
-  color: var(--brand-primary);
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
 }
 
 /* Code Block Pattern */
@@ -707,111 +737,478 @@
   color: var(--text-primary);
 }
 
-/* Timeline Pattern */
-.asset-wrapper .timeline {
+/* Project Milestones Timeline - Horizontal */
+.asset-wrapper .timeline-horizontal {
+  position: relative;
+  padding: 12rem 0 4rem;
+  overflow-x: auto;
+}
+
+.asset-wrapper .timeline-line {
+  position: absolute;
+  top: 50%;
+  left: 4rem;
+  right: 4rem;
+  height: 4px;
+  background: var(--brand-primary);
+  transform: translateY(-50%);
+}
+
+.asset-wrapper .timeline-milestones {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 0 4rem;
+  min-width: 100%;
+}
+
+.asset-wrapper .timeline-milestone {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  position: relative;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex: 1;
 }
 
-.asset-wrapper .timeline-event {
-  display: flex;
-  gap: 1rem;
-  position: relative;
+.asset-wrapper .timeline-milestone:hover {
+  transform: translateY(-4px);
 }
 
-.asset-wrapper .timeline-marker {
-  flex-shrink: 0;
+/* Milestone circle marker */
+.asset-wrapper .milestone-circle {
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 9999px;
+  border-radius: 50%;
+  background: white;
+  border: 4px solid;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid;
+  font-size: 0.75rem;
+  font-weight: 700;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 2;
 }
 
-.asset-wrapper .timeline-event.completed .timeline-marker {
+/* Chevron hover indicator */
+.asset-wrapper .milestone-chevron {
+  position: absolute;
+  top: -1.5rem;
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-bottom: 0.5rem solid currentColor;
+  opacity: 0.7;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Date and title */
+.asset-wrapper .milestone-date {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.asset-wrapper .milestone-title {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 8rem;
+}
+
+/* Milestone colors */
+.asset-wrapper .timeline-milestone.completed .milestone-circle {
   background: var(--semantic-success);
   border-color: var(--semantic-success);
   color: white;
 }
 
-.asset-wrapper .timeline-event.pending .timeline-marker {
-  background: white;
-  border-color: var(--border-default);
-  color: var(--text-secondary);
+.asset-wrapper .timeline-milestone.pending .milestone-circle {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
 }
 
-.asset-wrapper .timeline-content {
-  flex: 1;
+.asset-wrapper .timeline-milestone:nth-child(1).pending .milestone-circle {
+  border-color: var(--brand-primary);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(2).pending .milestone-circle {
+  border-color: var(--brand-secondary);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(3).pending .milestone-circle {
+  border-color: var(--accent-blue);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(4).pending .milestone-circle {
+  border-color: var(--accent-green);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(5).pending .milestone-circle {
+  border-color: var(--accent-yellow);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(6).pending .milestone-circle {
+  border-color: var(--accent-red);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(7).pending .milestone-circle {
+  border-color: var(--brand-tertiary);
+}
+
+/* Tooltip */
+.asset-wrapper .milestone-tooltip {
+  position: absolute;
+  top: -10rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20rem;
+  padding: 1.25rem;
+  background: white;
+  border: 2px solid currentColor;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 20;
+}
+
+.asset-wrapper .timeline-milestone:hover .milestone-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.asset-wrapper .tooltip-title {
+  font-size: 1.125rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  color: currentColor;
+  margin-bottom: 0.75rem;
+}
+
+.asset-wrapper .tooltip-description {
+  font-size: 1rem;
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.asset-wrapper .tooltip-status {
+  font-size: 0.875rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.asset-wrapper .timeline-milestone.completed .tooltip-status {
+  color: var(--semantic-success);
+}
+
+.asset-wrapper .timeline-milestone.pending .tooltip-status {
+  color: currentColor;
+}
+
+/* Tooltip arrow pointing down to circle */
+.asset-wrapper .milestone-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-top: 0.5rem solid currentColor;
+}
+
+/* ============================================
+   COMPLEX PROJECT TIMELINE PATTERN
+   Gantt-style multi-phase timeline with swim lanes
+   ============================================ */
+
+.asset-wrapper .complex-timeline {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  background: var(--card-background);
+  border-radius: 0.75rem;
+}
+
+.asset-wrapper .timeline-header {
+  font-size: 1.75rem;
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  color: var(--brand-primary);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Month Headers Grid */
+.asset-wrapper .timeline-months {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(5rem, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  padding-left: 10rem; /* Space for phase labels */
+}
+
+.asset-wrapper .month-header {
+  font-size: 0.875rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Color gradient for months */
+.asset-wrapper .month-header:nth-child(1),
+.asset-wrapper .month-header:nth-child(2),
+.asset-wrapper .month-header:nth-child(3) {
+  background: linear-gradient(135deg, var(--accent-blue), var(--brand-secondary));
+}
+
+.asset-wrapper .month-header:nth-child(4),
+.asset-wrapper .month-header:nth-child(5),
+.asset-wrapper .month-header:nth-child(6) {
+  background: linear-gradient(135deg, var(--brand-secondary), var(--accent-green));
+}
+
+.asset-wrapper .month-header:nth-child(7),
+.asset-wrapper .month-header:nth-child(8),
+.asset-wrapper .month-header:nth-child(9) {
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-yellow));
+}
+
+.asset-wrapper .month-header:nth-child(10),
+.asset-wrapper .month-header:nth-child(11),
+.asset-wrapper .month-header:nth-child(12) {
+  background: linear-gradient(135deg, var(--accent-yellow), var(--accent-red));
+}
+
+/* Phase Rows (Swim Lanes) */
+.asset-wrapper .timeline-phase {
+  position: relative;
+  display: grid;
+  grid-template-columns: 10rem repeat(auto-fit, minmax(5rem, 1fr));
+  gap: 0.25rem;
+  align-items: start;
+  padding: 1.5rem 0;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.asset-wrapper .timeline-phase:last-child {
+  border-bottom: none;
+}
+
+.asset-wrapper .phase-label {
+  font-size: 1rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  color: white;
+  background: var(--brand-primary);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  align-self: center;
+  margin-right: 1rem;
+}
+
+/* Task Grid Container */
+.asset-wrapper .phase-tasks {
+  grid-column: 2 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.25rem;
+  position: relative;
+}
+
+/* Task Bars */
+.asset-wrapper .task-bar {
+  background: var(--brand-secondary);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.asset-wrapper .task-bar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Phase-specific task colors */
+.asset-wrapper .timeline-phase:nth-child(1) .task-bar {
+  background: linear-gradient(135deg, var(--accent-blue), var(--brand-secondary));
+}
+
+.asset-wrapper .timeline-phase:nth-child(2) .task-bar {
+  background: linear-gradient(135deg, var(--brand-secondary), var(--accent-green));
+}
+
+.asset-wrapper .timeline-phase:nth-child(3) .task-bar {
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-yellow));
+}
+
+.asset-wrapper .timeline-phase:nth-child(4) .task-bar {
+  background: linear-gradient(135deg, var(--accent-yellow), var(--accent-red));
+}
+
+/* Milestone Markers (Complex Timeline) */
+.asset-wrapper .milestone-marker-complex {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 0.5rem;
 }
 
-.asset-wrapper .timeline-date {
+.asset-wrapper .milestone-stem-complex {
+  width: 3px;
+  height: 5rem;
+  background: var(--brand-primary);
+  border-radius: 2px;
+}
+
+.asset-wrapper .milestone-label-complex {
   font-size: 0.75rem;
-  font-family: var(--font-primary);
-  font-weight: 600;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-}
-
-.asset-wrapper .timeline-title {
-  font-size: 1.125rem;
   font-family: var(--font-secondary);
-  color: var(--text-primary);
+  font-weight: 600;
+  color: var(--brand-primary);
+  text-align: center;
+  max-width: 6rem;
+  line-height: 1.2;
 }
 
-.asset-wrapper .timeline-description {
-  font-size: 0.875rem;
+.asset-wrapper .milestone-subtitle-complex {
+  font-size: 0.65rem;
   font-family: var(--font-primary);
   color: var(--text-secondary);
+  text-align: center;
+  max-width: 6rem;
+  line-height: 1.2;
+  margin-top: -0.25rem;
 }
 
-/* Two Column Comparison Pattern */
-.asset-wrapper .two-column-comparison {
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .asset-wrapper .timeline-months {
+    padding-left: 8rem;
+  }
+  
+  .asset-wrapper .timeline-phase {
+    grid-template-columns: 8rem repeat(auto-fit, minmax(4rem, 1fr));
+  }
+  
+  .asset-wrapper .phase-label {
+    font-size: 0.875rem;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .asset-wrapper .complex-timeline {
+    padding: 1rem 0.5rem;
+  }
+  
+  .asset-wrapper .timeline-months {
+    display: none; /* Hide month headers on mobile */
+  }
+  
+  .asset-wrapper .timeline-phase {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .asset-wrapper .phase-label {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  .asset-wrapper .phase-tasks {
+    grid-column: 1;
+    grid-template-columns: 1fr;
+  }
+  
+  .asset-wrapper .task-bar {
+    grid-column: 1 !important;
+  }
+  
+  .asset-wrapper .milestone-marker-complex {
+    grid-column: 1 !important;
+  }
+}
+
+/* Four Block Grid Pattern (Problem Statement / SWOT) */
+.asset-wrapper .four-block-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.asset-wrapper .four-block-grid .block {
+  background: var(--surface-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-default);
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.asset-wrapper .comparison-header {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.asset-wrapper .comparison-header > div {
+.asset-wrapper .four-block-grid .block-title {
   font-size: 1.125rem;
-  font-family: var(--font-primary);
+  font-family: var(--font-secondary);
   font-weight: 600;
-  padding: 1rem;
-  background: var(--brand-primary);
-  color: white;
-  text-align: center;
-  border-radius: 0.5rem;
-}
-
-.asset-wrapper .comparison-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.asset-wrapper .comparison-grid > div {
-  background: white;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border-default);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  font-size: 0.875rem;
-  font-family: var(--font-primary);
   color: var(--text-primary);
+}
+
+.asset-wrapper .four-block-grid .block-content {
+  font-size: 0.9375rem;
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .asset-wrapper .four-block-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Problem Solution Box Pattern */

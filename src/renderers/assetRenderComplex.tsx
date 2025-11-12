@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Calendar, CheckCircle, Circle } from 'lucide-react';
 
 export interface ComplexPatternProps {
   data: any;
@@ -96,7 +96,7 @@ export const StatusBoardPattern: React.FC<ComplexPatternProps> = ({ data, onChan
 };
 
 // ==========================================
-// PROJECT MILESTONES TIMELINE (Horizontal)
+// TIMELINE PATTERN (Vertical List)
 // ==========================================
 
 export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange, mode }) => {
@@ -125,7 +125,7 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
               type="text"
               value={event.date || ''}
               onChange={(e) => updateEvent(index, 'date', e.target.value)}
-              placeholder="Date (e.g., Jan 2025)..."
+              placeholder="Date (e.g., Nov 2025)..."
             />
             <input
               type="text"
@@ -150,34 +150,28 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
             <button onClick={() => removeEvent(index)}><X size={16} /></button>
           </div>
         ))}
-        <button onClick={addEvent}><Plus size={16} /> Add Milestone</button>
+        <button onClick={addEvent}><Plus size={16} /> Add Event</button>
       </div>
     );
   }
   
-  // Display mode - horizontal timeline with circles
   return (
-    <div className="timeline-horizontal">
-      <div className="timeline-line"></div>
-      <div className="timeline-milestones">
-        {events.map((event, index) => (
-          <div 
-            key={index} 
-            className={`timeline-milestone ${event.completed ? 'completed' : 'pending'}`}
-            data-milestone-index={index}
-          >
-            <div className="milestone-chevron"></div>
-            <div className="milestone-circle">{index + 1}</div>
-            <div className="milestone-date">{event.date}</div>
-            <div className="milestone-title">{event.title}</div>
-            <div className="milestone-tooltip">
-              <div className="tooltip-title">{event.title}</div>
-              <div className="tooltip-description">{event.description}</div>
-              <div className="tooltip-status">{event.completed ? 'Completed' : 'Upcoming'}</div>
-            </div>
+    <div className="timeline">
+      {events.map((event, index) => (
+        <div key={index} className={`timeline-event ${event.completed ? 'completed' : 'pending'}`}>
+          <div className="timeline-marker">
+            {event.completed ? <CheckCircle size={20} /> : <Circle size={20} />}
           </div>
-        ))}
-      </div>
+          <div className="timeline-content">
+            <div className="timeline-date">
+              <Calendar size={16} />
+              {event.date}
+            </div>
+            <div className="timeline-title">{event.title}</div>
+            <div className="timeline-description">{event.description}</div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
@@ -188,14 +182,12 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
 
 export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data, onChange, mode }) => {
   const defaultData = {
-    topLeftTitle: '',
-    topLeftContent: '',
-    topRightTitle: '',
-    topRightContent: '',
-    bottomLeftTitle: '',
-    bottomLeftContent: '',
-    bottomRightTitle: '',
-    bottomRightContent: ''
+    leftTitle: '',
+    rightTitle: '',
+    leftTop: '',
+    leftBottom: '',
+    rightTop: '',
+    rightBottom: ''
   };
   
   const compData = { ...defaultData, ...data };
@@ -206,60 +198,44 @@ export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data
     };
     
     return (
-      <div className="four-block-edit">
-        <div className="block-edit">
+      <div className="two-column-edit">
+        <div className="headers">
           <input
             type="text"
-            value={compData.topLeftTitle}
-            onChange={(e) => updateField('topLeftTitle', e.target.value)}
-            placeholder="Top Left Title..."
+            value={compData.leftTitle}
+            onChange={(e) => updateField('leftTitle', e.target.value)}
+            placeholder="Left Column Title..."
           />
-          <textarea
-            value={compData.topLeftContent}
-            onChange={(e) => updateField('topLeftContent', e.target.value)}
-            placeholder="Top Left Content..."
-            rows={4}
+          <input
+            type="text"
+            value={compData.rightTitle}
+            onChange={(e) => updateField('rightTitle', e.target.value)}
+            placeholder="Right Column Title..."
           />
         </div>
-        <div className="block-edit">
-          <input
-            type="text"
-            value={compData.topRightTitle}
-            onChange={(e) => updateField('topRightTitle', e.target.value)}
-            placeholder="Top Right Title..."
-          />
+        <div className="content-grid">
           <textarea
-            value={compData.topRightContent}
-            onChange={(e) => updateField('topRightContent', e.target.value)}
-            placeholder="Top Right Content..."
+            value={compData.leftTop}
+            onChange={(e) => updateField('leftTop', e.target.value)}
+            placeholder="Left Top Content..."
             rows={4}
           />
-        </div>
-        <div className="block-edit">
-          <input
-            type="text"
-            value={compData.bottomLeftTitle}
-            onChange={(e) => updateField('bottomLeftTitle', e.target.value)}
-            placeholder="Bottom Left Title..."
-          />
           <textarea
-            value={compData.bottomLeftContent}
-            onChange={(e) => updateField('bottomLeftContent', e.target.value)}
-            placeholder="Bottom Left Content..."
+            value={compData.rightTop}
+            onChange={(e) => updateField('rightTop', e.target.value)}
+            placeholder="Right Top Content..."
             rows={4}
           />
-        </div>
-        <div className="block-edit">
-          <input
-            type="text"
-            value={compData.bottomRightTitle}
-            onChange={(e) => updateField('bottomRightTitle', e.target.value)}
-            placeholder="Bottom Right Title..."
+          <textarea
+            value={compData.leftBottom}
+            onChange={(e) => updateField('leftBottom', e.target.value)}
+            placeholder="Left Bottom Content..."
+            rows={4}
           />
           <textarea
-            value={compData.bottomRightContent}
-            onChange={(e) => updateField('bottomRightContent', e.target.value)}
-            placeholder="Bottom Right Content..."
+            value={compData.rightBottom}
+            onChange={(e) => updateField('rightBottom', e.target.value)}
+            placeholder="Right Bottom Content..."
             rows={4}
           />
         </div>
@@ -268,22 +244,16 @@ export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data
   }
   
   return (
-    <div className="four-block-grid">
-      <div className="block">
-        <div className="block-title">{compData.topLeftTitle}</div>
-        <div className="block-content">{compData.topLeftContent}</div>
+    <div className="two-column-comparison">
+      <div className="comparison-header">
+        <div className="left-header">{compData.leftTitle}</div>
+        <div className="right-header">{compData.rightTitle}</div>
       </div>
-      <div className="block">
-        <div className="block-title">{compData.topRightTitle}</div>
-        <div className="block-content">{compData.topRightContent}</div>
-      </div>
-      <div className="block">
-        <div className="block-title">{compData.bottomLeftTitle}</div>
-        <div className="block-content">{compData.bottomLeftContent}</div>
-      </div>
-      <div className="block">
-        <div className="block-title">{compData.bottomRightTitle}</div>
-        <div className="block-content">{compData.bottomRightContent}</div>
+      <div className="comparison-grid">
+        <div className="left-top">{compData.leftTop}</div>
+        <div className="right-top">{compData.rightTop}</div>
+        <div className="left-bottom">{compData.leftBottom}</div>
+        <div className="right-bottom">{compData.rightBottom}</div>
       </div>
     </div>
   );
@@ -336,7 +306,3 @@ export const ProblemSolutionBoxPattern: React.FC<ComplexPatternProps> = ({ data,
     </div>
   );
 };
-
-// ==========================================
-// COMPLEX PROJECT TIMELINE (Gantt-style with Phases)
-// ==========================================

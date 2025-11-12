@@ -175,6 +175,48 @@ node generate-password.js your-password
 
 ## CMS ContentIQ
 
+### Asset Library System (November 11, 2025)
+
+**Purpose:** Modern asset preview and selection interface for Template Builder
+
+**Components:**
+- **AssetLibrary.tsx** (`/cms-admin/src/components/AssetLibrary.tsx`)
+  - Live preview component with interactive editing
+  - Category filtering: All, basic, lists, complex, rich, charts, media
+  - Search functionality across asset names and descriptions
+  - Multi-column preview toggle (1, 2, or 3 columns)
+  - Real-time data editing with JSON textarea
+  - Collapsible code viewer for schema and exampleData
+
+- **assetDataStore.ts** (`/cms-admin/src/schemas/assetDataStore.ts`)
+  - Single source of truth for 22 asset definitions
+  - Each asset contains: id, name, type, description, category, schema, exampleData
+  - Categories: basic (4), lists (6), charts (4), complex (4), rich (3), media (0)
+
+- **assetRenderEngine.tsx** (`/cms-admin/src/renderers/assetRenderEngine.tsx`)
+  - Master orchestrator routing to 6 specialized pattern files
+  - Applies design system wrapper classes
+  - Handles mode switching (display vs edit)
+
+- **assetRenderEngine.css** (`/cms-admin/src/renderers/assetRenderEngine.css`)
+  - Complete styling using semantic design system variables
+  - NO hardcoded hex values allowed
+  - Uses `var(--brand-primary)`, `var(--accent-green)`, etc.
+
+**Pattern Files (6 total):**
+1. `assetRenderText.tsx` - Text, Textarea, RichText, Quote, CodeBlock (5 assets)
+2. `assetRenderLists.tsx` - HighlightsList, BulletList, ChecklistItems, ProgressBarList, KeyValueList (5 assets)
+3. `assetRenderCards.tsx` - MetricCard, NestedCards, RiskCard, OutlookCard, CategoryList (5 assets)
+4. `assetRenderCharts.tsx` - RadialProgress, PieChart, BarChart, LineChart (4 assets)
+5. `assetRenderComplex.tsx` - StatusBoard, Timeline, TwoColumnComparison, ProblemSolutionBox (4 assets)
+6. `assetRenderUtility.tsx` - Hr, Number (2 assets)
+
+**Design Principles:**
+- Pattern files contain ONLY logic/structure (no styling)
+- Master engine applies design system classes
+- All colors use semantic CSS variables
+- Single source of truth (assetDataStore)
+
 ### Editor Workflow
 
 1. **Create New Summary**

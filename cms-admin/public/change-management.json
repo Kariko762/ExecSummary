@@ -23,45 +23,52 @@
   ],
   "sections": [
     {
+      "id": "v1-2-4",
+      "title": "v1.2.4 - EditorModalV2 Bug Fixes",
+      "groupId": "release-notes",
+      "order": 1,
+      "content": "# Release Notes\n\n## Version 1.2.4 - EditorModalV2 Bug Fixes\n**Released: November 11, 2025**\n\n### 🐛 Critical Bug Fixes\n- **Fixed 'Unknown renderer type: object' error**\n  - Object-type assets (Team Data, Executive Details, Project Status) now render properly\n  - Added 'object' case to RenderFactory (backward compatible with 'objectForm')\n  - No Template Builder changes required\n\n### ✨ New Features\n- **Central Notification Integration**: EditorModalV2 uses unified toast system\n- **Section Complete Notifications**: Visual feedback when marking sections complete/incomplete\n- **Extended Notification Types**: Added 'info' and 'warning' alongside 'success' and 'error'\n\n### 🎨 UI/UX Improvements\n- HR/divider sections no longer clutter navigation sidebar (display-only)\n- Section complete toggles show descriptive success messages\n- Consistent notification styling across all modals\n\n### 📝 Technical\n- Updated TypeScript RenderType to include 'object'\n- Modified 5 files with zero breaking changes\n- 100% backward compatible with existing templates"
+    },
+    {
       "id": "v1-2-3",
       "title": "v1.2.3 - Change Management & RichText",
       "groupId": "release-notes",
-      "order": 1,
+      "order": 2,
       "content": "# Release Notes\n\n## Version 1.2.3 - Documentation System\n**Released: November 10, 2025**\n\n### ✨ New Features\n- **Change Management Modal**: Collapsible menu system for release notes, changelog, and dev tasks\n- **RichTextRenderer**: Markdown rendering via RenderEngine with Design System integration\n- **ContentModalFixedMenu**: Reusable modal component with fixed left navigation\n- **System Settings Documentation Tab**: Access Change Management from Settings\n\n### 🐛 Bug Fixes\n- Fixed RichTextRenderer Design System class methods (text() vs body())\n- Fixed ContentModalFixedMenu sizing - now fixed h-[90vh] instead of max-h\n- Auto-expand active section's group on load\n\n### 📝 Documentation\n- Moved to semantic versioning (MAJOR.MINOR.PATCH)\n- Granular changelog tracking\n- JSON-driven content management"
     },
     {
       "id": "v1-2-2",
       "title": "v1.2.2 - Alignment & Change Detection",
       "groupId": "release-notes",
-      "order": 2,
+      "order": 3,
       "content": "## Version 1.2.2 - Alignment & Change Detection\n**Released: November 9, 2025**\n\n### ✨ New Features\n- **Text Alignment Controls**: Left/center/right alignment for all 22 asset types\n- **Unsaved Changes Warning**: Intelligent change detection with confirmation modal\n- **Template Tracking**: Display base template name in header\n\n### 🐛 Bug Fixes\n- **Object Type Preservation**: Fixed Object vs Key-Value distinction loss on save/load\n- **Template Data Loading**: Fixed templates showing generic examples instead of saved data\n- **Section Layout Preservation**: Empty sections maintain column layouts\n\n### ✨ UI/UX Improvements\n- Asset Library starts collapsed\n- Back button styling matches Design System Manager\n- Metric cards use proper nested card layout\n- Clear distinction between list vs listNoTitle"
     },
     {
       "id": "v1-2-1",
       "title": "v1.2.1 - Nested Cards Preview",
       "groupId": "release-notes",
-      "order": 3,
+      "order": 4,
       "content": "## Version 1.2.1 - Nested Cards Preview\n**Released: November 7, 2025**\n\n### ✨ New Features\n- Enhanced nested cards preview in Properties Panel\n- Show card content previews instead of just field names\n\n### 🐛 Bug Fixes\n- Fixed metric cards rendering with proper nested card layout"
     },
     {
       "id": "v1-2-0",
       "title": "v1.2.0 - Multi-Column Support",
       "groupId": "release-notes",
-      "order": 4,
+      "order": 5,
       "content": "## Version 1.2.0 - Multi-Column Support\n**Released: November 5, 2025**\n\n### ✨ New Features\n- Multi-column template import/export (2, 3, 4 columns)\n- Indexed field support (section_1_0, section_1_1)\n- Grid layout rendering for multi-column sections\n\n### 🐛 Bug Fixes\n- Multi-column section import bugs resolved\n- RenderTypes metadata handling improved\n- Object/KeyValue schema.fields copying fixed"
     },
     {
       "id": "v1-1-0",
       "title": "v1.1.0 - Properties Panel Enhancements",
       "groupId": "release-notes",
-      "order": 5,
+      "order": 6,
       "content": "## Version 1.1.0 - Properties Panel Enhancements\n**Released: October 20, 2025**\n\n### ✨ New Features\n- Enhanced Properties Panel with live preview\n- Asset-specific editors for all 22 types\n- Field validation and error messages\n\n### 🐛 Bug Fixes\n- Fixed chart data editor not saving properly\n- Fixed image URL validation"
     },
     {
       "id": "v1-0-0",
       "title": "v1.0.0 - Initial Release",
       "groupId": "release-notes",
-      "order": 6,
+      "order": 7,
       "content": "## Version 1.0.0 - Initial Release\n**Released: October 1, 2025**\n\n### 🚀 Initial Features\n- 22 asset types with Properties Panel editors\n- Template Builder with drag-and-drop\n- JSON schema validation\n- Dark mode support\n- Export/import functionality\n\n### 📦 Asset Categories\n- **Basic Inputs**: text, textarea, number, date\n- **Lists & Arrays**: simple, labeled, cards, metrics\n- **Complex**: object, key-value\n- **Rich Content**: markdown, quote, code\n- **Charts**: pie, bar, line, radial\n- **Media**: image, video, embedded\n- **Layout**: hr, status board, progress bar"
     },
     {
@@ -69,48 +76,55 @@
       "title": "Unreleased",
       "groupId": "changelog",
       "order": 1,
-      "content": "# Changelog\n\nAll notable changes to the Executive Summary CMS platform.\n\n## [Unreleased]\n\n### Planned\n- Undo/redo functionality (v1.3.0)\n- Markdown preview rendering (v1.2.4)\n- Expression preview rendering (v1.2.5)\n- \"Remove all sections\" feature (v1.2.4)"
+      "content": "# Changelog\n\nAll notable changes to the Executive Summary CMS platform.\n\n## [Unreleased]\n\n### In Progress\n- EditorModalV2 production testing and bug fixes (v1.2.4)\n\n### Planned\n- Undo/redo functionality (v1.3.0)\n- Markdown preview rendering (v1.2.4)\n- Expression preview rendering (v1.2.5)\n- \"Remove all sections\" feature (v1.2.4)"
+    },
+    {
+      "id": "v1-2-4-log",
+      "title": "[1.2.4] - 2025-11-11",
+      "groupId": "changelog",
+      "order": 2,
+      "content": "## [1.2.4] - 2025-11-11\n\n### Added\n- Central notification system integration in EditorModalV2\n- Support for 'info' and 'warning' notification types in App.tsx\n- Section complete/incomplete notifications with visual feedback\n\n### Changed\n- RenderFactory now supports both 'object' and 'objectForm' renderAs types\n- TypeScript RenderType updated to include 'object' as valid type\n- HR/divider sections filtered from EditorModalV2 navigation sidebar\n- Notification type expanded from 'success' | 'error' to include 'info' | 'warning'\n\n### Fixed\n- **CRITICAL**: Fixed 'Unknown renderer type: object' error in EditorModalV2\n  - Root cause: assetTypeRegistry uses renderAs: 'object' but RenderFactory only had 'objectForm'\n  - Solution: Added 'object' case to RenderFactory switch statement (backward compatible)\n  - Impact: All object-type assets (Team Data, Executive Details, etc.) now render correctly\n- HR/divider sections no longer appear in section navigation (display-only, not editable)\n- EditorModalV2 toggleComplete() now uses central showNotification system instead of inline alerts\n\n### Technical Details\n- Files Modified: 5 total\n  1. `/src/types/schema.ts` - Added 'object' to RenderType union\n  2. `/src/renderers/RenderFactory.tsx` - Added case 'object' alongside 'objectForm'\n  3. `/cms-admin/src/components/EditorModalV2.tsx` - Added showNotification prop, filtered HR sections, integrated central notifications\n  4. `/cms-admin/src/App.tsx` - Updated notification types, passed showNotification to EditorModalV2, added warning/info icon handling\n  5. `/cms-admin/public/change-management.json` - This changelog entry\n- Backward Compatibility: 100% maintained (both 'object' and 'objectForm' supported)\n- Template Builder: No changes required (continues using 'object')\n- Breaking Changes: None"
     },
     {
       "id": "v1-2-3-log",
       "title": "[1.2.3] - 2025-11-10",
       "groupId": "changelog",
-      "order": 2,
+      "order": 3,
       "content": "## [1.2.3] - 2025-11-10\n\n### Added\n- Change Management modal with collapsible menu system\n- RichTextRenderer for markdown content via RenderEngine\n- ContentModalFixedMenu component for documentation\n- System Settings Documentation tab\n- Auto-expand active section's parent group on load\n\n### Changed\n- Moved to semantic versioning (MAJOR.MINOR.PATCH)\n- Changed ContentModalFixedMenu to fixed height (h-[90vh])\n- Flattened change-management.json structure (groups + sections)\n\n### Fixed\n- RichTextRenderer using correct Design System class methods\n- ContentModalFixedMenu sizing and stability issues"
     },
     {
       "id": "v1-2-2-log",
       "title": "[1.2.2] - 2025-11-09",
       "groupId": "changelog",
-      "order": 3,
+      "order": 4,
       "content": "## [1.2.2] - 2025-11-09\n\n### Added\n- Text alignment controls (left/center/right) for all asset types\n- Unsaved changes warning modal with intelligent detection\n- Template tracking with base template name display\n- Alignment metadata storage (_${fieldKey}_alignment)\n\n### Changed\n- Asset Library now starts with all categories collapsed\n- Back button styling to match Design System Manager\n- Metric cards rendering to use nestedCards\n\n### Fixed\n- Object vs Key-Value type preservation on save/load\n- Template data loading showing generic examples bug\n- Section layout preservation when deleting last field\n- List vs listNoTitle label display distinction"
     },
     {
       "id": "v1-2-1-log",
       "title": "[1.2.1] - 2025-11-07",
       "groupId": "changelog",
-      "order": 4,
+      "order": 5,
       "content": "## [1.2.1] - 2025-11-07\n\n### Added\n- Enhanced nested cards preview in Properties Panel\n- Card content previews instead of field names\n\n### Fixed\n- Metric cards rendering with proper nested card layout"
     },
     {
       "id": "v1-2-0-log",
       "title": "[1.2.0] - 2025-11-05",
       "groupId": "changelog",
-      "order": 5,
+      "order": 6,
       "content": "## [1.2.0] - 2025-11-05\n\n### Added\n- Multi-column template support (2, 3, 4 columns)\n- Indexed field handling (section_1_0, section_1_1)\n- Grid layout rendering for multi-column sections\n\n### Fixed\n- Multi-column section import bugs\n- RenderTypes metadata handling\n- Object/KeyValue schema.fields copying"
     },
     {
       "id": "v1-1-0-log",
       "title": "[1.1.0] - 2025-10-20",
       "groupId": "changelog",
-      "order": 6,
+      "order": 7,
       "content": "## [1.1.0] - 2025-10-20\n\n### Added\n- Enhanced Properties Panel with live preview\n- Asset-specific editors for all 22 types\n- Field validation and error messages\n\n### Fixed\n- Chart data editor not saving properly\n- Image URL validation"
     },
     {
       "id": "v1-0-0-log",
       "title": "[1.0.0] - 2025-10-01",
       "groupId": "changelog",
-      "order": 7,
+      "order": 8,
       "content": "## [1.0.0] - 2025-10-01\n\n### Added\n- Initial Template Builder release\n- 22 asset types across 7 categories\n- Properties Panel for all assets\n- JSON schema validation\n- Dark/light mode theming\n- Export/import functionality\n- Drag-and-drop interface\n\n### Categories\n- Basic Inputs (text, textarea, number, date)\n- Lists & Arrays (simple, labeled, cards, metrics)\n- Complex (object, key-value)\n- Rich Content (markdown, quote, code)\n- Charts (pie, bar, line, radial)\n- Media (image, video, embedded)\n- Layout (hr, status board, progress bar)"
     },
     {
@@ -118,14 +132,14 @@
       "title": "🚀 Completed Tasks",
       "groupId": "dev-tasks",
       "order": 1,
-      "content": "# Development Tasks\n\n## 🚀 Completed Tasks\n\n### v1.2.3 - Documentation System ✅\n- [x] Create Change Management modal\n- [x] Implement RichTextRenderer\n- [x] Build ContentModalFixedMenu component\n- [x] Add collapsible menu system\n- [x] Auto-expand active section's group\n- [x] Fix RichTextRenderer Design System classes\n- [x] Fix modal sizing issues\n- [x] Move to semantic versioning\n\n### v1.2.2 - Alignment & Change Detection ✅\n- [x] Implement alignment controls for all 22 asset types\n- [x] Add unsaved changes tracking and warning\n- [x] Display base template name when loaded\n- [x] Fix Object vs Key-Value type preservation\n- [x] Fix template data loading bug\n- [x] Preserve section layouts when deleting fields\n- [x] Update back button styling\n- [x] Fix metric cards rendering\n- [x] Clarify list vs listNoTitle distinction\n\n### v1.2.1 - Preview Enhancements ✅\n- [x] Add nested cards preview to Properties Panel\n- [x] Show card content previews\n\n### v1.2.0 - Multi-Column Support ✅\n- [x] Multi-column template import/export\n- [x] Indexed field handling\n- [x] Grid layout rendering\n\n### v1.1.0 - Properties Panel ✅\n- [x] Enhanced Properties Panel\n- [x] Asset-specific editors for all 22 types\n- [x] Field validation\n\n### v1.0.0 - Initial Release ✅\n- [x] All 22 asset types with example data and editors\n- [x] Template Builder with drag-and-drop\n- [x] JSON schema validation\n- [x] Dark mode support"
+      "content": "# Development Tasks\n\n## 🚀 Completed Tasks\n\n### v1.2.4 - EditorModalV2 Bug Fixes ✅\n- [x] Fix 'Unknown renderer type: object' error\n- [x] Add 'object' case to RenderFactory\n- [x] Update RenderType TypeScript definition\n- [x] Integrate central notification system in EditorModalV2\n- [x] Add support for 'info' and 'warning' notification types\n- [x] Filter HR/divider sections from navigation sidebar\n- [x] Add section complete/incomplete notifications\n- [x] Update change-management.json with v1.2.4 changelog\n- [x] Ensure zero breaking changes (backward compatible)\n\n### v1.2.3 - Documentation System ✅\n- [x] Create Change Management modal\n- [x] Implement RichTextRenderer\n- [x] Build ContentModalFixedMenu component\n- [x] Add collapsible menu system\n- [x] Auto-expand active section's group\n- [x] Fix RichTextRenderer Design System classes\n- [x] Fix modal sizing issues\n- [x] Move to semantic versioning\n\n### v1.2.2 - Alignment & Change Detection ✅\n- [x] Implement alignment controls for all 22 asset types\n- [x] Add unsaved changes tracking and warning\n- [x] Display base template name when loaded\n- [x] Fix Object vs Key-Value type preservation\n- [x] Fix template data loading bug\n- [x] Preserve section layouts when deleting fields\n- [x] Update back button styling\n- [x] Fix metric cards rendering\n- [x] Clarify list vs listNoTitle distinction\n\n### v1.2.1 - Preview Enhancements ✅\n- [x] Add nested cards preview to Properties Panel\n- [x] Show card content previews\n\n### v1.2.0 - Multi-Column Support ✅\n- [x] Multi-column template import/export\n- [x] Indexed field handling\n- [x] Grid layout rendering\n\n### v1.1.0 - Properties Panel ✅\n- [x] Enhanced Properties Panel\n- [x] Asset-specific editors for all 22 types\n- [x] Field validation\n\n### v1.0.0 - Initial Release ✅\n- [x] All 22 asset types with example data and editors\n- [x] Template Builder with drag-and-drop\n- [x] JSON schema validation\n- [x] Dark mode support"
     },
     {
       "id": "pending",
       "title": "📋 Pending Tasks",
       "groupId": "dev-tasks",
       "order": 2,
-      "content": "## 📋 Pending Tasks\n\n### v1.2.4 - Planned (Next Patch)\n- [ ] Add Markdown preview rendering\n  - Parse markdown in preview mode\n  - Update richText renderer\n  - Show formatted output instead of raw syntax\n\n- [ ] Implement \"Remove all sections\" feature\n  - Add confirmation modal\n  - Reset to clean slate with header only\n  - Test edge cases\n\n### v1.2.5 - Planned\n- [ ] Add Expression preview rendering\n  - Evaluate expressions in preview mode\n  - Show calculated results\n  - Integrate expression parser\n\n### v1.3.0 - Planned (Next Minor)\n- [ ] Implement Undo/Redo functionality\n  - Create state history stack\n  - Track section and property changes\n  - Add keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z)\n  - Test complex state management\n\n### Future Enhancements\n- [ ] Template versioning and history\n- [ ] Collaborative editing\n- [ ] Real-time preview sync\n- [ ] Template marketplace/sharing"
+      "content": "## 📋 Pending Tasks\n\n### v1.2.4 - Planned (Next Patch)\n- [ ] Review Template Naming System\n  - Backend section count includes ALL fields (metadata, enabled/completed flags)\n  - Should only count actual content sections visible in EditorModalV2\n  - Fix backend `/api/templates` to exclude metadata fields from sectionCount\n  - Update Template Builder export to set accurate `_template_name`\n\n- [ ] Fix ContentModalFixedMenu infinite re-render\n  - Error: \"Maximum update depth exceeded\" in console (hundreds of messages)\n  - Issue: setState inside useEffect without proper dependency array\n  - Location: ContentModalFixedMenu.tsx line 96\n  - Impact: Performance degradation, console spam\n  - Priority: HIGH (affects Change Management modal and other documentation modals)\n\n- [ ] Add Markdown preview rendering\n  - Parse markdown in preview mode\n  - Update richText renderer\n  - Show formatted output instead of raw syntax\n\n- [ ] Implement \"Remove all sections\" feature\n  - Add confirmation modal\n  - Reset to clean slate with header only\n  - Test edge cases\n\n### v1.2.5 - Planned\n- [ ] Add Expression preview rendering\n  - Evaluate expressions in preview mode\n  - Show calculated results\n  - Integrate expression parser\n\n### v1.3.0 - Planned (Next Minor)\n- [ ] Implement Undo/Redo functionality\n  - Create state history stack\n  - Track section and property changes\n  - Add keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z)\n  - Test complex state management\n\n### Future Enhancements\n- [ ] Template versioning and history\n- [ ] Collaborative editing\n- [ ] Real-time preview sync\n- [ ] Template marketplace/sharing"
     },
     {
       "id": "testing",
@@ -140,6 +154,13 @@
       "groupId": "dev-tasks",
       "order": 4,
       "content": "## 📊 Project Metrics\n\n### Version History\n- **v1.2.3**: Documentation system (Nov 10, 2025)\n- **v1.2.2**: Alignment & change detection (Nov 9, 2025)\n- **v1.2.1**: Preview enhancements (Nov 7, 2025)\n- **v1.2.0**: Multi-column support (Nov 5, 2025)\n- **v1.1.0**: Properties Panel enhancements (Oct 20, 2025)\n- **v1.0.0**: Initial release (Oct 1, 2025)\n\n### Code Statistics (Cumulative)\n- **Primary File**: TemplateBuilder.tsx (~4,100 lines)\n- **Total Components**: 20+\n- **Asset Types**: 22 (100% implemented)\n- **Design System Integration**: 100%\n\n### Feature Completion\n- **Core Features**: 100% complete\n- **Documentation**: 100% complete\n- **Testing Coverage**: ~70%\n- **Nice-to-Have Features**: 4 planned for v1.3.x\n\n### Release Cadence\n- **Patch releases**: Weekly (bug fixes, small features)\n- **Minor releases**: Bi-weekly (new features)\n- **Major releases**: When breaking changes required"
+    },
+    {
+      "id": "azure-deployment",
+      "title": "☁️ Azure Deployment (CR-004)",
+      "groupId": "dev-tasks",
+      "order": 5,
+      "content": "## ☁️ Azure Deployment (CR-004)\n**Status:** Pending Approval  \n**Target:** December 11-16, 2025  \n**Effort:** 26 hours (4 working days)  \n**Cost:** $0/month (Azure Free Tier)  \n**Full Details:** `/plans/CR-004-Azure-Deployment.md`\n\n### Overview\nContainerize backend with Docker and deploy full stack (frontend + CMS + backend) to Azure Free Tier. Enables cloud hosting, CI/CD automation, and publicly accessible URLs at zero cost.\n\n### Phase 1: Backend Dockerization (4 hours)\n- [ ] Create Dockerfile for Backend (Node.js 18 Alpine, multi-stage, < 500 MB)\n- [ ] Create .dockerignore (exclude node_modules, .git, logs)\n- [ ] Update Backend for Production (env vars, CORS, health check /health)\n- [ ] Local Docker Testing (build, run, test all endpoints)\n\n### Phase 2: Docker Compose (2 hours)\n- [ ] Create docker-compose.yml (3 services: backend, frontend, cms)\n- [ ] Create Frontend Dockerfile (Vite build + nginx Alpine)\n- [ ] Create CMS Dockerfile (Vite build + nginx Alpine)\n- [ ] Test Full Stack Locally (docker-compose up, test all services)\n\n### Phase 3: Azure Infrastructure (3 hours)\n- [ ] Azure Account & Resource Group (rg-execsummary-free, East US)\n- [ ] Container Registry (Use GitHub Container Registry, not ACR)\n- [ ] App Service Plan (F1 Free: 60 min/day CPU, 1 GB RAM)\n- [ ] App Services (Backend: App Service, Frontend/CMS: Static Web Apps)\n\n### Phase 4: CI/CD Pipeline (4 hours)\n- [ ] GitHub Actions - Backend (.github/workflows/deploy-backend.yml)\n- [ ] GitHub Actions - Frontend (.github/workflows/deploy-frontend.yml)\n- [ ] GitHub Actions - CMS (.github/workflows/deploy-cms.yml)\n- [ ] Configure GitHub Secrets (AZURE_CREDENTIALS, API tokens)\n- [ ] Test Pipeline (trigger, verify build, verify deploy, test rollback)\n\n### Phase 5: Environment Config (2 hours)\n- [ ] Create .env.example Files (backend, frontend, cms)\n- [ ] Configure Azure Variables (NODE_ENV, CORS_ORIGIN, VITE_API_URL)\n- [ ] Optional: Azure Key Vault (Free: 10k ops/month)\n- [ ] Environment Switching (dev, staging, production)\n\n### Phase 6: Azure Optimization (3 hours)\n- [ ] Configure Static Web Apps (build, SPA routing, HTTPS)\n- [ ] Configure Backend Service (CORS, health check, App Insights)\n- [ ] **CRITICAL: Azure Blob Storage** (File uploads, 5 GB free)\n- [ ] Optimize for Quotas (caching, health pings, monitoring)\n\n### Phase 7: DNS (Optional) (2 hours)\n- [ ] Option A: Use Default Azure URLs (*.azurewebsites.net, *.azurestaticapps.net)\n- [ ] Option B: Custom Domain for Static Web Apps (free SSL)\n- [ ] Option C: Upgrade to B1 ($13/month for backend custom domain)\n\n### Phase 8: Testing (4 hours)\n- [ ] E2E Functional Testing (all features, file uploads, CORS)\n- [ ] Performance Testing (cold start, response times, CPU quota)\n- [ ] Security Audit (HTTPS, CORS, env vars, auth, rate limiting)\n- [ ] Cross-Browser Testing (Chrome, Firefox, Edge, Safari, mobile)\n- [ ] Quota Monitoring (CPU < 60 min/day, memory < 1 GB)\n\n### Phase 9: Documentation (2 hours)\n- [ ] Deployment Documentation (architecture, process, env vars, URLs)\n- [ ] Operations Runbooks (monitoring, logs, restart, troubleshooting)\n- [ ] Update README.md (Azure section, public URLs, limitations)\n- [ ] Monitoring Dashboard (Azure Monitor, App Insights, alerts)\n\n### Key Risks\n1. **CPU Quota (60 min/day)** → Use Static Web Apps for frontend/CMS, monitor closely, B1 upgrade if needed\n2. **File Persistence** → **Implement Blob Storage** (ephemeral containers lose files on restart)\n3. **Cold Starts** → 5-10 sec initial load, health check pings, document expectations\n4. **CORS Issues** → Thorough testing, environment-specific config, preflight handling\n\n### Success Metrics\n- Deployment success: 100%\n- Uptime: > 99% (with cold starts)\n- API response: < 2s (p95)\n- CPU quota: < 50 min/day avg\n- Cost: $0/month\n\n### Public URLs (After Deployment)\n- Backend: `https://execsummary-backend.azurewebsites.net`\n- Frontend: `https://execsummary.azurestaticapps.net`\n- CMS: `https://execsummary-cms.azurestaticapps.net`"
     }
   ]
 }

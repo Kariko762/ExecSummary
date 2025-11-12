@@ -97,24 +97,6 @@ const EXAMPLES: RenderExample[] = [
       'Team Velocity': '42 points',
     },
   },
-  {
-    id: 'listNoTitle',
-    name: 'List (no labels)',
-    category: 'lists',
-    categoryLabel: 'Lists',
-    description: 'Simple bullet list without labels',
-    useCase: 'Highlights, achievements, bullet points',
-    schema: {
-      renderAs: 'listNoTitle',
-      label: 'Key Highlights',
-      placeholder: 'Add highlight...',
-    },
-    sampleData: [
-      'Completed Phase 1 ahead of schedule',
-      'Achieved 95% user adoption rate',
-      'Reduced operational costs by 30%',
-    ],
-  },
 
   // COMPLEX
   {
@@ -170,25 +152,37 @@ const EXAMPLES: RenderExample[] = [
   },
   {
     id: 'objectForm',
-    name: 'Object Form',
+    name: 'Object Form (Array)',
     category: 'complex',
     categoryLabel: 'Complex',
-    description: 'Form for nested object properties',
-    useCase: 'Structured data, configurations, settings',
+    description: 'Array of objects with structured fields',
+    useCase: 'Team members, project items, structured lists',
     schema: {
-      renderAs: 'objectForm',
-      label: 'Project Details',
-      fields: {
-        name: { renderAs: 'text', label: 'Project Name', required: true },
-        budget: { renderAs: 'number', label: 'Budget (USD)' },
-        description: { renderAs: 'textarea', label: 'Description' },
+      type: 'array',
+      renderAs: 'array',
+      itemSchema: {
+        type: 'object',
+        renderAs: 'objectForm',
+        label: 'Team Information',
+        fields: {
+          team: { renderAs: 'text', label: 'Team Name', required: true },
+          lead: { renderAs: 'text', label: 'Team Lead' },
+          members: { renderAs: 'number', label: 'Member Count' },
+        },
       },
     },
-    sampleData: {
-      name: 'Cloud Migration',
-      budget: 500000,
-      description: 'Migrate legacy systems to cloud infrastructure',
-    },
+    sampleData: [
+      {
+        team: 'Revenue Operations',
+        lead: 'Sarah Johnson',
+        members: 12,
+      },
+      {
+        team: 'Product Development',
+        lead: 'Michael Chen',
+        members: 8,
+      },
+    ],
   },
 
   // CHARTS

@@ -11,7 +11,7 @@ import {
 import type { FieldSchema } from '../../../src/types/schema';
 import { ChartColors } from '../../../src/design-system';
 import EditorModalV2 from './EditorModalV2';
-import AssetPreviewModal from './AssetPreviewModal';
+import AssetLibrary from './AssetLibrary';
 
 interface TemplateBuilderProps {
   onBack: () => void;
@@ -37,6 +37,7 @@ interface TemplateSection {
   expanded: boolean;
   fields: TemplateField[];
   sectionLayoutType?: LayoutZone; // NEW: Track the layout type set by first asset
+  interAssetBorder?: boolean; // Show vertical borders between assets in multi-column layouts
 }
 
 interface LayoutElement {
@@ -167,9 +168,9 @@ const ASSET_LIBRARY: AssetCategory[] = [
       {
         id: 'arrayNoLabels',
         name: 'List (No Labels)',
-        renderType: 'listNoTitle',
+        renderType: 'list',
         description: 'Simple bullet list without labels',
-        schema: { type: 'array', renderAs: 'listNoTitle', label: 'New List', itemSchema: { type: 'string', renderAs: 'text' } },
+        schema: { type: 'array', renderAs: 'list', label: 'New List', itemSchema: { type: 'string', renderAs: 'text' } },
         icon: List,
         iconColor: 'text-green-400',
         exampleData: ['Completed Phase 1 ahead of schedule', 'Reduced operational costs by 30%', 'Hired 5 new team members'],
@@ -221,14 +222,18 @@ const ASSET_LIBRARY: AssetCategory[] = [
           renderAs: 'objectForm',
           label: 'New Object',
           fields: {
-            team: { type: 'string', renderAs: 'text', label: 'Team' },
-            lead: { type: 'string', renderAs: 'text', label: 'Lead' },
-            members: { type: 'number', renderAs: 'number', label: 'Members' }
+            field1: { type: 'string', renderAs: 'text', label: 'Field 1' },
+            field2: { type: 'string', renderAs: 'text', label: 'Field 2' },
+            field3: { type: 'number', renderAs: 'number', label: 'Field 3' }
           }
         },
         icon: Layers,
         iconColor: 'text-purple-500',
-        exampleData: { team: 'RevOps', lead: 'Sarah Johnson', members: 12 },
+        exampleData: { 
+          field1: 'Sample text', 
+          field2: 'Another value', 
+          field3: 42 
+        },
         supportsMultiColumn: true
       },
       {
@@ -564,7 +569,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
         id: 'hr',
         name: 'Horizontal Rule',
         renderType: 'hr',
-        description: 'Visual divider line',
+        description: 'Visual divider line for sections and multi-column layouts',
         schema: { 
           type: 'string', 
           label: 'Divider',
@@ -580,7 +585,7 @@ const ASSET_LIBRARY: AssetCategory[] = [
         icon: Minus,
         iconColor: 'text-gray-500',
         exampleData: null,
-        supportsMultiColumn: false
+        supportsMultiColumn: true
       },
       {
         id: 'statusBoard',
@@ -865,7 +870,8 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
   const [selectedField, setSelectedField] = useState<{ sectionId: string; fieldId: string } | null>(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showValidationModal, setShowValidationModal] = useState(false);
-  const [previewAsset, setPreviewAsset] = useState<AssetItem | null>(null);
+  const [showAssetReference, setShowAssetReference] = useState(false);
+  const [assetReferenceType, setAssetReferenceType] = useState<string | undefined>();
   const [validationResults, setValidationResults] = useState<Array<{check: string; passed: boolean; message: string}>>([]);
   const [validationPassed, setValidationPassed] = useState(false);
   const [saveTemplateName, setSaveTemplateName] = useState<string>('');
@@ -877,6 +883,8 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
   const [isValidating, setIsValidating] = useState(false);
   const [showUnsavedChangesModal, setShowUnsavedChangesModal] = useState(false);
   const [showRemoveAllModal, setShowRemoveAllModal] = useState(false);
+  const [showRemoveSectionModal, setShowRemoveSectionModal] = useState(false);
+  const [pendingRemoveSectionId, setPendingRemoveSectionId] = useState<string | null>(null);
   
   // Use central notification system or fallback to console
   const showNotification = (type: 'success' | 'error' | 'warning', message: string) => {
@@ -1575,9 +1583,17 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
       showNotification('error', 'Cannot remove the standard header section');
       return;
     }
-    if (window.confirm('Remove this section and all its fields?')) {
-      setSections(prev => prev.filter(s => s.id !== sectionId));
+    setPendingRemoveSectionId(sectionId);
+    setShowRemoveSectionModal(true);
+  };
+
+  const confirmRemoveSection = () => {
+    if (pendingRemoveSectionId) {
+      setSections(prev => prev.filter(s => s.id !== pendingRemoveSectionId));
+      showNotification('success', 'Section removed successfully');
     }
+    setShowRemoveSectionModal(false);
+    setPendingRemoveSectionId(null);
   };
 
   // Add layout asset as a section (generic for all layout assets)
@@ -1599,12 +1615,6 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
     };
     setSections([...sections, layoutSection]);
     showNotification('success', `${asset.name} added`);
-  };
-
-  // Legacy function - now calls generic
-  const addHorizontalRule = () => {
-    const hrAsset = ASSET_CATEGORIES.find(c => c.id === 'layout')?.assets.find(a => a.id === 'hr');
-    if (hrAsset) addLayoutAsset(hrAsset);
   };
 
   // Field management
@@ -1647,7 +1657,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
             ...section,
             fields: section.fields.map(field =>
               field.id === fieldId
-                ? property === 'key' || property === 'label' || property === 'exampleData' || property === 'alignment'
+                ? property === 'key' || property === 'label' || property === 'exampleData' || property === 'alignment' || property === 'schema'
                   ? { ...field, [property]: value }
                   : { ...field, schema: { ...field.schema, [property]: value } }
                 : field
@@ -1862,7 +1872,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                 }
                 templateData[fieldKey] = [exampleItem];
               }
-            } else if (fieldType === 'list' || fieldType === 'listNoTitle') {
+            } else if (fieldType === 'list') {
               // Use exampleData if provided, otherwise create default
               if (field.exampleData && field.exampleData.length > 0) {
                 templateData[fieldKey] = field.exampleData;
@@ -2094,7 +2104,8 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          setPreviewAsset(asset);
+                                          setAssetReferenceType(asset.renderType);
+                                          setShowAssetReference(true);
                                         }}
                                         className="p-2 rounded-lg bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry transition-all opacity-0 group-hover:opacity-100"
                                         title="Preview Asset"
@@ -2154,7 +2165,8 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          setPreviewAsset(asset);
+                                          setAssetReferenceType(asset.renderType);
+                                          setShowAssetReference(true);
                                         }}
                                         className="p-2 rounded-lg bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry transition-all opacity-0 group-hover:opacity-100"
                                         title="Preview Asset"
@@ -2668,7 +2680,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                       )}
 
                       {/* Example Data for Lists/Arrays */}
-                      {(field.renderType === 'list' || field.renderType === 'listNoTitle') && (
+                      {(field.renderType === 'list') && (
                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                           <div className="flex items-center justify-between mb-2">
                             <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
@@ -2871,34 +2883,160 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                         </div>
                       )}
 
-                      {/* Example Data for Object */}
-                      {field.renderType === 'object' && field.schema?.fields && (
+                      {/* Field Definition Editor for Object */}
+                      {field.renderType === 'object' && (
                         <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                          <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300 mb-3 block">
-                            Example Object Data
-                          </label>
-                          <div className="space-y-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
-                            {Object.entries(field.schema.fields).map(([fieldKey, fieldDef]: [string, any]) => (
-                              <div key={fieldKey}>
-                                <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
-                                  {fieldDef.label || fieldKey}
-                                </label>
-                                <input
-                                  type={fieldDef.type === 'number' ? 'number' : 'text'}
-                                  value={(field.exampleData && field.exampleData[fieldKey]) || ''}
-                                  onChange={(e) => {
-                                    const newExampleData = { ...(field.exampleData || {}) };
-                                    newExampleData[fieldKey] = fieldDef.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value;
-                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                          <div className="flex items-center justify-between mb-3">
+                            <label className="text-xs font-roobert-bold text-gray-700 dark:text-gray-300">
+                              Object Fields
+                            </label>
+                            <button
+                              onClick={() => {
+                                const currentFields = field.schema?.fields || {};
+                                const newFieldKey = `field${Object.keys(currentFields).length + 1}`;
+                                const updatedSchema = {
+                                  ...field.schema,
+                                  fields: {
+                                    ...currentFields,
+                                    [newFieldKey]: { type: 'string', renderAs: 'text', label: 'New Field' }
+                                  }
+                                };
+                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'schema', updatedSchema);
+                                
+                                // Also add to exampleData
+                                const updatedExampleData = { ...(field.exampleData || {}), [newFieldKey]: '' };
+                                updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', updatedExampleData);
+                              }}
+                              className="text-xs px-2 py-1 rounded bg-fis-eggplant/10 text-fis-eggplant hover:bg-fis-eggplant/20 font-roobert-medium"
+                            >
+                              + Add Field
+                            </button>
+                          </div>
+                          <div className="space-y-3">
+                            {Object.entries(field.schema?.fields || {}).map(([fieldKey, fieldDef]: [string, any], idx) => (
+                              <div key={idx} className="p-3 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                                {/* Field Key Name */}
+                                <div className="mb-2">
+                                  <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                    Field Key
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={fieldKey}
+                                    onChange={(e) => {
+                                      const newKey = e.target.value;
+                                      if (!newKey || newKey === fieldKey) return;
+                                      
+                                      // Rename field in schema.fields
+                                      const currentFields = { ...(field.schema?.fields || {}) };
+                                      const fieldDefCopy = currentFields[fieldKey];
+                                      delete currentFields[fieldKey];
+                                      currentFields[newKey] = fieldDefCopy;
+                                      
+                                      const updatedSchema = { ...field.schema, fields: currentFields };
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'schema', updatedSchema);
+                                      
+                                      // Also rename in exampleData
+                                      const currentData = { ...(field.exampleData || {}) };
+                                      const oldValue = currentData[fieldKey];
+                                      delete currentData[fieldKey];
+                                      currentData[newKey] = oldValue;
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', currentData);
+                                    }}
+                                    className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono"
+                                    placeholder="fieldName"
+                                  />
+                                </div>
+                                
+                                {/* Field Label */}
+                                <div className="mb-2">
+                                  <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                    Field Label
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={fieldDef.label || ''}
+                                    onChange={(e) => {
+                                      const currentFields = { ...(field.schema?.fields || {}) };
+                                      currentFields[fieldKey] = { ...currentFields[fieldKey], label: e.target.value };
+                                      const updatedSchema = { ...field.schema, fields: currentFields };
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'schema', updatedSchema);
+                                    }}
+                                    className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                    placeholder="Display Label"
+                                  />
+                                </div>
+                                
+                                {/* Field Type */}
+                                <div className="mb-2">
+                                  <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                    Field Type
+                                  </label>
+                                  <select
+                                    value={fieldDef.type || 'string'}
+                                    onChange={(e) => {
+                                      const currentFields = { ...(field.schema?.fields || {}) };
+                                      currentFields[fieldKey] = { 
+                                        ...currentFields[fieldKey], 
+                                        type: e.target.value,
+                                        renderAs: e.target.value === 'number' ? 'number' : 'text'
+                                      };
+                                      const updatedSchema = { ...field.schema, fields: currentFields };
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'schema', updatedSchema);
+                                    }}
+                                    className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                  >
+                                    <option value="string">Text</option>
+                                    <option value="number">Number</option>
+                                  </select>
+                                </div>
+                                
+                                {/* Example Value */}
+                                <div className="mb-2">
+                                  <label className="text-xs text-gray-600 dark:text-gray-400 mb-1 block">
+                                    Example Value
+                                  </label>
+                                  <input
+                                    type={fieldDef.type === 'number' ? 'number' : 'text'}
+                                    value={(field.exampleData && field.exampleData[fieldKey]) || ''}
+                                    onChange={(e) => {
+                                      const newExampleData = { ...(field.exampleData || {}) };
+                                      newExampleData[fieldKey] = fieldDef.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value;
+                                      updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', newExampleData);
+                                    }}
+                                    className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                                    placeholder={`Enter ${fieldDef.label || fieldKey}`}
+                                  />
+                                </div>
+                                
+                                {/* Delete Field Button */}
+                                <button
+                                  onClick={() => {
+                                    // Remove from schema.fields
+                                    const currentFields = { ...(field.schema?.fields || {}) };
+                                    delete currentFields[fieldKey];
+                                    const updatedSchema = { ...field.schema, fields: currentFields };
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'schema', updatedSchema);
+                                    
+                                    // Remove from exampleData
+                                    const currentData = { ...(field.exampleData || {}) };
+                                    delete currentData[fieldKey];
+                                    updateFieldProperty(selectedField.sectionId, selectedField.fieldId, 'exampleData', currentData);
                                   }}
-                                  className="w-full px-2 py-1.5 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                                  placeholder={`Enter ${fieldDef.label || fieldKey}`}
-                                />
+                                  className="w-full mt-2 px-2 py-1.5 text-xs rounded bg-red-50 dark:bg-red-900/20 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 font-roobert-medium"
+                                >
+                                  Remove Field
+                                </button>
                               </div>
                             ))}
+                            {(!field.schema?.fields || Object.keys(field.schema.fields).length === 0) && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center py-3 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+                                No fields defined. Click "+ Add Field" to add fields to this object.
+                              </div>
+                            )}
                           </div>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            Example values for object fields
+                            Define the fields that make up this object structure
                           </p>
                         </div>
                       )}
@@ -3867,17 +4005,12 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
         />
       )}
 
-      {/* Asset Preview Modal */}
-      {previewAsset && (
-        <AssetPreviewModal
-          isOpen={true}
-          onClose={() => setPreviewAsset(null)}
-          assetName={previewAsset.name}
-          schema={previewAsset.schema}
-          exampleData={previewAsset.exampleData}
-          supportsMultiColumn={previewAsset.supportsMultiColumn}
-        />
-      )}
+      {/* Asset Library Modal */}
+      <AssetLibrary
+        isOpen={showAssetReference}
+        onClose={() => setShowAssetReference(false)}
+        initialAssetType={assetReferenceType}
+      />
 
       {/* Layout Picker Modal */}
       {showLayoutPicker && (
@@ -4138,6 +4271,50 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                 className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-roobert-semibold transition-colors"
               >
                 Remove All
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Remove Section Confirmation Modal */}
+      {showRemoveSectionModal && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+          >
+            <div className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0">
+                  <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                    Remove This Section?
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Are you sure you want to remove this section and all its fields? This action cannot be undone.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+              <button
+                onClick={() => {
+                  setShowRemoveSectionModal(false);
+                  setPendingRemoveSectionId(null);
+                }}
+                className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmRemoveSection}
+                className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-roobert-semibold transition-colors"
+              >
+                Remove Section
               </button>
             </div>
           </motion.div>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save, Eye, Upload, ChevronLeft, ChevronRight, Check, Lock, Unlock, EyeOff, Code2, Copy, CheckCheck, CheckCircle, Shield, ShieldOff } from 'lucide-react';
+import { X, Save, Eye, Upload, ChevronLeft, ChevronRight, Check, Lock, Unlock, EyeOff, Code2, Copy, CheckCheck, CheckCircle, Shield, ShieldOff, HelpCircle } from 'lucide-react';
 import { summarySchema } from '@shared/schemas/summarySchema';
-import { buildFieldSchema } from '@shared/schemas/assetTypeRegistry';
+import { buildFieldSchema } from '@shared/schemas/assetRegister';
 import { RenderFactory } from '@renderers/RenderFactory';
 import { ConfirmationModal } from './ConfirmationModal';
 import PreviewModal from './PreviewModal';
+import { AssetTypeReferenceModal } from './AssetTypeReferenceModal';
 
 interface EditorModalV2Props {
   isOpen: boolean;
@@ -14,6 +15,7 @@ interface EditorModalV2Props {
   dataType: 'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories';
   onSave: (data: any, status: 'draft' | 'published') => void;
   isTestMode?: boolean; // Flag to indicate testing mode (don't prompt to save)
+  showNotification?: (type: 'success' | 'error' | 'info', message: string) => void;
 }
 
 export default function EditorModalV2({ 
@@ -22,7 +24,8 @@ export default function EditorModalV2({
   data, 
   dataType, 
   onSave,
-  isTestMode = false
+  isTestMode = false,
+  showNotification
 }: EditorModalV2Props) {
   const [editedData, setEditedData] = useState<any>(data);
   const [status, setStatus] = useState<'draft' | 'published'>('draft');
@@ -37,6 +40,11 @@ export default function EditorModalV2({
   const [showCloseConfirmation, setShowCloseConfirmation] = useState(false); // For unsaved changes warning
   const [showPublishConfirmation, setShowPublishConfirmation] = useState(false); // For publish confirmation
   const [showUnpublishConfirmation, setShowUnpublishConfirmation] = useState(false); // For unpublish confirmation
+  const [showAssetReference, setShowAssetReference] = useState(false); // Asset type reference modal
+  const [referenceAssetType, setReferenceAssetType] = useState<string | undefined>(undefined); // Which asset type to show
+  const [showCompleteConfirmation, setShowCompleteConfirmation] = useState(false); // For section complete/incomplete confirmation
+  const [showVisibilityConfirmation, setShowVisibilityConfirmation] = useState(false); // For section enable/disable confirmation
+  const [pendingSectionAction, setPendingSectionAction] = useState<{ sectionId: string; action: 'complete' | 'visibility' } | null>(null); // Track pending action
 
   // Section weights (complexity/time required, 1-10)
   const sectionWeights: { [key: string]: number } = {
@@ -306,13 +314,46 @@ export default function EditorModalV2({
       
       const fullBaseSchema = buildFieldSchema(sectionType, baseSchema);
       
-      const factorySchema: any = {
+      // For the factorySchema, merge itemSchema properties at the top level for simple types
+      // but keep nested structure for complex types
+      let factorySchema: any = {
         label: formatSectionTitle(sectionId),
         renderAs: sectionType,
+        enabled: true,  // Always enable fields in edit mode
         ...fullBaseSchema,
         ...(chartConfig ? { chartConfig } : {}),
         alignment: alignment
       };
+      
+      // If itemSchema exists and renderAs is a simple type, merge itemSchema properties at top level
+      if (itemSchema && ['text', 'textarea', 'number', 'richText', 'expression', 'quote', 'codeBlock', 'keyValueList'].includes(sectionType)) {
+        // For simple types, take properties from itemSchema and put them at the top level
+        factorySchema = {
+          ...factorySchema,
+          label: itemSchema.label || factorySchema.label,
+          placeholder: itemSchema.placeholder,
+          helpText: itemSchema.helpText,
+          required: itemSchema.required,
+          // Remove itemSchema from the top level for simple types
+          itemSchema: undefined
+        };
+      } else if (itemSchema && ['object', 'objectForm', 'keyValue', 'image', 'video', 'embeddedVideo', 'statusBoard'].includes(sectionType)) {
+        // For complex types that need fields, merge fields from itemSchema
+        factorySchema = {
+          ...factorySchema,
+          label: itemSchema.label || factorySchema.label,
+          fields: itemSchema.fields || factorySchema.fields,
+          helpText: itemSchema.helpText,
+          required: itemSchema.required
+        };
+      }
+      
+      console.log(`[EditorModalV2] Rendering section "${sectionId}" with:`, {
+        sectionType,
+        sectionData,
+        factorySchema,
+        mode: 'edit'
+      });
       
       return (
         <div className="space-y-4">
@@ -434,7 +475,7 @@ export default function EditorModalV2({
     const excludePrefixes = ['_enabled_', '_completed_', '_locked_', '_template_'];
     const excludeSuffixes = ['_schema', '_type', '_fields', '_config', '_columnSpan', '_itemSchema'];
     const excludeContains = ['_chartConfig']; // Exclude dynamic chart config keys
-    const excludeExact = ['_enabled', '_completed', '_locked']; // Exclude these exact keys
+    const excludeExact = ['_enabled', '_completed', '_locked', '_fileExists']; // Exclude these exact keys
     
     const allKeys = Object.keys(sourceData)
       .filter(key => {
@@ -493,6 +534,11 @@ export default function EditorModalV2({
         locked: completed || manuallyLocked,
         content: fieldKeys.length === 1 ? sourceData[fieldKeys[0]] : fieldKeys.map(k => sourceData[k])
       };
+    })
+    // Filter out HR/divider sections from navigation (they're display-only, not editable)
+    .filter(section => {
+      const sectionType = sourceData[`_${section.id}_type`];
+      return sectionType !== 'hr';
     });
     
     console.log('Sections generated:', [...sections, ...contentSections]);
@@ -676,22 +722,50 @@ export default function EditorModalV2({
     );
   };
 
+  const openAssetReference = (assetType?: string) => {
+    setReferenceAssetType(assetType);
+    setShowAssetReference(true);
+  };
+
   const toggleComplete = (sectionId: string) => {
     const section = sections.find(s => s.id === sectionId);
     if (!section) return;
 
-    const action = section.completed ? 'mark as incomplete' : 'mark as complete';
-    if (window.confirm(`Are you sure you want to ${action} this section? ${!section.completed ? 'This will lock the section.' : 'This will unlock the section.'}`)) {
-      setIsDirty(true);
-      
-      const newCompleted = !section.completed;
-      
-      // Update edited data with flag - auto lock/unlock based on completion
-      setEditedData((prev: any) => ({
-        ...prev,
-        [`_completed_${sectionId}`]: newCompleted
-      }));
+    // Show confirmation modal
+    setPendingSectionAction({ sectionId, action: 'complete' });
+    setShowCompleteConfirmation(true);
+  };
+
+  const confirmToggleComplete = () => {
+    if (!pendingSectionAction || pendingSectionAction.action !== 'complete') return;
+    
+    const sectionId = pendingSectionAction.sectionId;
+    const section = sections.find(s => s.id === sectionId);
+    if (!section) return;
+
+    setIsDirty(true);
+    
+    const newCompleted = !section.completed;
+    
+    // Update edited data with flag - auto lock/unlock based on completion
+    setEditedData((prev: any) => ({
+      ...prev,
+      [`_completed_${sectionId}`]: newCompleted
+    }));
+    
+    // Show notification using central system
+    if (showNotification) {
+      showNotification(
+        'success', 
+        newCompleted 
+          ? `Section "${section.title}" marked as complete and locked.`
+          : `Section "${section.title}" marked as incomplete and unlocked.`
+      );
     }
+
+    // Close modal and clear pending action
+    setShowCompleteConfirmation(false);
+    setPendingSectionAction(null);
   };
 
   const toggleLock = (sectionId: string) => {
@@ -712,24 +786,37 @@ export default function EditorModalV2({
     const section = sections.find(s => s.id === sectionId);
     if (!section) return;
 
-    const action = section.enabled ? 'disable' : 'enable';
-    if (window.confirm(`Are you sure you want to ${action} this section? ${section.enabled ? 'It will be hidden from the display.' : 'It will be shown in the display.'}`)) {
-      setIsDirty(true);
-      
-      // Update edited data with flag
-      setEditedData((prev: any) => ({
-        ...prev,
-        [`_enabled_${sectionId}`]: !section.enabled
-      }));
-      
-      // If disabling the active section, navigate to next enabled section
-      if (section.enabled && activeSectionId === sectionId) {
-        const enabledSections = sections.filter(s => s.enabled && s.id !== sectionId);
-        if (enabledSections.length > 0) {
-          setActiveSectionId(enabledSections[0].id);
-        }
+    // Show confirmation modal
+    setPendingSectionAction({ sectionId, action: 'visibility' });
+    setShowVisibilityConfirmation(true);
+  };
+
+  const confirmToggleEnabled = () => {
+    if (!pendingSectionAction || pendingSectionAction.action !== 'visibility') return;
+    
+    const sectionId = pendingSectionAction.sectionId;
+    const section = sections.find(s => s.id === sectionId);
+    if (!section) return;
+
+    setIsDirty(true);
+    
+    // Update edited data with flag
+    setEditedData((prev: any) => ({
+      ...prev,
+      [`_enabled_${sectionId}`]: !section.enabled
+    }));
+    
+    // If disabling the active section, navigate to next enabled section
+    if (section.enabled && activeSectionId === sectionId) {
+      const enabledSections = sections.filter(s => s.enabled && s.id !== sectionId);
+      if (enabledSections.length > 0) {
+        setActiveSectionId(enabledSections[0].id);
       }
     }
+
+    // Close modal and clear pending action
+    setShowVisibilityConfirmation(false);
+    setPendingSectionAction(null);
   };
 
   const sections = getSections();
@@ -966,19 +1053,28 @@ export default function EditorModalV2({
                   Sections
                 </h3>
                 <div className="space-y-1">
-                  {sections.filter(s => s.enabled).map((section) => (
+                  {sections.map((section) => (
                     <button
                       key={section.id}
                       onClick={() => setActiveSectionId(section.id)}
                       className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-roobert-medium transition-all ${
                         activeSectionId === section.id
                           ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white shadow-md'
-                          : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                          : section.enabled
+                          ? 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                          : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 dark:text-gray-600 opacity-60'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="flex-1 truncate">{section.title}</span>
                         <div className="flex items-center gap-1.5 ml-2">
+                          {!section.enabled && (
+                            <EyeOff className={`w-3 h-3 ${
+                              activeSectionId === section.id 
+                                ? 'text-white/70' 
+                                : 'text-gray-400 dark:text-gray-600'
+                            }`} />
+                          )}
                           {section.locked && !section.completed && (
                             <Lock className={`w-3 h-3 ${
                               activeSectionId === section.id 
@@ -1016,24 +1112,42 @@ export default function EditorModalV2({
                     {/* Section Header */}
                     <div className="mb-2">
                       <div className="flex items-start justify-between mb-3">
-                        <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
-                          {activeSection.title}
-                        </h2>
+                        <div className="flex items-center gap-3">
+                          <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+                            {activeSection.title}
+                          </h2>
+                          {editedData[`_${activeSection.id}_type`] && (
+                            <>
+                              <span className="text-sm font-roobert-regular text-gray-400 dark:text-gray-500">
+                                {editedData[`_${activeSection.id}_type`]}
+                              </span>
+                              <button
+                                onClick={() => openAssetReference(editedData[`_${activeSection.id}_type`])}
+                                className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-fis-raspberry transition-colors"
+                                title="View asset type reference"
+                              >
+                                <HelpCircle className="w-4 h-4" />
+                              </button>
+                            </>
+                          )}
+                        </div>
                         
                         {/* Section Controls */}
                         <div className="flex items-center gap-1.5">
-                          {/* Complete/Incomplete Toggle */}
-                          <button
-                            onClick={() => toggleComplete(activeSection.id)}
-                            className={`p-1.5 rounded-lg transition-colors ${
-                              activeSection.completed
-                                ? 'bg-fis-green/30 text-fis-green hover:bg-fis-green/40'
-                                : 'bg-fis-green/20 text-fis-green hover:bg-fis-green/30'
-                            }`}
-                            title={activeSection.completed ? 'Return to Draft' : 'Mark as Complete'}
-                          >
-                            {activeSection.completed ? <X className="w-4 h-4" /> : <Check className="w-4 h-4" />}
-                          </button>
+                          {/* Complete/Incomplete Toggle - only show if enabled */}
+                          {activeSection.enabled && (
+                            <button
+                              onClick={() => toggleComplete(activeSection.id)}
+                              className={`p-1.5 rounded-lg transition-colors ${
+                                activeSection.completed
+                                  ? 'bg-fis-green/30 text-fis-green hover:bg-fis-green/40'
+                                  : 'bg-fis-green/20 text-fis-green hover:bg-fis-green/30'
+                              }`}
+                              title={activeSection.completed ? 'Return to Draft' : 'Mark as Complete'}
+                            >
+                              {activeSection.completed ? <X className="w-4 h-4" /> : <Check className="w-4 h-4" />}
+                            </button>
+                          )}
                           
                           {/* Lock/Unlock Toggle - only show if not completed */}
                           {!activeSection.completed && (
@@ -1053,16 +1167,26 @@ export default function EditorModalV2({
                           {/* Enable/Disable Toggle */}
                           <button
                             onClick={() => toggleEnabled(activeSection.id)}
-                            className="p-1.5 rounded-lg bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"
-                            title="Disable section (hide from display)"
+                            className={`p-1.5 rounded-lg transition-colors ${
+                              activeSection.enabled
+                                ? 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
+                                : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50'
+                            }`}
+                            title={activeSection.enabled ? 'Disable section (hide from display)' : 'Enable section (show in display)'}
                           >
-                            <EyeOff className="w-4 h-4" />
+                            {activeSection.enabled ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
                         </div>
                       </div>
                       
+                      {!activeSection.enabled && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-roobert-medium bg-red-500/20 text-red-600 dark:text-red-400">
+                          <EyeOff className="w-3 h-3" />
+                          Disabled
+                        </span>
+                      )}
                       {activeSection.completed && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-roobert-medium bg-green-500/20 text-green-600 dark:text-green-400">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-roobert-medium bg-green-500/20 text-green-600 dark:text-green-400 ml-2">
                           <span className="w-1.5 h-1.5 bg-green-600 dark:bg-green-400 rounded-full"></span>
                           Complete
                         </span>
@@ -1076,14 +1200,13 @@ export default function EditorModalV2({
                     </div>
 
                     {/* Schema-Driven Content */}
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-[5px] border border-gray-200 dark:border-gray-700 relative">
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-[5px] border border-gray-200 dark:border-gray-700 relative min-h-[400px]">
                       {renderSchemaSection(activeSection.id)}
                       
-                      {/* Overlay for locked sections - Adaptive design */}
+                      {/* Overlay for locked sections - covers entire preview area */}
                       {activeSection.locked && (
-                        <div className="absolute inset-0 bg-gradient-to-br from-fis-navy/90 via-fis-eggplant/80 to-fis-navy/90 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                          {/* Large sections: Full overlay with icon */}
-                          <div className="hidden sm:block text-center px-6 py-8 glass-strong rounded-2xl border-2 border-fis-raspberry/50 backdrop-blur-md shadow-2xl max-w-md">
+                        <div className="absolute inset-0 bg-gradient-to-br from-fis-navy/90 via-fis-eggplant/80 to-fis-navy/90 backdrop-blur-sm rounded-xl flex items-center justify-center z-50">
+                          <div className="text-center px-8 py-10 glass-strong rounded-2xl border-2 border-fis-raspberry/50 backdrop-blur-md shadow-2xl max-w-md">
                             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-fis-raspberry to-fis-eggplant flex items-center justify-center shadow-lg">
                               <Lock className="w-8 h-8 text-white" />
                             </div>
@@ -1400,6 +1523,83 @@ export default function EditorModalV2({
           onClose={() => setShowPreview(false)}
           data={editedData}
           dataType={dataType}
+        />
+
+        {/* Section Complete/Incomplete Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showCompleteConfirmation}
+          onClose={() => {
+            setShowCompleteConfirmation(false);
+            setPendingSectionAction(null);
+          }}
+          title={pendingSectionAction ? 
+            (sections.find(s => s.id === pendingSectionAction.sectionId)?.completed ? 
+              '🔓 Mark Section as Incomplete?' : 
+              '✅ Mark Section as Complete?'
+            ) : ''}
+          message={pendingSectionAction ? 
+            (sections.find(s => s.id === pendingSectionAction.sectionId)?.completed ? 
+              'This will unlock the section and allow further editing. Are you sure you want to mark this section as incomplete?' : 
+              'This will lock the section to prevent further changes. Are you sure you want to mark this section as complete?'
+            ) : ''}
+          type="info"
+          buttons={[
+            {
+              label: pendingSectionAction && sections.find(s => s.id === pendingSectionAction.sectionId)?.completed ? 
+                'Yes, Mark Incomplete' : 'Yes, Mark Complete',
+              action: confirmToggleComplete,
+              variant: 'primary',
+              closeAfter: false
+            },
+            {
+              label: 'Cancel',
+              action: () => {},
+              variant: 'secondary',
+              closeAfter: true
+            }
+          ]}
+        />
+
+        {/* Section Visibility Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showVisibilityConfirmation}
+          onClose={() => {
+            setShowVisibilityConfirmation(false);
+            setPendingSectionAction(null);
+          }}
+          title={pendingSectionAction ? 
+            (sections.find(s => s.id === pendingSectionAction.sectionId)?.enabled ? 
+              '� Disable This Section?' : 
+              '✅ Enable This Section?'
+            ) : ''}
+          message={pendingSectionAction ? 
+            (sections.find(s => s.id === pendingSectionAction.sectionId)?.enabled ? 
+              'This section will be disabled and hidden from the published display. It will remain accessible in the editor so you can re-enable it later. Are you sure?' : 
+              'This section will be enabled and shown in the published display, making it visible to users. Are you sure?'
+            ) : ''}
+          type="info"
+          buttons={[
+            {
+              label: pendingSectionAction && sections.find(s => s.id === pendingSectionAction.sectionId)?.enabled ? 
+                'Yes, Disable Section' : 'Yes, Enable Section',
+              action: confirmToggleEnabled,
+              variant: 'primary',
+              closeAfter: false
+            },
+            {
+              label: 'Cancel',
+              action: () => {},
+              variant: 'secondary',
+              closeAfter: true
+            }
+          ]}
+        />
+
+        {/* Asset Type Reference Modal */}
+        <AssetTypeReferenceModal
+          isOpen={showAssetReference}
+          onClose={() => setShowAssetReference(false)}
+          initialAssetType={referenceAssetType}
         />
       </div>
     </AnimatePresence>

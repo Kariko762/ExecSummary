@@ -136,7 +136,7 @@ function renderCurrency(value: string): React.ReactNode {
     : `$${amount.toFixed(0)}`;
 
   return (
-    <span className="inline-flex items-center gap-1 font-roobert-semibold text-fis-green">
+    <span className="inline-flex items-center gap-1 font-roobert-semibold text-fis-green" style={{ transform: 'translateY(4px)' }}>
       <DollarSign className="w-4 h-4" />
       {formatted}
     </span>
@@ -153,7 +153,7 @@ function renderPercent(value: string): React.ReactNode {
   return (
     <span className={`inline-flex items-center gap-1 font-roobert-semibold ${
       isPositive ? 'text-fis-green' : 'text-red-500'
-    }`}>
+    }`} style={{ transform: 'translateY(4px)' }}>
       {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
       {Math.abs(percent)}%
     </span>
@@ -212,7 +212,7 @@ function renderTrend(direction: string): React.ReactNode {
   const Icon = trend.icon;
 
   return (
-    <span className={`inline-flex items-center ${trend.color} mx-1`}>
+    <span className={`inline-flex items-center ${trend.color} mx-1`} style={{ transform: 'translateY(4px)' }}>
       <Icon className="w-4 h-4" />
     </span>
   );
@@ -478,6 +478,59 @@ export function RichText({ children, className = '' }: RichTextProps): React.Rea
   return (
     <span className={className}>
       {renderWithExpressions(children)}
+    </span>
+  );
+}
+
+/**
+ * Evaluate data-driven expressions with {[ ]} syntax
+ * Example: "{[ (revenue.current )} / {[ (revenue.target ]}" with data { revenue: { current: 100, target: 200 } }
+ * Returns: "100 / 200"
+ */
+export function evaluateDataExpression(template: string, data: any = {}): string {
+  // Match {[ ... ]} patterns
+  const expressionRegex = /\{\[\s*([^}]+?)\s*\]\}/g;
+  
+  return template.replace(expressionRegex, (match, expression) => {
+    try {
+      // Clean up the expression
+      const cleanExpr = expression.trim();
+      
+      // Create a function that evaluates the expression with the data context
+      // We'll use Function constructor to safely evaluate with the data object
+      const func = new Function(...Object.keys(data), `return ${cleanExpr}`);
+      const result = func(...Object.values(data));
+      
+      // Format the result
+      if (typeof result === 'number') {
+        // If it's a whole number, don't show decimals
+        return Number.isInteger(result) ? result.toString() : result.toFixed(2);
+      }
+      
+      return String(result);
+    } catch (error) {
+      // If evaluation fails, return the original expression
+      console.error('Expression evaluation error:', error);
+      return match;
+    }
+  });
+}
+
+/**
+ * Component wrapper for data-driven expressions
+ */
+interface DataExpressionProps {
+  template: string;
+  data?: any;
+  className?: string;
+}
+
+export function DataExpression({ template, data = {}, className = '' }: DataExpressionProps): React.ReactElement {
+  const evaluated = evaluateDataExpression(template, data);
+  
+  return (
+    <span className={className}>
+      {evaluated}
     </span>
   );
 }

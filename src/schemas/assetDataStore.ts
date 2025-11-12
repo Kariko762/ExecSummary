@@ -9,8 +9,10 @@
  * - AssetTypeReferenceModal: Uses ASSET_LIBRARY for documentation
  * - RenderFactory: Routes based on asset types
  * - EditorModalV2: Uses schemas for rendering
- * - Design System: Styling properties come from AssetStyles below
+ * - Design System: Styling properties come from design-system/
  */
+
+import { ChartColors } from '../design-system';
 
 // ==========================================
 // DESIGN SYSTEM INTEGRATION
@@ -183,13 +185,13 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   {
     id: 'highlightsList',
     name: 'Highlights List (Numbered)',
-    type: 'highlightsList',
+    type: 'list',
     category: 'lists',
     description: 'Numbered list with colored circle badges (1-6) and text content',
     useCase: 'Key Highlights, This Week\'s Focus sections - auto-numbered pink badges',
     schema: {
-      type: 'array',
-      renderAs: 'highlightsList',
+      type: 'list',
+      renderAs: 'list',
       label: 'Highlights',
       required: false
     },
@@ -209,13 +211,13 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   {
     id: 'bulletList',
     name: 'Bullet List',
-    type: 'bulletList',
+    type: 'list',
     category: 'lists',
     description: 'Standard bulleted list without numbering',
     useCase: 'General list items, feature lists, action items',
     schema: {
-      type: 'array',
-      renderAs: 'bulletList',
+      type: 'list',
+      renderAs: 'list',
       label: 'List Items',
       required: false
     },
@@ -233,13 +235,13 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   {
     id: 'checklistItems',
     name: 'Checklist (Completed)',
-    type: 'checklistItems',
+    type: 'list',
     category: 'lists',
     description: 'Items with green checkmark icons showing completed status',
     useCase: 'Progress to Date section, completed milestones',
     schema: {
-      type: 'array',
-      renderAs: 'checklistItems',
+      type: 'list',
+      renderAs: 'list',
       label: 'Completed Items',
       required: false
     },
@@ -248,7 +250,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       'Collected competitive analysis of leading financial service portals',
       'Detailed preliminary requirements document'
     ],
-    supportsMultiColumn: true,
+    supportsMultiColumn: false,
     styling: {
       container: 'bg-green-50 dark:bg-green-900/10',
       padding: AssetStyles.spacing.md
@@ -279,7 +281,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       { title: 'SNOW Migration Dashboard', subtitle: 'Demo Operations', percentage: 85, status: 'On Track' },
       { title: 'International Issuing Hub', subtitle: 'Demo Enablement', percentage: 30, status: 'At Risk' }
     ],
-    supportsMultiColumn: true,
+    supportsMultiColumn: false,
     styling: {
       container: AssetStyles.effects.card,
       padding: AssetStyles.spacing.lg
@@ -293,13 +295,13 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   {
     id: 'metricCard',
     name: 'Metric Card',
-    type: 'metricCard',
+    type: 'metricCards',
     category: 'charts',
     description: 'Single metric with icon, label, and large value display',
     useCase: 'Key Metrics section - Revenue $1,230,000, Customers 263, Growth +48%',
     schema: {
-      type: 'array',
-      renderAs: 'metricCard',
+      type: 'metricCards',
+      renderAs: 'metricCards',
       label: 'Key Metrics',
       required: false,
       fields: {
@@ -313,7 +315,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       { title: 'Growth', value: '+48%' },
       { title: 'NPS Score', value: '0' }
     ],
-    supportsMultiColumn: false,
+    supportsMultiColumn: true,
     styling: {
       container: AssetStyles.effects.glassStrong,
       padding: AssetStyles.spacing.lg
@@ -355,19 +357,19 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   {
     id: 'radialProgressChart',
     name: 'Radial Progress Chart',
-    type: 'radialProgressChart',
+    type: 'radialChart',
     category: 'charts',
     description: 'Multi-ring donut chart with legend showing percentages',
     useCase: 'Department Performance section - shows multiple metrics in concentric rings',
     schema: {
-      type: 'object',
-      renderAs: 'radialProgressChart',
+      type: 'radialChart',
+      renderAs: 'radialChart',
       label: 'Department Performance',
       required: false,
       chartConfig: {
         dataKey: 'value',
         maxValue: 100,
-        colors: ['#5D2A6D', '#8B4789', '#B565A7', '#E183C5', '#FF9FD8'],
+        colors: [...ChartColors.palette],
         showPercentage: true,
         thickness: 20
       },
@@ -403,7 +405,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       chartConfig: {
         dataKey: 'value',
         nameKey: 'name',
-        colors: ['#5D2A6D', '#8B4789', '#B565A7', '#E183C5', '#FF9FD8'],
+        colors: [...ChartColors.palette],
         showLegend: true,
         showTooltip: true,
         innerRadius: 0,
@@ -437,7 +439,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
         xAxisKey: 'name',
         yAxisKey: 'value',
         bars: [
-          { dataKey: 'value', fill: '#8B4789', name: 'Value' }
+          { dataKey: 'value', fill: ChartColors.series.eggplantLight, name: 'Value' }
         ],
         orientation: 'vertical',
         showGrid: true,
@@ -454,66 +456,6 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       { name: 'Q2', value: 600 },
       { name: 'Q3', value: 800 },
       { name: 'Q4', value: 1000 }
-    ],
-    supportsMultiColumn: true
-  },
-  
-  {
-    id: 'lineChart',
-    name: 'Line Chart',
-    type: 'lineChart',
-    category: 'charts',
-    description: 'Line chart showing trends over time',
-    useCase: 'Time series data, trend analysis, monthly metrics',
-    schema: {
-      type: 'lineChart',
-      renderAs: 'lineChart',
-      required: false,
-      chartConfig: {
-        xAxisKey: 'name',
-        yAxisKey: 'value',
-        curveType: 'monotone',
-        showGrid: true,
-        showLegend: true,
-        strokeWidth: 3
-      },
-      fields: {
-        name: { label: 'Label', renderAs: 'text', required: true },
-        value: { label: 'Value', renderAs: 'number', required: true }
-      }
-    },
-    exampleData: [
-      { name: 'Jan', value: 45 },
-      { name: 'Feb', value: 52 },
-      { name: 'Mar', value: 61 },
-      { name: 'Apr', value: 58 },
-      { name: 'May', value: 67 },
-      { name: 'Jun', value: 74 }
-    ],
-    supportsMultiColumn: true
-  },
-  
-  {
-    id: 'stackedBarChart',
-    name: 'Stacked Bar Chart',
-    type: 'stackedBarChart',
-    category: 'charts',
-    description: 'Stacked bar chart with multiple data series',
-    useCase: 'Multi-category comparisons, activity breakdowns, resource allocation',
-    schema: {
-      type: 'stackedBarChart',
-      renderAs: 'barChart',
-      required: false,
-      chartConfig: {
-        xAxisKey: 'name',
-        stacked: true,
-        showGrid: true,
-        showLegend: true
-      }
-    },
-    exampleData: [
-      { name: 'Banking', Support: 150, Prep: 200, Demo: 300 },
-      { name: 'Capital Markets', Support: 120, Prep: 180, Demo: 250 }
     ],
     supportsMultiColumn: true
   },
@@ -535,37 +477,24 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       label: 'Issues & Blockers',
       required: false
     },
-    exampleData: {
-      columns: [
-        {
-          title: 'On Track',
-          items: [
-            'Demo environment performance improvements ongoing',
-            'New deployment process in testing'
-          ]
-        },
-        {
-          title: 'At Risk',
-          items: [
-            'Titled Performance & Import Failures - unreliable search/browse',
-            'Timeline: End of November 2024'
-          ]
-        },
-        {
-          title: 'Blocked',
-          items: [
-            'Shift Payment Audit Trail - excessive work flagged'
-          ]
-        },
-        {
-          title: 'Completed',
-          items: [
-            'Team shift recording and approval process implemented',
-            'Demo Team payment issues resolved'
-          ]
-        }
-      ]
-    },
+    exampleData: [
+      { 
+        title: 'Titled Performance & Import Failures',
+        description: 'Demo environment titled search/browse designer performance are unreliable',
+        status: 'In Progress',
+        priority: 'high',
+        timeline: 'End of November 2024',
+        action: 'Developers: new deployment and design process'
+      },
+      {
+        title: 'Demo Team - Shift Payment Issues',
+        description: 'Team member flagged for excessive work due to lack of shift audit trail',
+        status: 'Resolved',
+        priority: 'medium',
+        timeline: 'Immediate',
+        action: 'All team members to record and approve all shifts'
+      }
+    ],
     supportsMultiColumn: false,
     styling: {
       container: AssetStyles.effects.card,
@@ -578,42 +507,28 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     name: 'Risk Card',
     type: 'riskCard',
     category: 'complex',
-    description: 'Alert-style card with severity icon (triangle/circle), title, description, and mitigation plan. Supports low (blue), medium (yellow), and high (red) severity levels.',
+    description: 'Alert-style card with severity icon (triangle/circle), title, description, and mitigation plan',
     useCase: 'Risks & Mitigation section with warning/high severity items',
     schema: {
       type: 'riskCard',
       renderAs: 'objectForm',
       label: 'Risk Item',
       fields: {
-        severity: { type: 'string', renderAs: 'text', label: 'Severity (low/medium/high)' },
+        severity: { type: 'string', renderAs: 'text', label: 'Severity (medium/high)' },
         title: { type: 'string', renderAs: 'text', label: 'Risk Title' },
         description: { type: 'string', renderAs: 'textarea', label: 'Description' },
         mitigation: { type: 'string', renderAs: 'textarea', label: 'Mitigation Plan' }
       }
     },
-    exampleData: [
-      {
-        severity: 'low',
-        title: 'Vendor Documentation Update Required',
-        description: 'API documentation needs minor updates for new endpoints',
-        mitigation: 'Technical writing team scheduled to complete updates by end of sprint'
-      },
-      {
-        severity: 'medium',
-        title: 'International Issuing Hub delayed due to Money 20/20 and EG-Coast availability',
-        description: 'Timeline delays expected due to conference schedule conflicts',
-        mitigation: 'ER expected to approve asset transfer this week, Coast dropped Matthews LIBs to expedite'
-      },
-      {
-        severity: 'high',
-        title: 'Critical Security Vulnerability in Payment Gateway',
-        description: 'Zero-day exploit discovered in third-party payment processing library',
-        mitigation: 'Emergency patch deployment scheduled for tonight, all transactions temporarily routed through backup system'
-      }
-    ],
+    exampleData: {
+      severity: 'medium',
+      title: 'International Issuing Hub delayed due to Money 20/20 and EG-Coast availability',
+      description: 'Timeline delays expected',
+      mitigation: 'ER expected to approve asset transfer this week, Coast dropped Matthews LIBs to expedite'
+    },
     supportsMultiColumn: false,
     styling: {
-      container: 'border-l-4',
+      container: 'border-l-4 border-orange-500 bg-orange-50 dark:bg-orange-900/10',
       padding: AssetStyles.spacing.md
     }
   },
@@ -691,36 +606,6 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     }
   },
   
-  {
-    id: 'listTop5',
-    name: 'Top 5 List (Square Badges)',
-    type: 'listTop5',
-    category: 'lists',
-    description: 'Ranked top 5 list with square numbered badges and values',
-    useCase: 'Top products, rankings, leaderboards, most popular items',
-    schema: {
-      type: 'listTop5',
-      renderAs: 'listTop5',
-      label: 'Top 5 Items',
-      required: false,
-      fields: {
-        name: { label: 'Name', renderAs: 'text', required: true },
-        value: { label: 'Count', renderAs: 'number', required: true }
-      }
-    },
-    exampleData: [
-      { name: 'Modern Banking Platform', value: 42 },
-      { name: 'Capital Markets Suite', value: 38 },
-      { name: 'Digital Payments Hub', value: 31 },
-      { name: 'Risk Analytics Engine', value: 27 },
-      { name: 'Cloud Treasury', value: 23 }
-    ],
-    supportsMultiColumn: true,
-    styling: {
-      typography: AssetStyles.typography.body.small
-    }
-  },
-  
   // ==========================================
   // UTILITY TYPES
   // ==========================================
@@ -731,14 +616,14 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     type: 'hr',
     category: 'basic',
     description: 'Visual separator line',
-    useCase: 'Section dividers, visual breaks, multi-column separation',
+    useCase: 'Section dividers, visual breaks',
     schema: {
       type: 'hr',
       renderAs: 'hr',
       required: false
     },
     exampleData: null,
-    supportsMultiColumn: true
+    supportsMultiColumn: false
   },
   
   {
@@ -764,11 +649,11 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   
   {
     id: 'timeline',
-    name: 'Project Milestones',
+    name: 'Timeline',
     type: 'timeline',
     category: 'complex',
-    description: 'Horizontal timeline with milestone markers and hover tooltips',
-    useCase: 'Project roadmaps, initiative timelines, quarterly goals with dates',
+    description: 'Horizontal timeline with milestones and badges',
+    useCase: 'Executive Summary Dashboard - quarterly milestones (Nov 5, Oct 31, Oct 24)',
     schema: {
       type: 'timeline',
       renderAs: 'timeline',
@@ -776,19 +661,17 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       required: false,
       fields: {
         date: { type: 'string', renderAs: 'text', label: 'Date' },
-        title: { type: 'string', renderAs: 'text', label: 'Milestone Title' },
-        description: { type: 'string', renderAs: 'text', label: 'Details' },
-        completed: { type: 'boolean', renderAs: 'checkbox', label: 'Completed' }
+        label: { type: 'string', renderAs: 'text', label: 'Label' },
+        subtitle: { type: 'string', renderAs: 'text', label: 'Subtitle' },
+        badge: { type: 'string', renderAs: 'text', label: 'Badge (Quarterly Summary/First Draft)' },
+        revenue: { type: 'string', renderAs: 'text', label: 'Revenue' },
+        change: { type: 'string', renderAs: 'text', label: 'Change %' }
       }
     },
     exampleData: [
-      { date: 'Jan 2025', title: 'Project Kickoff', description: 'Initial planning session with stakeholders and core team formation', completed: true },
-      { date: 'Feb 2025', title: 'Requirements Finalized', description: 'Technical specifications and business requirements documented', completed: true },
-      { date: 'Apr 2025', title: 'Phase 1 Development', description: 'Core infrastructure and foundational features deployed to staging', completed: true },
-      { date: 'Jun 2025', title: 'Beta Launch', description: 'Limited release to pilot customers for feedback and validation', completed: false },
-      { date: 'Aug 2025', title: 'Feature Expansion', description: 'Additional capabilities based on beta feedback implemented', completed: false },
-      { date: 'Oct 2025', title: 'Production Release', description: 'Full rollout to all markets with complete feature set', completed: false },
-      { date: 'Dec 2025', title: 'Year-End Review', description: 'Performance analysis, metrics review, and next year planning', completed: false }
+      { date: 'Nov 5', label: '2025', subtitle: 'Digital-First GTM Strategy', badge: 'First Draft', revenue: '$1M', change: '+48%' },
+      { date: 'Oct 31', label: '2024', subtitle: 'Demo Services Group - Weekly', badge: 'Quarterly Summary', revenue: '$1M', change: '+48%' },
+      { date: 'Oct 24', label: '2024', subtitle: 'Demo Services Group - Weekly', badge: 'Quarterly Summary', revenue: '$1M', change: '+46%' }
     ],
     supportsMultiColumn: false,
     styling: {
@@ -799,39 +682,39 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   
   {
     id: 'twoColumnComparison',
-    name: 'Four Block Grid',
+    name: 'Two-Column Comparison',
     type: 'twoColumnComparison',
     category: 'complex',
-    description: '2x2 grid with title and rich text in each block',
-    useCase: 'Problem Statement (Issue/Impact/Market/Operations), SWOT Analysis',
+    description: 'Side-by-side comparison with headings and bullet points',
+    useCase: 'Alternatives Considered section - comparing two options',
     schema: {
       type: 'twoColumnComparison',
       renderAs: 'objectForm',
-      label: 'Four Block Grid',
+      label: 'Comparison',
       fields: {
-        topLeftTitle: { type: 'string', renderAs: 'text', label: 'Top Left Title' },
-        topLeftContent: { type: 'string', renderAs: 'richText', label: 'Top Left Content' },
-        topRightTitle: { type: 'string', renderAs: 'text', label: 'Top Right Title' },
-        topRightContent: { type: 'string', renderAs: 'richText', label: 'Top Right Content' },
-        bottomLeftTitle: { type: 'string', renderAs: 'text', label: 'Bottom Left Title' },
-        bottomLeftContent: { type: 'string', renderAs: 'richText', label: 'Bottom Left Content' },
-        bottomRightTitle: { type: 'string', renderAs: 'text', label: 'Bottom Right Title' },
-        bottomRightContent: { type: 'string', renderAs: 'richText', label: 'Bottom Right Content' }
+        leftTitle: { type: 'string', renderAs: 'text', label: 'Left Column Title' },
+        leftItems: { type: 'array', renderAs: 'list', label: 'Left Column Items' },
+        rightTitle: { type: 'string', renderAs: 'text', label: 'Right Column Title' },
+        rightItems: { type: 'array', renderAs: 'list', label: 'Right Column Items' }
       }
     },
     exampleData: {
-      topLeftTitle: 'The Issue',
-      topLeftContent: 'Current client portal is outdated (built in 2016), lacks mobile optimization, and generates 200+ support calls per month due to usability issues. Client feedback consistently cites the portal as a pain point in relationship reviews.',
-      topRightTitle: 'Business Impact',
-      topRightContent: 'Portal deficiencies contributed to loss of 2 major clients ($800K AUM) in 2024. Annual support costs attributed to portal issues exceed $150K. RFP win rate decreased 12% when portal demos are included.',
-      bottomLeftTitle: 'Market Context',
-      bottomLeftContent: 'Competitors have launched modern, mobile-first portals with enhanced features. Recent market research shows 78% of clients expect banking-grade digital experiences from all financial service providers.',
-      bottomRightTitle: 'Operational Context',
-      bottomRightContent: 'Current portal runs on legacy technology stack with limited internal expertise. IT team spends 40% of maintenance time on portal-related issues. No API layer exists for future integrations.'
+      leftTitle: 'Within Rapid Solutions',
+      leftItems: [
+        'Faster time to market (2-3 months)',
+        'Unified technology stack with parent platform',
+        'Leverage existing authentication and architecture'
+      ],
+      rightTitle: 'COSS',
+      rightItems: [
+        'Lower consolidation burden (15% of customer count)',
+        'Existing training and best practices',
+        'Shared learning with other CU customers'
+      ]
     },
     supportsMultiColumn: false,
     styling: {
-      container: 'grid grid-cols-2 gap-6',
+      container: 'grid grid-cols-2 gap-8',
       padding: AssetStyles.spacing.md
     }
   }

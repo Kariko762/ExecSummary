@@ -6,8 +6,9 @@ import { PresentationProvider } from './contexts/PresentationContext';
 import { AuthProvider } from './contexts/AuthContext';
 import CMSHeader from './components/CMSHeader';
 import EditorModal from './components/EditorModalV2';
-import { EngineAssetsPreview } from './components/EngineAssetsPreview';
-import StyleSchemeManagerV2 from './components/StyleSchemeManagerV2';
+import { AssetTypeReferenceModal } from './components/AssetTypeReferenceModal';
+import DesignSystemManager from './components/DesignSystemManager';
+import DesignSystemInjector from './components/DesignSystemInjector';
 import SystemSettingsManager from './components/SystemSettingsManager';
 import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -64,7 +65,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [importType, setImportType] = useState<'summaries' | 'executive-iq' | 'organizations' | 'performance'>('summaries');
-  const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null);
+  const [notification, setNotification] = useState<{type: 'success' | 'error' | 'info' | 'warning', message: string} | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [modalDataType, setModalDataType] = useState<'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories'>('summaries');
@@ -72,7 +73,8 @@ function App() {
   const [newSummaryName, setNewSummaryName] = useState('');
   const [creationMode, setCreationMode] = useState<'template' | 'clone'>('template');
   const [selectedSourceId, setSelectedSourceId] = useState<string>('');
-  const [showEngineAssets, setShowEngineAssets] = useState(false);
+  const [showAssetReference, setShowAssetReference] = useState(false);
+  const [assetReferenceType, setAssetReferenceType] = useState<string | undefined>();
   const [showStyleScheme, setShowStyleScheme] = useState(false);
   const [showSystemSettings, setShowSystemSettings] = useState(false);
   const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
@@ -112,7 +114,7 @@ function App() {
     }
   }, [showNewSummaryModal]);
 
-  const showNotification = (type: 'success' | 'error', message: string) => {
+  const showNotification = (type: 'success' | 'error' | 'info' | 'warning', message: string) => {
     setNotification({ type, message });
   };
 
@@ -152,7 +154,7 @@ function App() {
       const response = await fetch(`${API_URL}/templates`);
       if (!response.ok) throw new Error('Failed to fetch templates');
       const data = await response.json();
-      setAvailableTemplates(Array.isArray(data) ? data : []);
+      setAvailableTemplates(Array.isArray(data.templates) ? data.templates : []);
     } catch (error) {
       console.error('Failed to fetch templates:', error);
       setAvailableTemplates([]); // Ensure it's always an array
@@ -344,7 +346,8 @@ function App() {
           // Fetch custom template
           const response = await fetch(`${API_URL}/templates/${selectedSourceId}`);
           if (!response.ok) throw new Error('Failed to fetch template');
-          sourceData = await response.json();
+          const data = await response.json();
+          sourceData = data.template;
         }
       } else {
         // Fetch the selected summary to clone
@@ -652,10 +655,13 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <PresentationProvider>
+          {/* Design System CSS Variable Injector - Always mounted */}
+          <DesignSystemInjector />
+          
           <ProtectedRoute requireAuth={requireAuth} appName="CMS Admin">
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
               <CMSHeader 
-                onOpenEngineAssets={() => setShowEngineAssets(true)}
+                onOpenAssetReference={() => setShowAssetReference(true)}
                 onOpenStyleScheme={() => setShowStyleScheme(true)}
                 onOpenSystemSettings={() => setShowSystemSettings(true)}
                 onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
@@ -673,8 +679,12 @@ function App() {
                 <div className="flex items-start gap-3">
                   {notification.type === 'success' ? (
                     <CheckCircle className="w-6 h-6 text-green-500 dark:text-green-400 flex-shrink-0" />
-                  ) : (
+                  ) : notification.type === 'error' ? (
                     <AlertCircle className="w-6 h-6 text-red-500 dark:text-red-400 flex-shrink-0" />
+                  ) : notification.type === 'warning' ? (
+                    <AlertCircle className="w-6 h-6 text-yellow-500 dark:text-yellow-400 flex-shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-6 h-6 text-blue-500 dark:text-blue-400 flex-shrink-0" />
                   )}
                   <p className="text-gray-900 dark:text-white font-roobert-medium">{notification.message}</p>
                 </div>
@@ -958,11 +968,9 @@ function App() {
                           className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
                         >
                           <option value="">-- Select a template --</option>
-                          <option value="default">Default Template (Built-in)</option>
-                          <option value="default-with-charts">Default Template with Charts (Built-in)</option>
                           {availableTemplates.map((template) => (
                             <option key={template.id} value={template.id}>
-                              {template.name} {template.description && `- ${template.description}`}
+                              {template.name} ({template.sectionCount} sections)
                             </option>
                           ))}
                         </select>
@@ -1044,12 +1052,14 @@ function App() {
             data={selectedItem}
             dataType={modalDataType}
             onSave={handleSaveItem}
+            showNotification={showNotification}
           />
 
-          {/* Engine Assets Preview */}
-          <EngineAssetsPreview
-            isOpen={showEngineAssets}
-            onClose={() => setShowEngineAssets(false)}
+          {/* Asset Type Reference Modal */}
+          <AssetTypeReferenceModal
+            isOpen={showAssetReference}
+            onClose={() => setShowAssetReference(false)}
+            initialAssetType={assetReferenceType}
           />
 
           {/* Template Builder */}
@@ -1065,7 +1075,7 @@ function App() {
           {/* Style Scheme Manager */}
           {showStyleScheme && (
             <div className="fixed inset-0 z-[60]">
-              <StyleSchemeManagerV2 
+              <DesignSystemManager 
                 onClose={() => setShowStyleScheme(false)}
                 onNotification={showNotification}
               />
