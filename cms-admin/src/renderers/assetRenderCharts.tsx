@@ -74,15 +74,21 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
       };
       
       return (
-        <div className="radial-edit">
+        <div>
           {items.map((item, index) => (
-            <div key={index} className="radial-ring-edit">
-              <input
-                type="text"
-                value={item.name || ''}
-                onChange={(e) => updateRing(index, 'name', e.target.value)}
-                placeholder="Ring Name..."
-              />
+            <div key={index} className="edit-item-container">
+              <div className="edit-field-row">
+                <input
+                  type="text"
+                  value={item.name || ''}
+                  onChange={(e) => updateRing(index, 'name', e.target.value)}
+                  placeholder="Ring Name..."
+                  style={{ flex: 1 }}
+                />
+                <button className="delete-button" onClick={() => removeRing(index)}>
+                  <X size={16} />
+                </button>
+              </div>
               <input
                 type="number"
                 value={item.value || 0}
@@ -91,10 +97,11 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
                 min="0"
                 max="100"
               />
-              <button onClick={() => removeRing(index)}><X size={16} /></button>
             </div>
           ))}
-          <button onClick={addRing}><Plus size={16} /> Add Ring</button>
+          <button className="primary-action" onClick={addRing}>
+            <Plus size={16} /> Add Ring
+          </button>
         </div>
       );
     }
@@ -209,15 +216,21 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
     };
     
     return (
-      <div className="pie-edit">
+      <div>
         {items.map((item, index) => (
-          <div key={index} className="pie-slice-edit">
-            <input
-              type="text"
-              value={item.name || ''}
-              onChange={(e) => updateSlice(index, 'name', e.target.value)}
-              placeholder="Slice Name..."
-            />
+          <div key={index} className="edit-item-container">
+            <div className="edit-field-row" style={{ marginBottom: '8px' }}>
+              <input
+                type="text"
+                value={item.name || ''}
+                onChange={(e) => updateSlice(index, 'name', e.target.value)}
+                placeholder="Slice Name..."
+                style={{ flex: 1 }}
+              />
+              <button className="delete-button" onClick={() => removeSlice(index)}>
+                <X size={16} />
+              </button>
+            </div>
             <input
               type="number"
               value={item.value || 0}
@@ -225,10 +238,11 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
               placeholder="Value..."
               min="0"
             />
-            <button onClick={() => removeSlice(index)}><X size={16} /></button>
           </div>
         ))}
-        <button onClick={addSlice}><Plus size={16} /> Add Slice</button>
+        <button className="primary-action" onClick={addSlice}>
+          <Plus size={16} /> Add Slice
+        </button>
       </div>
     );
   }
@@ -296,15 +310,21 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
     };
     
     return (
-      <div className="bar-edit">
+      <div>
         {items.map((item, index) => (
-          <div key={index} className="bar-item-edit">
-            <input
-              type="text"
-              value={item.name || ''}
-              onChange={(e) => updateBar(index, 'name', e.target.value)}
-              placeholder="Category..."
-            />
+          <div key={index} className="edit-item-container">
+            <div className="edit-field-row" style={{ marginBottom: '8px' }}>
+              <input
+                type="text"
+                value={item.name || ''}
+                onChange={(e) => updateBar(index, 'name', e.target.value)}
+                placeholder="Category..."
+                style={{ flex: 1 }}
+              />
+              <button className="delete-button" onClick={() => removeBar(index)}>
+                <X size={16} />
+              </button>
+            </div>
             {Object.keys(item).filter(key => key !== 'name').map(key => (
               <input
                 key={key}
@@ -313,12 +333,14 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
                 onChange={(e) => updateBar(index, key, e.target.value)}
                 placeholder={`${key}...`}
                 min="0"
+                style={{ marginBottom: '8px' }}
               />
             ))}
-            <button onClick={() => removeBar(index)}><X size={16} /></button>
           </div>
         ))}
-        <button onClick={addBar}><Plus size={16} /> Add Bar</button>
+        <button className="primary-action" onClick={addBar}>
+          <Plus size={16} /> Add Bar
+        </button>
       </div>
     );
   }
@@ -418,15 +440,21 @@ export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, 
     };
     
     return (
-      <div className="line-edit">
+      <div>
         {items.map((item, index) => (
-          <div key={index} className="line-point-edit">
-            <input
-              type="text"
-              value={item.name || ''}
-              onChange={(e) => updatePoint(index, 'name', e.target.value)}
-              placeholder="Label (e.g., Jan)..."
-            />
+          <div key={index} className="edit-item-container">
+            <div className="edit-field-row" style={{ marginBottom: '8px' }}>
+              <input
+                type="text"
+                value={item.name || ''}
+                onChange={(e) => updatePoint(index, 'name', e.target.value)}
+                placeholder="Label (e.g., Jan)..."
+                style={{ flex: 1 }}
+              />
+              <button className="delete-button" onClick={() => removePoint(index)}>
+                <X size={16} />
+              </button>
+            </div>
             <input
               type="number"
               value={item.value || 0}
@@ -434,10 +462,11 @@ export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, 
               placeholder="Value..."
               min="0"
             />
-            <button onClick={() => removePoint(index)}><X size={16} /></button>
           </div>
         ))}
-        <button onClick={addPoint}><Plus size={16} /> Add Point</button>
+        <button className="primary-action" onClick={addPoint}>
+          <Plus size={16} /> Add Point
+        </button>
       </div>
     );
   }

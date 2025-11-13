@@ -72,6 +72,7 @@ function App() {
   const [newSummaryName, setNewSummaryName] = useState('');
   const [creationMode, setCreationMode] = useState<'template' | 'clone'>('template');
   const [selectedSourceId, setSelectedSourceId] = useState<string>('');
+  const [modalType, setModalType] = useState<'one-pager' | 'tabbed'>('one-pager');
   const [showAssetReference, setShowAssetReference] = useState(false);
   const [assetReferenceType, setAssetReferenceType] = useState<string | undefined>();
   const [showStyleScheme, setShowStyleScheme] = useState(false);
@@ -956,6 +957,37 @@ function App() {
                   </div>
 
                   <div className="space-y-4">
+                    {/* Modal Type Selection */}
+                    <div>
+                      <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                        Summary Type
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setModalType('one-pager')}
+                          className={`px-4 py-2 rounded-lg border-2 transition-all font-roobert-medium ${
+                            modalType === 'one-pager'
+                              ? 'bg-fis-eggplant border-fis-eggplant text-white'
+                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-eggplant'
+                          }`}
+                        >
+                          One-Pager
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setModalType('tabbed')}
+                          className={`px-4 py-2 rounded-lg border-2 transition-all font-roobert-medium ${
+                            modalType === 'tabbed'
+                              ? 'bg-fis-eggplant border-fis-eggplant text-white'
+                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-eggplant'
+                          }`}
+                        >
+                          Tabbed Page
+                        </button>
+                      </div>
+                    </div>
+
                     {/* Mode Toggle */}
                     <div>
                       <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
@@ -1004,7 +1036,7 @@ function App() {
                           <option value="">-- Select a template --</option>
                           {availableTemplates.map((template) => (
                             <option key={template.id} value={template.id}>
-                              {template.name} ({template.sectionCount} sections)
+                              {template.name}
                             </option>
                           ))}
                         </select>
@@ -1048,15 +1080,24 @@ function App() {
                         onChange={(e) => setNewSummaryName(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleCreateNewSummary()}
                         placeholder="e.g., Demo Services Group - Weekly Update"
-                        className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                        className={`w-full px-4 py-3 rounded-lg border-2 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
+                          newSummaryName.trim() && summaries.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase())
+                            ? 'border-red-500 dark:border-red-400'
+                            : 'border-gray-200 dark:border-gray-600'
+                        }`}
                         autoFocus
                       />
+                      {newSummaryName.trim() && summaries.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase()) && (
+                        <p className="text-xs text-red-600 dark:text-red-400 mt-1">
+                          A summary with this name already exists
+                        </p>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-3 pt-2">
                       <button
                         onClick={handleCreateNewSummary}
-                        disabled={!newSummaryName.trim() || (creationMode === 'clone' && !selectedSourceId)}
+                        disabled={!newSummaryName.trim() || (creationMode === 'clone' && !selectedSourceId) || summaries.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase())}
                         className="flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Create & Edit

@@ -23,7 +23,6 @@
 }
 
 .asset-wrapper.edit-mode {
-  border: 1px dashed var(--border-default);
   border-radius: 0.5rem;
   background: var(--surface-card);
 }
@@ -134,6 +133,7 @@
 .asset-wrapper .code-wrapper {
   background: var(--surface-base);
   border: 1px solid var(--border-default);
+  border-left: 4px solid var(--brand-primary, #431C5B) !important;
   border-radius: 8px;
   padding: 1rem;
   margin: 0.5rem 0;
@@ -521,6 +521,7 @@
   background: white;
   border-radius: 0.75rem;
   border: 1px solid var(--border-default);
+  border-left: 4px solid var(--brand-primary, #431C5B) !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   text-align: center;
@@ -1345,18 +1346,23 @@
 }
 
 /* ==========================================
-   EDIT MODE STYLES
+   EDIT MODE STYLES - Universal Design System
+   Uses brand color variants for depth and hierarchy
    ========================================== */
 
+/* ===== INPUT FIELDS ===== */
 .asset-wrapper.edit-mode input,
 .asset-wrapper.edit-mode textarea,
 .asset-wrapper.edit-mode select {
   width: 100%;
-  padding: 0.5rem;
+  padding: 10px 12px;
   border: 1px solid var(--border-default);
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
+  border-radius: 6px;
+  font-size: 14px;
   font-family: var(--font-primary);
+  background: white;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
 }
 
 .asset-wrapper.edit-mode input:focus,
@@ -1364,30 +1370,338 @@
 .asset-wrapper.edit-mode select:focus {
   outline: none;
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(67, 28, 91, 0.1);
+  box-shadow: 0 0 0 3px var(--brand-primary-high-2);
 }
 
-.asset-wrapper.edit-mode button {
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
+.asset-wrapper.edit-mode input::placeholder,
+.asset-wrapper.edit-mode textarea::placeholder {
+  color: #9ca3af;
+}
+
+.asset-wrapper.edit-mode textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ===== BUTTONS ===== */
+
+/* Primary Action Buttons (Add Item/Card/etc.) */
+.asset-wrapper.edit-mode button.primary-action,
+.asset-wrapper.edit-mode button[class*="add-"] {
+  width: 80%;
+  margin: 12px auto 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
   font-family: var(--font-primary);
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   background: var(--brand-primary);
   color: white;
-  border: none;
+  border: 1px solid var(--brand-primary-low-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.asset-wrapper.edit-mode button:hover {
+.asset-wrapper.edit-mode button.primary-action:hover,
+.asset-wrapper.edit-mode button[class*="add-"]:hover {
+  background: var(--brand-primary-low-1, #5a3c7d) !important;
+  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.25);
+  transform: translateY(-1px);
+}
+
+.asset-wrapper.edit-mode button.primary-action:active,
+.asset-wrapper.edit-mode button[class*="add-"]:active {
+  background: var(--brand-primary-low-1);
+  transform: translateY(0);
+}
+
+/* Delete/Remove Buttons */
+.asset-wrapper.edit-mode button.delete-button,
+.asset-wrapper.edit-mode button[class*="remove-"],
+.asset-wrapper.edit-mode button[class*="delete-"] {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.asset-wrapper.edit-mode button.delete-button:hover,
+.asset-wrapper.edit-mode button[class*="remove-"]:hover,
+.asset-wrapper.edit-mode button[class*="delete-"]:hover {
+  background: var(--semantic-error-light);
+  color: var(--semantic-error);
+}
+
+.asset-wrapper.edit-mode button.delete-button:active,
+.asset-wrapper.edit-mode button[class*="remove-"]:active,
+.asset-wrapper.edit-mode button[class*="delete-"]:active {
+  background: var(--semantic-error-low-1);
+}
+
+/* Secondary Action Buttons */
+.asset-wrapper.edit-mode button.secondary-action {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--brand-secondary);
+  color: white;
+  border: 1px solid var(--brand-secondary-low-1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.asset-wrapper.edit-mode button.secondary-action:hover {
+  background: var(--brand-secondary-low-1, #8b1442) !important;
+}
+
+/* Button Icons */
+.asset-wrapper.edit-mode button svg {
+  flex-shrink: 0;
+}
+
+/* ===== CONTAINERS ===== */
+
+/* Item Containers (for cards, charts, complex items) */
+.asset-wrapper.edit-mode .edit-item-container {
+  background: white;
+  border: 1px solid var(--brand-primary-low-2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(107, 70, 193, 0.08);
+  transition: all 0.2s ease;
+}
+
+.asset-wrapper.edit-mode .edit-item-container:hover {
+  border-color: var(--brand-primary-high-1);
+  box-shadow: 0 4px 8px rgba(107, 70, 193, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Nested/Selected Container */
+.asset-wrapper.edit-mode .edit-item-container.selected {
+  background: var(--brand-primary-high-2);
+  border-color: var(--brand-primary-high-1);
+}
+
+/* List Item Row (for simple lists) */
+.asset-wrapper.edit-mode .edit-list-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Add padding around list items container - target direct parent */
+.asset-wrapper.edit-mode > div:has(.edit-list-item) {
+  padding-top: 8px;
+  padding-bottom: 4px;
+}
+
+/* ===== BADGES & ICONS ===== */
+
+/* Numbered Badge (Highlights List) */
+.asset-wrapper.edit-mode .edit-number-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+/* Sequential Badge Colors */
+.asset-wrapper.edit-mode .edit-number-badge[data-index="0"] {
+  background: var(--brand-primary);
+}
+
+.asset-wrapper.edit-mode .edit-number-badge[data-index="1"] {
   background: var(--brand-secondary);
 }
 
-.asset-wrapper.edit-mode button svg {
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 0.25rem;
+.asset-wrapper.edit-mode .edit-number-badge[data-index="2"] {
+  background: var(--accent-blue);
+}
+
+.asset-wrapper.edit-mode .edit-number-badge[data-index="3"] {
+  background: var(--accent-green);
+}
+
+.asset-wrapper.edit-mode .edit-number-badge[data-index="4"] {
+  background: var(--accent-yellow);
+}
+
+.asset-wrapper.edit-mode .edit-number-badge[data-index="5"],
+.asset-wrapper.edit-mode .edit-number-badge[data-index="6"],
+.asset-wrapper.edit-mode .edit-number-badge[data-index="7"],
+.asset-wrapper.edit-mode .edit-number-badge[data-index="8"],
+.asset-wrapper.edit-mode .edit-number-badge[data-index="9"] {
+  background: var(--brand-tertiary);
+}
+
+/* Icon Container (Bullets, Checkmarks) */
+.asset-wrapper.edit-mode .edit-icon {
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.asset-wrapper.edit-mode .edit-icon.check {
+  color: var(--semantic-success);
+}
+
+/* ===== STATUS BADGES ===== */
+
+.asset-wrapper.edit-mode .status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.asset-wrapper.edit-mode .status-badge.on-track {
+  background: var(--semantic-success-high-2);
+  color: var(--semantic-success-low-1);
+}
+
+.asset-wrapper.edit-mode .status-badge.at-risk {
+  background: var(--semantic-warning-high-2);
+  color: var(--semantic-warning-low-1);
+}
+
+.asset-wrapper.edit-mode .status-badge.blocked {
+  background: var(--semantic-error-high-2);
+  color: var(--semantic-error-low-1);
+}
+
+/* ===== SEVERITY CONTAINERS (Risks) ===== */
+
+.asset-wrapper.edit-mode .edit-item-container.severity-low {
+  background: var(--semantic-info-high-2);
+  border-left: 4px solid var(--semantic-info);
+}
+
+.asset-wrapper.edit-mode .edit-item-container.severity-medium {
+  background: var(--semantic-warning-high-2);
+  border-left: 4px solid var(--semantic-warning);
+}
+
+.asset-wrapper.edit-mode .edit-item-container.severity-high {
+  background: var(--semantic-error-high-2);
+  border-left: 4px solid var(--semantic-error);
+}
+
+/* ===== TOGGLE SWITCH ===== */
+
+.asset-wrapper.edit-mode .toggle-switch {
+  width: 48px;
+  height: 24px;
+  background: var(--brand-primary-low-2);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.asset-wrapper.edit-mode .toggle-switch.active {
+  background: var(--semantic-success);
+}
+
+.asset-wrapper.edit-mode .toggle-switch-knob {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.asset-wrapper.edit-mode .toggle-switch.active .toggle-switch-knob {
+  left: 26px;
+}
+
+/* ===== PROGRESS BARS ===== */
+
+.asset-wrapper.edit-mode .edit-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--border-default);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.asset-wrapper.edit-mode .edit-progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.asset-wrapper.edit-mode .edit-progress-fill.on-track {
+  background: var(--semantic-success);
+}
+
+.asset-wrapper.edit-mode .edit-progress-fill.at-risk {
+  background: var(--semantic-warning);
+}
+
+.asset-wrapper.edit-mode .edit-progress-fill.blocked {
+  background: var(--semantic-error);
+}
+
+/* ===== SPACING UTILITIES ===== */
+
+.asset-wrapper.edit-mode .edit-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.asset-wrapper.edit-mode .edit-field-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.asset-wrapper.edit-mode .edit-field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
 }
 
 /* ==========================================

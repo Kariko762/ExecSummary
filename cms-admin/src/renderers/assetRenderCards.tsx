@@ -37,25 +37,31 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
     };
     
     return (
-      <div className="metric-grid">
+      <div>
         {items.map((item, index) => (
-          <div key={index} className="metric-edit-card">
+          <div key={index} className="edit-item-container">
             <input
               type="text"
               value={item.title || ''}
               onChange={(e) => updateCard(index, 'title', e.target.value)}
               placeholder="Metric Title..."
+              style={{ marginBottom: '8px' }}
             />
             <input
               type="text"
               value={item.value || ''}
               onChange={(e) => updateCard(index, 'value', e.target.value)}
               placeholder="Value..."
+              style={{ marginBottom: '12px' }}
             />
-            <button onClick={() => removeCard(index)}><X size={16} /></button>
+            <button className="delete-button" onClick={() => removeCard(index)} style={{ width: '100%' }}>
+              <X size={16} /> Remove Card
+            </button>
           </div>
         ))}
-        <button onClick={addCard}><Plus size={16} /> Add Metric</button>
+        <button className="primary-action" onClick={addCard}>
+          <Plus size={16} /> Add Metric
+        </button>
       </div>
     );
   }
@@ -107,23 +113,30 @@ export const NestedCardsPattern: React.FC<CardPatternProps> = ({ data, onChange,
     return (
       <div>
         {items.map((item, index) => (
-          <div key={index} className="nested-card-edit">
-            <input
-              type="text"
-              value={item.title || ''}
-              onChange={(e) => updateCard(index, 'title', e.target.value)}
-              placeholder="Title..."
-            />
+          <div key={index} className="edit-item-container">
+            <div className="edit-field-row" style={{ marginBottom: '8px' }}>
+              <input
+                type="text"
+                value={item.title || ''}
+                onChange={(e) => updateCard(index, 'title', e.target.value)}
+                placeholder="Title..."
+                style={{ flex: 1 }}
+              />
+              <button className="delete-button" onClick={() => removeCard(index)}>
+                <X size={16} />
+              </button>
+            </div>
             <input
               type="text"
               value={item.value || ''}
               onChange={(e) => updateCard(index, 'value', e.target.value)}
               placeholder="Value..."
             />
-            <button onClick={() => removeCard(index)}><X size={16} /></button>
           </div>
         ))}
-        <button onClick={addCard}><Plus size={16} /> Add Card</button>
+        <button className="primary-action" onClick={addCard}>
+          <Plus size={16} /> Add Card
+        </button>
       </div>
     );
   }
@@ -166,49 +179,50 @@ export const RiskCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mo
     };
     
     return (
-      <div className="risk-edit-container" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {risks.map((risk, index) => (
-          <div key={index} className="risk-edit" style={{ position: 'relative', padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '0.5rem' }}>
-            {risks.length > 1 && (
-              <button
-                onClick={() => removeRisk(index)}
-                style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', padding: '0.25rem' }}
-              >
-                <X size={16} />
+      <div>
+        {risks.map((risk, index) => {
+          const severityClass = `severity-${risk?.severity || 'medium'}`;
+          return (
+            <div key={index} className={`edit-item-container ${severityClass}`}>
+              <div className="edit-field-row" style={{ marginBottom: '12px' }}>
+                <input
+                  type="text"
+                  value={risk?.title || ''}
+                  onChange={(e) => updateRisk(index, 'title', e.target.value)}
+                  placeholder="Risk Title..."
+                  style={{ flex: 1 }}
+                />
+                <select 
+                  value={risk?.severity || 'medium'}
+                  onChange={(e) => updateRisk(index, 'severity', e.target.value)}
+                  style={{ width: '140px' }}
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+              <textarea
+                value={risk?.description || ''}
+                onChange={(e) => updateRisk(index, 'description', e.target.value)}
+                placeholder="Risk Description..."
+                rows={3}
+                style={{ marginBottom: '12px' }}
+              />
+              <textarea
+                value={risk?.mitigation || ''}
+                onChange={(e) => updateRisk(index, 'mitigation', e.target.value)}
+                placeholder="Mitigation Plan..."
+                rows={3}
+                style={{ marginBottom: '12px' }}
+              />
+              <button className="delete-button" onClick={() => removeRisk(index)} style={{ width: '100%' }}>
+                <X size={16} /> Remove Risk
               </button>
-            )}
-            <select 
-              value={risk?.severity || 'medium'}
-              onChange={(e) => updateRisk(index, 'severity', e.target.value)}
-            >
-              <option value="low">Low Severity</option>
-              <option value="medium">Medium Severity</option>
-              <option value="high">High Severity</option>
-            </select>
-            <input
-              type="text"
-              value={risk?.title || ''}
-              onChange={(e) => updateRisk(index, 'title', e.target.value)}
-              placeholder="Risk Title..."
-            />
-            <textarea
-              value={risk?.description || ''}
-              onChange={(e) => updateRisk(index, 'description', e.target.value)}
-              placeholder="Risk Description..."
-              rows={3}
-            />
-            <textarea
-              value={risk?.mitigation || ''}
-              onChange={(e) => updateRisk(index, 'mitigation', e.target.value)}
-              placeholder="Mitigation Plan..."
-              rows={3}
-            />
-          </div>
-        ))}
-        <button
-          onClick={addRisk}
-          style={{ padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-        >
+            </div>
+          );
+        })}
+        <button className="primary-action" onClick={addRisk}>
           <Plus size={16} /> Add Risk
         </button>
       </div>
@@ -253,12 +267,13 @@ export const OutlookCardPattern: React.FC<CardPatternProps> = ({ data, onChange,
     };
     
     return (
-      <div className="outlook-edit">
+      <div>
         <input
           type="text"
           value={data?.title || ''}
           onChange={(e) => updateField('title', e.target.value)}
           placeholder="Outlook Title..."
+          style={{ marginBottom: '12px' }}
         />
         <textarea
           value={data?.content || ''}
@@ -322,42 +337,56 @@ export const CategoryListPattern: React.FC<CardPatternProps> = ({ data, onChange
     return (
       <div>
         {categories.map((category, catIndex) => (
-          <div key={catIndex} className="category-edit">
-            <input
-              type="text"
-              value={category.name || ''}
-              onChange={(e) => updateCategory(catIndex, 'name', e.target.value)}
-              placeholder="Category Name..."
-            />
-            <select
-              value={category.color || 'green'}
-              onChange={(e) => updateCategory(catIndex, 'color', e.target.value)}
-            >
-              <option value="green">Green</option>
-              <option value="yellow">Yellow</option>
-              <option value="red">Red</option>
-              <option value="blue">Blue</option>
-            </select>
+          <div key={catIndex} className="edit-item-container">
+            <div className="edit-field-row" style={{ marginBottom: '12px' }}>
+              <input
+                type="text"
+                value={category.name || ''}
+                onChange={(e) => updateCategory(catIndex, 'name', e.target.value)}
+                placeholder="Category Name..."
+                style={{ flex: 1 }}
+              />
+              <select
+                value={category.color || 'green'}
+                onChange={(e) => updateCategory(catIndex, 'color', e.target.value)}
+                style={{ width: '120px' }}
+              >
+                <option value="green">Green</option>
+                <option value="yellow">Yellow</option>
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+              </select>
+            </div>
             
-            <div className="category-items">
+            <div style={{ marginBottom: '12px' }}>
               {(category.items || []).map((item: string, itemIndex: number) => (
-                <div key={itemIndex}>
+                <div key={itemIndex} className="edit-list-item">
+                  <div className="edit-icon">•</div>
                   <input
                     type="text"
                     value={item}
                     onChange={(e) => updateItem(catIndex, itemIndex, e.target.value)}
                     placeholder="Item..."
+                    style={{ flex: 1 }}
                   />
-                  <button onClick={() => removeItem(catIndex, itemIndex)}><X size={16} /></button>
+                  <button className="delete-button" onClick={() => removeItem(catIndex, itemIndex)}>
+                    <X size={16} />
+                  </button>
                 </div>
               ))}
-              <button onClick={() => addItem(catIndex)}><Plus size={16} /> Add Item</button>
+              <button className="secondary-action" onClick={() => addItem(catIndex)} style={{ width: '100%', marginTop: '8px' }}>
+                <Plus size={16} /> Add Item
+              </button>
             </div>
             
-            <button onClick={() => removeCategory(catIndex)}>Remove Category</button>
+            <button className="delete-button" onClick={() => removeCategory(catIndex)} style={{ width: '100%' }}>
+              <X size={16} /> Remove Category
+            </button>
           </div>
         ))}
-        <button onClick={addCategory}><Plus size={16} /> Add Category</button>
+        <button className="primary-action" onClick={addCategory}>
+          <Plus size={16} /> Add Category
+        </button>
       </div>
     );
   }

@@ -52,27 +52,33 @@ export const StatusBoardPattern: React.FC<ComplexPatternProps> = ({ data, onChan
     };
     
     return (
-      <div className="status-board-edit">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
         {columns.map((column, colIndex) => (
-          <div key={colIndex} className="status-column-edit">
+          <div key={colIndex} className="edit-item-container">
             <input
               type="text"
               value={column.title || ''}
               onChange={(e) => updateColumnTitle(colIndex, e.target.value)}
               placeholder="Column Title..."
+              style={{ marginBottom: '12px', fontWeight: 600 }}
             />
             {(column.items || []).map((item: string, itemIndex: number) => (
-              <div key={itemIndex} className="status-item-edit">
+              <div key={itemIndex} className="edit-list-item">
                 <input
                   type="text"
                   value={item}
                   onChange={(e) => updateItem(colIndex, itemIndex, e.target.value)}
                   placeholder="Item..."
+                  style={{ flex: 1 }}
                 />
-                <button onClick={() => removeItem(colIndex, itemIndex)}><X size={16} /></button>
+                <button className="delete-button" onClick={() => removeItem(colIndex, itemIndex)}>
+                  <X size={16} />
+                </button>
               </div>
             ))}
-            <button onClick={() => addItem(colIndex)}><Plus size={16} /> Add Item</button>
+            <button className="secondary-action" onClick={() => addItem(colIndex)} style={{ width: '100%', marginTop: '8px' }}>
+              <Plus size={16} /> Add Item
+            </button>
           </div>
         ))}
       </div>
@@ -118,20 +124,36 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
     };
     
     return (
-      <div className="timeline-edit">
+      <div>
         {events.map((event, index) => (
-          <div key={index} className="timeline-event-edit">
-            <input
-              type="text"
-              value={event.date || ''}
-              onChange={(e) => updateEvent(index, 'date', e.target.value)}
-              placeholder="Date (e.g., Jan 2025)..."
-            />
+          <div key={index} className="edit-item-container">
+            <div className="edit-field-row" style={{ marginBottom: '12px' }}>
+              <input
+                type="text"
+                value={event.date || ''}
+                onChange={(e) => updateEvent(index, 'date', e.target.value)}
+                placeholder="Date (e.g., Jan 2025)..."
+                style={{ width: '150px' }}
+              />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Completed</span>
+                <div 
+                  className={`toggle-switch ${event.completed ? 'active' : ''}`}
+                  onClick={() => updateEvent(index, 'completed', !event.completed)}
+                >
+                  <div className="toggle-switch-knob"></div>
+                </div>
+              </div>
+              <button className="delete-button" onClick={() => removeEvent(index)}>
+                <X size={16} />
+              </button>
+            </div>
             <input
               type="text"
               value={event.title || ''}
               onChange={(e) => updateEvent(index, 'title', e.target.value)}
               placeholder="Milestone Title..."
+              style={{ marginBottom: '12px' }}
             />
             <textarea
               value={event.description || ''}
@@ -139,18 +161,11 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
               placeholder="Description..."
               rows={2}
             />
-            <label>
-              <input
-                type="checkbox"
-                checked={event.completed || false}
-                onChange={(e) => updateEvent(index, 'completed', e.target.checked)}
-              />
-              Completed
-            </label>
-            <button onClick={() => removeEvent(index)}><X size={16} /></button>
           </div>
         ))}
-        <button onClick={addEvent}><Plus size={16} /> Add Milestone</button>
+        <button className="primary-action" onClick={addEvent}>
+          <Plus size={16} /> Add Milestone
+        </button>
       </div>
     );
   }
@@ -206,13 +221,14 @@ export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data
     };
     
     return (
-      <div className="four-block-edit">
-        <div className="block-edit">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div className="edit-item-container">
           <input
             type="text"
             value={compData.topLeftTitle}
             onChange={(e) => updateField('topLeftTitle', e.target.value)}
             placeholder="Top Left Title..."
+            style={{ marginBottom: '8px' }}
           />
           <textarea
             value={compData.topLeftContent}
@@ -221,12 +237,13 @@ export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data
             rows={4}
           />
         </div>
-        <div className="block-edit">
+        <div className="edit-item-container">
           <input
             type="text"
             value={compData.topRightTitle}
             onChange={(e) => updateField('topRightTitle', e.target.value)}
             placeholder="Top Right Title..."
+            style={{ marginBottom: '8px' }}
           />
           <textarea
             value={compData.topRightContent}
@@ -235,12 +252,13 @@ export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data
             rows={4}
           />
         </div>
-        <div className="block-edit">
+        <div className="edit-item-container">
           <input
             type="text"
             value={compData.bottomLeftTitle}
             onChange={(e) => updateField('bottomLeftTitle', e.target.value)}
             placeholder="Bottom Left Title..."
+            style={{ marginBottom: '8px' }}
           />
           <textarea
             value={compData.bottomLeftContent}
@@ -249,12 +267,13 @@ export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data
             rows={4}
           />
         </div>
-        <div className="block-edit">
+        <div className="edit-item-container">
           <input
             type="text"
             value={compData.bottomRightTitle}
             onChange={(e) => updateField('bottomRightTitle', e.target.value)}
             placeholder="Bottom Right Title..."
+            style={{ marginBottom: '8px' }}
           />
           <textarea
             value={compData.bottomRightContent}
