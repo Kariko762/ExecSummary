@@ -1,6 +1,91 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Palette, Type, Layout, Download, Upload, RotateCcw, Save, Eye, ArrowLeft } from 'lucide-react';
+
+/**
+ * Color manipulation utilities
+ */
+
+// Convert hex to HSL
+function hexToHSL(hex: string): { h: number; s: number; l: number } {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!result) return { h: 0, s: 0, l: 0 };
+
+  let r = parseInt(result[1], 16) / 255;
+  let g = parseInt(result[2], 16) / 255;
+  let b = parseInt(result[3], 16) / 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h = 0, s = 0, l = (max + min) / 2;
+
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
+
+// Convert HSL to hex
+function hslToHex(h: number, s: number, l: number): string {
+  h = h / 360;
+  s = s / 100;
+  l = l / 100;
+
+  let r, g, b;
+
+  if (s === 0) {
+    r = g = b = l;
+  } else {
+    const hue2rgb = (p: number, q: number, t: number) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+
+  const toHex = (x: number) => {
+    const hex = Math.round(x * 255).toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  };
+
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+// Generate highlight (lighter) variants
+function generateHighlight(hex: string, amount: number): string {
+  const hsl = hexToHSL(hex);
+  // Increase lightness, slightly reduce saturation for natural look
+  const newL = Math.min(95, hsl.l + amount);
+  const newS = Math.max(20, hsl.s - amount * 0.2);
+  return hslToHex(hsl.h, newS, newL).toUpperCase();
+}
+
+// Generate shadow (darker) variants
+function generateShadow(hex: string, amount: number): string {
+  const hsl = hexToHSL(hex);
+  // Decrease lightness, slightly increase saturation for richness
+  const newL = Math.max(5, hsl.l - amount);
+  const newS = Math.min(100, hsl.s + amount * 0.15);
+  return hslToHex(hsl.h, newS, newL).toUpperCase();
+}
 
 /**
  * Design System Manager
@@ -35,6 +120,21 @@ interface SpacingDefinition {
 interface DesignSystemManagerProps {
   onClose?: () => void;
   onNotification?: (type: 'success' | 'error', message: string) => void;
+}
+
+interface DesignSystemProfile {
+  typography: Record<string, TypographyStyle>;
+  colors: ColorDefinition[];
+  spacing: SpacingDefinition[];
+  fonts: typeof DEFAULT_FONTS;
+}
+
+interface DesignSystemData {
+  version: string;
+  timestamp: string;
+  light: DesignSystemProfile;
+  dark: DesignSystemProfile;
+  activeTheme?: 'light' | 'dark';
 }
 
 const DEFAULT_TYPOGRAPHY: Record<string, TypographyStyle> = {
@@ -100,11 +200,22 @@ const DEFAULT_TYPOGRAPHY: Record<string, TypographyStyle> = {
   },
 };
 
+// Generate brand color variants (highlights and shadows)
+function generateBrandColorSet(baseColor: string, name: string): ColorDefinition[] {
+  return [
+    { key: `brand-${name}-high-2`, label: `${name} High 2`, value: generateHighlight(baseColor, 35), description: `Lightest ${name} variant` },
+    { key: `brand-${name}-high-1`, label: `${name} High 1`, value: generateHighlight(baseColor, 20), description: `Light ${name} variant` },
+    { key: `brand-${name}`, label: `${name} Base`, value: baseColor, description: `Base ${name} color` },
+    { key: `brand-${name}-low-1`, label: `${name} Low 1`, value: generateShadow(baseColor, 15), description: `Dark ${name} variant` },
+    { key: `brand-${name}-low-2`, label: `${name} Low 2`, value: generateShadow(baseColor, 30), description: `Darkest ${name} variant` },
+  ];
+}
+
 const DEFAULT_COLORS: ColorDefinition[] = [
-  // Brand Colors - FIS Official Brand Palette
-  { key: 'brand-primary', label: 'Brand Primary', value: '#431C5B', description: 'Primary brand color (Eggplant)' },
-  { key: 'brand-secondary', label: 'Brand Secondary', value: '#B21A53', description: 'Secondary brand color (Raspberry)' },
-  { key: 'brand-tertiary', label: 'Brand Tertiary', value: '#1D1F48', description: 'Tertiary brand color (Navy)' },
+  // Brand Colors - FIS Official Brand Palette (with calculated variants)
+  ...generateBrandColorSet('#431C5B', 'primary'),
+  ...generateBrandColorSet('#B21A53', 'secondary'),
+  ...generateBrandColorSet('#1D1F48', 'tertiary'),
   
   // Accent Colors
   { key: 'accent-blue', label: 'Accent Blue', value: '#3B82F6', description: 'Blue accent' },
@@ -204,37 +315,160 @@ const FONT_OPTIONS = [
 
 export default function DesignSystemManager({ onClose, onNotification }: DesignSystemManagerProps) {
   // Load from localStorage on mount
-  const loadSavedData = () => {
+  const loadSavedData = (): { data: DesignSystemData; savedTheme: 'light' | 'dark' } => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
+        // Check if it's the new format (with light/dark profiles)
+        if (parsed.light && parsed.dark) {
+          return {
+            data: parsed,
+            savedTheme: parsed.activeTheme || 'light'
+          };
+        }
+        // Old format - migrate to new format
         return {
-          typography: parsed.typography || DEFAULT_TYPOGRAPHY,
-          colors: parsed.colors || DEFAULT_COLORS,
-          spacing: parsed.spacing || DEFAULT_SPACING,
-          fonts: parsed.fonts || DEFAULT_FONTS,
-        };
-      }
+          data: {
+            version: '2.0.0',
+            timestamp: new Date().toISOString(),
+            light: {
+              typography: parsed.typography || DEFAULT_TYPOGRAPHY,
+              colors: parsed.colors || DEFAULT_COLORS,
+              spacing: parsed.spacing || DEFAULT_SPACING,
+              fonts: parsed.fonts || DEFAULT_FONTS,
+            },
+            dark: {
+              typography: DEFAULT_TYPOGRAPHY,
+              colors: [
+              // Brand Colors - Dark Theme from Infographic (with calculated variants)
+              ...generateBrandColorSet('#FF8C42', 'primary'),
+              ...generateBrandColorSet('#00C9FF', 'secondary'),
+              ...generateBrandColorSet('#B366FF', 'tertiary'),
+              
+              // Accent Colors - Vibrant for Dark Background
+              { key: 'accent-blue', label: 'Accent Blue', value: '#06B6D4', description: 'Cyan-blue accent' },
+              { key: 'accent-green', label: 'Accent Green', value: '#4BCD3E', description: 'Bright green accent' },
+              { key: 'accent-yellow', label: 'Accent Yellow', value: '#FFC107', description: 'Golden yellow accent' },
+              { key: 'accent-red', label: 'Accent Red', value: '#FF6B6B', description: 'Coral red accent' },
+              
+              // Semantic Colors - High Contrast
+              { key: 'semantic-info', label: 'Info', value: '#06B6D4', description: 'Information state' },
+              { key: 'semantic-success', label: 'Success', value: '#10B981', description: 'Success state' },
+              { key: 'semantic-warning', label: 'Warning', value: '#FFA500', description: 'Warning state' },
+              { key: 'semantic-error', label: 'Error', value: '#EF4444', description: 'Error state' },
+              
+              // Surface Colors - Dark Background Layers
+              { key: 'surface-base', label: 'Surface Base', value: '#1F2937', description: 'Base surface color (Dark Slate)' },
+              { key: 'surface-card', label: 'Surface Card', value: '#2D3748', description: 'Card surface color (Charcoal)' },
+              { key: 'surface-elevated', label: 'Surface Elevated', value: '#374151', description: 'Elevated surface color' },
+              
+              // Border Colors - Subtle Dark Borders
+              { key: 'border-subtle', label: 'Border Subtle', value: '#374151', description: 'Subtle border' },
+              { key: 'border-default', label: 'Border Default', value: '#4B5563', description: 'Default border' },
+              { key: 'border-strong', label: 'Border Strong', value: '#6B7280', description: 'Strong border' },
+              { key: 'border-accent', label: 'Border Accent', value: '#FF8C42', description: 'Accent border (Orange)' },
+              
+              // Text Colors - High Contrast on Dark
+              { key: 'text-primary', label: 'Text Primary', value: '#F9FAFB', description: 'Primary text (Near White)' },
+              { key: 'text-secondary', label: 'Text Secondary', value: '#D1D5DB', description: 'Secondary text (Light Gray)' },
+              { key: 'text-tertiary', label: 'Text Tertiary', value: '#9CA3AF', description: 'Tertiary text (Medium Gray)' },
+              { key: 'text-inverse', label: 'Text Inverse', value: '#111827', description: 'Inverse text (on light)' },
+            ],
+            spacing: DEFAULT_SPACING,
+            fonts: DEFAULT_FONTS,
+          },
+        },
+        savedTheme: 'light'
+      };
+    }
     } catch (error) {
       console.error('Failed to load saved design system:', error);
     }
+    // Return default profiles
     return {
-      typography: DEFAULT_TYPOGRAPHY,
-      colors: DEFAULT_COLORS,
-      spacing: DEFAULT_SPACING,
-      fonts: DEFAULT_FONTS,
+      data: {
+        version: '2.0.0',
+        timestamp: new Date().toISOString(),
+        light: {
+          typography: DEFAULT_TYPOGRAPHY,
+          colors: DEFAULT_COLORS,
+          spacing: DEFAULT_SPACING,
+          fonts: DEFAULT_FONTS,
+        },
+        dark: {
+          typography: DEFAULT_TYPOGRAPHY,
+          colors: [
+            // Brand Colors - Dark Theme from Infographic (with calculated variants)
+            ...generateBrandColorSet('#FF8C42', 'primary'),
+            ...generateBrandColorSet('#00C9FF', 'secondary'),
+            ...generateBrandColorSet('#B366FF', 'tertiary'),
+            
+            // Accent Colors - Vibrant for Dark Background
+            { key: 'accent-blue', label: 'Accent Blue', value: '#06B6D4', description: 'Cyan-blue accent' },
+            { key: 'accent-green', label: 'Accent Green', value: '#4BCD3E', description: 'Bright green accent' },
+            { key: 'accent-yellow', label: 'Accent Yellow', value: '#FFC107', description: 'Golden yellow accent' },
+            { key: 'accent-red', label: 'Accent Red', value: '#FF6B6B', description: 'Coral red accent' },
+            
+            // Semantic Colors - High Contrast
+            { key: 'semantic-info', label: 'Info', value: '#06B6D4', description: 'Information state' },
+            { key: 'semantic-success', label: 'Success', value: '#10B981', description: 'Success state' },
+            { key: 'semantic-warning', label: 'Warning', value: '#FFA500', description: 'Warning state' },
+            { key: 'semantic-error', label: 'Error', value: '#EF4444', description: 'Error state' },
+            
+            // Surface Colors - Dark Background Layers
+            { key: 'surface-base', label: 'Surface Base', value: '#1F2937', description: 'Base surface color (Dark Slate)' },
+            { key: 'surface-card', label: 'Surface Card', value: '#2D3748', description: 'Card surface color (Charcoal)' },
+            { key: 'surface-elevated', label: 'Surface Elevated', value: '#374151', description: 'Elevated surface color' },
+            
+            // Border Colors - Subtle Dark Borders
+            { key: 'border-subtle', label: 'Border Subtle', value: '#374151', description: 'Subtle border' },
+            { key: 'border-default', label: 'Border Default', value: '#4B5563', description: 'Default border' },
+            { key: 'border-strong', label: 'Border Strong', value: '#6B7280', description: 'Strong border' },
+            { key: 'border-accent', label: 'Border Accent', value: '#FF8C42', description: 'Accent border (Orange)' },
+            
+            // Text Colors - High Contrast on Dark
+            { key: 'text-primary', label: 'Text Primary', value: '#F9FAFB', description: 'Primary text (Near White)' },
+            { key: 'text-secondary', label: 'Text Secondary', value: '#D1D5DB', description: 'Secondary text (Light Gray)' },
+            { key: 'text-tertiary', label: 'Text Tertiary', value: '#9CA3AF', description: 'Tertiary text (Medium Gray)' },
+            { key: 'text-inverse', label: 'Text Inverse', value: '#111827', description: 'Inverse text (on light)' },
+          ],
+          spacing: DEFAULT_SPACING,
+          fonts: DEFAULT_FONTS,
+        },
+      },
+      savedTheme: 'light'
     };
   };
 
-  const savedData = loadSavedData();
-  const [typography, setTypography] = useState(savedData.typography);
-  const [colors, setColors] = useState(savedData.colors);
-  const [spacing, setSpacing] = useState(savedData.spacing);
-  const [fonts, setFonts] = useState(savedData.fonts);
+  const { data: savedData, savedTheme } = loadSavedData();
+  const [lightProfile, setLightProfile] = useState<DesignSystemProfile>(savedData.light);
+  const [darkProfile, setDarkProfile] = useState<DesignSystemProfile>(savedData.dark);
+  const [activeProfile, setActiveProfile] = useState<'light' | 'dark'>('light');
+  const [activeTheme, setActiveTheme] = useState<'light' | 'dark'>(savedTheme); // Which theme is currently applied
+  const [pendingThemeChange, setPendingThemeChange] = useState<'light' | 'dark' | null>(null);
+  const [showThemeChangeModal, setShowThemeChangeModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'fonts' | 'typography' | 'colors' | 'spacing' | 'preview'>('colors');
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+
+  // Get current profile data based on active profile
+  const currentProfile = activeProfile === 'light' ? lightProfile : darkProfile;
+  const typography = currentProfile.typography;
+  const colors = currentProfile.colors;
+  const spacing = currentProfile.spacing;
+  const fonts = currentProfile.fonts;
+
+  // Update current profile
+  const updateCurrentProfile = (updates: Partial<DesignSystemProfile>) => {
+    if (activeProfile === 'light') {
+      setLightProfile({ ...lightProfile, ...updates });
+    } else {
+      setDarkProfile({ ...darkProfile, ...updates });
+    }
+    setHasChanges(true);
+  };
 
   // Helper function to generate light tint (mix with white)
   const generateLightTint = (hexColor: string, percentage: number = 85): string => {
@@ -265,12 +499,13 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
     return `#${darkenedR.toString(16).padStart(2, '0')}${darkenedG.toString(16).padStart(2, '0')}${darkenedB.toString(16).padStart(2, '0')}`;
   };
 
-  // Inject CSS variables into :root whenever colors change
+  // Inject CSS variables into :root based on active theme
   useEffect(() => {
     const root = document.documentElement;
+    const themeProfile = activeTheme === 'light' ? lightProfile : darkProfile;
     
-    // Inject all color variables
-    colors.forEach((color: ColorDefinition) => {
+    // Inject all color variables from active theme
+    themeProfile.colors.forEach((color: ColorDefinition) => {
       root.style.setProperty(`--${color.key}`, color.value);
       
       // Auto-generate light and dark variants for semantic colors
@@ -282,15 +517,21 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
         root.style.setProperty(`--${color.key}-dark`, darkShade);
       }
     });
-  }, [colors]);
+
+    // Apply dark/light class to document for Tailwind
+    if (activeTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [activeTheme, lightProfile, darkProfile]);
 
   const handleExport = () => {
-    const exportData = {
+    const exportData: DesignSystemData = {
       version: '2.0.0',
       timestamp: new Date().toISOString(),
-      typography,
-      colors,
-      spacing,
+      light: lightProfile,
+      dark: darkProfile,
     };
     
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -300,6 +541,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
     a.download = `design-system-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    onNotification?.('success', 'Design system exported (Light & Dark profiles)');
   };
 
   const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -310,50 +552,82 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
     reader.onload = (e) => {
       try {
         const imported = JSON.parse(e.target?.result as string);
-        if (imported.typography) setTypography(imported.typography);
-        if (imported.colors) setColors(imported.colors);
-        if (imported.spacing) setSpacing(imported.spacing);
-        if (imported.fonts) setFonts(imported.fonts);
+        
+        // Check if it's the new format (with light/dark profiles)
+        if (imported.light && imported.dark) {
+          setLightProfile(imported.light);
+          setDarkProfile(imported.dark);
+          onNotification?.('success', 'Design system imported (Light & Dark profiles)!');
+        } else {
+          // Old format - import to current profile only
+          const profile: DesignSystemProfile = {
+            typography: imported.typography || currentProfile.typography,
+            colors: imported.colors || currentProfile.colors,
+            spacing: imported.spacing || currentProfile.spacing,
+            fonts: imported.fonts || currentProfile.fonts,
+          };
+          if (activeProfile === 'light') {
+            setLightProfile(profile);
+          } else {
+            setDarkProfile(profile);
+          }
+          onNotification?.('success', `Design system imported to ${activeProfile} profile!`);
+        }
+        
         setHasChanges(true);
-        onNotification?.('success', 'Design system imported successfully!');
       } catch (error) {
         console.error('Failed to import design system:', error);
         onNotification?.('error', 'Failed to import file. Please check the format.');
       }
     };
     reader.readAsText(file);
+    // Reset file input
+    event.target.value = '';
   };
 
   const handleReset = () => {
-    if (confirm('Reset all design system values to defaults?')) {
-      setTypography(DEFAULT_TYPOGRAPHY);
-      setColors(DEFAULT_COLORS);
-      setSpacing(DEFAULT_SPACING);
-      setFonts(DEFAULT_FONTS);
-      setHasChanges(false);
-      onNotification?.('success', 'Design system reset to defaults');
+    setShowResetModal(true);
+  };
+
+  const confirmReset = () => {
+    const profileName = activeProfile === 'light' ? 'Light' : 'Dark';
+    const defaultProfile: DesignSystemProfile = {
+      typography: DEFAULT_TYPOGRAPHY,
+      colors: DEFAULT_COLORS,
+      spacing: DEFAULT_SPACING,
+      fonts: DEFAULT_FONTS,
+    };
+    
+    if (activeProfile === 'light') {
+      setLightProfile(defaultProfile);
+    } else {
+      setDarkProfile(defaultProfile);
     }
+    
+    setHasChanges(true);
+    setShowResetModal(false);
+    onNotification?.('success', `${profileName} profile reset to defaults`);
+  };
+
+  const cancelReset = () => {
+    setShowResetModal(false);
   };
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const dataToSave = {
+      const dataToSave: DesignSystemData = {
         version: '2.0.0',
         timestamp: new Date().toISOString(),
-        typography,
-        colors,
-        spacing,
-        fonts,
+        light: lightProfile,
+        dark: darkProfile,
+        activeTheme: activeTheme, // Save which theme is currently active
       };
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
       
-      // Trigger page reload to apply font changes
-      window.location.reload();
-      
       setHasChanges(false);
-      onNotification?.('success', 'Design system saved! Page reloading...');
+      onNotification?.('success', 'Design system saved successfully!');
     } catch (error) {
       console.error('Failed to save design system:', error);
       onNotification?.('error', 'Failed to save design system');
@@ -363,18 +637,77 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
   };
 
   const updateColor = (key: string, value: string) => {
-    setColors((prev: ColorDefinition[]) => prev.map((c: ColorDefinition) => c.key === key ? { ...c, value } : c));
-    setHasChanges(true);
+    let updatedColors = colors.map((c: ColorDefinition) => c.key === key ? { ...c, value } : c);
+    
+    // If updating a base brand color, regenerate its highlights and shadows
+    const brandColorMatch = key.match(/^brand-(primary|secondary|tertiary)$/);
+    if (brandColorMatch) {
+      const colorName = brandColorMatch[1];
+      const newVariants = generateBrandColorSet(value, colorName);
+      
+      // Find the position of the first variant of this color
+      const firstVariantIndex = updatedColors.findIndex(c => c.key.startsWith(`brand-${colorName}`));
+      
+      if (firstVariantIndex !== -1) {
+        // Remove old variants (all 5 shades)
+        updatedColors = updatedColors.filter(c => !c.key.startsWith(`brand-${colorName}`));
+        // Insert new variants at the exact same position
+        updatedColors.splice(firstVariantIndex, 0, ...newVariants);
+      } else {
+        // Fallback: shouldn't happen, but insert in correct order
+        const primaryIndex = updatedColors.findIndex(c => c.key.startsWith('brand-primary'));
+        const secondaryIndex = updatedColors.findIndex(c => c.key.startsWith('brand-secondary'));
+        
+        let insertIndex = 0;
+        if (colorName === 'primary') {
+          insertIndex = 0;
+        } else if (colorName === 'secondary') {
+          insertIndex = primaryIndex >= 0 ? primaryIndex + 5 : 0;
+        } else if (colorName === 'tertiary') {
+          insertIndex = secondaryIndex >= 0 ? secondaryIndex + 5 : (primaryIndex >= 0 ? primaryIndex + 5 : 0);
+        }
+        
+        updatedColors.splice(insertIndex, 0, ...newVariants);
+      }
+    }
+    
+    updateCurrentProfile({ colors: updatedColors });
   };
 
   const updateTypography = (key: string, className: string) => {
-    setTypography((prev: Record<string, TypographyStyle>) => ({ ...prev, [key]: { ...prev[key], className } }));
-    setHasChanges(true);
+    const updatedTypography = { ...typography, [key]: { ...typography[key], className } };
+    updateCurrentProfile({ typography: updatedTypography });
   };
 
   const updateSpacing = (key: string, value: string) => {
-    setSpacing((prev: SpacingDefinition[]) => prev.map((s: SpacingDefinition) => s.key === key ? { ...s, value } : s));
-    setHasChanges(true);
+    const updatedSpacing = spacing.map((s: SpacingDefinition) => s.key === key ? { ...s, value } : s);
+    updateCurrentProfile({ spacing: updatedSpacing });
+  };
+
+  const updateFonts = (newFonts: typeof DEFAULT_FONTS) => {
+    updateCurrentProfile({ fonts: newFonts });
+  };
+
+  const handleThemeDropdownChange = (newTheme: 'light' | 'dark') => {
+    if (newTheme !== activeTheme) {
+      setPendingThemeChange(newTheme);
+      setShowThemeChangeModal(true);
+    }
+  };
+
+  const confirmThemeChange = () => {
+    if (pendingThemeChange) {
+      setActiveTheme(pendingThemeChange);
+      // CSS variables are automatically applied via useEffect
+      onNotification?.('success', `${pendingThemeChange === 'light' ? '☀️ Light' : '🌙 Dark'} theme activated`);
+    }
+    setShowThemeChangeModal(false);
+    setPendingThemeChange(null);
+  };
+
+  const cancelThemeChange = () => {
+    setShowThemeChangeModal(false);
+    setPendingThemeChange(null);
   };
 
   return (
@@ -398,12 +731,53 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   </h1>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Configure centralized design system - colors, typography, spacing, and themes
+                  Configure centralized design system (DSM)
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
+              {/* Light/Dark Profile Toggle - For Editing */}
+              <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 mr-2">
+                <button
+                  onClick={() => setActiveProfile('light')}
+                  className={`px-3 py-1.5 text-sm font-roobert-medium rounded transition-all ${
+                    activeProfile === 'light'
+                      ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  Light
+                </button>
+                <button
+                  onClick={() => setActiveProfile('dark')}
+                  className={`px-3 py-1.5 text-sm font-roobert-medium rounded transition-all ${
+                    activeProfile === 'dark'
+                      ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  Dark
+                </button>
+              </div>
+
+              {/* Active Theme Selector */}
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400">
+                  Active Theme:
+                </label>
+                <select
+                  value={activeTheme}
+                  onChange={(e) => handleThemeDropdownChange(e.target.value as 'light' | 'dark')}
+                  className="px-3 py-1.5 text-sm font-roobert-medium bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                >
+                  <option value="light">☀️ Light</option>
+                  <option value="dark">🌙 Dark</option>
+                </select>
+              </div>
+
+              <div className="w-px h-8 bg-gray-300 dark:bg-gray-600"></div>
+
               <label className="cursor-pointer">
                 <input
                   type="file"
@@ -482,6 +856,90 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
         </div>
       </div>
 
+      {/* Theme Change Confirmation Modal */}
+      <AnimatePresence>
+        {showThemeChangeModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md mx-4 shadow-xl border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-fis-eggplant/10 dark:bg-fis-raspberry/10 flex items-center justify-center">
+                  <Palette className="w-5 h-5 text-fis-eggplant dark:text-fis-raspberry" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                    Change Active Theme?
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    Are you sure you want to activate the <strong>{pendingThemeChange === 'light' ? 'Light' : 'Dark'}</strong> theme? This will apply the colors, fonts, and styling from that profile to the entire application.
+                  </p>
+                  <div className="flex gap-3 justify-end">
+                    <button
+                      onClick={cancelThemeChange}
+                      className="px-4 py-2 text-sm font-roobert-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={confirmThemeChange}
+                      className="px-4 py-2 text-sm font-roobert-semibold bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 transition-opacity"
+                    >
+                      Activate {pendingThemeChange === 'light' ? 'Light' : 'Dark'} Theme
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Reset Confirmation Modal */}
+      <AnimatePresence>
+        {showResetModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md mx-4 shadow-xl border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center">
+                  <RotateCcw className="w-5 h-5 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                    Reset {activeProfile === 'light' ? 'Light' : 'Dark'} Profile?
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    This will restore all colors, fonts, typography, and spacing to their default values. This action cannot be undone.
+                  </p>
+                  <div className="flex gap-3 justify-end">
+                    <button
+                      onClick={cancelReset}
+                      className="px-4 py-2 text-sm font-roobert-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={confirmReset}
+                      className="px-4 py-2 text-sm font-roobert-semibold bg-red-600 dark:bg-red-500 text-white rounded-lg hover:opacity-90 transition-opacity"
+                    >
+                      Reset to Defaults
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {activeTab === 'fonts' && (
@@ -503,8 +961,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.primary}
                     onChange={(e) => {
-                      setFonts({ ...fonts, primary: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, primary: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -520,8 +977,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.secondary}
                     onChange={(e) => {
-                      setFonts({ ...fonts, secondary: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, secondary: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -537,8 +993,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.mono}
                     onChange={(e) => {
-                      setFonts({ ...fonts, mono: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, mono: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-mono"
                   >
@@ -568,8 +1023,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.header}
                     onChange={(e) => {
-                      setFonts({ ...fonts, header: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, header: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -586,8 +1040,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.title}
                     onChange={(e) => {
-                      setFonts({ ...fonts, title: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, title: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -604,8 +1057,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.subtitle}
                     onChange={(e) => {
-                      setFonts({ ...fonts, subtitle: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, subtitle: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -623,8 +1075,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.label}
                     onChange={(e) => {
-                      setFonts({ ...fonts, label: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, label: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -641,8 +1092,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.fieldLabel}
                     onChange={(e) => {
-                      setFonts({ ...fonts, fieldLabel: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, fieldLabel: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -660,8 +1110,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.body}
                     onChange={(e) => {
-                      setFonts({ ...fonts, body: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, body: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -678,8 +1127,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.bodySmall}
                     onChange={(e) => {
-                      setFonts({ ...fonts, bodySmall: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, bodySmall: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -697,8 +1145,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.quote}
                     onChange={(e) => {
-                      setFonts({ ...fonts, quote: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, quote: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -715,8 +1162,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.code}
                     onChange={(e) => {
-                      setFonts({ ...fonts, code: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, code: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-mono"
                   >
@@ -734,8 +1180,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.chartLabel}
                     onChange={(e) => {
-                      setFonts({ ...fonts, chartLabel: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, chartLabel: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -752,8 +1197,7 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
                   <select
                     value={fonts.chartValue}
                     onChange={(e) => {
-                      setFonts({ ...fonts, chartValue: e.target.value });
-                      setHasChanges(true);
+                      updateFonts({ ...fonts, chartValue: e.target.value });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                   >
@@ -806,8 +1250,6 @@ function TabButton({ active, onClick, icon, label }: { active: boolean; onClick:
 
 // Colors Panel
 function ColorsPanel({ colors, onUpdate }: { colors: ColorDefinition[]; onUpdate: (key: string, value: string) => void }) {
-  const [brandTheme, setBrandTheme] = useState<'light' | 'dark'>('light');
-  
   const categories = {
     'Brand Colors': colors.filter(c => c.key.startsWith('brand-')),
     'Accent Colors': colors.filter(c => c.key.startsWith('accent-')),
@@ -815,6 +1257,27 @@ function ColorsPanel({ colors, onUpdate }: { colors: ColorDefinition[]; onUpdate
     'Surface Colors': colors.filter(c => c.key.startsWith('surface-')),
     'Border Colors': colors.filter(c => c.key.startsWith('border-')),
     'Text Colors': colors.filter(c => c.key.startsWith('text-')),
+  };
+
+  // Helper to check if color is a base brand color (not a variant)
+  const isBaseBrandColor = (key: string) => {
+    return key.match(/^brand-(primary|secondary|tertiary)$/);
+  };
+
+  // Get all variants for a base brand color
+  const getBrandColorVariants = (baseKey: string) => {
+    const match = baseKey.match(/^brand-(primary|secondary|tertiary)$/);
+    if (!match) return [];
+    const colorName = match[1];
+    return colors.filter(c => c.key.startsWith(`brand-${colorName}`));
+  };
+
+  // Only show base brand colors, hide variants
+  const displayItems = (items: ColorDefinition[]) => {
+    if (items.some(c => c.key.startsWith('brand-'))) {
+      return items.filter(c => isBaseBrandColor(c.key));
+    }
+    return items;
   };
 
   return (
@@ -825,61 +1288,55 @@ function ColorsPanel({ colors, onUpdate }: { colors: ColorDefinition[]; onUpdate
             <h2 className="text-base font-roobert-semibold text-gray-900 dark:text-white">
               {category}
             </h2>
-            
-            {/* Light/Dark toggle for Brand Colors */}
-            {category === 'Brand Colors' && (
-              <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-                <button
-                  onClick={() => setBrandTheme('light')}
-                  className={`px-3 py-1 text-xs font-roobert-medium rounded transition-all ${
-                    brandTheme === 'light'
-                      ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                  }`}
-                >
-                  Light
-                </button>
-                <button
-                  onClick={() => setBrandTheme('dark')}
-                  className={`px-3 py-1 text-xs font-roobert-medium rounded transition-all ${
-                    brandTheme === 'dark'
-                      ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                  }`}
-                >
-                  Dark
-                </button>
-              </div>
-            )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-            {items.map(color => (
-              <div
-                key={color.key}
-                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <div
-                    className="w-10 h-10 rounded border-2 border-gray-300 dark:border-gray-600 flex-shrink-0"
-                    style={{ backgroundColor: color.value }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="font-roobert-medium text-xs text-gray-900 dark:text-white truncate">
-                      {color.label}
-                    </div>
-                    <div className="text-[10px] text-gray-500 dark:text-gray-400 font-mono truncate">
-                      {color.key}
+            {displayItems(items).map(color => {
+              const isBrand = isBaseBrandColor(color.key);
+              const variants = isBrand ? getBrandColorVariants(color.key) : [];
+              
+              return (
+                <div
+                  key={color.key}
+                  className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3"
+                >
+                  <div className="flex items-end gap-2 mb-2">
+                    <div
+                      className="w-14 h-14 rounded border-2 border-gray-300 dark:border-gray-600 flex-shrink-0"
+                      style={{ backgroundColor: color.value }}
+                    />
+                    <div className="flex-1 min-w-0 flex flex-col justify-end">
+                      <div className="font-roobert-medium text-xs text-gray-900 dark:text-white truncate">
+                        {color.label}
+                      </div>
+                      <div className="text-[10px] text-gray-500 dark:text-gray-400 font-mono truncate mb-2">
+                        {color.key}
+                      </div>
+                      
+                      {/* Show variants as small color boxes for brand colors */}
+                      {isBrand && variants.length > 0 && (
+                        <div className="flex gap-1 flex-wrap">
+                          {variants.map(variant => (
+                            <div
+                              key={variant.key}
+                              className="w-5 h-5 rounded border border-gray-300 dark:border-gray-600"
+                              style={{ backgroundColor: variant.value }}
+                              title={variant.label}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
+                  <input
+                    type="text"
+                    value={color.value}
+                    onChange={(e) => onUpdate(color.key, e.target.value)}
+                    className="w-full px-2 py-1 text-xs font-mono bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded"
+                    placeholder="#RRGGBB"
+                  />
                 </div>
-                <input
-                  type="text"
-                  value={color.value}
-                  onChange={(e) => onUpdate(color.key, e.target.value)}
-                  className="w-full px-2 py-1 text-xs font-mono bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded"
-                />
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ))}
