@@ -47,6 +47,14 @@
       "icon": "FolderOpen",
       "created": "2025-11-13T00:00:00.000Z",
       "description": "Knowledge base category definitions"
+    },
+    {
+      "id": "strategiciq",
+      "name": "StrategicIQ",
+      "color": "red",
+      "icon": "Lightbulb",
+      "description": "Supporting documentation that links Research -> Initiatives",
+      "created": "2025-11-14T09:22:29.790Z"
     }
   ]
 }

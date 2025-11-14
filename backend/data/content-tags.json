@@ -1,0 +1,58 @@
+{
+  "tags": [
+    {
+      "id": "weekly-summary",
+      "name": "Weekly Summaries",
+      "description": "Executive weekly performance dashboards",
+      "color": "primary",
+      "icon": "FileText",
+      "category": "weekly-summary",
+      "created": "2024-11-10T00:00:00.000Z"
+    },
+    {
+      "id": "executive-iq",
+      "name": "Executive IQ",
+      "description": "Strategic insights and intelligence",
+      "color": "secondary",
+      "icon": "Lightbulb",
+      "category": "executive-iq",
+      "created": "2024-11-10T00:00:00.000Z"
+    },
+    {
+      "id": "organizations",
+      "name": "Organizations",
+      "description": "Company and organizational data",
+      "color": "tertiary",
+      "icon": "Building2",
+      "category": "organizations",
+      "created": "2024-11-10T00:00:00.000Z"
+    },
+    {
+      "id": "performance",
+      "name": "Performance",
+      "description": "Performance metrics and analytics",
+      "color": "blue",
+      "icon": "TrendingUp",
+      "category": "performance",
+      "created": "2024-11-10T00:00:00.000Z"
+    },
+    {
+      "id": "knowledge-base",
+      "name": "Knowledge Base",
+      "description": "Knowledge articles and documentation",
+      "color": "green",
+      "icon": "BookOpen",
+      "category": "knowledge-base",
+      "created": "2024-11-10T00:00:00.000Z"
+    },
+    {
+      "id": "kb-categories",
+      "name": "KB Categories",
+      "description": "Knowledge base category management",
+      "color": "gray",
+      "icon": "FolderOpen",
+      "category": "kb-categories",
+      "created": "2024-11-10T00:00:00.000Z"
+    }
+  ]
+}

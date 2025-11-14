@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
@@ -10,17 +10,21 @@ interface CMSHeaderProps {
   onOpenStyleScheme?: () => void;
   onOpenTemplateBuilder?: () => void;
   onOpenSystemSettings?: () => void;
+  onOpenComments?: () => void;
 }
 
-export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenSystemSettings }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenSystemSettings, onOpenComments }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
   const [engineSubmenuOpen, setEngineSubmenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [customLogo, setCustomLogo] = useState<string | null>(null);
+  const [backendConnected, setBackendConnected] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
 
   // Load custom logo from system settings
   useEffect(() => {
@@ -31,6 +35,22 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
     }
   }, []);
 
+  // Check backend connectivity
+  useEffect(() => {
+    const checkBackend = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/summaries', { method: 'HEAD' });
+        setBackendConnected(response.ok);
+      } catch (error) {
+        setBackendConnected(false);
+      }
+    };
+    checkBackend();
+    // Recheck every 30 seconds
+    const interval = setInterval(checkBackend, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Handle clicks outside the menu to close it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,9 +58,12 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
         setIsNavDropdownOpen(false);
         setEngineSubmenuOpen(false);
       }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
     };
 
-    if (isNavDropdownOpen) {
+    if (isNavDropdownOpen || isUserMenuOpen) {
       // Small delay to prevent immediate closure when opening
       setTimeout(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -50,7 +73,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [isNavDropdownOpen]);
+  }, [isNavDropdownOpen, isUserMenuOpen]);
 
   // Handle ESC key to close navigation menu
   useEffect(() => {
@@ -60,14 +83,17 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
           setIsNavDropdownOpen(false);
           setEngineSubmenuOpen(false);
         }
+        if (isUserMenuOpen) {
+          setIsUserMenuOpen(false);
+        }
       }
     };
 
-    if (isNavDropdownOpen) {
+    if (isNavDropdownOpen || isUserMenuOpen) {
       window.addEventListener('keydown', handleEscape);
       return () => window.removeEventListener('keydown', handleEscape);
     }
-  }, [isNavDropdownOpen]);
+  }, [isNavDropdownOpen, isUserMenuOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -352,45 +378,110 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
             </div>
           </form>
           {/* Actions */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
+            {/* API Status */}
             <motion.button
               onClick={() => setShowAPIDashboard(true)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 rounded-full bg-green-500/20 hover:bg-green-500/30 text-green-600 dark:text-green-400 text-sm font-roobert-medium transition-all cursor-pointer border border-green-500/30"
-              title="Click to view API dashboard"
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all ${
+                backendConnected
+                  ? 'border-[var(--accent-green)]/60 bg-[var(--accent-green)]/25 hover:bg-[var(--accent-green)]/40'
+                  : 'border-red-400/60 bg-red-400/25 hover:bg-red-400/40'
+              }`}
+              title={backendConnected ? 'Backend Connected - Click to view API dashboard' : 'Backend Disconnected - Click to view API dashboard'}
             >
-              ● Backend Connected
+              <span className={`text-sm font-roobert-medium ${
+                backendConnected ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+              }`}>API</span>
+              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                backendConnected
+                  ? 'border-[var(--accent-green)] bg-[var(--accent-green)]/30'
+                  : 'border-red-500 bg-red-500/30'
+              }`}>
+                <Check className={`w-3 h-3 ${
+                  backendConnected ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                }`} />
+              </div>
             </motion.button>
 
-            {/* Theme Toggle */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={toggleTheme}
-              className="p-2 rounded-lg glass hover:glass-strong transition-all"
-              title="Toggle Theme"
-            >
-              {theme === 'light' ? (
-                <Moon className="w-5 h-5 text-gray-600" />
-              ) : (
-                <Sun className="w-5 h-5 text-yellow-400" />
-              )}
-            </motion.button>
-
-            {/* Logout Button - Show only when authenticated */}
-            {isAuthenticated && (
+            {/* User Menu */}
+            <div className="relative" ref={userMenuRef}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={logout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-400 transition-all border border-red-500/30"
-                title="Logout"
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg glass hover:glass-strong transition-all"
               >
-                <LogOut className="w-4 h-4" />
-                <span className="text-sm font-roobert-medium">Logout</span>
+                <span className="text-sm font-roobert-medium text-gray-600 dark:text-gray-400">Jason</span>
+                <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               </motion.button>
-            )}
+
+              {/* User Dropdown Menu */}
+              <AnimatePresence>
+                {isUserMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+                  >
+                    {/* Light/Dark Theme Toggle */}
+                    <button
+                      onClick={() => {
+                        toggleTheme();
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full flex items-center justify-between px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-left"
+                    >
+                      <span className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+                        {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+                      </span>
+                      {theme === 'light' ? (
+                        <Moon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      ) : (
+                        <Sun className="w-4 h-4 text-yellow-400" />
+                      )}
+                    </button>
+
+                    {/* Horizontal Rule */}
+                    <div className="h-px bg-gray-200 dark:bg-gray-700"></div>
+
+                    {/* Profile */}
+                    <button
+                      onClick={() => {
+                        setIsUserMenuOpen(false);
+                        // TODO: Open profile modal/page
+                        console.log('Profile clicked');
+                      }}
+                      className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-left"
+                    >
+                      <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      <span className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+                        Profile
+                      </span>
+                    </button>
+
+                    {/* Logout */}
+                    {isAuthenticated && (
+                      <button
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          logout();
+                        }}
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all text-left text-red-600 dark:text-red-400"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span className="text-sm font-roobert-medium">
+                          Logout
+                        </span>
+                      </button>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

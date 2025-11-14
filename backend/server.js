@@ -22,6 +22,8 @@ app.use('/api/auth', authRoutes);
 
 // Path to data directory
 const DATA_DIR = path.join(__dirname, '../src/data');
+const TAGS_FILE = path.join(__dirname, 'data', 'content-tags.json');
+const COMMENTS_FILE = path.join(__dirname, 'data', 'comments.json');
 
 // Helper function to read JSON file
 async function readJSONFile(filePath) {
@@ -751,8 +753,6 @@ app.get('/api/health', (req, res) => {
 // CONTENT TAGS ENDPOINTS
 // ============================================
 
-const TAGS_FILE = path.join(__dirname, 'content-tags.json');
-
 // GET all content tags
 app.get('/api/content-tags', async (req, res) => {
   try {
@@ -883,6 +883,108 @@ app.get('/api/content-tags/:id/usage', async (req, res) => {
   }
 });
 
+// ============================================
+// COMMENTS ENDPOINTS
+// ============================================
+
+// GET all comments for a specific content item
+app.get('/api/comments/:contentType/:contentId', async (req, res) => {
+  try {
+    const { contentType, contentId } = req.params;
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    
+    const itemComments = commentsData.comments.filter(
+      c => c.contentId === contentId && c.contentType === contentType
+    );
+    
+    // Sort by timestamp (newest first)
+    itemComments.sort((a, b) => b.timestamp - a.timestamp);
+    
+    res.json(itemComments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET all comments (for displaying counts across all content)
+app.get('/api/comments', async (req, res) => {
+  try {
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    res.json(commentsData.comments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST create new comment
+app.post('/api/comments', async (req, res) => {
+  try {
+    const newComment = {
+      id: `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      contentId: req.body.contentId,
+      contentType: req.body.contentType,
+      author: req.body.author,
+      text: req.body.text,
+      timestamp: Date.now(),
+      edited: false
+    };
+    
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    commentsData.comments.push(newComment);
+    await writeJSONFile(COMMENTS_FILE, commentsData);
+    
+    res.status(201).json(newComment);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing comment
+app.put('/api/comments/:id', async (req, res) => {
+  try {
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    const commentIndex = commentsData.comments.findIndex(c => c.id === req.params.id);
+    
+    if (commentIndex === -1) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+    
+    // Update only text, mark as edited
+    commentsData.comments[commentIndex] = {
+      ...commentsData.comments[commentIndex],
+      text: req.body.text,
+      edited: true,
+      editedAt: Date.now()
+    };
+    
+    await writeJSONFile(COMMENTS_FILE, commentsData);
+    
+    res.json(commentsData.comments[commentIndex]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE comment
+app.delete('/api/comments/:id', async (req, res) => {
+  try {
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    const initialLength = commentsData.comments.length;
+    
+    commentsData.comments = commentsData.comments.filter(c => c.id !== req.params.id);
+    
+    if (commentsData.comments.length === initialLength) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+    
+    await writeJSONFile(COMMENTS_FILE, commentsData);
+    
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Backend API running on http://localhost:${PORT}`);
@@ -932,4 +1034,10 @@ app.listen(PORT, () => {
   console.log(`  PUT    /api/content-tags/:id`);
   console.log(`  DELETE /api/content-tags/:id`);
   console.log(`  GET    /api/content-tags/:id/usage`);
+  console.log(`\n💬 Comments:`);
+  console.log(`  GET    /api/comments`);
+  console.log(`  GET    /api/comments/:contentType/:contentId`);
+  console.log(`  POST   /api/comments`);
+  console.log(`  PUT    /api/comments/:id`);
+  console.log(`  DELETE /api/comments/:id`);
 });

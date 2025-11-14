@@ -12,6 +12,7 @@ import DesignSystemInjector from './components/DesignSystemInjector';
 import SystemSettingsManager from './components/SystemSettingsManager';
 import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
+import CommentsPanel from './components/CommentsPanel';
 import './App.css';
 
 const API_URL = 'http://localhost:3001/api';
@@ -85,6 +86,9 @@ function App() {
   const [availableTags, setAvailableTags] = useState<any[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>('');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
+  const [showComments, setShowComments] = useState(false);
+  const [activeCommentContent, setActiveCommentContent] = useState<{id: string, type: string, title: string} | null>(null);
+  const [allComments, setAllComments] = useState<any[]>([]);
 
   // Check system settings for auth requirement
   useEffect(() => {
@@ -101,10 +105,32 @@ function App() {
     }
   }, [activeSection, activeTagFilter]);
 
-  // Load tags on mount
+  // Load tags and comments on mount
   useEffect(() => {
     fetchTags();
+    fetchComments();
   }, []);
+
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(`${API_URL}/comments`);
+      if (response.ok) {
+        const data = await response.json();
+        setAllComments(data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch comments:', error);
+    }
+  };
+
+  const getCommentCount = (contentId: string, contentType: string) => {
+    return allComments.filter(c => c.contentId === contentId && c.contentType === contentType).length;
+  };
+
+  const openCommentsForContent = (contentId: string, contentType: string, title: string) => {
+    setActiveCommentContent({ id: contentId, type: contentType, title });
+    setShowComments(true);
+  };
 
   const fetchTags = async () => {
     try {
@@ -625,25 +651,55 @@ function App() {
       ? allContent.filter(item => item._contentTag === activeTagFilter)
       : allContent;
 
-    if (items.length === 0) {
-      return (
-        <div className="text-center py-16">
-          <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500 dark:text-gray-400 font-roobert-medium mb-2">
-            No items found
-          </p>
-          <p className="text-sm text-gray-400">
-            Upload a JSON file from the Import Data section to get started.
-          </p>
-        </div>
-      );
-    }
-
     return (
       <>
-        {/* Stats Row removed - now shown in top action bar */}
+        {/* Filter Display - Grid View Only */}
+        {viewMode === 'grid' && (
+          <div className="mb-6 flex items-center gap-3 flex-wrap">
+            <span className="text-sm font-roobert-medium text-gray-600 dark:text-gray-400">
+              Filter:
+            </span>
+            {activeTagFilter ? (
+              <button
+                onClick={() => setActiveTagFilter('')}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white text-sm font-roobert-medium hover:shadow-lg transition-all"
+              >
+                {availableTags.find(t => t.id === activeTagFilter)?.name || activeTagFilter}
+                <span className="text-white/80">×</span>
+              </button>
+            ) : (
+              availableTags.map((tag) => (
+                <button
+                  key={tag.id}
+                  onClick={() => setActiveTagFilter(tag.id)}
+                  className={`px-4 py-2 rounded-lg text-sm font-roobert-medium transition-all ${
+                    tag.color === 'primary' ? 'bg-fis-eggplant/10 text-fis-eggplant dark:text-fis-raspberry hover:bg-fis-eggplant/20'
+                    : tag.color === 'secondary' ? 'bg-fis-raspberry/10 text-fis-raspberry hover:bg-fis-raspberry/20'
+                    : tag.color === 'tertiary' ? 'bg-fis-navy/10 text-fis-navy dark:text-blue-400 hover:bg-fis-navy/20'
+                    : tag.color === 'blue' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20'
+                    : tag.color === 'green' ? 'bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20'
+                    : 'bg-gray-500/10 text-gray-600 dark:text-gray-400 hover:bg-gray-500/20'
+                  }`}
+                >
+                  {tag.name}
+                </button>
+              ))
+            )}
+          </div>
+        )}
 
         {viewMode === 'grid' ? (
+          items.length === 0 ? (
+            <div className="text-center py-16">
+              <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 font-roobert-medium mb-2">
+                No items found
+              </p>
+              <p className="text-sm text-gray-400">
+                Upload a JSON file from the Import Data section to get started.
+              </p>
+            </div>
+          ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item, index) => {
             const itemTag = availableTags.find(t => t.id === item._contentTag);
@@ -757,6 +813,45 @@ function App() {
                   Edit
                 </button>
                 <button
+                  onClick={() => {
+                    const contentType = item._contentTag === 'weekly-summary' ? 'summaries'
+                      : item._contentTag === 'executive-iq' ? 'executive-iq'
+                      : item._contentTag === 'organizations' ? 'organizations'
+                      : item._contentTag === 'performance' ? 'performance'
+                      : item._contentTag === 'knowledge-base' ? 'knowledge-base'
+                      : item._contentTag === 'kb-categories' ? 'kb-categories'
+                      : 'summaries';
+                    openCommentsForContent(item.id, contentType, item.title || item.name || item.displayName);
+                  }}
+                  className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 hover:scale-110 transition-all relative"
+                  title="View comments"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  {(() => {
+                    const contentType = item._contentTag === 'weekly-summary' ? 'summaries'
+                      : item._contentTag === 'executive-iq' ? 'executive-iq'
+                      : item._contentTag === 'organizations' ? 'organizations'
+                      : item._contentTag === 'performance' ? 'performance'
+                      : item._contentTag === 'knowledge-base' ? 'knowledge-base'
+                      : item._contentTag === 'kb-categories' ? 'kb-categories'
+                      : 'summaries';
+                    return getCommentCount(item.id, contentType);
+                  })() > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                      {(() => {
+                        const contentType = item._contentTag === 'weekly-summary' ? 'summaries'
+                          : item._contentTag === 'executive-iq' ? 'executive-iq'
+                          : item._contentTag === 'organizations' ? 'organizations'
+                          : item._contentTag === 'performance' ? 'performance'
+                          : item._contentTag === 'knowledge-base' ? 'knowledge-base'
+                          : item._contentTag === 'kb-categories' ? 'kb-categories'
+                          : 'summaries';
+                        return getCommentCount(item.id, contentType);
+                      })()}
+                    </span>
+                  )}
+                </button>
+                <button
                   onClick={() => handleDelete(item.id)}
                   className="p-2 rounded-lg bg-red-500/90 text-white hover:bg-red-600 hover:scale-110 transition-all"
                   title="Delete"
@@ -768,6 +863,7 @@ function App() {
             );
           })}
         </div>
+          )
         ) : (
           // Table View
           <div className="flex gap-0 overflow-hidden rounded-2xl border-2 border-white/20">
@@ -819,15 +915,27 @@ function App() {
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-700">
                       <th className="text-left text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Name</th>
-                      <th className="text-left text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Date</th>
-                      <th className="text-left text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Status</th>
+                      <th className="text-center text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Date</th>
+                      <th className="text-center text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Status</th>
                       <th className="text-center text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">% Complete</th>
-                      <th className="text-left text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Tag</th>
+                      <th className="text-center text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Tag</th>
                       <th className="text-center text-sm font-medium text-gray-700 dark:text-gray-300 pb-3">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {items.map((item) => {
+                    {items.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="py-16 text-center">
+                          <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                          <p className="text-gray-500 dark:text-gray-400 font-roobert-medium mb-2">
+                            No items found
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            {activeTagFilter ? 'No items in this category. Try a different filter.' : 'Upload a JSON file from the Import Data section to get started.'}
+                          </p>
+                        </td>
+                      </tr>
+                    ) : items.map((item) => {
                       const itemTag = availableTags.find(t => t.id === item._contentTag);
                       
                       return (
@@ -838,10 +946,10 @@ function App() {
                           <td className="py-3 pr-4 text-sm font-light text-gray-900 dark:text-gray-100">
                             {item.quarter || item.name || item.displayName} {item.year || ''}
                           </td>
-                          <td className="py-3 pr-4 text-xs font-light text-gray-500 dark:text-gray-400">
+                          <td className="py-3 pr-4 text-xs font-light text-gray-500 dark:text-gray-400 text-center">
                             {item.date || (item.lastUpdated ? formatDate(item.lastUpdated) : 'N/A')}
                           </td>
-                          <td className="py-3 pr-4">
+                          <td className="py-3 pr-4 text-center">
                             {item.status && (
                               <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-roobert-bold uppercase ${
                                 item.status === 'published' 
@@ -855,7 +963,7 @@ function App() {
                           <td className="py-3 pr-4 text-xs font-light text-gray-600 dark:text-gray-300 text-center align-middle">
                             {item.status === 'draft' ? `${calculateSummaryCompletion(item)}%` : '-'}
                           </td>
-                          <td className="py-3 pr-4">
+                          <td className="py-3 pr-4 text-center">
                             {item._contentTag && (
                               <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-roobert-medium ${
                                 itemTag?.color === 'primary' ? 'bg-fis-eggplant/10 text-fis-eggplant dark:text-fis-raspberry'
@@ -888,12 +996,43 @@ function App() {
                                 Edit
                               </button>
                               <button
-                                onClick={() => showNotification('info', 'Comments feature coming soon!')}
-                                className="px-3 py-1.5 rounded-lg bg-blue-500 text-white text-xs hover:bg-blue-600 transition-all flex items-center gap-1 font-roobert-medium"
-                                title="Comments"
+                                onClick={() => {
+                                  const contentType = item._contentTag === 'weekly-summary' ? 'summaries'
+                                    : item._contentTag === 'executive-iq' ? 'executive-iq'
+                                    : item._contentTag === 'organizations' ? 'organizations'
+                                    : item._contentTag === 'performance' ? 'performance'
+                                    : item._contentTag === 'knowledge-base' ? 'knowledge-base'
+                                    : item._contentTag === 'kb-categories' ? 'kb-categories'
+                                    : 'summaries';
+                                  openCommentsForContent(item.id, contentType, item.title || item.name || item.displayName);
+                                }}
+                                className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-all relative"
+                                title="View comments"
                               >
-                                <MessageCircle className="w-3 h-3" />
-                                Comments
+                                <MessageCircle className="w-4 h-4" />
+                                {(() => {
+                                  const contentType = item._contentTag === 'weekly-summary' ? 'summaries'
+                                    : item._contentTag === 'executive-iq' ? 'executive-iq'
+                                    : item._contentTag === 'organizations' ? 'organizations'
+                                    : item._contentTag === 'performance' ? 'performance'
+                                    : item._contentTag === 'knowledge-base' ? 'knowledge-base'
+                                    : item._contentTag === 'kb-categories' ? 'kb-categories'
+                                    : 'summaries';
+                                  return getCommentCount(item.id, contentType);
+                                })() > 0 && (
+                                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                                    {(() => {
+                                      const contentType = item._contentTag === 'weekly-summary' ? 'summaries'
+                                        : item._contentTag === 'executive-iq' ? 'executive-iq'
+                                        : item._contentTag === 'organizations' ? 'organizations'
+                                        : item._contentTag === 'performance' ? 'performance'
+                                        : item._contentTag === 'knowledge-base' ? 'knowledge-base'
+                                        : item._contentTag === 'kb-categories' ? 'kb-categories'
+                                        : 'summaries';
+                                      return getCommentCount(item.id, contentType);
+                                    })()}
+                                  </span>
+                                )}
                               </button>
                               <button
                                 onClick={() => handleDelete(item.id)}
@@ -931,6 +1070,7 @@ function App() {
                 onOpenStyleScheme={() => setShowStyleScheme(true)}
                 onOpenSystemSettings={() => setShowSystemSettings(true)}
                 onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
+                onOpenComments={() => setShowComments(true)}
               />
           
               {/* Notification */}
@@ -1321,11 +1461,26 @@ function App() {
           {showSystemSettings && (
             <div className="fixed inset-0 z-[60]">
               <SystemSettingsManager 
-                onClose={() => setShowSystemSettings(false)}
+                onClose={() => {
+                  setShowSystemSettings(false);
+                  // Refresh tags and content after closing settings (in case tags were added/modified)
+                  fetchTags();
+                  fetchAllContent();
+                }}
                 onNotification={showNotification}
               />
             </div>
           )}
+
+          {/* Comments Panel */}
+          <CommentsPanel
+            isOpen={showComments}
+            onClose={() => setShowComments(false)}
+            contentId={activeCommentContent?.id || null}
+            contentType={activeCommentContent?.type || null}
+            contentTitle={activeCommentContent?.title}
+            onCommentChange={fetchComments}
+          />
             </div>
           </ProtectedRoute>
         </PresentationProvider>
