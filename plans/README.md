@@ -1,30 +1,54 @@
-# Integration Change Management Plan - Summary
+# Plans Folder - Active Planning Documents
 
-**Project:** Feature Integration into Metadata-Driven Template System  
-**Date Created:** November 8, 2025  
-**Status:** Planning Phase  
-**Total Estimated Duration:** 8-10 working days  
-**Total Estimated Effort:** 56 hours
+**Last Updated:** November 14, 2025  
+**Status:** Reference & Future Planning
 
 ---
 
 ## Overview
 
-This document provides an executive summary of the three-phase change management plan to integrate Organizations, ExecutiveIQ, and Strategic Initiatives features into the unified metadata-driven template system with full CMS editing capabilities.
+This folder contains active planning documents for future work and reference materials for the Executive Summary Platform.
 
 ---
 
-## Change Requests Summary
+## Active Documents
 
-| CR ID | Feature | Priority | Effort | Risk | Timeline | Status |
-|-------|---------|----------|--------|------|----------|--------|
-| CR-001 | Organizations Dashboard | Medium-High | 0.5-1 day (8h) | Low | Nov 14-15, 2025 | Pending |
-| CR-002 | ExecutiveIQ Articles | Medium | 2-3 days (21h) | Medium | Nov 20-24, 2025 | Pending |
-| CR-003 | Strategic Initiatives | Medium | 3-4 days (29h) | High | Dec 4-9, 2025 | Pending |
-| CR-004 | Docker & Azure Deployment | Medium | 3-4 days (26h) | Medium | Dec 11-16, 2025 | Pending |
-| CR-005 | Asset Definitions Refactoring | Low | 0.5-1 day (8h) | Low | TBD | Pending |
+### Future Work
 
-**Total:** 12-15 working days, 90 hours of development effort
+**CR-004: Azure Deployment** (`CR-004-Azure-Deployment.md`)
+- **Status:** Future work
+- **Target:** December 2025
+- **Scope:** Docker containerization + Azure Free Tier deployment
+- **Effort:** 26 hours (3-4 days)
+- **Dependencies:** None (can be done anytime)
+
+### Reference Materials
+
+**Color Migration Files** (`COLOR_MIGRATION_FILES.md`)
+- Design system color migration reference
+- Hardcoded → semantic variable mapping
+
+**Render Flow Diagram** (`RENDER_FLOW_DIAGRAM.md`)
+- Architecture diagram showing render flow
+- Data → RenderFactory → Renderers
+
+---
+
+## Archived/Completed
+
+The following planning documents have been moved to `/legacy-md/plans/`:
+
+✅ **CR-FOUNDATION-001-TEST-RESULTS.md** - Completed Nov 9, 2025
+- Editor save/close behavior testing
+- All tests passed
+
+✅ **CR-005-Asset-Definitions-Refactoring.md** - Completed differently Nov 11, 2025
+- Original plan: Centralize asset definitions
+- Actual implementation: Asset Library overhaul with assetDataStore.ts
+
+✅ **PROJECT_COMPLETION_PLAN.md** - Outdated Nov 8, 2025
+- Pre-dates Asset Library, Content Tags, Table View overhauls
+- Superseded by actual work done Nov 10-14
 
 ---
 

@@ -1,0 +1,41 @@
+{
+  "id": "org-acme-corp-2025",
+  "name": "ACME Corporation",
+  "lastUpdated": "2025-11-13",
+  "_contentTag": "organizations",
+  "status": "published",
+  "_overview_type": "richText",
+  "_enabled_overview": true,
+  "overview": "ACME Corporation is a Fortune 500 enterprise customer in the manufacturing sector with 45,000 employees across 23 countries. Primary partner since 2022 with focus on digital transformation initiatives.",
+  "_keyContacts_type": "keyValueList",
+  "_enabled_keyContacts": true,
+  "keyContacts": {
+    "CEO": "John Smith",
+    "CTO": "Sarah Johnson",
+    "VP Operations": "Michael Chen",
+    "Account Manager": "Jennifer Davis"
+  },
+  "_metrics_type": "nestedCards",
+  "_enabled_metrics": true,
+  "metrics": [
+    {
+      "label": "Annual Revenue",
+      "value": 850000,
+      "type": "currency"
+    },
+    {
+      "label": "Contract Value",
+      "value": 2400000,
+      "type": "currency"
+    },
+    {
+      "label": "Satisfaction Score",
+      "value": 92,
+      "type": "percentage"
+    }
+  ],
+  "_completed_standard_header": true,
+  "_completed_overview": true,
+  "_completed_keyContacts": true,
+  "_completed_metrics": true
+}

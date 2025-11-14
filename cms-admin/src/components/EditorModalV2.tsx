@@ -47,6 +47,27 @@ export default function EditorModalV2({
   const [showVisibilityConfirmation, setShowVisibilityConfirmation] = useState(false); // For section enable/disable confirmation
   const [pendingSectionAction, setPendingSectionAction] = useState<{ sectionId: string; action: 'complete' | 'visibility' } | null>(null); // Track pending action
   const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set()); // Track which subsections are expanded
+  const [availableTags, setAvailableTags] = useState<any[]>([]); // Available content tags
+
+  // Fetch available tags
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/content-tags');
+        if (response.ok) {
+          const data = await response.json();
+          const tagsArray = Array.isArray(data) ? data : (data.tags || []);
+          console.log('EditorModalV2 - Tags loaded:', tagsArray);
+          setAvailableTags(tagsArray);
+        }
+      } catch (error) {
+        console.error('Failed to fetch tags:', error);
+      }
+    };
+    if (isOpen) {
+      fetchTags();
+    }
+  }, [isOpen]);
 
   // Section weights (complexity/time required, 1-10)
   const sectionWeights: { [key: string]: number } = {
@@ -360,6 +381,32 @@ export default function EditorModalV2({
               placeholder="Organization - Weekly Executive Update"
             />
           </div>
+          
+          <div>
+            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Content Tag
+            </label>
+            <select
+              value={editedData._contentTag || ''}
+              onChange={(e) => {
+                setEditedData((prev: any) => ({ ...prev, _contentTag: e.target.value }));
+                setIsDirty(true);
+              }}
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            >
+              <option value="">-- Select a tag --</option>
+              {availableTags.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </option>
+              ))}
+            </select>
+            {availableTags.length === 0 && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                No tags available. Create one in System Settings.
+              </p>
+            )}
+          </div>
         </div>
       );
     }
@@ -536,7 +583,7 @@ export default function EditorModalV2({
       });
     }
     
-    const metadataKeys = ['id', 'quarter', 'year', 'date', 'title', 'displayName', 'name', 'category', 'lastUpdated', 'status', 'protectionEnabled'];
+    const metadataKeys = ['id', 'quarter', 'year', 'date', 'title', 'displayName', 'name', 'category', 'lastUpdated', 'status', 'protectionEnabled', '_contentTag'];
     const excludePrefixes = ['_enabled_', '_completed_', '_locked_', '_template_'];
     const excludeSuffixes = ['_schema', '_type', '_fields', '_config', '_columnSpan', '_itemSchema'];
     const excludeContains = ['_chartConfig']; // Exclude dynamic chart config keys

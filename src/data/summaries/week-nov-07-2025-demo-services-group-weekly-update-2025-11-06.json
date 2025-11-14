@@ -4,6 +4,7 @@
   "year": 2025,
   "date": "2025-11-06",
   "title": "Nov 07 2025 - Demo Services Group - Weekly Update",
+  "_contentTag": "weekly-summary",
   "_highlights_type": "list",
   "_enabled_highlights": true,
   "_keyMetrics_type": "metricCards",
@@ -11,51 +12,126 @@
   "_activityMetrics_type": "nestedCards",
   "_enabled_activityMetrics": true,
   "_activityMetrics_fields": {
-    "category": { "type": "text", "label": "Category", "required": true },
-    "metrics": { "type": "list", "label": "Metrics" }
+    "category": {
+      "type": "text",
+      "label": "Category",
+      "required": true
+    },
+    "metrics": {
+      "type": "list",
+      "label": "Metrics"
+    }
   },
   "_topAssets_type": "nestedCards",
   "_enabled_topAssets": true,
   "_topAssets_fields": {
-    "name": { "type": "text", "label": "Asset Name", "required": true },
-    "count": { "type": "number", "label": "Count" },
-    "category": { "type": "text", "label": "Category" }
+    "name": {
+      "type": "text",
+      "label": "Asset Name",
+      "required": true
+    },
+    "count": {
+      "type": "number",
+      "label": "Count"
+    },
+    "category": {
+      "type": "text",
+      "label": "Category"
+    }
   },
   "_weeklyFocus_type": "list",
   "_enabled_weeklyFocus": true,
   "_departments_type": "nestedCards",
   "_enabled_departments": false,
   "_departments_fields": {
-    "name": { "type": "text", "label": "Department", "required": true },
-    "performance": { "type": "number", "label": "Performance" },
-    "achievements": { "type": "list", "label": "Achievements" }
+    "name": {
+      "type": "text",
+      "label": "Department",
+      "required": true
+    },
+    "performance": {
+      "type": "number",
+      "label": "Performance"
+    },
+    "achievements": {
+      "type": "list",
+      "label": "Achievements"
+    }
   },
   "_initiatives_type": "nestedCards",
   "_enabled_initiatives": false,
   "_initiatives_fields": {
-    "name": { "type": "text", "label": "Initiative", "required": true },
-    "status": { "type": "text", "label": "Status" },
-    "progress": { "type": "number", "label": "Progress" },
-    "owner": { "type": "text", "label": "Owner" },
-    "impact": { "type": "text", "label": "Impact" }
+    "name": {
+      "type": "text",
+      "label": "Initiative",
+      "required": true
+    },
+    "status": {
+      "type": "text",
+      "label": "Status"
+    },
+    "progress": {
+      "type": "number",
+      "label": "Progress"
+    },
+    "owner": {
+      "type": "text",
+      "label": "Owner"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact"
+    }
   },
   "_risks_type": "nestedCards",
   "_enabled_risks": true,
   "_risks_fields": {
-    "title": { "type": "text", "label": "Risk Title", "required": true },
-    "description": { "type": "textarea", "label": "Description" },
-    "severity": { "type": "text", "label": "Severity" },
-    "mitigation": { "type": "textarea", "label": "Mitigation" }
+    "title": {
+      "type": "text",
+      "label": "Risk Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "severity": {
+      "type": "text",
+      "label": "Severity"
+    },
+    "mitigation": {
+      "type": "textarea",
+      "label": "Mitigation"
+    }
   },
   "_issuesAndBlockers_type": "nestedCards",
   "_enabled_issuesAndBlockers": true,
   "_issuesAndBlockers_fields": {
-    "title": { "type": "text", "label": "Issue Title", "required": true },
-    "description": { "type": "textarea", "label": "Description" },
-    "impact": { "type": "text", "label": "Impact" },
-    "action": { "type": "textarea", "label": "Action" },
-    "timeline": { "type": "text", "label": "Timeline" },
-    "status": { "type": "text", "label": "Status" }
+    "title": {
+      "type": "text",
+      "label": "Issue Title",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact"
+    },
+    "action": {
+      "type": "textarea",
+      "label": "Action"
+    },
+    "timeline": {
+      "type": "text",
+      "label": "Timeline"
+    },
+    "status": {
+      "type": "text",
+      "label": "Status"
+    }
   },
   "_outlook_type": "textarea",
   "_enabled_outlook": true,
@@ -67,50 +143,110 @@
     "Capital Markets leads activity: 2.1× Support, 2.6× Prep, 1.7× Demo hours vs Banking"
   ],
   "keyMetrics": [
-    { "label": "Won ACV", "value": 1230000, "type": "currency" },
-    { "label": "Conversion Rate", "value": 48, "type": "percentage" },
-    { "label": "Demos Registered", "value": 263, "type": "number" }
+    {
+      "label": "Won ACV",
+      "value": 1230000,
+      "type": "currency"
+    },
+    {
+      "label": "Conversion Rate",
+      "value": 48,
+      "type": "percentage"
+    },
+    {
+      "label": "Demos Registered",
+      "value": 263,
+      "type": "number"
+    }
   ],
   "activityMetrics": [
     {
       "category": "Demo Studio",
       "metrics": [
-        { "label": "Demos Registered", "value": 263 },
-        { "label": "Demos Linked To Deals", "value": 126 },
-        { "label": "Won ACV", "value": 1230000 },
-        { "label": "Conversion Rate", "value": 48 }
+        {
+          "label": "Demos Registered",
+          "value": 263
+        },
+        {
+          "label": "Demos Linked To Deals",
+          "value": 126
+        },
+        {
+          "label": "Won ACV",
+          "value": 1230000
+        },
+        {
+          "label": "Conversion Rate",
+          "value": 48
+        }
       ]
     },
     {
       "category": "Banking Activity Hours",
       "metrics": [
-        { "label": "Support", "value": 684 },
-        { "label": "Prep", "value": 8953 },
-        { "label": "Demo", "value": 6528 }
+        {
+          "label": "Support",
+          "value": 684
+        },
+        {
+          "label": "Prep",
+          "value": 8953
+        },
+        {
+          "label": "Demo",
+          "value": 6528
+        }
       ]
     },
     {
       "category": "Capital Markets Activity Hours",
       "metrics": [
-        { "label": "Support", "value": 1464 },
-        { "label": "Prep", "value": 23358 },
-        { "label": "Demo", "value": 11057 }
+        {
+          "label": "Support",
+          "value": 1464
+        },
+        {
+          "label": "Prep",
+          "value": 23358
+        },
+        {
+          "label": "Demo",
+          "value": 11057
+        }
       ]
     },
     {
       "category": "Banking Activity %",
       "metrics": [
-        { "label": "Support", "value": 4 },
-        { "label": "Prep", "value": 55 },
-        { "label": "Demo", "value": 41 }
+        {
+          "label": "Support",
+          "value": 4
+        },
+        {
+          "label": "Prep",
+          "value": 55
+        },
+        {
+          "label": "Demo",
+          "value": 41
+        }
       ]
     },
     {
       "category": "Capital Markets Activity %",
       "metrics": [
-        { "label": "Support", "value": 4 },
-        { "label": "Prep", "value": 65 },
-        { "label": "Demo", "value": 31 }
+        {
+          "label": "Support",
+          "value": 4
+        },
+        {
+          "label": "Prep",
+          "value": 65
+        },
+        {
+          "label": "Demo",
+          "value": 31
+        }
       ]
     }
   ],

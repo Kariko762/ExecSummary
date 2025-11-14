@@ -747,6 +747,142 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Backend API is running' });
 });
 
+// ============================================
+// CONTENT TAGS ENDPOINTS
+// ============================================
+
+const TAGS_FILE = path.join(__dirname, 'content-tags.json');
+
+// GET all content tags
+app.get('/api/content-tags', async (req, res) => {
+  try {
+    const tags = await readJSONFile(TAGS_FILE);
+    res.json(tags.tags || []);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET single tag by ID
+app.get('/api/content-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(TAGS_FILE);
+    const tag = tagsData.tags.find(t => t.id === req.params.id);
+    if (!tag) {
+      return res.status(404).json({ error: 'Tag not found' });
+    }
+    res.json(tag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST create new tag
+app.post('/api/content-tags', async (req, res) => {
+  try {
+    const newTag = {
+      ...req.body,
+      created: new Date().toISOString()
+    };
+    
+    const tagsData = await readJSONFile(TAGS_FILE);
+    
+    // Check for duplicate ID
+    if (tagsData.tags.some(t => t.id === newTag.id)) {
+      return res.status(400).json({ error: 'Tag ID already exists' });
+    }
+    
+    tagsData.tags.push(newTag);
+    await writeJSONFile(TAGS_FILE, tagsData);
+    
+    res.status(201).json(newTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing tag
+app.put('/api/content-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(TAGS_FILE);
+    const tagIndex = tagsData.tags.findIndex(t => t.id === req.params.id);
+    
+    if (tagIndex === -1) {
+      return res.status(404).json({ error: 'Tag not found' });
+    }
+    
+    // Preserve created date
+    const updatedTag = {
+      ...req.body,
+      created: tagsData.tags[tagIndex].created
+    };
+    
+    tagsData.tags[tagIndex] = updatedTag;
+    await writeJSONFile(TAGS_FILE, tagsData);
+    
+    res.json(updatedTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE tag
+app.delete('/api/content-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(TAGS_FILE);
+    const initialLength = tagsData.tags.length;
+    
+    tagsData.tags = tagsData.tags.filter(t => t.id !== req.params.id);
+    
+    if (tagsData.tags.length === initialLength) {
+      return res.status(404).json({ error: 'Tag not found' });
+    }
+    
+    await writeJSONFile(TAGS_FILE, tagsData);
+    res.json({ message: 'Tag deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET tag usage statistics (count published/draft content with this tag)
+app.get('/api/content-tags/:id/usage', async (req, res) => {
+  try {
+    const tagId = req.params.id;
+    let publishedCount = 0;
+    let draftCount = 0;
+    
+    // Scan summaries directory
+    const summariesDir = path.join(DATA_DIR, 'summaries');
+    const summaryFiles = await listFiles(summariesDir);
+    
+    for (const file of summaryFiles) {
+      const filePath = path.join(summariesDir, file);
+      const content = await readJSONFile(filePath);
+      
+      // Check if content has this tag
+      if (content.standard_header?.contentTag === tagId || content.contentTag === tagId) {
+        if (content.status === 'published') {
+          publishedCount++;
+        } else {
+          draftCount++;
+        }
+      }
+    }
+    
+    // Could scan other content types here (executive-iq, knowledge-base, etc.)
+    
+    res.json({
+      tagId,
+      publishedCount,
+      draftCount,
+      totalCount: publishedCount + draftCount
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Backend API running on http://localhost:${PORT}`);
@@ -789,4 +925,11 @@ app.listen(PORT, () => {
   console.log(`  PUT    /api/auth/users/:id (admin)`);
   console.log(`  DELETE /api/auth/users/:id (admin)`);
   console.log(`  GET    /api/health`);
+  console.log(`\n📌 Content Tags:`);
+  console.log(`  GET    /api/content-tags`);
+  console.log(`  GET    /api/content-tags/:id`);
+  console.log(`  POST   /api/content-tags`);
+  console.log(`  PUT    /api/content-tags/:id`);
+  console.log(`  DELETE /api/content-tags/:id`);
+  console.log(`  GET    /api/content-tags/:id/usage`);
 });

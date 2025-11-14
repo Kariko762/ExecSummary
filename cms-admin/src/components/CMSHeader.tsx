@@ -306,6 +306,26 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                       <div className="text-xs text-gray-500 dark:text-gray-400">Colors, typography, spacing</div>
                                     </div>
                                   </button>
+
+                                  {/* Knowledge Base Documentation */}
+                                  <a
+                                    href="/knowledge-base/kb_main.md"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setEngineSubmenuOpen(false);
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-indigo-500/10">
+                                      <BookOpen className="w-4 h-4 text-indigo-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Documentation</div>
+                                      <div className="text-xs text-gray-500 dark:text-gray-400">CMS Admin knowledge base</div>
+                                    </div>
+                                  </a>
                                 </div>
                               </motion.div>
                             )}

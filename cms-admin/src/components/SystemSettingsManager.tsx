@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X, FileText } from 'lucide-react';
+import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X, FileText, Tag } from 'lucide-react';
 import { ChangeManagementModal } from './ChangeManagementModal';
+import ContentTagManager from './ContentTagManager';
 
 /**
  * System Settings Manager
@@ -66,7 +67,7 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   const [settings, setSettings] = useState<SystemSettings>(loadSettings());
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'authentication' | 'users' | 'security' | 'documentation'>('authentication');
+  const [activeTab, setActiveTab] = useState<'general' | 'authentication' | 'users' | 'security' | 'documentation'>('general');
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [showChangeManagement, setShowChangeManagement] = useState(false);
 
@@ -222,6 +223,12 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
           {/* Tabs */}
           <div className="flex gap-2 mt-6">
             <TabButton
+              active={activeTab === 'general'}
+              onClick={() => setActiveTab('general')}
+              icon={<Settings className="w-4 h-4" />}
+              label="General"
+            />
+            <TabButton
               active={activeTab === 'authentication'}
               onClick={() => setActiveTab('authentication')}
               icon={<Shield className="w-4 h-4" />}
@@ -253,6 +260,15 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
+        {activeTab === 'general' && (
+          <div className="space-y-6">
+            {/* Content Tags Section */}
+            <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700">
+              <ContentTagManager />
+            </div>
+          </div>
+        )}
+        
         {activeTab === 'authentication' && (
           <AuthenticationPanel
             settings={settings.authentication}

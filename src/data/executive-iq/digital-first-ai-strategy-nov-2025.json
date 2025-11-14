@@ -4,6 +4,7 @@
   "year": 2025,
   "date": "2025-11-05",
   "title": "Digital First GTM Strategy",
+  "_contentTag": "executive-iq",
   "subtitle": "AI-Powered Demo Intelligence & On-Demand Personalization",
   "category": "strategy",
   "executiveSummary": "The future of enterprise sales demands AI-powered, prospect-centric engagement. By leveraging AI to understand prospect intent, automatically assemble tailored narratives, and deliver on-demand interactive experiences, we eliminate friction in the buyer journey while capturing rich telemetry that guides sellers to focus on high-value conversations. This isn't just operational efficiency—it's a [[highlight]]fundamental competitive advantage[[/highlight]].",
@@ -175,9 +176,19 @@
   },
   "_trendAnalysis_type": "nestedCards",
   "_trendAnalysis_fields": {
-    "name": { "type": "text", "label": "Category Name", "required": true },
-    "icon": { "type": "text", "label": "Icon" },
-    "trends": { "type": "list", "label": "Trends" }
+    "name": {
+      "type": "text",
+      "label": "Category Name",
+      "required": true
+    },
+    "icon": {
+      "type": "text",
+      "label": "Icon"
+    },
+    "trends": {
+      "type": "list",
+      "label": "Trends"
+    }
   },
   "_enabled_trendAnalysis": true,
   "_completed_trendAnalysis": false,
@@ -185,17 +196,36 @@
     {
       "chartTitle": "Demo Automation Impact",
       "data": [
-        { "label": "Prep Time Reduction", "value": 37 },
-        { "label": "Time-to-Demo Improvement", "value": 32 },
-        { "label": "Engagement Score Adoption", "value": 78 },
-        { "label": "AI Content Assembly Usage", "value": 82 }
+        {
+          "label": "Prep Time Reduction",
+          "value": 37
+        },
+        {
+          "label": "Time-to-Demo Improvement",
+          "value": 32
+        },
+        {
+          "label": "Engagement Score Adoption",
+          "value": 78
+        },
+        {
+          "label": "AI Content Assembly Usage",
+          "value": 82
+        }
       ]
     }
   ],
   "_supportingData_type": "nestedCards",
   "_supportingData_fields": {
-    "chartTitle": { "type": "text", "label": "Chart Title", "required": true },
-    "data": { "type": "list", "label": "Data Points" }
+    "chartTitle": {
+      "type": "text",
+      "label": "Chart Title",
+      "required": true
+    },
+    "data": {
+      "type": "list",
+      "label": "Data Points"
+    }
   },
   "_enabled_supportingData": true,
   "_completed_supportingData": false,

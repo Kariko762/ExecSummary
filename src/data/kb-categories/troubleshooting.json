@@ -1,6 +1,7 @@
 {
   "id": "troubleshooting",
   "name": "Troubleshooting",
+  "_contentTag": "kb-categories",
   "type": "support",
   "description": "Solutions to common issues, debugging guides, and problem resolution strategies",
   "icon": "Wrench",

@@ -1,8 +1,8 @@
 {
   "id": "banking-na",
   "name": "Banking (NA)",
+  "_contentTag": "organizations",
   "lastUpdated": "2024-11-04T17:45:00Z",
-  
   "keyHighlights": [
     "{{badge:success}} Banking NA Tiled Microsite first draft endorsed by {{bold:Michael Driscoll}}",
     "{{trend:up}} D1 Flex Mobile 6.0 demos drove {{metric:43|engagements|users}} this month {{delta:12}}",
@@ -11,8 +11,6 @@
   "_keyHighlights_type": "list",
   "_enabled_keyHighlights": true,
   "_completed_keyHighlights": false,
-  
-
   "strategicProjects": [
     {
       "id": "bn-proj-001",
@@ -52,7 +50,12 @@
     "status": {
       "type": "select",
       "label": "Status",
-      "options": ["on-track", "at-risk", "delayed", "completed"]
+      "options": [
+        "on-track",
+        "at-risk",
+        "delayed",
+        "completed"
+      ]
     },
     "progress": {
       "type": "number",
@@ -75,7 +78,6 @@
   },
   "_enabled_strategicProjects": true,
   "_completed_strategicProjects": false,
-  
   "supportActivities": [
     {
       "id": "bn-sup-001",
@@ -101,7 +103,11 @@
     "type": {
       "type": "select",
       "label": "Type",
-      "options": ["request", "incident", "enhancement"]
+      "options": [
+        "request",
+        "incident",
+        "enhancement"
+      ]
     },
     "title": {
       "type": "text",
@@ -111,12 +117,19 @@
     "priority": {
       "type": "select",
       "label": "Priority",
-      "options": ["high", "medium", "low"]
+      "options": [
+        "high",
+        "medium",
+        "low"
+      ]
     },
     "status": {
       "type": "select",
       "label": "Status",
-      "options": ["active", "resolved"]
+      "options": [
+        "active",
+        "resolved"
+      ]
     },
     "description": {
       "type": "textarea",
@@ -129,7 +142,6 @@
   },
   "_enabled_supportActivities": true,
   "_completed_supportActivities": false,
-  
   "demoInsights": {
     "demosThisWeek": 22,
     "hoursInvested": 189,

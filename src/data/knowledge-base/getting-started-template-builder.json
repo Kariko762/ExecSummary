@@ -4,12 +4,11 @@
   "year": 2025,
   "date": "2025-11-09",
   "title": "Getting Started with Template Builder",
-  
+  "_contentTag": "knowledge-base",
   "category": "development",
   "_category_type": "text",
   "_enabled_category": true,
   "_completed_category": true,
-  
   "tags": [
     "template-builder",
     "getting-started",
@@ -18,22 +17,18 @@
   "_tags_type": "listNoTitle",
   "_enabled_tags": true,
   "_completed_tags": true,
-  
   "author": "System Administrator",
   "_author_type": "text",
   "_enabled_author": true,
   "_completed_author": true,
-  
   "publishDate": "2025-11-09",
   "_publishDate_type": "text",
   "_enabled_publishDate": true,
   "_completed_publishDate": true,
-  
   "overview": "Learn how to create custom templates using the visual Template Builder. This guide covers dragging assets, configuring fields, adding sections, and saving templates for reuse across your organization.",
   "_overview_type": "textarea",
   "_enabled_overview": true,
   "_completed_overview": true,
-  
   "prerequisites": [
     "Access to the CMS Admin panel",
     "Basic understanding of JSON structure",
@@ -42,7 +37,6 @@
   "_prerequisites_type": "listNoTitle",
   "_enabled_prerequisites": true,
   "_completed_prerequisites": true,
-  
   "steps": [
     {
       "title": "Step 1: Open Template Builder",
@@ -93,7 +87,6 @@
   },
   "_enabled_steps": true,
   "_completed_steps": true,
-  
   "keyPoints": [
     "Section names should be descriptive (avoid 'Section 2', 'Section 3')",
     "Field keys become JSON property names - use camelCase",
@@ -104,7 +97,6 @@
   "_keyPoints_type": "listNoTitle",
   "_enabled_keyPoints": true,
   "_completed_keyPoints": true,
-  
   "codeExamples": [
     {
       "title": "Example Template JSON Structure",
@@ -130,12 +122,10 @@
   },
   "_enabled_codeExamples": true,
   "_completed_codeExamples": true,
-  
   "importantNote": "Always test your templates before using them in production. The validation system will catch structural issues, but testing ensures the user experience is optimal.",
   "_importantNote_type": "quote",
   "_enabled_importantNote": true,
   "_completed_importantNote": true,
-  
   "troubleshooting": [
     {
       "issue": "Template validation fails with 'Generic section names' error",
@@ -159,7 +149,6 @@
   },
   "_enabled_troubleshooting": true,
   "_completed_troubleshooting": true,
-  
   "faqs": [
     {
       "question": "Can I edit templates after saving them?",
@@ -187,12 +176,10 @@
   },
   "_enabled_faqs": true,
   "_completed_faqs": true,
-  
   "relatedArticles": [],
   "_relatedArticles_type": "listNoTitle",
   "_enabled_relatedArticles": true,
   "_completed_relatedArticles": false,
-  
   "additionalResources": [
     {
       "title": "Template Builder Deep Dive",
@@ -222,10 +209,8 @@
   },
   "_enabled_additionalResources": true,
   "_completed_additionalResources": true,
-  
   "status": "published",
   "protectionEnabled": false,
-  
   "_template_name": "Knowledge Base Article Template",
   "_template_description": "Comprehensive article template for technical documentation and guides",
   "_template_created": "2025-11-09T00:00:00.000Z",

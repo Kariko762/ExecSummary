@@ -45,6 +45,10 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - **🎨 Categorical Coloring**: 🆕 Unique colors for chart data (A, B, C, D) from design system palette
 - **⚠️ Inline Validation**: 🆕 Contextual warnings on section headers for generic names
 - **🧪 Test Mode**: 🆕 Preview templates without save prompts during testing
+- **🏷️ Content Tagging**: 🆕 Dynamic tag system with 6 categories (Weekly Summaries, Executive IQ, Organizations, etc.)
+- **📊 Dual View Modes**: 🆕 Toggle between Grid (cards) and Table (professional data table) views
+- **🎨 Table View**: 🆕 Sidebar navigation with gradient blend, Live/Draft badges, completion %, tag pills
+- **🔄 Smart Filtering**: 🆕 Click tags to filter content instantly - works in both Grid and Table views
 
 ## 🎯 Key Components
 

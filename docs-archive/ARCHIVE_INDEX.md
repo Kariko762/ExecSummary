@@ -16,6 +16,11 @@ These documents were created during development and provided valuable context at
 - **TEMPLATE_SYSTEM.md** - Now covered in knowledge-base/developer/
 - **TEMPLATE_BUILDER_DEEP_DIVE.md** - Now covered in knowledge-base/developer/adding-new-assets.md
 - **TEMPLATE_README.md** - Superseded by knowledge-base documentation
+- **TEMPLATE_BUILDER_IMPROVEMENTS_PLAN.md** (Nov 2025) - Feature improvement proposals - planning phase complete
+- **TEMPLATE_BUILDER_INTERNAL_REVIEW.md** (Nov 2025) - Deep technical architecture review
+- **TEMPLATE_IMPORT_FIX_PLAN.md** (Nov 2025) - Multi-column layout reconstruction fix plan
+- **TEMPLATE_STYLING_SCHEMA.md** (Nov 2025) - Proposed styling metadata schema
+- **TEMPLATE_BUILDER_NOV_2025_ENHANCEMENTS.md** - Template Builder feature enhancements
 
 ### Migration Guides (Completed)
 - **EDITOR_MODAL_V2_MIGRATION.md** - Migration completed

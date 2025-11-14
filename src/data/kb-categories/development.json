@@ -1,6 +1,7 @@
 {
   "id": "development",
   "name": "Development",
+  "_contentTag": "kb-categories",
   "type": "technical",
   "description": "Articles related to software development, coding practices, and technical implementations",
   "icon": "Code",

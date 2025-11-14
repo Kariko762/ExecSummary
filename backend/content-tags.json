@@ -1,0 +1,52 @@
+{
+  "tags": [
+    {
+      "id": "weekly-summary",
+      "name": "Weekly Summaries",
+      "color": "primary",
+      "icon": "FileText",
+      "created": "2025-11-01T00:00:00.000Z",
+      "description": "Weekly executive summary reports"
+    },
+    {
+      "id": "executive-iq",
+      "name": "Executive IQ",
+      "color": "blue",
+      "icon": "Lightbulb",
+      "created": "2025-11-01T00:00:00.000Z",
+      "description": "Strategic initiative insights"
+    },
+    {
+      "id": "organizations",
+      "name": "Organizations",
+      "color": "secondary",
+      "icon": "Building2",
+      "created": "2025-11-13T00:00:00.000Z",
+      "description": "Organization data and profiles"
+    },
+    {
+      "id": "performance",
+      "name": "Performance",
+      "color": "green",
+      "icon": "TrendingUp",
+      "created": "2025-11-13T00:00:00.000Z",
+      "description": "Performance metrics and KPIs"
+    },
+    {
+      "id": "knowledge-base",
+      "name": "Knowledge Base",
+      "color": "tertiary",
+      "icon": "BookOpen",
+      "created": "2025-11-13T00:00:00.000Z",
+      "description": "KB articles and documentation"
+    },
+    {
+      "id": "kb-categories",
+      "name": "KB Categories",
+      "color": "blue",
+      "icon": "FolderOpen",
+      "created": "2025-11-13T00:00:00.000Z",
+      "description": "Knowledge base category definitions"
+    }
+  ]
+}

@@ -2,6 +2,7 @@
   "id": "performance-oct-31-2024",
   "date": "2024-10-31",
   "displayName": "October 31, 2024",
+  "_contentTag": "performance",
   "demoStudio": {
     "demosRegistered": 263,
     "demosLinkedToDeals": 126,
@@ -27,22 +28,72 @@
     }
   },
   "topAssets": [
-    { "name": "D1 Flex", "count": 73, "category": "Banking" },
-    { "name": "D1 Flex Mobile 6.0", "count": 43, "category": "Banking" },
-    { "name": "D1 Flex Mobile (Beacon)", "count": 35, "category": "Banking" },
-    { "name": "D1 Business", "count": 33, "category": "Banking" },
-    { "name": "D1 Banker", "count": 20, "category": "Banking" }
+    {
+      "name": "D1 Flex",
+      "count": 73,
+      "category": "Banking"
+    },
+    {
+      "name": "D1 Flex Mobile 6.0",
+      "count": 43,
+      "category": "Banking"
+    },
+    {
+      "name": "D1 Flex Mobile (Beacon)",
+      "count": 35,
+      "category": "Banking"
+    },
+    {
+      "name": "D1 Business",
+      "count": 33,
+      "category": "Banking"
+    },
+    {
+      "name": "D1 Banker",
+      "count": 20,
+      "category": "Banking"
+    }
   ],
   "demosPerMonth": [
-    { "month": "Jan", "demos": 37 },
-    { "month": "Feb", "demos": 44 },
-    { "month": "Mar", "demos": 58 },
-    { "month": "Apr", "demos": 27 },
-    { "month": "May", "demos": 21 },
-    { "month": "Jun", "demos": 19 },
-    { "month": "Jul", "demos": 18 },
-    { "month": "Aug", "demos": 16 },
-    { "month": "Sep", "demos": 14 },
-    { "month": "Oct", "demos": 3 }
+    {
+      "month": "Jan",
+      "demos": 37
+    },
+    {
+      "month": "Feb",
+      "demos": 44
+    },
+    {
+      "month": "Mar",
+      "demos": 58
+    },
+    {
+      "month": "Apr",
+      "demos": 27
+    },
+    {
+      "month": "May",
+      "demos": 21
+    },
+    {
+      "month": "Jun",
+      "demos": 19
+    },
+    {
+      "month": "Jul",
+      "demos": 18
+    },
+    {
+      "month": "Aug",
+      "demos": 16
+    },
+    {
+      "month": "Sep",
+      "demos": 14
+    },
+    {
+      "month": "Oct",
+      "demos": 3
+    }
   ]
 }
