@@ -20,6 +20,7 @@ export interface ListPatternProps {
 
 export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChange, mode }) => {
   const items = Array.isArray(data) ? data : [];
+  console.log('HighlightsListPattern received:', items);
   
   if (mode === 'edit') {
     const addItem = () => {
@@ -62,12 +63,16 @@ export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChan
   
   return (
     <div className="highlights-list">
-      {items.map((item, index) => (
-        <div key={index} className="highlight-item">
-          <div className="highlight-badge">{index + 1}</div>
-          <div className="highlight-text">{item}</div>
-        </div>
-      ))}
+      {items.map((item, index) => {
+        // Handle both string arrays and object arrays with name/value properties
+        const displayText = typeof item === 'object' ? (item.name || item.value || '') : item;
+        return (
+          <div key={index} className="highlight-item">
+            <div className="highlight-badge">{index + 1}</div>
+            <div className="highlight-text">{displayText}</div>
+          </div>
+        );
+      })}
     </div>
   );
 };

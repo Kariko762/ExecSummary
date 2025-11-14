@@ -157,8 +157,8 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
   
   // Multi-ring display
   const chartData = items.map((item, index) => ({
-    name: item.name,
-    value: item.value,
+    name: String(item.name || item.label || 'Item ' + (index + 1)),
+    value: Number(item.value || item.percentage || 0),
     fill: COLORS[index % COLORS.length]
   }));
   

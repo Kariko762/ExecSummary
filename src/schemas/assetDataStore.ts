@@ -357,13 +357,13 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   {
     id: 'radialProgressChart',
     name: 'Radial Progress Chart',
-    type: 'radialChart',
+    type: 'radialProgressChart',
     category: 'charts',
     description: 'Multi-ring donut chart with legend showing percentages',
     useCase: 'Department Performance section - shows multiple metrics in concentric rings',
     schema: {
-      type: 'radialChart',
-      renderAs: 'radialChart',
+      type: 'radialProgressChart',
+      renderAs: 'radialProgressChart',
       label: 'Department Performance',
       required: false,
       chartConfig: {

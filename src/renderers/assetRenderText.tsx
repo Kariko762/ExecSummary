@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export interface TextPatternProps {
   data: any;
@@ -29,7 +30,7 @@ export const TextPattern: React.FC<TextPatternProps> = ({ data, onChange, mode }
     );
   }
   
-  return <span>{data}</span>;
+  return <span>{renderWithExpressions(data || '')}</span>;
 };
 
 // ==========================================
@@ -48,7 +49,7 @@ export const TextareaPattern: React.FC<TextPatternProps> = ({ data, onChange, mo
     );
   }
   
-  return <p>{data}</p>;
+  return <p>{renderWithExpressions(data || '')}</p>;
 };
 
 // ==========================================
@@ -67,19 +68,7 @@ export const RichTextPattern: React.FC<TextPatternProps> = ({ data, onChange, mo
     );
   }
   
-  // Simple markdown parser (bold, italic)
-  const renderRichText = (text: string) => {
-    if (!text) return null;
-    
-    // Replace **bold** with <strong>
-    let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    // Replace *italic* with <em>
-    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    
-    return <div dangerouslySetInnerHTML={{ __html: formatted }} />;
-  };
-  
-  return renderRichText(data);
+  return <div className="rich-text">{renderWithExpressions(data || '')}</div>;
 };
 
 // ==========================================
@@ -100,7 +89,7 @@ export const QuotePattern: React.FC<TextPatternProps> = ({ data, onChange, mode 
   
   return (
     <blockquote>
-      <p>{data}</p>
+      <p>{renderWithExpressions(data || '')}</p>
     </blockquote>
   );
 };

@@ -20,6 +20,9 @@ export interface ChartPatternProps {
 // ==========================================
 
 export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onChange, mode }) => {
+  // Handle both array and single object data
+  const items = Array.isArray(data) ? data : [data];
+  
   if (mode === 'edit') {
     const updateField = (field: string, value: string) => {
       onChange?.({ ...data, [field]: value });
@@ -53,18 +56,75 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
     );
   }
   
-  const percentage = Number(data?.percentage || 0);
-  const chartData = [
-    { name: data?.label || 'Progress', value: percentage, fill: '#8884d8' },
-    { name: 'Remaining', value: 100 - percentage, fill: '#e0e0e0' }
-  ];
+  // Display mode: Create concentric rings for multiple items
+  if (Array.isArray(data) && data.length > 1) {
+    // Colors for concentric rings (purple palette)
+    const RING_COLORS = ['#5D2A6D', '#8B4789', '#B565A7', '#E183C5'];
+    
+    // Transform data for RadialBarChart - preserve actual names for tooltip
+    const chartData = data.map((item, index) => ({
+      name: String(item.name || item.label || `Item ${index + 1}`),
+      value: Number(item.value || item.percentage || 0),
+      fill: RING_COLORS[index % RING_COLORS.length]
+    }));
+    
+    console.log('RadialProgressPattern chartData:', chartData);
+    
+    return (
+      <div className="radial-chart-concentric">
+        <ResponsiveContainer width="100%" height={300}>
+          <RadialBarChart 
+            cx="50%" 
+            cy="50%" 
+            innerRadius="20%" 
+            outerRadius="90%" 
+            data={chartData}
+            startAngle={90}
+            endAngle={-270}
+          >
+            <RadialBar
+              background
+              dataKey="value"
+              cornerRadius={10}
+              label={{ position: 'insideStart', fill: '#fff', fontSize: 12 }}
+              domain={[0, 100]}
+            />
+            <Legend 
+              iconSize={10}
+              layout="horizontal"
+              verticalAlign="bottom"
+              align="center"
+            />
+            <Tooltip 
+              content={({ active, payload }: any) => {
+                if (active && payload && payload.length) {
+                  const data = payload[0].payload;
+                  return (
+                    <div className="bg-white dark:bg-gray-800 p-2 rounded shadow-lg border border-gray-200 dark:border-gray-700">
+                      <p className="font-roobert-semibold text-sm">{data.name}</p>
+                      <p className="text-fis-eggplant dark:text-fis-raspberry">{data.value}%</p>
+                    </div>
+                  );
+                }
+                return null;
+              }}
+            />
+          </RadialBarChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  }
+  
+  // Single radial chart
+  const singleItem = items[0] || {};
+  const percentage = Number(singleItem?.percentage || singleItem?.value || 0);
   
   const getColor = (status: string) => {
     switch(status) {
       case 'onTrack': return '#10b981';
       case 'atRisk': return '#f59e0b';
       case 'blocked': return '#ef4444';
-      default: return '#8884d8';
+      default: return '#8B4789';
     }
   };
   
@@ -76,7 +136,7 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
           cy="50%" 
           innerRadius="60%" 
           outerRadius="90%" 
-          data={[{ ...chartData[0], fill: getColor(data?.status) }]}
+          data={[{ value: percentage, fill: getColor(singleItem?.status) }]}
           startAngle={90}
           endAngle={-270}
         >
@@ -89,8 +149,8 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
       </ResponsiveContainer>
       <div className="chart-label">
         <div className="percentage">{percentage}%</div>
-        <div className="label">{data?.label}</div>
-        <div className={`badge status-${data?.status}`}>{data?.status}</div>
+        <div className="label">{singleItem?.label || singleItem?.name}</div>
+        {singleItem?.status && <div className={`badge status-${singleItem.status}`}>{singleItem.status}</div>}
       </div>
     </div>
   );
@@ -217,6 +277,14 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
     );
   }
   
+  // Auto-detect data keys for stacked charts (exclude 'name' field)
+  const dataKeys = items.length > 0 
+    ? Object.keys(items[0]).filter(key => key !== 'name')
+    : ['value'];
+  
+  // Color palette for multiple series
+  const SERIES_COLORS = ['#5D2A6D', '#E183C5', '#4A90E2', '#50C878', '#FFB84D'];
+  
   return (
     <div className="bar-chart">
       <ResponsiveContainer width="100%" height={300}>
@@ -226,7 +294,14 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="value" fill="#8884d8" />
+          {dataKeys.map((key, index) => (
+            <Bar 
+              key={key} 
+              dataKey={key} 
+              fill={SERIES_COLORS[index % SERIES_COLORS.length]}
+              stackId={dataKeys.length > 1 ? 'stack' : undefined}
+            />
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -51,6 +51,48 @@
   font-display: swap;
 }
 
+/* ==========================================
+   HIGHLIGHTS LIST STYLING
+   ========================================== */
+.highlights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.highlight-badge {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #8B4789;
+  color: white;
+  font-size: 0.875rem;
+  font-family: 'Roobert Medium', sans-serif;
+  font-weight: 600;
+}
+
+.highlight-text {
+  flex: 1;
+  font-size: 0.875rem;
+  font-family: 'Roobert Light', sans-serif;
+  color: #1a1a1a;
+  padding-top: 0.25rem;
+}
+
+.dark .highlight-text {
+  color: #e5e7eb;
+}
+
 @font-face {
   font-family: 'Roobert Heavy';
   src: url('/RoobertFont/Roobert-Heavy.otf') format('opentype');

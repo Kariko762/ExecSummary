@@ -6,7 +6,7 @@ import { PresentationProvider } from './contexts/PresentationContext';
 import { AuthProvider } from './contexts/AuthContext';
 import CMSHeader from './components/CMSHeader';
 import EditorModal from './components/EditorModalV2';
-import { AssetTypeReferenceModal } from './components/AssetTypeReferenceModal';
+import AssetLibrary from './components/AssetLibrary';
 import DesignSystemManager from './components/DesignSystemManager';
 import DesignSystemInjector from './components/DesignSystemInjector';
 import SystemSettingsManager from './components/SystemSettingsManager';
@@ -378,6 +378,14 @@ function App() {
       // Remove the _fileExists flag before saving
       const { _fileExists, ...dataToSave } = data;
       
+      // DEBUG: Log asset title fields
+      const assetTitleFields = Object.keys(dataToSave).filter(k => k.includes('_assetTitle'));
+      console.log('🔍 App.tsx - Received data with asset titles:', assetTitleFields);
+      assetTitleFields.forEach(field => {
+        console.log(`   ${field}: "${dataToSave[field]}"`);
+      });
+      console.log('🔍 App.tsx - Sending to backend:', method, url);
+      
       const response = await fetch(url, {
         method,
         headers: {
@@ -387,6 +395,8 @@ function App() {
       });
 
       if (response.ok) {
+        const responseData = await response.json();
+        console.log('🔍 App.tsx - Backend response:', responseData);
         showNotification('success', `Saved as ${status}!`);
         // Don't close modal here - let EditorModalV2 decide when to close
         // setModalOpen(false);
@@ -1430,8 +1440,8 @@ function App() {
             showNotification={showNotification}
           />
 
-          {/* Asset Type Reference Modal */}
-          <AssetTypeReferenceModal
+          {/* Asset Library Modal */}
+          <AssetLibrary
             isOpen={showAssetReference}
             onClose={() => setShowAssetReference(false)}
             initialAssetType={assetReferenceType}

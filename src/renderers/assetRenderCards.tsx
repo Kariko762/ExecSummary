@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle } from 'lucide-react';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export interface CardPatternProps {
   data: any;
@@ -74,8 +75,8 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
       {items.map((item, index) => (
         <div key={index} className="metric-card">
           <div className="icon">{getIcon(item.title)}</div>
-          <div className="label">{item.title}</div>
-          <div className="value">{item.value}</div>
+          <div className="label">{renderWithExpressions(item.title)}</div>
+          <div className="value">{renderWithExpressions(item.value)}</div>
         </div>
       ))}
     </div>
@@ -132,8 +133,8 @@ export const NestedCardsPattern: React.FC<CardPatternProps> = ({ data, onChange,
     <div className="nested-cards-grid">
       {items.map((item, index) => (
         <div key={index} className="nested-card">
-          <div className="title">{item.title}</div>
-          <div className="value">{item.value}</div>
+          <div className="title">{renderWithExpressions(item.title)}</div>
+          <div className="value">{renderWithExpressions(item.value)}</div>
         </div>
       ))}
     </div>
@@ -190,10 +191,10 @@ export const RiskCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mo
       </div>
       <div className="content">
         <div className="badge">{data?.severity || 'medium'} severity</div>
-        <div className="title">{data?.title}</div>
-        <div className="description">{data?.description}</div>
+        <div className="title">{renderWithExpressions(data?.title)}</div>
+        <div className="description">{renderWithExpressions(data?.description)}</div>
         <div className="mitigation-label">Mitigation:</div>
-        <div className="mitigation">{data?.mitigation}</div>
+        <div className="mitigation">{renderWithExpressions(data?.mitigation)}</div>
       </div>
     </div>
   );
@@ -230,8 +231,8 @@ export const OutlookCardPattern: React.FC<CardPatternProps> = ({ data, onChange,
   return (
     <div className="outlook-card">
       <div className="icon-large">📊</div>
-      <h3>{data?.title}</h3>
-      <p>{data?.content}</p>
+      <h3>{renderWithExpressions(data?.title)}</h3>
+      <p>{renderWithExpressions(data?.content)}</p>
     </div>
   );
 };
@@ -323,10 +324,10 @@ export const CategoryListPattern: React.FC<CardPatternProps> = ({ data, onChange
     <div className="category-list">
       {categories.map((category, index) => (
         <div key={index} className={`category-box color-${category.color}`}>
-          <h4>{category.name}</h4>
+          <h4>{renderWithExpressions(category.name)}</h4>
           <ul>
             {(category.items || []).map((item: string, itemIndex: number) => (
-              <li key={itemIndex}>{item}</li>
+              <li key={itemIndex}>{renderWithExpressions(item)}</li>
             ))}
           </ul>
         </div>

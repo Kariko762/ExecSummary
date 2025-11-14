@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Eye, Code, Shield, Loader2, CheckCircle2, AlertCircle, AlertTriangle } from 'lucide-react';
-import { RenderFactory } from '../renderers/RenderFactory';
+import { AssetRenderEngine } from '../renderers/assetRenderEngine';
 import { useEffect, useState } from 'react';
 import { validateSection } from '../schemas/validationSchema';
 
@@ -133,7 +133,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   const date = content.date || content.lastUpdated || content.updatedAt;
   
   // Get all sections by finding keys that have corresponding _type metadata
-  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; itemSchema?: any; chartConfig?: any; subtitle?: string; isMultiField?: boolean; multiFieldData?: any[] }> = [];
+  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; itemSchema?: any; chartConfig?: any; subtitle?: string; isMultiField?: boolean; multiFieldData?: any[]; displayTitle?: boolean }> = [];
   
   // First pass: Identify all data keys with _type metadata
   const allDataKeys = Object.keys(content).filter((key) => {
@@ -195,13 +195,14 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       
       sections.push({
         key,
-        label: rawData?.title || formatLabel(key),
+        label: content[`_${key}_label`] || formatLabel(key),
         data: actualData,
         type: content[typeKey],
         fields: content[fieldsKey], // Legacy support
         itemSchema: content[`_${key}_itemSchema`], // New format
         chartConfig: content[chartConfigKey],
-        subtitle
+        subtitle,
+        displayTitle: content[`_${key}_displayTitle`] !== false // Default to true
       });
     } else {
       // Multiple fields - create multi-field section
@@ -209,18 +210,22 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         key: fieldKey,
         type: content[`_${fieldKey}_type`],
         data: content[fieldKey],
-        fields: content[`_${fieldKey}_fields`], // Legacy support
-        itemSchema: content[`_${fieldKey}_itemSchema`], // New format
-        chartConfig: content[`_${fieldKey}_chartConfig`]
+        fields: content[`_${fieldKey}_fields`],
+        itemSchema: content[`_${fieldKey}_itemSchema`],
+        chartConfig: content[`_${fieldKey}_chartConfig`],
+        layoutZone: content[`_${fieldKey}_layoutZone`] || 'full',
+        assetTitle: content[`_${fieldKey}_assetTitle`] || '',
+        displayAssetTitle: content[`_${fieldKey}_displayAssetTitle`] !== false
       }));
       
       sections.push({
         key: baseName,
-        label: formatLabel(baseName),
+        label: content[`_${baseName}_label`] || formatLabel(baseName),
         data: null, // Not used for multi-field
         type: 'multiField', // Special type
         isMultiField: true,
-        multiFieldData
+        multiFieldData,
+        displayTitle: content[`_${baseName}_displayTitle`] !== false // Default to true
       });
     }
   });
@@ -513,56 +518,51 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
               <div className="flex-1 overflow-y-auto p-6 space-y-8 bg-white dark:bg-gray-900">
                 {sections.map((section) => (
                   <section key={section.key}>
-                    <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4">
-                      {section.label}
-                    </h3>
-                    {section.subtitle && (
+                    {section.displayTitle !== false && (
+                      <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4">
+                        {section.label}
+                      </h3>
+                    )}
+                    {section.subtitle && section.displayTitle !== false && (
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                         {section.subtitle}
                       </p>
                     )}
                     
-                    {/* Multi-field section: Render in grid */}
+                    {/* Multi-field section: Render in grid with layout zones */}
                     {section.isMultiField && section.multiFieldData ? (
-                      <div className={
-                        section.multiFieldData.length === 2 
-                          ? 'grid grid-cols-2 divide-x divide-fis-eggplant dark:divide-fis-raspberry'
-                          : section.multiFieldData.length === 3
-                          ? 'grid grid-cols-3 divide-x divide-fis-eggplant dark:divide-fis-raspberry'
-                          : section.multiFieldData.length === 4
-                          ? 'grid grid-cols-4 divide-x divide-fis-eggplant dark:divide-fis-raspberry'
-                          : 'grid grid-cols-2 divide-x divide-fis-eggplant dark:divide-fis-raspberry'
-                      }>
+                      <div className="grid gap-6 items-center w-full" style={{
+                        gridTemplateColumns: section.multiFieldData.map((field: any) => {
+                          const zone = field.layoutZone || 'full';
+                          if (zone.includes('left-70')) return '2.33fr';
+                          if (zone.includes('right-30')) return '1fr';
+                          if (zone.includes('left-33')) return '1fr';
+                          if (zone.includes('middle-33')) return '1fr';
+                          if (zone.includes('right-33')) return '1fr';
+                          if (zone.includes('left-50')) return '1fr';
+                          if (zone.includes('right-50')) return '1fr';
+                          return '1fr';
+                        }).join(' ')
+                      }}>
                         {section.multiFieldData.map((field: any, index: number) => (
-                          <div key={field.key} className="px-6 first:pl-0 last:pr-0">
-                            <RenderFactory
-                              fieldKey={field.key}
-                              value={field.data}
-                              onChange={() => {}}
-                              mode="display"
-                              schema={{
-                                renderAs: field.type as any,
-                                ...(field.itemSchema ? { itemSchema: field.itemSchema } : {}),
-                                ...(field.fields ? { fields: field.fields } : {}),
-                                ...(field.chartConfig ? { chartConfig: field.chartConfig } : {})
-                              }}
+                          <div key={field.key} className="flex flex-col self-center">
+                            {field.displayAssetTitle && field.assetTitle && (
+                              <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                {field.assetTitle}
+                              </h4>
+                            )}
+                            <AssetRenderEngine
+                              type={field.type}
+                              data={field.data}
                             />
                           </div>
                         ))}
                       </div>
                     ) : (
                       /* Single field section: Render normally */
-                      <RenderFactory
-                        fieldKey={section.key}
-                        value={section.data}
-                        onChange={() => {}}
-                        mode="display"
-                        schema={{
-                          renderAs: section.type as any,
-                          ...(section.itemSchema ? { itemSchema: section.itemSchema } : {}),
-                          ...(section.fields ? { fields: section.fields } : {}),
-                          ...(section.chartConfig ? { chartConfig: section.chartConfig } : {})
-                        }}
+                      <AssetRenderEngine
+                        type={section.type}
+                        data={section.data}
                       />
                     )}
                   </section>
@@ -582,8 +582,25 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   );
 };
 
-// Helper function to convert camelCase to Title Case
+// Helper function to convert camelCase/snake_case to Title Case
 function formatLabel(key: string): string {
+  // Remove trailing underscores and numbers (e.g., "_1_2_" or "_0")
+  let cleaned = key.replace(/_\d+_?$/g, '').replace(/_$/g, '');
+  
+  // Replace underscores with spaces
+  cleaned = cleaned.replace(/_/g, ' ');
+  
+  // Split on capital letters for camelCase
+  const words = cleaned.split(/(?=[A-Z])/).join(' ').split(' ');
+  
+  // Capitalize each word
+  return words
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
+// OLD formatLabel function below (keeping for reference)
+function formatLabelOld(key: string): string {
   return key
     // Insert space before capital letters
     .replace(/([A-Z])/g, ' $1')

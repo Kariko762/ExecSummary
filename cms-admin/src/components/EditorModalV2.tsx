@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save, Eye, Upload, ChevronLeft, ChevronRight, ChevronDown, Check, Lock, Unlock, EyeOff, Code2, Copy, CheckCheck, CheckCircle, Shield, ShieldOff, HelpCircle } from 'lucide-react';
 import { summarySchema } from '@shared/schemas/summarySchema';
-import { buildFieldSchema } from '@shared/schemas/assetRegister';
+import { buildFieldSchema } from '../schemas/assetDataStore';
 import { AssetRenderEngine } from '../renderers/assetRenderEngine';
 import '../renderers/assetRenderEngine.css';
 import { ConfirmationModal } from './ConfirmationModal';
@@ -255,8 +255,52 @@ export default function EditorModalV2({
                     >
                       <HelpCircle className="w-3 h-3" />
                     </div>
+                    
+                    {/* Inline Asset Title Input */}
+                    <input
+                      type="text"
+                      value={editedData[`_${fieldKey}_assetTitle`] || ''}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        const assetTitleKey = `_${fieldKey}_assetTitle`;
+                        console.log(`🔍 Setting ${assetTitleKey} = "${e.target.value}"`);
+                        setEditedData((prev: any) => ({
+                          ...prev,
+                          [assetTitleKey]: e.target.value
+                        }));
+                        setIsDirty(true);
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      onKeyDown={(e) => e.stopPropagation()}
+                      onKeyUp={(e) => e.stopPropagation()}
+                      placeholder="Asset title (optional)"
+                      className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-64 md:w-80 lg:w-96"
+                    />
+
+                    
+                    {/* Asset Title Toggle */}
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const displayKey = `_${fieldKey}_displayAssetTitle`;
+                        setEditedData((prev: any) => ({
+                          ...prev,
+                          [displayKey]: prev[displayKey] === false ? true : false
+                        }));
+                        setIsDirty(true);
+                      }}
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-roobert-medium transition-colors cursor-pointer ${
+                        editedData[`_${fieldKey}_displayAssetTitle`] !== false
+                          ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                          : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+                      }`}
+                      title={editedData[`_${fieldKey}_displayAssetTitle`] !== false ? 'Asset title visible' : 'Asset title hidden'}
+                    >
+                      Title {editedData[`_${fieldKey}_displayAssetTitle`] !== false ? '✓' : '✗'}
+                    </div>
+                    
                     <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
-                      | {positionLabel}
+                      {positionLabel}
                     </span>
                   </div>
                   <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
@@ -670,9 +714,18 @@ export default function EditorModalV2({
   };
 
   const formatSectionTitle = (key: string): string => {
-    return key
-      .split(/(?=[A-Z])|_|-/)
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    // Remove trailing underscores and numbers (e.g., "_1_2_" or "_0")
+    let cleaned = key.replace(/_\d+_?$/g, '').replace(/_$/g, '');
+    
+    // Replace underscores with spaces
+    cleaned = cleaned.replace(/_/g, ' ');
+    
+    // Split on capital letters for camelCase
+    const words = cleaned.split(/(?=[A-Z])/).join(' ').split(' ');
+    
+    // Capitalize each word
+    return words
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
   };
 
@@ -685,6 +738,13 @@ export default function EditorModalV2({
     const dataToSave = hasBeenSaved 
       ? editedData 
       : { ...editedData, _fileExists: false };
+    
+    // DEBUG: Log all _assetTitle fields being saved
+    const assetTitleFields = Object.keys(dataToSave).filter(k => k.includes('_assetTitle'));
+    console.log('🔍 EditorModalV2 - Saving data with asset titles:', assetTitleFields);
+    assetTitleFields.forEach(field => {
+      console.log(`   ${field}: "${dataToSave[field]}"`);
+    });
     
     onSave({ ...dataToSave, status: 'draft' }, 'draft');
     setStatus('draft');
@@ -1291,6 +1351,29 @@ export default function EditorModalV2({
                           >
                             {activeSection.enabled ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
+                          
+                          {/* Display Title Toggle */}
+                          <button
+                            onClick={() => {
+                              const displayTitleKey = `_${activeSection.id}_displayTitle`;
+                              const currentValue = editedData[displayTitleKey];
+                              setEditedData((prev: any) => ({
+                                ...prev,
+                                [displayTitleKey]: currentValue === false ? true : false
+                              }));
+                              setIsDirty(true);
+                            }}
+                            className={`p-1.5 rounded-lg transition-colors flex items-center justify-center ${
+                              editedData[`_${activeSection.id}_displayTitle`] !== false
+                                ? 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
+                                : 'bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50'
+                            }`}
+                            title={editedData[`_${activeSection.id}_displayTitle`] !== false ? 'Hide section title in preview' : 'Show section title in preview'}
+                          >
+                            <span className="text-sm font-bold leading-none w-4 h-4 flex items-center justify-center">
+                              {editedData[`_${activeSection.id}_displayTitle`] !== false ? 'T' : 'T̶'}
+                            </span>
+                          </button>
                         </div>
                       </div>
                       
@@ -1312,6 +1395,29 @@ export default function EditorModalV2({
                           Locked
                         </span>
                       )}
+                    </div>
+
+                    {/* Section Label Editor */}
+                    <div className="mt-4 mb-2">
+                      <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        Section Display Title
+                      </label>
+                      <input
+                        type="text"
+                        value={editedData[`_${activeSection.id}_label`] || activeSection.title}
+                        onChange={(e) => {
+                          setEditedData((prev: any) => ({
+                            ...prev,
+                            [`_${activeSection.id}_label`]: e.target.value
+                          }));
+                          setIsDirty(true);
+                        }}
+                        placeholder={activeSection.title}
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry focus:border-transparent"
+                      />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Leave blank to use auto-generated title: "{activeSection.title}"
+                      </p>
                     </div>
 
                     {/* Schema-Driven Content */}

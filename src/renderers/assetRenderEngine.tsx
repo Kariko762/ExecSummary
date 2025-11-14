@@ -15,6 +15,7 @@
 
 import React from 'react';
 import { AssetStyles } from '../schemas/assetDataStore';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 // Import pattern files
 import {
@@ -112,6 +113,8 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <ProgressBarListPattern {...props} />;
       case 'keyValueList':
         return <KeyValueListPattern {...props} />;
+      case 'listTop5':
+        return <HighlightsListPattern {...props} />;
       
       // CARD ASSETS
       case 'metricCard':
@@ -131,6 +134,7 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
       case 'pieChart':
         return <PieChartPattern {...props} />;
       case 'barChart':
+      case 'stackedBarChart':
         return <BarChartPattern {...props} />;
       case 'lineChart':
         return <LineChartPattern {...props} />;
@@ -669,6 +673,39 @@ export const AssetRenderEngineStyles = `
 /* ==========================================
    CHART PATTERNS
    ========================================== */
+
+/* Radial Grid for Multiple Charts */
+.asset-wrapper .radial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.asset-wrapper .radial-chart-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  ${AssetStyles.effects.card}
+}
+
+.asset-wrapper .radial-chart-item .chart-label {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.asset-wrapper .radial-chart-item .percentage {
+  ${AssetStyles.typography.heading.h2}
+  color: var(--fis-eggplant);
+  font-weight: 600;
+}
+
+.asset-wrapper .radial-chart-item .label {
+  ${AssetStyles.typography.body.small}
+  color: #64748b;
+  margin-top: 0.25rem;
+}
 
 .asset-wrapper .radial-chart,
 .asset-wrapper .pie-chart,
