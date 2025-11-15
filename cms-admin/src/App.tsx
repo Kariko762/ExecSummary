@@ -63,7 +63,8 @@ function App() {
   const [performances, setPerformances] = useState<Performance[]>([]);
   const [kbArticles, setKbArticles] = useState<any[]>([]);
   const [kbCategories, setKbCategories] = useState<any[]>([]);
-  const [allContent, setAllContent] = useState<any[]>([]); // Unified content list
+  const [allContent, setAllContent] = useState<any[]>([]); // Unified content list (filtered)
+  const [allContentUnfiltered, setAllContentUnfiltered] = useState<any[]>([]); // Complete unfiltered list for cloning
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [importType, setImportType] = useState<'summaries' | 'executive-iq' | 'organizations' | 'performance'>('summaries');
@@ -88,6 +89,8 @@ function App() {
   const [showComments, setShowComments] = useState(false);
   const [activeCommentContent, setActiveCommentContent] = useState<{id: string, type: string, title: string} | null>(null);
   const [allComments, setAllComments] = useState<any[]>([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{id: string, item: any} | null>(null);
 
   // Check system settings for auth requirement
   useEffect(() => {
@@ -152,12 +155,8 @@ function App() {
   const fetchAllContent = async () => {
     setLoading(true);
     try {
-      // Use unified content endpoint with optional tag filtering
-      const url = activeTagFilter 
-        ? `${API_URL}/content?tag=${activeTagFilter}`
-        : `${API_URL}/content`;
-      
-      const response = await fetch(url);
+      // Always fetch ALL content (unfiltered) to maintain complete list
+      const response = await fetch(`${API_URL}/content`);
       if (response.ok) {
         const content = await response.json();
         
@@ -167,7 +166,15 @@ function App() {
           _type: item._contentTag || 'content' // Use _contentTag as _type for UI
         }));
         
-        setAllContent(enrichedContent);
+        // Store complete unfiltered list for clone dropdown
+        setAllContentUnfiltered(enrichedContent);
+        
+        // Apply tag filter for display if active
+        const filteredContent = activeTagFilter
+          ? enrichedContent.filter((item: any) => item._contentTag === activeTagFilter)
+          : enrichedContent;
+        
+        setAllContent(filteredContent);
       }
     } catch (error) {
       console.error('Failed to fetch content:', error);
@@ -239,30 +246,57 @@ function App() {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this item? This action cannot be undone.')) return;
+  const handleDelete = async (id: string, item?: any) => {
+    // Check if item is published/live
+    if (item?.status === 'published') {
+      showNotification('error', 'Cannot delete LIVE content. Please unpublish it first.');
+      return;
+    }
 
-    const endpoint = activeSection === 'summaries' ? 'summaries' 
-      : activeSection === 'executive-iq' ? 'executive-iq' 
-      : activeSection === 'performance' ? 'performance'
-      : activeSection === 'knowledge-base' ? 'knowledge-base'
-      : activeSection === 'kb-categories' ? 'kb-categories'
-      : 'organizations';
+    // Show confirmation modal
+    setItemToDelete({id, item});
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+
+    // All content uses unified /api/content/ endpoint
+    let endpoint = 'content';
+    
+    // Only use specific endpoints when in dedicated section views
+    if (activeSection !== 'all-content') {
+      endpoint = activeSection === 'summaries' ? 'summaries' 
+        : activeSection === 'executive-iq' ? 'executive-iq' 
+        : activeSection === 'performance' ? 'performance'
+        : activeSection === 'knowledge-base' ? 'knowledge-base'
+        : activeSection === 'kb-categories' ? 'kb-categories'
+        : activeSection === 'organizations' ? 'organizations'
+        : 'content';
+    }
 
     try {
-      const response = await fetch(`${API_URL}/${endpoint}/${id}`, {
+      const response = await fetch(`${API_URL}/${endpoint}/${itemToDelete.id}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
         showNotification('success', 'Deleted successfully!');
-        fetchData();
+        // Refresh the appropriate view
+        if (activeSection === 'all-content') {
+          fetchAllContent();
+        } else {
+          fetchData();
+        }
       } else {
         showNotification('error', 'Failed to delete');
       }
     } catch (error) {
       console.error('Delete error:', error);
       showNotification('error', 'Delete failed');
+    } finally {
+      setShowDeleteModal(false);
+      setItemToDelete(null);
     }
   };
 
@@ -468,9 +502,9 @@ function App() {
           sourceData = data.template;
         }
       } else {
-        // Fetch the selected summary to clone
-        const response = await fetch(`${API_URL}/summaries/${selectedSourceId}`);
-        if (!response.ok) throw new Error('Failed to fetch source summary');
+        // Fetch the selected content to clone from unified endpoint
+        const response = await fetch(`${API_URL}/content/${selectedSourceId}`);
+        if (!response.ok) throw new Error('Failed to fetch source content');
         sourceData = await response.json();
       }
 
@@ -849,7 +883,7 @@ function App() {
                   )}
                 </button>
                 <button
-                  onClick={() => handleDelete(item.id)}
+                  onClick={() => handleDelete(item.id, item)}
                   className="p-2 rounded-lg bg-red-500/90 text-white hover:bg-red-600 hover:scale-110 transition-all"
                   title="Delete"
                 >
@@ -1032,7 +1066,7 @@ function App() {
                                 )}
                               </button>
                               <button
-                                onClick={() => handleDelete(item.id)}
+                                onClick={() => handleDelete(item.id, item)}
                                 className="p-1.5 rounded-lg bg-red-500/90 text-white hover:bg-red-600 transition-all"
                                 title="Delete"
                               >
@@ -1353,9 +1387,14 @@ function App() {
                           className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
                         >
                           <option value="">-- Select content to clone --</option>
-                          {summaries.map((summary) => (
-                            <option key={summary.id} value={summary.id}>
-                              {summary.quarter} {summary.year} - {summary.title}
+                          {/* Sort by tag, then by title - always show ALL content regardless of filters */}
+                          {[...allContentUnfiltered].sort((a, b) => {
+                            const tagCompare = (a._contentTag || 'zzz').localeCompare(b._contentTag || 'zzz');
+                            if (tagCompare !== 0) return tagCompare;
+                            return (a.title || a.displayName || a.name || '').localeCompare(b.title || b.displayName || b.name || '');
+                          }).map((item) => (
+                            <option key={item.id} value={item.id}>
+                              [{item._contentTag || 'unknown'}] {item.title || item.displayName || item.name || item.id}
                             </option>
                           ))}
                         </select>
@@ -1478,6 +1517,50 @@ function App() {
             contentTitle={activeCommentContent?.title}
             onCommentChange={fetchComments}
           />
+
+          {/* Delete Confirmation Modal */}
+          {showDeleteModal && (
+            <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+              >
+                <div className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                        Delete Content
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Are you sure you want to delete this item? This action cannot be undone.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+                  <button
+                    onClick={() => {
+                      setShowDeleteModal(false);
+                      setItemToDelete(null);
+                    }}
+                    className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmDelete}
+                    className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-roobert-semibold transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
             </div>
           </ProtectedRoute>
         </PresentationProvider>
