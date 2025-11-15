@@ -5,6 +5,7 @@ export interface ExecutiveSummary {
   date: string;
   title: string;
   status?: 'draft' | 'published'; // Optional status field for CMS
+  isNew?: boolean; // Flag for content published within 7 days
   highlights: string[];
   keyMetrics: {
     revenue: number;
@@ -92,6 +93,7 @@ export interface ExecutiveIQ {
   date: string;
   title: string;
   subtitle?: string;
+  isNew?: boolean; // Flag for content published within 7 days
   category: 'strategy' | 'innovation' | 'market-insight' | 'thought-leadership' | 'transformation';
   keyMetrics?: {
     revenue: number;

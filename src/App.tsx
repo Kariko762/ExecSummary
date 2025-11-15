@@ -24,6 +24,8 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [selectedTag, setSelectedTag] = useState<string>('all');
+  const [performanceDate, setPerformanceDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
   // Load timeline data from backend API
   useEffect(() => {
@@ -76,6 +78,12 @@ function App() {
 
   const filteredSummaries = timelineItems.filter(summary => {
     if (!summary || !summary.title) return false;
+    
+    // Tag filter
+    const contentTag = (summary as any)._contentTag;
+    if (selectedTag !== 'all' && contentTag !== selectedTag) return false;
+    
+    // Search filter
     const searchLower = searchQuery.toLowerCase();
     const baseMatch = 
       summary.title.toLowerCase().includes(searchLower) ||
@@ -151,6 +159,8 @@ function App() {
                           <Timeline
                             summaries={timelineItems}
                             onSelectSummary={setSelectedSummary}
+                            selectedTag={selectedTag}
+                            onTagChange={setSelectedTag}
                           />
                           </section>
 

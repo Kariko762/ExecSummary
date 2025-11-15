@@ -441,7 +441,7 @@
   "outlook": "Strong momentum across Demo Services Group with key wins in Banking Microsite and SNOW migration. Focus areas for next week include finalizing operational dashboards, accelerating International Issuing Hub through E6 approval, and addressing platform tooling challenges (Tiled, Coast MSA). Capital Markets continues to dominate activity hours (70% of total workload), indicating opportunity to balance resources or expand Banking team capacity. Demo-to-deal conversion rate of 48% demonstrates strong alignment between demo quality and sales outcomes.",
   "_completed_highlights": true,
   "_completed_risks": true,
-  "status": "draft",
+  "status": "published",
   "protectionEnabled": true,
   "_completed_header": true,
   "_completed_keyMetrics": true,
@@ -451,5 +451,6 @@
   "_completed_issuesAndBlockers": true,
   "_completed_outlook": true,
   "_completed_protectionEnabled": true,
-  "_completed_standard_header": true
+  "_completed_standard_header": true,
+  "_type": "weekly-summary"
 }

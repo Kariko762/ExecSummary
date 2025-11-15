@@ -653,11 +653,12 @@
   "_code_block_sectionLayoutType": "full",
   "_enabled_code_block": true,
   "_completed_code_block": false,
-  "status": "draft",
+  "status": "published",
   "protectionEnabled": false,
   "_template_name": "master_template_v2",
   "_template_description": "",
   "_template_created": "2025-11-12T21:41:07.329Z",
   "_template_updated": "2025-11-12T21:41:07.329Z",
-  "_contentTag": "weekly-summary"
+  "_contentTag": "weekly-summary",
+  "_type": "weekly-summary"
 }

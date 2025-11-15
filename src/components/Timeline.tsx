@@ -1,14 +1,63 @@
 import { motion } from 'framer-motion';
 import { TimelineItem } from '../types';
-import { TrendingUp, Lightbulb, FileText } from 'lucide-react';
+import { TrendingUp, Lightbulb, FileText, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
 import { isExecutiveIQ } from '../data/timeline-loader';
+import { useRef, useState } from 'react';
 
 interface TimelineProps {
   summaries: TimelineItem[];
   onSelectSummary: (summary: TimelineItem) => void;
+  selectedTag?: string;
+  onTagChange?: (tag: string) => void;
 }
 
-export const Timeline: React.FC<TimelineProps> = ({ summaries, onSelectSummary }) => {
+export const Timeline: React.FC<TimelineProps> = ({ 
+  summaries, 
+  onSelectSummary,
+  selectedTag = 'all',
+  onTagChange 
+}) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 300; // Scroll by 300px (slightly more than one card)
+      const newScrollLeft = direction === 'left'
+        ? scrollContainerRef.current.scrollLeft - scrollAmount
+        : scrollContainerRef.current.scrollLeft + scrollAmount;
+      
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+      
+      // Update button states after scroll animation
+      setTimeout(checkScrollButtons, 300);
+    }
+  };
+
+  const tags = [
+    { value: 'all', label: 'All' },
+    { value: 'executive-summary', label: 'Executive Summary' },
+    { value: 'executive-iq', label: 'Executive-IQ' },
+    { value: 'weekly-summary', label: 'Weekly Summary' },
+  ];
+
+  // Filter summaries based on selected tag
+  const filteredSummaries = selectedTag === 'all' 
+    ? summaries 
+    : summaries.filter(s => (s as any)._contentTag === selectedTag);
+
   return (
     <section className="mb-12 overflow-hidden">
       <motion.div
@@ -16,22 +65,71 @@ export const Timeline: React.FC<TimelineProps> = ({ summaries, onSelectSummary }
         animate={{ opacity: 1, y: 0 }}
         className="mb-6"
       >
-        <h2 className="text-2xl md:text-3xl font-roobert-heavy text-gray-900 dark:text-white mb-1">
-          Timeline
-        </h2>
-        <p className="text-base md:text-lg font-roobert-light text-gray-600 dark:text-gray-400">
-          Navigate through quarterly milestones
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-roobert-heavy text-gray-900 dark:text-white mb-1">
+              Timeline
+            </h2>
+            <p className="text-base md:text-lg font-roobert-light text-gray-600 dark:text-gray-400">
+              Navigate through quarterly milestones
+            </p>
+          </div>
+          
+          {/* Tag Filter */}
+          {onTagChange && (
+            <div className="flex items-center gap-2 pr-[5px]">
+              <Filter className="w-4 h-4 text-gray-500" />
+              <select
+                value={selectedTag}
+                onChange={(e) => onTagChange(e.target.value)}
+                className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-roobert-medium text-sm focus:outline-none focus:ring-2 focus:ring-fis-eggplant"
+              >
+                {tags.map(tag => (
+                  <option key={tag.value} value={tag.value}>
+                    {tag.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
       </motion.div>
 
       <div className="relative">
         {/* Timeline Line */}
         <div className="absolute top-12 left-0 right-0 h-1 bg-gradient-to-r from-fis-eggplant via-fis-navy to-fis-eggplant rounded-full" />
 
+        {/* Scroll Buttons */}
+        <button
+          onClick={() => scroll('left')}
+          disabled={!canScrollLeft}
+          className={`absolute left-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center transition-all ${
+            canScrollLeft ? 'opacity-100 hover:scale-110' : 'opacity-30 cursor-not-allowed'
+          }`}
+        >
+          <ChevronLeft className="w-6 h-6 text-fis-eggplant dark:text-fis-raspberry" />
+        </button>
+
+        <button
+          onClick={() => scroll('right')}
+          disabled={!canScrollRight}
+          className={`absolute right-0 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center transition-all ${
+            canScrollRight ? 'opacity-100 hover:scale-110' : 'opacity-30 cursor-not-allowed'
+          }`}
+        >
+          <ChevronRight className="w-6 h-6 text-fis-eggplant dark:text-fis-raspberry" />
+        </button>
+
         {/* Timeline Items */}
-        <div className="flex overflow-x-auto pb-8 pt-4 pl-3 gap-6 hide-scrollbar">
-          {summaries.map((summary, index) => {
+        <div 
+          ref={scrollContainerRef}
+          onScroll={checkScrollButtons}
+          className="flex overflow-x-auto pb-8 pt-4 px-12 gap-6 hide-scrollbar"
+          style={{ width: '90%', margin: '0 auto' }}
+        >
+          {filteredSummaries.map((summary, index) => {
             const isIQ = isExecutiveIQ(summary);
+            const isNew = (summary as any).isNew;
             const TimelineIcon = isIQ ? Lightbulb : FileText;
             const iconBg = isIQ ? 'from-fis-raspberry to-fis-eggplant' : 'from-fis-eggplant to-fis-navy';
             
@@ -50,6 +148,15 @@ export const Timeline: React.FC<TimelineProps> = ({ summaries, onSelectSummary }
                 <div className={`absolute top-[20px] left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br ${iconBg} shadow-lg flex items-center justify-center z-10 ring-4 ring-white dark:ring-gray-900`}>
                   <TimelineIcon className="w-4 h-4 text-white" />
                 </div>
+
+                {/* NEW Badge - positioned between timeline and card */}
+                {isNew && (
+                  <div className="absolute top-[60px] left-1/2 -translate-x-1/2 z-20">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-roobert-heavy bg-gradient-to-r from-green-400 to-green-600 text-white shadow-lg animate-pulse">
+                      NEW
+                    </span>
+                  </div>
+                )}
 
                 {/* Card */}
                 <div className="mt-20 glass-strong card-shadow hover:card-shadow-hover rounded-xl p-5 transition-all border-2 border-transparent hover:border-fis-eggplant duration-300 h-[200px] flex flex-col">
