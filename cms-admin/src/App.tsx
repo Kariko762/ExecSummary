@@ -70,7 +70,6 @@ function App() {
   const [notification, setNotification] = useState<{type: 'success' | 'error' | 'info' | 'warning', message: string} | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [modalDataType, setModalDataType] = useState<'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories'>('summaries');
   const [showNewSummaryModal, setShowNewSummaryModal] = useState(false);
   const [newSummaryName, setNewSummaryName] = useState('');
   const [creationMode, setCreationMode] = useState<'template' | 'clone'>('template');
@@ -153,40 +152,26 @@ function App() {
   const fetchAllContent = async () => {
     setLoading(true);
     try {
-      // Fetch all content types in parallel
-      const [summariesRes, executiveIQRes, organizationsRes, performancesRes, kbArticlesRes, kbCategoriesRes] = await Promise.all([
-        fetch(`${API_URL}/summaries`).then(r => r.ok ? r.json() : []),
-        fetch(`${API_URL}/executive-iq`).then(r => r.ok ? r.json() : []),
-        fetch(`${API_URL}/organizations`).then(r => r.ok ? r.json() : []),
-        fetch(`${API_URL}/performance`).then(r => r.ok ? r.json() : []),
-        fetch(`${API_URL}/knowledge-base`).then(r => r.ok ? r.json() : []),
-        fetch(`${API_URL}/kb-categories`).then(r => r.ok ? r.json() : [])
-      ]);
-
-      // Store in separate state for backwards compatibility
-      setSummaries(summariesRes);
-      setExecutiveIQ(executiveIQRes);
-      setOrganizations(organizationsRes);
-      setPerformances(performancesRes);
-      setKbArticles(kbArticlesRes);
-      setKbCategories(kbCategoriesRes);
-
-      // Combine all content into unified list
-      const combined = [
-        ...summariesRes,
-        ...executiveIQRes,
-        ...organizationsRes,
-        ...performancesRes,
-        ...kbArticlesRes,
-        ...kbCategoriesRes
-      ];
-      setAllContent(combined);
-
-      // Only show notification on initial load or manual refresh, not on filter changes
-      // showNotification('success', `Loaded ${combined.length} items`);
+      // Use unified content endpoint with optional tag filtering
+      const url = activeTagFilter 
+        ? `${API_URL}/content?tag=${activeTagFilter}`
+        : `${API_URL}/content`;
+      
+      const response = await fetch(url);
+      if (response.ok) {
+        const content = await response.json();
+        
+        // Add _type field for backwards compatibility with UI
+        const enrichedContent = content.map((item: any) => ({
+          ...item,
+          _type: item._contentTag || 'content' // Use _contentTag as _type for UI
+        }));
+        
+        setAllContent(enrichedContent);
+      }
     } catch (error) {
-      console.error('Failed to fetch data:', error);
-      showNotification('error', 'Failed to load data');
+      console.error('Failed to fetch content:', error);
+      showNotification('error', 'Failed to load content');
     } finally {
       setLoading(false);
     }
@@ -290,7 +275,6 @@ function App() {
     }
     
     setSelectedItem(item);
-    setModalDataType(type);
     setModalOpen(true);
   };
 
@@ -365,18 +349,21 @@ function App() {
   };
 
   const handleSaveItem = async (data: any, status: 'draft' | 'published') => {
-    const endpoint = modalDataType;
-    
     try {
-      // Check if this is a new item (no file exists yet) or an update
-      const isNewItem = !data._fileExists; // We'll add this flag when creating new items
+      // Use unified content endpoint
+      const isNewItem = !data._fileExists;
       const method = isNewItem ? 'POST' : 'PUT';
       const url = isNewItem 
-        ? `${API_URL}/${endpoint}`
-        : `${API_URL}/${endpoint}/${data.id}`;
+        ? `${API_URL}/content`
+        : `${API_URL}/content/${data.id}`;
       
       // Remove the _fileExists flag before saving
       const { _fileExists, ...dataToSave } = data;
+      
+      // Ensure _contentTag field exists (default to 'content' if not set)
+      if (!dataToSave._contentTag) {
+        dataToSave._contentTag = 'content';
+      }
       
       // DEBUG: Log asset title fields
       const assetTitleFields = Object.keys(dataToSave).filter(k => k.includes('_assetTitle'));
@@ -384,7 +371,8 @@ function App() {
       assetTitleFields.forEach(field => {
         console.log(`   ${field}: "${dataToSave[field]}"`);
       });
-      console.log('🔍 App.tsx - Sending to backend:', method, url);
+      console.log('🔍 App.tsx - Sending to unified endpoint:', method, url);
+      console.log('🔍 App.tsx - Content tag:', dataToSave._contentTag);
       
       const response = await fetch(url, {
         method,
@@ -508,7 +496,6 @@ function App() {
       
       // Open in editor
       setSelectedItem(newSummary);
-      setModalDataType('summaries');
       setModalOpen(true);
     } catch (error) {
       console.error('Create error:', error);
@@ -1435,7 +1422,7 @@ function App() {
             isOpen={modalOpen}
             onClose={() => setModalOpen(false)}
             data={selectedItem}
-            dataType={modalDataType}
+            dataType={selectedItem?._contentTag || 'content'}
             onSave={handleSaveItem}
             showNotification={showNotification}
           />

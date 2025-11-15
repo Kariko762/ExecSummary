@@ -13,7 +13,7 @@ import { StrategicInitiativesDashboard } from './components/StrategicInitiatives
 import { KnowledgeBaseDashboard } from './components/KnowledgeBaseDashboard';
 import { SchemaTest } from './components/SchemaTest';
 import LoginPage from './components/LoginPage';
-import { timelineItems, isExecutiveSummary } from './data/timeline-loader';
+import { timelineItems, isExecutiveSummary, loadTimelineData } from './data/timeline-loader';
 import { TimelineItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -23,6 +23,14 @@ function App() {
   const [requireAuth, setRequireAuth] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
+  // Load timeline data from backend API
+  useEffect(() => {
+    loadTimelineData().then(() => {
+      setIsLoadingData(false);
+    });
+  }, []);
 
   // Check system settings for auth requirement and authentication status
   useEffect(() => {
@@ -67,26 +75,27 @@ function App() {
   };
 
   const filteredSummaries = timelineItems.filter(summary => {
+    if (!summary || !summary.title) return false;
     const searchLower = searchQuery.toLowerCase();
     const baseMatch = 
       summary.title.toLowerCase().includes(searchLower) ||
-      summary.quarter.toLowerCase().includes(searchLower) ||
-      summary.year.toString().includes(searchLower);
+      (summary.quarter || '').toLowerCase().includes(searchLower) ||
+      (summary.year || '').toString().includes(searchLower);
     
     if (isExecutiveSummary(summary)) {
-      return baseMatch || summary.highlights.some(h => h.toLowerCase().includes(searchLower));
+      return baseMatch || (summary.highlights || []).some(h => h.toLowerCase().includes(searchLower));
     }
     return baseMatch;
   });
 
-  // Show loading while checking auth
-  if (isCheckingAuth) {
+  // Show loading while checking auth or loading data
+  if (isCheckingAuth || isLoadingData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-fis-eggplant border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600 dark:text-gray-400 font-roobert-medium">
-            Loading...
+            {isCheckingAuth ? 'Loading...' : 'Loading content from API...'}
           </p>
         </div>
       </div>

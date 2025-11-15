@@ -6,8 +6,7 @@
  */
 
 import React from 'react';
-import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle } from 'lucide-react';
-import { renderWithExpressions } from '../utils/expressionParser';
+import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle, Info, Target, Star, Rocket, BarChart3, Activity, Zap, Heart, CheckCircle } from 'lucide-react';
 
 export interface CardPatternProps {
   data: any;
@@ -24,7 +23,7 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
   
   if (mode === 'edit') {
     const addCard = () => {
-      onChange?.([...items, { title: '', value: '' }]);
+      onChange?.([...items, { title: '', value: '', style: 'standard', icon: 'award', iconColor: 'eggplant' }]);
     };
     
     const removeCard = (index: number) => {
@@ -38,47 +37,167 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
     };
     
     return (
-      <div className="metric-grid">
+      <div>
         {items.map((item, index) => (
-          <div key={index} className="metric-edit-card">
+          <div key={index} className="edit-item-container">
+            {/* Top Control Row: Style controls + Remove button */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', padding: '6px 8px', backgroundColor: 'var(--fis-fog)', borderRadius: '8px' }}>
+              {/* Card Style Dropdown */}
+              <div style={{ maxWidth: '100px' }}>
+                <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, color: 'var(--fis-eggplant)', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'Roobert' }}>Card Style</label>
+                <select
+                  value={item.style || 'standard'}
+                  onChange={(e) => updateCard(index, 'style', e.target.value)}
+                  style={{ 
+                    width: '100%', 
+                    height: '24px', 
+                    padding: '2px 4px', 
+                    fontSize: '11px', 
+                    borderRadius: '4px', 
+                    border: '1px solid var(--fis-stone)',
+                    fontWeight: 600
+                  }}
+                >
+                  <option value="standard" style={{ background: 'white', color: 'black' }}>Standard</option>
+                  <option value="highlight" style={{ background: 'linear-gradient(135deg, #431C5B, #B21A53)', color: 'white', fontWeight: 700 }}>Highlight</option>
+                  <option value="bold" style={{ background: '#1D1F48', color: 'white', fontWeight: 700 }}>Bold</option>
+                  <option value="total" style={{ background: '#3bcd3e', color: 'white', fontWeight: 800 }}>Total</option>
+                </select>
+              </div>
+              
+              {/* Card Icon Dropdown */}
+              <div style={{ maxWidth: '100px' }}>
+                <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, color: 'var(--fis-eggplant)', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'Roobert' }}>Icon</label>
+                <select
+                  value={item.icon || 'award'}
+                  onChange={(e) => updateCard(index, 'icon', e.target.value)}
+                  style={{ width: '100%', height: '24px', padding: '2px 4px', fontSize: '11px', borderRadius: '4px', border: '1px solid var(--fis-stone)' }}
+                >
+                  <option value="award">Award</option>
+                  <option value="dollar">Dollar</option>
+                  <option value="users">Users</option>
+                  <option value="trending">Trending</option>
+                  <option value="target">Target</option>
+                  <option value="star">Star</option>
+                  <option value="rocket">Rocket</option>
+                  <option value="chart">Chart</option>
+                  <option value="activity">Activity</option>
+                  <option value="zap">Lightning</option>
+                  <option value="heart">Heart</option>
+                  <option value="check">Check</option>
+                </select>
+              </div>
+              
+              {/* Icon Colour Dropdown */}
+              <div style={{ maxWidth: '100px' }}>
+                <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, color: 'var(--fis-eggplant)', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'Roobert' }}>Icon Colour</label>
+                <select
+                  value={item.iconColor || 'eggplant'}
+                  onChange={(e) => updateCard(index, 'iconColor', e.target.value)}
+                  style={{ width: '100%', height: '24px', padding: '2px 4px', fontSize: '11px', borderRadius: '4px', border: '1px solid var(--fis-stone)' }}
+                >
+                  <option value="eggplant">Eggplant</option>
+                  <option value="raspberry">Raspberry</option>
+                  <option value="navy">Navy</option>
+                  <option value="green">Green</option>
+                  <option value="stone">Stone</option>
+                  <option value="fog">Fog</option>
+                </select>
+              </div>
+              
+              {/* Remove Card Button (Right-aligned) */}
+              <div style={{ marginLeft: 'auto', paddingTop: '16px' }}>
+                <button
+                  className="delete-button"
+                  onClick={() => removeCard(index)}
+                  style={{ padding: '4px 10px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <X size={14} /> Remove
+                </button>
+              </div>
+            </div>
+            
+            {/* Card Content Inputs */}
             <input
               type="text"
               value={item.title || ''}
               onChange={(e) => updateCard(index, 'title', e.target.value)}
               placeholder="Metric Title..."
+              style={{ marginBottom: '8px' }}
             />
             <input
               type="text"
               value={item.value || ''}
               onChange={(e) => updateCard(index, 'value', e.target.value)}
               placeholder="Value..."
+              style={{ marginBottom: '12px' }}
             />
-            <button onClick={() => removeCard(index)}><X size={16} /></button>
           </div>
         ))}
-        <button onClick={addCard}><Plus size={16} /> Add Metric</button>
+        <button className="primary-action" onClick={addCard}>
+          <Plus size={16} /> Add Metric
+        </button>
       </div>
     );
   }
   
-  // Icon mapping for display
-  const getIcon = (title: string) => {
-    const lowerTitle = title.toLowerCase();
-    if (lowerTitle.includes('revenue') || lowerTitle.includes('$')) return <DollarSign />;
-    if (lowerTitle.includes('customer') || lowerTitle.includes('user')) return <Users />;
-    if (lowerTitle.includes('growth') || lowerTitle.includes('%')) return <TrendingUp />;
-    return <Award />;
+  // Icon mapping helper
+  const getIconComponent = (iconName: string) => {
+    const icons: Record<string, React.ReactNode> = {
+      award: <Award />,
+      dollar: <DollarSign />,
+      users: <Users />,
+      trending: <TrendingUp />,
+      target: <Target />,
+      star: <Star />,
+      rocket: <Rocket />,
+      chart: <BarChart3 />,
+      activity: <Activity />,
+      zap: <Zap />,
+      heart: <Heart />,
+      check: <CheckCircle />
+    };
+    return icons[iconName] || <Award />;
+  };
+  
+  // Color mapping helper
+  const getColorVar = (colorName: string) => {
+    const colors: Record<string, string> = {
+      eggplant: 'var(--fis-eggplant)',
+      raspberry: 'var(--fis-raspberry)',
+      navy: 'var(--fis-navy)',
+      green: 'var(--accent-green)',
+      stone: 'var(--fis-stone)',
+      fog: 'var(--fis-fog)'
+    };
+    return colors[colorName] || 'var(--fis-eggplant)';
+  };
+  
+  // Style class mapping helper
+  const getStyleClass = (styleName: string) => {
+    const styles: Record<string, string> = {
+      standard: '',
+      highlight: 'metric-card-highlight',
+      bold: 'metric-card-bold',
+      total: 'metric-card-total'
+    };
+    return styles[styleName] || '';
   };
   
   return (
     <div className="metric-grid">
-      {items.map((item, index) => (
-        <div key={index} className="metric-card">
-          <div className="icon">{getIcon(item.title)}</div>
-          <div className="label">{renderWithExpressions(item.title)}</div>
-          <div className="value">{renderWithExpressions(item.value)}</div>
-        </div>
-      ))}
+      {items.map((item, index) => {
+        const styleClass = getStyleClass(item.style || 'standard');
+        const iconColor = getColorVar(item.iconColor || 'eggplant');
+        
+        return (
+          <div key={index} className={`metric-card ${styleClass}`}>
+            <div className="icon" style={{ color: iconColor }}>{getIconComponent(item.icon || 'award')}</div>
+            <div className="label">{item.title}</div>
+            <div className="value">{item.value}</div>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -108,23 +227,30 @@ export const NestedCardsPattern: React.FC<CardPatternProps> = ({ data, onChange,
     return (
       <div>
         {items.map((item, index) => (
-          <div key={index} className="nested-card-edit">
-            <input
-              type="text"
-              value={item.title || ''}
-              onChange={(e) => updateCard(index, 'title', e.target.value)}
-              placeholder="Title..."
-            />
+          <div key={index} className="edit-item-container">
+            <div className="edit-field-row" style={{ marginBottom: '8px' }}>
+              <input
+                type="text"
+                value={item.title || ''}
+                onChange={(e) => updateCard(index, 'title', e.target.value)}
+                placeholder="Title..."
+                style={{ flex: 1 }}
+              />
+              <button className="delete-button" onClick={() => removeCard(index)}>
+                <X size={16} />
+              </button>
+            </div>
             <input
               type="text"
               value={item.value || ''}
               onChange={(e) => updateCard(index, 'value', e.target.value)}
               placeholder="Value..."
             />
-            <button onClick={() => removeCard(index)}><X size={16} /></button>
           </div>
         ))}
-        <button onClick={addCard}><Plus size={16} /> Add Card</button>
+        <button className="primary-action" onClick={addCard}>
+          <Plus size={16} /> Add Card
+        </button>
       </div>
     );
   }
@@ -133,8 +259,8 @@ export const NestedCardsPattern: React.FC<CardPatternProps> = ({ data, onChange,
     <div className="nested-cards-grid">
       {items.map((item, index) => (
         <div key={index} className="nested-card">
-          <div className="title">{renderWithExpressions(item.title)}</div>
-          <div className="value">{renderWithExpressions(item.value)}</div>
+          <div className="title">{item.title}</div>
+          <div className="value">{item.value}</div>
         </div>
       ))}
     </div>
@@ -146,56 +272,100 @@ export const NestedCardsPattern: React.FC<CardPatternProps> = ({ data, onChange,
 // ==========================================
 
 export const RiskCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mode }) => {
+  // Handle array of risks
+  const risks = Array.isArray(data) ? data : [data];
+  
   if (mode === 'edit') {
-    const updateField = (field: string, value: string) => {
-      onChange?.({ ...data, [field]: value });
+    const updateRisk = (index: number, field: string, value: string) => {
+      const updated = [...risks];
+      updated[index] = { ...updated[index], [field]: value };
+      onChange?.(updated.length === 1 ? updated[0] : updated);
+    };
+    
+    const addRisk = () => {
+      const newRisk = { severity: 'medium', title: '', description: '', mitigation: '' };
+      onChange?.([...risks, newRisk]);
+    };
+    
+    const removeRisk = (index: number) => {
+      const updated = risks.filter((_, i) => i !== index);
+      onChange?.(updated.length === 1 ? updated[0] : updated);
     };
     
     return (
-      <div className="risk-edit">
-        <select 
-          value={data?.severity || 'medium'}
-          onChange={(e) => updateField('severity', e.target.value)}
-        >
-          <option value="medium">Medium Severity</option>
-          <option value="high">High Severity</option>
-        </select>
-        <input
-          type="text"
-          value={data?.title || ''}
-          onChange={(e) => updateField('title', e.target.value)}
-          placeholder="Risk Title..."
-        />
-        <textarea
-          value={data?.description || ''}
-          onChange={(e) => updateField('description', e.target.value)}
-          placeholder="Risk Description..."
-          rows={3}
-        />
-        <textarea
-          value={data?.mitigation || ''}
-          onChange={(e) => updateField('mitigation', e.target.value)}
-          placeholder="Mitigation Plan..."
-          rows={3}
-        />
+      <div>
+        {risks.map((risk, index) => {
+          const severityClass = `severity-${risk?.severity || 'medium'}`;
+          return (
+            <div key={index} className={`edit-item-container ${severityClass}`}>
+              <div className="edit-field-row" style={{ marginBottom: '12px' }}>
+                <input
+                  type="text"
+                  value={risk?.title || ''}
+                  onChange={(e) => updateRisk(index, 'title', e.target.value)}
+                  placeholder="Risk Title..."
+                  style={{ flex: 1 }}
+                />
+                <select 
+                  value={risk?.severity || 'medium'}
+                  onChange={(e) => updateRisk(index, 'severity', e.target.value)}
+                  style={{ width: '140px' }}
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+              <textarea
+                value={risk?.description || ''}
+                onChange={(e) => updateRisk(index, 'description', e.target.value)}
+                placeholder="Risk Description..."
+                rows={3}
+                style={{ marginBottom: '12px' }}
+              />
+              <textarea
+                value={risk?.mitigation || ''}
+                onChange={(e) => updateRisk(index, 'mitigation', e.target.value)}
+                placeholder="Mitigation Plan..."
+                rows={3}
+                style={{ marginBottom: '12px' }}
+              />
+              <button className="delete-button" onClick={() => removeRisk(index)} style={{ width: '100%' }}>
+                <X size={16} /> Remove Risk
+              </button>
+            </div>
+          );
+        })}
+        <button className="primary-action" onClick={addRisk}>
+          <Plus size={16} /> Add Risk
+        </button>
       </div>
     );
   }
   
-  const Icon = data?.severity === 'high' ? AlertCircle : AlertTriangle;
-  
   return (
-    <div className={`risk-card severity-${data?.severity || 'medium'}`}>
-      <div className="icon">
-        <Icon size={20} />
-      </div>
-      <div className="content">
-        <div className="badge">{data?.severity || 'medium'} severity</div>
-        <div className="title">{renderWithExpressions(data?.title)}</div>
-        <div className="description">{renderWithExpressions(data?.description)}</div>
-        <div className="mitigation-label">Mitigation:</div>
-        <div className="mitigation">{renderWithExpressions(data?.mitigation)}</div>
-      </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      {risks.map((risk, index) => {
+        // Icon selection based on severity
+        const Icon = risk?.severity === 'high' ? AlertCircle : 
+                     risk?.severity === 'low' ? Info : 
+                     AlertTriangle;
+        
+        return (
+          <div key={index} className={`risk-card severity-${risk?.severity || 'medium'}`}>
+            <div className="icon">
+              <Icon size={20} />
+            </div>
+            <div className="content">
+              <div className="badge">{risk?.severity || 'medium'} severity</div>
+              <div className="title">{risk?.title}</div>
+              <div className="description">{risk?.description}</div>
+              <div className="mitigation-label">Mitigation:</div>
+              <div className="mitigation">{risk?.mitigation}</div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -211,12 +381,13 @@ export const OutlookCardPattern: React.FC<CardPatternProps> = ({ data, onChange,
     };
     
     return (
-      <div className="outlook-edit">
+      <div>
         <input
           type="text"
           value={data?.title || ''}
           onChange={(e) => updateField('title', e.target.value)}
           placeholder="Outlook Title..."
+          style={{ marginBottom: '12px' }}
         />
         <textarea
           value={data?.content || ''}
@@ -231,8 +402,8 @@ export const OutlookCardPattern: React.FC<CardPatternProps> = ({ data, onChange,
   return (
     <div className="outlook-card">
       <div className="icon-large">📊</div>
-      <h3>{renderWithExpressions(data?.title)}</h3>
-      <p>{renderWithExpressions(data?.content)}</p>
+      <h3>{data?.title}</h3>
+      <p>{data?.content}</p>
     </div>
   );
 };
@@ -280,42 +451,56 @@ export const CategoryListPattern: React.FC<CardPatternProps> = ({ data, onChange
     return (
       <div>
         {categories.map((category, catIndex) => (
-          <div key={catIndex} className="category-edit">
-            <input
-              type="text"
-              value={category.name || ''}
-              onChange={(e) => updateCategory(catIndex, 'name', e.target.value)}
-              placeholder="Category Name..."
-            />
-            <select
-              value={category.color || 'green'}
-              onChange={(e) => updateCategory(catIndex, 'color', e.target.value)}
-            >
-              <option value="green">Green</option>
-              <option value="yellow">Yellow</option>
-              <option value="red">Red</option>
-              <option value="blue">Blue</option>
-            </select>
+          <div key={catIndex} className="edit-item-container">
+            <div className="edit-field-row" style={{ marginBottom: '12px' }}>
+              <input
+                type="text"
+                value={category.name || ''}
+                onChange={(e) => updateCategory(catIndex, 'name', e.target.value)}
+                placeholder="Category Name..."
+                style={{ flex: 1 }}
+              />
+              <select
+                value={category.color || 'green'}
+                onChange={(e) => updateCategory(catIndex, 'color', e.target.value)}
+                style={{ width: '120px' }}
+              >
+                <option value="green">Green</option>
+                <option value="yellow">Yellow</option>
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+              </select>
+            </div>
             
-            <div className="category-items">
+            <div style={{ marginBottom: '12px' }}>
               {(category.items || []).map((item: string, itemIndex: number) => (
-                <div key={itemIndex}>
+                <div key={itemIndex} className="edit-list-item">
+                  <div className="edit-icon">•</div>
                   <input
                     type="text"
                     value={item}
                     onChange={(e) => updateItem(catIndex, itemIndex, e.target.value)}
                     placeholder="Item..."
+                    style={{ flex: 1 }}
                   />
-                  <button onClick={() => removeItem(catIndex, itemIndex)}><X size={16} /></button>
+                  <button className="delete-button" onClick={() => removeItem(catIndex, itemIndex)}>
+                    <X size={16} />
+                  </button>
                 </div>
               ))}
-              <button onClick={() => addItem(catIndex)}><Plus size={16} /> Add Item</button>
+              <button className="secondary-action" onClick={() => addItem(catIndex)} style={{ width: '100%', marginTop: '8px' }}>
+                <Plus size={16} /> Add Item
+              </button>
             </div>
             
-            <button onClick={() => removeCategory(catIndex)}>Remove Category</button>
+            <button className="delete-button" onClick={() => removeCategory(catIndex)} style={{ width: '100%' }}>
+              <X size={16} /> Remove Category
+            </button>
           </div>
         ))}
-        <button onClick={addCategory}><Plus size={16} /> Add Category</button>
+        <button className="primary-action" onClick={addCategory}>
+          <Plus size={16} /> Add Category
+        </button>
       </div>
     );
   }
@@ -324,10 +509,10 @@ export const CategoryListPattern: React.FC<CardPatternProps> = ({ data, onChange
     <div className="category-list">
       {categories.map((category, index) => (
         <div key={index} className={`category-box color-${category.color}`}>
-          <h4>{renderWithExpressions(category.name)}</h4>
+          <h4>{category.name}</h4>
           <ul>
             {(category.items || []).map((item: string, itemIndex: number) => (
-              <li key={itemIndex}>{renderWithExpressions(item)}</li>
+              <li key={itemIndex}>{item}</li>
             ))}
           </ul>
         </div>

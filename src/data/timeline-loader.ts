@@ -1,28 +1,84 @@
 import { ExecutiveSummary, ExecutiveIQ, TimelineItem } from '../types';
 
-// Import summaries
-const summaryModules = import.meta.glob('./summaries/*.json', { eager: true });
-const summaries: ExecutiveSummary[] = Object.values(summaryModules)
-  .map((module: any) => ({ ...module.default, type: 'summary' as const }))
-  .filter((summary: any) => summary.status !== 'draft'); // Filter out draft summaries from main app
+// Backend API configuration
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
-// Import ExecutiveIQ articles
-const execIQModules = import.meta.glob('./executive-iq/*.json', { eager: true });
-const execIQArticles: ExecutiveIQ[] = Object.values(execIQModules)
-  .map((module: any) => ({ ...module.default, type: 'executive-iq' as const }));
+// State to hold loaded data
+let timelineData: TimelineItem[] = [];
+let isLoaded = false;
+let loadingPromise: Promise<void> | null = null;
 
-// Combine and sort by date (newest first)
-export const timelineItems: TimelineItem[] = [...summaries, ...execIQArticles]
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+// Function to load data from backend API
+async function loadTimelineData(): Promise<void> {
+  if (isLoaded) return;
+  if (loadingPromise) return loadingPromise;
+
+  loadingPromise = (async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/content`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch content: ${response.statusText}`);
+      }
+      
+      const allContent = await response.json();
+      
+      // Map content based on tag type - include weekly-summary regardless of draft status for now
+      timelineData = allContent
+        .filter((item: any) => {
+          const tag = item._contentTag;
+          return tag === 'executive-summary' || tag === 'executive-iq' || tag === 'weekly-summary';
+        })
+        // Note: Removed draft filter to show all content during testing
+        .map((item: any) => {
+          // Map weekly-summary to executive-summary format for display
+          if (item._contentTag === 'weekly-summary') {
+            return { ...item, type: 'summary' as const };
+          } else if (item._contentTag === 'executive-iq') {
+            return { ...item, type: 'executive-iq' as const };
+          } else if (item._contentTag === 'executive-summary') {
+            return { ...item, type: 'summary' as const };
+          }
+          return item;
+        });
+      
+      // Update the exported array reference
+      timelineItems.length = 0;
+      timelineItems.push(...timelineData);
+      
+      isLoaded = true;
+    } catch (error) {
+      console.error('Failed to load timeline data from API:', error);
+      // Fallback to empty array if API fails
+      timelineData = [];
+      timelineItems.length = 0;
+      isLoaded = true;
+    }
+  })();
+
+  return loadingPromise;
+}
+
+// Initialize data loading
+loadTimelineData();
+
+// Export reactive timeline items array
+export let timelineItems: TimelineItem[] = [];
 
 // Helper function to check item type
 export function isExecutiveSummary(item: TimelineItem): item is ExecutiveSummary {
-  return 'departments' in item;
+  // Check for _contentTag or legacy departments field
+  return (item as any)._contentTag === 'executive-summary' || 
+         (item as any)._contentTag === 'weekly-summary' || 
+         'departments' in item;
 }
 
 export function isExecutiveIQ(item: TimelineItem): item is ExecutiveIQ {
-  return 'category' in item;
+  // Check for _contentTag or legacy category field
+  return (item as any)._contentTag === 'executive-iq' || 'category' in item;
 }
 
+// Export data loading function for components to await
+export { loadTimelineData };
+
 // Keep original exports for backwards compatibility
-export const executiveSummaries = summaries;
+export const executiveSummaries = timelineData.filter(isExecutiveSummary);

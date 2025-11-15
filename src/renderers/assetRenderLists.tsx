@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { Plus, X, Check } from 'lucide-react';
-import { renderWithExpressions } from '../utils/expressionParser';
 
 export interface ListPatternProps {
   data: any;
@@ -21,6 +20,7 @@ export interface ListPatternProps {
 
 export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChange, mode }) => {
   const items = Array.isArray(data) ? data : [];
+  console.log('HighlightsListPattern received:', items);
   
   if (mode === 'edit') {
     const addItem = () => {
@@ -41,14 +41,13 @@ export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChan
       <div>
         {items.map((item, index) => (
           <div key={index} className="edit-list-item">
-            <div className="edit-number-badge" data-index={index}>
-              {index + 1}
-            </div>
+            <div className="edit-number-badge" data-index={index}>{index + 1}</div>
             <input
               type="text"
               value={item}
               onChange={(e) => updateItem(index, e.target.value)}
               placeholder="Enter highlight..."
+              style={{ flex: 1 }}
             />
             <button className="delete-button" onClick={() => removeItem(index)}>
               <X size={16} />
@@ -56,33 +55,21 @@ export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChan
           </div>
         ))}
         <button className="primary-action" onClick={addItem}>
-          <Plus size={16} /> Add Highlight
+          <Plus size={16} /> Add Item
         </button>
       </div>
     );
   }
   
-  console.log('HighlightsListPattern (main app) received:', items);
-  
   return (
     <div className="highlights-list">
       {items.map((item, index) => {
         // Handle both string arrays and object arrays with name/value properties
-        const isObject = typeof item === 'object';
-        const displayText = isObject ? (item.name || item.value || '') : item;
-        const displayValue = isObject && item.value ? item.value : null;
-        
+        const displayText = typeof item === 'object' ? (item.name || item.value || '') : item;
         return (
           <div key={index} className="highlight-item">
             <div className="highlight-badge">{index + 1}</div>
-            <div className="highlight-text">
-              {renderWithExpressions(String(displayText))}
-              {displayValue && (
-                <span className="ml-2 font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry">
-                  ({displayValue})
-                </span>
-              )}
-            </div>
+            <div className="highlight-text">{displayText}</div>
           </div>
         );
       })}
@@ -115,7 +102,8 @@ export const BulletListPattern: React.FC<ListPatternProps> = ({ data, onChange, 
     return (
       <div>
         {items.map((item, index) => (
-          <div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+          <div key={index} className="edit-list-item">
+            <div className="edit-icon">•</div>
             <input
               type="text"
               value={item}
@@ -123,18 +111,22 @@ export const BulletListPattern: React.FC<ListPatternProps> = ({ data, onChange, 
               placeholder="Enter item..."
               style={{ flex: 1 }}
             />
-            <button onClick={() => removeItem(index)}><X size={16} /></button>
+            <button className="delete-button" onClick={() => removeItem(index)}>
+              <X size={16} />
+            </button>
           </div>
         ))}
-        <button onClick={addItem}><Plus size={16} /> Add Item</button>
+        <button className="primary-action" onClick={addItem}>
+          <Plus size={16} /> Add Item
+        </button>
       </div>
     );
   }
   
   return (
-    <ul>
+    <ul className="bullet-list">
       {items.map((item, index) => (
-        <li key={index}>{renderWithExpressions(item)}</li>
+        <li key={index}>{item}</li>
       ))}
     </ul>
   );
@@ -165,8 +157,10 @@ export const ChecklistItemsPattern: React.FC<ListPatternProps> = ({ data, onChan
     return (
       <div>
         {items.map((item, index) => (
-          <div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-            <Check size={16} />
+          <div key={index} className="edit-list-item">
+            <div className="edit-icon check">
+              <Check size={16} />
+            </div>
             <input
               type="text"
               value={item}
@@ -174,23 +168,27 @@ export const ChecklistItemsPattern: React.FC<ListPatternProps> = ({ data, onChan
               placeholder="Enter completed item..."
               style={{ flex: 1 }}
             />
-            <button onClick={() => removeItem(index)}><X size={16} /></button>
+            <button className="delete-button" onClick={() => removeItem(index)}>
+              <X size={16} />
+            </button>
           </div>
         ))}
-        <button onClick={addItem}><Plus size={16} /> Add Item</button>
+        <button className="primary-action" onClick={addItem}>
+          <Plus size={16} /> Add Item
+        </button>
       </div>
     );
   }
   
   return (
-    <ul>
+    <div className="checklist">
       {items.map((item, index) => (
-        <li key={index}>
+        <div key={index} className="checklist-item">
           <Check size={16} className="check-icon" />
-          <span>{renderWithExpressions(item)}</span>
-        </li>
+          <span>{item}</span>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };
 
@@ -218,65 +216,88 @@ export const ProgressBarListPattern: React.FC<ListPatternProps> = ({ data, onCha
     
     return (
       <div>
-        {items.map((item, index) => (
-          <div key={index} style={{ marginBottom: '16px', padding: '12px', border: '1px solid #ccc', borderRadius: '8px' }}>
-            <input
-              type="text"
-              value={item.title || ''}
-              onChange={(e) => updateItem(index, 'title', e.target.value)}
-              placeholder="Title..."
-              style={{ width: '100%', marginBottom: '8px' }}
-            />
-            <input
-              type="text"
-              value={item.subtitle || ''}
-              onChange={(e) => updateItem(index, 'subtitle', e.target.value)}
-              placeholder="Subtitle..."
-              style={{ width: '100%', marginBottom: '8px' }}
-            />
-            <input
-              type="number"
-              value={item.percentage || 0}
-              onChange={(e) => updateItem(index, 'percentage', parseInt(e.target.value))}
-              placeholder="Percentage..."
-              min="0"
-              max="100"
-              style={{ width: '100%', marginBottom: '8px' }}
-            />
-            <select
-              value={item.status || 'On Track'}
-              onChange={(e) => updateItem(index, 'status', e.target.value)}
-              style={{ width: '100%', marginBottom: '8px' }}
-            >
-              <option>On Track</option>
-              <option>At Risk</option>
-              <option>Blocked</option>
-            </select>
-            <button onClick={() => removeItem(index)}><X size={16} /> Remove</button>
-          </div>
-        ))}
-        <button onClick={addItem}><Plus size={16} /> Add Initiative</button>
+        {items.map((item, index) => {
+          const statusClass = (item.status || 'On Track').toLowerCase().replace(' ', '-');
+          return (
+            <div key={index} className="edit-item-container">
+              <div className="edit-field-row" style={{ marginBottom: '12px' }}>
+                <input
+                  type="text"
+                  value={item.title || ''}
+                  onChange={(e) => updateItem(index, 'title', e.target.value)}
+                  placeholder="Task title..."
+                  style={{ flex: 1 }}
+                />
+                <select
+                  value={item.status || 'On Track'}
+                  onChange={(e) => updateItem(index, 'status', e.target.value)}
+                  className={`status-badge ${statusClass}`}
+                  style={{ width: 'auto' }}
+                >
+                  <option>On Track</option>
+                  <option>At Risk</option>
+                  <option>Blocked</option>
+                </select>
+              </div>
+              <input
+                type="text"
+                value={item.subtitle || ''}
+                onChange={(e) => updateItem(index, 'subtitle', e.target.value)}
+                placeholder="Description..."
+                style={{ width: '100%', marginBottom: '12px' }}
+              />
+              <div className="edit-field-row" style={{ marginBottom: '8px' }}>
+                <input
+                  type="number"
+                  value={item.percentage || 0}
+                  onChange={(e) => updateItem(index, 'percentage', parseInt(e.target.value))}
+                  placeholder="%"
+                  min="0"
+                  max="100"
+                  style={{ width: '80px' }}
+                />
+                <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+                  {item.percentage || 0}% complete
+                </span>
+              </div>
+              <div className={`edit-progress-bar`}>
+                <div className={`edit-progress-fill ${statusClass}`} style={{ width: `${item.percentage || 0}%` }}></div>
+              </div>
+              <button className="delete-button" onClick={() => removeItem(index)} style={{ marginTop: '12px', width: '100%' }}>
+                <X size={16} /> Remove Task
+              </button>
+            </div>
+          );
+        })}
+        <button className="primary-action" onClick={addItem}>
+          <Plus size={16} /> Add Task
+        </button>
       </div>
     );
   }
   
   return (
-    <div>
-      {items.map((item, index) => (
-        <div key={index} className="progress-item">
-          <div className="header">
-            <span className="title">{item.title}</span>
-            <span className={`badge status-${item.status?.toLowerCase().replace(' ', '-')}`}>
-              {item.status}
-            </span>
+    <div className="progress-list">
+      {items.map((item, index) => {
+        const status = item.status || '';
+        const statusClass = status.toLowerCase().replace(/\s+/g, '-');
+        console.log('Progress bar status:', status, '-> class:', statusClass);
+        return (
+          <div key={index} className={`progress-item ${statusClass}`}>
+            <div className="header">
+              <span className="title">{item.title}</span>
+              <span className={`badge status-${statusClass}`}>
+                {item.status}
+              </span>
+            </div>
+            {item.subtitle && <div className="subtitle">{item.subtitle}</div>}
+            <div className="progress-bar-container">
+              <div className="progress-bar" style={{ width: `${item.percentage}%` }}></div>
+            </div>
+            <div className="percentage">{item.percentage}% complete</div>
           </div>
-          <div className="subtitle">{item.subtitle}</div>
-          <div className="progress-bar-container">
-            <div className="progress-bar" style={{ width: `${item.percentage}%` }}></div>
-          </div>
-          <div className="percentage">{item.percentage}% complete</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
@@ -310,7 +331,7 @@ export const KeyValueListPattern: React.FC<ListPatternProps> = ({ data, onChange
     return (
       <div>
         {entries.map(([key, value], index) => (
-          <div key={index} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+          <div key={index} className="edit-list-item">
             <input
               type="text"
               value={key}
@@ -325,22 +346,108 @@ export const KeyValueListPattern: React.FC<ListPatternProps> = ({ data, onChange
               placeholder="Value..."
               style={{ flex: 1 }}
             />
-            <button onClick={() => removePair(key)}><X size={16} /></button>
+            <button className="delete-button" onClick={() => removePair(key)}>
+              <X size={16} />
+            </button>
           </div>
         ))}
-        <button onClick={addPair}><Plus size={16} /> Add Pair</button>
+        <button className="primary-action" onClick={addPair}>
+          <Plus size={16} /> Add Pair
+        </button>
       </div>
     );
   }
   
   return (
-    <dl>
+    <div className="keyvalue-list">
       {entries.map(([key, value], index) => (
-        <div key={index}>
-          <dt>{key}:</dt>
-          <dd>{value as string}</dd>
+        <div key={index} className="keyvalue-item">
+          <span className="keyvalue-label">{key}:</span>
+          <span className="keyvalue-value">{value as string}</span>
         </div>
       ))}
-    </dl>
+    </div>
+  );
+};
+
+// ==========================================
+// TOP 5 LIST PATTERN (Square Badges)
+// ==========================================
+
+export const Top5ListPattern: React.FC<ListPatternProps> = ({ data, onChange, mode }) => {
+  const items = Array.isArray(data) ? data : [];
+  
+  if (mode === 'edit') {
+    const addItem = () => {
+      onChange?.([...items, { name: '', value: 0 }]);
+    };
+    
+    const removeItem = (index: number) => {
+      onChange?.(items.filter((_, i) => i !== index));
+    };
+    
+    const updateItem = (index: number, field: string, value: string) => {
+      const updated = [...items];
+      updated[index] = { 
+        ...updated[index], 
+        [field]: field === 'value' ? Number(value) : value 
+      };
+      onChange?.(updated);
+    };
+    
+    return (
+      <div>
+        {items.map((item, index) => (
+          <div key={index} className="edit-list-item">
+            <div className="edit-number-badge" data-index={index}>{index + 1}</div>
+            <input
+              type="text"
+              value={item.name || ''}
+              onChange={(e) => updateItem(index, 'name', e.target.value)}
+              placeholder="Item name..."
+              style={{ flex: 2 }}
+            />
+            <input
+              type="number"
+              value={item.value || item.count || 0}
+              onChange={(e) => updateItem(index, item.value !== undefined ? 'value' : 'count', e.target.value)}
+              placeholder="Count..."
+              min="0"
+              style={{ width: '100px' }}
+            />
+            <button className="delete-button" onClick={() => removeItem(index)}>
+              <X size={16} />
+            </button>
+          </div>
+        ))}
+        <button className="primary-action" onClick={addItem}>
+          <Plus size={16} /> Add Item
+        </button>
+      </div>
+    );
+  }
+  
+  // Calculate total
+  const total = items.reduce((sum, item) => sum + (item.value || item.count || 0), 0);
+  
+  return (
+    <div className="top5-list">
+      <div className="top5-items">
+        {items.map((item, index) => (
+          <div key={index} className="top5-item">
+            <div className="top5-badge" data-rank={index}>
+              {index + 1}
+            </div>
+            <span className="top5-name">{item.name}</span>
+            <span className="top5-value">{item.value || item.count || 0}</span>
+          </div>
+        ))}
+      </div>
+      {total > 0 && (
+        <div className="top5-total">
+          Total: <span className="top5-total-value">{total}</span>
+        </div>
+      )}
+    </div>
   );
 };

@@ -1,0 +1,271 @@
+{
+  "id": "week-performance-weekly-nov-25-2025-11-14",
+  "quarter": "Nov 14",
+  "year": 2025,
+  "date": "2025-11-14",
+  "title": "Performance Weekly Nov-25",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_demo_studio_key_metrics_1_2__type": "metricCard",
+  "_demo_studio_key_metrics_1_2__layoutZone": "full",
+  "_demo_studio_key_metrics_1_2__rowIndex": 0,
+  "_demo_studio_key_metrics_1_2__fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    }
+  },
+  "demo_studio_key_metrics_1_2_": [
+    {
+      "title": "Unique Demos (YTD)",
+      "value": "263"
+    },
+    {
+      "title": "Linked to Deals (YTD)",
+      "value": "126"
+    },
+    {
+      "title": "Demos Won (ACV)",
+      "value": "$1.23M"
+    }
+  ],
+  "_demo_studio_key_metrics_1_2__sectionLayoutType": "full",
+  "_enabled_demo_studio_key_metrics_1_2_": true,
+  "_completed_demo_studio_key_metrics_1_2_": false,
+  "_demo_studio_key_metrics_2_2__0_type": "lineChart",
+  "_demo_studio_key_metrics_2_2__0_layoutZone": "left-70",
+  "_demo_studio_key_metrics_2_2__0_rowIndex": 0,
+  "_demo_studio_key_metrics_2_2__0_fields": {
+    "name": {
+      "label": "Label",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Value",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_demo_studio_key_metrics_2_2__0_chartConfig": {
+    "xAxisKey": "name",
+    "yAxisKey": "value",
+    "curveType": "monotone",
+    "showGrid": true,
+    "showLegend": true,
+    "strokeWidth": 3
+  },
+  "demo_studio_key_metrics_2_2__0": [
+    {
+      "name": "Jan",
+      "value": 37
+    },
+    {
+      "name": "Feb",
+      "value": 44
+    },
+    {
+      "name": "Mar",
+      "value": 58
+    },
+    {
+      "name": "Apr",
+      "value": 27
+    },
+    {
+      "name": "May",
+      "value": 21
+    },
+    {
+      "name": "Jun",
+      "value": 19
+    },
+    {
+      "name": "Jul",
+      "value": 18
+    },
+    {
+      "name": "Aug",
+      "value": 16
+    },
+    {
+      "name": "Sep",
+      "value": 14
+    },
+    {
+      "name": "Oct",
+      "value": 3
+    }
+  ],
+  "_demo_studio_key_metrics_2_2__1_type": "listTop5",
+  "_demo_studio_key_metrics_2_2__1_layoutZone": "right-30",
+  "_demo_studio_key_metrics_2_2__1_rowIndex": 0,
+  "_demo_studio_key_metrics_2_2__1_fields": {
+    "name": {
+      "label": "Name",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Count",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "demo_studio_key_metrics_2_2__1": [
+    {
+      "name": "D1 Flex",
+      "value": 73
+    },
+    {
+      "name": "D1 Flex Mobile (6.0)",
+      "value": 43
+    },
+    {
+      "name": "D1 Flex Mobile (Beacon)",
+      "value": 35
+    },
+    {
+      "name": "D1 Business",
+      "value": 33
+    },
+    {
+      "name": "D1 Banker",
+      "value": 20
+    }
+  ],
+  "_demo_studio_key_metrics_2_2__sectionLayoutType": "left-70",
+  "_enabled_demo_studio_key_metrics_2_2_": true,
+  "_completed_demo_studio_key_metrics_2_2_": false,
+  "_key_activity_insights_metrics_type": "metricCard",
+  "_key_activity_insights_metrics_layoutZone": "full",
+  "_key_activity_insights_metrics_rowIndex": 0,
+  "_key_activity_insights_metrics_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    }
+  },
+  "key_activity_insights_metrics": [
+    {
+      "title": "Banking",
+      "value": "16,165",
+      "icon": "zap",
+      "iconColor": "green",
+      "style": "bold"
+    },
+    {
+      "title": "Capital Markets",
+      "value": "35,879"
+    },
+    {
+      "title": "Grand Total",
+      "value": "52,044",
+      "style": "total",
+      "icon": "target",
+      "iconColor": "raspberry"
+    }
+  ],
+  "_key_activity_insights_metrics_sectionLayoutType": "full",
+  "_enabled_key_activity_insights_metrics": true,
+  "_completed_key_activity_insights_metrics": false,
+  "_key_activity_insights_0_type": "radialProgressChart",
+  "_key_activity_insights_0_layoutZone": "left-33",
+  "_key_activity_insights_0_rowIndex": 0,
+  "_key_activity_insights_0_fields": {
+    "name": {
+      "label": "Label",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Percentage",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "key_activity_insights_0": [
+    {
+      "name": "Support",
+      "value": 4
+    },
+    {
+      "name": "Prep",
+      "value": 55
+    },
+    {
+      "name": "Demo",
+      "value": 41
+    }
+  ],
+  "_key_activity_insights_1_type": "radialProgressChart",
+  "_key_activity_insights_1_layoutZone": "middle-33",
+  "_key_activity_insights_1_rowIndex": 0,
+  "_key_activity_insights_1_fields": {
+    "name": {
+      "label": "Label",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Percentage",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "key_activity_insights_1": [
+    {
+      "name": "Support",
+      "value": 4
+    },
+    {
+      "name": "Prep",
+      "value": 65
+    },
+    {
+      "name": "Demo",
+      "value": 30
+    }
+  ],
+  "_key_activity_insights_2_type": "stackedBarChart",
+  "_key_activity_insights_2_layoutZone": "right-33",
+  "_key_activity_insights_2_rowIndex": 0,
+  "key_activity_insights_2": [
+    {
+      "name": "Banking",
+      "Support": 8953,
+      "Prep": 6528,
+      "Demo": 684
+    },
+    {
+      "name": "Capital Markets",
+      "Support": 23358,
+      "Prep": 11057,
+      "Demo": 1464
+    }
+  ],
+  "_key_activity_insights_sectionLayoutType": "left-33",
+  "_enabled_key_activity_insights": true,
+  "_completed_key_activity_insights": false,
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "performance_weekly_v2",
+  "_template_description": "",
+  "_template_created": "2025-11-14T13:09:17.760Z",
+  "_template_updated": "2025-11-14T13:09:17.760Z",
+  "_contentTag": "performance",
+  "_demo_studio_key_metrics_2_2__0_assetTitle": "Demo Per Month (YTD) ",
+  "_type": "performance"
+}

@@ -23,6 +23,17 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({ summary, onClick, inde
     return new Intl.NumberFormat('en-US').format(num);
   };
 
+  // Handle both old and new data formats
+  const keyMetrics = summary.keyMetrics || {};
+  const hasOldFormat = 'revenue' in keyMetrics && 'growth' in keyMetrics;
+  
+  // Extract metrics from keyMetrics array if it's the new format
+  const metricsArray = Array.isArray(summary.keyMetrics) ? summary.keyMetrics : [];
+  const getMetricValue = (label: string) => {
+    const metric = metricsArray.find((m: any) => m.label?.toLowerCase().includes(label.toLowerCase()));
+    return metric?.value || 0;
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -53,12 +64,14 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({ summary, onClick, inde
           </div>
         </div>
         
-        <motion.div
-          className="px-3 py-1 rounded-full bg-green-500/20 text-green-600 dark:text-green-400 text-xs font-roobert-medium"
-          whileHover={{ scale: 1.1 }}
-        >
-          +{summary.keyMetrics.growth}%
-        </motion.div>
+        {(hasOldFormat && keyMetrics.growth) || getMetricValue('conversion') ? (
+          <motion.div
+            className="px-3 py-1 rounded-full bg-green-500/20 text-green-600 dark:text-green-400 text-xs font-roobert-medium"
+            whileHover={{ scale: 1.1 }}
+          >
+            {hasOldFormat ? `+${keyMetrics.growth}%` : `${getMetricValue('conversion')}%`}
+          </motion.div>
+        ) : null}
       </div>
 
       {/* Title */}
@@ -68,45 +81,68 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({ summary, onClick, inde
 
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="glass rounded-lg p-3">
-          <div className="flex items-center space-x-2 mb-1">
-            <DollarSign className="w-4 h-4 text-fis-eggplant" />
-            <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">Revenue</span>
-          </div>
-          <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
-            {formatCurrency(summary.keyMetrics.revenue)}
-          </p>
-        </div>
+        {metricsArray.length > 0 ? (
+          // New format: keyMetrics is an array
+          metricsArray.slice(0, 4).map((metric: any, idx: number) => (
+            <div key={idx} className="glass rounded-lg p-3">
+              <div className="flex items-center space-x-2 mb-1">
+                {metric.type === 'currency' && <DollarSign className="w-4 h-4 text-fis-eggplant" />}
+                {metric.type === 'percentage' && <TrendingUp className="w-4 h-4 text-fis-green" />}
+                {metric.type === 'number' && <Users className="w-4 h-4 text-fis-navy" />}
+                {!metric.type && <ThumbsUp className="w-4 h-4 text-fis-eggplant" />}
+                <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">{metric.label}</span>
+              </div>
+              <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
+                {metric.type === 'currency' ? formatCurrency(metric.value) :
+                 metric.type === 'percentage' ? `${metric.value}%` :
+                 formatNumber(metric.value)}
+              </p>
+            </div>
+          ))
+        ) : (
+          // Old format: keyMetrics is an object with specific fields
+          <>
+            <div className="glass rounded-lg p-3">
+              <div className="flex items-center space-x-2 mb-1">
+                <DollarSign className="w-4 h-4 text-fis-eggplant" />
+                <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">Revenue</span>
+              </div>
+              <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
+                {formatCurrency(keyMetrics.revenue || 0)}
+              </p>
+            </div>
 
-        <div className="glass rounded-lg p-3">
-          <div className="flex items-center space-x-2 mb-1">
-            <Users className="w-4 h-4 text-fis-navy" />
-            <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">Customers</span>
-          </div>
-          <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
-            {formatNumber(summary.keyMetrics.customers)}
-          </p>
-        </div>
+            <div className="glass rounded-lg p-3">
+              <div className="flex items-center space-x-2 mb-1">
+                <Users className="w-4 h-4 text-fis-navy" />
+                <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">Customers</span>
+              </div>
+              <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
+                {formatNumber(keyMetrics.customers || 0)}
+              </p>
+            </div>
 
-        <div className="glass rounded-lg p-3">
-          <div className="flex items-center space-x-2 mb-1">
-            <TrendingUp className="w-4 h-4 text-fis-green" />
-            <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">Growth</span>
-          </div>
-          <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
-            {summary.keyMetrics.growth}%
-          </p>
-        </div>
+            <div className="glass rounded-lg p-3">
+              <div className="flex items-center space-x-2 mb-1">
+                <TrendingUp className="w-4 h-4 text-fis-green" />
+                <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">Growth</span>
+              </div>
+              <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
+                {keyMetrics.growth || 0}%
+              </p>
+            </div>
 
-        <div className="glass rounded-lg p-3">
-          <div className="flex items-center space-x-2 mb-1">
-            <ThumbsUp className="w-4 h-4 text-fis-eggplant" />
-            <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">NPS</span>
-          </div>
-          <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
-            {summary.keyMetrics.satisfaction}
-          </p>
-        </div>
+            <div className="glass rounded-lg p-3">
+              <div className="flex items-center space-x-2 mb-1">
+                <ThumbsUp className="w-4 h-4 text-fis-eggplant" />
+                <span className="text-xs font-roobert-light text-gray-500 dark:text-gray-400">NPS</span>
+              </div>
+              <p className="text-lg font-roobert-heavy text-gray-900 dark:text-white">
+                {keyMetrics.satisfaction || 0}
+              </p>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Highlights Preview */}
@@ -114,7 +150,7 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({ summary, onClick, inde
         <h4 className="text-xs font-roobert-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
           Key Highlights
         </h4>
-        {summary.highlights.slice(0, 3).map((highlight, i) => (
+        {(summary.highlights || []).slice(0, 3).map((highlight, i) => (
           <div key={i} className="flex items-start space-x-2">
             <div className="w-1.5 h-1.5 rounded-full bg-fis-eggplant mt-2 flex-shrink-0" />
             <div className="text-sm font-roobert-light text-gray-600 dark:text-gray-300 line-clamp-1">

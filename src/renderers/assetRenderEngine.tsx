@@ -15,7 +15,6 @@
 
 import React from 'react';
 import { AssetStyles } from '../schemas/assetDataStore';
-import { renderWithExpressions } from '../utils/expressionParser';
 
 // Import pattern files
 import {
@@ -31,7 +30,8 @@ import {
   BulletListPattern,
   ChecklistItemsPattern,
   ProgressBarListPattern,
-  KeyValueListPattern
+  KeyValueListPattern,
+  Top5ListPattern
 } from './assetRenderLists';
 
 import {
@@ -58,7 +58,8 @@ import {
 
 import {
   HrPattern,
-  NumberPattern
+  NumberPattern,
+  SpacerPattern
 } from './assetRenderUtility';
 
 // ==========================================
@@ -113,8 +114,6 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <ProgressBarListPattern {...props} />;
       case 'keyValueList':
         return <KeyValueListPattern {...props} />;
-      case 'listTop5':
-        return <HighlightsListPattern {...props} />;
       
       // CARD ASSETS
       case 'metricCard':
@@ -154,6 +153,10 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <HrPattern {...props} />;
       case 'number':
         return <NumberPattern {...props} />;
+      case 'spacer':
+        return <SpacerPattern {...props} />;
+      case 'listTop5':
+        return <Top5ListPattern {...props} />;
       
       default:
         return <div className="text-red-500">Unknown asset type: {type}</div>;
@@ -219,7 +222,8 @@ export const AssetRenderEngineStyles = `
 
 /* Text Pattern */
 .asset-wrapper .text-display {
-  ${AssetStyles.typography.body.normal}
+  font-size: 0.875rem !important;
+  font-family: 'Roobert Light', sans-serif !important;
   color: var(--fis-navy);
 }
 
@@ -232,12 +236,14 @@ export const AssetRenderEngineStyles = `
   padding: 0.5rem;
   border: 1px solid #cbd5e1;
   border-radius: 0.375rem;
-  ${AssetStyles.typography.body.normal}
+  font-size: 0.875rem;
+  font-family: 'Roobert Light', sans-serif;
 }
 
 /* Textarea Pattern */
 .asset-wrapper .textarea-display {
-  ${AssetStyles.typography.body.normal}
+  font-size: 0.875rem !important;
+  font-family: 'Roobert Light', sans-serif !important;
   white-space: pre-wrap;
   color: var(--fis-navy);
 }
@@ -251,7 +257,8 @@ export const AssetRenderEngineStyles = `
   padding: 0.5rem;
   border: 1px solid #cbd5e1;
   border-radius: 0.375rem;
-  ${AssetStyles.typography.body.normal}
+  font-size: 0.875rem;
+  font-family: 'Roobert Light', sans-serif;
   resize: vertical;
 }
 
@@ -397,34 +404,38 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper .progress-title {
-  ${AssetStyles.typography.heading.h5}
+  font-size: 0.875rem !important;
+  font-family: 'Roobert Light', sans-serif !important;
   color: var(--fis-navy);
 }
 
 .asset-wrapper .progress-status {
-  ${AssetStyles.typography.label.badge}
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-family: 'Roobert Medium', sans-serif;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 500;
 }
 
-.asset-wrapper .progress-status.onTrack {
+.asset-wrapper .progress-status.status-on-track {
   background: #d1fae5;
   color: #065f46;
 }
 
-.asset-wrapper .progress-status.atRisk {
+.asset-wrapper .progress-status.status-at-risk {
   background: #fef3c7;
   color: #92400e;
 }
 
-.asset-wrapper .progress-status.blocked {
+.asset-wrapper .progress-status.status-blocked {
   background: #fee2e2;
   color: #991b1b;
 }
 
 .asset-wrapper .progress-subtitle {
-  ${AssetStyles.typography.body.small}
-  color: #64748b;
+  font-size: 0.75rem !important;
+  font-family: 'Roobert Light', sans-serif !important;
+  color: #431C5B;
 }
 
 .asset-wrapper .progress-bar-container {

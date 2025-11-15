@@ -56,6 +56,7 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
       renderer = <KeyValueListRenderer {...props} />;
       break;
     
+    case 'metricCard':
     case 'metricCards':
       renderer = <MetricCardsRenderer {...props} />;
       break;

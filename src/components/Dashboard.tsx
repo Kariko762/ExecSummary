@@ -9,7 +9,7 @@ import { ChartColors } from '../design-system';
 export const Dashboard: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentPerformance = performanceData[currentIndex];
-  const hasPerformanceData = performanceData.length > 0;
+  const hasPerformanceData = performanceData.length > 0 && currentPerformance?.demoStudio;
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev < performanceData.length - 1 ? prev + 1 : prev));
@@ -18,6 +18,22 @@ export const Dashboard: React.FC = () => {
   const goToNext = () => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
+
+  // Show message if no valid performance data
+  if (!hasPerformanceData) {
+    return (
+      <div className="space-y-6">
+        <div className="text-center py-12">
+          <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-4">
+            Performance Dashboard
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400">
+            No performance data available. Please check data files in /src/data/performance/
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

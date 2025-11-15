@@ -1,6 +1,8 @@
 import { ContentModal } from '../../../src/components/ContentModal';
 import { ThemeProvider } from '../../../src/contexts/ThemeContext';
 import { PresentationProvider } from '../../../src/contexts/PresentationContext';
+import { AssetRenderEngine } from '../renderers/assetRenderEngine';
+import '../renderers/assetRenderEngine.css';
 
 interface PreviewModalProps {
   isOpen: boolean;
@@ -12,6 +14,7 @@ interface PreviewModalProps {
 export default function PreviewModal({ isOpen, onClose, data }: PreviewModalProps) {
   if (!isOpen) return null;
 
+  // TEMPORARY: Still using old ContentModal - TODO: Build CMS-native preview
   // For all content types, use the universal ContentModal with draft status
   const draftData = { ...data, status: 'draft' };
 

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./renderers/assetRenderEngine.css";
 
 /* Preview Mode - Global Override */
 body.preview-mode div.fixed {
@@ -13,6 +14,43 @@ body.preview-mode div.fixed {
   --color-fis-charcoal: #403040;
   --color-fis-gray: #E6E7E8;
   --color-fis-green: #3bcd3e;
+}
+
+/* CSS Custom Properties for Asset Render Engine */
+:root {
+  /* FIS Colors */
+  --fis-eggplant: #431C5B;
+  --fis-navy: #1D1F48;
+  --fis-raspberry: #B21A53;
+  --fis-charcoal: #403040;
+  --fis-stone: #9D9EA2;
+  --fis-fog: #E6E7E8;
+  
+  /* Brand Colors (Semantic Mapping) */
+  --brand-primary: #431C5B;    /* eggplant */
+  --brand-secondary: #B21A53;  /* raspberry */
+  --brand-tertiary: #1D1F48;   /* navy */
+  
+  /* Accent Colors */
+  --accent-green: #3bcd3e;
+  --accent-green-dark: #057055;
+  --accent-blue: #0066CC;
+  --accent-yellow: #FFB800;
+  --accent-orange: #f59e0b;
+  --accent-red: #DC2626;
+  
+  /* Border Colors */
+  --border-default: #e5e7eb;
+  --border-strong: #d1d5db;
+  
+  /* Text Colors */
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  
+  /* Fonts */
+  --font-primary: 'Roobert', system-ui, sans-serif;
+  --font-secondary: 'Roobert Medium', system-ui, sans-serif;
 }
 
 /* Roobert Font Faces - Corporate Font */

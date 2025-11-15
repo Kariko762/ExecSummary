@@ -215,7 +215,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         chartConfig: content[`_${fieldKey}_chartConfig`],
         layoutZone: content[`_${fieldKey}_layoutZone`] || 'full',
         assetTitle: content[`_${fieldKey}_assetTitle`] || '',
-        displayAssetTitle: content[`_${fieldKey}_displayAssetTitle`] !== false
+        displayAssetTitle: content[`_${fieldKey}_displayAssetTitle`] !== false,
+        alignment: content[`_${fieldKey}_alignment`] || 'left'
       }));
       
       sections.push({
@@ -531,32 +532,98 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                     
                     {/* Multi-field section: Render in grid with layout zones */}
                     {section.isMultiField && section.multiFieldData ? (
-                      <div className="grid gap-6 items-center w-full" style={{
-                        gridTemplateColumns: section.multiFieldData.map((field: any) => {
-                          const zone = field.layoutZone || 'full';
-                          if (zone.includes('left-70')) return '2.33fr';
-                          if (zone.includes('right-30')) return '1fr';
-                          if (zone.includes('left-33')) return '1fr';
-                          if (zone.includes('middle-33')) return '1fr';
-                          if (zone.includes('right-33')) return '1fr';
-                          if (zone.includes('left-50')) return '1fr';
-                          if (zone.includes('right-50')) return '1fr';
-                          return '1fr';
-                        }).join(' ')
-                      }}>
-                        {section.multiFieldData.map((field: any, index: number) => (
-                          <div key={field.key} className="flex flex-col self-center">
-                            {field.displayAssetTitle && field.assetTitle && (
-                              <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                {field.assetTitle}
-                              </h4>
-                            )}
-                            <AssetRenderEngine
-                              type={field.type}
-                              data={field.data}
-                            />
-                          </div>
-                        ))}
+                      <div className="flex flex-col gap-6 w-full">
+                        {/* Group fields by row based on layoutZone */}
+                        {(() => {
+                          const rows: any[][] = [];
+                          let currentRow: any[] = [];
+                          let currentRowType: string | null = null;
+
+                          section.multiFieldData.forEach((field: any) => {
+                            const zone = field.layoutZone || 'full';
+                            
+                            // Determine row type based on zone
+                            let rowType = 'full';
+                            if (zone.includes('left-70') || zone.includes('right-30')) {
+                              rowType = '70-30';
+                            } else if (zone.includes('left-50') || zone.includes('right-50')) {
+                              rowType = '50-50';
+                            } else if (zone.includes('left-33') || zone.includes('middle-33') || zone.includes('right-33')) {
+                              rowType = '33-33-33';
+                            }
+
+                            // Start new row if:
+                            // 1. Row type changes
+                            // 2. Full width item
+                            // 3. 70-30 row has 2 items
+                            // 4. 50-50 row has 2 items
+                            // 5. 33-33-33 row has 3 items
+                            if (
+                              (currentRowType && currentRowType !== rowType) ||
+                              rowType === 'full' ||
+                              (currentRowType === '70-30' && currentRow.length >= 2) ||
+                              (currentRowType === '50-50' && currentRow.length >= 2) ||
+                              (currentRowType === '33-33-33' && currentRow.length >= 3)
+                            ) {
+                              if (currentRow.length > 0) {
+                                rows.push([...currentRow]);
+                              }
+                              currentRow = [];
+                              currentRowType = null;
+                            }
+
+                            currentRow.push(field);
+                            currentRowType = rowType;
+
+                            // Full width items complete their own row
+                            if (rowType === 'full') {
+                              rows.push([...currentRow]);
+                              currentRow = [];
+                              currentRowType = null;
+                            }
+                          });
+
+                          // Add remaining row
+                          if (currentRow.length > 0) {
+                            rows.push(currentRow);
+                          }
+
+                          return rows.map((row, rowIndex) => {
+                            const firstZone = row[0]?.layoutZone || 'full';
+                            let gridCols = 'grid-cols-1';
+                            
+                            if (firstZone.includes('left-33') || firstZone.includes('middle-33') || firstZone.includes('right-33')) {
+                              gridCols = 'grid-cols-3';
+                            } else if (firstZone.includes('left-50') || firstZone.includes('right-50')) {
+                              gridCols = 'grid-cols-2';
+                            } else if (firstZone.includes('left-70') || firstZone.includes('right-30')) {
+                              gridCols = 'grid-cols-[2.33fr_1fr]';
+                            }
+
+                            return (
+                              <div key={rowIndex} className={`grid ${gridCols} gap-6 items-start w-full`}>
+                                {row.map((field: any, fieldIndex: number) => {
+                                  const alignment = field.alignment || 'left';
+                                  const alignmentClass = alignment === 'center' ? 'text-center' : alignment === 'right' ? 'text-right' : 'text-left';
+                                  
+                                  return (
+                                    <div key={field.key} className={`flex flex-col ${alignmentClass}`}>
+                                      {field.displayAssetTitle && field.assetTitle && (
+                                        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                          {field.assetTitle}
+                                        </h4>
+                                      )}
+                                      <AssetRenderEngine
+                                        type={field.type}
+                                        data={field.data}
+                                      />
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          });
+                        })()}
                       </div>
                     ) : (
                       /* Single field section: Render normally */

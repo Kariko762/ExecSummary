@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save, Eye, Upload, ChevronLeft, ChevronRight, ChevronDown, Check, Lock, Unlock, EyeOff, Code2, Copy, CheckCheck, CheckCircle, Shield, ShieldOff, HelpCircle } from 'lucide-react';
+import { X, Save, Eye, Upload, ChevronLeft, ChevronRight, ChevronDown, Check, Lock, Unlock, EyeOff, Code2, Copy, CheckCheck, CheckCircle, Shield, ShieldOff, HelpCircle, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { summarySchema } from '@shared/schemas/summarySchema';
 import { buildFieldSchema } from '../schemas/assetDataStore';
 import { AssetRenderEngine } from '../renderers/assetRenderEngine';
@@ -297,6 +297,67 @@ export default function EditorModalV2({
                       title={editedData[`_${fieldKey}_displayAssetTitle`] !== false ? 'Asset title visible' : 'Asset title hidden'}
                     >
                       Title {editedData[`_${fieldKey}_displayAssetTitle`] !== false ? '✓' : '✗'}
+                    </div>
+                    
+                    {/* Alignment Buttons */}
+                    <div className="flex gap-0.5" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const alignKey = `_${fieldKey}_alignment`;
+                          setEditedData((prev: any) => ({
+                            ...prev,
+                            [alignKey]: 'left'
+                          }));
+                          setIsDirty(true);
+                        }}
+                        className={`p-1 rounded transition-colors ${
+                          (editedData[`_${fieldKey}_alignment`] || 'left') === 'left'
+                            ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`}
+                        title="Align Left"
+                      >
+                        <AlignLeft className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const alignKey = `_${fieldKey}_alignment`;
+                          setEditedData((prev: any) => ({
+                            ...prev,
+                            [alignKey]: 'center'
+                          }));
+                          setIsDirty(true);
+                        }}
+                        className={`p-1 rounded transition-colors ${
+                          editedData[`_${fieldKey}_alignment`] === 'center'
+                            ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`}
+                        title="Align Center"
+                      >
+                        <AlignCenter className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const alignKey = `_${fieldKey}_alignment`;
+                          setEditedData((prev: any) => ({
+                            ...prev,
+                            [alignKey]: 'right'
+                          }));
+                          setIsDirty(true);
+                        }}
+                        className={`p-1 rounded transition-colors ${
+                          editedData[`_${fieldKey}_alignment`] === 'right'
+                            ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`}
+                        title="Align Right"
+                      >
+                        <AlignRight className="w-3 h-3" />
+                      </button>
                     </div>
                     
                     <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
@@ -1374,6 +1435,99 @@ export default function EditorModalV2({
                               {editedData[`_${activeSection.id}_displayTitle`] !== false ? 'T' : 'T̶'}
                             </span>
                           </button>
+                          
+                          {/* Alignment Buttons - Sets alignment for ALL assets in section */}
+                          {(() => {
+                            // Determine current alignment state for highlighting
+                            const indexedFieldPattern = new RegExp(`^${activeSection.id}_(\\d+)$`);
+                            const indexedFields = Object.keys(editedData).filter(key => indexedFieldPattern.test(key) && !key.startsWith('_'));
+                            
+                            let currentAlignment = 'left'; // default
+                            if (indexedFields.length > 1) {
+                              // Multi-field: check first field's alignment (after setting all, they should match)
+                              currentAlignment = editedData[`_${indexedFields[0]}_alignment`] || 'left';
+                            } else {
+                              // Single-field: check section alignment
+                              currentAlignment = editedData[`_${activeSection.id}_alignment`] || 'left';
+                            }
+                            
+                            return (
+                              <>
+                                <button
+                                  onClick={() => {
+                                    setEditedData((prev: any) => {
+                                      const updates: any = {};
+                                      if (indexedFields.length > 1) {
+                                        indexedFields.forEach(fieldKey => {
+                                          updates[`_${fieldKey}_alignment`] = 'left';
+                                        });
+                                      } else {
+                                        updates[`_${activeSection.id}_alignment`] = 'left';
+                                      }
+                                      return { ...prev, ...updates };
+                                    });
+                                    setIsDirty(true);
+                                  }}
+                                  className={`p-1.5 rounded-lg transition-colors ${
+                                    currentAlignment === 'left'
+                                      ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                                      : 'bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500'
+                                  }`}
+                                  title="Align Left (all assets in section)"
+                                >
+                                  <AlignLeft className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setEditedData((prev: any) => {
+                                      const updates: any = {};
+                                      if (indexedFields.length > 1) {
+                                        indexedFields.forEach(fieldKey => {
+                                          updates[`_${fieldKey}_alignment`] = 'center';
+                                        });
+                                      } else {
+                                        updates[`_${activeSection.id}_alignment`] = 'center';
+                                      }
+                                      return { ...prev, ...updates };
+                                    });
+                                    setIsDirty(true);
+                                  }}
+                                  className={`p-1.5 rounded-lg transition-colors ${
+                                    currentAlignment === 'center'
+                                      ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                                      : 'bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500'
+                                  }`}
+                                  title="Align Center (all assets in section)"
+                                >
+                                  <AlignCenter className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setEditedData((prev: any) => {
+                                      const updates: any = {};
+                                      if (indexedFields.length > 1) {
+                                        indexedFields.forEach(fieldKey => {
+                                          updates[`_${fieldKey}_alignment`] = 'right';
+                                        });
+                                      } else {
+                                        updates[`_${activeSection.id}_alignment`] = 'right';
+                                      }
+                                      return { ...prev, ...updates };
+                                    });
+                                    setIsDirty(true);
+                                  }}
+                                  className={`p-1.5 rounded-lg transition-colors ${
+                                    currentAlignment === 'right'
+                                      ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                                      : 'bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-500 hover:bg-gray-300 dark:hover:bg-gray-500'
+                                  }`}
+                                  title="Align Right (all assets in section)"
+                                >
+                                  <AlignRight className="w-4 h-4" />
+                                </button>
+                              </>
+                            );
+                          })()}
                         </div>
                       </div>
                       

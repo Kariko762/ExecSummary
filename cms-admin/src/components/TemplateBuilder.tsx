@@ -1128,7 +1128,30 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
         : 'Template needs at least one content section'
     });
 
-    // Check 4: All sections have fields
+    // Check 4: All sections have been renamed from defaults
+    const unnamedSections = sections.filter(s => {
+      // Skip header section
+      if (s.id === 'section-header') return false;
+      
+      // Check for default patterns like "Section 0", "Section 1", etc.
+      const sectionPattern = /^Section \d+$/;
+      
+      // Check for layout asset default patterns like "Status Board 1", "Timeline 1", etc.
+      // Extract just the trailing number pattern
+      const layoutAssetPattern = /\s+\d+$/;
+      
+      return sectionPattern.test(s.name) || layoutAssetPattern.test(s.name);
+    });
+    const allSectionsNamed = unnamedSections.length === 0;
+    results.push({
+      check: 'Section Names',
+      passed: allSectionsNamed,
+      message: allSectionsNamed 
+        ? 'All sections have meaningful names' 
+        : `Unnamed sections detected: ${unnamedSections.map(s => s.name).join(', ')}. Please rename sections to describe their content.`
+    });
+
+    // Check 6: All sections have fields
     const emptySections = sections.filter(s => s.fields.length === 0);
     const noEmptySections = emptySections.length === 0;
     results.push({
@@ -1139,7 +1162,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
         : `Empty sections: ${emptySections.map(s => s.name).join(', ')}`
     });
 
-    // Check 5: All field keys are unique
+    // Check 7: All field keys are unique
     const allKeys = sections.flatMap(s => s.fields.map(f => f.key));
     const uniqueKeys = new Set(allKeys);
     const allKeysUnique = allKeys.length === uniqueKeys.size;
@@ -1151,7 +1174,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
         : 'Duplicate field keys detected - each field must have a unique key'
     });
 
-    // Check 6: All fields have valid schemas
+    // Check 8: All fields have valid schemas
     let allSchemasValid = true;
     let invalidSchemas: string[] = [];
     sections.forEach(section => {

@@ -22,6 +22,7 @@ app.use('/api/auth', authRoutes);
 
 // Path to data directory
 const DATA_DIR = path.join(__dirname, '../src/data');
+const CONTENT_DIR = path.join(__dirname, 'data', 'content'); // Unified content directory
 const TAGS_FILE = path.join(__dirname, 'data', 'content-tags.json');
 const COMMENTS_FILE = path.join(__dirname, 'data', 'comments.json');
 
@@ -54,6 +55,93 @@ async function listFiles(directory) {
     throw new Error(`Failed to list files: ${error.message}`);
   }
 }
+
+// ============================================
+// UNIFIED CONTENT ENDPOINTS (Tag-Based)
+// ============================================
+
+// GET all content (with optional tag filtering)
+app.get('/api/content', async (req, res) => {
+  try {
+    const { tag } = req.query;
+    const files = await listFiles(CONTENT_DIR);
+    
+    const allContent = await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(CONTENT_DIR, file);
+        return await readJSONFile(filePath);
+      })
+    );
+    
+    // Filter by tag if provided
+    const filteredContent = tag 
+      ? allContent.filter(item => item._contentTag === tag)
+      : allContent;
+    
+    // Sort by date (newest first)
+    filteredContent.sort((a, b) => {
+      const dateA = new Date(a.date || a.lastUpdated || a.updatedAt || 0);
+      const dateB = new Date(b.date || b.lastUpdated || b.updatedAt || 0);
+      return dateB - dateA;
+    });
+    
+    res.json(filteredContent);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET single content item by ID
+app.get('/api/content/:id', async (req, res) => {
+  try {
+    const filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+    const content = await readJSONFile(filePath);
+    res.json(content);
+  } catch (error) {
+    res.status(404).json({ error: 'Content not found' });
+  }
+});
+
+// POST create new content
+app.post('/api/content', async (req, res) => {
+  try {
+    const content = req.body;
+    const filePath = path.join(CONTENT_DIR, `${content.id}.json`);
+    
+    await writeJSONFile(filePath, content);
+    res.status(201).json({ message: 'Content created', data: content });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing content
+app.put('/api/content/:id', async (req, res) => {
+  try {
+    const content = req.body;
+    const filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+    
+    await writeJSONFile(filePath, content);
+    res.json({ message: 'Content updated', data: content });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE content
+app.delete('/api/content/:id', async (req, res) => {
+  try {
+    const filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+    await fs.unlink(filePath);
+    res.json({ message: 'Content deleted' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
+// LEGACY TYPE-SPECIFIC ENDPOINTS (Deprecated - kept for backwards compatibility)
+// ============================================
 
 // ============================================
 // SUMMARIES ENDPOINTS

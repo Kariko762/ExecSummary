@@ -1,7 +1,8 @@
 import React from 'react';
 import { RendererProps } from '../types/schema';
-import { DollarSign, TrendingUp, Users, ThumbsUp } from 'lucide-react';
+import { DollarSign, TrendingUp, Users, ThumbsUp, Award, Target, Star, Rocket, BarChart3, Activity, Zap, Heart, CheckCircle } from 'lucide-react';
 import { getClasses } from '../design-system';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export const MetricCardsRenderer: React.FC<RendererProps> = ({
   schema,
@@ -18,7 +19,27 @@ export const MetricCardsRenderer: React.FC<RendererProps> = ({
   const metrics = isArrayFormat ? value : (value || {});
   const fields = schema.fields || {};
 
-  const getIcon = (key: string) => {
+  const getIcon = (iconName: string | undefined, key: string) => {
+    // If explicit icon name provided, use it
+    if (iconName) {
+      const icons: Record<string, JSX.Element> = {
+        award: <Award className="w-5 h-5" />,
+        dollar: <DollarSign className="w-5 h-5" />,
+        users: <Users className="w-5 h-5" />,
+        trending: <TrendingUp className="w-5 h-5" />,
+        target: <Target className="w-5 h-5" />,
+        star: <Star className="w-5 h-5" />,
+        rocket: <Rocket className="w-5 h-5" />,
+        chart: <BarChart3 className="w-5 h-5" />,
+        activity: <Activity className="w-5 h-5" />,
+        zap: <Zap className="w-5 h-5" />,
+        heart: <Heart className="w-5 h-5" />,
+        check: <CheckCircle className="w-5 h-5" />
+      };
+      return icons[iconName] || <Award className="w-5 h-5" />;
+    }
+    
+    // Fallback to key-based icon selection
     const lowerKey = key.toLowerCase();
     if (lowerKey.includes('revenue') || lowerKey.includes('dollar')) 
       return <DollarSign className="w-5 h-5" />;
@@ -29,6 +50,31 @@ export const MetricCardsRenderer: React.FC<RendererProps> = ({
     if (lowerKey.includes('satisfaction') || lowerKey.includes('nps')) 
       return <ThumbsUp className="w-5 h-5" />;
     return <TrendingUp className="w-5 h-5" />;
+  };
+  
+  const getIconColor = (colorName: string | undefined) => {
+    if (!colorName) return undefined;
+    
+    const colors: Record<string, string> = {
+      eggplant: 'var(--fis-eggplant)',
+      raspberry: 'var(--fis-raspberry)',
+      navy: 'var(--fis-navy)',
+      green: 'var(--accent-green)',
+      stone: 'var(--fis-stone)',
+      fog: 'var(--fis-fog)'
+    };
+    return colors[colorName];
+  };
+  
+  const getCardClass = (styleName: string | undefined) => {
+    if (!styleName || styleName === 'standard') return 'metric-card';
+    
+    const styles: Record<string, string> = {
+      highlight: 'metric-card metric-card-highlight',
+      bold: 'metric-card metric-card-bold',
+      total: 'metric-card metric-card-total'
+    };
+    return styles[styleName] || 'metric-card';
   };
 
   const formatValue = (key: string, val: number) => {
@@ -48,29 +94,27 @@ export const MetricCardsRenderer: React.FC<RendererProps> = ({
 
   if (mode === 'display') {
     if (isArrayFormat) {
-      // Display array format: [{ label, value, type }]
+      // Display array format with new styling support: [{ title, value, style, icon, iconColor }]
       return (
-        <div className="flex flex-wrap justify-center gap-4">
-          {metrics.map((metric: any, index: number) => (
-            <div
-              key={index}
-              className="p-5 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm min-w-[200px]"
-            >
-              <div className="flex items-center justify-center mb-3">
-                <div className="w-10 h-10 rounded-lg bg-fis-eggplant/10 dark:bg-fis-eggplant/20 flex items-center justify-center text-fis-eggplant dark:text-fis-raspberry">
-                  {getIcon(metric.label || '')}
+        <div className="metric-grid">
+          {metrics.map((metric: any, index: number) => {
+            const cardClass = getCardClass(metric.style);
+            const iconColor = getIconColor(metric.iconColor);
+            
+            return (
+              <div key={index} className={cardClass}>
+                <div className="icon" style={iconColor ? { color: iconColor } : undefined}>
+                  {getIcon(metric.icon, metric.title || metric.label || '')}
+                </div>
+                <div className="label">
+                  {renderWithExpressions(metric.title || metric.label || '')}
+                </div>
+                <div className="value">
+                  {renderWithExpressions(String(metric.value ?? '—'))}
                 </div>
               </div>
-              <p className={`${getClasses.textMuted()} mb-1 text-center`}>
-                {metric.label}
-              </p>
-              <p className={`${getClasses.valueHeavy()} text-center`}>
-                {metric.value !== null && metric.value !== undefined 
-                  ? formatValue(metric.label || '', metric.value) 
-                  : '—'}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       );
     }

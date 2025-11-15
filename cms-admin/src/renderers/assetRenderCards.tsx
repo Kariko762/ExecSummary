@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle, Info } from 'lucide-react';
+import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle, Info, Target, Star, Rocket, BarChart3, Activity, Zap, Heart, CheckCircle } from 'lucide-react';
 
 export interface CardPatternProps {
   data: any;
@@ -23,7 +23,7 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
   
   if (mode === 'edit') {
     const addCard = () => {
-      onChange?.([...items, { title: '', value: '' }]);
+      onChange?.([...items, { title: '', value: '', style: 'standard', icon: 'award', iconColor: 'eggplant' }]);
     };
     
     const removeCard = (index: number) => {
@@ -40,6 +40,84 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
       <div>
         {items.map((item, index) => (
           <div key={index} className="edit-item-container">
+            {/* Top Control Row: Style controls + Remove button */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', padding: '6px 8px', backgroundColor: 'var(--fis-fog)', borderRadius: '8px' }}>
+              {/* Card Style Dropdown */}
+              <div style={{ maxWidth: '100px' }}>
+                <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, color: 'var(--fis-eggplant)', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'Roobert' }}>Card Style</label>
+                <select
+                  value={item.style || 'standard'}
+                  onChange={(e) => updateCard(index, 'style', e.target.value)}
+                  style={{ 
+                    width: '100%', 
+                    height: '24px', 
+                    padding: '2px 4px', 
+                    fontSize: '11px', 
+                    borderRadius: '4px', 
+                    border: '1px solid var(--fis-stone)',
+                    fontWeight: 600
+                  }}
+                >
+                  <option value="standard" style={{ background: 'white', color: 'black' }}>Standard</option>
+                  <option value="highlight" style={{ background: 'linear-gradient(135deg, #431C5B, #B21A53)', color: 'white', fontWeight: 700 }}>Highlight</option>
+                  <option value="bold" style={{ background: '#1D1F48', color: 'white', fontWeight: 700 }}>Bold</option>
+                  <option value="total" style={{ background: '#3bcd3e', color: 'white', fontWeight: 800 }}>Total</option>
+                </select>
+              </div>
+              
+              {/* Card Icon Dropdown */}
+              <div style={{ maxWidth: '100px' }}>
+                <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, color: 'var(--fis-eggplant)', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'Roobert' }}>Icon</label>
+                <select
+                  value={item.icon || 'award'}
+                  onChange={(e) => updateCard(index, 'icon', e.target.value)}
+                  style={{ width: '100%', height: '24px', padding: '2px 4px', fontSize: '11px', borderRadius: '4px', border: '1px solid var(--fis-stone)' }}
+                >
+                  <option value="award">Award</option>
+                  <option value="dollar">Dollar</option>
+                  <option value="users">Users</option>
+                  <option value="trending">Trending</option>
+                  <option value="target">Target</option>
+                  <option value="star">Star</option>
+                  <option value="rocket">Rocket</option>
+                  <option value="chart">Chart</option>
+                  <option value="activity">Activity</option>
+                  <option value="zap">Lightning</option>
+                  <option value="heart">Heart</option>
+                  <option value="check">Check</option>
+                </select>
+              </div>
+              
+              {/* Icon Colour Dropdown */}
+              <div style={{ maxWidth: '100px' }}>
+                <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, color: 'var(--fis-eggplant)', marginBottom: '3px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'Roobert' }}>Icon Colour</label>
+                <select
+                  value={item.iconColor || 'eggplant'}
+                  onChange={(e) => updateCard(index, 'iconColor', e.target.value)}
+                  style={{ width: '100%', height: '24px', padding: '2px 4px', fontSize: '11px', borderRadius: '4px', border: '1px solid var(--fis-stone)' }}
+                >
+                  <option value="eggplant">Eggplant</option>
+                  <option value="raspberry">Raspberry</option>
+                  <option value="navy">Navy</option>
+                  <option value="green">Green</option>
+                  <option value="stone">Stone</option>
+                  <option value="fog">Fog</option>
+                </select>
+              </div>
+              
+              {/* Remove Card Button (Right-aligned) */}
+              <div style={{ marginLeft: 'auto', paddingTop: '16px' }}>
+                <button
+                  className="delete-button"
+                  onClick={() => removeCard(index)}
+                  style={{ padding: '4px 10px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <X size={14} /> Remove
+                </button>
+              </div>
+            </div>
+            
+            {/* Card Content Inputs */}
             <input
               type="text"
               value={item.title || ''}
@@ -54,9 +132,6 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
               placeholder="Value..."
               style={{ marginBottom: '12px' }}
             />
-            <button className="delete-button" onClick={() => removeCard(index)} style={{ width: '100%' }}>
-              <X size={16} /> Remove Card
-            </button>
           </div>
         ))}
         <button className="primary-action" onClick={addCard}>
@@ -66,24 +141,63 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
     );
   }
   
-  // Icon mapping for display
-  const getIcon = (title: string) => {
-    const lowerTitle = title.toLowerCase();
-    if (lowerTitle.includes('revenue') || lowerTitle.includes('$')) return <DollarSign />;
-    if (lowerTitle.includes('customer') || lowerTitle.includes('user')) return <Users />;
-    if (lowerTitle.includes('growth') || lowerTitle.includes('%')) return <TrendingUp />;
-    return <Award />;
+  // Icon mapping helper
+  const getIconComponent = (iconName: string) => {
+    const icons: Record<string, React.ReactNode> = {
+      award: <Award />,
+      dollar: <DollarSign />,
+      users: <Users />,
+      trending: <TrendingUp />,
+      target: <Target />,
+      star: <Star />,
+      rocket: <Rocket />,
+      chart: <BarChart3 />,
+      activity: <Activity />,
+      zap: <Zap />,
+      heart: <Heart />,
+      check: <CheckCircle />
+    };
+    return icons[iconName] || <Award />;
+  };
+  
+  // Color mapping helper
+  const getColorVar = (colorName: string) => {
+    const colors: Record<string, string> = {
+      eggplant: 'var(--fis-eggplant)',
+      raspberry: 'var(--fis-raspberry)',
+      navy: 'var(--fis-navy)',
+      green: 'var(--accent-green)',
+      stone: 'var(--fis-stone)',
+      fog: 'var(--fis-fog)'
+    };
+    return colors[colorName] || 'var(--fis-eggplant)';
+  };
+  
+  // Style class mapping helper
+  const getStyleClass = (styleName: string) => {
+    const styles: Record<string, string> = {
+      standard: '',
+      highlight: 'metric-card-highlight',
+      bold: 'metric-card-bold',
+      total: 'metric-card-total'
+    };
+    return styles[styleName] || '';
   };
   
   return (
     <div className="metric-grid">
-      {items.map((item, index) => (
-        <div key={index} className="metric-card">
-          <div className="icon">{getIcon(item.title)}</div>
-          <div className="label">{item.title}</div>
-          <div className="value">{item.value}</div>
-        </div>
-      ))}
+      {items.map((item, index) => {
+        const styleClass = getStyleClass(item.style || 'standard');
+        const iconColor = getColorVar(item.iconColor || 'eggplant');
+        
+        return (
+          <div key={index} className={`metric-card ${styleClass}`}>
+            <div className="icon" style={{ color: iconColor }}>{getIconComponent(item.icon || 'award')}</div>
+            <div className="label">{item.title}</div>
+            <div className="value">{item.value}</div>
+          </div>
+        );
+      })}
     </div>
   );
 };

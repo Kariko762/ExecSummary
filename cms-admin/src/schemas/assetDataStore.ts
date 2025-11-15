@@ -295,7 +295,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     name: 'Metric Card',
     type: 'metricCard',
     category: 'charts',
-    description: 'Single metric with icon, label, and large value display',
+    description: 'Single metric with icon, label, and large value display. Supports 4 styles (Standard/Highlight/Bold/Total), 12 icons, and 6 DSM colors.',
     useCase: 'Key Metrics section - Revenue $1,230,000, Customers 263, Growth +48%',
     schema: {
       type: 'array',
@@ -304,14 +304,17 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       required: false,
       fields: {
         title: { type: 'string', renderAs: 'text', label: 'Title' },
-        value: { type: 'string', renderAs: 'text', label: 'Value' }
+        value: { type: 'string', renderAs: 'text', label: 'Value' },
+        style: { type: 'string', renderAs: 'select', label: 'Card Style', options: ['standard', 'highlight', 'bold', 'total'] },
+        icon: { type: 'string', renderAs: 'select', label: 'Icon', options: ['award', 'dollar', 'users', 'trending', 'target', 'star', 'rocket', 'chart', 'activity', 'zap', 'heart', 'check'] },
+        iconColor: { type: 'string', renderAs: 'select', label: 'Icon Color', options: ['eggplant', 'raspberry', 'navy', 'green', 'stone', 'fog'] }
       }
     },
     exampleData: [
-      { title: 'Revenue', value: '$1,230,000' },
-      { title: 'Customers', value: '263' },
-      { title: 'Growth', value: '+48%' },
-      { title: 'NPS Score', value: '0' }
+      { title: 'Revenue', value: '$1,230,000', style: 'highlight', icon: 'dollar', iconColor: 'green' },
+      { title: 'Customers', value: '263', style: 'standard', icon: 'users', iconColor: 'navy' },
+      { title: 'Growth', value: '+48%', style: 'bold', icon: 'trending', iconColor: 'green' },
+      { title: 'NPS Score', value: '0', style: 'total', icon: 'award', iconColor: 'eggplant' }
     ],
     supportsMultiColumn: false,
     styling: {

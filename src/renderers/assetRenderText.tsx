@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import { renderWithExpressions } from '../utils/expressionParser';
 
 export interface TextPatternProps {
   data: any;
@@ -30,7 +29,7 @@ export const TextPattern: React.FC<TextPatternProps> = ({ data, onChange, mode }
     );
   }
   
-  return <span>{renderWithExpressions(data || '')}</span>;
+  return <span>{data}</span>;
 };
 
 // ==========================================
@@ -49,7 +48,7 @@ export const TextareaPattern: React.FC<TextPatternProps> = ({ data, onChange, mo
     );
   }
   
-  return <p>{renderWithExpressions(data || '')}</p>;
+  return <p>{data}</p>;
 };
 
 // ==========================================
@@ -68,7 +67,19 @@ export const RichTextPattern: React.FC<TextPatternProps> = ({ data, onChange, mo
     );
   }
   
-  return <div className="rich-text">{renderWithExpressions(data || '')}</div>;
+  // Simple markdown parser (bold, italic)
+  const renderRichText = (text: string) => {
+    if (!text) return null;
+    
+    // Replace **bold** with <strong>
+    let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Replace *italic* with <em>
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    return <div dangerouslySetInnerHTML={{ __html: formatted }} />;
+  };
+  
+  return renderRichText(data);
 };
 
 // ==========================================
@@ -88,9 +99,11 @@ export const QuotePattern: React.FC<TextPatternProps> = ({ data, onChange, mode 
   }
   
   return (
-    <blockquote>
-      <p>{renderWithExpressions(data || '')}</p>
-    </blockquote>
+    <div className="quote-wrapper">
+      <blockquote className="quote-display">
+        {data}
+      </blockquote>
+    </div>
   );
 };
 
@@ -112,8 +125,10 @@ export const CodeBlockPattern: React.FC<TextPatternProps> = ({ data, onChange, m
   }
   
   return (
-    <pre>
-      <code>{data}</code>
-    </pre>
+    <div className="code-wrapper">
+      <pre className="code-display">
+        <code>{data}</code>
+      </pre>
+    </div>
   );
 };

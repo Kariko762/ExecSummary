@@ -279,20 +279,22 @@ export const ProgressBarListPattern: React.FC<ListPatternProps> = ({ data, onCha
   return (
     <div className="progress-list">
       {items.map((item, index) => {
-        const statusClass = item.status?.toLowerCase().replace(' ', '-');
+        const status = item.status || '';
+        const statusClass = status.toLowerCase().replace(/\s+/g, '-');
+        console.log('Progress bar status:', status, '-> class:', statusClass);
         return (
           <div key={index} className={`progress-item ${statusClass}`}>
-            <div className="progress-header">
-              <div className="progress-title">{item.title}</div>
-              <div className={`progress-status status-${statusClass}`}>
+            <div className="header">
+              <span className="title">{item.title}</span>
+              <span className={`badge status-${statusClass}`}>
                 {item.status}
-              </div>
+              </span>
             </div>
-            {item.subtitle && <div className="progress-subtitle">{item.subtitle}</div>}
+            {item.subtitle && <div className="subtitle">{item.subtitle}</div>}
             <div className="progress-bar-container">
-              <div className="progress-bar-fill" style={{ width: `${item.percentage}%` }}></div>
+              <div className="progress-bar" style={{ width: `${item.percentage}%` }}></div>
             </div>
-            <div className="progress-percentage">{item.percentage}% complete</div>
+            <div className="percentage">{item.percentage}% complete</div>
           </div>
         );
       })}
