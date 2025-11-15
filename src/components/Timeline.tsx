@@ -171,7 +171,7 @@ export const Timeline: React.FC<TimelineProps> = ({
                       </defs>
                       {/* Geometric shapes using raspberry color */}
                       <circle cx="15%" cy="15%" r="50" fill={`url(#timeline-fade-${summary.id})`} />
-                      <polygon points="80,10 110,30 110,70 80,90 50,70 50,30" fill={`url(#timeline-fade-${summary.id})`} transform="translate(60%, 10%)" />
+                      <polygon points="80,10 110,30 110,70 80,90 50,70 50,30" fill={`url(#timeline-fade-${summary.id})`} transform="translate(250, 20)" />
                       <rect x="10%" y="70%" width="45" height="45" fill={`url(#timeline-fade-${summary.id})`} transform="rotate(20)" />
                       <circle cx="85%" cy="80%" r="60" fill={`url(#timeline-fade-${summary.id})`} />
                     </svg>

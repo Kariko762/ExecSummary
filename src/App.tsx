@@ -461,7 +461,7 @@ function App() {
                                           <circle cx="10%" cy="10%" r="70" fill={`url(#init-fade-${initiative.id})`} />
                                           <circle cx="85%" cy="15%" r="60" fill={`url(#init-fade-${initiative.id})`} />
                                           <polygon points="0,0 50,0 25,50" fill={`url(#init-fade-${initiative.id})`} transform="translate(20, 150)" />
-                                          <polygon points="100,0 150,25 150,75 100,100 50,75 50,25" fill={`url(#init-fade-${initiative.id})`} transform="translate(70%, 70%)" />
+                                          <polygon points="100,0 150,25 150,75 100,100 50,75 50,25" fill={`url(#init-fade-${initiative.id})`} transform="translate(280, 140)" />
                                         </svg>
                                       </div>
                                       

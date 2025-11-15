@@ -6,6 +6,7 @@ export default {
   ],
   darkMode: 'class',
   theme: {
+    colorFormat: 'rgb', // Force RGB format instead of oklch for html2canvas compatibility
     extend: {
       fontFamily: {
         'sans': ['Roobert', 'system-ui', 'sans-serif'],
