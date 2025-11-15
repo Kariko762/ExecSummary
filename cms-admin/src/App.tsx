@@ -91,6 +91,8 @@ function App() {
   const [allComments, setAllComments] = useState<any[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{id: string, item: any} | null>(null);
+  const [showEditWarningModal, setShowEditWarningModal] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState<any>(null);
 
   // Check system settings for auth requirement
   useEffect(() => {
@@ -301,15 +303,24 @@ function App() {
   };
 
   const handleEditItem = (item: any, type: 'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories') => {
-    // Warn if editing a live summary
-    if (type === 'summaries' && item.status === 'published') {
-      if (!confirm('⚠️ WARNING: This summary is LIVE and published.\n\nAny changes you make will be immediately visible to users.\n\nDo you want to continue editing?')) {
-        return;
-      }
+    // Warn if editing published content
+    if (item.status === 'published') {
+      setItemToEdit(item);
+      setShowEditWarningModal(true);
+      return;
     }
     
     setSelectedItem(item);
     setModalOpen(true);
+  };
+
+  const confirmEdit = () => {
+    if (itemToEdit) {
+      setSelectedItem(itemToEdit);
+      setModalOpen(true);
+      setShowEditWarningModal(false);
+      setItemToEdit(null);
+    }
   };
 
   // Format ISO date to readable short format
@@ -760,7 +771,7 @@ function App() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <h3 className="font-roobert-semibold text-lg text-gray-900 dark:text-white">
-                          {item.quarter || item.name || item.displayName} {item.year || ''}
+                          {item.title || item.displayName || item.name || 'Untitled'}
                         </h3>
                         {item.status && (
                           <span className={`px-2 py-0.5 rounded text-xs font-roobert-bold uppercase ${
@@ -775,7 +786,7 @@ function App() {
                     </div>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
-                    {item.title || (item.demoStudio ? `${item.demoStudio.demosRegistered} Demos Registered` : item.lastUpdated ? formatDate(item.lastUpdated) : 'No description')}
+                    {item.quarter && item.year ? `${item.quarter} ${item.year}` : (item.date || (item.lastUpdated ? formatDate(item.lastUpdated) : 'No date'))}
                   </p>
                   <div className="flex items-center gap-2 flex-wrap">
                     {/* Tag Badge */}
@@ -945,7 +956,7 @@ function App() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Name</th>
+                      <th className="text-left text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Title</th>
                       <th className="text-center text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Date</th>
                       <th className="text-center text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">Status</th>
                       <th className="text-center text-sm font-medium text-gray-700 dark:text-gray-300 pb-3 pr-4">% Complete</th>
@@ -975,7 +986,7 @@ function App() {
                           className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors"
                         >
                           <td className="py-3 pr-4 text-sm font-light text-gray-900 dark:text-gray-100">
-                            {item.quarter || item.name || item.displayName} {item.year || ''}
+                            {item.title || item.displayName || item.name || 'Untitled'}
                           </td>
                           <td className="py-3 pr-4 text-xs font-light text-gray-500 dark:text-gray-400 text-center">
                             {item.date || (item.lastUpdated ? formatDate(item.lastUpdated) : 'N/A')}
@@ -1556,6 +1567,53 @@ function App() {
                     className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-roobert-semibold transition-colors"
                   >
                     Delete
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          )}
+
+          {/* Edit Warning Modal */}
+          {showEditWarningModal && (
+            <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+              >
+                <div className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                        Edit Published Content
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                        ⚠️ <strong>WARNING:</strong> This content is <span className="text-green-600 dark:text-green-400 font-roobert-semibold">LIVE</span> and published.
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Any changes you make will be <strong>immediately visible to users</strong>.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+                  <button
+                    onClick={() => {
+                      setShowEditWarningModal(false);
+                      setItemToEdit(null);
+                    }}
+                    className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmEdit}
+                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-roobert-semibold transition-all"
+                  >
+                    Continue Editing
                   </button>
                 </div>
               </motion.div>

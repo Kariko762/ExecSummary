@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X, FileText, Tag } from 'lucide-react';
+import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X, FileText, Tag, Building2, Target, Plus, Trash2, Edit } from 'lucide-react';
 import { ChangeManagementModal } from './ChangeManagementModal';
 import ContentTagManager from './ContentTagManager';
 
@@ -70,6 +70,13 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   const [activeTab, setActiveTab] = useState<'general' | 'authentication' | 'users' | 'security' | 'documentation'>('general');
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [showChangeManagement, setShowChangeManagement] = useState(false);
+  
+  // Tenant management states
+  const [organizations, setOrganizations] = useState<any[]>([]);
+  const [initiatives, setInitiatives] = useState<any[]>([]);
+  const [showCreateOrgModal, setShowCreateOrgModal] = useState(false);
+  const [showCreateInitiativeModal, setShowCreateInitiativeModal] = useState(false);
+  const [tenantToDelete, setTenantToDelete] = useState<{type: 'org' | 'initiative', slug: string, name: string} | null>(null);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -172,6 +179,69 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
     onNotification?.('success', 'Logo removed (not saved yet)');
   };
 
+  // Tenant Management Functions
+  const fetchTenants = async (type: 'org' | 'initiative') => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/tenants?type=${type}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (type === 'org') setOrganizations(data);
+        else setInitiatives(data);
+      }
+    } catch (error) {
+      console.error(`Failed to fetch ${type}s:`, error);
+    }
+  };
+
+  const createTenant = async (type: 'org' | 'initiative', name: string, description: string) => {
+    try {
+      const response = await fetch('http://localhost:3001/api/tenants', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, name, description }),
+      });
+
+      if (response.ok) {
+        onNotification?.('success', `${type === 'org' ? 'Organization' : 'Initiative'} created successfully!`);
+        fetchTenants(type);
+        setShowCreateOrgModal(false);
+        setShowCreateInitiativeModal(false);
+      } else {
+        const error = await response.json();
+        onNotification?.('error', error.error || 'Failed to create tenant');
+      }
+    } catch (error) {
+      onNotification?.('error', 'Failed to create tenant');
+    }
+  };
+
+  const deleteTenant = async () => {
+    if (!tenantToDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/tenants/${tenantToDelete.type}/${tenantToDelete.slug}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        onNotification?.('success', `${tenantToDelete.type === 'org' ? 'Organization' : 'Initiative'} deleted successfully!`);
+        fetchTenants(tenantToDelete.type);
+        setTenantToDelete(null);
+      } else {
+        const error = await response.json();
+        onNotification?.('error', error.error || 'Failed to delete tenant');
+      }
+    } catch (error) {
+      onNotification?.('error', 'Failed to delete tenant');
+    }
+  };
+
+  // Load tenants on mount
+  useEffect(() => {
+    fetchTenants('org');
+    fetchTenants('initiative');
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 overflow-auto">
       {/* Header */}
@@ -262,6 +332,128 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
       <div className="max-w-7xl mx-auto px-6 py-8">
         {activeTab === 'general' && (
           <div className="space-y-6">
+            {/* Organizations Section */}
+            <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                    <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Organizations</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Manage organizational content tenants</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowCreateOrgModal(true)}
+                  className="flex items-center justify-center gap-2 px-6 py-2.5 min-w-[200px] bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white rounded-lg font-roobert-medium hover:shadow-lg transition-all"
+                >
+                  <Plus className="w-4 h-4" />
+                  Create Organization
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {organizations.map((org) => (
+                  <div key={org.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3">
+                        <h4 className="font-roobert-semibold text-gray-900 dark:text-white">{org.name}</h4>
+                        <span className="text-xs px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-roobert-medium">
+                          {org.slug}
+                        </span>
+                      </div>
+                      {org.description && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{org.description}</p>
+                      )}
+                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        <span>{org.contentCount} content items</span>
+                        <span className="text-green-600 dark:text-green-400">{org.publishedCount} published</span>
+                        <span className="text-yellow-600 dark:text-yellow-400">{org.draftCount} draft</span>
+                        <span>Created {org.createdDate}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setTenantToDelete({ type: 'org', slug: org.slug, name: org.name })}
+                      disabled={org.contentCount > 0}
+                      className={`p-2 rounded-lg transition-colors ${
+                        org.contentCount > 0
+                          ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                          : 'text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
+                      }`}
+                      title={org.contentCount > 0 ? 'Cannot delete: contains content' : 'Delete organization'}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                {organizations.length === 0 && (
+                  <p className="text-center py-8 text-gray-500 dark:text-gray-400">No organizations created yet</p>
+                )}
+              </div>
+            </div>
+
+            {/* Initiatives Section */}
+            <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                    <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Strategic Initiatives</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Manage initiative/project content tenants</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowCreateInitiativeModal(true)}
+                  className="flex items-center justify-center gap-2 px-6 py-2.5 min-w-[200px] bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg font-roobert-medium hover:shadow-lg transition-all"
+                >
+                  <Plus className="w-4 h-4" />
+                  Create Initiative
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {initiatives.map((initiative) => (
+                  <div key={initiative.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3">
+                        <h4 className="font-roobert-semibold text-gray-900 dark:text-white">{initiative.name}</h4>
+                        <span className="text-xs px-2 py-1 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-roobert-medium">
+                          {initiative.slug}
+                        </span>
+                      </div>
+                      {initiative.description && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{initiative.description}</p>
+                      )}
+                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                        <span>{initiative.contentCount} content items</span>
+                        <span className="text-green-600 dark:text-green-400">{initiative.publishedCount} published</span>
+                        <span className="text-yellow-600 dark:text-yellow-400">{initiative.draftCount} draft</span>
+                        <span>Created {initiative.createdDate}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setTenantToDelete({ type: 'initiative', slug: initiative.slug, name: initiative.name })}
+                      disabled={initiative.contentCount > 0}
+                      className={`p-2 rounded-lg transition-colors ${
+                        initiative.contentCount > 0
+                          ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                          : 'text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
+                      }`}
+                      title={initiative.contentCount > 0 ? 'Cannot delete: contains content' : 'Delete initiative'}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                {initiatives.length === 0 && (
+                  <p className="text-center py-8 text-gray-500 dark:text-gray-400">No initiatives created yet</p>
+                )}
+              </div>
+            </div>
+
             {/* Content Tags Section */}
             <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700">
               <ContentTagManager />
@@ -312,6 +504,172 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
       {showChangeManagement && (
         <ChangeManagementModal onClose={() => setShowChangeManagement(false)} />
       )}
+
+      {/* Create Organization Modal */}
+      {showCreateOrgModal && (
+        <TenantCreateModal
+          type="org"
+          title="Create Organization"
+          onClose={() => setShowCreateOrgModal(false)}
+          onCreate={createTenant}
+        />
+      )}
+
+      {/* Create Initiative Modal */}
+      {showCreateInitiativeModal && (
+        <TenantCreateModal
+          type="initiative"
+          title="Create Initiative"
+          onClose={() => setShowCreateInitiativeModal(false)}
+          onCreate={createTenant}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {tenantToDelete && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+          >
+            <div className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+                  <Trash2 className="w-6 h-6 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                    Delete {tenantToDelete.type === 'org' ? 'Organization' : 'Initiative'}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Are you sure you want to delete <strong>{tenantToDelete.name}</strong>? This action cannot be undone.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+              <button
+                onClick={() => setTenantToDelete(null)}
+                className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteTenant}
+                className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-roobert-semibold transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Tenant Create Modal Component
+function TenantCreateModal({
+  type,
+  title,
+  onClose,
+  onCreate
+}: {
+  type: 'org' | 'initiative';
+  title: string;
+  onClose: () => void;
+  onCreate: (type: 'org' | 'initiative', name: string, description: string) => void;
+}) {
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleSubmit = () => {
+    if (!name.trim()) return;
+    onCreate(type, name, description);
+    setName('');
+    setDescription('');
+  };
+
+  return (
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden"
+      >
+        <div className="p-6">
+          <div className="flex items-start gap-4 mb-6">
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+              type === 'org' ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-purple-100 dark:bg-purple-900/30'
+            }`}>
+              {type === 'org' ? (
+                <Building2 className={`w-6 h-6 ${type === 'org' ? 'text-blue-600 dark:text-blue-400' : 'text-purple-600 dark:text-purple-400'}`} />
+              ) : (
+                <Target className={`w-6 h-6 text-purple-600 dark:text-purple-400`} />
+              )}
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-1">
+                {title}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Create a new {type === 'org' ? 'organization' : 'initiative'} tenant for content management
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Name *
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                placeholder={`e.g., ${type === 'org' ? 'Fabrikam Inc.' : 'Digital Transformation'}`}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+                autoFocus
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Description (optional)
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder={`e.g., ${type === 'org' ? 'Global technology solutions provider' : 'Enterprise-wide digital modernization initiative'}`}
+                rows={3}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white resize-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!name.trim()}
+            className={`px-4 py-2 rounded-lg font-roobert-semibold transition-colors ${
+              type === 'org'
+                ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white hover:shadow-lg'
+                : 'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:shadow-lg'
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            Create {type === 'org' ? 'Organization' : 'Initiative'}
+          </button>
+        </div>
+      </motion.div>
     </div>
   );
 }

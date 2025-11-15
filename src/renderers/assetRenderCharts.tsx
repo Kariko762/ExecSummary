@@ -113,10 +113,6 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
   if (!isArray && data) {
     // Single ring display (legacy format)
     const percentage = Number(data?.percentage || 0);
-    const chartData = [
-      { name: data?.label || 'Progress', value: percentage, fill: '#8884d8' },
-      { name: 'Remaining', value: 100 - percentage, fill: '#e0e0e0' }
-    ];
     
     const getColor = (status: string) => {
       switch(status) {
@@ -127,6 +123,12 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
       }
     };
     
+    // Create data with max value of 100 to force proper scaling
+    const chartData = [
+      { name: data?.label || 'Progress', value: percentage, fill: getColor(data?.status) },
+      { name: 'Scale', value: 100, fill: 'transparent' } // Force 100% scale
+    ];
+    
     return (
       <div className="radial-chart">
         <ResponsiveContainer width="100%" height={200}>
@@ -135,7 +137,7 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
             cy="50%" 
             innerRadius="60%" 
             outerRadius="90%" 
-            data={[{ ...chartData[0], fill: getColor(data?.status) }]}
+            data={chartData}
             startAngle={90}
             endAngle={-270}
           >
@@ -156,11 +158,16 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
   }
   
   // Multi-ring display
-  const chartData = items.map((item, index) => ({
-    name: String(item.name || item.label || 'Item ' + (index + 1)),
-    value: Number(item.value || item.percentage || 0),
-    fill: COLORS[index % COLORS.length]
-  }));
+  const maxValue = Math.max(...items.map(item => Number(item.value || item.percentage || 0)), 100);
+  const chartData = [
+    ...items.map((item, index) => ({
+      name: String(item.name || item.label || 'Item ' + (index + 1)),
+      value: Number(item.value || item.percentage || 0),
+      fill: COLORS[index % COLORS.length]
+    })),
+    // Add invisible max ring to force 100% scale
+    { name: 'Scale', value: 100, fill: 'transparent' }
+  ];
   
   return (
     <div className="radial-chart">

@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import authRoutes from './api/auth.js';
+import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats } from './api/tenants.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +20,13 @@ app.use(express.static('public'));
 
 // Authentication routes
 app.use('/api/auth', authRoutes);
+
+// Tenant Management Routes (Organizations & Initiatives)
+app.get('/api/tenants', getTenants);
+app.post('/api/tenants', createTenant);
+app.delete('/api/tenants/:type/:slug', deleteTenant);
+app.get('/api/tenants/:type/:slug/content', getTenantContent);
+app.get('/api/tenants/:type/:slug/stats', getTenantStats);
 
 // Path to data directory
 const DATA_DIR = path.join(__dirname, '../src/data');

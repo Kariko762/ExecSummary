@@ -185,7 +185,7 @@ export default function ContentTagManager() {
         </div>
         <button
           onClick={handleCreate}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-medium hover:shadow-lg transition-all"
+          className="flex items-center justify-center gap-2 px-6 py-2.5 min-w-[200px] rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-medium hover:shadow-lg transition-all"
         >
           <Plus className="w-4 h-4" />
           Create Tag
