@@ -248,5 +248,6 @@ export {
   createTenant,
   deleteTenant,
   getTenantContent,
-  getTenantStats
+  getTenantStats,
+  updateTenantStats
 };

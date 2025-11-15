@@ -88,6 +88,13 @@ function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
   const [showComments, setShowComments] = useState(false);
   const [activeCommentContent, setActiveCommentContent] = useState<{id: string, type: string, title: string} | null>(null);
+  
+  // Tenant content creation states
+  const [contentCreationType, setContentCreationType] = useState<'timeline' | 'performance' | 'organization' | 'initiative'>('timeline');
+  const [selectedOrgSlug, setSelectedOrgSlug] = useState<string>('');
+  const [selectedInitiativeSlug, setSelectedInitiativeSlug] = useState<string>('');
+  const [tenantOrganizations, setTenantOrganizations] = useState<any[]>([]);
+  const [tenantInitiatives, setTenantInitiatives] = useState<any[]>([]);
   const [allComments, setAllComments] = useState<any[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{id: string, item: any} | null>(null);
@@ -160,7 +167,8 @@ function App() {
       // Always fetch ALL content (unfiltered) to maintain complete list
       const response = await fetch(`${API_URL}/content`);
       if (response.ok) {
-        const content = await response.json();
+        const responseData = await response.json();
+        const content = responseData.success ? responseData.content : responseData;
         
         // Add _type field for backwards compatibility with UI
         const enrichedContent = content.map((item: any) => ({
@@ -199,8 +207,30 @@ function App() {
   useEffect(() => {
     if (showNewSummaryModal) {
       fetchTemplates();
+      fetchTenants();
     }
   }, [showNewSummaryModal]);
+
+  const fetchTenants = async () => {
+    try {
+      const [orgsRes, initiativesRes] = await Promise.all([
+        fetch('http://localhost:3001/api/tenants?type=org'),
+        fetch('http://localhost:3001/api/tenants?type=initiative')
+      ]);
+      
+      if (orgsRes.ok) {
+        const orgsData = await orgsRes.json();
+        setTenantOrganizations(orgsData);
+      }
+      
+      if (initiativesRes.ok) {
+        const initiativesData = await initiativesRes.json();
+        setTenantInitiatives(initiativesData);
+      }
+    } catch (error) {
+      console.error('Failed to fetch tenants:', error);
+    }
+  };
 
   const showNotification = (type: 'success' | 'error' | 'info' | 'warning', message: string) => {
     setNotification({ type, message });
@@ -454,6 +484,17 @@ function App() {
       return;
     }
 
+    // Validate tenant selection for org/initiative content
+    if (contentCreationType === 'organization' && !selectedOrgSlug) {
+      showNotification('error', 'Please select an organization');
+      return;
+    }
+
+    if (contentCreationType === 'initiative' && !selectedInitiativeSlug) {
+      showNotification('error', 'Please select an initiative');
+      return;
+    }
+
     try {
       // Generate ID from name and timestamp
       const timestamp = new Date().toISOString().split('T')[0];
@@ -528,9 +569,25 @@ function App() {
         quarter: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         year: new Date().getFullYear(),
         status: 'draft',
-        _contentTag: selectedTag, // Add selected tag
+        _contentTag: contentCreationType === 'performance' ? 'performance' 
+                   : contentCreationType === 'organization' ? 'organization'
+                   : contentCreationType === 'initiative' ? 'initiative'
+                   : selectedTag, // Timeline uses selected tag
         _fileExists: false // Mark as new - file will be created on first save
       };
+
+      // Add tenant metadata for org/initiative content
+      if (contentCreationType === 'organization') {
+        newSummary._tenant = {
+          type: 'org',
+          slug: selectedOrgSlug
+        };
+      } else if (contentCreationType === 'initiative') {
+        newSummary._tenant = {
+          type: 'initiative',
+          slug: selectedInitiativeSlug
+        };
+      }
 
       // Don't POST immediately - open in editor and let user save when ready
       showNotification('success', `Opening new ${creationMode === 'clone' ? 'cloned' : ''} summary in editor...`);
@@ -538,6 +595,9 @@ function App() {
       setNewSummaryName('');
       setSelectedSourceId('');
       setCreationMode('template');
+      setContentCreationType('timeline');
+      setSelectedOrgSlug('');
+      setSelectedInitiativeSlug('');
       
       // Open in editor
       setSelectedItem(newSummary);
@@ -1255,108 +1315,239 @@ function App() {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
                   onClick={(e) => e.stopPropagation()}
-                  className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full border border-gray-200 dark:border-gray-700 shadow-2xl"
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-xl w-full max-h-[85vh] overflow-y-auto border border-gray-200 dark:border-gray-700 shadow-2xl"
                 >
-                  <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-fis-eggplant to-fis-raspberry flex items-center justify-center flex-shrink-0">
-                      <Plus className="w-6 h-6 text-white" />
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fis-eggplant to-fis-raspberry flex items-center justify-center flex-shrink-0">
+                      <Plus className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-1">
+                      <h3 className="text-xl font-roobert-heavy text-gray-900 dark:text-white mb-1">
                         Create New Content
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        It will be created as a draft.
+                        Select content type and create as draft
                       </p>
                     </div>
                   </div>
 
+                  {/* Content Type Tabs */}
+                  <div className="flex gap-2 mb-4 border-b border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={() => {
+                        setContentCreationType('timeline');
+                        setSelectedTag(availableTags.find(t => t.id === 'weekly-summary')?.id || availableTags[0]?.id || '');
+                      }}
+                      className={`px-4 py-2 font-roobert-semibold text-sm transition-all relative ${
+                        contentCreationType === 'timeline'
+                          ? 'text-fis-eggplant dark:text-fis-raspberry'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                      }`}
+                    >
+                      Timeline
+                      {contentCreationType === 'timeline' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-fis-eggplant dark:bg-fis-raspberry" />
+                      )}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setContentCreationType('performance');
+                        setSelectedTag('performance'); // Auto-tag as 'performance'
+                      }}
+                      className={`px-4 py-2 font-roobert-semibold text-sm transition-all relative ${
+                        contentCreationType === 'performance'
+                          ? 'text-fis-eggplant dark:text-fis-raspberry'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                      }`}
+                    >
+                      Performance
+                      {contentCreationType === 'performance' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-fis-eggplant dark:bg-fis-raspberry" />
+                      )}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setContentCreationType('organization');
+                        setSelectedTag('organization'); // Auto-tag as 'organization'
+                      }}
+                      className={`px-4 py-2 font-roobert-semibold text-sm transition-all relative ${
+                        contentCreationType === 'organization'
+                          ? 'text-blue-600 dark:text-blue-400'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                      }`}
+                    >
+                      Organization
+                      {contentCreationType === 'organization' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
+                      )}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setContentCreationType('initiative');
+                        setSelectedTag('initiative'); // Auto-tag as 'initiative'
+                      }}
+                      className={`px-4 py-2 font-roobert-semibold text-sm transition-all relative ${
+                        contentCreationType === 'initiative'
+                          ? 'text-purple-600 dark:text-purple-400'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                      }`}
+                    >
+                      Initiative
+                      {contentCreationType === 'initiative' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 dark:bg-purple-400" />
+                      )}
+                    </button>
+                  </div>
+
                   <div className="space-y-4">
-                    {/* Content Tag Selection */}
+                    {/* Organization/Initiative Selector */}
+                    {(contentCreationType === 'organization' || contentCreationType === 'initiative') && (
+                      <div>
+                        <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                          Select {contentCreationType === 'organization' ? 'Organization' : 'Initiative'}
+                        </label>
+                        <select
+                          value={contentCreationType === 'organization' ? selectedOrgSlug : selectedInitiativeSlug}
+                          onChange={(e) => contentCreationType === 'organization' ? setSelectedOrgSlug(e.target.value) : setSelectedInitiativeSlug(e.target.value)}
+                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+                        >
+                          <option value="">-- Select {contentCreationType === 'organization' ? 'Organization' : 'Initiative'} --</option>
+                          {(contentCreationType === 'organization' ? tenantOrganizations : tenantInitiatives).map((item) => (
+                            <option key={item.id} value={item.slug}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* Content Tag - Timeline: Selectable | Others: Auto-assigned (locked) */}
                     <div>
                       <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
                         Content Tag
                       </label>
-                      <select
-                        value={selectedTag}
-                        onChange={(e) => setSelectedTag(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
-                      >
-                        {availableTags.map((tag) => (
-                          <option key={tag.id} value={tag.id}>
-                            {tag.name}
-                          </option>
-                        ))}
-                      </select>
-                      {availableTags.length === 0 && (
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                          No tags available. Create one in System Settings.
-                        </p>
+                      
+                      {/* Timeline: User can select tag (only weekly-summary and executive-iq) */}
+                      {contentCreationType === 'timeline' && (
+                        <select
+                          value={selectedTag}
+                          onChange={(e) => setSelectedTag(e.target.value)}
+                          className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+                        >
+                          {availableTags
+                            .filter(tag => ['weekly-summary', 'executive-iq'].includes(tag.id))
+                            .map((tag) => (
+                              <option key={tag.id} value={tag.id}>
+                                {tag.name}
+                              </option>
+                            ))}
+                        </select>
+                      )}
+
+                      {/* Performance/Org/Initiative: Auto-assigned (locked) */}
+                      {contentCreationType === 'performance' && (
+                        <div className="px-4 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 text-gray-900 dark:text-white flex items-center justify-between">
+                          <span className="font-roobert-medium">Performance</span>
+                          <span className="text-xs text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/40 px-2 py-1 rounded-md">Auto-assigned</span>
+                        </div>
+                      )}
+
+                      {contentCreationType === 'organization' && (
+                        <div className="px-4 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 text-gray-900 dark:text-white flex items-center justify-between">
+                          <span className="font-roobert-medium">Organization</span>
+                          <span className="text-xs text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/40 px-2 py-1 rounded-md">Auto-assigned</span>
+                        </div>
+                      )}
+
+                      {contentCreationType === 'initiative' && (
+                        <div className="px-4 py-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border-2 border-purple-200 dark:border-purple-800 text-gray-900 dark:text-white flex items-center justify-between">
+                          <span className="font-roobert-medium">Initiative</span>
+                          <span className="text-xs text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/40 px-2 py-1 rounded-md">Auto-assigned</span>
+                        </div>
                       )}
                     </div>
 
-                    {/* Content Type Selection */}
-                    <div>
-                      <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
-                        Content Type
-                      </label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setModalType('one-pager')}
-                          className={`px-4 py-2 rounded-lg border-2 transition-all font-roobert-medium ${
-                            modalType === 'one-pager'
-                              ? 'bg-fis-eggplant border-fis-eggplant text-white'
-                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-eggplant'
-                          }`}
-                        >
-                          One-Pager
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setModalType('tabbed')}
-                          className={`px-4 py-2 rounded-lg border-2 transition-all font-roobert-medium ${
-                            modalType === 'tabbed'
-                              ? 'bg-fis-eggplant border-fis-eggplant text-white'
-                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-eggplant'
-                          }`}
-                        >
-                          Tabbed Page
-                        </button>
+                    {/* Content Type & Creation Method - Combined Row */}
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Content Type Toggle */}
+                      <div>
+                        <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                          Content Type
+                        </label>
+                        <div className="relative bg-gray-100 dark:bg-gray-700 rounded-lg p-1 flex">
+                          <button
+                            type="button"
+                            onClick={() => setModalType('one-pager')}
+                            className={`flex-1 px-3 py-2 rounded-md text-sm font-roobert-medium transition-all relative z-10 ${
+                              modalType === 'one-pager'
+                                ? 'text-white'
+                                : 'text-gray-700 dark:text-gray-300'
+                            }`}
+                          >
+                            One-Pager
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setModalType('tabbed')}
+                            className={`flex-1 px-3 py-2 rounded-md text-sm font-roobert-medium transition-all relative z-10 ${
+                              modalType === 'tabbed'
+                                ? 'text-white'
+                                : 'text-gray-700 dark:text-gray-300'
+                            }`}
+                          >
+                            Tabbed
+                          </button>
+                          {/* Sliding background */}
+                          <div
+                            className="absolute top-1 bottom-1 bg-fis-eggplant dark:bg-fis-raspberry rounded-md transition-all duration-200 ease-out"
+                            style={{
+                              left: modalType === 'one-pager' ? '4px' : '50%',
+                              right: modalType === 'one-pager' ? '50%' : '4px',
+                            }}
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Mode Toggle */}
-                    <div>
-                      <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
-                        Creation Method
-                      </label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setCreationMode('template');
-                            setSelectedSourceId('');
-                          }}
-                          className={`px-4 py-2 rounded-lg border-2 transition-all font-roobert-medium ${
-                            creationMode === 'template'
-                              ? 'bg-fis-eggplant border-fis-eggplant text-white'
-                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-eggplant'
-                          }`}
-                        >
-                          From Template
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setCreationMode('clone')}
-                          className={`px-4 py-2 rounded-lg border-2 transition-all font-roobert-medium ${
-                            creationMode === 'clone'
-                              ? 'bg-fis-eggplant border-fis-eggplant text-white'
-                              : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-eggplant'
-                          }`}
-                        >
-                          Clone Existing
-                        </button>
+                      {/* Creation Method Toggle */}
+                      <div>
+                        <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                          Creation Method
+                        </label>
+                        <div className="relative bg-gray-100 dark:bg-gray-700 rounded-lg p-1 flex">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCreationMode('template');
+                              setSelectedSourceId('');
+                            }}
+                            className={`flex-1 px-3 py-2 rounded-md text-sm font-roobert-medium transition-all relative z-10 ${
+                              creationMode === 'template'
+                                ? 'text-white'
+                                : 'text-gray-700 dark:text-gray-300'
+                            }`}
+                          >
+                            Template
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setCreationMode('clone')}
+                            className={`flex-1 px-3 py-2 rounded-md text-sm font-roobert-medium transition-all relative z-10 ${
+                              creationMode === 'clone'
+                                ? 'text-white'
+                                : 'text-gray-700 dark:text-gray-300'
+                            }`}
+                          >
+                            Clone
+                          </button>
+                          {/* Sliding background */}
+                          <div
+                            className="absolute top-1 bottom-1 bg-fis-eggplant dark:bg-fis-raspberry rounded-md transition-all duration-200 ease-out"
+                            style={{
+                              left: creationMode === 'template' ? '4px' : '50%',
+                              right: creationMode === 'template' ? '50%' : '4px',
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -1440,7 +1631,13 @@ function App() {
                     <div className="flex items-center gap-3 pt-2">
                       <button
                         onClick={handleCreateNewSummary}
-                        disabled={!newSummaryName.trim() || (creationMode === 'clone' && !selectedSourceId) || summaries.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase())}
+                        disabled={
+                          !newSummaryName.trim() || 
+                          (creationMode === 'clone' && !selectedSourceId) || 
+                          (contentCreationType === 'organization' && !selectedOrgSlug) ||
+                          (contentCreationType === 'initiative' && !selectedInitiativeSlug) ||
+                          summaries.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase())
+                        }
                         className="flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Create & Edit
@@ -1451,6 +1648,9 @@ function App() {
                           setNewSummaryName('');
                           setSelectedSourceId('');
                           setCreationMode('template');
+                          setContentCreationType('timeline');
+                          setSelectedOrgSlug('');
+                          setSelectedInitiativeSlug('');
                           // Reset to first available tag
                           if (availableTags.length > 0) {
                             setSelectedTag(availableTags[0].id);

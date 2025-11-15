@@ -15,7 +15,8 @@ export const Dashboard: React.FC = () => {
     const loadPerformanceData = async () => {
       try {
         const response = await fetch('http://localhost:3001/api/content?tag=performance');
-        const data = await response.json();
+        const responseData = await response.json();
+        const data = responseData.success ? responseData.content : responseData;
         
         // Filter for published template-based performance (not legacy demoStudio format)
         const publishedTemplateData = data.filter((item: any) => 
@@ -137,7 +138,7 @@ export const Dashboard: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-6"
       >
-        <h2 className="text-4xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
+        <h2 className="text-3xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
           Performance Dashboard
         </h2>
         {currentPerformance?.title && (

@@ -74,6 +74,8 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   // Tenant management states
   const [organizations, setOrganizations] = useState<any[]>([]);
   const [initiatives, setInitiatives] = useState<any[]>([]);
+  const [organizationsEnabled, setOrganizationsEnabled] = useState(true);
+  const [initiativesEnabled, setInitiativesEnabled] = useState(true);
   const [showCreateOrgModal, setShowCreateOrgModal] = useState(false);
   const [showCreateInitiativeModal, setShowCreateInitiativeModal] = useState(false);
   const [tenantToDelete, setTenantToDelete] = useState<{type: 'org' | 'initiative', slug: string, name: string} | null>(null);
@@ -240,7 +242,22 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   useEffect(() => {
     fetchTenants('org');
     fetchTenants('initiative');
+    
+    // Load enabled states from localStorage
+    const savedOrgsEnabled = localStorage.getItem('organizationsEnabled');
+    const savedInitiativesEnabled = localStorage.getItem('initiativesEnabled');
+    if (savedOrgsEnabled !== null) setOrganizationsEnabled(savedOrgsEnabled === 'true');
+    if (savedInitiativesEnabled !== null) setInitiativesEnabled(savedInitiativesEnabled === 'true');
   }, []);
+
+  // Save enabled states to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('organizationsEnabled', String(organizationsEnabled));
+  }, [organizationsEnabled]);
+
+  useEffect(() => {
+    localStorage.setItem('initiativesEnabled', String(initiativesEnabled));
+  }, [initiativesEnabled]);
 
   return (
     <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 overflow-auto">
@@ -335,12 +352,30 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
             {/* Organizations Section */}
             <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
                     <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Organizations</h3>
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Organizations</h3>
+                      <button
+                        onClick={() => setOrganizationsEnabled(!organizationsEnabled)}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                          organizationsEnabled
+                            ? 'bg-blue-600 dark:bg-blue-500'
+                            : 'bg-gray-300 dark:bg-gray-600'
+                        }`}
+                        title={organizationsEnabled ? 'Visible in main app' : 'Hidden in main app'}
+                      >
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          organizationsEnabled ? 'translate-x-6' : 'translate-x-1'
+                        }`} />
+                      </button>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {organizationsEnabled ? 'Visible in main app' : 'Hidden in main app'}
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Manage organizational content tenants</p>
                   </div>
                 </div>
@@ -396,12 +431,30 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
             {/* Initiatives Section */}
             <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
               <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
                     <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Strategic Initiatives</h3>
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Strategic Initiatives</h3>
+                      <button
+                        onClick={() => setInitiativesEnabled(!initiativesEnabled)}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                          initiativesEnabled
+                            ? 'bg-purple-600 dark:bg-purple-500'
+                            : 'bg-gray-300 dark:bg-gray-600'
+                        }`}
+                        title={initiativesEnabled ? 'Visible in main app' : 'Hidden in main app'}
+                      >
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          initiativesEnabled ? 'translate-x-6' : 'translate-x-1'
+                        }`} />
+                      </button>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {initiativesEnabled ? 'Visible in main app' : 'Hidden in main app'}
+                      </span>
+                    </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">Manage initiative/project content tenants</p>
                   </div>
                 </div>

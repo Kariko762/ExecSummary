@@ -3,12 +3,18 @@
 /* CSS Custom Properties */
 :root {
   /* Brand Colors */
-  --brand-primary: #431C5B;
-  --brand-secondary: #B21A53;
+  --brand-primary: #431C5B;      /* eggplant */
+  --brand-secondary: #B21A53;    /* raspberry */
+  --brand-tertiary: #1D1F48;     /* navy */
   
   /* Accent Colors */
   --accent-yellow: #FFB800;
   --accent-orange: #f59e0b;
+  --accent-green: #3bcd3e;
+  --accent-green-dark: #057055;
+  --accent-blue: #0066CC;
+  --accent-purple: #8B4789;
+  --accent-red: #DC2626;
   
   /* Semantic Colors */
   --semantic-success: #10b981;

@@ -20,7 +20,8 @@ async function loadTimelineData(): Promise<void> {
         throw new Error(`Failed to fetch content: ${response.statusText}`);
       }
       
-      const allContent = await response.json();
+      const responseData = await response.json();
+      const allContent = responseData.success ? responseData.content : responseData;
       
       // Map content based on tag type - filter by published status
       timelineData = allContent

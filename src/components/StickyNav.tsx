@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, TrendingUp, Building2 } from 'lucide-react';
+import { Clock, TrendingUp, Building2, Target } from 'lucide-react';
 
 export function StickyNav() {
   const [isVisible, setIsVisible] = useState(false);
@@ -33,7 +33,7 @@ export function StickyNav() {
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
     // Observe all sections
-    const sections = ['timeline', 'performance', 'organizations'];
+    const sections = ['timeline', 'performance', 'organizations', 'initiatives'];
     sections.forEach(id => {
       const element = document.getElementById(id);
       if (element) observer.observe(element);
@@ -60,7 +60,8 @@ export function StickyNav() {
   const navItems = [
     { id: 'timeline', label: 'Summary Timeline', icon: Clock },
     { id: 'performance', label: 'Performance', icon: TrendingUp },
-    { id: 'organizations', label: 'Organizations', icon: Building2 }
+    { id: 'organizations', label: 'Organizations', icon: Building2 },
+    { id: 'initiatives', label: 'Initiatives', icon: Target }
   ];
 
   return (

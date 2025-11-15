@@ -1,0 +1,406 @@
+{
+  "id": "template-org-update",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-15",
+  "title": "Organization Name - Monthly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_section_0_type": "quote",
+  "_section_0_layoutZone": "full",
+  "_section_0_rowIndex": 0,
+  "section_0": "Strong momentum this month with three major project milestones delivered on time and customer satisfaction at an all-time high of 94%.",
+  "_section_0_sectionLayoutType": "full",
+  "_enabled_section_0": true,
+  "_completed_section_0": false,
+  "_section_0_label": "Executive Summary",
+  "_section_1_type": "highlightsList",
+  "_section_1_layoutZone": "full",
+  "_section_1_rowIndex": 0,
+  "section_1": [
+    "Successfully launched new portal features - 200+ users onboarded in first week",
+    "Reduced average ticket resolution time by 35% through process improvements",
+    "Completed security audit with zero critical findings"
+  ],
+  "_section_1_sectionLayoutType": "full",
+  "_enabled_section_1": true,
+  "_completed_section_1": false,
+  "_section_1_label": "Key Highlights",
+  "_section_2_type": "hr",
+  "_section_2_layoutZone": "full",
+  "_section_2_rowIndex": 0,
+  "section_2": "",
+  "_section_2_sectionLayoutType": "full",
+  "_enabled_section_2": true,
+  "_completed_section_2": false,
+  "_metrics_type": "metricCard",
+  "_metrics_layoutZone": "full",
+  "_metrics_rowIndex": 0,
+  "_metrics_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "metrics": [
+    {
+      "title": "Open Tickets",
+      "value": "12",
+      "style": "standard",
+      "icon": "activity",
+      "iconColor": "navy"
+    },
+    {
+      "title": "Avg Response Time",
+      "value": "2.5 hrs",
+      "style": "highlight",
+      "icon": "zap",
+      "iconColor": "green"
+    },
+    {
+      "title": "Customer Satisfaction",
+      "value": "94%",
+      "style": "bold",
+      "icon": "heart",
+      "iconColor": "raspberry"
+    },
+    {
+      "title": "Projects Delivered",
+      "value": "3",
+      "style": "total",
+      "icon": "check",
+      "iconColor": "green"
+    }
+  ],
+  "_metrics_sectionLayoutType": "full",
+  "_enabled_metrics": true,
+  "_completed_metrics": false,
+  "_metrics_label": "Support Metrics",
+  "_projects_type": "progressBarList",
+  "_projects_layoutZone": "full",
+  "_projects_rowIndex": 0,
+  "_projects_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Initiative Title"
+    },
+    "subtitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Team/Owner"
+    },
+    "percentage": {
+      "type": "number",
+      "renderAs": "number",
+      "label": "Completion %"
+    },
+    "status": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Status (On Track/At Risk/Blocked)"
+    }
+  },
+  "projects": [
+    {
+      "title": "Portal Modernization Phase 2",
+      "subtitle": "Engineering Team",
+      "percentage": 75,
+      "status": "On Track"
+    },
+    {
+      "title": "API Integration Layer",
+      "subtitle": "Platform Team",
+      "percentage": 45,
+      "status": "At Risk"
+    },
+    {
+      "title": "Security Compliance Upgrade",
+      "subtitle": "Security Team",
+      "percentage": 90,
+      "status": "On Track"
+    }
+  ],
+  "_projects_sectionLayoutType": "full",
+  "_enabled_projects": true,
+  "_completed_projects": false,
+  "_projects_label": "Active Projects",
+  "_charts_0_type": "radialProgressChart",
+  "_charts_0_layoutZone": "left-50",
+  "_charts_0_rowIndex": 0,
+  "_charts_0_fields": {
+    "name": {
+      "label": "Label",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Percentage",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "charts_0": [
+    {
+      "name": "Engineering",
+      "value": 85
+    },
+    {
+      "name": "Support",
+      "value": 92
+    },
+    {
+      "name": "Operations",
+      "value": 78
+    },
+    {
+      "name": "Planning",
+      "value": 88
+    }
+  ],
+  "_charts_1_type": "barChart",
+  "_charts_1_layoutZone": "right-50",
+  "_charts_1_rowIndex": 0,
+  "_charts_1_fields": {
+    "name": {
+      "label": "Label",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Value",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_charts_1_chartConfig": {
+    "xAxisKey": "name",
+    "yAxisKey": "value",
+    "bars": [
+      {
+        "dataKey": "value",
+        "fill": "#8B4789",
+        "name": "Tickets Closed"
+      }
+    ],
+    "orientation": "vertical",
+    "showGrid": true,
+    "showLegend": true,
+    "stacked": false
+  },
+  "charts_1": [
+    {
+      "name": "Week 1",
+      "value": 15
+    },
+    {
+      "name": "Week 2",
+      "value": 22
+    },
+    {
+      "name": "Week 3",
+      "value": 18
+    },
+    {
+      "name": "Week 4",
+      "value": 25
+    }
+  ],
+  "_charts_sectionLayoutType": "left-50",
+  "_enabled_charts": true,
+  "_completed_charts": false,
+  "_charts_label": "Team Performance",
+  "_section_3_type": "hr",
+  "_section_3_layoutZone": "full",
+  "_section_3_rowIndex": 0,
+  "section_3": "",
+  "_section_3_sectionLayoutType": "full",
+  "_enabled_section_3": true,
+  "_completed_section_3": false,
+  "_risks_type": "riskCard",
+  "_risks_layoutZone": "full",
+  "_risks_rowIndex": 0,
+  "_risks_fields": {
+    "severity": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Severity (low/medium/high)"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Risk Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Description"
+    },
+    "mitigation": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Mitigation Plan"
+    }
+  },
+  "risks": [
+    {
+      "severity": "medium",
+      "title": "API Integration Timeline Delay",
+      "description": "Third-party vendor API documentation incomplete, causing 2-week development delay",
+      "mitigation": "Escalated to vendor account manager. Alternative approach using REST endpoints being evaluated as backup plan."
+    },
+    {
+      "severity": "low",
+      "title": "Team Resource Constraint",
+      "description": "Two team members on PTO during critical sprint phase",
+      "mitigation": "Adjusted sprint commitments. Cross-training completed for backup coverage on critical tasks."
+    }
+  ],
+  "_risks_sectionLayoutType": "full",
+  "_enabled_risks": true,
+  "_completed_risks": false,
+  "_risks_label": "Risks & Issues",
+  "_timeline_type": "timeline",
+  "_timeline_layoutZone": "full",
+  "_timeline_rowIndex": 0,
+  "_timeline_fields": {
+    "date": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Date"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Milestone Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Details"
+    },
+    "completed": {
+      "type": "boolean",
+      "renderAs": "checkbox",
+      "label": "Completed"
+    }
+  },
+  "timeline": [
+    {
+      "date": "Nov 15",
+      "title": "Portal Phase 2 Design Review",
+      "description": "Final stakeholder sign-off on UI/UX mockups",
+      "completed": true
+    },
+    {
+      "date": "Nov 22",
+      "title": "API Integration Testing",
+      "description": "Complete end-to-end integration test suite",
+      "completed": false
+    },
+    {
+      "date": "Dec 1",
+      "title": "Security Audit Completion",
+      "description": "Final security assessment and certification",
+      "completed": false
+    },
+    {
+      "date": "Dec 10",
+      "title": "Production Deployment",
+      "description": "Phase 2 features released to production environment",
+      "completed": false
+    }
+  ],
+  "_timeline_sectionLayoutType": "full",
+  "_enabled_timeline": true,
+  "_completed_timeline": false,
+  "_timeline_label": "Upcoming Milestones",
+  "_section_4_type": "hr",
+  "_section_4_layoutZone": "full",
+  "_section_4_rowIndex": 0,
+  "section_4": "",
+  "_section_4_sectionLayoutType": "full",
+  "_enabled_section_4": true,
+  "_completed_section_4": false,
+  "_nextsteps_type": "checklistItems",
+  "_nextsteps_layoutZone": "full",
+  "_nextsteps_rowIndex": 0,
+  "nextsteps": [
+    "Schedule follow-up meeting with vendor to finalize API documentation",
+    "Complete resource allocation planning for December sprint",
+    "Prepare executive presentation for Phase 2 deployment readiness review"
+  ],
+  "_nextsteps_sectionLayoutType": "full",
+  "_enabled_nextsteps": true,
+  "_completed_nextsteps": false,
+  "_nextsteps_label": "Next Steps",
+  "_contact_type": "keyValueList",
+  "_contact_layoutZone": "full",
+  "_contact_rowIndex": 0,
+  "contact": {
+    "Team Lead": "Sarah Johnson",
+    "Email": "sarah.johnson@company.com",
+    "Next Update": "December 15, 2025",
+    "Escalation Contact": "Director of Engineering"
+  },
+  "_contact_sectionLayoutType": "full",
+  "_enabled_contact": true,
+  "_completed_contact": false,
+  "_contact_label": "Contact Information",
+  "status": "draft",
+  "protectionEnabled": false,
+  "_contentTag": "organizations",
+  "_template_name": "organizational_update_template_v1",
+  "_template_description": "Monthly executive update template for organizational stakeholders - includes highlights, project status, support metrics, risks, and upcoming milestones",
+  "_template_created": "2025-11-15T00:00:00.000Z",
+  "_template_updated": "2025-11-15T00:00:00.000Z"
+}

@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import authRoutes from './api/auth.js';
-import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats } from './api/tenants.js';
+import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats, updateTenantStats } from './api/tenants.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,8 +28,19 @@ app.delete('/api/tenants/:type/:slug', deleteTenant);
 app.get('/api/tenants/:type/:slug/content', getTenantContent);
 app.get('/api/tenants/:type/:slug/stats', getTenantStats);
 
+// Feature Flags API - returns enabled/disabled state for orgs and initiatives
+app.get('/api/feature-flags', (req, res) => {
+  // These would be stored in a database in production
+  // For now, they're managed in localStorage on the CMS side
+  // The main app can check localStorage directly or we can sync via backend
+  res.json({
+    organizationsEnabled: true,  // Default to enabled
+    initiativesEnabled: true     // Default to enabled
+  });
+});
+
 // Path to data directory
-const DATA_DIR = path.join(__dirname, '../src/data');
+const DATA_DIR = path.join(__dirname, 'data');
 const CONTENT_DIR = path.join(__dirname, 'data', 'content'); // Unified content directory
 const TAGS_FILE = path.join(__dirname, 'data', 'content-tags.json');
 const COMMENTS_FILE = path.join(__dirname, 'data', 'comments.json');
@@ -68,18 +79,93 @@ async function listFiles(directory) {
 // UNIFIED CONTENT ENDPOINTS (Tag-Based)
 // ============================================
 
-// GET all content (with optional tag filtering)
+// GET all content (with optional tag/tenant filtering)
 app.get('/api/content', async (req, res) => {
   try {
-    const { tag } = req.query;
-    const files = await listFiles(CONTENT_DIR);
+    const { tag, tenant, tenantType } = req.query;
+    const allContent = [];
     
-    const allContent = await Promise.all(
-      files.map(async (file) => {
-        const filePath = path.join(CONTENT_DIR, file);
-        return await readJSONFile(filePath);
-      })
-    );
+    // If tenant filtering is requested, only read from that specific tenant folder
+    if (tenant && tenantType) {
+      try {
+        const tenantDir = tenantType === 'org' 
+          ? path.join(DATA_DIR, 'orgs', tenant)
+          : path.join(DATA_DIR, 'initiatives', tenant);
+        
+        const files = await listFiles(tenantDir);
+        const tenantContent = await Promise.all(
+          files.map(async (file) => {
+            const filePath = path.join(tenantDir, file);
+            return await readJSONFile(filePath);
+          })
+        );
+        allContent.push(...tenantContent);
+      } catch (error) {
+        console.log(`No content for ${tenantType} ${tenant}:`, error.message);
+      }
+    } else {
+      // Read all content from all locations
+      
+      // Read from main content directory
+      try {
+        const files = await listFiles(CONTENT_DIR);
+        const contentItems = await Promise.all(
+          files.map(async (file) => {
+            const filePath = path.join(CONTENT_DIR, file);
+            return await readJSONFile(filePath);
+          })
+        );
+        allContent.push(...contentItems);
+      } catch (error) {
+        console.log('No content in main directory:', error.message);
+      }
+      
+      // Read from organization folders
+      try {
+        const orgsDir = path.join(DATA_DIR, 'orgs');
+        const orgFolders = await fs.readdir(orgsDir);
+        for (const orgSlug of orgFolders) {
+          if (orgSlug === 'registry.json') continue;
+          const orgContentDir = path.join(orgsDir, orgSlug);
+          const stat = await fs.stat(orgContentDir);
+          if (stat.isDirectory()) {
+            const files = await listFiles(orgContentDir);
+            const orgContent = await Promise.all(
+              files.map(async (file) => {
+                const filePath = path.join(orgContentDir, file);
+                return await readJSONFile(filePath);
+              })
+            );
+            allContent.push(...orgContent);
+          }
+        }
+      } catch (error) {
+        console.log('No organization content:', error.message);
+      }
+      
+      // Read from initiative folders
+      try {
+        const initiativesDir = path.join(DATA_DIR, 'initiatives');
+        const initiativeFolders = await fs.readdir(initiativesDir);
+        for (const initiativeSlug of initiativeFolders) {
+          if (initiativeSlug === 'registry.json') continue;
+          const initiativeContentDir = path.join(initiativesDir, initiativeSlug);
+          const stat = await fs.stat(initiativeContentDir);
+          if (stat.isDirectory()) {
+            const files = await listFiles(initiativeContentDir);
+            const initiativeContent = await Promise.all(
+              files.map(async (file) => {
+                const filePath = path.join(initiativeContentDir, file);
+                return await readJSONFile(filePath);
+              })
+            );
+            allContent.push(...initiativeContent);
+          }
+        }
+      } catch (error) {
+        console.log('No initiative content:', error.message);
+      }
+    }
     
     // Filter by tag if provided
     const filteredContent = tag 
@@ -93,9 +179,9 @@ app.get('/api/content', async (req, res) => {
       return dateB - dateA;
     });
     
-    res.json(filteredContent);
+    res.json({ success: true, content: filteredContent });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
@@ -114,9 +200,28 @@ app.get('/api/content/:id', async (req, res) => {
 app.post('/api/content', async (req, res) => {
   try {
     const content = req.body;
-    const filePath = path.join(CONTENT_DIR, `${content.id}.json`);
+    console.log('📝 POST /api/content - Content ID:', content.id);
+    console.log('📝 POST /api/content - _tenant:', JSON.stringify(content._tenant));
     
-    await writeJSONFile(filePath, content);
+    // Check if content is assigned to a tenant (organization or initiative)
+    let filePath;
+    if (content._tenant) {
+      const { type, slug } = content._tenant;
+      const tenantDir = path.join(DATA_DIR, type === 'org' ? 'orgs' : 'initiatives', slug);
+      filePath = path.join(tenantDir, `${content.id}.json`);
+      
+      // Ensure tenant directory exists
+      await fs.mkdir(tenantDir, { recursive: true });
+      
+      // Update tenant stats after save
+      await writeJSONFile(filePath, content);
+      await updateTenantStats(type, slug);
+    } else {
+      // Save to regular content directory
+      filePath = path.join(CONTENT_DIR, `${content.id}.json`);
+      await writeJSONFile(filePath, content);
+    }
+    
     res.status(201).json({ message: 'Content created', data: content });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -127,9 +232,26 @@ app.post('/api/content', async (req, res) => {
 app.put('/api/content/:id', async (req, res) => {
   try {
     const content = req.body;
-    const filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
     
-    await writeJSONFile(filePath, content);
+    // Check if content is assigned to a tenant (organization or initiative)
+    let filePath;
+    if (content._tenant) {
+      const { type, slug } = content._tenant;
+      const tenantDir = path.join(DATA_DIR, type === 'org' ? 'orgs' : 'initiatives', slug);
+      filePath = path.join(tenantDir, `${req.params.id}.json`);
+      
+      // Ensure tenant directory exists
+      await fs.mkdir(tenantDir, { recursive: true });
+      
+      // Update tenant stats after save
+      await writeJSONFile(filePath, content);
+      await updateTenantStats(type, slug);
+    } else {
+      // Save to regular content directory
+      filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+      await writeJSONFile(filePath, content);
+    }
+    
     res.json({ message: 'Content updated', data: content });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -309,22 +431,25 @@ app.delete('/api/executive-iq/:id', async (req, res) => {
 // ORGANIZATIONS ENDPOINTS
 // ============================================
 
-// GET all organizations
+// GET all organizations from registry
 app.get('/api/organizations', async (req, res) => {
   try {
-    const orgsDir = path.join(DATA_DIR, 'organizations');
-    const files = await listFiles(orgsDir);
-    
-    const organizations = await Promise.all(
-      files.map(async (file) => {
-        const filePath = path.join(orgsDir, file);
-        return await readJSONFile(filePath);
-      })
-    );
-    
-    res.json(organizations);
+    const registryPath = path.join(DATA_DIR, 'orgs', 'registry.json');
+    const registry = await readJSONFile(registryPath);
+    res.json({ success: true, organizations: registry.organizations || [] });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({ success: true, organizations: [] }); // Return empty if registry doesn't exist
+  }
+});
+
+// GET all initiatives from registry
+app.get('/api/initiatives', async (req, res) => {
+  try {
+    const registryPath = path.join(DATA_DIR, 'initiatives', 'registry.json');
+    const registry = await readJSONFile(registryPath);
+    res.json({ success: true, initiatives: registry.initiatives || [] });
+  } catch (error) {
+    res.json({ success: true, initiatives: [] }); // Return empty if registry doesn't exist
   }
 });
 
@@ -1099,6 +1224,7 @@ app.listen(PORT, () => {
   console.log(`  POST   /api/organizations`);
   console.log(`  PUT    /api/organizations/:id`);
   console.log(`  DELETE /api/organizations/:id`);
+  console.log(`  GET    /api/initiatives`);
   console.log(`  GET    /api/templates`);
   console.log(`  GET    /api/templates/:id`);
   console.log(`  POST   /api/templates`);

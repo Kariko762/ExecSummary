@@ -1320,7 +1320,7 @@ function ColorsPanel({ colors, onUpdate }: { colors: ColorDefinition[]; onUpdate
                               key={variant.key}
                               className="w-5 h-5 rounded border border-gray-300 dark:border-gray-600"
                               style={{ backgroundColor: variant.value }}
-                              title={variant.label}
+                              title={`${variant.label}: ${variant.value}`}
                             />
                           ))}
                         </div>

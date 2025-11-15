@@ -39,7 +39,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
   useEffect(() => {
     const checkBackend = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/summaries', { method: 'HEAD' });
+        const response = await fetch('http://localhost:3001/api/content', { method: 'HEAD' });
         setBackendConnected(response.ok);
       } catch (error) {
         setBackendConnected(false);

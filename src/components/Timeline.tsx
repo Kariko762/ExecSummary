@@ -159,7 +159,26 @@ export const Timeline: React.FC<TimelineProps> = ({
                 )}
 
                 {/* Card */}
-                <div className="mt-20 glass-strong card-shadow hover:card-shadow-hover rounded-xl p-5 transition-all border-2 border-transparent hover:border-fis-eggplant duration-300 h-[200px] flex flex-col">
+                <div className="mt-20 glass-strong card-shadow hover:card-shadow-hover rounded-xl p-5 transition-all border-2 border-transparent hover:border-fis-eggplant duration-300 h-[200px] flex flex-col relative overflow-hidden">
+                  {/* Geometric SVG Background Pattern */}
+                  <div className="absolute inset-0 opacity-30">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <linearGradient id={`timeline-fade-${summary.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" style={{ stopColor: '#B21A53', stopOpacity: 0.5 }} />
+                          <stop offset="100%" style={{ stopColor: '#B21A53', stopOpacity: 0 }} />
+                        </linearGradient>
+                      </defs>
+                      {/* Geometric shapes using raspberry color */}
+                      <circle cx="15%" cy="15%" r="50" fill={`url(#timeline-fade-${summary.id})`} />
+                      <polygon points="80,10 110,30 110,70 80,90 50,70 50,30" fill={`url(#timeline-fade-${summary.id})`} transform="translate(60%, 10%)" />
+                      <rect x="10%" y="70%" width="45" height="45" fill={`url(#timeline-fade-${summary.id})`} transform="rotate(20)" />
+                      <circle cx="85%" cy="80%" r="60" fill={`url(#timeline-fade-${summary.id})`} />
+                    </svg>
+                  </div>
+                  
+                  {/* Content with relative positioning */}
+                  <div className="relative z-10">
                   {/* Type Tag */}
                   <div className="mb-3">
                     <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-roobert-semibold ${isIQ ? 'bg-fis-raspberry/20 text-fis-raspberry' : 'bg-fis-navy/20 text-fis-navy dark:bg-blue-500/20 dark:text-blue-400'}`}>
@@ -202,6 +221,7 @@ export const Timeline: React.FC<TimelineProps> = ({
                     </div>
                     </div>
                   )}
+                  </div>
                 </div>
               </motion.div>
             );

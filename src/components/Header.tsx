@@ -189,29 +189,6 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                           </div>
                         </Link>
 
-                        {/* Strategic Initiatives */}
-                        <Link
-                          to="/strategic-initiatives"
-                          onClick={() => setIsNavDropdownOpen(false)}
-                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                            location.pathname === '/strategic-initiatives' 
-                              ? 'bg-fis-raspberry/20 text-fis-raspberry dark:bg-fis-raspberry/30 dark:text-pink-300' 
-                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
-                          }`}
-                        >
-                          <div className={`p-2 rounded-lg ${
-                            location.pathname === '/strategic-initiatives' 
-                              ? 'bg-fis-raspberry/30 dark:bg-fis-raspberry/40' 
-                              : 'bg-gray-200 dark:bg-gray-700'
-                          }`}>
-                            <Lightbulb className="w-5 h-5" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-roobert-semibold text-sm">Strategic Initiatives</div>
-                            <div className="text-xs text-gray-600 dark:text-gray-400">Executive project summaries</div>
-                          </div>
-                        </Link>
-
                         {/* Knowledge Base */}
                         <Link
                           to="/knowledge-base"
@@ -373,22 +350,6 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                   <div className="flex-1">
                     <div className="font-roobert-semibold text-sm">Executive Summary Dashboard</div>
                     <div className="text-xs text-gray-600 dark:text-gray-400">Performance dashboards</div>
-                  </div>
-                </Link>
-
-                <Link
-                  to="/strategic-initiatives"
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                    location.pathname === '/strategic-initiatives' 
-                      ? 'bg-fis-raspberry/20 text-fis-raspberry dark:bg-fis-raspberry/30 dark:text-pink-300' 
-                      : 'hover:bg-white/50 dark:hover:bg-gray-800/50 text-gray-900 dark:text-white'
-                  }`}
-                >
-                  <Lightbulb className="w-5 h-5" />
-                  <div className="flex-1">
-                    <div className="font-roobert-semibold text-sm">Strategic Initiatives</div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Executive projects</div>
                   </div>
                 </Link>
 
