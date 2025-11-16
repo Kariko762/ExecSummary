@@ -15,7 +15,7 @@ interface CMSHeaderProps {
 
 export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenSystemSettings, onOpenComments }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
   const [engineSubmenuOpen, setEngineSubmenuOpen] = useState(false);
@@ -23,16 +23,36 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
   const [searchQuery, setSearchQuery] = useState('');
   const [customLogo, setCustomLogo] = useState<string | null>(null);
   const [backendConnected, setBackendConnected] = useState(false);
+  const [requireAuth, setRequireAuth] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
-  // Load custom logo from system settings
+  // Load custom logo and auth settings from system settings
   useEffect(() => {
-    const settings = localStorage.getItem('system-settings');
-    if (settings) {
-      const parsed = JSON.parse(settings);
-      setCustomLogo(parsed.customLogo || null);
-    }
+    const loadSettings = () => {
+      const settings = localStorage.getItem('system-settings');
+      if (settings) {
+        const parsed = JSON.parse(settings);
+        setCustomLogo(parsed.customLogo || null);
+        setRequireAuth(parsed.authentication?.cmsAdmin?.requireLogin || false);
+      }
+    };
+
+    // Load settings initially
+    loadSettings();
+
+    // Listen for custom system settings change event
+    const handleSettingsChange = (e: CustomEvent) => {
+      const settings = e.detail;
+      setCustomLogo(settings.customLogo || null);
+      setRequireAuth(settings.authentication?.cmsAdmin?.requireLogin || false);
+    };
+
+    window.addEventListener('systemSettingsChanged', handleSettingsChange as EventListener);
+
+    return () => {
+      window.removeEventListener('systemSettingsChanged', handleSettingsChange as EventListener);
+    };
   }, []);
 
   // Check backend connectivity
@@ -413,7 +433,11 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-lg glass hover:glass-strong transition-all"
               >
-                <span className="text-sm font-roobert-medium text-gray-600 dark:text-gray-400">Jason</span>
+                {isAuthenticated && user && (
+                  <span className="text-sm font-roobert-medium text-gray-600 dark:text-gray-400">
+                    {user.username}
+                  </span>
+                )}
                 <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               </motion.button>
 
@@ -464,7 +488,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                     </button>
 
                     {/* Logout */}
-                    {isAuthenticated && (
+                    {(isAuthenticated || requireAuth) && (
                       <button
                         onClick={() => {
                           setIsUserMenuOpen(false);
@@ -474,7 +498,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                       >
                         <LogOut className="w-4 h-4" />
                         <span className="text-sm font-roobert-medium">
-                          Logout
+                          {isAuthenticated ? 'Logout' : 'Login Required'}
                         </span>
                       </button>
                     )}

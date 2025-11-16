@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X, FileText, Tag, Building2, Target, Plus, Trash2, Edit } from 'lucide-react';
 import { ChangeManagementModal } from './ChangeManagementModal';
 import ContentTagManager from './ContentTagManager';
+import { useAuth } from '../contexts/AuthContext';
 
 /**
  * System Settings Manager
@@ -51,6 +52,7 @@ const DEFAULT_SETTINGS: SystemSettings = {
 const STORAGE_KEY = 'system-settings';
 
 export default function SystemSettingsManager({ onClose, onNotification }: SystemSettingsManagerProps) {
+  const { logout } = useAuth();
   const loadSettings = (): SystemSettings => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -80,6 +82,15 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   const [showCreateInitiativeModal, setShowCreateInitiativeModal] = useState(false);
   const [tenantToDelete, setTenantToDelete] = useState<{type: 'org' | 'initiative', slug: string, name: string} | null>(null);
 
+  // User management states
+  const [users, setUsers] = useState<any[]>([]);
+  const [roles, setRoles] = useState<any>({});
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [userToDelete, setUserToDelete] = useState<any>(null);
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
@@ -90,12 +101,27 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
       
+      // Dispatch custom event to notify other components of settings change
+      window.dispatchEvent(new CustomEvent('systemSettingsChanged', { 
+        detail: dataToSave 
+      }));
+      
+      // Check if CMS Admin authentication is being enabled
+      const wasCmsAuthEnabled = settings.authentication.cmsAdmin.requireLogin;
+      const isCmsAuthBeingEnabled = dataToSave.authentication.cmsAdmin.requireLogin && !wasCmsAuthEnabled;
+      
       // Brief delay for visual feedback
       await new Promise(resolve => setTimeout(resolve, 300));
       
       setSettings(dataToSave);
       setHasChanges(false);
       onNotification?.('success', 'System settings saved successfully!');
+
+      // If CMS Admin authentication is being enabled, force logout
+      if (isCmsAuthBeingEnabled) {
+        logout();
+        onNotification?.('info', 'Authentication enabled. Please log in again.');
+      }
     } catch (error) {
       console.error('Failed to save system settings:', error);
       onNotification?.('error', 'Failed to save system settings');
@@ -123,6 +149,12 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
       },
     }));
     setHasChanges(true);
+
+    // If enabling CMS Admin authentication, force logout to require re-login
+    if (app === 'cmsAdmin' && value) {
+      logout();
+      onNotification?.('info', 'Authentication enabled. Please log in again.');
+    }
   };
 
   const handleLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -250,6 +282,112 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
     if (savedInitiativesEnabled !== null) setInitiativesEnabled(savedInitiativesEnabled === 'true');
   }, []);
 
+  // User Management Functions
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/auth/users');
+      if (response.ok) {
+        const data = await response.json();
+        setUsers(data.users);
+        setRoles(data.roles);
+      } else {
+        console.error('Failed to fetch users');
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  const createUser = async (userData: { username: string; password: string; email: string; role: string }) => {
+    try {
+      const response = await fetch('http://localhost:3001/api/auth/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        onNotification?.('success', 'User created successfully!');
+        fetchUsers();
+        setShowCreateUserModal(false);
+      } else {
+        const error = await response.json();
+        onNotification?.('error', error.error || 'Failed to create user');
+      }
+    } catch (error) {
+      onNotification?.('error', 'Failed to create user');
+    }
+  };
+
+  const updateUser = async (userId: string, userData: { email?: string; role?: string; isActive?: boolean }) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/auth/users/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        onNotification?.('success', 'User updated successfully!');
+        fetchUsers();
+        setShowEditUserModal(false);
+        setSelectedUser(null);
+      } else {
+        const error = await response.json();
+        onNotification?.('error', error.error || 'Failed to update user');
+      }
+    } catch (error) {
+      onNotification?.('error', 'Failed to update user');
+    }
+  };
+
+  const changePassword = async (userId: string, newPassword: string) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/auth/users/${userId}/password`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: newPassword }),
+      });
+
+      if (response.ok) {
+        onNotification?.('success', 'Password changed successfully!');
+        setShowChangePasswordModal(false);
+        setSelectedUser(null);
+      } else {
+        const error = await response.json();
+        onNotification?.('error', error.error || 'Failed to change password');
+      }
+    } catch (error) {
+      onNotification?.('error', 'Failed to change password');
+    }
+  };
+
+  const deleteUser = async () => {
+    if (!userToDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/auth/users/${userToDelete.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        onNotification?.('success', 'User deleted successfully!');
+        fetchUsers();
+        setUserToDelete(null);
+      } else {
+        const error = await response.json();
+        onNotification?.('error', error.error || 'Failed to delete user');
+      }
+    } catch (error) {
+      onNotification?.('error', 'Failed to delete user');
+    }
+  };
+
+  // Load users on mount
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   // Save enabled states to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('organizationsEnabled', String(organizationsEnabled));
@@ -326,7 +464,6 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
               onClick={() => setActiveTab('users')}
               icon={<Shield className="w-4 h-4" />}
               label="Users"
-              disabled
             />
             <TabButton
               active={activeTab === 'security'}
@@ -526,9 +663,21 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
         )}
         
         {activeTab === 'users' && (
-          <div className="text-center py-12 text-gray-500">
-            User management coming soon...
-          </div>
+          <UserManagementPanel
+            users={users}
+            roles={roles}
+            onCreateUser={() => setShowCreateUserModal(true)}
+            onEditUser={(user) => {
+              setSelectedUser(user);
+              setShowEditUserModal(true);
+            }}
+            onChangePassword={(user) => {
+              setSelectedUser(user);
+              setShowChangePasswordModal(true);
+            }}
+            onDeleteUser={setUserToDelete}
+            onToggleUserStatus={(userId, isActive) => updateUser(userId, { isActive })}
+          />
         )}
         
         {activeTab === 'security' && (
@@ -617,6 +766,46 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
             </div>
           </motion.div>
         </div>
+      )}
+
+      {/* User Management Modals */}
+      {showCreateUserModal && (
+        <UserCreateModal
+          roles={roles}
+          onClose={() => setShowCreateUserModal(false)}
+          onCreate={createUser}
+        />
+      )}
+
+      {showEditUserModal && selectedUser && (
+        <UserEditModal
+          user={selectedUser}
+          roles={roles}
+          onClose={() => {
+            setShowEditUserModal(false);
+            setSelectedUser(null);
+          }}
+          onUpdate={updateUser}
+        />
+      )}
+
+      {showChangePasswordModal && selectedUser && (
+        <ChangePasswordModal
+          user={selectedUser}
+          onClose={() => {
+            setShowChangePasswordModal(false);
+            setSelectedUser(null);
+          }}
+          onChangePassword={changePassword}
+        />
+      )}
+
+      {userToDelete && (
+        <UserDeleteModal
+          user={userToDelete}
+          onClose={() => setUserToDelete(null)}
+          onDelete={deleteUser}
+        />
       )}
     </div>
   );
@@ -759,15 +948,511 @@ function TabButton({
   );
 }
 
-// Authentication Panel
-function AuthenticationPanel({ 
+// User Management Panel
+function UserManagementPanel({
+  users,
+  roles,
+  onCreateUser,
+  onEditUser,
+  onChangePassword,
+  onDeleteUser,
+  onToggleUserStatus
+}: {
+  users: any[];
+  roles: any;
+  onCreateUser: () => void;
+  onEditUser: (user: any) => void;
+  onChangePassword: (user: any) => void;
+  onDeleteUser: (user: any) => void;
+  onToggleUserStatus: (userId: string, isActive: boolean) => void;
+}) {
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-roobert-semibold text-gray-900 dark:text-white">User Management</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Manage user accounts, roles, and permissions
+          </p>
+        </div>
+        <button
+          onClick={onCreateUser}
+          className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white rounded-lg font-roobert-medium hover:shadow-lg transition-all"
+        >
+          <Plus className="w-4 h-4" />
+          Create User
+        </button>
+      </div>
+
+      {/* Users List */}
+      <div className="space-y-3">
+        {users.map((user) => (
+          <div key={user.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">{user.username}</h3>
+                  <span className={`px-2 py-1 rounded-full text-xs font-roobert-medium ${
+                    user.isActive
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                      : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                  }`}>
+                    {user.isActive ? 'Active' : 'Disabled'}
+                  </span>
+                  <span className="px-2 py-1 rounded text-xs font-roobert-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
+                    {roles[user.role]?.name || user.role}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{user.email}</p>
+                <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                  <span>Created: {new Date(user.createdAt).toLocaleDateString()}</span>
+                  {user.lastLogin && <span>Last login: {new Date(user.lastLogin).toLocaleDateString()}</span>}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => onToggleUserStatus(user.id, !user.isActive)}
+                  className={`p-2 rounded-lg transition-colors ${
+                    user.isActive
+                      ? 'text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30'
+                      : 'text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
+                  }`}
+                  title={user.isActive ? 'Disable user' : 'Enable user'}
+                >
+                  {user.isActive ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                </button>
+                <button
+                  onClick={() => onEditUser(user)}
+                  className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+                  title="Edit user"
+                >
+                  <Edit className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => onChangePassword(user)}
+                  className="p-2 text-purple-600 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-lg transition-colors"
+                  title="Change password"
+                >
+                  <Shield className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => onDeleteUser(user)}
+                  className="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                  title="Delete user"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+        {users.length === 0 && (
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+            No users found. Create your first user to get started.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// User Create Modal
+function UserCreateModal({
+  roles,
+  onClose,
+  onCreate
+}: {
+  roles: any;
+  onClose: () => void;
+  onCreate: (userData: { username: string; password: string; email: string; role: string }) => void;
+}) {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    email: '',
+    role: 'viewer'
+  });
+
+  const handleSubmit = () => {
+    if (!formData.username || !formData.password || !formData.email || !formData.role) return;
+    onCreate(formData);
+    setFormData({ username: '', password: '', email: '', role: 'viewer' });
+  };
+
+  return (
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden"
+      >
+        <div className="p-6">
+          <div className="flex items-start gap-4 mb-6">
+            <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+              <Plus className="w-6 h-6 text-green-600 dark:text-green-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-1">
+                Create New User
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Add a new user account with specified role and permissions
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Username *
+              </label>
+              <input
+                type="text"
+                value={formData.username}
+                onChange={(e) => setFormData(prev => ({ ...prev, username: e.target.value }))}
+                placeholder="Enter username"
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+                autoFocus
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Email *
+              </label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                placeholder="user@example.com"
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Password *
+              </label>
+              <input
+                type="password"
+                value={formData.password}
+                onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                placeholder="Enter password"
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Role *
+              </label>
+              <select
+                value={formData.role}
+                onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value }))}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+              >
+                {Object.entries(roles).map(([key, role]: [string, any]) => (
+                  <option key={key} value={key}>{role.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!formData.username || !formData.password || !formData.email || !formData.role}
+            className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-roobert-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Create User
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// User Edit Modal
+function UserEditModal({
+  user,
+  roles,
+  onClose,
+  onUpdate
+}: {
+  user: any;
+  roles: any;
+  onClose: () => void;
+  onUpdate: (userId: string, userData: { email?: string; role?: string; isActive?: boolean }) => void;
+}) {
+  const [formData, setFormData] = useState({
+    email: user.email,
+    role: user.role,
+    isActive: user.isActive
+  });
+
+  const handleSubmit = () => {
+    onUpdate(user.id, formData);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden"
+      >
+        <div className="p-6">
+          <div className="flex items-start gap-4 mb-6">
+            <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
+              <Edit className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-1">
+                Edit User: {user.username}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Update user details and permissions
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+                autoFocus
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Role
+              </label>
+              <select
+                value={formData.role}
+                onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value }))}
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+              >
+                {Object.entries(roles).map(([key, role]: [string, any]) => (
+                  <option key={key} value={key}>{role.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
+              <div>
+                <div className="font-roobert-medium text-sm text-gray-900 dark:text-white mb-1">
+                  Account Active
+                </div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  {formData.isActive ? 'User can log in and access the system' : 'User account is disabled'}
+                </div>
+              </div>
+              <button
+                onClick={() => setFormData(prev => ({ ...prev, isActive: !prev.isActive }))}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  formData.isActive ? 'bg-green-600 dark:bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    formData.isActive ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-roobert-semibold transition-colors"
+          >
+            Update User
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// Change Password Modal
+function ChangePasswordModal({
+  user,
+  onClose,
+  onChangePassword
+}: {
+  user: any;
+  onClose: () => void;
+  onChangePassword: (userId: string, newPassword: string) => void;
+}) {
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleSubmit = () => {
+    if (!newPassword || newPassword !== confirmPassword) return;
+    onChangePassword(user.id, newPassword);
+    setNewPassword('');
+    setConfirmPassword('');
+  };
+
+  return (
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden"
+      >
+        <div className="p-6">
+          <div className="flex items-start gap-4 mb-6">
+            <div className="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center flex-shrink-0">
+              <Shield className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-1">
+                Change Password: {user.username}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Set a new password for this user account
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                New Password *
+              </label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Enter new password"
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+                autoFocus
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Confirm Password *
+              </label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm new password"
+                className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
+              />
+              {newPassword && confirmPassword && newPassword !== confirmPassword && (
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1">Passwords do not match</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!newPassword || newPassword !== confirmPassword}
+            className="px-4 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-roobert-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Change Password
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// User Delete Modal
+function UserDeleteModal({
+  user,
+  onClose,
+  onDelete
+}: {
+  user: any;
+  onClose: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+      >
+        <div className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+              <Trash2 className="w-6 h-6 text-red-600 dark:text-red-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                Delete User: {user.username}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Are you sure you want to delete <strong>{user.username}</strong>? This action cannot be undone and will permanently remove the user account.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-gray-50 dark:bg-gray-900/50 px-6 py-4 flex gap-3 justify-end">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-roobert-medium hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onDelete}
+            className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-roobert-semibold transition-colors"
+          >
+            Delete User
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+// Authentication Panel Component
+function AuthenticationPanel({
   settings,
   customLogo,
   onUpdate,
   onLogoUpload,
   onLogoRemove,
   uploadingLogo
-}: { 
+}: {
   settings: AuthenticationSettings;
   customLogo?: string;
   onUpdate: (app: 'parentApp' | 'cmsAdmin', value: boolean) => void;
@@ -777,184 +1462,139 @@ function AuthenticationPanel({
 }) {
   return (
     <div className="space-y-6">
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-        <div className="flex items-start gap-3">
-          <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-blue-800 dark:text-blue-300">
-            <p className="font-roobert-semibold mb-1">Authentication Controls</p>
-            <p>Enable login requirements to force user authentication before accessing the application. When disabled, users can access the app directly without logging in.</p>
+      {/* Authentication Settings */}
+      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+            <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
-        </div>
-      </div>
-
-      {/* Custom Logo Upload */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-        <div className="mb-4">
-          <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-1">
-            Custom Logo
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Upload a custom logo to replace the FIS logo across both applications
-          </p>
+          <div>
+            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Authentication Settings</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Control login requirements for different applications</p>
+          </div>
         </div>
 
         <div className="space-y-4">
-          {/* Logo Preview */}
-          {customLogo && (
-            <div className="relative inline-block">
-              <img 
-                src={customLogo} 
-                alt="Custom Logo" 
-                className="h-16 w-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2 bg-white dark:bg-gray-900"
+          {/* Parent App Authentication */}
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+            <div>
+              <div className="font-roobert-medium text-sm text-gray-900 dark:text-white mb-1">
+                Main Application Login
+              </div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">
+                Require users to log in to access the main executive summary application
+              </div>
+            </div>
+            <button
+              onClick={() => onUpdate('parentApp', !settings.parentApp.requireLogin)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                settings.parentApp.requireLogin
+                  ? 'bg-blue-600 dark:bg-blue-500'
+                  : 'bg-gray-300 dark:bg-gray-600'
+              }`}
+            >
+              <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                settings.parentApp.requireLogin ? 'translate-x-6' : 'translate-x-1'
+              }`} />
+            </button>
+          </div>
+
+          {/* CMS Admin Authentication */}
+          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+            <div>
+              <div className="font-roobert-medium text-sm text-gray-900 dark:text-white mb-1">
+                CMS Admin Login
+              </div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">
+                Require users to log in to access the content management system
+              </div>
+            </div>
+            <button
+              onClick={() => onUpdate('cmsAdmin', !settings.cmsAdmin.requireLogin)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                settings.cmsAdmin.requireLogin
+                  ? 'bg-blue-600 dark:bg-blue-500'
+                  : 'bg-gray-300 dark:bg-gray-600'
+              }`}
+            >
+              <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                settings.cmsAdmin.requireLogin ? 'translate-x-6' : 'translate-x-1'
+              }`} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Custom Logo Section */}
+      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+            <ImageIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          </div>
+          <div>
+            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Custom Logo</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Upload a custom logo for the application</p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {customLogo ? (
+            <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+              <img
+                src={`http://localhost:3001${customLogo}`}
+                alt="Custom Logo"
+                className="w-16 h-16 object-contain rounded-lg border border-gray-200 dark:border-gray-600"
               />
+              <div className="flex-1">
+                <div className="font-roobert-medium text-sm text-gray-900 dark:text-white mb-1">
+                  Current Logo
+                </div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  Logo is currently active in the application
+                </div>
+              </div>
               <button
                 onClick={onLogoRemove}
-                className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                className="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                 title="Remove logo"
               >
-                <X className="w-3 h-3" />
+                <X className="w-4 h-4" />
               </button>
+            </div>
+          ) : (
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              No custom logo uploaded
             </div>
           )}
 
-          {/* Upload Button */}
-          <div>
-            <label className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg cursor-pointer transition-colors">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={onLogoUpload}
-                className="hidden"
-                disabled={uploadingLogo}
-              />
-              {uploadingLogo ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                  <span className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300">Uploading...</span>
-                </>
-              ) : (
-                <>
-                  <Upload className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                  <span className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
-                    {customLogo ? 'Replace Logo' : 'Upload Logo'}
-                  </span>
-                </>
-              )}
+          <div className="flex items-center gap-4">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={onLogoUpload}
+              className="hidden"
+              id="logo-upload"
+            />
+            <label
+              htmlFor="logo-upload"
+              className="flex items-center gap-2 px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-50"
+            >
+              <Upload className={`w-4 h-4 ${uploadingLogo ? 'animate-pulse' : ''}`} />
+              {uploadingLogo ? 'Uploading...' : 'Upload Logo'}
             </label>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              Recommended: PNG or SVG, max 2MB. For best results, use a transparent background.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Parent App Authentication */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-1">
-              Executive Summary App
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Control authentication for the main executive summary dashboard
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            {settings.parentApp.requireLogin ? (
-              <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                <Eye className="w-3 h-3" />
-                <span className="text-xs font-roobert-semibold">Login Required</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-                <EyeOff className="w-3 h-3" />
-                <span className="text-xs font-roobert-semibold">Open Access</span>
-              </div>
+            {customLogo && (
+              <button
+                onClick={onLogoRemove}
+                className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                <X className="w-4 h-4" />
+                Remove
+              </button>
             )}
           </div>
-        </div>
 
-        <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-          <div>
-            <div className="font-roobert-medium text-sm text-gray-900 dark:text-white mb-1">
-              Require Login
-            </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">
-              {settings.parentApp.requireLogin ? 'Users must authenticate to access' : 'Open access, no login required'}
-            </div>
-          </div>
-          <button
-            onClick={() => onUpdate('parentApp', !settings.parentApp.requireLogin)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              settings.parentApp.requireLogin ? 'bg-fis-eggplant dark:bg-fis-raspberry' : 'bg-gray-300 dark:bg-gray-600'
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                settings.parentApp.requireLogin ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
-          </button>
-        </div>
-      </div>
-
-      {/* CMS Admin Authentication */}
-      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-1">
-              CMS Admin Panel
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Control authentication for the content management system
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            {settings.cmsAdmin.requireLogin ? (
-              <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
-                <Eye className="w-3 h-3" />
-                <span className="text-xs font-roobert-semibold">Login Required</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
-                <EyeOff className="w-3 h-3" />
-                <span className="text-xs font-roobert-semibold">Open Access</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-          <div>
-            <div className="font-roobert-medium text-sm text-gray-900 dark:text-white mb-1">
-              Require Login
-            </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">
-              {settings.cmsAdmin.requireLogin ? 'Users must authenticate to access CMS' : 'Open access, no login required'}
-            </div>
-          </div>
-          <button
-            onClick={() => onUpdate('cmsAdmin', !settings.cmsAdmin.requireLogin)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              settings.cmsAdmin.requireLogin ? 'bg-fis-eggplant dark:bg-fis-raspberry' : 'bg-gray-300 dark:bg-gray-600'
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                settings.cmsAdmin.requireLogin ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
-          </button>
-        </div>
-      </div>
-
-      {/* Info Box */}
-      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-        <div className="flex items-start gap-3">
-          <Shield className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-yellow-800 dark:text-yellow-300">
-            <p className="font-roobert-semibold mb-1">Note on User Management</p>
-            <p>User credentials and permissions will be managed via JSON files. The Users tab (coming soon) will allow you to create, edit, and manage user accounts.</p>
+          <div className="text-xs text-gray-500 dark:text-gray-400">
+            Recommended: PNG or JPG format, max 2MB, square aspect ratio preferred
           </div>
         </div>
       </div>

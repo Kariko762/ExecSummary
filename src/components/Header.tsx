@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download, Settings, BookOpen, LogOut } from 'lucide-react';
+import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download, Settings, BookOpen, LogOut, Bell } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import html2canvas from 'html2canvas';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 interface HeaderProps {
   onSearch: (query: string) => void;
@@ -18,9 +19,13 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
   const [searchQuery, setSearchQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
+  const [isAnnouncementsOpen, setIsAnnouncementsOpen] = useState(false);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [customLogo, setCustomLogo] = useState<string | null>(null);
   const location = useLocation();
   const menuRef = useRef<HTMLDivElement>(null);
+  const announcementsRef = useRef<HTMLDivElement>(null);
 
   // Load custom logo from system settings
   useEffect(() => {
@@ -31,15 +36,50 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
     }
   }, []);
 
+  // Load announcements
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/content?tag=announcement');
+        const data = await response.json();
+        
+        if (data.success && data.content) {
+          // Map content to announcement format
+          const mappedAnnouncements = data.content
+            .filter((item: any) => item.status === 'published')
+            .map((item: any) => ({
+              id: item.id,
+              title: item.title,
+              message: item.details || item.summary || item.sections?.[0]?.content || '',
+              date: new Date(item.date || item._template_created),
+              priority: item.priority || 'low',
+              read: false
+            }))
+            .sort((a: any, b: any) => b.date.getTime() - a.date.getTime());
+          
+          setAnnouncements(mappedAnnouncements);
+          setUnreadCount(mappedAnnouncements.length);
+        }
+      } catch (error) {
+        console.error('Failed to fetch announcements:', error);
+      }
+    };
+    
+    fetchAnnouncements();
+  }, []);
+
   // Handle clicks outside the menu to close it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsNavDropdownOpen(false);
       }
+      if (announcementsRef.current && !announcementsRef.current.contains(event.target as Node)) {
+        setIsAnnouncementsOpen(false);
+      }
     };
 
-    if (isNavDropdownOpen) {
+    if (isNavDropdownOpen || isAnnouncementsOpen) {
       // Small delay to prevent immediate closure when opening
       setTimeout(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -49,21 +89,26 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [isNavDropdownOpen]);
+  }, [isNavDropdownOpen, isAnnouncementsOpen]);
 
   // Handle ESC key to close navigation menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isNavDropdownOpen) {
-        setIsNavDropdownOpen(false);
+      if (e.key === 'Escape') {
+        if (isNavDropdownOpen) {
+          setIsNavDropdownOpen(false);
+        }
+        if (isAnnouncementsOpen) {
+          setIsAnnouncementsOpen(false);
+        }
       }
     };
 
-    if (isNavDropdownOpen) {
+    if (isNavDropdownOpen || isAnnouncementsOpen) {
       window.addEventListener('keydown', handleEscape);
       return () => window.removeEventListener('keydown', handleEscape);
     }
-  }, [isNavDropdownOpen]);
+  }, [isNavDropdownOpen, isAnnouncementsOpen]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -253,6 +298,125 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-2">
+            {/* Announcements Bell */}
+            <div className="relative" ref={announcementsRef}>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsAnnouncementsOpen(!isAnnouncementsOpen)}
+                className="relative p-2 rounded-lg glass hover:glass-strong transition-all"
+                title="Announcements"
+              >
+                <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </motion.button>
+
+              {/* Announcements Dropdown */}
+              <AnimatePresence>
+                {isAnnouncementsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-96 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+                  >
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">
+                          Announcements
+                        </h3>
+                        <button
+                          onClick={() => setIsAnnouncementsOpen(false)}
+                          className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        >
+                          <X className="w-5 h-5 text-gray-500" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-3 max-h-96 overflow-y-auto">
+                        {announcements.length === 0 ? (
+                          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                            <Bell className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                            <p className="font-roobert-medium">No announcements</p>
+                            <p className="text-sm">You're all caught up!</p>
+                          </div>
+                        ) : (
+                          announcements.map((announcement) => (
+                            <motion.div
+                              key={announcement.id}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              className={`p-4 rounded-lg border transition-all cursor-pointer ${
+                                announcement.read
+                                  ? 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700'
+                                  : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
+                              }`}
+                              onClick={() => {
+                                // Mark as read
+                                setAnnouncements(prev => 
+                                  prev.map(a => 
+                                    a.id === announcement.id ? { ...a, read: true } : a
+                                  )
+                                );
+                                setUnreadCount(prev => Math.max(0, prev - 1));
+                              }}
+                            >
+                              <div className="flex items-start justify-between mb-2">
+                                <h4 className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                                  {renderWithExpressions(announcement.title)}
+                                </h4>
+                                <div className={`w-2 h-2 rounded-full ${
+                                  announcement.priority === 'high' ? 'bg-red-500' :
+                                  announcement.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                                }`} />
+                              </div>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                {renderWithExpressions(announcement.message)}
+                              </p>
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs text-gray-500 dark:text-gray-500">
+                                  {announcement.date.toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </span>
+                                {!announcement.read && (
+                                  <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">
+                                    New
+                                  </span>
+                                )}
+                              </div>
+                            </motion.div>
+                          ))
+                        )}
+                      </div>
+
+                      {announcements.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <button
+                            onClick={() => {
+                              setAnnouncements(prev => prev.map(a => ({ ...a, read: true })));
+                              setUnreadCount(0);
+                            }}
+                            className="w-full text-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                          >
+                            Mark all as read
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -386,6 +550,22 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
             </form>
 
             <div className="flex items-center justify-center space-x-4">
+              {/* Mobile Announcements Bell */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsAnnouncementsOpen(!isAnnouncementsOpen)}
+                  className="relative flex items-center space-x-2 px-4 py-2 rounded-lg glass"
+                >
+                  <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Announcements</span>
+                </button>
+              </div>
+
               <button
                 onClick={handleExportDashboard}
                 className="flex items-center space-x-2 px-4 py-2 rounded-lg glass"
@@ -416,6 +596,104 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                 </span>
               </button>
             </div>
+
+            {/* Mobile Announcements Dropdown */}
+            <AnimatePresence>
+              {isAnnouncementsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mt-4 bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
+                >
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">
+                        Announcements
+                      </h3>
+                      <button
+                        onClick={() => setIsAnnouncementsOpen(false)}
+                        className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <X className="w-5 h-5 text-gray-500" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-3 max-h-64 overflow-y-auto">
+                      {announcements.length === 0 ? (
+                        <div className="text-center py-6 text-gray-500 dark:text-gray-400">
+                          <Bell className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                          <p className="font-roobert-medium">No announcements</p>
+                          <p className="text-sm">You're all caught up!</p>
+                        </div>
+                      ) : (
+                        announcements.map((announcement) => (
+                          <div
+                            key={announcement.id}
+                            className={`p-3 rounded-lg border transition-all ${
+                              announcement.read
+                                ? 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700'
+                                : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
+                            }`}
+                            onClick={() => {
+                              // Mark as read
+                              setAnnouncements(prev => 
+                                prev.map(a => 
+                                  a.id === announcement.id ? { ...a, read: true } : a
+                                )
+                              );
+                              setUnreadCount(prev => Math.max(0, prev - 1));
+                            }}
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <h4 className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                                {renderWithExpressions(announcement.title)}
+                              </h4>
+                              <div className={`w-2 h-2 rounded-full ${
+                                announcement.priority === 'high' ? 'bg-red-500' :
+                                announcement.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                              }`} />
+                            </div>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                              {renderWithExpressions(announcement.message)}
+                            </p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs text-gray-500 dark:text-gray-500">
+                                {announcement.date.toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                              {!announcement.read && (
+                                <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded-full">
+                                  New
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {announcements.length > 0 && (
+                      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <button
+                          onClick={() => {
+                            setAnnouncements(prev => prev.map(a => ({ ...a, read: true })));
+                            setUnreadCount(0);
+                          }}
+                          className="w-full text-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                        >
+                          Mark all as read
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Mobile Logout Button */}
             {isAuthenticated && onLogout && (

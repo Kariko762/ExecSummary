@@ -28,17 +28,6 @@ app.delete('/api/tenants/:type/:slug', deleteTenant);
 app.get('/api/tenants/:type/:slug/content', getTenantContent);
 app.get('/api/tenants/:type/:slug/stats', getTenantStats);
 
-// Feature Flags API - returns enabled/disabled state for orgs and initiatives
-app.get('/api/feature-flags', (req, res) => {
-  // These would be stored in a database in production
-  // For now, they're managed in localStorage on the CMS side
-  // The main app can check localStorage directly or we can sync via backend
-  res.json({
-    organizationsEnabled: true,  // Default to enabled
-    initiativesEnabled: true     // Default to enabled
-  });
-});
-
 // Path to data directory
 const DATA_DIR = path.join(__dirname, 'data');
 const CONTENT_DIR = path.join(__dirname, 'data', 'content'); // Unified content directory
@@ -273,314 +262,11 @@ app.delete('/api/content/:id', async (req, res) => {
 // LEGACY TYPE-SPECIFIC ENDPOINTS (Deprecated - kept for backwards compatibility)
 // ============================================
 
-// ============================================
-// SUMMARIES ENDPOINTS
-// ============================================
 
-// GET all summaries
-app.get('/api/summaries', async (req, res) => {
-  try {
-    const summariesDir = path.join(DATA_DIR, 'summaries');
-    const files = await listFiles(summariesDir);
-    
-    const summaries = await Promise.all(
-      files.map(async (file) => {
-        const filePath = path.join(summariesDir, file);
-        return await readJSONFile(filePath);
-      })
-    );
-    
-    // Sort by date (newest first)
-    summaries.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    res.json(summaries);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
-// GET single summary by ID
-app.get('/api/summaries/:id', async (req, res) => {
-  try {
-    const summariesDir = path.join(DATA_DIR, 'summaries');
-    const filePath = path.join(summariesDir, `${req.params.id}.json`);
-    const summary = await readJSONFile(filePath);
-    res.json(summary);
-  } catch (error) {
-    res.status(404).json({ error: 'Summary not found' });
-  }
-});
 
-// POST create new summary
-app.post('/api/summaries', async (req, res) => {
-  try {
-    const summary = req.body;
-    const summariesDir = path.join(DATA_DIR, 'summaries');
-    const filePath = path.join(summariesDir, `${summary.id}.json`);
-    
-    await writeJSONFile(filePath, summary);
-    res.status(201).json({ message: 'Summary created', data: summary });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
-// PUT update existing summary
-app.put('/api/summaries/:id', async (req, res) => {
-  try {
-    const summary = req.body;
-    const summariesDir = path.join(DATA_DIR, 'summaries');
-    const filePath = path.join(summariesDir, `${req.params.id}.json`);
-    
-    await writeJSONFile(filePath, summary);
-    res.json({ message: 'Summary updated', data: summary });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
-// DELETE summary
-app.delete('/api/summaries/:id', async (req, res) => {
-  try {
-    const summariesDir = path.join(DATA_DIR, 'summaries');
-    const filePath = path.join(summariesDir, `${req.params.id}.json`);
-    await fs.unlink(filePath);
-    res.json({ message: 'Summary deleted' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// ============================================
-// EXECUTIVE IQ ENDPOINTS
-// ============================================
-
-// GET all ExecutiveIQ articles
-app.get('/api/executive-iq', async (req, res) => {
-  try {
-    const execIQDir = path.join(DATA_DIR, 'executive-iq');
-    const files = await listFiles(execIQDir);
-    
-    const articles = await Promise.all(
-      files.map(async (file) => {
-        const filePath = path.join(execIQDir, file);
-        return await readJSONFile(filePath);
-      })
-    );
-    
-    articles.sort((a, b) => new Date(b.date) - new Date(a.date));
-    res.json(articles);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// GET single ExecutiveIQ article
-app.get('/api/executive-iq/:id', async (req, res) => {
-  try {
-    const execIQDir = path.join(DATA_DIR, 'executive-iq');
-    const filePath = path.join(execIQDir, `${req.params.id}.json`);
-    const article = await readJSONFile(filePath);
-    res.json(article);
-  } catch (error) {
-    res.status(404).json({ error: 'Article not found' });
-  }
-});
-
-// POST create new ExecutiveIQ article
-app.post('/api/executive-iq', async (req, res) => {
-  try {
-    const article = req.body;
-    const execIQDir = path.join(DATA_DIR, 'executive-iq');
-    const filePath = path.join(execIQDir, `${article.id}.json`);
-    
-    await writeJSONFile(filePath, article);
-    res.status(201).json({ message: 'Article created', data: article });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// PUT update ExecutiveIQ article
-app.put('/api/executive-iq/:id', async (req, res) => {
-  try {
-    const article = req.body;
-    const execIQDir = path.join(DATA_DIR, 'executive-iq');
-    const filePath = path.join(execIQDir, `${req.params.id}.json`);
-    
-    await writeJSONFile(filePath, article);
-    res.json({ message: 'Article updated', data: article });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// DELETE ExecutiveIQ article
-app.delete('/api/executive-iq/:id', async (req, res) => {
-  try {
-    const execIQDir = path.join(DATA_DIR, 'executive-iq');
-    const filePath = path.join(execIQDir, `${req.params.id}.json`);
-    await fs.unlink(filePath);
-    res.json({ message: 'Article deleted' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// ============================================
-// ORGANIZATIONS ENDPOINTS
-// ============================================
-
-// GET all organizations from registry
-app.get('/api/organizations', async (req, res) => {
-  try {
-    const registryPath = path.join(DATA_DIR, 'orgs', 'registry.json');
-    const registry = await readJSONFile(registryPath);
-    res.json({ success: true, organizations: registry.organizations || [] });
-  } catch (error) {
-    res.json({ success: true, organizations: [] }); // Return empty if registry doesn't exist
-  }
-});
-
-// GET all initiatives from registry
-app.get('/api/initiatives', async (req, res) => {
-  try {
-    const registryPath = path.join(DATA_DIR, 'initiatives', 'registry.json');
-    const registry = await readJSONFile(registryPath);
-    res.json({ success: true, initiatives: registry.initiatives || [] });
-  } catch (error) {
-    res.json({ success: true, initiatives: [] }); // Return empty if registry doesn't exist
-  }
-});
-
-// GET single organization
-app.get('/api/organizations/:id', async (req, res) => {
-  try {
-    const orgsDir = path.join(DATA_DIR, 'organizations');
-    const filePath = path.join(orgsDir, `${req.params.id}.json`);
-    const organization = await readJSONFile(filePath);
-    res.json(organization);
-  } catch (error) {
-    res.status(404).json({ error: 'Organization not found' });
-  }
-});
-
-// POST create organization
-app.post('/api/organizations', async (req, res) => {
-  try {
-    const organization = req.body;
-    const orgsDir = path.join(DATA_DIR, 'organizations');
-    const filePath = path.join(orgsDir, `${organization.id}.json`);
-    
-    await writeJSONFile(filePath, organization);
-    res.status(201).json({ message: 'Organization created', data: organization });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// PUT update organization
-app.put('/api/organizations/:id', async (req, res) => {
-  try {
-    const organization = req.body;
-    const orgsDir = path.join(DATA_DIR, 'organizations');
-    const filePath = path.join(orgsDir, `${req.params.id}.json`);
-    
-    await writeJSONFile(filePath, organization);
-    res.json({ message: 'Organization updated', data: organization });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// DELETE organization
-app.delete('/api/organizations/:id', async (req, res) => {
-  try {
-    const orgsDir = path.join(DATA_DIR, 'organizations');
-    const filePath = path.join(orgsDir, `${req.params.id}.json`);
-    await fs.unlink(filePath);
-    res.json({ message: 'Organization deleted' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// ============================================
-// PERFORMANCE ENDPOINTS
-// ============================================
-
-// GET all performance data
-app.get('/api/performance', async (req, res) => {
-  try {
-    const perfDir = path.join(DATA_DIR, 'performance');
-    const files = await listFiles(perfDir);
-    
-    const performances = await Promise.all(
-      files.map(async (file) => {
-        const filePath = path.join(perfDir, file);
-        return await readJSONFile(filePath);
-      })
-    );
-    
-    // Sort by date descending
-    performances.sort((a, b) => new Date(b.date) - new Date(a.date));
-    res.json(performances);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// GET single performance data
-app.get('/api/performance/:id', async (req, res) => {
-  try {
-    const perfDir = path.join(DATA_DIR, 'performance');
-    const filePath = path.join(perfDir, `${req.params.id}.json`);
-    const performance = await readJSONFile(filePath);
-    res.json(performance);
-  } catch (error) {
-    res.status(404).json({ error: 'Performance data not found' });
-  }
-});
-
-// POST create performance data
-app.post('/api/performance', async (req, res) => {
-  try {
-    const performance = req.body;
-    const perfDir = path.join(DATA_DIR, 'performance');
-    const filePath = path.join(perfDir, `${performance.id}.json`);
-    
-    await writeJSONFile(filePath, performance);
-    res.status(201).json({ message: 'Performance data created', data: performance });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// PUT update performance data
-app.put('/api/performance/:id', async (req, res) => {
-  try {
-    const performance = req.body;
-    const perfDir = path.join(DATA_DIR, 'performance');
-    const filePath = path.join(perfDir, `${req.params.id}.json`);
-    
-    await writeJSONFile(filePath, performance);
-    res.json({ message: 'Performance data updated', data: performance });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// DELETE performance data
-app.delete('/api/performance/:id', async (req, res) => {
-  try {
-    const perfDir = path.join(DATA_DIR, 'performance');
-    const filePath = path.join(perfDir, `${req.params.id}.json`);
-    await fs.unlink(filePath);
-    res.json({ message: 'Performance data deleted' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // ============================================
 // FILE IMPORT ENDPOINT
@@ -808,159 +494,7 @@ app.delete('/api/templates/:id', async (req, res) => {
   }
 });
 
-// ============================================
-// KNOWLEDGE BASE CATEGORIES ENDPOINTS
-// ============================================
 
-// GET all KB categories
-app.get('/api/kb-categories', async (req, res) => {
-  try {
-    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
-    const files = await listFiles(categoriesDir);
-    
-    const categories = await Promise.all(
-      files.map(async (file) => {
-        const filePath = path.join(categoriesDir, file);
-        return await readJSONFile(filePath);
-      })
-    );
-    
-    categories.sort((a, b) => a.name.localeCompare(b.name));
-    res.json(categories);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// GET single KB category by ID
-app.get('/api/kb-categories/:id', async (req, res) => {
-  try {
-    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
-    const filePath = path.join(categoriesDir, `${req.params.id}.json`);
-    const category = await readJSONFile(filePath);
-    res.json(category);
-  } catch (error) {
-    res.status(404).json({ error: 'Category not found' });
-  }
-});
-
-// POST create new KB category
-app.post('/api/kb-categories', async (req, res) => {
-  try {
-    const category = req.body;
-    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
-    const filePath = path.join(categoriesDir, `${category.id}.json`);
-    
-    await writeJSONFile(filePath, category);
-    res.json({ success: true, message: 'Category created successfully', category });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// PUT update existing KB category
-app.put('/api/kb-categories/:id', async (req, res) => {
-  try {
-    const category = req.body;
-    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
-    const filePath = path.join(categoriesDir, `${req.params.id}.json`);
-    
-    await writeJSONFile(filePath, category);
-    res.json({ success: true, message: 'Category updated successfully', category });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// DELETE KB category
-app.delete('/api/kb-categories/:id', async (req, res) => {
-  try {
-    const categoriesDir = path.join(DATA_DIR, 'kb-categories');
-    const filePath = path.join(categoriesDir, `${req.params.id}.json`);
-    
-    await fs.unlink(filePath);
-    res.json({ success: true, message: 'Category deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// ============================================
-// KNOWLEDGE BASE ARTICLES ENDPOINTS
-// ============================================
-
-// GET all KB articles
-app.get('/api/knowledge-base', async (req, res) => {
-  try {
-    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
-    const files = await listFiles(articlesDir);
-    
-    const articles = await Promise.all(
-      files.map(async (file) => {
-        const filePath = path.join(articlesDir, file);
-        return await readJSONFile(filePath);
-      })
-    );
-    
-    articles.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
-    res.json(articles);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// GET single KB article by ID
-app.get('/api/knowledge-base/:id', async (req, res) => {
-  try {
-    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
-    const filePath = path.join(articlesDir, `${req.params.id}.json`);
-    const article = await readJSONFile(filePath);
-    res.json(article);
-  } catch (error) {
-    res.status(404).json({ error: 'Article not found' });
-  }
-});
-
-// POST create new KB article
-app.post('/api/knowledge-base', async (req, res) => {
-  try {
-    const article = req.body;
-    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
-    const filePath = path.join(articlesDir, `${article.id}.json`);
-    
-    await writeJSONFile(filePath, article);
-    res.json({ success: true, message: 'Article created successfully', article });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// PUT update existing KB article
-app.put('/api/knowledge-base/:id', async (req, res) => {
-  try {
-    const article = req.body;
-    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
-    const filePath = path.join(articlesDir, `${req.params.id}.json`);
-    
-    await writeJSONFile(filePath, article);
-    res.json({ success: true, message: 'Article updated successfully', article });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// DELETE KB article
-app.delete('/api/knowledge-base/:id', async (req, res) => {
-  try {
-    const articlesDir = path.join(DATA_DIR, 'knowledge-base');
-    const filePath = path.join(articlesDir, `${req.params.id}.json`);
-    
-    await fs.unlink(filePath);
-    res.json({ success: true, message: 'Article deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // ============================================
 // HEALTH CHECK
@@ -1072,27 +606,68 @@ app.get('/api/content-tags/:id/usage', async (req, res) => {
     const tagId = req.params.id;
     let publishedCount = 0;
     let draftCount = 0;
-    
-    // Scan summaries directory
-    const summariesDir = path.join(DATA_DIR, 'summaries');
-    const summaryFiles = await listFiles(summariesDir);
-    
-    for (const file of summaryFiles) {
-      const filePath = path.join(summariesDir, file);
-      const content = await readJSONFile(filePath);
-      
-      // Check if content has this tag
-      if (content.standard_header?.contentTag === tagId || content.contentTag === tagId) {
-        if (content.status === 'published') {
-          publishedCount++;
-        } else {
-          draftCount++;
+
+    // Helper function to scan directory for tag usage
+    const scanDirectory = async (dirPath) => {
+      try {
+        const files = await listFiles(dirPath);
+        for (const file of files) {
+          const filePath = path.join(dirPath, file);
+          const content = await readJSONFile(filePath);
+
+          // Check if content has this tag (check both old and new tag formats)
+          const hasTag = content._contentTag === tagId ||
+                        content.contentTag === tagId ||
+                        content.standard_header?.contentTag === tagId;
+
+          if (hasTag) {
+            if (content.status === 'published') {
+              publishedCount++;
+            } else {
+              draftCount++;
+            }
+          }
+        }
+      } catch (error) {
+        // Directory might not exist, skip silently
+      }
+    };
+
+    // Scan main content directory
+    await scanDirectory(CONTENT_DIR);
+
+    // Scan organization directories
+    try {
+      const orgsDir = path.join(DATA_DIR, 'orgs');
+      const orgFolders = await fs.readdir(orgsDir);
+      for (const orgSlug of orgFolders) {
+        if (orgSlug === 'registry.json') continue;
+        const orgContentDir = path.join(orgsDir, orgSlug);
+        const stat = await fs.stat(orgContentDir);
+        if (stat.isDirectory()) {
+          await scanDirectory(orgContentDir);
         }
       }
+    } catch (error) {
+      // No organization content, skip
     }
-    
-    // Could scan other content types here (executive-iq, knowledge-base, etc.)
-    
+
+    // Scan initiative directories
+    try {
+      const initiativesDir = path.join(DATA_DIR, 'initiatives');
+      const initiativeFolders = await fs.readdir(initiativesDir);
+      for (const initiativeSlug of initiativeFolders) {
+        if (initiativeSlug === 'registry.json') continue;
+        const initiativeContentDir = path.join(initiativesDir, initiativeSlug);
+        const stat = await fs.stat(initiativeContentDir);
+        if (stat.isDirectory()) {
+          await scanDirectory(initiativeContentDir);
+        }
+      }
+    } catch (error) {
+      // No initiative content, skip
+    }
+
     res.json({
       tagId,
       publishedCount,
@@ -1100,6 +675,7 @@ app.get('/api/content-tags/:id/usage', async (req, res) => {
       totalCount: publishedCount + draftCount
     });
   } catch (error) {
+    console.error('Tag usage error:', error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -1211,42 +787,29 @@ app.listen(PORT, () => {
   console.log(`🚀 Backend API running on http://localhost:${PORT}`);
   console.log(`📁 Data directory: ${DATA_DIR}`);
   console.log(`\nAvailable endpoints:`);
-  console.log(`  GET    /api/summaries`);
-  console.log(`  GET    /api/summaries/:id`);
-  console.log(`  POST   /api/summaries`);
-  console.log(`  PUT    /api/summaries/:id`);
-  console.log(`  DELETE /api/summaries/:id`);
-  console.log(`  GET    /api/executive-iq`);
-  console.log(`  POST   /api/executive-iq`);
-  console.log(`  PUT    /api/executive-iq/:id`);
-  console.log(`  DELETE /api/executive-iq/:id`);
-  console.log(`  GET    /api/organizations`);
-  console.log(`  POST   /api/organizations`);
-  console.log(`  PUT    /api/organizations/:id`);
-  console.log(`  DELETE /api/organizations/:id`);
-  console.log(`  GET    /api/initiatives`);
+  console.log(`  GET    /api/content`);
+  console.log(`  POST   /api/content`);
+  console.log(`  PUT    /api/content/:id`);
+  console.log(`  DELETE /api/content/:id`);
+  console.log(`  GET    /api/tenants`);
+  console.log(`  POST   /api/tenants`);
+  console.log(`  DELETE /api/tenants/:type/:slug`);
+  console.log(`  GET    /api/tenants/:type/:slug/content`);
+  console.log(`  GET    /api/tenants/:type/:slug/stats`);
   console.log(`  GET    /api/templates`);
   console.log(`  GET    /api/templates/:id`);
   console.log(`  POST   /api/templates`);
   console.log(`  PUT    /api/templates/:id`);
   console.log(`  DELETE /api/templates/:id`);
-  console.log(`  GET    /api/kb-categories`);
-  console.log(`  GET    /api/kb-categories/:id`);
-  console.log(`  POST   /api/kb-categories`);
-  console.log(`  PUT    /api/kb-categories/:id`);
-  console.log(`  DELETE /api/kb-categories/:id`);
-  console.log(`  GET    /api/knowledge-base`);
-  console.log(`  GET    /api/knowledge-base/:id`);
-  console.log(`  POST   /api/knowledge-base`);
-  console.log(`  PUT    /api/knowledge-base/:id`);
-  console.log(`  DELETE /api/knowledge-base/:id`);
   console.log(`  POST   /api/import/:type (with file upload)`);
+  console.log(`  POST   /api/upload-logo`);
   console.log(`  POST   /api/auth/login`);
   console.log(`  POST   /api/auth/verify`);
   console.log(`  POST   /api/auth/logout`);
   console.log(`  GET    /api/auth/users (admin)`);
   console.log(`  POST   /api/auth/users (admin)`);
   console.log(`  PUT    /api/auth/users/:id (admin)`);
+  console.log(`  PUT    /api/auth/users/:id/password (admin)`);
   console.log(`  DELETE /api/auth/users/:id (admin)`);
   console.log(`  GET    /api/health`);
   console.log(`\n📌 Content Tags:`);

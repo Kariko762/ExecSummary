@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import { renderWithExpressions } from '../../../src/utils/expressionParser';
 
 export interface TextPatternProps {
   data: any;
@@ -48,7 +49,7 @@ export const TextareaPattern: React.FC<TextPatternProps> = ({ data, onChange, mo
     );
   }
   
-  return <p>{data}</p>;
+  return <div className="whitespace-pre-wrap">{renderWithExpressions(data)}</div>;
 };
 
 // ==========================================
@@ -67,16 +68,19 @@ export const RichTextPattern: React.FC<TextPatternProps> = ({ data, onChange, mo
     );
   }
   
-  // Simple markdown parser (bold, italic)
+  // Simple markdown parser (bold, italic) + expressions
   const renderRichText = (text: string) => {
     if (!text) return null;
+    
+    // First process expressions, then markdown
+    const withExpressions = renderWithExpressions(text);
     
     // Replace **bold** with <strong>
     let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     // Replace *italic* with <em>
     formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
     
-    return <div dangerouslySetInnerHTML={{ __html: formatted }} />;
+    return <div className="whitespace-pre-wrap">{withExpressions}</div>;
   };
   
   return renderRichText(data);
@@ -101,7 +105,7 @@ export const QuotePattern: React.FC<TextPatternProps> = ({ data, onChange, mode 
   return (
     <div className="quote-wrapper">
       <blockquote className="quote-display">
-        {data}
+        {renderWithExpressions(data)}
       </blockquote>
     </div>
   );

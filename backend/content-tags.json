@@ -55,6 +55,15 @@
       "icon": "Lightbulb",
       "description": "Supporting documentation that links Research -> Initiatives",
       "created": "2025-11-14T09:22:29.790Z"
+    },
+    {
+      "id": "announcement",
+      "name": "Announcements",
+      "color": "blue",
+      "icon": "Bell",
+      "created": "2025-11-16T00:00:00.000Z",
+      "description": "(System Tag) Default System Announcement Tag",
+      "protected": true
     }
   ]
 }

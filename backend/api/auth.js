@@ -146,7 +146,7 @@ router.get('/users', async (req, res) => {
   try {
     // TODO: Add authentication middleware
     const usersData = await readUsers();
-    
+
     // Remove password hashes from response
     const usersWithoutPasswords = usersData.users.map(({ passwordHash, ...user }) => user);
 
@@ -156,7 +156,7 @@ router.get('/users', async (req, res) => {
     });
   } catch (error) {
     console.error('Get users error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -201,7 +201,7 @@ router.post('/users', async (req, res) => {
     res.status(201).json(userWithoutPassword);
   } catch (error) {
     console.error('Create user error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -235,7 +235,38 @@ router.put('/users/:id', async (req, res) => {
     res.json(userWithoutPassword);
   } catch (error) {
     console.error('Update user error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT /api/auth/users/:id/password (admin only - change password)
+router.put('/users/:id/password', async (req, res) => {
+  try {
+    // TODO: Add authentication middleware + admin check
+    const { id } = req.params;
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({ error: 'Password is required' });
+    }
+
+    const usersData = await readUsers();
+    const userIndex = usersData.users.findIndex(u => u.id === id);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Hash new password
+    const passwordHash = await bcrypt.hash(password, 10);
+    usersData.users[userIndex].passwordHash = passwordHash;
+
+    await writeUsers(usersData);
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -258,7 +289,7 @@ router.delete('/users/:id', async (req, res) => {
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     console.error('Delete user error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: error.message });
   }
 });
 

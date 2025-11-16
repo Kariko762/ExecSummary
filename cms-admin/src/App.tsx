@@ -503,7 +503,26 @@ function App() {
 
       let sourceData;
       
-      if (creationMode === 'template') {
+      // For announcements, always use the announcement template
+      if (contentCreationType === 'announcement') {
+        try {
+          const response = await fetch(`${API_URL}/templates/announcement-template`);
+          if (!response.ok) throw new Error('Failed to fetch announcement template');
+          const data = await response.json();
+          sourceData = data.template;
+        } catch (error) {
+          console.error('Announcement template fetch error:', error);
+          // Fallback to minimal template
+          sourceData = {
+            id: 'template-new',
+            quarter: 'Month Day',
+            year: new Date().getFullYear(),
+            date: new Date().toISOString().split('T')[0],
+            title: 'New Announcement',
+            status: 'draft'
+          };
+        }
+      } else if (creationMode === 'template') {
         // Use template
         if (selectedSourceId === 'default' || !selectedSourceId || selectedSourceId === 'default-with-charts') {
           // Fetch the first available template from templates folder
@@ -572,6 +591,7 @@ function App() {
         _contentTag: contentCreationType === 'performance' ? 'performance' 
                    : contentCreationType === 'organization' ? 'organization'
                    : contentCreationType === 'initiative' ? 'initiative'
+                   : contentCreationType === 'announcement' ? 'announcement'
                    : selectedTag, // Timeline uses selected tag
         _fileExists: false // Mark as new - file will be created on first save
       };
@@ -1332,13 +1352,13 @@ function App() {
                   </div>
 
                   {/* Content Type Tabs */}
-                  <div className="flex gap-2 mb-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="flex gap-1 mb-4 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
                     <button
                       onClick={() => {
                         setContentCreationType('timeline');
                         setSelectedTag(availableTags.find(t => t.id === 'weekly-summary')?.id || availableTags[0]?.id || '');
                       }}
-                      className={`px-4 py-2 font-roobert-semibold text-sm transition-all relative ${
+                      className={`px-3 py-2 font-roobert-semibold text-xs transition-all relative whitespace-nowrap ${
                         contentCreationType === 'timeline'
                           ? 'text-fis-eggplant dark:text-fis-raspberry'
                           : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
@@ -1354,7 +1374,7 @@ function App() {
                         setContentCreationType('performance');
                         setSelectedTag('performance'); // Auto-tag as 'performance'
                       }}
-                      className={`px-4 py-2 font-roobert-semibold text-sm transition-all relative ${
+                      className={`px-3 py-2 font-roobert-semibold text-xs transition-all relative whitespace-nowrap ${
                         contentCreationType === 'performance'
                           ? 'text-fis-eggplant dark:text-fis-raspberry'
                           : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
@@ -1370,7 +1390,7 @@ function App() {
                         setContentCreationType('organization');
                         setSelectedTag('organization'); // Auto-tag as 'organization'
                       }}
-                      className={`px-4 py-2 font-roobert-semibold text-sm transition-all relative ${
+                      className={`px-3 py-2 font-roobert-semibold text-xs transition-all relative whitespace-nowrap ${
                         contentCreationType === 'organization'
                           ? 'text-blue-600 dark:text-blue-400'
                           : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
@@ -1386,7 +1406,7 @@ function App() {
                         setContentCreationType('initiative');
                         setSelectedTag('initiative'); // Auto-tag as 'initiative'
                       }}
-                      className={`px-4 py-2 font-roobert-semibold text-sm transition-all relative ${
+                      className={`px-3 py-2 font-roobert-semibold text-xs transition-all relative whitespace-nowrap ${
                         contentCreationType === 'initiative'
                           ? 'text-purple-600 dark:text-purple-400'
                           : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
@@ -1395,6 +1415,22 @@ function App() {
                       Initiative
                       {contentCreationType === 'initiative' && (
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 dark:bg-purple-400" />
+                      )}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setContentCreationType('announcement');
+                        setSelectedTag('announcement'); // Auto-tag as 'announcement'
+                      }}
+                      className={`px-3 py-2 font-roobert-semibold text-xs transition-all relative whitespace-nowrap ${
+                        contentCreationType === 'announcement'
+                          ? 'text-blue-600 dark:text-blue-400'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                      }`}
+                    >
+                      Announcement
+                      {contentCreationType === 'announcement' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
                       )}
                     </button>
                   </div>
@@ -1465,9 +1501,17 @@ function App() {
                           <span className="text-xs text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/40 px-2 py-1 rounded-md">Auto-assigned</span>
                         </div>
                       )}
+
+                      {contentCreationType === 'announcement' && (
+                        <div className="px-4 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 text-gray-900 dark:text-white flex items-center justify-between">
+                          <span className="font-roobert-medium">Announcement</span>
+                          <span className="text-xs text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/40 px-2 py-1 rounded-md">Auto-assigned</span>
+                        </div>
+                      )}
                     </div>
 
-                    {/* Content Type & Creation Method - Combined Row */}
+                    {/* Content Type & Creation Method - Combined Row (Hidden for Announcements) */}
+                    {contentCreationType !== 'announcement' && (
                     <div className="grid grid-cols-2 gap-4">
                       {/* Content Type Toggle */}
                       <div>
@@ -1550,9 +1594,10 @@ function App() {
                         </div>
                       </div>
                     </div>
+                    )}
 
-                    {/* Template Selector */}
-                    {creationMode === 'template' && (
+                    {/* Template Selector (conditional for non-announcements only) */}
+                    {contentCreationType !== 'announcement' && creationMode === 'template' && (
                       <div>
                         <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
                           Select Template
@@ -1563,13 +1608,15 @@ function App() {
                           className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white"
                         >
                           <option value="">-- Select a template --</option>
-                          {availableTemplates.map((template) => (
+                          {availableTemplates
+                            .filter(template => !template.id.startsWith('announcement-'))
+                            .map((template) => (
                             <option key={template.id} value={template.id}>
                               {template.name}
                             </option>
                           ))}
                         </select>
-                        {availableTemplates.length === 0 && (
+                        {availableTemplates.filter(template => !template.id.startsWith('announcement-')).length === 0 && (
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             No custom templates yet. Use Template Builder to create one.
                           </p>
@@ -1577,8 +1624,8 @@ function App() {
                       </div>
                     )}
 
-                    {/* Clone Source Selector */}
-                    {creationMode === 'clone' && (
+                    {/* Clone Source Selector (Not for announcements) */}
+                    {contentCreationType !== 'announcement' && creationMode === 'clone' && (
                       <div>
                         <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
                           Select Content

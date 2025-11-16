@@ -331,6 +331,15 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   
   // Build sections from groups
   sectionGroups.forEach((fieldKeys, baseName) => {
+    // Check if parent section is enabled (for multi-field sections)
+    const parentEnabledKey = `_enabled_${baseName}`;
+    const isParentEnabled = content[parentEnabledKey] !== false;
+    
+    // Skip entire section if parent is disabled
+    if (!isParentEnabled) {
+      return;
+    }
+    
     if (fieldKeys.length === 1) {
       // Single field - original logic
       const key = fieldKeys[0];

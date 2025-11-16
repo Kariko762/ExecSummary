@@ -299,6 +299,27 @@ export default function EditorModalV2({
                       Title {editedData[`_${fieldKey}_displayAssetTitle`] !== false ? '✓' : '✗'}
                     </div>
                     
+                    {/* Asset Enable/Disable Toggle */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const enabledKey = `_enabled_${fieldKey}`;
+                        setEditedData((prev: any) => ({
+                          ...prev,
+                          [enabledKey]: prev[enabledKey] === false ? true : false
+                        }));
+                        setIsDirty(true);
+                      }}
+                      className={`p-1 rounded transition-colors ${
+                        editedData[`_enabled_${fieldKey}`] !== false
+                          ? 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
+                          : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50'
+                      }`}
+                      title={editedData[`_enabled_${fieldKey}`] !== false ? 'Disable asset (hide from display)' : 'Enable asset (show in display)'}
+                    >
+                      {editedData[`_enabled_${fieldKey}`] !== false ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                    </button>
+                    
                     {/* Alignment Buttons */}
                     <div className="flex gap-0.5" onClick={(e) => e.stopPropagation()}>
                       <button
@@ -363,6 +384,14 @@ export default function EditorModalV2({
                     <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
                       {positionLabel}
                     </span>
+                    
+                    {/* Disabled Badge */}
+                    {editedData[`_enabled_${fieldKey}`] === false && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium bg-red-500/20 text-red-600 dark:text-red-400">
+                        <EyeOff className="w-2.5 h-2.5" />
+                        Hidden
+                      </span>
+                    )}
                   </div>
                   <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                 </button>

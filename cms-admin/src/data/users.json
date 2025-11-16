@@ -3,7 +3,7 @@
     {
       "id": "1",
       "username": "admin",
-      "passwordHash": "$2a$10$UUkjuAK2WQcgCYlEdP7JBuS6ycs0iLnWYPkoZkXSNvYIE6/VHcR7y",
+      "passwordHash": "$2a$10$VmYJ6ku1TRtVPtrSweKnr.naZGOLzb/M0ZYsb3vwNVspBcCREdmOq",
       "email": "admin@example.com",
       "role": "admin",
       "permissions": {
@@ -19,7 +19,29 @@
         }
       },
       "createdAt": "2025-01-01T00:00:00.000Z",
-      "lastLogin": "2025-11-09T13:38:40.640Z",
+      "lastLogin": "2025-11-16T06:54:14.372Z",
+      "isActive": true
+    },
+    {
+      "id": "1763275020122",
+      "username": "Jason",
+      "passwordHash": "$2a$10$/Ea6nG5daNJ9k1waZxKHC.HzQVMCsxGj6.Bqy/yriJVWrAGbMWql6",
+      "email": "jaosn.hanscomb@fisglobal.com",
+      "role": "admin",
+      "permissions": {
+        "parentApp": {
+          "canView": true,
+          "canEdit": false
+        },
+        "cmsAdmin": {
+          "canView": true,
+          "canEdit": true,
+          "canManageUsers": true,
+          "canManageSettings": true
+        }
+      },
+      "createdAt": "2025-11-16T06:37:00.122Z",
+      "lastLogin": "2025-11-16T07:07:15.354Z",
       "isActive": true
     }
   ],
@@ -74,5 +96,5 @@
     }
   },
   "version": "1.0.0",
-  "lastUpdated": "2025-11-09T13:38:40.640Z"
+  "lastUpdated": "2025-11-16T07:07:15.354Z"
 }

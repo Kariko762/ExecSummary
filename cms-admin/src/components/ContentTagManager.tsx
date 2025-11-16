@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Tag, FileText, Lightbulb, FolderOpen, AlertCircle, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, Tag, FileText, Lightbulb, FolderOpen, AlertCircle, X, Bell } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const API_URL = 'http://localhost:3001/api';
@@ -11,6 +11,7 @@ interface ContentTag {
   icon: string;
   created: string;
   description?: string;
+  protected?: boolean;
 }
 
 interface TagUsage {
@@ -25,6 +26,7 @@ const ICON_OPTIONS = [
   { value: 'Lightbulb', label: 'Lightbulb', icon: Lightbulb },
   { value: 'FolderOpen', label: 'Folder', icon: FolderOpen },
   { value: 'Tag', label: 'Tag', icon: Tag },
+  { value: 'Bell', label: 'Bell', icon: Bell },
 ];
 
 const COLOR_OPTIONS = [
@@ -221,7 +223,7 @@ export default function ContentTagManager() {
             {tags.map((tag) => {
               const Icon = getIconComponent(tag.icon);
               const usage = tagUsage[tag.id] || { publishedCount: 0, draftCount: 0, totalCount: 0 };
-              const canDelete = usage.totalCount === 0;
+              const canDelete = usage.totalCount === 0 && !tag.protected;
               
               return (
                 <tr key={tag.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
@@ -234,7 +236,14 @@ export default function ContentTagManager() {
                         <Icon className="w-5 h-5" />
                       </div>
                       <div>
-                        <div className="font-roobert-semibold text-gray-900 dark:text-white">{tag.name}</div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-roobert-semibold text-gray-900 dark:text-white">{tag.name}</span>
+                          {tag.protected && (
+                            <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 text-xs font-roobert-medium">
+                              Protected
+                            </span>
+                          )}
+                        </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">{tag.id}</div>
                       </div>
                     </div>
@@ -264,18 +273,20 @@ export default function ContentTagManager() {
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button
-                        onClick={() => handleDelete(tag)}
-                        disabled={!canDelete}
-                        className={`p-2 rounded-lg transition-colors ${
-                          canDelete
-                            ? 'hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400'
-                            : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
-                        }`}
-                        title={canDelete ? 'Delete tag' : 'Cannot delete tag with content'}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      {!tag.protected && (
+                        <button
+                          onClick={() => handleDelete(tag)}
+                          disabled={!canDelete}
+                          className={`p-2 rounded-lg transition-colors ${
+                            canDelete
+                              ? 'hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400'
+                              : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
+                          }`}
+                          title={!canDelete ? 'Cannot delete tag with content' : 'Delete tag'}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

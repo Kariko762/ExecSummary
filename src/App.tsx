@@ -4,6 +4,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
 import { Header } from './components/Header';
 import { SummaryCard } from './components/SummaryCard';
+import { renderWithExpressions } from './utils/expressionParser';
 import { Dashboard } from './components/Dashboard';
 import { ContentModal } from './components/ContentModal';
 import { Timeline } from './components/Timeline';
@@ -27,6 +28,7 @@ function App() {
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [selectedTag, setSelectedTag] = useState<string>('all');
   const [performanceDate, setPerformanceDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
   
   // Feature flags from System Settings
   const [organizationsEnabled, setOrganizationsEnabled] = useState(true);
@@ -43,6 +45,36 @@ function App() {
     loadTimelineData().then(() => {
       setIsLoadingData(false);
     });
+  }, []);
+
+  // Load announcements from API
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/content?tag=announcement');
+        const data = await response.json();
+        
+        if (data.success && data.content) {
+          const mappedAnnouncements = data.content
+            .filter((item: any) => item.status === 'published')
+            .map((item: any) => ({
+              id: item.id,
+              title: item.title,
+              message: item.details || item.summary || item.sections?.[0]?.content || '',
+              date: new Date(item.date || item._template_created),
+              priority: item.priority || 'low'
+            }))
+            .sort((a: any, b: any) => b.date.getTime() - a.date.getTime())
+            .slice(0, 3); // Only show 3 most recent on dashboard
+          
+          setAnnouncements(mappedAnnouncements);
+        }
+      } catch (error) {
+        console.error('Failed to fetch announcements:', error);
+      }
+    };
+    
+    fetchAnnouncements();
   }, []);
 
   // Load feature flags from localStorage
