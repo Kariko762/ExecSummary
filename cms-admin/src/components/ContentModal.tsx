@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Eye, Code, Shield, Loader2, CheckCircle2, AlertCircle, AlertTriangle, Download, FileImage, FileText } from 'lucide-react';
+import { X, Eye, Code, Shield, Loader2, CheckCircle2, AlertCircle, AlertTriangle, Download, FileImage, FileText, Maximize2, Minimize2 } from 'lucide-react';
 import { AssetRenderEngine } from '../renderers/assetRenderEngine';
 import { useEffect, useState, useRef } from 'react';
 import { validateSection } from '../schemas/validationSchema';
@@ -26,8 +26,13 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   const [validationChecks, setValidationChecks] = useState<ValidationCheck[]>([]);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showStickyNav, setShowStickyNav] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('');
   const contentRef = useRef<HTMLDivElement>(null);
   const exportWrapperRef = useRef<HTMLDivElement>(null); // New ref for the entire exportable area
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const stickyNavRef = useRef<HTMLDivElement>(null);
 
   // Detect if this is a draft
   const isDraft = content?.status === 'draft';
@@ -40,9 +45,47 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
     };
   }, [showExportMenu]);
 
+  // Sticky nav scroll detection
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    // Always show sticky nav (no scroll trigger needed since header is fixed)
+    setShowStickyNav(true);
+
+    // Set up intersection observer for active section tracking
+    const observerOptions = {
+      root: scrollContainer,
+      rootMargin: '-120px 0px -50%',
+      threshold: 0.1
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      const visibleEntries = entries.filter(entry => entry.isIntersecting);
+      
+      if (visibleEntries.length > 0) {
+        visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        const sectionId = visibleEntries[0].target.id;
+        if (sectionId) {
+          setActiveSection(sectionId);
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Observe all section elements
+    const sectionElements = scrollContainer.querySelectorAll('section[id]');
+    sectionElements.forEach(el => observer.observe(el));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [activePreviewTab, content]);
+
   // Export functions
   const exportAsImage = async () => {
-    const targetRef = exportWrapperRef.current || contentRef.current;
+    const targetRef = scrollContainerRef.current;
     if (!targetRef) return;
     
     setIsExporting(true);
@@ -104,7 +147,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   };
 
   const exportAsPDF = async () => {
-    const targetRef = exportWrapperRef.current || contentRef.current;
+    const targetRef = scrollContainerRef.current;
     if (!targetRef) return;
     
     setIsExporting(true);
@@ -282,6 +325,21 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
     }
   }, [showExportMenu]);
 
+  // Scroll to section function
+  const scrollToSection = (sectionKey: string) => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    const element = scrollContainer.querySelector(`#section-${sectionKey}`);
+    if (element) {
+      // Get actual sticky nav height
+      const navHeight = stickyNavRef.current?.offsetHeight || 0;
+      const yOffset = -navHeight - 124; // Extra 124px for spacing (adjusted by ~100px)
+      const y = (element as HTMLElement).offsetTop + yOffset;
+      scrollContainer.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   if (!content) return null;
 
   // Extract display metadata
@@ -402,14 +460,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed top-0 left-0 right-0 bottom-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"
+        className={isFullscreen 
+          ? "fixed inset-0 bg-black z-50"
+          : "fixed top-0 left-0 right-0 bottom-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"}
         onClick={onClose}
       >
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white/60 dark:bg-gray-900/60 backdrop-blur-2xl rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-white/20 dark:border-white/10 flex flex-col"
+          className={isFullscreen
+            ? "fixed inset-0 bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden"
+            : "bg-white/60 dark:bg-gray-900/60 backdrop-blur-2xl rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-white/20 dark:border-white/10 flex flex-col"}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Draft Preview Control Bar - Only shown in draft mode */}
@@ -497,6 +559,15 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       </div>
                     )}
                   </div>
+
+                  {/* Fullscreen Toggle Button */}
+                  <button
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                    title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                  >
+                    {isFullscreen ? <Minimize2 className="w-6 h-6 text-white" /> : <Maximize2 className="w-6 h-6 text-white" />}
+                  </button>
 
                   <button
                     onClick={onClose}
@@ -691,12 +762,12 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
             <div ref={exportWrapperRef} className="flex flex-col flex-1 overflow-hidden">
               {/* Header - Only shown if NOT in draft mode */}
               {!isDraft && (
-                <div className="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-6 flex items-center justify-between z-10 rounded-t-3xl flex-shrink-0">
+                <div className={`sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between z-10 rounded-t-3xl flex-shrink-0 ${isFullscreen ? 'p-3' : 'p-6'}`}>
                   <div>
-                    <h2 className="text-3xl font-roobert-heavy text-gray-900 dark:text-white mb-1">
+                    <h2 className={`font-roobert-heavy text-gray-900 dark:text-white ${isFullscreen ? 'text-xl mb-0' : 'text-3xl mb-1'}`}>
                       {title}
                     </h2>
-                    {date && (
+                    {date && !isFullscreen && (
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         {new Date(date).toLocaleDateString('en-US', { 
                           month: 'long', 
@@ -713,7 +784,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       <button
                         onClick={() => setShowExportMenu(!showExportMenu)}
                         disabled={isExporting}
-                        className="px-4 py-2 rounded-xl bg-gradient-to-r from-fis-eggplant to-fis-raspberry hover:from-fis-eggplant/90 hover:to-fis-raspberry/90 text-white text-sm font-roobert-medium flex items-center gap-2 transition-all disabled:opacity-50"
+                        className={`rounded-xl bg-gradient-to-r from-fis-eggplant to-fis-raspberry hover:from-fis-eggplant/90 hover:to-fis-raspberry/90 text-white text-sm font-roobert-medium flex items-center gap-2 transition-all disabled:opacity-50 ${isFullscreen ? 'px-3 py-1.5' : 'px-4 py-2'}`}
                       >
                         {isExporting ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -743,6 +814,15 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       )}
                     </div>
 
+                    {/* Fullscreen Toggle Button */}
+                    <button
+                      onClick={() => setIsFullscreen(!isFullscreen)}
+                      className="w-10 h-10 rounded-xl bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                      title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                    >
+                      {isFullscreen ? <Minimize2 className="w-5 h-5 text-gray-600 dark:text-gray-400" /> : <Maximize2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />}
+                    </button>
+
                     <button
                       onClick={onClose}
                       className="close-button w-10 h-10 rounded-xl bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
@@ -754,9 +834,43 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
               )}
 
               {/* Content Sections */}
-              <div ref={contentRef} className="flex-1 overflow-y-auto p-6 space-y-8 bg-white dark:bg-gray-900">
+              <div ref={scrollContainerRef} className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
+                {/* Sticky Navigation */}
+                <AnimatePresence>
+                  {showStickyNav && !isDraft && sections.filter(s => s.type !== 'hr').length > 1 && (
+                    <motion.div
+                      ref={stickyNavRef}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2, ease: 'easeInOut' }}
+                      className={`sticky top-0 z-10 glass-strong border-b border-gray-200 dark:border-gray-700 ${isFullscreen ? 'px-3 py-1.5' : 'px-6 py-3'}`}
+                    >
+                      <nav className="flex items-center gap-2 overflow-x-auto pb-1">
+                        {sections.filter(section => section.type !== 'hr').map((section) => (
+                          <button
+                            key={section.key}
+                            onClick={() => scrollToSection(section.key)}
+                            className={`
+                              flex-shrink-0 rounded-lg font-roobert-medium transition-all duration-200
+                              ${isFullscreen ? 'px-2 py-1 text-[9px]' : 'px-3 py-1.5 text-[10px]'}
+                              ${activeSection === `section-${section.key}`
+                                ? 'bg-gradient-to-r from-fis-eggplant to-fis-navy text-white shadow-md'
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800/50'
+                              }
+                            `}
+                          >
+                            {section.label}
+                          </button>
+                        ))}
+                      </nav>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className={isFullscreen ? 'p-4 space-y-4' : 'p-6 space-y-8'}>
                 {sections.map((section) => (
-                  <section key={section.key}>
+                  <section key={section.key} id={`section-${section.key}`}>
                     {section.displayTitle !== false && (
                       <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4">
                         {section.label}
@@ -872,6 +986,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                     )}
                   </section>
                 ))}
+                </div>
                 
                 {sections.length === 0 && (
                   <div className="text-center py-12 text-gray-500 dark:text-gray-400">

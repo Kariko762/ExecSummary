@@ -7,6 +7,7 @@ import { SummaryCard } from './components/SummaryCard';
 import { renderWithExpressions } from './utils/expressionParser';
 import { Dashboard } from './components/Dashboard';
 import { ContentModal } from './components/ContentModal';
+import { ContentModalFixedMenu } from './components/ContentModalFixedMenu';
 import { Timeline } from './components/Timeline';
 import { StickyNav } from './components/StickyNav';
 import { OrganizationDashboard } from './components/OrganizationDashboard';
@@ -89,13 +90,13 @@ function App() {
   // Load organizations and initiatives registries
   useEffect(() => {
     // Load organizations
-    fetch('http://localhost:3001/api/organizations')
+    fetch('http://localhost:3001/api/tenants?type=org')
       .then(res => res.json())
       .then(data => {
-        if (data.success && data.organizations) {
-          setOrganizations(data.organizations);
+        if (data.success && data.tenants) {
+          setOrganizations(data.tenants);
           // Fetch latest content for each org
-          data.organizations.forEach((org: any) => {
+          data.tenants.forEach((org: any) => {
             fetch(`http://localhost:3001/api/content?tenant=${org.slug}&tenantType=org`)
               .then(res => res.json())
               .then(contentData => {
@@ -113,13 +114,13 @@ function App() {
       .catch(err => console.error('Failed to load organizations:', err));
 
     // Load initiatives
-    fetch('http://localhost:3001/api/initiatives')
+    fetch('http://localhost:3001/api/tenants?type=initiative')
       .then(res => res.json())
       .then(data => {
-        if (data.success && data.initiatives) {
-          setInitiatives(data.initiatives);
+        if (data.success && data.tenants) {
+          setInitiatives(data.tenants);
           // Fetch latest content for each initiative
-          data.initiatives.forEach((init: any) => {
+          data.tenants.forEach((init: any) => {
             fetch(`http://localhost:3001/api/content?tenant=${init.slug}&tenantType=initiative`)
               .then(res => res.json())
               .then(contentData => {
@@ -237,10 +238,17 @@ function App() {
                   <Route path="/" element={
                     <AnimatePresence mode="wait">
                       {selectedSummary ? (
-                        <ContentModal
-                          content={selectedSummary}
-                          onClose={() => setSelectedSummary(null)}
-                        />
+                        selectedSummary._layout === 'tabbed' ? (
+                          <ContentModalFixedMenu
+                            content={selectedSummary}
+                            onClose={() => setSelectedSummary(null)}
+                          />
+                        ) : (
+                          <ContentModal
+                            content={selectedSummary}
+                            onClose={() => setSelectedSummary(null)}
+                          />
+                        )
                       ) : (
                         <>
                           {/* Hero Section */}

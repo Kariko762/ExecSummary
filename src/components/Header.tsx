@@ -3,7 +3,7 @@ import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightb
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { renderWithExpressions } from '../utils/expressionParser';
 

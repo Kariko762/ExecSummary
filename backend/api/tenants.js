@@ -94,10 +94,10 @@ const getTenants = async (req, res) => {
       Object.assign(tenant, stats);
     }
     
-    res.json(tenants);
+    res.json({ success: true, tenants });
   } catch (error) {
     console.error('Error getting tenants:', error);
-    res.status(500).json({ error: 'Failed to retrieve tenants' });
+    res.status(500).json({ success: false, error: 'Failed to retrieve tenants' });
   }
 };
 

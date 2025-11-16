@@ -588,6 +588,7 @@ function App() {
         quarter: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         year: new Date().getFullYear(),
         status: 'draft',
+        _layout: modalType, // Save the modal type (one-pager or tabbed)
         _contentTag: contentCreationType === 'performance' ? 'performance' 
                    : contentCreationType === 'organization' ? 'organization'
                    : contentCreationType === 'initiative' ? 'initiative'
