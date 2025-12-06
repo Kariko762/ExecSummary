@@ -1,5 +1,5 @@
 import React from 'react';
-import { RendererProps } from '../types/schema';
+import type { RendererProps } from '../types/schema';
 import { Colors } from '../design-system';
 
 /**

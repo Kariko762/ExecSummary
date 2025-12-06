@@ -57,7 +57,7 @@ export function parseExpression(text: string): ParsedElement[] {
   const elements: ParsedElement[] = [];
   
   // Handle both {{}} and [[]] syntax
-  const bracketRegex = /\[\[(\w+)\]\](.*?)\[\[\/\1\]\]/g;
+  const bracketRegex = /\[\[(\w+)\]\](.*?)\[\[\/\1\]\]/gi;
   const curlyRegex = /\{\{([^}]+)\}\}/g;
   
   let lastIndex = 0;
@@ -67,6 +67,7 @@ export function parseExpression(text: string): ParsedElement[] {
   const matches: Array<{ index: number; length: number; type: string; value: string }> = [];
   
   while ((match = bracketRegex.exec(text)) !== null) {
+    console.log('🔍 Bracket match found:', match);
     matches.push({
       index: match.index,
       length: match[0].length,
@@ -102,6 +103,7 @@ export function parseExpression(text: string): ParsedElement[] {
       });
     }
     
+    console.log('🔍 Creating expression element:', { type: match.type, value: match.value });
     elements.push({
       type: 'expression',
       content: text.substring(match.index, match.index + match.length),
@@ -234,7 +236,7 @@ function renderHighlight(text: string): React.ReactNode {
  */
 function renderBold(text: string): React.ReactNode {
   return (
-    <span className="font-roobert-bold text-gray-900 dark:text-white">
+    <span className="font-roobert-heavy text-gray-900 dark:text-white font-bold">
       {text}
     </span>
   );
@@ -457,8 +459,11 @@ function renderExpressionElement(element: ParsedElement, key: number): React.Rea
 /**
  * Main function to render text with expressions
  */
-export function renderWithExpressions(text: string): React.ReactNode {
+export function renderWithExpressions(text: string | undefined | null): React.ReactNode {
+  console.log('🔍 renderWithExpressions called with:', text, 'type:', typeof text);
+  if (!text || typeof text !== 'string') return text || '';
   const elements = parseExpression(text);
+  console.log('🔍 Parsed elements:', elements);
   return (
     <>
       {elements.map((element, index) => renderExpressionElement(element, index))}

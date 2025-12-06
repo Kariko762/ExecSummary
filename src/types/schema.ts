@@ -27,10 +27,11 @@ export type RenderType =
   | 'image'             // Image upload/display
   | 'video'             // Video upload/display
   | 'embeddedVideo'     // Embedded video URL
-  | 'statusBoard';      // Table layout
+  | 'statusBoard'       // Table layout
+  | 'orgChart';         // Organizational chart with hierarchy
 
 export type ValidationRule = {
-  rule: 'required' | 'min' | 'max' | 'pattern' | 'email' | 'url' | 'custom';
+  rule: 'required' | 'min' | 'max' | 'minItems' | 'maxItems' | 'pattern' | 'email' | 'url' | 'custom';
   value?: any;
   message?: string;
   validator?: (value: any) => boolean;
@@ -96,16 +97,18 @@ export interface FieldSchema {
   helpText?: string;
   defaultValue?: any;
   
+  // For complex renderers
+  groupByField?: string;
+  columns?: any[];
+  
   // For sections
   id?: string;
   title?: string;
   description?: string;
   locked?: boolean;
   
-  // For nested structures (objects)
+  // For nested structures (objects) and arrays
   fields?: Record<string, FieldSchema>;
-  
-  // For arrays
   itemSchema?: FieldSchema;
   minItems?: number;
   maxItems?: number;
@@ -131,6 +134,7 @@ export interface SectionSchema extends FieldSchema {
   enabled?: boolean;
   locked?: boolean;
   weight?: number;
+  renderAs?: RenderType; // Make renderAs optional for sections
   interAssetBorder?: boolean; // Show vertical borders between assets in multi-column layouts
   fields: Record<string, FieldSchema>;
 }
@@ -161,8 +165,13 @@ export interface RendererProps {
   fieldKey: string;
   schema: FieldSchema;
   value: any;
+  data?: any; // For direct data passing (used by some renderers)
   onChange?: (value: any) => void;
   mode: RenderMode;
   disabled?: boolean;
   error?: string;
+  columnContext?: {
+    isMultiColumn: boolean;
+    columnCount: number;
+  };
 }

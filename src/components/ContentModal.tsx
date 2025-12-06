@@ -85,7 +85,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
   // Export functions
   const exportAsImage = async () => {
-    const targetRef = scrollContainerRef.current;
+    const targetRef = exportWrapperRef.current;
     if (!targetRef) return;
     
     setIsExporting(true);
@@ -101,17 +101,22 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
       if (draftBar) (draftBar as HTMLElement).style.display = 'none';
       
-      // Get the scrollable content div (not the modal wrapper)
+      // Get the wrapper div that includes header + content
       const contentDiv = targetRef;
       
-      // Temporarily remove scroll and set to full height
-      const originalOverflow = contentDiv.style.overflow;
-      const originalMaxHeight = contentDiv.style.maxHeight;
-      const originalHeight = contentDiv.style.height;
+      // Find the scrollable content area inside
+      const scrollableContent = scrollContainerRef.current;
       
-      contentDiv.style.overflow = 'visible';
-      contentDiv.style.maxHeight = 'none';
-      contentDiv.style.height = 'auto';
+      // Temporarily remove scroll from the scrollable area and set to full height
+      const originalOverflow = scrollableContent ? scrollableContent.style.overflow : '';
+      const originalMaxHeight = scrollableContent ? scrollableContent.style.maxHeight : '';
+      const originalHeight = scrollableContent ? scrollableContent.style.height : '';
+      
+      if (scrollableContent) {
+        scrollableContent.style.overflow = 'visible';
+        scrollableContent.style.maxHeight = 'none';
+        scrollableContent.style.height = 'auto';
+      }
       
       // Use modern-screenshot which supports oklch colors and captures full content
       const dataUrl = await domToPng(contentDiv, {
@@ -122,9 +127,11 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       });
       
       // Restore original styles
-      contentDiv.style.overflow = originalOverflow;
-      contentDiv.style.maxHeight = originalMaxHeight;
-      contentDiv.style.height = originalHeight;
+      if (scrollableContent) {
+        scrollableContent.style.overflow = originalOverflow;
+        scrollableContent.style.maxHeight = originalMaxHeight;
+        scrollableContent.style.height = originalHeight;
+      }
       
       // Restore buttons
       if (exportBtn) (exportBtn as HTMLElement).style.display = '';
@@ -147,7 +154,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   };
 
   const exportAsPDF = async () => {
-    const targetRef = scrollContainerRef.current;
+    const targetRef = exportWrapperRef.current;
     if (!targetRef) return;
     
     setIsExporting(true);
@@ -163,17 +170,22 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
       if (draftBar) (draftBar as HTMLElement).style.display = 'none';
       
-      // Get the scrollable content div
+      // Get the wrapper div that includes header + content
       const contentDiv = targetRef;
       
-      // Temporarily remove scroll and set to full height
-      const originalOverflow = contentDiv.style.overflow;
-      const originalMaxHeight = contentDiv.style.maxHeight;
-      const originalHeight = contentDiv.style.height;
+      // Find the scrollable content area inside
+      const scrollableContent = scrollContainerRef.current;
       
-      contentDiv.style.overflow = 'visible';
-      contentDiv.style.maxHeight = 'none';
-      contentDiv.style.height = 'auto';
+      // Temporarily remove scroll from the scrollable area and set to full height
+      const originalOverflow = scrollableContent ? scrollableContent.style.overflow : '';
+      const originalMaxHeight = scrollableContent ? scrollableContent.style.maxHeight : '';
+      const originalHeight = scrollableContent ? scrollableContent.style.height : '';
+      
+      if (scrollableContent) {
+        scrollableContent.style.overflow = 'visible';
+        scrollableContent.style.maxHeight = 'none';
+        scrollableContent.style.height = 'auto';
+      }
       
       // Use modern-screenshot to capture full content
       const dataUrl = await domToPng(contentDiv, {
@@ -184,9 +196,11 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       });
       
       // Restore original styles
-      contentDiv.style.overflow = originalOverflow;
-      contentDiv.style.maxHeight = originalMaxHeight;
-      contentDiv.style.height = originalHeight;
+      if (scrollableContent) {
+        scrollableContent.style.overflow = originalOverflow;
+        scrollableContent.style.maxHeight = originalMaxHeight;
+        scrollableContent.style.height = originalHeight;
+      }
       
       // Restore buttons
       if (exportBtn) (exportBtn as HTMLElement).style.display = '';
@@ -409,7 +423,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       let subtitle: string | undefined;
       
       // Handle special object structures that contain arrays
-      if (rawData && typeof rawData === 'object' && !Array.isArray(rawData)) {
+      // BUT: Skip extraction for budgetBreakdown which needs the full object
+      const sectionType = content[typeKey];
+      if (rawData && typeof rawData === 'object' && !Array.isArray(rawData) && sectionType !== 'budgetBreakdown') {
         if (rawData.categories && Array.isArray(rawData.categories)) {
           actualData = rawData.categories;
           subtitle = rawData.subtitle;
@@ -525,6 +541,46 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                     Validate
                   </button>
 
+                  {/* Budget Expand/Collapse Buttons - Only show if content has budgetBreakdown */}
+                  {(() => {
+                    const hasBudget = Object.keys(content).some(key => {
+                      const typeKey = `_${key}_type`;
+                      const hasType = content[typeKey] === 'budgetBreakdown';
+                      if (hasType) {
+                        console.log('🔍 Found budgetBreakdown:', key, typeKey, content[typeKey]);
+                      }
+                      return hasType;
+                    });
+                    
+                    console.log('🔍 ContentModal - Has budget breakdown:', hasBudget);
+                    console.log('🔍 ContentModal - Content keys:', Object.keys(content).filter(k => k.includes('_type')));
+                    
+                    if (!hasBudget) return null;
+                    
+                    return (
+                      <>
+                        <button
+                          onClick={() => window.dispatchEvent(new CustomEvent('budget:expandAll'))}
+                          className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                          title="Expand All Budget Categories"
+                        >
+                          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => window.dispatchEvent(new CustomEvent('budget:collapseAll'))}
+                          className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                          title="Collapse All Budget Categories"
+                        >
+                          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 11l7-7 7 7M5 19l7-7 7 7" />
+                          </svg>
+                        </button>
+                      </>
+                    );
+                  })()}
+
                   {/* Export Button with Dropdown */}
                   <div className="relative export-button">
                     <button
@@ -541,7 +597,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                     </button>
                     
                     {showExportMenu && (
-                      <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-30 min-w-[180px]">
+                      <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
                         <button
                           onClick={exportAsImage}
                           className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
@@ -779,23 +835,64 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                   </div>
                   
                   <div className="flex items-center gap-2">
+                    {/* Budget/Forecast Expand/Collapse Buttons - Show if content has budgetBreakdown or forecastBreakdown */}
+                    {(() => {
+                      const hasBudget = Object.keys(content).some(key => {
+                        const typeKey = `_${key}_type`;
+                        return content[typeKey] === 'budgetBreakdown';
+                      });
+                      
+                      const hasForecast = Object.keys(content).some(key => {
+                        const typeKey = `_${key}_type`;
+                        return content[typeKey] === 'forecastBreakdown';
+                      });
+                      
+                      if (!hasBudget && !hasForecast) return null;
+                      
+                      const eventPrefix = hasBudget ? 'budget' : 'forecast';
+                      const label = hasBudget ? 'Budget' : 'Forecast';
+                      
+                      return (
+                        <>
+                          <button
+                            onClick={() => window.dispatchEvent(new CustomEvent(`${eventPrefix}:expandAll`))}
+                            className="w-10 h-10 rounded-xl bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                            title={`Expand All ${label} Categories`}
+                          >
+                            <svg className="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => window.dispatchEvent(new CustomEvent(`${eventPrefix}:collapseAll`))}
+                            className="w-10 h-10 rounded-xl bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                            title={`Collapse All ${label} Categories`}
+                          >
+                            <svg className="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 11l7-7 7 7M5 19l7-7 7 7" />
+                            </svg>
+                          </button>
+                        </>
+                      );
+                    })()}
+
                     {/* Export Button with Dropdown */}
                     <div className="relative export-button">
                       <button
                         onClick={() => setShowExportMenu(!showExportMenu)}
                         disabled={isExporting}
-                        className={`rounded-xl bg-gradient-to-r from-fis-eggplant to-fis-raspberry hover:from-fis-eggplant/90 hover:to-fis-raspberry/90 text-white text-sm font-roobert-medium flex items-center gap-2 transition-all disabled:opacity-50 ${isFullscreen ? 'px-3 py-1.5' : 'px-4 py-2'}`}
+                        className="w-10 h-10 rounded-xl bg-gradient-to-r from-fis-eggplant to-fis-raspberry hover:from-fis-eggplant/90 hover:to-fis-raspberry/90 text-white transition-all disabled:opacity-50 flex items-center justify-center"
+                        title="Export"
                       >
                         {isExporting ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
                         ) : (
                           <Download className="w-4 h-4" />
                         )}
-                        Export
                       </button>
                       
                       {showExportMenu && (
-                        <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-30 min-w-[180px]">
+                        <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
                           <button
                             onClick={exportAsImage}
                             className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"

@@ -702,6 +702,7 @@
   border-radius: 0.25rem;
   display: inline-block;
   width: fit-content;
+  white-space: nowrap;
 }
 
 .asset-wrapper .risk-card.severity-low .badge {

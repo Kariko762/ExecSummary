@@ -1,5 +1,5 @@
 import React from 'react';
-import { RendererProps } from '../types/schema';
+import type { RendererProps } from '../types/schema';
 import { getClasses } from '../design-system';
 
 export const ImageRenderer: React.FC<RendererProps> = ({

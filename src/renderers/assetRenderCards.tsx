@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle, Info, Target, Star, Rocket, BarChart3, Activity, Zap, Heart, CheckCircle } from 'lucide-react';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export interface CardPatternProps {
   data: any;
@@ -208,6 +209,7 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
 
 export const NestedCardsPattern: React.FC<CardPatternProps> = ({ data, onChange, mode }) => {
   const items = Array.isArray(data) ? data : [];
+  console.log('🔍 NestedCardsPattern:', { mode, itemCount: items.length, sampleTitle: items[0]?.title });
   
   if (mode === 'edit') {
     const addCard = () => {
@@ -255,14 +257,25 @@ export const NestedCardsPattern: React.FC<CardPatternProps> = ({ data, onChange,
     );
   }
   
+  console.log('🔍 NestedCardsPattern DISPLAY mode - Processing items:', items.map(i => ({ title: i.title, hasExpressions: i.title?.includes('[[') })));
+  
   return (
     <div className="nested-cards-grid">
-      {items.map((item, index) => (
-        <div key={index} className="nested-card">
-          <div className="title">{item.title}</div>
-          <div className="value">{item.value}</div>
-        </div>
-      ))}
+      {items.map((item, index) => {
+        const renderedTitle = renderWithExpressions(item.title);
+        const renderedValue = renderWithExpressions(item.value);
+        console.log('🔍 Item', index, ':', { 
+          rawTitle: item.title, 
+          renderedTitle, 
+          titleType: typeof renderedTitle 
+        });
+        return (
+          <div key={index} className="nested-card">
+            <div className="title">{renderedTitle}</div>
+            <div className="value">{renderedValue}</div>
+          </div>
+        );
+      })}
     </div>
   );
 };

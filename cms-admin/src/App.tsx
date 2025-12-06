@@ -13,6 +13,7 @@ import SystemSettingsManager from './components/SystemSettingsManager';
 import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
 import CommentsPanel from './components/CommentsPanel';
+import OrgIQ from './pages/OrgIQ';
 import './App.css';
 
 const API_URL = 'http://localhost:3001/api';
@@ -81,6 +82,7 @@ function App() {
   const [showStyleScheme, setShowStyleScheme] = useState(false);
   const [showSystemSettings, setShowSystemSettings] = useState(false);
   const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
+  const [showOrgIQ, setShowOrgIQ] = useState(false);
   const [availableTemplates, setAvailableTemplates] = useState<any[]>([]);
   const [requireAuth, setRequireAuth] = useState(false);
   const [availableTags, setAvailableTags] = useState<any[]>([]);
@@ -1193,6 +1195,7 @@ function App() {
                 onOpenStyleScheme={() => setShowStyleScheme(true)}
                 onOpenSystemSettings={() => setShowSystemSettings(true)}
                 onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
+                onOpenOrgIQ={() => setShowOrgIQ(true)}
                 onOpenComments={() => setShowComments(true)}
               />
           
@@ -1739,6 +1742,21 @@ function App() {
                 onBack={() => setShowTemplateBuilder(false)}
                 showNotification={showNotification}
               />
+            </div>
+          )}
+
+          {/* OrgIQ Page */}
+          {showOrgIQ && (
+            <div className="fixed inset-0 z-[100]">
+              <div className="relative h-full">
+                <button
+                  onClick={() => setShowOrgIQ(false)}
+                  className="absolute top-4 right-4 z-10 px-4 py-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg shadow-md hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 transition-colors"
+                >
+                  ← Back to CMS
+                </button>
+                <OrgIQ />
+              </div>
             </div>
           )}
 

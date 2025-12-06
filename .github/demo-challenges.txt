@@ -1,0 +1,82 @@
+Below is a grounded, cross‑channel view of common demo issues at FIS—synthesized from recent emails, Teams meetings & transcripts, and files. I’ve grouped them into clear themes and attached specific evidence from your data for each.
+
+1) Demo environment stability & availability
+Planned or unplanned downtime of demo VMs/services (e.g., “NEXTGEN is down,” SQL services failing after updates, VM stuck in Starting). These interruptions directly jeopardize scheduled demos and cause scramble mitigation. [RE: NEXTGEN is down | Outlook], [RE: NEXTGEN is down | Outlook], [RE: NEXTGEN is down | Outlook], [RE: NEXTGEN is down | Outlook]
+Org‑level resiliency monitoring exists, but incidents and aging trends show broader stability risks that should inform demo readiness (Enterprise Resiliency dashboards; ITSM incident aging/MTTR). [Enterprise…Dashboard | Power BI], [Management…cidents v2 | Power BI]
+Representative records: RE: NEXTGEN is down (multiple threads) and Enterprise resiliency reporting. [RE: NEXTGEN is down | Outlook], [RE: NEXTGEN is down | Outlook], [RE: NEXTGEN is down | Outlook], [Enterprise…Dashboard | Power BI]
+
+
+ 
+
+2) Access & permissions (Azure / app roles / visibility)
+Provisioning gaps (Azure portal VM access, group membership propagation) and visibility issues (“server now visible,” “please confirm you can view the new environment”). These recur before demos. [Re: New SE…reparation | Outlook], [RE: Azure…VM Access | Outlook]
+Application‑level access discrepancies (e.g., LMDR screen accessible for one user but not another right before a client demo). [Re: URGENT…Sales Demo | Outlook]
+Representative records: RE: Azure portal - VM Access; Re: URGENT: LMDR & Bank Loan Screens Blank…. [RE: Azure…VM Access | Outlook], [Re: URGENT…Sales Demo | Outlook]
+
+3) Version & compatibility misalignment
+OS/product version mismatch blocks upgrades or forces rebuilds (e.g., DIM 25.2.3 incompatible with Windows 2016; new Windows 2022 VM created, but not enough time to rebuild demo). [RE: UPDATE…en upgrade | Outlook]
+Representative record: RE: UPDATE - Next Gen upgrade. [RE: UPDATE…en upgrade | Outlook]
+
+4) Demo data & use‑case readiness
+Repeated feedback that teams lack ready demo data and turnkey use‑cases, inflating prep time. Proposed mitigations include standard SQL/Oracle/JSON templates and AI‑assisted generation. [Data Issues | Outlook]
+In DIM, rec‑inventory configuration gaps (server/db specifics, schema) block flows until configs are corrected. [RE: Issues…nvironment | Outlook]
+Representative records: Data Issues; RE: Issues accessing some Rec Inventory Services on DIM Demo environment. [Data Issues | Outlook], [RE: Issues…nvironment | Outlook]
+
+5) Tooling & content pipeline performance (e.g., Tiled / interactive assets)
+Tiled Designer performance & PowerPoint import failures drive rework; teams are documenting a revised build/deploy workflow to stabilize delivery. [Demo Servi…ive Update | Outlook], [Demo Servi…ive Update | Outlook]
+Broader initiative (“Digital First”) acknowledges high demo prep effort and the need to scale interactive content (Seismic/Tiled) and automation. [FISDSGDI…FIRSTv1 1 | PowerPoint], [FISDSGDI…LFIRST_v1 | PowerPoint]
+Representative records: Demo Services Group | Weekly Executive Update; FIS_DSG_DIGITAL_FIRST_v1. [Demo Servi…ive Update | Outlook], [FISDSGDI…LFIRSTv1 | PowerPoint]
+
+6) Knowledge base & documentation gaps
+Ongoing effort to stand up a dedicated Confluence space for Demo Ops (pages for access requests, server ops, troubleshooting, patching), with access/friction creating delays. [Re: [SPDJI…n FIS WIKI | Outlook], [Creating K…n FIS WIKI | Outlook]
+Post‑mortems highlight unclear ownership and tribal knowledge, calling for documented end‑to‑end flows and ownership paths. [Incident-2…on Failure | FIS Wiki]
+Representative records: Creating Knowledge Base for Demo Operations Knowledge Base on FIS WIKI; Incident-255 Statements Generation Failure. [Creating K…n FIS WIKI | Outlook], [Incident-2…on Failure | FIS Wiki]
+
+7) Support process and ticketing maturity
+Transition from “DEMO Ticket” to ServiceNow (SNOW) causes confusion and routing delays; recurring “Demo Ticket Power BI” reports reflect volume and aging. [Demo Suppo…ment Added | Outlook], [RE: Demo T…ember 2025 | Outlook]
+ITSM dashboards show delinquent changes/problems and aging tasks, which likely impact demo readiness windows. [Management…s and Task | Power BI], [Management…- Problems | Power BI]
+Representative records: Demo Support Group | [dsINC10037] New Comment Added; management dashboards for incidents/requests/problems. [Demo Suppo…ment Added | Outlook], [Management…cidents v2 | Power BI]
+
+
+, [Management…- Request | Power BI]
+
+
+ 
+
+8) External dependencies & coordination (E6/Coast/IIH)
+IIH demo asset transfer and partner availability (E6, Coast) have delayed progress; clear governance with edit controls is now defined for demo assets. [Demo Servi…ive Update | Outlook], [RE: E6 <> FIS | Outlook], [FIS - E6 G…e Document | Word]
+Representative records: E6 <> FIS (IIH) <> Coast - Demo Strategy; FIS - E6 Governance Document. [RE: E6 <> FIS | Outlook], [FIS - E6 G…e Document | Word]
+
+9) Identity Provider (IdP) / auth quirks in demo flows
+“Demo Suite” snapshot notes IdP issues requiring temporary workarounds—impacting subsets of demo environments. [Demo Suite…t - Dec 20 | PDF]
+Representative record: ​pdf icon Demo Suite Weekly Status Snapshot - Dec 20.pdf. [Demo Suite…t - Dec 20 | PDF]
+
+10) Scheduling & team availability constraints
+Meeting notes reflect holiday‑period delays in responses, slowing ticket resolution and demo prep coordination. [Demo Standup | Meeting], [Demo Studi…Recording | Video]
+Representative records: Demo Standup (with transcript summary); Demo Studio Iteration Review Series 2025-20251104_083152-Meeting Recording.mp4. [Demo Standup | Meeting], [Demo Studi…Recording | Video]
+
+11) Monitoring, lifecycle, & operational coverage gaps
+Internal slides call out unknown environment status/health, no lifecycle owner, and the need for URL resolution, uptime testing, connectivity/cert/auth support in a formal services tier. [FISDSGOV…025PUBLIC | PowerPoint], [FISDSGDI…FIRSTv1 1 | PowerPoint]
+Representative records: FIS_DSG_OVERVIEW_2025_PUBLIC.pptx; FIS_DSG_DIGITAL_FIRST_v1.pptx. [FISDSGOV…025PUBLIC | PowerPoint], [FISDSGDI…FIRSTv1 1 | PowerPoint]
+
+Consolidated “Top Themes” list (quick reference)
+Environment Stability/Availability (VM/DB/app services downtime; slow recovery) – examples: NEXTGEN outages; SQL services failures. [RE: NEXTGEN is down | Outlook], [RE: NEXTGEN is down | Outlook]
+Access/Permissions (Azure & app roles/visibility) – provisioning/role consistency before demos. [Re: New SE…reparation | Outlook], [RE: Azure…VM Access | Outlook]
+Version/Compatibility (OS/product mismatch; rebuilds) – DIM upgrade constraints. [RE: UPDATE…en upgrade | Outlook]
+Demo Data & Use‑Cases (templates missing; long prep) – AI/data templates proposed; DIM config fixes. [Data Issues | Outlook], [RE: Issues…nvironment | Outlook]
+Tooling Performance (Tiled import/design slowness) – new workflow under development. [Demo Servi…ive Update | Outlook], [Demo Servi…ive Update | Outlook]
+Documentation & Ownership (KB access; undefined ownership) – Confluence space setup; post‑mortem lessons. [Creating K…n FIS WIKI | Outlook], [Incident-2…on Failure | FIS Wiki]
+Ticketing/Process Maturity (SNOW migration; aging/delinquent items) – repeated reporting; dashboards. [RE: Demo T…ember 2025 | Outlook], [Management…s and Task | Power BI]
+External Partner Dependencies (E6/Coast timelines; governance) – IIH coordination. [RE: E6 <> FIS | Outlook]
+IdP/Auth Workarounds (temporary fixes impacting subsets of environments). [Demo Suite…t - Dec 20 | PDF]
+Scheduling/Availability (holiday delays in ticket responses & deployments). [Demo Standup | Meeting]
+Monitoring & Lifecycle Coverage (need for proactive uptime checks, certs, auth support, lifecycle ownership). [FISDSGOV…025_PUBLIC | PowerPoint]
+Targeted remedial actions (aligned to existing initiatives)
+Create a “Demo Readiness” runbook per strategic product (environment checklist + access roles + data seeds + rollback steps + partner contacts). Publish in the Demo Ops Confluence space once access is sorted. Owners: Demo Ops + product SEs. [Creating K…n FIS WIKI | Outlook]
+Pre‑demo access validation (48–72 hours out): automate Azure group membership checks and app‑role tests; autogenerate a readiness ticket in SNOW. Owners: Demo Ops; leverage ITSM dashboards for aging alerts. [Re: New SE…reparation | Outlook], [Management…- Request | Power BI]
+Version baseline & compatibility matrix (e.g., DIM ↔ Windows builds): keep a live matrix; block demo bookings on unsupported combos. Owners: Product engineering + Demo Ops. [RE: UPDATE…en upgrade | Outlook]
+Standard demo‑data templates (SQL/JSON) with prompt‑driven customization; stage in a shared repo and expose via the Demo Insight Hub. Owners: Demo Services; SGO reviewers for accuracy. [Data Issues | Outlook], [FIS16x9PPT_2024 | PowerPoint]
+Tiled pipeline hardening: adopt the documented workflow (source control of assets, linted PPT → Tiled import, performance guardrails). Owners: Demo Services; publish guidance. [Demo Servi…ive Update | Outlook]
+IdP/auth guardrails: convert known workarounds into repeatable playbooks; track via SNOW problem records to retire workarounds. Owners: Demo Ops; link to dashboards. [Demo Suite…t - Dec 20 | PDF], [Management…- Problems | Power BI]
+Holiday contingency: a “backup demo host” roster + mirrored environments; pre‑recorded walk‑throughs for at‑risk weeks (seen in iteration reviews). Owners: Demo Studio + Demo Ops. [Demo Studi…Recording | Video], [Demo Studi…Recording | Video]
+Lifecycle & monitoring: roll out the Core/Enhanced/Extended services (URL uptime, cert & auth support, synthetic monitoring) to strategic products first. Owners: Demo Services Group. [FISDSGOV…025_PUBLIC | PowerPoint]

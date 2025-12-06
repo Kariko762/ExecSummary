@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle, Info, Target, Star, Rocket, BarChart3, Activity, Zap, Heart, CheckCircle } from 'lucide-react';
+import { renderWithExpressions } from '../../../src/utils/expressionParser';
 
 export interface CardPatternProps {
   data: any;
@@ -259,8 +260,8 @@ export const NestedCardsPattern: React.FC<CardPatternProps> = ({ data, onChange,
     <div className="nested-cards-grid">
       {items.map((item, index) => (
         <div key={index} className="nested-card">
-          <div className="title">{item.title}</div>
-          <div className="value">{item.value}</div>
+          <div className="title">{renderWithExpressions(item.title)}</div>
+          <div className="value">{renderWithExpressions(item.value)}</div>
         </div>
       ))}
     </div>

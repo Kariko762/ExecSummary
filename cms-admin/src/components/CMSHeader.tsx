@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
@@ -9,11 +9,12 @@ interface CMSHeaderProps {
   onOpenAssetReference?: () => void;
   onOpenStyleScheme?: () => void;
   onOpenTemplateBuilder?: () => void;
+  onOpenOrgIQ?: () => void;
   onOpenSystemSettings?: () => void;
   onOpenComments?: () => void;
 }
 
-export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenSystemSettings, onOpenComments }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenComments }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
@@ -314,6 +315,25 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     <div className="flex-1">
                                       <div className="font-roobert-semibold text-sm">Template Builder</div>
                                       <div className="text-xs text-gray-600 dark:text-gray-400">Drag & drop template designer</div>
+                                    </div>
+                                  </button>
+
+                                  {/* OrgIQ */}
+                                  <button
+                                    onClick={() => {
+                                      console.log('OrgIQ clicked!');
+                                      setIsNavDropdownOpen(false);
+                                      setEngineSubmenuOpen(false);
+                                      onOpenOrgIQ?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-blue-500/10 dark:hover:bg-blue-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-blue-500/10 dark:bg-blue-500/20">
+                                      <Target className="w-4 h-4 text-blue-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">OrgIQ</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Organizational intelligence platform</div>
                                     </div>
                                   </button>
 

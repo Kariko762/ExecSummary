@@ -1,5 +1,5 @@
 import React from 'react';
-import { RendererProps } from '../types/schema';
+import type { RendererProps } from '../types/schema';
 import { Plus, Trash2 } from 'lucide-react';
 import { getClasses } from '../design-system';
 

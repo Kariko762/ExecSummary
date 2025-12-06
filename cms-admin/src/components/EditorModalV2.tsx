@@ -836,8 +836,8 @@ export default function EditorModalV2({
       console.log(`   ${field}: "${dataToSave[field]}"`);
     });
     
-    onSave({ ...dataToSave, status: 'draft' }, 'draft');
-    setStatus('draft');
+    // Preserve current status (published or draft)
+    onSave({ ...dataToSave, status }, status);
     setIsDirty(false);
     setHasBeenSaved(true); // Mark as saved
     onClose();
@@ -849,8 +849,8 @@ export default function EditorModalV2({
       ? editedData 
       : { ...editedData, _fileExists: false };
     
-    onSave({ ...dataToSave, status: 'draft' }, 'draft');
-    setStatus('draft');
+    // Preserve current status (published or draft)
+    onSave({ ...dataToSave, status }, status);
     setIsDirty(false);
     setHasBeenSaved(true); // Mark as saved
   };
@@ -891,7 +891,7 @@ export default function EditorModalV2({
     // Change from published back to draft
     const dataToSave = editedData;
     onSave({ ...dataToSave, status: 'draft' }, 'draft');
-    setStatus('draft');
+    setStatus('draft'); // Update local status to draft
     setIsDirty(false);
     setShowUnpublishConfirmation(false);
   };

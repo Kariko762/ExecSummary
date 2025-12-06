@@ -47,10 +47,10 @@ export const NestedCardsRenderer: React.FC<RendererProps> = ({
                 className="p-5 rounded-xl bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-fis-eggplant/40 dark:hover:border-fis-raspberry/40 transition-all"
               >
                 <p className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry uppercase tracking-wider mb-2">
-                  {title}
+                  {renderWithExpressions(title)}
                 </p>
                 <p className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
-                  {value}
+                  {renderWithExpressions(value)}
                 </p>
                 {/* Show any additional fields */}
                 {Object.keys(fields).slice(2).map(key => {
@@ -58,7 +58,7 @@ export const NestedCardsRenderer: React.FC<RendererProps> = ({
                   if (!fieldValue) return null;
                   return (
                     <p key={key} className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-                      {fieldValue}
+                      {renderWithExpressions(String(fieldValue))}
                     </p>
                   );
                 })}

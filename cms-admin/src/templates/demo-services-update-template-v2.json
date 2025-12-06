@@ -1,0 +1,620 @@
+{
+  "id": "template-new",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-25",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_executive_overview_kpis_0_type": "richText",
+  "_executive_overview_kpis_0_layoutZone": "full",
+  "_executive_overview_kpis_0_rowIndex": 0,
+  "_executive_overview_kpis_0_alignment": "center",
+  "executive_overview_kpis_0": "This is **bold text** and this is *italic text* with inline formatting support.",
+  "_executive_overview_kpis_1_type": "metricCard",
+  "_executive_overview_kpis_1_layoutZone": "full",
+  "_executive_overview_kpis_1_rowIndex": 1,
+  "_executive_overview_kpis_1_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "_executive_overview_kpis_1_alignment": "center",
+  "executive_overview_kpis_1": [
+    {
+      "title": "Revenue",
+      "value": "$1,230,000",
+      "style": "highlight",
+      "icon": "dollar",
+      "iconColor": "green"
+    },
+    {
+      "title": "Customers",
+      "value": "263",
+      "style": "standard",
+      "icon": "users",
+      "iconColor": "navy"
+    },
+    {
+      "title": "Growth",
+      "value": "+48%",
+      "style": "bold",
+      "icon": "trending",
+      "iconColor": "green"
+    },
+    {
+      "title": "NPS Score",
+      "value": "0",
+      "style": "total",
+      "icon": "award",
+      "iconColor": "eggplant"
+    }
+  ],
+  "_executive_overview_kpis_2_type": "hr",
+  "_executive_overview_kpis_2_layoutZone": "full",
+  "_executive_overview_kpis_2_rowIndex": 2,
+  "_executive_overview_kpis_2_alignment": "center",
+  "executive_overview_kpis_2": "",
+  "_executive_overview_kpis_sectionLayoutType": "full",
+  "_enabled_executive_overview_kpis": true,
+  "_completed_executive_overview_kpis": false,
+  "_strategic_highlights_initiative_progress_0_type": "highlightsList",
+  "_strategic_highlights_initiative_progress_0_layoutZone": "left-50",
+  "_strategic_highlights_initiative_progress_0_rowIndex": 0,
+  "_strategic_highlights_initiative_progress_0_alignment": "center",
+  "strategic_highlights_initiative_progress_0": [
+    "Banking NA Titled Microsite - First Draft Published and endorsed by Michael Driscoll",
+    "GTM Team Support - Office of the CTO Template Completed, moving to Figma conversion",
+    "SNOW Migration - Built comprehensive reports, dashboard launch by Nov 14"
+  ],
+  "_strategic_highlights_initiative_progress_1_type": "progressBarList",
+  "_strategic_highlights_initiative_progress_1_layoutZone": "right-50",
+  "_strategic_highlights_initiative_progress_1_rowIndex": 0,
+  "_strategic_highlights_initiative_progress_1_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Initiative Title"
+    },
+    "subtitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Team/Owner"
+    },
+    "percentage": {
+      "type": "number",
+      "renderAs": "number",
+      "label": "Completion %"
+    },
+    "status": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Status (On Track/At Risk/Blocked)"
+    }
+  },
+  "_strategic_highlights_initiative_progress_1_alignment": "center",
+  "strategic_highlights_initiative_progress_1": [
+    {
+      "title": "Banking NA Titled Microsite",
+      "subtitle": "Demo Business",
+      "percentage": 75,
+      "status": "On Track"
+    },
+    {
+      "title": "SNOW Migration Dashboard",
+      "subtitle": "Demo Operations",
+      "percentage": 85,
+      "status": "On Track"
+    },
+    {
+      "title": "International Issuing Hub",
+      "subtitle": "Demo Enablement",
+      "percentage": 30,
+      "status": "At Risk"
+    }
+  ],
+  "_strategic_highlights_initiative_progress_sectionLayoutType": "left-50",
+  "_enabled_strategic_highlights_initiative_progress": true,
+  "_completed_strategic_highlights_initiative_progress": false,
+  "_operational_enablement_updates_0_type": "bulletList",
+  "_operational_enablement_updates_0_layoutZone": "left-50",
+  "_operational_enablement_updates_0_rowIndex": 0,
+  "_operational_enablement_updates_0_alignment": "center",
+  "operational_enablement_updates_0": [
+    "First item in the list",
+    "Second item with more detail",
+    "Third item for completion"
+  ],
+  "_operational_enablement_updates_1_type": "bulletList",
+  "_operational_enablement_updates_1_layoutZone": "right-50",
+  "_operational_enablement_updates_1_rowIndex": 0,
+  "_operational_enablement_updates_1_alignment": "center",
+  "operational_enablement_updates_1": [
+    "First item in the list",
+    "Second item with more detail",
+    "Third item for completion"
+  ],
+  "_operational_enablement_updates_sectionLayoutType": "left-50",
+  "_enabled_operational_enablement_updates": true,
+  "_completed_operational_enablement_updates": false,
+  "_milestones_roadmap_type": "timeline",
+  "_milestones_roadmap_layoutZone": "full",
+  "_milestones_roadmap_rowIndex": 0,
+  "_milestones_roadmap_fields": {
+    "date": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Date"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Milestone Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Details"
+    },
+    "completed": {
+      "type": "boolean",
+      "renderAs": "checkbox",
+      "label": "Completed"
+    }
+  },
+  "_milestones_roadmap_alignment": "center",
+  "milestones_roadmap": [
+    {
+      "date": "Jan 2025",
+      "title": "Project Kickoff",
+      "description": "Initial planning session with stakeholders and core team formation",
+      "completed": true
+    },
+    {
+      "date": "Feb 2025",
+      "title": "Requirements Finalized",
+      "description": "Technical specifications and business requirements documented",
+      "completed": true
+    },
+    {
+      "date": "Apr 2025",
+      "title": "Phase 1 Development",
+      "description": "Core infrastructure and foundational features deployed to staging",
+      "completed": true
+    },
+    {
+      "date": "Jun 2025",
+      "title": "Beta Launch",
+      "description": "Limited release to pilot customers for feedback and validation",
+      "completed": false
+    },
+    {
+      "date": "Aug 2025",
+      "title": "Feature Expansion",
+      "description": "Additional capabilities based on beta feedback implemented",
+      "completed": false
+    },
+    {
+      "date": "Oct 2025",
+      "title": "Production Release",
+      "description": "Full rollout to all markets with complete feature set",
+      "completed": false
+    },
+    {
+      "date": "Dec 2025",
+      "title": "Year-End Review",
+      "description": "Performance analysis, metrics review, and next year planning",
+      "completed": false
+    }
+  ],
+  "_milestones_roadmap_sectionLayoutType": "full",
+  "_enabled_milestones_roadmap": true,
+  "_completed_milestones_roadmap": false,
+  "_performance_insights_activity_breakdown_0_type": "pieChart",
+  "_performance_insights_activity_breakdown_0_layoutZone": "left-50",
+  "_performance_insights_activity_breakdown_0_rowIndex": 0,
+  "_performance_insights_activity_breakdown_0_fields": {
+    "name": {
+      "label": "Label",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Value",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_performance_insights_activity_breakdown_0_chartConfig": {
+    "dataKey": "value",
+    "nameKey": "name",
+    "colors": [
+      "#5D2A6D",
+      "#8B4789",
+      "#B565A7",
+      "#E183C5",
+      "#FF9FD8"
+    ],
+    "showLegend": true,
+    "showTooltip": true,
+    "innerRadius": 0,
+    "outerRadius": 80
+  },
+  "_performance_insights_activity_breakdown_0_alignment": "center",
+  "performance_insights_activity_breakdown_0": [
+    {
+      "name": "Category A",
+      "value": 400
+    },
+    {
+      "name": "Category B",
+      "value": 300
+    },
+    {
+      "name": "Category C",
+      "value": 200
+    }
+  ],
+  "_performance_insights_activity_breakdown_1_type": "barChart",
+  "_performance_insights_activity_breakdown_1_layoutZone": "right-50",
+  "_performance_insights_activity_breakdown_1_rowIndex": 0,
+  "_performance_insights_activity_breakdown_1_fields": {
+    "name": {
+      "label": "Label",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Value",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_performance_insights_activity_breakdown_1_chartConfig": {
+    "xAxisKey": "name",
+    "yAxisKey": "value",
+    "bars": [
+      {
+        "dataKey": "value",
+        "fill": "#8B4789",
+        "name": "Value"
+      }
+    ],
+    "orientation": "vertical",
+    "showGrid": true,
+    "showLegend": true,
+    "stacked": false
+  },
+  "_performance_insights_activity_breakdown_1_alignment": "center",
+  "performance_insights_activity_breakdown_1": [
+    {
+      "name": "Q1",
+      "value": 400
+    },
+    {
+      "name": "Q2",
+      "value": 600
+    },
+    {
+      "name": "Q3",
+      "value": 800
+    },
+    {
+      "name": "Q4",
+      "value": 1000
+    }
+  ],
+  "_performance_insights_activity_breakdown_sectionLayoutType": "left-50",
+  "_enabled_performance_insights_activity_breakdown": true,
+  "_completed_performance_insights_activity_breakdown": false,
+  "_business_unit_workload_distribution_type": "metricCard",
+  "_business_unit_workload_distribution_layoutZone": "full",
+  "_business_unit_workload_distribution_rowIndex": 0,
+  "_business_unit_workload_distribution_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "_business_unit_workload_distribution_alignment": "center",
+  "business_unit_workload_distribution": [
+    {
+      "title": "Revenue",
+      "value": "$1,230,000",
+      "style": "highlight",
+      "icon": "dollar",
+      "iconColor": "green"
+    },
+    {
+      "title": "Customers",
+      "value": "263",
+      "style": "standard",
+      "icon": "users",
+      "iconColor": "navy"
+    },
+    {
+      "title": "Growth",
+      "value": "+48%",
+      "style": "bold",
+      "icon": "trending",
+      "iconColor": "green"
+    },
+    {
+      "title": "NPS Score",
+      "value": "0",
+      "style": "total",
+      "icon": "award",
+      "iconColor": "eggplant"
+    }
+  ],
+  "_business_unit_workload_distribution_sectionLayoutType": "full",
+  "_enabled_business_unit_workload_distribution": true,
+  "_completed_business_unit_workload_distribution": false,
+  "_delivery_status_workstreams_type": "statusBoard",
+  "_delivery_status_workstreams_layoutZone": "full",
+  "_delivery_status_workstreams_rowIndex": 0,
+  "_delivery_status_workstreams_alignment": "center",
+  "delivery_status_workstreams": {
+    "columns": [
+      {
+        "title": "On Track",
+        "items": [
+          "Demo environment performance improvements ongoing",
+          "New deployment process in testing"
+        ]
+      },
+      {
+        "title": "At Risk",
+        "items": [
+          "Titled Performance & Import Failures - unreliable search/browse",
+          "Timeline: End of November 2024"
+        ]
+      },
+      {
+        "title": "Blocked",
+        "items": [
+          "Shift Payment Audit Trail - excessive work flagged"
+        ]
+      },
+      {
+        "title": "Completed",
+        "items": [
+          "Team shift recording and approval process implemented",
+          "Demo Team payment issues resolved"
+        ]
+      }
+    ]
+  },
+  "_delivery_status_workstreams_sectionLayoutType": "full",
+  "_enabled_delivery_status_workstreams": true,
+  "_completed_delivery_status_workstreams": false,
+  "_risks_issues_mitigation_actions_0_type": "riskCard",
+  "_risks_issues_mitigation_actions_0_layoutZone": "full",
+  "_risks_issues_mitigation_actions_0_rowIndex": 0,
+  "_risks_issues_mitigation_actions_0_fields": {
+    "severity": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Severity (low/medium/high)"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Risk Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Description"
+    },
+    "mitigation": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Mitigation Plan"
+    }
+  },
+  "risks_issues_mitigation_actions_0": [
+    {
+      "severity": "low",
+      "title": "Vendor Documentation Update Required",
+      "description": "API documentation needs minor updates for new endpoints",
+      "mitigation": "Technical writing team scheduled to complete updates by end of sprint"
+    },
+    {
+      "severity": "medium",
+      "title": "International Issuing Hub delayed due to Money 20/20 and EG-Coast availability",
+      "description": "Timeline delays expected due to conference schedule conflicts",
+      "mitigation": "ER expected to approve asset transfer this week, Coast dropped Matthews LIBs to expedite"
+    },
+    {
+      "severity": "high",
+      "title": "Critical Security Vulnerability in Payment Gateway",
+      "description": "Zero-day exploit discovered in third-party payment processing library",
+      "mitigation": "Emergency patch deployment scheduled for tonight, all transactions temporarily routed through backup system"
+    }
+  ],
+  "_risks_issues_mitigation_actions_1_type": "hr",
+  "_risks_issues_mitigation_actions_1_layoutZone": "full",
+  "_risks_issues_mitigation_actions_1_rowIndex": 1,
+  "risks_issues_mitigation_actions_1": "",
+  "_risks_issues_mitigation_actions_sectionLayoutType": "full",
+  "_enabled_risks_issues_mitigation_actions": true,
+  "_completed_risks_issues_mitigation_actions": false,
+  "_strategic_assessment_business_context_type": "twoColumnComparison",
+  "_strategic_assessment_business_context_layoutZone": "full",
+  "_strategic_assessment_business_context_rowIndex": 0,
+  "_strategic_assessment_business_context_fields": {
+    "topLeftTitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Top Left Title"
+    },
+    "topLeftContent": {
+      "type": "string",
+      "renderAs": "richText",
+      "label": "Top Left Content"
+    },
+    "topRightTitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Top Right Title"
+    },
+    "topRightContent": {
+      "type": "string",
+      "renderAs": "richText",
+      "label": "Top Right Content"
+    },
+    "bottomLeftTitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Bottom Left Title"
+    },
+    "bottomLeftContent": {
+      "type": "string",
+      "renderAs": "richText",
+      "label": "Bottom Left Content"
+    },
+    "bottomRightTitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Bottom Right Title"
+    },
+    "bottomRightContent": {
+      "type": "string",
+      "renderAs": "richText",
+      "label": "Bottom Right Content"
+    }
+  },
+  "_strategic_assessment_business_context_alignment": "center",
+  "strategic_assessment_business_context": {
+    "topLeftTitle": "The Issue",
+    "topLeftContent": "Current client portal is outdated (built in 2016), lacks mobile optimization, and generates 200+ support calls per month due to usability issues. Client feedback consistently cites the portal as a pain point in relationship reviews.",
+    "topRightTitle": "Business Impact",
+    "topRightContent": "Portal deficiencies contributed to loss of 2 major clients ($800K AUM) in 2024. Annual support costs attributed to portal issues exceed $150K. RFP win rate decreased 12% when portal demos are included.",
+    "bottomLeftTitle": "Market Context",
+    "bottomLeftContent": "Competitors have launched modern, mobile-first portals with enhanced features. Recent market research shows 78% of clients expect banking-grade digital experiences from all financial service providers.",
+    "bottomRightTitle": "Operational Context",
+    "bottomRightContent": "Current portal runs on legacy technology stack with limited internal expertise. IT team spends 40% of maintenance time on portal-related issues. No API layer exists for future integrations."
+  },
+  "_strategic_assessment_business_context_sectionLayoutType": "full",
+  "_enabled_strategic_assessment_business_context": true,
+  "_completed_strategic_assessment_business_context": false,
+  "_outlook_closing_summary_0_type": "richText",
+  "_outlook_closing_summary_0_layoutZone": "full",
+  "_outlook_closing_summary_0_rowIndex": 0,
+  "_outlook_closing_summary_0_alignment": "center",
+  "outlook_closing_summary_0": "This is **bold text** and this is *italic text* with inline formatting support.",
+  "_outlook_closing_summary_1_type": "quote",
+  "_outlook_closing_summary_1_layoutZone": "full",
+  "_outlook_closing_summary_1_rowIndex": 1,
+  "_outlook_closing_summary_1_alignment": "center",
+  "outlook_closing_summary_1": "Strong momentum across Demo Services Group with key wins in Banking Microsite and SNOW migration.",
+  "_outlook_closing_summary_sectionLayoutType": "full",
+  "_enabled_outlook_closing_summary": true,
+  "_completed_outlook_closing_summary": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "Demo Services - Update Template v2",
+  "_template_description": "",
+  "_template_created": "2025-11-25T18:05:24.558Z",
+  "_template_updated": "2025-11-25T18:05:24.558Z"
+}

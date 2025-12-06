@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { Plus, X, Check } from 'lucide-react';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export interface ListPatternProps {
   data: any;
@@ -69,7 +70,7 @@ export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChan
         return (
           <div key={index} className="highlight-item">
             <div className="highlight-badge">{index + 1}</div>
-            <div className="highlight-text">{displayText}</div>
+            <div className="highlight-text">{renderWithExpressions(displayText)}</div>
           </div>
         );
       })}
@@ -126,7 +127,7 @@ export const BulletListPattern: React.FC<ListPatternProps> = ({ data, onChange, 
   return (
     <ul className="bullet-list">
       {items.map((item, index) => (
-        <li key={index}>{item}</li>
+        <li key={index}>{renderWithExpressions(item)}</li>
       ))}
     </ul>
   );
@@ -185,7 +186,7 @@ export const ChecklistItemsPattern: React.FC<ListPatternProps> = ({ data, onChan
       {items.map((item, index) => (
         <div key={index} className="checklist-item">
           <Check size={16} className="check-icon" />
-          <span>{item}</span>
+          <span>{renderWithExpressions(item)}</span>
         </div>
       ))}
     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { RendererProps, FieldSchema } from '../types/schema';
+import type { RendererProps, FieldSchema } from '../types/schema';
 import { Trash2, Plus } from 'lucide-react';
 import { renderWithExpressions } from '../utils/expressionParser';
 

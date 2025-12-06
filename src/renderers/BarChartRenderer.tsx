@@ -1,5 +1,5 @@
 import React from 'react';
-import { RendererProps, FieldSchema } from '../types/schema';
+import type { RendererProps, FieldSchema } from '../types/schema';
 import { Plus, Trash2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { getClasses, ChartColors } from '../design-system';

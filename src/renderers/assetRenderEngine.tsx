@@ -62,6 +62,8 @@ import {
   SpacerPattern
 } from './assetRenderUtility';
 
+import { BudgetBreakdown } from './assetRenderBudget';
+
 // ==========================================
 // ENGINE PROPS
 // ==========================================
@@ -157,6 +159,10 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <SpacerPattern {...props} />;
       case 'listTop5':
         return <Top5ListPattern {...props} />;
+      
+      // BUDGET & FINANCIAL
+      case 'budgetBreakdown':
+        return <BudgetBreakdown data={data} />;
       
       default:
         return <div className="text-red-500">Unknown asset type: {type}</div>;

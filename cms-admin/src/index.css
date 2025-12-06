@@ -1,6 +1,35 @@
 @import "tailwindcss";
 @import "./renderers/assetRenderEngine.css";
 
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar Styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9D9EA2 transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #9D9EA2;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #431C5B;
+}
+
 /* Preview Mode - Global Override */
 body.preview-mode div.fixed {
   top: 5rem !important;
@@ -206,3 +235,20 @@ html {
     background: white !important;
   }
 }
+
+/* OrgIQ Detail Panel Animations */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+

@@ -169,7 +169,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       required: false
     },
     exampleData: 'This is **bold text** and this is *italic text* with inline formatting support.',
-    supportsMultiColumn: false,
+    supportsMultiColumn: true,
     styling: {
       typography: AssetStyles.typography.body.normal,
       padding: AssetStyles.spacing.md
@@ -198,7 +198,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       'GTM Team Support - Office of the CTO Template Completed, moving to Figma conversion',
       'SNOW Migration - Built comprehensive reports, dashboard launch by Nov 14'
     ],
-    supportsMultiColumn: false,
+    supportsMultiColumn: true,
     styling: {
       container: AssetStyles.effects.card,
       padding: AssetStyles.spacing.md,
@@ -639,7 +639,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       required: false
     },
     exampleData: 'Strong momentum across Demo Services Group with key wins in Banking Microsite and SNOW migration.',
-    supportsMultiColumn: false,
+    supportsMultiColumn: true,
     styling: {
       container: AssetStyles.effects.glassStrong,
       padding: AssetStyles.spacing.lg,
@@ -661,7 +661,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       required: false
     },
     exampleData: 'const example = "code snippet";',
-    supportsMultiColumn: false,
+    supportsMultiColumn: true,
     styling: {
       container: 'bg-gray-900 dark:bg-gray-950',
       padding: AssetStyles.spacing.md,
@@ -861,6 +861,549 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     styling: {
       container: 'min-h-[20px]', // Minimal height to ensure visibility in editor
       padding: '0'
+    }
+  },
+  
+  // ==========================================
+  // ORGANIZATIONAL CHARTS
+  // ==========================================
+  
+  {
+    id: 'orgChart',
+    name: 'Org Chart',
+    type: 'orgChart',
+    category: 'complex',
+    description: 'Interactive organizational hierarchy chart with search, zoom, and export capabilities',
+    useCase: 'HR hierarchies, team structures, reporting lines - dynamic data with real-time search and visual navigation',
+    schema: {
+      type: 'object',
+      renderAs: 'orgChart',
+      label: 'Organization Chart',
+      required: false
+    },
+    exampleData: {
+      nodes: [
+        {
+          id: '1',
+          parentId: null,
+          name: 'Sarah Johnson',
+          title: 'Chief Executive Officer',
+          department: 'Executive Leadership',
+          email: 'sarah.johnson@company.com',
+          phone: '+1 (555) 100-0001',
+          imageUrl: 'https://i.pravatar.cc/150?img=47'
+        },
+        {
+          id: '2',
+          parentId: '1',
+          name: 'Michael Chen',
+          title: 'Chief Technology Officer',
+          department: 'Technology',
+          email: 'michael.chen@company.com',
+          phone: '+1 (555) 100-0002',
+          imageUrl: 'https://i.pravatar.cc/150?img=12'
+        },
+        {
+          id: '3',
+          parentId: '1',
+          name: 'Emily Rodriguez',
+          title: 'Chief Financial Officer',
+          department: 'Finance',
+          email: 'emily.rodriguez@company.com',
+          phone: '+1 (555) 100-0003',
+          imageUrl: 'https://i.pravatar.cc/150?img=45'
+        },
+        {
+          id: '4',
+          parentId: '1',
+          name: 'David Park',
+          title: 'Chief Operating Officer',
+          department: 'Operations',
+          email: 'david.park@company.com',
+          phone: '+1 (555) 100-0004',
+          imageUrl: 'https://i.pravatar.cc/150?img=33'
+        },
+        {
+          id: '5',
+          parentId: '2',
+          name: 'Jennifer Lee',
+          title: 'VP of Engineering',
+          department: 'Engineering',
+          email: 'jennifer.lee@company.com',
+          phone: '+1 (555) 100-0005',
+          imageUrl: 'https://i.pravatar.cc/150?img=26'
+        },
+        {
+          id: '6',
+          parentId: '2',
+          name: 'Robert Taylor',
+          title: 'VP of Product',
+          department: 'Product',
+          email: 'robert.taylor@company.com',
+          phone: '+1 (555) 100-0006',
+          imageUrl: 'https://i.pravatar.cc/150?img=15'
+        },
+        {
+          id: '7',
+          parentId: '3',
+          name: 'Amanda White',
+          title: 'VP of Finance',
+          department: 'Finance',
+          email: 'amanda.white@company.com',
+          phone: '+1 (555) 100-0007',
+          imageUrl: 'https://i.pravatar.cc/150?img=44'
+        },
+        {
+          id: '8',
+          parentId: '4',
+          name: 'James Wilson',
+          title: 'VP of Operations',
+          department: 'Operations',
+          email: 'james.wilson@company.com',
+          phone: '+1 (555) 100-0008',
+          imageUrl: 'https://i.pravatar.cc/150?img=52'
+        }
+      ]
+    },
+    supportsMultiColumn: false,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.md
+    }
+  },
+
+  // ==========================================
+  // FINANCIAL / BUDGET TYPES
+  // ==========================================
+  
+  {
+    id: 'budgetBreakdown',
+    name: 'Executive Budget Breakdown',
+    type: 'budgetBreakdown',
+    category: 'complex',
+    description: 'Full-width financial budget breakdown with line items, variance tracking, and detailed explanations via hover/modal interactions',
+    useCase: 'Executive budgets, financial summaries, cost breakdowns - showing planned vs actual spend with drill-down details',
+    schema: {
+      type: 'object',
+      renderAs: 'budgetBreakdown',
+      label: 'Budget Breakdown',
+      required: false
+    },
+    exampleData: {
+      title: 'Q4 2025 Operating Budget',
+      currency: 'USD',
+      period: 'Q4 2025',
+      totalBudget: 5250000,
+      totalActual: 4875000,
+      categories: [
+        {
+          id: 'personnel',
+          name: 'Personnel & Compensation',
+          icon: 'Users',
+          budgeted: 3200000,
+          actual: 3150000,
+          variance: -50000,
+          variancePercent: -1.6,
+          status: 'on-track',
+          color: 'emerald',
+          lineItems: [
+            {
+              id: 'salaries',
+              name: 'Base Salaries',
+              budgeted: 2400000,
+              actual: 2380000,
+              variance: -20000,
+              summary: 'Personnel costs running 0.8% under budget due to delayed hiring',
+              explanation: 'Savings from delayed Q3 hires rolling into Q4',
+              justification: 'Two senior positions remained open through Q3 reorganization',
+              owner: 'HR Director',
+              lastUpdated: '2025-11-15'
+            },
+            {
+              id: 'benefits',
+              name: 'Benefits & Insurance',
+              budgeted: 550000,
+              actual: 545000,
+              variance: -5000,
+              summary: 'Employee benefits tracking slightly under budget with improved coverage terms',
+              explanation: 'Lower health insurance premiums than projected',
+              justification: 'Negotiated favorable group rates with new provider',
+              owner: 'Benefits Manager',
+              lastUpdated: '2025-11-10'
+            },
+            {
+              id: 'bonuses',
+              name: 'Performance Bonuses',
+              budgeted: 250000,
+              actual: 225000,
+              variance: -25000,
+              explanation: 'Q3 performance metrics below target',
+              justification: 'Market conditions impacted sales targets by 12%',
+              owner: 'Compensation Lead',
+              lastUpdated: '2025-11-20'
+            }
+          ]
+        },
+        {
+          id: 'technology',
+          name: 'Technology & Infrastructure',
+          icon: 'Server',
+          budgeted: 1200000,
+          actual: 1050000,
+          variance: -150000,
+          variancePercent: -12.5,
+          status: 'on-track',
+          color: 'blue',
+          lineItems: [
+            {
+              id: 'cloud',
+              name: 'Cloud Services (AWS, Azure)',
+              budgeted: 650000,
+              actual: 580000,
+              variance: -70000,
+              explanation: 'Optimization initiatives reduced compute costs',
+              justification: 'Infrastructure team implemented auto-scaling and reserved instances',
+              owner: 'Cloud Architect',
+              lastUpdated: '2025-11-18'
+            },
+            {
+              id: 'licenses',
+              name: 'Software Licenses',
+              budgeted: 350000,
+              actual: 310000,
+              variance: -40000,
+              explanation: 'Enterprise license renegotiation savings',
+              justification: 'Consolidated vendors and secured multi-year discount',
+              owner: 'IT Procurement',
+              lastUpdated: '2025-11-05'
+            },
+            {
+              id: 'hardware',
+              name: 'Hardware & Equipment',
+              budgeted: 200000,
+              actual: 160000,
+              variance: -40000,
+              explanation: 'Deferred laptop refresh to Q1 2026',
+              justification: 'Extended lifecycle by 6 months based on performance data',
+              owner: 'IT Director',
+              lastUpdated: '2025-11-12'
+            }
+          ]
+        },
+        {
+          id: 'operations',
+          name: 'Operations & Facilities',
+          icon: 'Building2',
+          budgeted: 550000,
+          actual: 475000,
+          variance: -75000,
+          variancePercent: -13.6,
+          status: 'on-track',
+          color: 'violet',
+          lineItems: [
+            {
+              id: 'rent',
+              name: 'Office Rent & Utilities',
+              budgeted: 350000,
+              actual: 325000,
+              variance: -25000,
+              explanation: 'Reduced office footprint with hybrid work model',
+              justification: 'Sublease of 2 floors generating $25K/month revenue',
+              owner: 'Facilities Manager',
+              lastUpdated: '2025-11-08'
+            },
+            {
+              id: 'supplies',
+              name: 'Office Supplies & Equipment',
+              budgeted: 120000,
+              actual: 90000,
+              variance: -30000,
+              explanation: 'Lower in-office headcount reduced supply needs',
+              justification: 'Average 40% remote work across all departments',
+              owner: 'Office Manager',
+              lastUpdated: '2025-11-14'
+            },
+            {
+              id: 'travel',
+              name: 'Business Travel',
+              budgeted: 80000,
+              actual: 60000,
+              variance: -20000,
+              explanation: 'Virtual meetings replacing some in-person conferences',
+              justification: 'Travel policy update prioritizing essential trips only',
+              owner: 'Operations Director',
+              lastUpdated: '2025-11-16'
+            }
+          ]
+        },
+        {
+          id: 'marketing',
+          name: 'Marketing & Customer Acquisition',
+          icon: 'TrendingUp',
+          budgeted: 300000,
+          actual: 325000,
+          variance: 25000,
+          variancePercent: 8.3,
+          status: 'at-risk',
+          color: 'amber',
+          lineItems: [
+            {
+              id: 'digital',
+              name: 'Digital Advertising',
+              budgeted: 180000,
+              actual: 195000,
+              variance: 15000,
+              explanation: 'Increased spend to capitalize on Q4 market opportunity',
+              justification: 'ROI tracking shows 3.2x return on incremental investment',
+              owner: 'Marketing Director',
+              lastUpdated: '2025-11-22'
+            },
+            {
+              id: 'events',
+              name: 'Events & Sponsorships',
+              budgeted: 80000,
+              actual: 90000,
+              variance: 10000,
+              explanation: 'Added last-minute industry conference sponsorship',
+              justification: 'Strategic opportunity to reach 2000+ qualified leads',
+              owner: 'Events Manager',
+              lastUpdated: '2025-11-19'
+            },
+            {
+              id: 'content',
+              name: 'Content Production',
+              budgeted: 40000,
+              actual: 40000,
+              variance: 0,
+              explanation: 'On budget - video production and design as planned',
+              justification: 'Quarterly content calendar executed per schedule',
+              owner: 'Content Lead',
+              lastUpdated: '2025-11-17'
+            }
+          ]
+        }
+      ],
+      notes: 'Overall tracking 7.1% under budget. Marketing overage justified by ROI metrics. Technology savings from optimization initiatives.'
+    },
+    supportsMultiColumn: false,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.lg
+    }
+  },
+
+  {
+    id: 'forecastBreakdown',
+    name: 'Financial Forecast (Capex/Opex)',
+    type: 'forecastBreakdown',
+    category: 'complex',
+    description: 'Financial forecast planning with Capex (one-time) vs Opex (yearly) classification for investment analysis',
+    useCase: 'Budget planning, financial forecasting, investment proposals - showing one-time capital expenses vs recurring operational costs',
+    schema: {
+      type: 'object',
+      renderAs: 'forecastBreakdown',
+      label: 'Forecast Breakdown',
+      required: false
+    },
+    exampleData: {
+      title: '2026 Technology Investment Forecast',
+      currency: 'USD',
+      period: 'FY 2026',
+      initiatives: [
+        {
+          id: 'cloud-migration',
+          name: 'Cloud Migration Project',
+          termYears: 3,
+          costCenters: [
+            {
+              id: 'capex',
+              type: 'capex',
+              name: 'Capex',
+              removable: false,
+              lineItems: [
+                {
+                  id: '1',
+                  name: 'Azure Reserved Instances',
+                  amount: 120000,
+                  description: 'One-time 3-year commitment for compute and storage',
+                  summary: 'Multi-year Azure reservation provides 40% savings vs on-demand pricing',
+                  justification: 'Current on-premise infrastructure reaching end-of-life. Cloud-first strategy approved.',
+                  owner: 'Cloud Architect',
+                  lastUpdated: '2025-12-05'
+                },
+                {
+                  id: '2',
+                  name: 'Migration Services',
+                  amount: 80000,
+                  description: 'Professional services for workload migration and optimization',
+                  summary: 'Third-party consulting to accelerate migration timeline',
+                  owner: 'Cloud Program Manager',
+                  lastUpdated: '2025-12-05'
+                }
+              ]
+            },
+            {
+              id: 'opex',
+              type: 'opex',
+              name: 'Opex',
+              removable: false,
+              lineItems: [
+                {
+                  id: '3',
+                  name: 'Annual Cloud Services',
+                  amount: 150000,
+                  description: 'Ongoing compute, storage, networking costs beyond reserved capacity',
+                  summary: 'Variable workloads and development environments',
+                  owner: 'IT Operations',
+                  lastUpdated: '2025-12-05'
+                },
+                {
+                  id: '4',
+                  name: 'Monitoring & Observability',
+                  amount: 50000,
+                  description: 'Datadog Enterprise license and APM',
+                  summary: 'Real-time monitoring across cloud infrastructure',
+                  owner: 'DevOps Team',
+                  lastUpdated: '2025-12-05'
+                }
+              ]
+            },
+            {
+              id: 'idsw-1',
+              type: 'custom',
+              name: 'IDSW',
+              removable: true,
+              lineItems: [
+                {
+                  id: '5',
+                  name: 'IDSW Support Services',
+                  amount: 45000,
+                  description: 'Dedicated support from IDSW for cloud migration',
+                  summary: 'Architecture review and optimization guidance',
+                  owner: 'Cloud Architect',
+                  lastUpdated: '2025-12-05'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'security-compliance',
+          name: 'Security & Compliance Initiative',
+          termYears: 1,
+          costCenters: [
+            {
+              id: 'capex',
+              type: 'capex',
+              name: 'Capex',
+              removable: false,
+              lineItems: [
+                {
+                  id: '6',
+                  name: 'SIEM Platform Implementation',
+                  amount: 60000,
+                  description: 'Splunk Enterprise Security deployment and configuration',
+                  summary: 'Centralized security event management and threat detection',
+                  justification: 'SOC 2 Type II compliance requirement. Audit findings require centralized logging.',
+                  owner: 'Security Architect',
+                  lastUpdated: '2025-12-05'
+                }
+              ]
+            },
+            {
+              id: 'opex',
+              type: 'opex',
+              name: 'Opex',
+              removable: false,
+              lineItems: [
+                {
+                  id: '7',
+                  name: 'Managed Security Services',
+                  amount: 80000,
+                  description: 'SOC services, threat intelligence, incident response',
+                  summary: '24/7 security monitoring and response',
+                  owner: 'CISO',
+                  lastUpdated: '2025-12-05'
+                },
+                {
+                  id: '8',
+                  name: 'Compliance & Audit',
+                  amount: 40000,
+                  description: 'Annual audit fees, penetration testing, compliance consulting',
+                  summary: 'SOC 2, ISO 27001, and industry-specific compliance',
+                  owner: 'Compliance Manager',
+                  lastUpdated: '2025-12-05'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'erp-modernization',
+          name: 'ERP System Modernization',
+          termYears: 1,
+          costCenters: [
+            {
+              id: 'capex',
+              type: 'capex',
+              name: 'Capex',
+              removable: false,
+              lineItems: [
+                {
+                  id: '9',
+                  name: 'NetSuite Upgrade',
+                  amount: 100000,
+                  description: 'Major version upgrade with new financial modules',
+                  summary: 'Enhanced reporting, multi-currency support, advanced revenue recognition',
+                  justification: 'Current version end-of-support in Q2 2026. New features required for global expansion.',
+                  owner: 'ERP Program Manager',
+                  lastUpdated: '2025-12-05'
+                }
+              ]
+            },
+            {
+              id: 'opex',
+              type: 'opex',
+              name: 'Opex',
+              removable: false,
+              lineItems: [
+                {
+                  id: '10',
+                  name: 'Training & Change Management',
+                  amount: 30000,
+                  description: 'User training, documentation, change management support',
+                  summary: 'Ensure successful adoption across 150 users',
+                  owner: 'ERP Program Manager',
+                  lastUpdated: '2025-12-05'
+                }
+              ]
+            },
+            {
+              id: 'consulting',
+              type: 'custom',
+              name: 'Consulting',
+              removable: true,
+              lineItems: [
+                {
+                  id: '11',
+                  name: 'NetSuite Implementation Partner',
+                  amount: 75000,
+                  description: 'Certified NetSuite consultants for upgrade and customization',
+                  summary: 'Expert guidance to minimize downtime and ensure data integrity',
+                  owner: 'ERP Program Manager',
+                  lastUpdated: '2025-12-05'
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      notes: 'Three strategic initiatives totaling $850K. Cloud Migration (3-year, $445K) is largest investment. Security & Compliance ($180K) addresses audit findings. ERP Modernization ($205K) enables global expansion. Overall split: 42% Capex / 38% Opex / 20% Custom (IDSW & Consulting).'
+    },
+    supportsMultiColumn: false,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.lg
     }
   }
 ];

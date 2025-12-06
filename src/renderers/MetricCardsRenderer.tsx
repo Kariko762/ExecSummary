@@ -1,5 +1,5 @@
 import React from 'react';
-import { RendererProps } from '../types/schema';
+import type { RendererProps } from '../types/schema';
 import { DollarSign, TrendingUp, Users, ThumbsUp, Award, Target, Star, Rocket, BarChart3, Activity, Zap, Heart, CheckCircle } from 'lucide-react';
 import { getClasses } from '../design-system';
 import { renderWithExpressions } from '../utils/expressionParser';

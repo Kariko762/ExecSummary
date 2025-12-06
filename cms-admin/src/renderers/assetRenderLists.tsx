@@ -7,19 +7,22 @@
 
 import React from 'react';
 import { Plus, X, Check } from 'lucide-react';
+import { renderWithExpressions } from '../../../src/utils/expressionParser';
 
 export interface ListPatternProps {
   data: any;
   onChange?: (value: any) => void;
   mode: 'edit' | 'display';
+  columnContext?: 'single' | 'multi';
 }
 
 // ==========================================
 // HIGHLIGHTS LIST PATTERN (Numbered)
 // ==========================================
 
-export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChange, mode }) => {
+export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChange, mode, columnContext }) => {
   const items = Array.isArray(data) ? data : [];
+  const isMultiColumn = columnContext === 'multi';
   console.log('HighlightsListPattern received:', items);
   
   if (mode === 'edit') {
@@ -62,14 +65,14 @@ export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChan
   }
   
   return (
-    <div className="highlights-list">
+    <div className={`highlights-list ${isMultiColumn ? 'multi-column' : ''}`}>
       {items.map((item, index) => {
         // Handle both string arrays and object arrays with name/value properties
         const displayText = typeof item === 'object' ? (item.name || item.value || '') : item;
         return (
           <div key={index} className="highlight-item">
-            <div className="highlight-badge">{index + 1}</div>
-            <div className="highlight-text">{displayText}</div>
+            <div className={`highlight-badge ${isMultiColumn ? 'compact' : ''}`}>{index + 1}</div>
+            <div className="highlight-text">{renderWithExpressions(displayText)}</div>
           </div>
         );
       })}
@@ -126,7 +129,7 @@ export const BulletListPattern: React.FC<ListPatternProps> = ({ data, onChange, 
   return (
     <ul className="bullet-list">
       {items.map((item, index) => (
-        <li key={index}>{item}</li>
+        <li key={index}>{renderWithExpressions(item)}</li>
       ))}
     </ul>
   );
@@ -185,7 +188,7 @@ export const ChecklistItemsPattern: React.FC<ListPatternProps> = ({ data, onChan
       {items.map((item, index) => (
         <div key={index} className="checklist-item">
           <Check size={16} className="check-icon" />
-          <span>{item}</span>
+          <span>{renderWithExpressions(item)}</span>
         </div>
       ))}
     </div>

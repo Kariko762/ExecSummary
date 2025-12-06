@@ -1,0 +1,84 @@
+{
+  "overlayId": "revenue-q4-2025",
+  "overlayName": "Revenue Q4 2025",
+  "description": "Revenue and profitability per product/business unit",
+  "dataType": "financial-metrics",
+  "createdDate": "2025-12-03T10:30:00Z",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  
+  "visualizationConfig": {
+    "title": "Revenue",
+    "icon": "TrendingUp",
+    "primaryColor": "green",
+    "hotspotEnabled": true,
+    "hotspotMetric": "revenue",
+    "hotspotLabel": "Revenue ($M)",
+    "hotspotRanges": [
+      { "min": 0, "max": 5, "color": "#d1fae5", "label": "$0-5M" },
+      { "min": 5.01, "max": 20, "color": "#a7f3d0", "label": "$5-20M" },
+      { "min": 20.01, "max": 50, "color": "#6ee7b7", "label": "$20-50M" },
+      { "min": 50.01, "max": 999999, "color": "#34d399", "label": "$50M+" }
+    ],
+    "aggregateMetrics": [
+      {
+        "id": "totalRevenue",
+        "label": "Total Revenue",
+        "calculation": "sum",
+        "field": "revenue",
+        "format": "currency"
+      },
+      {
+        "id": "avgMargin",
+        "label": "Avg Margin",
+        "calculation": "average",
+        "field": "profitMargin",
+        "format": "percentage"
+      }
+    ]
+  },
+  
+  "nodeMetrics": [
+    {
+      "nodeId": "root",
+      "revenue": 125.5,
+      "profitMargin": 28,
+      "growthRate": 15
+    },
+    {
+      "nodeId": "banking",
+      "revenue": 45.2,
+      "profitMargin": 32,
+      "growthRate": 12
+    },
+    {
+      "nodeId": "capital-markets",
+      "revenue": 80.3,
+      "profitMargin": 25,
+      "growthRate": 18
+    },
+    {
+      "nodeId": "risk",
+      "revenue": 28.5,
+      "profitMargin": 22,
+      "growthRate": 20
+    },
+    {
+      "nodeId": "lending",
+      "revenue": 18.9,
+      "profitMargin": 30,
+      "growthRate": 10
+    },
+    {
+      "nodeId": "wealth-retirement",
+      "revenue": 32.9,
+      "profitMargin": 24,
+      "growthRate": 22
+    },
+    {
+      "nodeId": "ctrm",
+      "revenue": 8.2,
+      "profitMargin": 18,
+      "growthRate": 35
+    }
+  ]
+}

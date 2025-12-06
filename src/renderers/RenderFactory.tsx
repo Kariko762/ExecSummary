@@ -1,5 +1,5 @@
 import React from 'react';
-import { RendererProps } from '../types/schema';
+import type { RendererProps } from '../types/schema';
 import { TextRenderer } from './TextRenderer';
 import { TextareaRenderer } from './TextareaRenderer';
 import { NumberRenderer } from './NumberRenderer';
@@ -21,6 +21,9 @@ import { VideoRenderer } from './VideoRenderer';
 import { EmbeddedVideoRenderer } from './EmbeddedVideoRenderer';
 import { TableLayoutRenderer } from './TableLayoutRenderer';
 import { KeyValueListRenderer } from './KeyValueListRenderer';
+import { OrgChartRenderer } from './OrgChartRenderer';
+import { BudgetBreakdown } from './assetRenderBudget';
+import { ForecastBreakdown } from './assetRenderForecast';
 
 /**
  * Factory component that routes to the appropriate renderer based on schema type
@@ -130,6 +133,18 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
     
     case 'statusBoard':
       renderer = <TableLayoutRenderer {...props} />;
+      break;
+    
+    case 'orgChart':
+      renderer = <OrgChartRenderer {...props} />;
+      break;
+    
+    case 'budgetBreakdown':
+      renderer = <BudgetBreakdown data={props.data} />;
+      break;
+    
+    case 'forecastBreakdown':
+      renderer = <ForecastBreakdown data={props.data} />;
       break;
     
     default:

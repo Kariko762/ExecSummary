@@ -62,6 +62,11 @@ import {
   SpacerPattern
 } from './assetRenderUtility';
 
+import OrgChartRenderer from './OrgChartRenderer';
+
+import { BudgetBreakdown } from './assetRenderBudget';
+import { ForecastBreakdown } from './assetRenderForecast';
+
 // ==========================================
 // ENGINE PROPS
 // ==========================================
@@ -158,7 +163,26 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
       case 'listTop5':
         return <Top5ListPattern {...props} />;
       
+      // ORGANIZATIONAL CHART
+      case 'orgChart':
+        return <OrgChartRenderer data={data} onChange={onChange} mode={mode} schema={{ type: 'object', renderAs: 'orgChart' }} />;
+      
+      // BUDGET & FINANCIAL
+      case 'budgetBreakdown':
+        return <BudgetBreakdown data={data} mode={mode} onChange={onChange} />;
+      case 'forecastBreakdown':
+        return <ForecastBreakdown data={data} mode={mode} onChange={onChange} />;
+      
       default:
+        console.error('❌ AssetRenderEngine - Unknown type received:', type);
+        console.log('Available types:', [
+          'text', 'textarea', 'richText', 'quote', 'codeBlock',
+          'highlightsList', 'bulletList', 'checklistItems', 'progressBarList', 'keyValueList',
+          'metricCard', 'radialProgressChart', 'pieChart', 'barChart', 'lineChart',
+          'statusBoard', 'timeline', 'twoColumnComparison', 'problemSolutionBox',
+          'hr', 'number', 'nestedCards', 'riskCard', 'outlookCard', 'categoryList',
+          'orgChart', 'budgetBreakdown', 'forecastBreakdown'
+        ]);
         return <div className="text-red-500">Unknown asset type: {type}</div>;
     }
   };
