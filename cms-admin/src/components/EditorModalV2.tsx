@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save, Eye, Upload, ChevronLeft, ChevronRight, ChevronDown, Check, Lock, Unlock, EyeOff, Code2, Copy, CheckCheck, CheckCircle, Shield, ShieldOff, HelpCircle, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
+import { X, Save, Eye, Upload, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Check, Lock, Unlock, EyeOff, Code2, Copy, CheckCheck, CheckCircle, Shield, ShieldOff, HelpCircle, AlignLeft, AlignCenter, AlignRight, Plus, Trash2 } from 'lucide-react';
 import { summarySchema } from '@shared/schemas/summarySchema';
-import { buildFieldSchema } from '../schemas/assetDataStore';
+import { buildFieldSchema, ASSET_LIBRARY } from '../schemas/assetDataStore';
 import { AssetRenderEngine } from '../renderers/assetRenderEngine';
 import '../renderers/assetRenderEngine.css';
 import { ConfirmationModal } from './ConfirmationModal';
@@ -48,6 +48,19 @@ export default function EditorModalV2({
   const [pendingSectionAction, setPendingSectionAction] = useState<{ sectionId: string; action: 'complete' | 'visibility' } | null>(null); // Track pending action
   const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set()); // Track which subsections are expanded
   const [availableTags, setAvailableTags] = useState<any[]>([]); // Available content tags
+  const [showAddSectionModal, setShowAddSectionModal] = useState(false); // Add section modal
+  const [selectedAssetType, setSelectedAssetType] = useState<string>('text'); // Selected asset type for new section
+  const [selectedColumnLayout, setSelectedColumnLayout] = useState<string>('full'); // Selected column layout: full, 50-50, 70-30, 30-70, 33-33-33
+  const [newSectionName, setNewSectionName] = useState<string>(''); // New section name
+  const [hoveredSectionId, setHoveredSectionId] = useState<string | null>(null); // Track hovered section for move/delete buttons
+  const [showDeleteSectionConfirm, setShowDeleteSectionConfirm] = useState(false); // Delete section confirmation
+  const [pendingDeleteSectionId, setPendingDeleteSectionId] = useState<string | null>(null); // Section to delete
+  const [showAssetLibraryForSection, setShowAssetLibraryForSection] = useState(false); // Show asset library to add asset to section
+  const [showAddAssetModal, setShowAddAssetModal] = useState(false); // Add asset to section modal
+  const [newAssetName, setNewAssetName] = useState<string>(''); // New asset display name
+  const [selectedAssetForSection, setSelectedAssetForSection] = useState<string>('text'); // Selected asset type to add
+  const [showDeleteAssetConfirm, setShowDeleteAssetConfirm] = useState(false); // Delete asset confirmation
+  const [pendingDeleteAssetKey, setPendingDeleteAssetKey] = useState<string | null>(null); // Asset to delete
 
   // Fetch available tags
   useEffect(() => {
@@ -179,8 +192,8 @@ export default function EditorModalV2({
       .filter(key => indexedFieldPattern.test(key) && !key.startsWith('_'))
       .sort(); // Sort to ensure consistent order (0, 1, 2, 3)
     
-    // If multiple indexed fields exist, render them as expandable subsections stacked vertically
-    if (indexedFields.length > 1) {
+    // If indexed fields exist (even just one), render them as expandable subsections stacked vertically
+    if (indexedFields.length >= 1) {
       return (
         <div className="space-y-3">
           {indexedFields.map((fieldKey, index) => {
@@ -191,6 +204,7 @@ export default function EditorModalV2({
             const chartConfig = editedData[`_${fieldKey}_chartConfig`];
             const alignment = editedData[`_${fieldKey}_alignment`] || 'left';
             const columnSpan = editedData[`_${fieldKey}_columnSpan`];
+            const layoutZone = editedData[`_${fieldKey}_layoutZone`] || 'full';
             
             if (!fieldType) return null;
             
@@ -207,15 +221,21 @@ export default function EditorModalV2({
               });
             };
             
-            // Calculate position label (left 33%, middle 33%, right 33%, etc.)
-            const totalFields = indexedFields.length;
-            const positionLabel = totalFields === 3 
-              ? (index === 0 ? 'left 33%' : index === 1 ? 'middle 33%' : 'right 33%')
-              : totalFields === 2
-              ? (index === 0 ? 'left 50%' : 'right 50%')
-              : totalFields === 4
-              ? `column ${index + 1} (25%)`
-              : columnSpan || `column ${index + 1}`;
+            // Get position label from layoutZone metadata
+            const getPositionLabel = (zone: string): string => {
+              if (zone === 'full') return 'Full Width';
+              if (zone === 'left-50' || zone === 'right-50') return zone === 'left-50' ? 'Left 50%' : 'Right 50%';
+              if (zone === 'left-70') return 'Left 70%';
+              if (zone === 'right-30') return 'Right 30%';
+              if (zone === 'left-30') return 'Left 30%';
+              if (zone === 'right-70') return 'Right 70%';
+              if (zone === 'left-33') return 'Left 33%';
+              if (zone === 'middle-33') return 'Middle 33%';
+              if (zone === 'right-33') return 'Right 33%';
+              return zone; // Fallback
+            };
+            
+            const positionLabel = getPositionLabel(layoutZone);
             
             // Use itemSchema if available (new format), otherwise use customFields (legacy)
             const baseSchema = itemSchema 
@@ -234,27 +254,31 @@ export default function EditorModalV2({
             return (
               <div key={fieldKey} className={`border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden`}>
                 {/* Subsection Header */}
-                <button
-                  onClick={toggleExpanded}
-                  className="w-full px-3 py-2 hover:opacity-90 transition-all flex items-center justify-between group"
-                >
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <span className="font-roobert-semibold text-sm text-gray-900 dark:text-white truncate">
-                      {formatSectionTitle(fieldKey)} {index}
-                    </span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      : {fieldType}
-                    </span>
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openAssetReference(fieldType);
-                      }}
-                      className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-400 hover:text-fis-raspberry transition-colors cursor-pointer"
-                      title="View asset type reference"
-                    >
-                      <HelpCircle className="w-3 h-3" />
-                    </div>
+                <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800/50 flex items-center gap-2">
+                  <button
+                    onClick={toggleExpanded}
+                    className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 transition-colors flex-shrink-0"
+                    title={isExpanded ? "Collapse" : "Expand"}
+                  >
+                    <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  <span className="font-roobert-semibold text-sm text-gray-900 dark:text-white truncate">
+                    {formatSectionTitle(fieldKey)} {index}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    : {fieldType}
+                  </span>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openAssetReference(fieldType);
+                    }}
+                    className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-400 hover:text-fis-raspberry transition-colors cursor-pointer"
+                    title="View asset type reference"
+                  >
+                    <HelpCircle className="w-3 h-3" />
+                  </div>
                     
                     {/* Inline Asset Title Input */}
                     <input
@@ -381,6 +405,19 @@ export default function EditorModalV2({
                       </button>
                     </div>
                     
+                    {/* Delete Asset Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPendingDeleteAssetKey(fieldKey);
+                        setShowDeleteAssetConfirm(true);
+                      }}
+                      className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                      title="Delete this asset"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                    
                     <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
                       {positionLabel}
                     </span>
@@ -392,9 +429,7 @@ export default function EditorModalV2({
                         Hidden
                       </span>
                     )}
-                  </div>
-                  <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-                </button>
+                </div>
                 
                 {/* Subsection Content */}
                 <AnimatePresence>
@@ -599,20 +634,190 @@ export default function EditorModalV2({
         mode: 'edit'
       });
       
+      // Get layout zone and asset title for single assets
+      const layoutZone = editedData[`_${sectionId}_layoutZone`] || 'full';
+      const getPositionLabel = (zone: string): string => {
+        if (zone === 'full') return 'Full Width';
+        if (zone === 'left-50' || zone === 'right-50') return zone === 'left-50' ? 'Left 50%' : 'Right 50%';
+        if (zone === 'left-70') return 'Left 70%';
+        if (zone === 'right-30') return 'Right 30%';
+        if (zone === 'left-30') return 'Left 30%';
+        if (zone === 'right-70') return 'Right 70%';
+        if (zone === 'left-33') return 'Left 33%';
+        if (zone === 'middle-33') return 'Middle 33%';
+        if (zone === 'right-33') return 'Right 33%';
+        return zone;
+      };
+      const positionLabel = getPositionLabel(layoutZone);
+      
       return (
-        <div className="space-y-4">
-          <AssetRenderEngine
-            type={sectionType}
-            data={sectionData}
-            onChange={(newValue) => {
-              setEditedData((prev: any) => ({
-                ...prev,
-                [sectionId]: newValue
-              }));
-              setIsDirty(true);
-            }}
-            mode="edit"
-          />
+        <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+          {/* Asset Header with Controls */}
+          <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800/50 flex items-center gap-2">
+            <span className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+              {formatSectionTitle(sectionId)}
+            </span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              : {sectionType}
+            </span>
+            <div
+              onClick={() => openAssetReference(sectionType)}
+              className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-400 hover:text-fis-raspberry transition-colors cursor-pointer"
+              title="View asset type reference"
+            >
+              <HelpCircle className="w-3 h-3" />
+            </div>
+            
+            {/* Asset Title Input */}
+            <input
+              type="text"
+              value={editedData[`_${sectionId}_assetTitle`] || ''}
+              onChange={(e) => {
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [`_${sectionId}_assetTitle`]: e.target.value
+                }));
+                setIsDirty(true);
+              }}
+              placeholder="Asset title (optional)"
+              className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-64 md:w-80 lg:w-96"
+            />
+            
+            {/* Asset Title Toggle */}
+            <div
+              onClick={() => {
+                const displayKey = `_${sectionId}_displayAssetTitle`;
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [displayKey]: prev[displayKey] === false ? true : false
+                }));
+                setIsDirty(true);
+              }}
+              className={`px-1.5 py-0.5 rounded text-[10px] font-roobert-medium transition-colors cursor-pointer ${
+                editedData[`_${sectionId}_displayAssetTitle`] !== false
+                  ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                  : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+              }`}
+              title={editedData[`_${sectionId}_displayAssetTitle`] !== false ? 'Asset title visible' : 'Asset title hidden'}
+            >
+              Title {editedData[`_${sectionId}_displayAssetTitle`] !== false ? '✓' : '✗'}
+            </div>
+            
+            {/* Asset Enable/Disable Toggle */}
+            <button
+              onClick={() => {
+                const enabledKey = `_enabled_${sectionId}`;
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [enabledKey]: prev[enabledKey] === false ? true : false
+                }));
+                setIsDirty(true);
+              }}
+              className={`p-1 rounded transition-colors ${
+                editedData[`_enabled_${sectionId}`] !== false
+                  ? 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
+                  : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50'
+              }`}
+              title={editedData[`_enabled_${sectionId}`] !== false ? 'Disable asset (hide from display)' : 'Enable asset (show in display)'}
+            >
+              {editedData[`_enabled_${sectionId}`] !== false ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+            </button>
+            
+            {/* Alignment Buttons */}
+            <div className="flex gap-0.5">
+              <button
+                onClick={() => {
+                  setEditedData((prev: any) => ({
+                    ...prev,
+                    [`_${sectionId}_alignment`]: 'left'
+                  }));
+                  setIsDirty(true);
+                }}
+                className={`p-1 rounded transition-colors ${
+                  (editedData[`_${sectionId}_alignment`] || 'left') === 'left'
+                    ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+                title="Align Left"
+              >
+                <AlignLeft className="w-3 h-3" />
+              </button>
+              <button
+                onClick={() => {
+                  setEditedData((prev: any) => ({
+                    ...prev,
+                    [`_${sectionId}_alignment`]: 'center'
+                  }));
+                  setIsDirty(true);
+                }}
+                className={`p-1 rounded transition-colors ${
+                  editedData[`_${sectionId}_alignment`] === 'center'
+                    ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+                title="Align Center"
+              >
+                <AlignCenter className="w-3 h-3" />
+              </button>
+              <button
+                onClick={() => {
+                  setEditedData((prev: any) => ({
+                    ...prev,
+                    [`_${sectionId}_alignment`]: 'right'
+                  }));
+                  setIsDirty(true);
+                }}
+                className={`p-1 rounded transition-colors ${
+                  editedData[`_${sectionId}_alignment`] === 'right'
+                    ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+                title="Align Right"
+              >
+                <AlignRight className="w-3 h-3" />
+              </button>
+            </div>
+            
+            {/* Delete Asset Button */}
+            <button
+              onClick={() => {
+                setPendingDeleteAssetKey(sectionId);
+                setShowDeleteAssetConfirm(true);
+              }}
+              className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              title="Delete this asset"
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
+            
+            <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
+              {positionLabel}
+            </span>
+            
+            {/* Disabled Badge */}
+            {editedData[`_enabled_${sectionId}`] === false && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium bg-red-500/20 text-red-600 dark:text-red-400">
+                <EyeOff className="w-2.5 h-2.5" />
+                Hidden
+              </span>
+            )}
+          </div>
+          
+          {/* Asset Content */}
+          <div className="p-4">
+            <AssetRenderEngine
+              type={sectionType}
+              data={sectionData}
+              onChange={(newValue) => {
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [sectionId]: newValue
+                }));
+                setIsDirty(true);
+              }}
+              mode="edit"
+            />
+          </div>
         </div>
       );
     }
@@ -635,20 +840,190 @@ export default function EditorModalV2({
       
       const legacyType = legacySchema.renderAs || legacySchema.type || 'text';
       
+      // Get layout zone and asset title for legacy single assets
+      const layoutZone = editedData[`_${sectionId}_layoutZone`] || 'full';
+      const getPositionLabel = (zone: string): string => {
+        if (zone === 'full') return 'Full Width';
+        if (zone === 'left-50' || zone === 'right-50') return zone === 'left-50' ? 'Left 50%' : 'Right 50%';
+        if (zone === 'left-70') return 'Left 70%';
+        if (zone === 'right-30') return 'Right 30%';
+        if (zone === 'left-30') return 'Left 30%';
+        if (zone === 'right-70') return 'Right 70%';
+        if (zone === 'left-33') return 'Left 33%';
+        if (zone === 'middle-33') return 'Middle 33%';
+        if (zone === 'right-33') return 'Right 33%';
+        return zone;
+      };
+      const positionLabel = getPositionLabel(layoutZone);
+      
       return (
-        <div className="space-y-4">
-          <AssetRenderEngine
-            type={legacyType}
-            data={sectionData}
-            onChange={(newValue) => {
-              setEditedData((prev: any) => ({
-                ...prev,
-                [sectionId]: newValue
-              }));
-              setIsDirty(true);
-            }}
-            mode="edit"
-          />
+        <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+          {/* Asset Header with Controls */}
+          <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800/50 flex items-center gap-2">
+            <span className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+              {formatSectionTitle(sectionId)}
+            </span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              : {legacyType}
+            </span>
+            <div
+              onClick={() => openAssetReference(legacyType)}
+              className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-400 hover:text-fis-raspberry transition-colors cursor-pointer"
+              title="View asset type reference"
+            >
+              <HelpCircle className="w-3 h-3" />
+            </div>
+            
+            {/* Asset Title Input */}
+            <input
+              type="text"
+              value={editedData[`_${sectionId}_assetTitle`] || ''}
+              onChange={(e) => {
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [`_${sectionId}_assetTitle`]: e.target.value
+                }));
+                setIsDirty(true);
+              }}
+              placeholder="Asset title (optional)"
+              className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-64 md:w-80 lg:w-96"
+            />
+            
+            {/* Asset Title Toggle */}
+            <div
+              onClick={() => {
+                const displayKey = `_${sectionId}_displayAssetTitle`;
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [displayKey]: prev[displayKey] === false ? true : false
+                }));
+                setIsDirty(true);
+              }}
+              className={`px-1.5 py-0.5 rounded text-[10px] font-roobert-medium transition-colors cursor-pointer ${
+                editedData[`_${sectionId}_displayAssetTitle`] !== false
+                  ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                  : 'bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400'
+              }`}
+              title={editedData[`_${sectionId}_displayAssetTitle`] !== false ? 'Asset title visible' : 'Asset title hidden'}
+            >
+              Title {editedData[`_${sectionId}_displayAssetTitle`] !== false ? '✓' : '✗'}
+            </div>
+            
+            {/* Asset Enable/Disable Toggle */}
+            <button
+              onClick={() => {
+                const enabledKey = `_enabled_${sectionId}`;
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [enabledKey]: prev[enabledKey] === false ? true : false
+                }));
+                setIsDirty(true);
+              }}
+              className={`p-1 rounded transition-colors ${
+                editedData[`_enabled_${sectionId}`] !== false
+                  ? 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-500'
+                  : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50'
+              }`}
+              title={editedData[`_enabled_${sectionId}`] !== false ? 'Disable asset (hide from display)' : 'Enable asset (show in display)'}
+            >
+              {editedData[`_enabled_${sectionId}`] !== false ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+            </button>
+            
+            {/* Alignment Buttons */}
+            <div className="flex gap-0.5">
+              <button
+                onClick={() => {
+                  setEditedData((prev: any) => ({
+                    ...prev,
+                    [`_${sectionId}_alignment`]: 'left'
+                  }));
+                  setIsDirty(true);
+                }}
+                className={`p-1 rounded transition-colors ${
+                  (editedData[`_${sectionId}_alignment`] || 'left') === 'left'
+                    ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+                title="Align Left"
+              >
+                <AlignLeft className="w-3 h-3" />
+              </button>
+              <button
+                onClick={() => {
+                  setEditedData((prev: any) => ({
+                    ...prev,
+                    [`_${sectionId}_alignment`]: 'center'
+                  }));
+                  setIsDirty(true);
+                }}
+                className={`p-1 rounded transition-colors ${
+                  editedData[`_${sectionId}_alignment`] === 'center'
+                    ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+                title="Align Center"
+              >
+                <AlignCenter className="w-3 h-3" />
+              </button>
+              <button
+                onClick={() => {
+                  setEditedData((prev: any) => ({
+                    ...prev,
+                    [`_${sectionId}_alignment`]: 'right'
+                  }));
+                  setIsDirty(true);
+                }}
+                className={`p-1 rounded transition-colors ${
+                  editedData[`_${sectionId}_alignment`] === 'right'
+                    ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
+                title="Align Right"
+              >
+                <AlignRight className="w-3 h-3" />
+              </button>
+            </div>
+            
+            {/* Delete Asset Button */}
+            <button
+              onClick={() => {
+                setPendingDeleteAssetKey(sectionId);
+                setShowDeleteAssetConfirm(true);
+              }}
+              className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              title="Delete this asset"
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
+            
+            <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
+              {positionLabel}
+            </span>
+            
+            {/* Disabled Badge */}
+            {editedData[`_enabled_${sectionId}`] === false && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium bg-red-500/20 text-red-600 dark:text-red-400">
+                <EyeOff className="w-2.5 h-2.5" />
+                Hidden
+              </span>
+            )}
+          </div>
+          
+          {/* Asset Content */}
+          <div className="p-4">
+            <AssetRenderEngine
+              type={legacyType}
+              data={sectionData}
+              onChange={(newValue) => {
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [sectionId]: newValue
+                }));
+                setIsDirty(true);
+              }}
+              mode="edit"
+            />
+          </div>
         </div>
       );
     }
@@ -817,6 +1192,434 @@ export default function EditorModalV2({
     return words
       .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(' ');
+  };
+
+  const moveSectionUp = (sectionId: string) => {
+    const sections = getSections();
+    const contentSections = sections.filter(s => s.id !== 'standard_header');
+    const index = contentSections.findIndex(s => s.id === sectionId);
+    if (index <= 0) return; // Can't move first item up
+    
+    // Get all section keys
+    const sectionKeys = contentSections.map(s => s.id);
+    
+    // Swap positions
+    [sectionKeys[index - 1], sectionKeys[index]] = [sectionKeys[index], sectionKeys[index - 1]];
+    
+    // Rebuild data object with reordered keys
+    const newData: any = {};
+    
+    // First copy all non-section keys (metadata, header fields)
+    Object.keys(editedData).forEach(key => {
+      const isContentSection = contentSections.some(s => s.id === key);
+      const isSectionMetadata = contentSections.some(s => 
+        key.startsWith(`_${s.id}_`) || 
+        key === `_enabled_${s.id}` || 
+        key === `_completed_${s.id}` || 
+        key === `_locked_${s.id}`
+      );
+      
+      if (!isContentSection && !isSectionMetadata) {
+        newData[key] = editedData[key];
+      }
+    });
+    
+    // Then add sections in new order with their metadata
+    sectionKeys.forEach(key => {
+      newData[key] = editedData[key];
+      
+      // Copy all metadata for this section
+      Object.keys(editedData).forEach(metaKey => {
+        if (metaKey.startsWith(`_${key}_`) || 
+            metaKey === `_enabled_${key}` || 
+            metaKey === `_completed_${key}` || 
+            metaKey === `_locked_${key}`) {
+          newData[metaKey] = editedData[metaKey];
+        }
+      });
+    });
+    
+    setEditedData(newData);
+    setIsDirty(true);
+    showNotification?.('success', 'Section moved up');
+  };
+
+  const moveSectionDown = (sectionId: string) => {
+    const sections = getSections();
+    const contentSections = sections.filter(s => s.id !== 'standard_header');
+    const index = contentSections.findIndex(s => s.id === sectionId);
+    if (index < 0 || index >= contentSections.length - 1) return; // Can't move last item down
+    
+    // Get all section keys
+    const sectionKeys = contentSections.map(s => s.id);
+    
+    // Swap positions
+    [sectionKeys[index], sectionKeys[index + 1]] = [sectionKeys[index + 1], sectionKeys[index]];
+    
+    // Rebuild data object with reordered keys
+    const newData: any = {};
+    
+    // First copy all non-section keys (metadata, header fields)
+    Object.keys(editedData).forEach(key => {
+      const isContentSection = contentSections.some(s => s.id === key);
+      const isSectionMetadata = contentSections.some(s => 
+        key.startsWith(`_${s.id}_`) || 
+        key === `_enabled_${s.id}` || 
+        key === `_completed_${s.id}` || 
+        key === `_locked_${s.id}`
+      );
+      
+      if (!isContentSection && !isSectionMetadata) {
+        newData[key] = editedData[key];
+      }
+    });
+    
+    // Then add sections in new order with their metadata
+    sectionKeys.forEach(key => {
+      newData[key] = editedData[key];
+      
+      // Copy all metadata for this section
+      Object.keys(editedData).forEach(metaKey => {
+        if (metaKey.startsWith(`_${key}_`) || 
+            metaKey === `_enabled_${key}` || 
+            metaKey === `_completed_${key}` || 
+            metaKey === `_locked_${key}`) {
+          newData[metaKey] = editedData[metaKey];
+        }
+      });
+    });
+    
+    setEditedData(newData);
+    setIsDirty(true);
+    showNotification?.('success', 'Section moved down');
+  };
+
+  const deleteSection = (sectionId: string) => {
+    const newData = { ...editedData };
+    
+    // Remove section data and all metadata
+    delete newData[sectionId];
+    delete newData[`_${sectionId}_type`];
+    delete newData[`_${sectionId}_columnLayout`];
+    delete newData[`_${sectionId}_assetTitle`];
+    delete newData[`_${sectionId}_enabled`];
+    delete newData[`_${sectionId}_completed`];
+    delete newData[`_${sectionId}_locked`];
+    delete newData[`_enabled_${sectionId}`];
+    delete newData[`_completed_${sectionId}`];
+    delete newData[`_locked_${sectionId}`];
+    
+    // Remove all indexed assets (section_0, section_1, etc.) and their metadata
+    const indexedPattern = new RegExp(`^${sectionId}_(\\d+)$`);
+    Object.keys(newData).forEach(key => {
+      // Check if this is an indexed asset for this section
+      if (indexedPattern.test(key)) {
+        delete newData[key];
+        delete newData[`_${key}_type`];
+        delete newData[`_${key}_assetTitle`];
+      }
+    });
+    
+    setEditedData(newData);
+    setIsDirty(true);
+    
+    // If deleted section was active, switch to first available section
+    if (activeSectionId === sectionId) {
+      const sections = getSectionsFromData(newData);
+      const firstEnabled = sections.find(s => s.enabled);
+      if (firstEnabled) {
+        setActiveSectionId(firstEnabled.id);
+      }
+    }
+    
+    showNotification?.('success', 'Section deleted');
+  };
+
+  const confirmDeleteSection = () => {
+    if (pendingDeleteSectionId) {
+      deleteSection(pendingDeleteSectionId);
+      setShowDeleteSectionConfirm(false);
+      setPendingDeleteSectionId(null);
+    }
+  };
+
+  const deleteAsset = (assetKey: string) => {
+    console.log('🗑️ deleteAsset called with:', assetKey);
+    const newData = { ...editedData };
+    
+    // Check if this is an indexed asset (e.g., section_0, section_1)
+    const indexedMatch = assetKey.match(/^(.+)_(\d+)$/);
+    console.log('Indexed match:', indexedMatch);
+    
+    if (indexedMatch) {
+      const [, baseName, indexStr] = indexedMatch;
+      const deletedIndex = parseInt(indexStr);
+      console.log(`Deleting indexed asset: baseName="${baseName}", index=${deletedIndex}`);
+      
+      // Get all indexed assets for this section
+      const indexedPattern = new RegExp(`^${baseName}_(\\d+)$`);
+      const allIndexed = Object.keys(newData)
+        .filter(k => indexedPattern.test(k))
+        .sort((a, b) => {
+          const aIdx = parseInt(a.match(indexedPattern)![1]);
+          const bIdx = parseInt(b.match(indexedPattern)![1]);
+          return aIdx - bIdx;
+        });
+      
+      console.log(`All indexed assets for "${baseName}":`, allIndexed);
+      console.log(`Total count: ${allIndexed.length}`);
+      
+      // If this is the only indexed asset, convert back to single format
+      if (allIndexed.length === 1) {
+        console.log('⚠️ Only one indexed asset - deleting it and leaving section empty');
+        // Just delete the indexed asset and its metadata
+        delete newData[assetKey];
+        delete newData[`_${assetKey}_type`];
+        delete newData[`_${assetKey}_assetTitle`];
+        delete newData[`_${assetKey}_layoutZone`];
+        delete newData[`_${assetKey}_alignment`];
+        delete newData[`_enabled_${assetKey}`];
+        delete newData[`_${assetKey}_displayAssetTitle`];
+        
+        console.log('✅ Deleted last indexed asset, section metadata preserved');
+        // Leave section metadata intact (don't delete _columnLayout, _enabled_section, etc.)
+        // Section remains valid but empty, ready for new assets
+      } else {
+        console.log(`📦 Re-indexing ${allIndexed.length} assets, removing ${assetKey}`);
+        // Re-index: collect all assets except the deleted one
+        const assetsToKeep = allIndexed.filter(key => key !== assetKey);
+        console.log('Assets to keep:', assetsToKeep);
+        
+        // IMPORTANT: Save the data BEFORE deleting
+        const savedAssets = assetsToKeep.map(key => ({
+          key,
+          data: editedData[key],
+          type: editedData[`_${key}_type`],
+          assetTitle: editedData[`_${key}_assetTitle`],
+          layoutZone: editedData[`_${key}_layoutZone`],
+          alignment: editedData[`_${key}_alignment`],
+          enabled: editedData[`_enabled_${key}`],
+          displayAssetTitle: editedData[`_${key}_displayAssetTitle`]
+        }));
+        
+        console.log('💾 Saved assets before deletion:', savedAssets);
+        console.log('First saved asset data:', savedAssets[0]);
+        
+        // Delete all old indexed assets and metadata
+        allIndexed.forEach(key => {
+          delete newData[key];
+          delete newData[`_${key}_type`];
+          delete newData[`_${key}_assetTitle`];
+          delete newData[`_${key}_layoutZone`];
+          delete newData[`_${key}_alignment`];
+          delete newData[`_enabled_${key}`];
+          delete newData[`_${key}_displayAssetTitle`];
+        });
+        
+        console.log('Deleted all old indexed assets');
+        
+        // Re-add remaining assets with new indices
+        savedAssets.forEach((asset, newIndex) => {
+          const newKey = `${baseName}_${newIndex}`;
+          newData[newKey] = asset.data;
+          newData[`_${newKey}_type`] = asset.type;
+          newData[`_${newKey}_assetTitle`] = asset.assetTitle;
+          newData[`_${newKey}_layoutZone`] = asset.layoutZone;
+          if (asset.alignment) {
+            newData[`_${newKey}_alignment`] = asset.alignment;
+          }
+          if (asset.enabled !== undefined) {
+            newData[`_enabled_${newKey}`] = asset.enabled;
+          }
+          if (asset.displayAssetTitle !== undefined) {
+            newData[`_${newKey}_displayAssetTitle`] = asset.displayAssetTitle;
+          }
+        });
+        console.log('✅ Re-indexed remaining assets');
+      }
+    } else {
+      console.log('Deleting single (non-indexed) asset:', assetKey);
+      // Single (non-indexed) asset - just delete it
+      delete newData[assetKey];
+      delete newData[`_${assetKey}_type`];
+      delete newData[`_${assetKey}_assetTitle`];
+      delete newData[`_${assetKey}_layoutZone`];
+      delete newData[`_${assetKey}_alignment`];
+      delete newData[`_enabled_${assetKey}`];
+      delete newData[`_${assetKey}_displayAssetTitle`];
+      console.log('✅ Deleted single asset');
+    }
+    
+    console.log('Final data keys:', Object.keys(newData).filter(k => k.includes('implementation')));
+    setEditedData(newData);
+    setIsDirty(true);
+    showNotification?.('success', 'Asset deleted');
+  };
+
+  const confirmDeleteAsset = () => {
+    if (pendingDeleteAssetKey) {
+      deleteAsset(pendingDeleteAssetKey);
+      setShowDeleteAssetConfirm(false);
+      setPendingDeleteAssetKey(null);
+    }
+  };
+
+  const addAssetToSection = () => {
+    if (!activeSectionId) return;
+    
+    if (!newAssetName.trim()) {
+      showNotification?.('error', 'Please enter an asset name');
+      return;
+    }
+    
+    const asset = ASSET_LIBRARY.find(a => a.type === selectedAssetForSection);
+    if (!asset) return;
+    
+    const newData = { ...editedData };
+    
+    // Get section's column layout
+    const sectionLayout = newData[`_${activeSectionId}_columnLayout`] || 'full';
+    
+    // Helper function to calculate layoutZone based on column layout and index
+    const getLayoutZone = (index: number, layout: string): string => {
+      if (layout === 'full') return 'full';
+      if (layout === '50-50') return index === 0 ? 'left-50' : 'right-50';
+      if (layout === '70-30') return index === 0 ? 'left-70' : 'right-30';
+      if (layout === '30-70') return index === 0 ? 'left-30' : 'right-70';
+      if (layout === '33-33-33') {
+        if (index === 0) return 'left-33';
+        if (index === 1) return 'middle-33';
+        return 'right-33';
+      }
+      return 'full';
+    };
+    
+    // Check if section already has data
+    const currentData = newData[activeSectionId];
+    
+    // If section is empty or undefined, initialize with asset data
+    if (!currentData) {
+      newData[activeSectionId] = asset.exampleData;
+      newData[`_${activeSectionId}_type`] = asset.type;
+      newData[`_${activeSectionId}_assetTitle`] = newAssetName;
+      newData[`_${activeSectionId}_layoutZone`] = getLayoutZone(0, sectionLayout);
+    } else {
+      // Section has data - need to convert to indexed format if not already
+      // Check if it's already indexed (has _0, _1, etc.)
+      const indexedPattern = new RegExp(`^${activeSectionId}_(\\d+)$`);
+      const existingIndexed = Object.keys(newData).filter(k => indexedPattern.test(k));
+      
+      if (existingIndexed.length > 0) {
+        // Already indexed - add new index
+        const maxIndex = Math.max(...existingIndexed.map(k => parseInt(k.match(indexedPattern)![1])));
+        const newIndex = maxIndex + 1;
+        const newKey = `${activeSectionId}_${newIndex}`;
+        
+        newData[newKey] = asset.exampleData;
+        newData[`_${newKey}_type`] = asset.type;
+        newData[`_${newKey}_assetTitle`] = newAssetName;
+        newData[`_${newKey}_layoutZone`] = getLayoutZone(newIndex, sectionLayout);
+      } else {
+        // Convert single item to indexed format
+        const existingData = newData[activeSectionId];
+        const existingType = newData[`_${activeSectionId}_type`];
+        const existingTitle = newData[`_${activeSectionId}_assetTitle`] || formatSectionTitle(activeSectionId);
+        const existingLayoutZone = newData[`_${activeSectionId}_layoutZone`];
+        
+        // Remove old single item
+        delete newData[activeSectionId];
+        delete newData[`_${activeSectionId}_type`];
+        delete newData[`_${activeSectionId}_assetTitle`];
+        delete newData[`_${activeSectionId}_layoutZone`];
+        
+        // Add as index 0
+        newData[`${activeSectionId}_0`] = existingData;
+        newData[`_${activeSectionId}_0_type`] = existingType;
+        newData[`_${activeSectionId}_0_assetTitle`] = existingTitle;
+        newData[`_${activeSectionId}_0_layoutZone`] = existingLayoutZone || getLayoutZone(0, sectionLayout);
+        
+        // Add new as index 1
+        newData[`${activeSectionId}_1`] = asset.exampleData;
+        newData[`_${activeSectionId}_1_type`] = asset.type;
+        newData[`_${activeSectionId}_1_assetTitle`] = newAssetName;
+        newData[`_${activeSectionId}_1_layoutZone`] = getLayoutZone(1, sectionLayout);
+      }
+    }
+    
+    setEditedData(newData);
+    setIsDirty(true);
+    setShowAddAssetModal(false);
+    
+    showNotification?.('success', `Asset "${newAssetName}" added to section`);
+  };
+
+  const addNewSection = (position: 'above' | 'below' | 'bottom') => {
+    if (!newSectionName.trim()) {
+      showNotification?.('error', 'Please enter a section name');
+      return;
+    }
+    
+    // Generate section ID from name (sanitize)
+    const sectionId = newSectionName.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+    
+    // Check if section ID already exists
+    if (editedData[sectionId]) {
+      showNotification?.('error', 'A section with this name already exists');
+      return;
+    }
+    
+    // Get all current section keys in order (excluding metadata)
+    const sections = getSections();
+    const sectionKeys = sections.filter(s => s.id !== 'standard_header').map(s => s.id);
+    
+    // Create new data object with sections in correct order
+    const newData: any = {};
+    
+    // First, copy all non-section keys (metadata, header fields, etc.)
+    Object.keys(editedData).forEach(key => {
+      if (!sectionKeys.includes(key) && !key.startsWith(`_${key}_`) && !key.startsWith('_enabled_') && !key.startsWith('_completed_') && !key.startsWith('_locked_')) {
+        newData[key] = editedData[key];
+      }
+    });
+    
+    // Determine insertion index
+    let insertIndex = sectionKeys.length; // default to bottom
+    if (position === 'above' && activeSectionId) {
+      insertIndex = sectionKeys.indexOf(activeSectionId);
+    } else if (position === 'below' && activeSectionId) {
+      insertIndex = sectionKeys.indexOf(activeSectionId) + 1;
+    }
+    
+    // Insert new section key at correct position
+    const newSectionKeys = [...sectionKeys];
+    newSectionKeys.splice(insertIndex, 0, sectionId);
+    
+    // Rebuild data object in correct order
+    newSectionKeys.forEach(key => {
+      // Copy section data
+      newData[key] = key === sectionId ? '' : editedData[key];
+      
+      // Copy section metadata
+      Object.keys(editedData).forEach(metaKey => {
+        if (metaKey.startsWith(`_${key}_`) || metaKey === `_enabled_${key}` || metaKey === `_completed_${key}` || metaKey === `_locked_${key}`) {
+          newData[metaKey] = editedData[metaKey];
+        }
+      });
+    });
+    
+    // Add new section metadata
+    newData[`_${sectionId}_type`] = 'text';
+    newData[`_${sectionId}_columnLayout`] = selectedColumnLayout; // Save column layout
+    newData[`_enabled_${sectionId}`] = true;
+    newData[`_completed_${sectionId}`] = false;
+    newData[`_locked_${sectionId}`] = false;
+    
+    setEditedData(newData);
+    setIsDirty(true);
+    setShowAddSectionModal(false);
+    setActiveSectionId(sectionId);
+    
+    showNotification?.('success', `Section "${newSectionName}" added`);
   };
 
   const handleSaveDraft = () => {
@@ -1314,49 +2117,100 @@ export default function EditorModalV2({
             {/* Sidebar Navigation */}
             <div className="w-64 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-y-auto">
               <div className="p-3">
-                <h3 className="text-xs font-roobert-heavy text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                  Sections
-                </h3>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs font-roobert-heavy text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Sections
+                  </h3>
+                  <button
+                    onClick={() => {
+                      setShowAddSectionModal(true);
+                      setNewSectionName('');
+                      setSelectedColumnLayout('full');
+                    }}
+                    className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-fis-raspberry transition-colors"
+                    title="Add new section"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
                 <div className="space-y-1">
-                  {sections.map((section) => (
-                    <button
+                  {sections.map((section, index) => (
+                    <div
                       key={section.id}
-                      onClick={() => setActiveSectionId(section.id)}
-                      className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-roobert-medium transition-all ${
-                        activeSectionId === section.id
-                          ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white shadow-md'
-                          : section.enabled
-                          ? 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
-                          : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 dark:text-gray-600 opacity-60'
-                      }`}
+                      className="relative group"
+                      onMouseEnter={() => setHoveredSectionId(section.id)}
+                      onMouseLeave={() => setHoveredSectionId(null)}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="flex-1 truncate">{section.title}</span>
-                        <div className="flex items-center gap-1.5 ml-2">
-                          {!section.enabled && (
-                            <EyeOff className={`w-3 h-3 ${
-                              activeSectionId === section.id 
-                                ? 'text-white/70' 
-                                : 'text-gray-400 dark:text-gray-600'
-                            }`} />
-                          )}
-                          {section.locked && !section.completed && (
-                            <Lock className={`w-3 h-3 ${
-                              activeSectionId === section.id 
-                                ? 'text-white/70' 
-                                : 'text-yellow-600 dark:text-yellow-400'
-                            }`} />
-                          )}
-                          {section.completed && (
-                            <Check className={`w-3.5 h-3.5 ${
-                              activeSectionId === section.id 
-                                ? 'text-white' 
-                                : 'text-green-600 dark:text-green-400'
-                            }`} />
-                          )}
+                      <button
+                        onClick={() => setActiveSectionId(section.id)}
+                        className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-roobert-medium transition-all ${
+                          activeSectionId === section.id
+                            ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white shadow-md'
+                            : section.enabled
+                            ? 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                            : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 dark:text-gray-600 opacity-60'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="flex-1 truncate">{section.title}</span>
+                          <div className="flex items-center gap-1.5 ml-2">
+                            {!section.enabled && (
+                              <EyeOff className={`w-3 h-3 ${
+                                activeSectionId === section.id 
+                                  ? 'text-white/70' 
+                                  : 'text-gray-400 dark:text-gray-600'
+                              }`} />
+                            )}
+                            {section.locked && !section.completed && (
+                              <Lock className={`w-3 h-3 ${
+                                activeSectionId === section.id 
+                                  ? 'text-white/70' 
+                                  : 'text-yellow-600 dark:text-yellow-400'
+                              }`} />
+                            )}
+                            {section.completed && (
+                              <Check className={`w-3.5 h-3.5 ${
+                                activeSectionId === section.id 
+                                  ? 'text-white' 
+                                  : 'text-green-600 dark:text-green-400'
+                              }`} />
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </button>
+                      </button>
+                      {/* Hover Actions */}
+                      {hoveredSectionId === section.id && section.id !== 'standard_header' && (
+                        <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); moveSectionUp(section.id); }}
+                            disabled={index === 0}
+                            className="p-0.5 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                            title="Move up"
+                          >
+                            <ChevronUp className="w-3 h-3" />
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); moveSectionDown(section.id); }}
+                            disabled={index === sections.length - 1}
+                            className="p-0.5 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                            title="Move down"
+                          >
+                            <ChevronDown className="w-3 h-3" />
+                          </button>
+                          <button
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              setPendingDeleteSectionId(section.id);
+                              setShowDeleteSectionConfirm(true);
+                            }}
+                            className="p-0.5 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600"
+                            title="Delete section"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -1399,6 +2253,19 @@ export default function EditorModalV2({
                         
                         {/* Section Controls */}
                         <div className="flex items-center gap-1.5">
+                          {/* Add Asset Button */}
+                          <button
+                            onClick={() => {
+                              setShowAddAssetModal(true);
+                              setNewAssetName('');
+                              setSelectedAssetForSection('text');
+                            }}
+                            className="p-1.5 rounded-lg transition-colors bg-fis-eggplant hover:bg-fis-raspberry text-white"
+                            title="Add Asset to Section"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                          
                           {/* Complete/Incomplete Toggle - only show if enabled */}
                           {activeSection.enabled && (
                             <button
@@ -2004,6 +2871,352 @@ export default function EditorModalV2({
           isOpen={showAssetReference}
           onClose={() => setShowAssetReference(false)}
           initialAssetType={referenceAssetType}
+        />
+
+        {/* Add Section Modal */}
+        {showAddSectionModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-xl"
+            >
+              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
+                Add New Section
+              </h3>
+              
+              {/* Section Name Input */}
+              <div className="mb-4">
+                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Section Name
+                </label>
+                <input
+                  type="text"
+                  value={newSectionName}
+                  onChange={(e) => setNewSectionName(e.target.value)}
+                  placeholder="e.g., Key Metrics, Executive Summary"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
+                  autoFocus
+                />
+              </div>
+              
+              {/* Column Layout Selector */}
+              <div className="mb-6">
+                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-3">
+                  Column Layout
+                </label>
+                <div className="flex gap-3 justify-center">
+                  {/* Full Width */}
+                  <button
+                    onClick={() => setSelectedColumnLayout('full')}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      selectedColumnLayout === 'full'
+                        ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title="Full Width"
+                  >
+                    <div className="w-16 h-12 border-2 border-current rounded"></div>
+                    <span className="text-xs font-roobert-medium">Full</span>
+                  </button>
+
+                  {/* 50/50 */}
+                  <button
+                    onClick={() => setSelectedColumnLayout('50-50')}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      selectedColumnLayout === '50-50'
+                        ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title="50/50 Split"
+                  >
+                    <div className="flex gap-1 w-16 h-12">
+                      <div className="flex-1 border-2 border-current rounded"></div>
+                      <div className="flex-1 border-2 border-current rounded"></div>
+                    </div>
+                    <span className="text-xs font-roobert-medium">50/50</span>
+                  </button>
+
+                  {/* 70/30 */}
+                  <button
+                    onClick={() => setSelectedColumnLayout('70-30')}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      selectedColumnLayout === '70-30'
+                        ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title="70/30 Split"
+                  >
+                    <div className="flex gap-1 w-16 h-12">
+                      <div className="flex-[7] border-2 border-current rounded"></div>
+                      <div className="flex-[3] border-2 border-current rounded"></div>
+                    </div>
+                    <span className="text-xs font-roobert-medium">70/30</span>
+                  </button>
+
+                  {/* 30/70 */}
+                  <button
+                    onClick={() => setSelectedColumnLayout('30-70')}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      selectedColumnLayout === '30-70'
+                        ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title="30/70 Split"
+                  >
+                    <div className="flex gap-1 w-16 h-12">
+                      <div className="flex-[3] border-2 border-current rounded"></div>
+                      <div className="flex-[7] border-2 border-current rounded"></div>
+                    </div>
+                    <span className="text-xs font-roobert-medium">30/70</span>
+                  </button>
+
+                  {/* 33/33/33 */}
+                  <button
+                    onClick={() => setSelectedColumnLayout('33-33-33')}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                      selectedColumnLayout === '33-33-33'
+                        ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                    }`}
+                    title="Three Equal Columns"
+                  >
+                    <div className="flex gap-1 w-16 h-12">
+                      <div className="flex-1 border-2 border-current rounded"></div>
+                      <div className="flex-1 border-2 border-current rounded"></div>
+                      <div className="flex-1 border-2 border-current rounded"></div>
+                    </div>
+                    <span className="text-xs font-roobert-medium">33/33/33</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => addNewSection('above')}
+                  className="flex-1 px-4 py-2 bg-fis-eggplant hover:bg-fis-raspberry text-white rounded-lg font-roobert-medium transition-colors text-sm"
+                >
+                  Add Above
+                </button>
+                <button
+                  onClick={() => addNewSection('below')}
+                  className="flex-1 px-4 py-2 bg-fis-eggplant hover:bg-fis-raspberry text-white rounded-lg font-roobert-medium transition-colors text-sm"
+                >
+                  Add Below
+                </button>
+                <button
+                  onClick={() => addNewSection('bottom')}
+                  className="flex-1 px-4 py-2 bg-fis-eggplant hover:bg-fis-raspberry text-white rounded-lg font-roobert-medium transition-colors text-sm"
+                >
+                  Add to Bottom
+                </button>
+              </div>
+
+              <button
+                onClick={() => setShowAddSectionModal(false)}
+                className="mt-4 w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-roobert-medium transition-colors"
+              >
+                Cancel
+              </button>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Delete Section Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showDeleteSectionConfirm}
+          onClose={() => {
+            setShowDeleteSectionConfirm(false);
+            setPendingDeleteSectionId(null);
+          }}
+          title="🗑️ Delete Section?"
+          message={`Are you sure you want to delete the section "${pendingDeleteSectionId ? formatSectionTitle(pendingDeleteSectionId) : ''}"? This action cannot be undone.`}
+          type="warning"
+          buttons={[
+            {
+              label: 'Yes, Delete Section',
+              action: confirmDeleteSection,
+              variant: 'danger',
+              closeAfter: false
+            },
+            {
+              label: 'Cancel',
+              action: () => {},
+              variant: 'secondary',
+              closeAfter: true
+            }
+          ]}
+        />
+
+        {/* Delete Asset Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showDeleteAssetConfirm}
+          onClose={() => {
+            setShowDeleteAssetConfirm(false);
+            setPendingDeleteAssetKey(null);
+          }}
+          title="🗑️ Delete Asset?"
+          message={`Are you sure you want to delete this asset${pendingDeleteAssetKey ? (() => {
+            const assetTitle = editedData[`_${pendingDeleteAssetKey}_assetTitle`];
+            if (assetTitle) return ` "${assetTitle}"`;
+            // For non-indexed assets, check the section title
+            const indexedMatch = pendingDeleteAssetKey.match(/^(.+)_(\d+)$/);
+            if (indexedMatch) {
+              const index = indexedMatch[2];
+              return ` (${formatSectionTitle(pendingDeleteAssetKey.split('_').slice(0, -1).join('_'))} #${parseInt(index) + 1})`;
+            }
+            return ` "${formatSectionTitle(pendingDeleteAssetKey)}"`;
+          })() : ''}? This action cannot be undone.`}
+          type="warning"
+          buttons={[
+            {
+              label: 'Yes, Delete Asset',
+              action: confirmDeleteAsset,
+              variant: 'danger',
+              closeAfter: false
+            },
+            {
+              label: 'Cancel',
+              action: () => {},
+              variant: 'secondary',
+              closeAfter: true
+            }
+          ]}
+        />
+
+        {/* Add Asset to Section Modal */}
+        {showAddAssetModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60]" onClick={(e) => {
+            // Allow clicks to pass through to Asset Library if it's open
+            if (showAssetLibraryForSection) return;
+            // Close modal if clicking on backdrop
+            if (e.target === e.currentTarget) setShowAddAssetModal(false);
+          }}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
+                Add Asset to Section
+              </h3>
+              
+              {/* Asset Name Input */}
+              <div className="mb-4">
+                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Asset Display Name
+                </label>
+                <input
+                  type="text"
+                  value={newAssetName}
+                  onChange={(e) => setNewAssetName(e.target.value)}
+                  placeholder="e.g., Revenue Metrics, Risk Assessment"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
+                  autoFocus
+                />
+              </div>
+              
+              {/* Asset Type Selector */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+                    Asset Type
+                  </label>
+                  <button
+                    onClick={() => {
+                      setShowAssetLibraryForSection(true);
+                    }}
+                    className="text-xs text-fis-raspberry hover:text-fis-eggplant font-roobert-medium flex items-center gap-1"
+                  >
+                    <HelpCircle className="w-3 h-3" />
+                    View Asset Reference
+                  </button>
+                </div>
+                <select
+                  value={selectedAssetForSection}
+                  onChange={(e) => setSelectedAssetForSection(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
+                >
+                  {(() => {
+                    // Filter assets based on section layout
+                    const sectionLayout = selectedColumnLayout || 'full';
+                    const isFullWidth = sectionLayout === 'full';
+                    
+                    // Full width sections can use any asset
+                    // Multi-column sections should only use multi-column compatible assets
+                    const filteredAssets = isFullWidth 
+                      ? ASSET_LIBRARY
+                      : ASSET_LIBRARY.filter(asset => {
+                          // Multi-column compatible assets (typically basic/lists/charts)
+                          const multiColumnCategories = ['basic', 'lists', 'charts', 'rich'];
+                          return multiColumnCategories.includes(asset.category || '');
+                        });
+                    
+                    // Group assets by category
+                    const groupedAssets: { [key: string]: typeof filteredAssets } = {};
+                    filteredAssets.forEach(asset => {
+                      const category = asset.category || 'other';
+                      if (!groupedAssets[category]) {
+                        groupedAssets[category] = [];
+                      }
+                      groupedAssets[category].push(asset);
+                    });
+                    
+                    // Category display names
+                    const categoryNames: { [key: string]: string } = {
+                      'basic': 'Text',
+                      'lists': 'Lists',
+                      'charts': 'Charts',
+                      'cards': 'Cards',
+                      'complex': 'Complex',
+                      'rich': 'Rich Content',
+                      'media': 'Media',
+                      'other': 'Other'
+                    };
+                    
+                    // Render grouped options
+                    return Object.entries(groupedAssets).map(([category, assets]) => (
+                      <optgroup key={category} label={categoryNames[category] || category.toUpperCase()}>
+                        {assets.map((asset) => (
+                          <option key={asset.id} value={asset.type}>
+                            {asset.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ));
+                  })()}
+                </select>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  {selectedColumnLayout === 'full' 
+                    ? 'All asset types available for full-width layout'
+                    : 'Showing multi-column compatible assets only'}
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <button
+                  onClick={addAssetToSection}
+                  className="flex-1 px-4 py-2 bg-fis-eggplant hover:bg-fis-raspberry text-white rounded-lg font-roobert-medium transition-colors"
+                >
+                  Add Asset
+                </button>
+                <button
+                  onClick={() => setShowAddAssetModal(false)}
+                  className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-roobert-medium transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Asset Library Reference (can be opened from Add Asset Modal) */}
+        <AssetLibrary
+          isOpen={showAssetLibraryForSection}
+          onClose={() => setShowAssetLibraryForSection(false)}
         />
       </div>
     </AnimatePresence>

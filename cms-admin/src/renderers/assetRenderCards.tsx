@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle, Info, Target, Star, Rocket, BarChart3, Activity, Zap, Heart, CheckCircle } from 'lucide-react';
+import { Plus, X, DollarSign, Users, TrendingUp, Award, AlertTriangle, AlertCircle, Info, Target, Star, Rocket, BarChart3, Activity, Zap, Heart, CheckCircle, ChevronUp, ChevronDown } from 'lucide-react';
 import { renderWithExpressions } from '../../../src/utils/expressionParser';
 
 export interface CardPatternProps {
@@ -293,6 +293,20 @@ export const RiskCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mo
       onChange?.(updated.length === 1 ? updated[0] : updated);
     };
     
+    const moveUp = (index: number) => {
+      if (index === 0) return;
+      const updated = [...risks];
+      [updated[index - 1], updated[index]] = [updated[index], updated[index - 1]];
+      onChange?.(updated);
+    };
+    
+    const moveDown = (index: number) => {
+      if (index === risks.length - 1) return;
+      const updated = [...risks];
+      [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
+      onChange?.(updated);
+    };
+    
     return (
       <div>
         {risks.map((risk, index) => {
@@ -308,13 +322,16 @@ export const RiskCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mo
                   style={{ flex: 1 }}
                 />
                 <select 
-                  value={risk?.severity || 'medium'}
-                  onChange={(e) => updateRisk(index, 'severity', e.target.value)}
-                  style={{ width: '140px' }}
+                  value={risk?.type || 'medium-severity'}
+                  onChange={(e) => updateRisk(index, 'type', e.target.value)}
+                  style={{ width: '180px' }}
                 >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
+                  <option value="high-impact">High Impact</option>
+                  <option value="high-severity">High Severity</option>
+                  <option value="medium-impact">Medium Impact</option>
+                  <option value="medium-severity">Medium Severity</option>
+                  <option value="low-impact">Low Impact</option>
+                  <option value="low-severity">Low Severity</option>
                 </select>
               </div>
               <textarea
@@ -331,9 +348,27 @@ export const RiskCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mo
                 rows={3}
                 style={{ marginBottom: '12px' }}
               />
-              <button className="delete-button" onClick={() => removeRisk(index)} style={{ width: '100%' }}>
-                <X size={16} /> Remove Risk
-              </button>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button 
+                  className="secondary-action" 
+                  onClick={() => moveUp(index)} 
+                  disabled={index === 0}
+                  style={{ flex: 1 }}
+                >
+                  <ChevronUp size={16} /> Move Up
+                </button>
+                <button 
+                  className="secondary-action" 
+                  onClick={() => moveDown(index)} 
+                  disabled={index === risks.length - 1}
+                  style={{ flex: 1 }}
+                >
+                  <ChevronDown size={16} /> Move Down
+                </button>
+                <button className="delete-button" onClick={() => removeRisk(index)} style={{ flex: 1 }}>
+                  <X size={16} /> Remove
+                </button>
+              </div>
             </div>
           );
         })}
@@ -347,18 +382,25 @@ export const RiskCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mo
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       {risks.map((risk, index) => {
-        // Icon selection based on severity
-        const Icon = risk?.severity === 'high' ? AlertCircle : 
-                     risk?.severity === 'low' ? Info : 
+        const riskType = risk?.type || 'medium-severity';
+        const [level, category] = riskType.split('-'); // e.g., "high-impact" -> ["high", "impact"]
+        const isImpact = category === 'impact';
+        const isSeverity = category === 'severity';
+        
+        // Icon selection based on level and category
+        const Icon = level === 'high' ? AlertCircle : 
+                     level === 'low' ? Info : 
                      AlertTriangle;
         
         return (
-          <div key={index} className={`risk-card severity-${risk?.severity || 'medium'}`}>
+          <div key={index} className={`risk-card severity-${level}`}>
             <div className="icon">
               <Icon size={20} />
             </div>
             <div className="content">
-              <div className="badge">{risk?.severity || 'medium'} severity</div>
+              <div className={`badge badge-${category}-${level}`}>
+                {level} {category}
+              </div>
               <div className="title">{risk?.title}</div>
               <div className="description">{risk?.description}</div>
               <div className="mitigation-label">Mitigation:</div>

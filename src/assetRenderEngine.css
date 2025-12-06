@@ -705,17 +705,53 @@
   white-space: nowrap;
 }
 
-.asset-wrapper .risk-card.severity-low .badge {
+/* Severity badge styling (solid background) */
+.asset-wrapper .risk-card .badge-severity-low {
   background: #3b82f6;
   color: white;
 }
 
-.asset-wrapper .risk-card.severity-medium .badge {
+.asset-wrapper .risk-card .badge-severity-medium {
   background: #f59e0b;
   color: white;
 }
 
-.asset-wrapper .risk-card.severity-high .badge {
+.asset-wrapper .risk-card .badge-severity-high {
+  background: #ef4444;
+  color: white;
+}
+
+/* Impact badge styling (outlined/border style) */
+.asset-wrapper .risk-card .badge-impact-low {
+  background: transparent;
+  color: #3b82f6;
+  border: 2px solid #3b82f6;
+}
+
+.asset-wrapper .risk-card .badge-impact-medium {
+  background: transparent;
+  color: #f59e0b;
+  border: 2px solid #f59e0b;
+}
+
+.asset-wrapper .risk-card .badge-impact-high {
+  background: transparent;
+  color: #ef4444;
+  border: 2px solid #ef4444;
+}
+
+/* Legacy support for old .badge class */
+.asset-wrapper .risk-card.severity-low .badge:not([class*="badge-"]) {
+  background: #3b82f6;
+  color: white;
+}
+
+.asset-wrapper .risk-card.severity-medium .badge:not([class*="badge-"]) {
+  background: #f59e0b;
+  color: white;
+}
+
+.asset-wrapper .risk-card.severity-high .badge:not([class*="badge-"]) {
   background: #ef4444;
   color: white;
 }

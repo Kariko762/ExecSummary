@@ -4,20 +4,46 @@
   "year": 2025,
   "date": "2025-12-06",
   "title": "Transforming Demo Operations: From Reactive to Strategic",
-  "_enabled_standard_header": true,
-  "_completed_standard_header": false,
-  
+  "_type": "executive-iq",
+  "_contentTag": "executive-iq",
+  "status": "draft",
   "_executive_summary_type": "textarea",
   "_executive_summary_layoutZone": "full",
   "_executive_summary_rowIndex": 0,
   "_executive_summary_alignment": "left",
-  "executive_summary": "FIS demo operations currently operate reactively, with 47% of demos requiring last-minute mitigation, $2.3M in at-risk pipeline, and 156 hours/month of unplanned rework. This initiative transforms our approach from firefighting to strategic execution through proactive monitoring, automated validation, and standardized processes.\n\nCross-functional analysis identified 11 interconnected challenge domains requiring coordinated remediation. Investment of $675K in Phase 1-2 delivers $2.4M annual ROI through reduced prep time, eliminated rework, and improved demo success rates.",
-  "_enabled_executive_summary": true,
-  "_completed_executive_summary": false,
-  
   "_current_state_type": "metricCard",
   "_current_state_layoutZone": "full",
   "_current_state_rowIndex": 0,
+  "_transformation_objectives_type": "highlightsList",
+  "_transformation_objectives_layoutZone": "full",
+  "_transformation_objectives_rowIndex": 0,
+  "_challenge_themes_type": "riskCard",
+  "_challenge_themes_layoutZone": "full",
+  "_challenge_themes_rowIndex": 0,
+  "_recommended_solutions_type": "nestedCards",
+  "_recommended_solutions_layoutZone": "full",
+  "_recommended_solutions_rowIndex": 0,
+  "_recommended_solutions_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Solution"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Details"
+    }
+  },
+  "_implementation_roadmap_type": "timeline",
+  "_implementation_roadmap_layoutZone": "full",
+  "_implementation_roadmap_rowIndex": 0,
+  "_financial_summary_type": "metricCard",
+  "_financial_summary_layoutZone": "full",
+  "_financial_summary_rowIndex": 0,
+  "executive_summary": "FIS demo operations currently operate reactively, with 47% of demos requiring last-minute mitigation, $2.3M in at-risk pipeline, and 156 hours/month of unplanned rework. This initiative transforms our approach from firefighting to strategic execution through proactive monitoring, automated validation, and standardized processes.\n\nCross-functional analysis identified 11 interconnected challenge domains requiring coordinated remediation. Investment of $675K in Phase 1-2 delivers $2.4M annual ROI through reduced prep time, eliminated rework, and improved demo success rates.",
+  "_enabled_executive_summary": true,
+  "_completed_executive_summary": false,
   "current_state": [
     {
       "title": "Demo Success Rate",
@@ -50,10 +76,6 @@
   ],
   "_enabled_current_state": true,
   "_completed_current_state": false,
-  
-  "_transformation_objectives_type": "highlightsList",
-  "_transformation_objectives_layoutZone": "full",
-  "_transformation_objectives_rowIndex": 0,
   "transformation_objectives": [
     "Reduce demo prep time by [[bold]]60%[[/bold]] (18h → 7h) through automated environment validation",
     "Achieve [[bold]]99.5% demo availability SLA[[/bold]] with proactive monitoring and health checks",
@@ -62,86 +84,86 @@
   ],
   "_enabled_transformation_objectives": true,
   "_completed_transformation_objectives": false,
-  
-  "_challenge_themes_type": "nestedCards",
-  "_challenge_themes_layoutZone": "full",
-  "_challenge_themes_rowIndex": 0,
-  "_challenge_themes_fields": {
-    "title": {
-      "type": "string",
-      "renderAs": "text",
-      "label": "Theme"
-    },
-    "value": {
-      "type": "string",
-      "renderAs": "text",
-      "label": "Details"
-    }
-  },
   "challenge_themes": [
     {
-      "title": "1. Environment Stability & Availability",
-      "value": "[[bold]]Critical Priority[[/bold]] | 23 incidents Q4 2025 | Planned and unplanned downtime of demo VMs/services (NEXTGEN, SQL, Azure) directly jeopardizes scheduled client demos. [[bold]]Business Impact:[[/bold]] 8 client demos rescheduled, $1.2M+ opportunities delayed. [[bold]]Solution:[[/bold]] Proactive monitoring, automated health checks, pre-demo validation."
+      "title": "Environment Stability & Availability",
+      "severity": "high",
+      "description": "Unplanned downtime and service interruptions in demo environments cause last-minute client demo cancellations and revenue delays.",
+      "mitigation": "Deploy proactive monitoring, automated health checks, and pre-demo validation workflows to ensure environment reliability.",
+      "type": "medium-impact"
     },
     {
-      "title": "2. Access & Permissions",
-      "value": "[[bold]]High Priority[[/bold]] | 18 incidents Q4 2025 | Azure portal access, group membership propagation, and application-level visibility issues recur before demos. [[bold]]Business Impact:[[/bold]] 6.2hr avg delay, demo scope reduction. [[bold]]Solution:[[/bold]] Automated access validation, pre-demo permission checks."
+      "title": "Access & Permissions Management",
+      "severity": "high",
+      "description": "Portal access issues, group membership delays, and permission conflicts recur immediately before scheduled demonstrations, forcing scope reduction.",
+      "mitigation": "Implement automated access validation and pre-demo permission verification to eliminate last-minute access failures.",
+      "type": "low-impact"
     },
     {
-      "title": "3. Version & Compatibility Misalignment",
-      "value": "[[bold]]High Priority[[/bold]] | 12 incidents Q4 2025 | OS and product version mismatches block upgrades or force emergency rebuilds. [[bold]]Business Impact:[[/bold]] 16hr avg rebuild, untested environments. [[bold]]Solution:[[/bold]] Automated compatibility matrix, pre-booking validation."
+      "title": "Version & Compatibility Conflicts",
+      "severity": "high",
+      "description": "Platform and product version mismatches block critical upgrades and force emergency environment rebuilds with untested configurations.",
+      "mitigation": "Establish automated compatibility matrix validation and pre-booking version checks to prevent incompatibility issues.",
+      "type": "medium-impact"
     },
     {
-      "title": "4. Demo Data & Use-Case Readiness",
-      "value": "[[bold]]High Priority[[/bold]] | 15 incidents Q4 2025 | Teams lack ready-to-use demo data and turnkey use cases. [[bold]]Business Impact:[[/bold]] 8hr manual data prep overnight. [[bold]]Solution:[[/bold]] AI-assisted data generation, template library."
+      "title": "Demo Data & Use-Case Readiness",
+      "severity": "high",
+      "description": "Lack of ready-to-use demo datasets and pre-built use cases drives extensive overnight preparation and rushed scenario creation.",
+      "mitigation": "Deploy AI-assisted data generation tools and maintain curated template library for common use cases.",
+      "type": "high-impact"
     },
     {
-      "title": "5. Tooling & Content Pipeline Performance",
-      "value": "[[bold]]Medium Priority[[/bold]] | 10 incidents Q4 2025 | Tiled Designer performance issues and PowerPoint import failures drive rework. [[bold]]Business Impact:[[/bold]] 12hr avg rework. [[bold]]Solution:[[/bold]] Revised build/deploy workflow, performance baselines."
+      "title": "Content Pipeline Performance",
+      "severity": "high",
+      "description": "Design tool performance degradation and import failures create significant rework cycles and missed deadlines for demo content delivery.",
+      "mitigation": "Optimize build/deploy workflows, establish performance baselines, and implement automated quality gates.",
+      "type": "high-impact"
     },
     {
-      "title": "6. Runbook & Knowledge Gaps",
-      "value": "[[bold]]Medium Priority[[/bold]] | 8 incidents Q4 2025 | Missing or outdated troubleshooting guides force tribal knowledge dependencies. [[bold]]Business Impact:[[/bold]] 5hr research time. [[bold]]Solution:[[/bold]] Centralized knowledge base, automated runbook updates."
+      "title": "Knowledge & Runbook Gaps",
+      "severity": "high",
+      "description": "Missing or outdated troubleshooting documentation forces reliance on tribal knowledge and extends incident resolution time.",
+      "mitigation": "Centralize knowledge base, automate runbook generation, and implement continuous documentation updates.",
+      "type": "low-impact"
     },
     {
-      "title": "7. Proactive Monitoring & Alerting",
-      "value": "[[bold]]Critical Priority[[/bold]] | No current capability | Reactive incident response after demos fail. [[bold]]Business Impact:[[/bold]] Zero advance warning of issues. [[bold]]Solution:[[/bold]] 24/7 monitoring, automated alerts, predictive analytics."
+      "title": "Reactive Incident Response",
+      "severity": "high",
+      "description": "Absence of proactive monitoring means issues are only discovered during live demos, resulting in client-facing failures.",
+      "mitigation": "Deploy 24/7 monitoring platform with predictive analytics and automated alerting for early issue detection.",
+      "type": "medium-impact"
     },
     {
-      "title": "8. Cross-Platform Dependency Management",
-      "value": "[[bold]]Medium Priority[[/bold]] | Dependencies between systems undocumented. [[bold]]Business Impact:[[/bold]] Cascading failures. [[bold]]Solution:[[/bold]] Dependency mapping, integration testing."
+      "title": "Cross-Platform Dependencies",
+      "severity": "high",
+      "description": "Undocumented system interdependencies cause cascading failures when one component changes, impacting multiple demo scenarios.",
+      "mitigation": "Map dependency relationships, implement integration testing, and establish change impact analysis processes."
     },
     {
-      "title": "9. Demo Request & Booking Workflow",
-      "value": "[[bold]]Medium Priority[[/bold]] | Manual processes, no validation. [[bold]]Business Impact:[[/bold]] Last-minute surprises. [[bold]]Solution:[[/bold]] Automated booking with pre-validation."
+      "title": "Manual Booking Workflow",
+      "severity": "high",
+      "description": "Manual demo request processing without pre-validation leads to last-minute discoveries of resource conflicts and environment unavailability.",
+      "mitigation": "Automate booking workflow with real-time availability checks and automated pre-demo validation.",
+      "type": "low-impact"
     },
     {
-      "title": "10. Capacity Planning & Resource Allocation",
-      "value": "[[bold]]Medium Priority[[/bold]] | No visibility into demo demand. [[bold]]Business Impact:[[/bold]] Resource conflicts. [[bold]]Solution:[[/bold]] Demand forecasting, capacity dashboard."
+      "title": "Capacity Planning Visibility",
+      "severity": "high",
+      "description": "Limited visibility into demo demand patterns creates resource allocation conflicts and missed capacity constraints.",
+      "mitigation": "Implement demand forecasting analytics and real-time capacity dashboard for proactive resource management.",
+      "type": "medium-impact"
     },
     {
-      "title": "11. Post-Incident Learning & Continuous Improvement",
-      "value": "[[bold]]Low Priority[[/bold]] | Incidents not tracked systematically. [[bold]]Business Impact:[[/bold]] Repeated failures. [[bold]]Solution:[[/bold]] Incident database, quarterly reviews."
+      "title": "Continuous Improvement Process",
+      "severity": "high",
+      "description": "Lack of systematic incident tracking and root cause analysis allows the same issues to recur without organizational learning.",
+      "mitigation": "Establish incident database, implement quarterly review cycles, and track improvement metrics.",
+      "type": "medium-impact"
     }
   ],
   "_enabled_challenge_themes": true,
   "_completed_challenge_themes": false,
-  
-  "_recommended_solutions_type": "nestedCards",
-  "_recommended_solutions_layoutZone": "full",
-  "_recommended_solutions_rowIndex": 0,
-  "_recommended_solutions_fields": {
-    "title": {
-      "type": "string",
-      "renderAs": "text",
-      "label": "Solution"
-    },
-    "value": {
-      "type": "string",
-      "renderAs": "text",
-      "label": "Details"
-    }
-  },
   "recommended_solutions": [
     {
       "title": "1. Enterprise Monitoring Platform",
@@ -174,10 +196,6 @@
   ],
   "_enabled_recommended_solutions": true,
   "_completed_recommended_solutions": false,
-  
-  "_implementation_roadmap_type": "timeline",
-  "_implementation_roadmap_layoutZone": "full",
-  "_implementation_roadmap_rowIndex": 0,
   "implementation_roadmap": [
     {
       "title": "Phase 1: Foundation",
@@ -202,10 +220,6 @@
   ],
   "_enabled_implementation_roadmap": true,
   "_completed_implementation_roadmap": false,
-  
-  "_financial_summary_type": "metricCard",
-  "_financial_summary_layoutZone": "full",
-  "_financial_summary_rowIndex": 0,
   "financial_summary": [
     {
       "title": "Total Investment",
@@ -237,5 +251,7 @@
     }
   ],
   "_enabled_financial_summary": true,
-  "_completed_financial_summary": false
+  "_completed_financial_summary": false,
+  "_quote_block_0_layoutZone": "full",
+  "_quote_block_1_layoutZone": "full"
 }

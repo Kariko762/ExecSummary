@@ -588,7 +588,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       renderAs: 'objectForm',
       label: 'Risk Item',
       fields: {
-        severity: { type: 'string', renderAs: 'text', label: 'Severity (low/medium/high)' },
+        type: { type: 'string', renderAs: 'text', label: 'Type (high-impact/high-severity/medium-impact/medium-severity/low-impact/low-severity)' },
         title: { type: 'string', renderAs: 'text', label: 'Risk Title' },
         description: { type: 'string', renderAs: 'textarea', label: 'Description' },
         mitigation: { type: 'string', renderAs: 'textarea', label: 'Mitigation Plan' }
@@ -596,13 +596,13 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     },
     exampleData: [
       {
-        severity: 'low',
+        type: 'low-severity',
         title: 'Vendor Documentation Update Required',
         description: 'API documentation needs minor updates for new endpoints',
         mitigation: 'Technical writing team scheduled to complete updates by end of sprint'
       },
       {
-        severity: 'medium',
+        type: 'high-impact',
         title: 'International Issuing Hub delayed due to Money 20/20 and EG-Coast availability',
         description: 'Timeline delays expected due to conference schedule conflicts',
         mitigation: 'ER expected to approve asset transfer this week, Coast dropped Matthews LIBs to expedite'
