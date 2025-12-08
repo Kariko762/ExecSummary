@@ -28,12 +28,33 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
   const [isExporting, setIsExporting] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
+  const [availableGoals, setAvailableGoals] = useState<any[]>([]);
+  const [selectedGoal, setSelectedGoal] = useState<any | null>(null);
+  const [showGoalModal, setShowGoalModal] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const exportWrapperRef = useRef<HTMLDivElement>(null); // New ref for the entire exportable area
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Detect if this is a draft
   const isDraft = content?.status === 'draft';
+
+  // Fetch available goals
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/goals');
+        const data = await response.json();
+        console.log('📊 Goals API Response:', data);
+        if (data.success && data.goals) {
+          console.log('✅ Setting available goals:', data.goals.length, 'goals');
+          setAvailableGoals(data.goals);
+        }
+      } catch (error) {
+        console.error('Failed to fetch goals:', error);
+      }
+    };
+    fetchGoals();
+  }, []);
 
   // Prevent background scroll when modal is open
   useEffect(() => {
@@ -419,7 +440,8 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
         itemSchema: content[`_${key}_itemSchema`], // New format
         chartConfig: content[chartConfigKey],
         subtitle,
-        displayTitle: content[`_${key}_displayTitle`] !== false // Default to true
+        displayTitle: content[`_${key}_displayTitle`] !== false, // Default to true
+        goalTag: content[`_${key}_goalTag`]
       });
     } else {
       // Multiple fields - create multi-field section
@@ -433,7 +455,8 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
         layoutZone: content[`_${fieldKey}_layoutZone`] || 'full',
         assetTitle: content[`_${fieldKey}_assetTitle`] || '',
         displayAssetTitle: content[`_${fieldKey}_displayAssetTitle`] !== false,
-        alignment: content[`_${fieldKey}_alignment`] || 'left'
+        alignment: content[`_${fieldKey}_alignment`] || 'left',
+        goalTag: content[`_${fieldKey}_goalTag`]
       }));
       
       sections.push({
@@ -860,12 +883,35 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
               {/* Content Sections */}
               <div ref={scrollContainerRef} className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
                 <div className={isFullscreen ? 'p-4 space-y-4' : 'p-6 space-y-8'}>
-                {sections.map((section) => (
+                {sections.map((section) => {
+                  const sectionGoal = section.goalTag ? availableGoals.find(g => g.id === section.goalTag) : null;
+                  console.log(`🎯 Section "${section.label}":`, {
+                    key: section.key,
+                    goalTag: section.goalTag,
+                    foundGoal: sectionGoal?.shortName || 'none',
+                    availableGoalsCount: availableGoals.length
+                  });
+                  
+                  return (
                   <section key={section.key} id={`section-${section.key}`}>
                     {section.displayTitle !== false && (
-                      <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4">
-                        {section.label}
-                      </h3>
+                      <div className="flex items-center gap-3 mb-4">
+                        <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white">
+                          {section.label}
+                        </h3>
+                        {sectionGoal && (
+                          <button
+                            onClick={() => {
+                              setSelectedGoal(sectionGoal);
+                              setShowGoalModal(true);
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-roobert-medium bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/20 transition-colors cursor-pointer"
+                            title={`View goal: ${sectionGoal.name}`}
+                          >
+                            🎯 {sectionGoal.shortName}
+                          </button>
+                        )}
+                      </div>
                     )}
                     {section.subtitle && section.displayTitle !== false && (
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -948,14 +994,29 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
                                 {row.map((field: any, fieldIndex: number) => {
                                   const alignment = field.alignment || 'left';
                                   const alignmentClass = alignment === 'center' ? 'text-center' : alignment === 'right' ? 'text-right' : 'text-left';
+                                  const fieldGoal = field.goalTag ? availableGoals.find(g => g.id === field.goalTag) : null;
                                   
                                   return (
                                     <div key={field.key} className={`flex flex-col ${alignmentClass}`}>
-                                      {field.displayAssetTitle && field.assetTitle && (
-                                        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                          {field.assetTitle}
-                                        </h4>
-                                      )}
+                                      <div className="flex items-center gap-2 mb-3">
+                                        {field.displayAssetTitle && field.assetTitle && (
+                                          <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300">
+                                            {field.assetTitle}
+                                          </h4>
+                                        )}
+                                        {fieldGoal && (
+                                          <button
+                                            onClick={() => {
+                                              setSelectedGoal(fieldGoal);
+                                              setShowGoalModal(true);
+                                            }}
+                                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/20 transition-colors cursor-pointer"
+                                            title={`View goal: ${fieldGoal.name}`}
+                                          >
+                                            🎯 {fieldGoal.shortName}
+                                          </button>
+                                        )}
+                                      </div>
                                       <AssetRenderEngine
                                         type={field.type}
                                         data={field.data}
@@ -976,7 +1037,8 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
                       />
                     )}
                   </section>
-                ))}
+                  );
+                })}
                 </div>
                 
                 {sections.length === 0 && (
@@ -990,6 +1052,160 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
             </div>
           )}
         </motion.div>
+
+        {/* Goal Details Modal */}
+        <AnimatePresence>
+          {showGoalModal && selectedGoal && (
+            <motion.div
+              key="goal-modal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
+              onClick={() => setShowGoalModal(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Header */}
+                <div className="sticky top-0 bg-gradient-to-r from-fis-eggplant to-fis-raspberry p-6 rounded-t-2xl">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-2xl">🎯</span>
+                        <h2 className="text-xl font-roobert-bold text-white">{selectedGoal.name}</h2>
+                      </div>
+                      <p className="text-sm text-white/80">Short Name: {selectedGoal.shortName}</p>
+                    </div>
+                    <button
+                      onClick={() => setShowGoalModal(false)}
+                      className="p-2 rounded-lg hover:bg-white/20 text-white transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 space-y-6">
+                  {/* Category, Owner, Status */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Category</p>
+                      <p className="text-sm font-roobert-medium text-gray-900 dark:text-white">{selectedGoal.category || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Status</p>
+                      <p className="text-sm font-roobert-medium text-gray-900 dark:text-white capitalize">{selectedGoal.status || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Owner</p>
+                      <p className="text-sm font-roobert-medium text-gray-900 dark:text-white">{selectedGoal.owner || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Priority</p>
+                      <p className="text-sm font-roobert-medium text-gray-900 dark:text-white capitalize">{selectedGoal.priority || 'N/A'}</p>
+                    </div>
+                  </div>
+
+                  {/* SMART Goal */}
+                  {selectedGoal.smartGoal?.statement && (
+                    <div>
+                      <h3 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">SMART Goal Statement</h3>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+                        {selectedGoal.smartGoal.statement}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* SMART Criteria */}
+                  {selectedGoal.smartGoal && (
+                    <div>
+                      <h3 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3">SMART Criteria</h3>
+                      <div className="space-y-2">
+                        {selectedGoal.smartGoal.specific && (
+                          <div className="flex gap-2">
+                            <span className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry w-20 flex-shrink-0">Specific:</span>
+                            <span className="text-xs text-gray-700 dark:text-gray-300">{selectedGoal.smartGoal.specific}</span>
+                          </div>
+                        )}
+                        {selectedGoal.smartGoal.measurable && (
+                          <div className="flex gap-2">
+                            <span className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry w-20 flex-shrink-0">Measurable:</span>
+                            <span className="text-xs text-gray-700 dark:text-gray-300">{selectedGoal.smartGoal.measurable}</span>
+                          </div>
+                        )}
+                        {selectedGoal.smartGoal.achievable && (
+                          <div className="flex gap-2">
+                            <span className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry w-20 flex-shrink-0">Achievable:</span>
+                            <span className="text-xs text-gray-700 dark:text-gray-300">{selectedGoal.smartGoal.achievable}</span>
+                          </div>
+                        )}
+                        {selectedGoal.smartGoal.relevant && (
+                          <div className="flex gap-2">
+                            <span className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry w-20 flex-shrink-0">Relevant:</span>
+                            <span className="text-xs text-gray-700 dark:text-gray-300">{selectedGoal.smartGoal.relevant}</span>
+                          </div>
+                        )}
+                        {selectedGoal.smartGoal.timeBound && (
+                          <div className="flex gap-2">
+                            <span className="text-xs font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry w-20 flex-shrink-0">Time-Bound:</span>
+                            <span className="text-xs text-gray-700 dark:text-gray-300">{selectedGoal.smartGoal.timeBound}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Indicators */}
+                  {selectedGoal.indicators && selectedGoal.indicators.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">Key Indicators</h3>
+                      <ul className="space-y-1">
+                        {selectedGoal.indicators.map((indicator: string, idx: number) => (
+                          <li key={idx} className="text-xs text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                            <span className="text-fis-eggplant dark:text-fis-raspberry">•</span>
+                            {indicator}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Progress */}
+                  {selectedGoal.progress !== undefined && (
+                    <div>
+                      <h3 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">Progress</h3>
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                          <div 
+                            className="h-full bg-gradient-to-r from-fis-eggplant to-fis-raspberry transition-all"
+                            style={{ width: `${selectedGoal.progress}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-roobert-semibold text-gray-900 dark:text-white">{selectedGoal.progress}%</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Target Date */}
+                  {selectedGoal.targetDate && (
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Target Date</p>
+                      <p className="text-sm font-roobert-medium text-gray-900 dark:text-white">
+                        {new Date(selectedGoal.targetDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </AnimatePresence>
   );

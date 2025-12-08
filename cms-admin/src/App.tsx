@@ -13,6 +13,8 @@ import SystemSettingsManager from './components/SystemSettingsManager';
 import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
 import CommentsPanel from './components/CommentsPanel';
+import GoalsManager from './components/GoalsManager';
+import PlatformOverview from './components/PlatformOverview';
 import OrgIQ from './pages/OrgIQ';
 import './App.css';
 
@@ -83,6 +85,8 @@ function App() {
   const [showSystemSettings, setShowSystemSettings] = useState(false);
   const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
   const [showOrgIQ, setShowOrgIQ] = useState(false);
+  const [showGoals, setShowGoals] = useState(false);
+  const [showPlatformOverview, setShowPlatformOverview] = useState(false);
   const [availableTemplates, setAvailableTemplates] = useState<any[]>([]);
   const [requireAuth, setRequireAuth] = useState(false);
   const [availableTags, setAvailableTags] = useState<any[]>([]);
@@ -1196,7 +1200,9 @@ function App() {
                 onOpenSystemSettings={() => setShowSystemSettings(true)}
                 onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
                 onOpenOrgIQ={() => setShowOrgIQ(true)}
+                onOpenPlatformOverview={() => setShowPlatformOverview(true)}
                 onOpenComments={() => setShowComments(true)}
+                onOpenGoals={() => setShowGoals(true)}
               />
           
               {/* Notification */}
@@ -1783,6 +1789,20 @@ function App() {
                 onNotification={showNotification}
               />
             </div>
+          )}
+
+          {/* Goals Manager */}
+          {showGoals && (
+            <GoalsManager
+              isOpen={showGoals}
+              onClose={() => setShowGoals(false)}
+              showNotification={showNotification}
+            />
+          )}
+
+          {/* Platform Overview */}
+          {showPlatformOverview && (
+            <PlatformOverview onClose={() => setShowPlatformOverview(false)} />
           )}
 
           {/* Comments Panel */}

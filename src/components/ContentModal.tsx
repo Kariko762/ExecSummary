@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Eye, Code, Shield, Loader2, CheckCircle2, AlertCircle, AlertTriangle, Download, FileImage, FileText, Maximize2, Minimize2 } from 'lucide-react';
+import { X, Eye, Code, Shield, Loader2, CheckCircle2, AlertCircle, AlertTriangle, Download, FileImage, FileText, Maximize2, Minimize2, Target, Users, TrendingUp, Circle, Clock, Calendar } from 'lucide-react';
 import { AssetRenderEngine } from '../renderers/assetRenderEngine';
 import { useEffect, useState, useRef } from 'react';
 import { validateSection } from '../schemas/validationSchema';
@@ -21,6 +21,8 @@ interface ValidationCheck {
 }
 
 export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) => {
+  console.log('🎬 ContentModal PRODUCTION FRONTEND - Component Rendering', { contentId: content.id || content.name });
+  
   const [activePreviewTab, setActivePreviewTab] = useState<PreviewTab>('visual');
   const [isValidating, setIsValidating] = useState(false);
   const [validationChecks, setValidationChecks] = useState<ValidationCheck[]>([]);
@@ -29,13 +31,39 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showStickyNav, setShowStickyNav] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
+  const [availableGoals, setAvailableGoals] = useState<any[]>([]);
+  const [selectedGoal, setSelectedGoal] = useState<any | null>(null);
+  const [showGoalModal, setShowGoalModal] = useState(false);
+  const [isExportingGoal, setIsExportingGoal] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const exportWrapperRef = useRef<HTMLDivElement>(null); // New ref for the entire exportable area
+  const goalModalRef = useRef<HTMLDivElement>(null); // Ref for goal modal export
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const stickyNavRef = useRef<HTMLDivElement>(null);
 
   // Detect if this is a draft
   const isDraft = content?.status === 'draft';
+
+  // Fetch available goals
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/goals');
+        const data = await response.json();
+        console.log('📊 Frontend ContentModal Goals API Response:', data);
+        if (data.goals) {
+          console.log('✅ Setting availableGoals to:', data.goals.length, 'goals');
+          setAvailableGoals(data.goals);
+          console.log('✅ setAvailableGoals called - should trigger re-render');
+        } else {
+          console.warn('⚠️ No goals found in API response:', data);
+        }
+      } catch (error) {
+        console.error('❌ Failed to fetch goals:', error);
+      }
+    };
+    fetchGoals();
+  }, []);
 
   // Prevent background scroll when modal is open
   useEffect(() => {
@@ -85,13 +113,19 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
   // Export functions
   const exportAsImage = async () => {
-    const targetRef = exportWrapperRef.current;
-    if (!targetRef) return;
+    console.log('🚀 PRODUCTION Frontend - exportAsImage called!');
+    const targetRef = scrollContainerRef.current;
+    if (!targetRef) {
+      console.error('❌ No scrollContainerRef found!');
+      return;
+    }
     
     setIsExporting(true);
     setShowExportMenu(false);
     
     try {
+      console.log('📂 Starting export process...');
+      
       // Hide the export button and close button temporarily
       const exportBtn = document.querySelector('.export-button');
       const closeBtn = document.querySelector('.close-button');
@@ -101,22 +135,42 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
       if (draftBar) (draftBar as HTMLElement).style.display = 'none';
       
-      // Get the wrapper div that includes header + content
+      // Get the scrollable content div AND the modal container with max-h-[90vh]
       const contentDiv = targetRef;
+      const modalContainer = contentDiv.closest('[class*="max-h-[90vh]"]') as HTMLElement;
       
-      // Find the scrollable content area inside
-      const scrollableContent = scrollContainerRef.current;
+      console.log('🔍 Export Debug:', {
+        contentDiv,
+        modalContainer,
+        modalContainerClasses: modalContainer?.className,
+        hasMaxHeight: modalContainer?.className?.includes('max-h-[90vh]')
+      });
+      
+      // Store original className of modal container (has max-h-[90vh])
+      const originalModalClassName = modalContainer ? modalContainer.className : '';
       
       // Temporarily remove scroll from the scrollable area and set to full height
-      const originalOverflow = scrollableContent ? scrollableContent.style.overflow : '';
-      const originalMaxHeight = scrollableContent ? scrollableContent.style.maxHeight : '';
-      const originalHeight = scrollableContent ? scrollableContent.style.height : '';
+      const originalOverflow = contentDiv.style.overflow;
+      const originalMaxHeight = contentDiv.style.maxHeight;
+      const originalHeight = contentDiv.style.height;
       
-      if (scrollableContent) {
-        scrollableContent.style.overflow = 'visible';
-        scrollableContent.style.maxHeight = 'none';
-        scrollableContent.style.height = 'auto';
+      contentDiv.style.overflow = 'visible';
+      contentDiv.style.maxHeight = 'none';
+      contentDiv.style.height = 'auto';
+      
+      // Remove max-h-[90vh] from modal container className to allow full height
+      if (modalContainer) {
+        console.log('✅ Removing max-h-[90vh] from modal container');
+        modalContainer.className = originalModalClassName.replace('max-h-[90vh]', 'max-h-none');
+        console.log('📏 New className:', modalContainer.className);
+      } else {
+        console.warn('⚠️ Modal container with max-h-[90vh] not found!');
       }
+      
+      // Small delay to let layout recalculate
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      console.log('📸 Capturing screenshot with dimensions:', contentDiv.scrollWidth, 'x', contentDiv.scrollHeight);
       
       // Use modern-screenshot which supports oklch colors and captures full content
       const dataUrl = await domToPng(contentDiv, {
@@ -126,11 +180,16 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         height: contentDiv.scrollHeight,
       });
       
+      console.log('✅ Screenshot captured, restoring styles...');
+      
       // Restore original styles
-      if (scrollableContent) {
-        scrollableContent.style.overflow = originalOverflow;
-        scrollableContent.style.maxHeight = originalMaxHeight;
-        scrollableContent.style.height = originalHeight;
+      contentDiv.style.overflow = originalOverflow;
+      contentDiv.style.maxHeight = originalMaxHeight;
+      contentDiv.style.height = originalHeight;
+      
+      // Restore modal container className
+      if (modalContainer) {
+        modalContainer.className = originalModalClassName;
       }
       
       // Restore buttons
@@ -145,8 +204,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       link.download = fileName;
       link.href = dataUrl;
       link.click();
+      
+      console.log('✅ Export complete! File:', fileName);
     } catch (error: any) {
-      console.error('Error exporting as image:', error);
+      console.error('❌ Error exporting as image:', error);
       alert('Failed to export as image. Please try again.');
     } finally {
       setIsExporting(false);
@@ -229,6 +290,87 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       alert('Failed to export as PDF. Please try again.');
     } finally {
       setIsExporting(false);
+    }
+  };
+
+  const handleExportGoalImage = async () => {
+    if (!goalModalRef.current) return;
+
+    setIsExportingGoal(true);
+    try {
+      const modalContainer = goalModalRef.current;
+      
+      // Hide export and close buttons
+      const exportBtn = modalContainer.querySelector('[title="Export as Image"]') as HTMLElement;
+      const closeBtn = modalContainer.querySelectorAll('button')[1] as HTMLElement; // X button
+      
+      if (exportBtn) exportBtn.style.display = 'none';
+      if (closeBtn) closeBtn.style.display = 'none';
+      
+      // Find the scrollable content div
+      const scrollableDiv = modalContainer.querySelector('.goal-scrollable-content') as HTMLElement;
+      
+      if (!scrollableDiv) {
+        throw new Error('Could not find scrollable content');
+      }
+      
+      // Store original styles AND classes
+      const originalStyles = {
+        containerOverflow: modalContainer.style.overflow,
+        containerMaxHeight: modalContainer.style.maxHeight,
+        containerHeight: modalContainer.style.height,
+        containerClass: modalContainer.className,
+        scrollOverflow: scrollableDiv.style.overflow,
+        scrollMaxHeight: scrollableDiv.style.maxHeight,
+        scrollHeight: scrollableDiv.style.height,
+      };
+      
+      // CRITICAL: Remove the max-h-[90vh] constraint by replacing the class
+      const originalClass = modalContainer.className;
+      modalContainer.className = originalClass.replace('max-h-[90vh]', '');
+      
+      // Remove all scroll and height constraints
+      modalContainer.style.overflow = 'visible';
+      modalContainer.style.maxHeight = 'none';
+      modalContainer.style.height = 'auto';
+      scrollableDiv.style.overflow = 'visible';
+      scrollableDiv.style.maxHeight = 'none';
+      scrollableDiv.style.height = 'auto';
+      
+      // Wait for layout to settle (increased from 100ms to 200ms)
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      // Capture the entire modal with full expanded content
+      const dataUrl = await domToPng(modalContainer, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        width: modalContainer.scrollWidth,
+        height: modalContainer.scrollHeight,
+      });
+
+      // Restore original styles AND classes
+      modalContainer.className = originalStyles.containerClass;
+      modalContainer.style.overflow = originalStyles.containerOverflow;
+      modalContainer.style.maxHeight = originalStyles.containerMaxHeight;
+      modalContainer.style.height = originalStyles.containerHeight;
+      scrollableDiv.style.overflow = originalStyles.scrollOverflow;
+      scrollableDiv.style.maxHeight = originalStyles.scrollMaxHeight;
+      scrollableDiv.style.height = originalStyles.scrollHeight;
+
+      // Restore buttons
+      if (exportBtn) exportBtn.style.display = '';
+      if (closeBtn) closeBtn.style.display = '';
+
+      const link = document.createElement('a');
+      const goalId = selectedGoal?.id || 'goal';
+      link.download = `goal-${goalId}-${new Date().toISOString().split('T')[0]}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error('Failed to export goal image:', error);
+      alert('Failed to export goal image. Please try again.');
+    } finally {
+      setIsExportingGoal(false);
     }
   };
 
@@ -361,7 +503,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   const date = content.date || content.lastUpdated || content.updatedAt;
   
   // Get all sections by finding keys that have corresponding _type metadata
-  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; itemSchema?: any; chartConfig?: any; subtitle?: string; isMultiField?: boolean; multiFieldData?: any[]; displayTitle?: boolean }> = [];
+  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; itemSchema?: any; chartConfig?: any; subtitle?: string; isMultiField?: boolean; multiFieldData?: any[]; displayTitle?: boolean; assetTitle?: string; displayAssetTitle?: boolean; goalTag?: string }> = [];
   
   // First pass: Identify all data keys with _type metadata
   const allDataKeys = Object.keys(content).filter((key) => {
@@ -441,7 +583,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         itemSchema: content[`_${key}_itemSchema`], // New format
         chartConfig: content[chartConfigKey],
         subtitle,
-        displayTitle: content[`_${key}_displayTitle`] !== false // Default to true
+        displayTitle: content[`_${key}_displayTitle`] !== false, // Default to true
+        assetTitle: content[`_${key}_assetTitle`],
+        displayAssetTitle: content[`_${key}_displayAssetTitle`],
+        goalTag: content[`_${key}_goalTag`]
       });
     } else {
       // Multiple fields - create multi-field section
@@ -455,7 +600,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         layoutZone: content[`_${fieldKey}_layoutZone`] || 'full',
         assetTitle: content[`_${fieldKey}_assetTitle`] || '',
         displayAssetTitle: content[`_${fieldKey}_displayAssetTitle`] !== false,
-        alignment: content[`_${fieldKey}_alignment`] || 'left'
+        alignment: content[`_${fieldKey}_alignment`] || 'left',
+        goalTag: content[`_${fieldKey}_goalTag`]
       }));
       
       sections.push({
@@ -584,7 +730,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                   {/* Export Button with Dropdown */}
                   <div className="relative export-button">
                     <button
-                      onClick={() => setShowExportMenu(!showExportMenu)}
+                      onClick={() => {
+                        console.log('🎯 PRODUCTION FRONTEND - Export dropdown CLICKED!', { showExportMenu, isExporting });
+                        setShowExportMenu(!showExportMenu);
+                      }}
                       disabled={isExporting}
                       className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-roobert-medium flex items-center gap-2 transition-all disabled:opacity-50"
                     >
@@ -599,7 +748,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                     {showExportMenu && (
                       <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
                         <button
-                          onClick={exportAsImage}
+                          onClick={() => {
+                            console.log('🖼️ PRODUCTION FRONTEND - Export as Image CLICKED!');
+                            exportAsImage();
+                          }}
                           className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
                         >
                           <FileImage className="w-4 h-4 text-blue-500" />
@@ -966,7 +1118,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                 </AnimatePresence>
 
                 <div className={isFullscreen ? 'p-4 space-y-4' : 'p-6 space-y-8'}>
-                {sections.map((section) => (
+                {sections.map((section) => {
+                  console.log(`🎯 Frontend ContentModal Section "${section.label}":`, { goalTag: section.goalTag, availableGoalsCount: availableGoals.length });
+                  
+                  return (
                   <section key={section.key} id={`section-${section.key}`}>
                     {section.displayTitle !== false && (
                       <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4">
@@ -1055,12 +1210,30 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                   const alignment = field.alignment || 'left';
                                   const alignmentClass = alignment === 'center' ? 'text-center' : alignment === 'right' ? 'text-right' : 'text-left';
                                   
+                                  // Find goal if field has goalTag
+                                  const fieldGoal = field.goalTag ? availableGoals.find(g => g.id === field.goalTag) : null;
+                                  
                                   return (
                                     <div key={field.key} className={`flex flex-col ${alignmentClass}`}>
                                       {field.displayAssetTitle && field.assetTitle && (
-                                        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                          {field.assetTitle}
-                                        </h4>
+                                        <div className="flex items-center gap-2 mb-3">
+                                          <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300">
+                                            {field.assetTitle}
+                                          </h4>
+                                          {fieldGoal && (
+                                            <button
+                                              onClick={() => {
+                                                setSelectedGoal(fieldGoal);
+                                                setShowGoalModal(true);
+                                              }}
+                                              className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded-md bg-fis-eggplant/10 text-fis-eggplant dark:bg-fis-raspberry/20 dark:text-fis-raspberry hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/30 hover:underline transition-all cursor-pointer"
+                                              title="Click to view goal details"
+                                            >
+                                              <span className="text-sm">{fieldGoal.icon || '🎯'}</span>
+                                              {fieldGoal.shortName || fieldGoal.name}
+                                            </button>
+                                          )}
+                                        </div>
                                       )}
                                       <AssetRenderEngine
                                         type={field.type}
@@ -1076,13 +1249,39 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       </div>
                     ) : (
                       /* Single field section: Render normally */
-                      <AssetRenderEngine
-                        type={section.type}
-                        data={section.data}
-                      />
+                      <div>
+                        {section.assetTitle && section.displayAssetTitle !== false && (() => {
+                          const assetGoal = section.goalTag ? availableGoals.find(g => g.id === section.goalTag) : null;
+                          return (
+                            <div className="flex items-center gap-2 mb-3">
+                              <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300">
+                                {section.assetTitle}
+                              </h4>
+                              {assetGoal && (
+                                <button
+                                  onClick={() => {
+                                    setSelectedGoal(assetGoal);
+                                    setShowGoalModal(true);
+                                  }}
+                                  className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded-md bg-fis-eggplant/10 text-fis-eggplant dark:bg-fis-raspberry/20 dark:text-fis-raspberry hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/30 hover:underline transition-all cursor-pointer"
+                                  title="Click to view goal details"
+                                >
+                                  <span className="text-sm">{assetGoal.icon || '🎯'}</span>
+                                  {assetGoal.shortName || assetGoal.name}
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })()}
+                        <AssetRenderEngine
+                          type={section.type}
+                          data={section.data}
+                        />
+                      </div>
                     )}
                   </section>
-                ))}
+                  );
+                })}
                 </div>
                 
                 {sections.length === 0 && (
@@ -1094,6 +1293,311 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
             </div>
           )}
         </motion.div>
+
+        {/* Goal Details Modal */}
+        <AnimatePresence>
+          {showGoalModal && selectedGoal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[10000] p-4"
+              onClick={() => setShowGoalModal(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: 'spring', duration: 0.3 }}
+                className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+                onClick={(e) => e.stopPropagation()}
+                ref={goalModalRef}
+              >
+                {/* Header */}
+                <div className="bg-purple-50 dark:bg-purple-950/30 border-b border-purple-200 dark:border-purple-800 p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-4 flex-1">
+                      <div className="bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 p-3 rounded-lg border border-purple-200 dark:border-purple-800">
+                        <Target className="w-6 h-6" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{selectedGoal.name}</h2>
+                          {selectedGoal.shortName && (
+                            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                              {selectedGoal.shortName}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-4 flex-wrap">
+                          {selectedGoal.status && (
+                            <span className="px-2 py-1 rounded text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
+                              {selectedGoal.status.replace('-', ' ').toUpperCase()}
+                            </span>
+                          )}
+                          {selectedGoal.priority && (
+                            <span className="px-2 py-1 rounded text-xs font-medium bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300">
+                              {selectedGoal.priority.toUpperCase()} PRIORITY
+                            </span>
+                          )}
+                          {selectedGoal.owner && (
+                            <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                              <Users className="w-4 h-4" />
+                              {selectedGoal.owner}
+                            </span>
+                          )}
+                          {selectedGoal.targetDate && (
+                            <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              Target: {new Date(selectedGoal.targetDate).toLocaleDateString()}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleExportGoalImage}
+                        disabled={isExportingGoal}
+                        className="p-2 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors disabled:opacity-50"
+                        title="Export as Image"
+                      >
+                        {isExportingGoal ? (
+                          <Loader2 className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin" />
+                        ) : (
+                          <Download className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        )}
+                      </button>
+                      <button
+                        onClick={() => setShowGoalModal(false)}
+                        className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                      >
+                        <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  {selectedGoal.progress !== undefined && (
+                    <div className="mt-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Overall Progress</span>
+                        <span className="text-sm font-bold text-gray-900 dark:text-white">{selectedGoal.progress}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                        <div
+                          className="h-3 rounded-full transition-all duration-500 bg-purple-500 dark:bg-purple-400"
+                          style={{ width: `${selectedGoal.progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Scrollable Content */}
+                <div className="goal-scrollable-content flex-1 overflow-y-auto p-6 space-y-6 bg-white dark:bg-gray-900">
+                  {/* SMART Goal Statement */}
+                  {selectedGoal.smartGoal?.statement && (
+                    <section>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        SMART Goal Statement
+                      </h3>
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed bg-purple-50 dark:bg-purple-950/30 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+                        {selectedGoal.smartGoal.statement}
+                      </p>
+                    </section>
+                  )}
+
+                {/* Two-Column Layout */}
+                {selectedGoal.smartGoal && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Left Column */}
+                    <div className="space-y-6">
+                      {/* Objectives */}
+                      {selectedGoal.smartGoal.specific?.objectives && (
+                        <section>
+                          <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📍 Specific Objectives</h3>
+                          <ul className="space-y-2">
+                            {selectedGoal.smartGoal.specific.objectives.map((obj: string, idx: number) => (
+                              <li key={idx} className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                                <span>{obj}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      )}
+
+                      {/* Metrics */}
+                      {selectedGoal.smartGoal.measurable?.metrics && (
+                        <section>
+                          <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📊 Measurable Metrics</h3>
+                          <ul className="space-y-2">
+                            {selectedGoal.smartGoal.measurable.metrics.map((metric: string, idx: number) => (
+                              <li key={idx} className="text-sm text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-blue-950/30 p-2 rounded border border-blue-200 dark:border-blue-800">
+                                {metric}
+                              </li>
+                            ))}
+                          </ul>
+                        </section>
+                      )}
+
+                      {/* CRO Alignment */}
+                      {selectedGoal.smartGoal.relevant?.croAlignment && (
+                        <section>
+                          <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">🎯 CRO Impact Areas</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedGoal.smartGoal.relevant.croAlignment.map((area: string, idx: number) => (
+                              <span
+                                key={idx}
+                                className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium"
+                              >
+                                {area}
+                              </span>
+                            ))}
+                          </div>
+                        </section>
+                      )}
+                    </div>
+
+                    {/* Right Column */}
+                    <div className="space-y-6">
+                      {/* Resources */}
+                      {selectedGoal.smartGoal.achievable && (
+                        <section>
+                          <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">💪 Resources & Ownership</h3>
+                          <div className="space-y-2 text-sm">
+                            {selectedGoal.smartGoal.achievable.resources && (
+                              <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700">
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Resources:</span>
+                                <p className="text-gray-600 dark:text-gray-400 mt-1">{selectedGoal.smartGoal.achievable.resources}</p>
+                              </div>
+                            )}
+                            {selectedGoal.smartGoal.achievable.ownership && (
+                              <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700">
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Ownership:</span>
+                                <p className="text-gray-600 dark:text-gray-400 mt-1">{selectedGoal.smartGoal.achievable.ownership}</p>
+                              </div>
+                            )}
+                            {selectedGoal.coOwners && selectedGoal.coOwners.length > 0 && (
+                              <div className="bg-gray-50 dark:bg-gray-800 p-3 rounded border border-gray-200 dark:border-gray-700">
+                                <span className="font-semibold text-gray-700 dark:text-gray-300">Co-Owners:</span>
+                                <div className="flex flex-wrap gap-2 mt-1">
+                                  {selectedGoal.coOwners.map((owner: string, idx: number) => (
+                                    <span key={idx} className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded text-xs">
+                                      {owner}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </section>
+                      )}
+
+                      {/* Dates */}
+                      {(selectedGoal.createdDate || selectedGoal.lastUpdated || selectedGoal.targetDate) && (
+                        <section>
+                          <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📅 Timeline</h3>
+                          <div className="space-y-2 text-sm">
+                            {selectedGoal.createdDate && (
+                              <div className="flex justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded">
+                                <span className="text-gray-600 dark:text-gray-400">Created:</span>
+                                <span className="font-medium text-gray-900 dark:text-white">{new Date(selectedGoal.createdDate).toLocaleDateString()}</span>
+                              </div>
+                            )}
+                            {selectedGoal.lastUpdated && (
+                              <div className="flex justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded">
+                                <span className="text-gray-600 dark:text-gray-400">Last Updated:</span>
+                                <span className="font-medium text-gray-900 dark:text-white">{new Date(selectedGoal.lastUpdated).toLocaleDateString()}</span>
+                              </div>
+                            )}
+                            {selectedGoal.targetDate && (
+                              <div className="flex justify-between bg-green-50 dark:bg-green-950/30 p-2 rounded border border-green-200 dark:border-green-800">
+                                <span className="text-green-700 dark:text-green-300 font-semibold">Target Date:</span>
+                                <span className="font-bold text-green-900 dark:text-green-100">{new Date(selectedGoal.targetDate).toLocaleDateString()}</span>
+                              </div>
+                            )}
+                          </div>
+                        </section>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                  {/* Milestones */}
+                  {selectedGoal.smartGoal?.timeBound?.timeline && (
+                    <section>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                        Milestones & Deliverables
+                      </h3>
+                      <div className="space-y-3">
+                        {selectedGoal.smartGoal.timeBound.timeline.map((milestone: any, idx: number) => {
+                          const isCompleted = milestone.status === 'completed' || milestone.status === 'complete';
+                          const isInProgress = milestone.status === 'in-progress';
+                          return (
+                            <div
+                              key={idx}
+                              className={`p-4 rounded-lg border ${
+                                isCompleted
+                                  ? 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800'
+                                  : isInProgress
+                                  ? 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800'
+                                  : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+                              }`}
+                            >
+                              <div className="flex items-start gap-3">
+                                {isCompleted ? (
+                                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                                ) : isInProgress ? (
+                                  <Circle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                                ) : (
+                                  <Circle className="w-5 h-5 text-gray-400 dark:text-gray-600 mt-0.5 flex-shrink-0" />
+                                )}
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="font-bold text-gray-900 dark:text-white">{milestone.phase}</span>
+                                    <span className="text-xs text-gray-600 dark:text-gray-400">{milestone.dueDate}</span>
+                                  </div>
+                                  <p className="text-sm text-gray-700 dark:text-gray-300">{milestone.deliverable}</p>
+                                  <span
+                                    className={`inline-block mt-2 px-2 py-1 rounded text-xs font-medium ${
+                                      isCompleted
+                                        ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
+                                        : isInProgress
+                                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                    }`}
+                                  >
+                                    {milestone.status.replace('-', ' ').toUpperCase()}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </section>
+                  )}
+
+                  {/* Linked Assets */}
+                  {selectedGoal.linkedAssets > 0 && (
+                    <section>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">🔗 Linked Assets</h3>
+                      <div className="bg-purple-50 dark:bg-purple-950/30 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+                        <p className="text-sm text-purple-700 dark:text-purple-300">
+                          This goal is linked to <span className="font-bold">{selectedGoal.linkedAssets}</span> content asset{selectedGoal.linkedAssets !== 1 ? 's' : ''} across your templates.
+                        </p>
+                      </div>
+                    </section>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </AnimatePresence>
   );
@@ -1114,15 +1618,4 @@ function formatLabel(key: string): string {
   return words
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
-}
-
-// OLD formatLabel function below (keeping for reference)
-function formatLabelOld(key: string): string {
-  return key
-    // Insert space before capital letters
-    .replace(/([A-Z])/g, ' $1')
-    // Capitalize first letter
-    .replace(/^./, (str) => str.toUpperCase())
-    // Trim any extra spaces
-    .trim();
 }

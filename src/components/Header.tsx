@@ -257,6 +257,52 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                           </div>
                         </Link>
 
+                        {/* Platform Overview */}
+                        <Link
+                          to="/platform-overview"
+                          onClick={() => setIsNavDropdownOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/platform-overview' 
+                              ? 'bg-fis-eggplant/20 text-fis-eggplant dark:bg-fis-eggplant/30 dark:text-purple-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/platform-overview' 
+                              ? 'bg-fis-eggplant/30 dark:bg-fis-eggplant/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <Lightbulb className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Platform Overview</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Executive platform showcase</div>
+                          </div>
+                        </Link>
+
+                        {/* Card Style Gallery */}
+                        <Link
+                          to="/card-styles"
+                          onClick={() => setIsNavDropdownOpen(false)}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/card-styles' 
+                              ? 'bg-fis-raspberry/20 text-fis-raspberry dark:bg-fis-raspberry/30 dark:text-pink-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/card-styles' 
+                              ? 'bg-fis-raspberry/30 dark:bg-fis-raspberry/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <Settings className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Card Style Gallery</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Design style examples</div>
+                          </div>
+                        </Link>
+
                         {/* Divider */}
                         <div className="h-px bg-gradient-to-r from-transparent via-fis-eggplant/30 to-transparent my-2" />
 

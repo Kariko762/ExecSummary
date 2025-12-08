@@ -131,21 +131,23 @@ export const Dashboard: React.FC = () => {
   const sections = parseSections();
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-3 pb-0">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-6"
+        className="text-center mb-0"
       >
-        <h2 className="text-3xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
-          Performance Dashboard
-        </h2>
-        {currentPerformance?.title && (
-          <p className="text-lg font-roobert-light text-gray-600 dark:text-gray-400">
-            {currentPerformance.title}
-          </p>
-        )}
+        <div className="inline-flex items-center gap-3 mb-1">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ background: 'var(--brand-secondary)' }}>
+            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+            Performance Dashboard
+          </h2>
+        </div>
       </motion.div>
 
       {/* Performance Navigator */}
@@ -153,7 +155,7 @@ export const Dashboard: React.FC = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex items-center justify-center gap-4 mb-8"
+          className="flex items-center justify-center gap-4"
         >
           <button
             onClick={goToPrevious}
@@ -165,7 +167,7 @@ export const Dashboard: React.FC = () => {
           </button>
           
           <div className="flex flex-col items-center">
-            <div className="text-xl font-roobert-semibold text-gray-900 dark:text-white px-6">
+            <div className="text-lg font-roobert-semibold text-gray-900 dark:text-white px-6">
               {currentPerformance.displayName || new Date(currentPerformance.date).toLocaleDateString('en-US', { 
                 month: 'long', 
                 day: 'numeric', 
@@ -190,18 +192,18 @@ export const Dashboard: React.FC = () => {
 
       {/* Content Sections - Dynamically rendered using AssetRenderEngine */}
       {hasPerformanceData && sections.length > 0 && (
-        <div className="space-y-8">
+        <div className="flex flex-col gap-5 pb-0">
           {sections.map((section) => (
             <section key={section.key}>
               {section.displayTitle !== false && (
-                <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4">
+                <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
                   {section.label}
                 </h3>
               )}
               
               {/* Multi-field section: Render in grid with layout zones */}
               {section.isMultiField && section.multiFieldData ? (
-                <div className="flex flex-col gap-6 w-full">
+                <div className="flex flex-col gap-4 w-full">
                   {(() => {
                     const rows: any[][] = [];
                     let currentRow: any[] = [];
@@ -262,7 +264,7 @@ export const Dashboard: React.FC = () => {
                       }
 
                       return (
-                        <div key={rowIndex} className={`grid ${gridCols} gap-6 ${itemsAlign} w-full`}>
+                        <div key={rowIndex} className={`grid ${gridCols} gap-4 ${itemsAlign} w-full`}>
                           {row.map((field: any, fieldIndex: number) => {
                             const alignment = field.alignment || 'left';
                             const alignmentClass = alignment === 'center' ? 'text-center' : alignment === 'right' ? 'text-right' : 'text-left';
@@ -272,7 +274,7 @@ export const Dashboard: React.FC = () => {
                             return (
                               <div key={field.key} className={`flex flex-col ${alignmentClass} ${isRightInTwoCol ? 'mt-28' : ''}`}>
                                 {field.displayAssetTitle && field.assetTitle && (
-                                  <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                  <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-1">
                                     {field.assetTitle}
                                   </h4>
                                 )}

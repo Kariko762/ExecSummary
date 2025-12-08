@@ -215,8 +215,9 @@
   "_template_updated": "2025-12-05T23:14:03.302Z",
   "_layout": "one-pager",
   "_contentTag": "weekly-summary",
-  "_highlights_0_displayAssetTitle": false,
+  "_highlights_0_displayAssetTitle": true,
   "_highlights_1_assetTitle": "Key Activity Insights ( Nov 24 - Nov 28)",
   "_highlights_2_displayAssetTitle": false,
-  "_type": "weekly-summary"
+  "_type": "weekly-summary",
+  "_highlights_0_assetTitle": "Testing TITLE"
 }

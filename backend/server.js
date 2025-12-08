@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import authRoutes from './api/auth.js';
+import goalsRoutes from './api/goals.js';
 import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats, updateTenantStats } from './api/tenants.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +21,9 @@ app.use(express.static('public'));
 
 // Authentication routes
 app.use('/api/auth', authRoutes);
+
+// Goals Management Routes
+app.use('/api/goals', goalsRoutes);
 
 // Tenant Management Routes (Organizations & Initiatives)
 app.get('/api/tenants', getTenants);

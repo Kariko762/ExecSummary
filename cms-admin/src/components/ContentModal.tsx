@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import { validateSection } from '../schemas/validationSchema';
 import { domToPng } from 'modern-screenshot';
 import jsPDF from 'jspdf';
+import ViewGoalModal from './ViewGoalModal';
 
 interface ContentModalProps {
   content: any; // The content object (Organization, ExecutiveIQ, Initiative, etc.)
@@ -29,6 +30,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showStickyNav, setShowStickyNav] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
+  const [availableGoals, setAvailableGoals] = useState<any[]>([]);
+  const [selectedGoal, setSelectedGoal] = useState<any | null>(null);
+  const [showGoalModal, setShowGoalModal] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const exportWrapperRef = useRef<HTMLDivElement>(null); // New ref for the entire exportable area
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -36,6 +40,25 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
   // Detect if this is a draft
   const isDraft = content?.status === 'draft';
+  console.log('🔍 ContentModal isDraft check:', { status: content?.status, isDraft, hasExportButton: isDraft });
+
+  // Fetch available goals
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/goals');
+        const data = await response.json();
+        console.log('📊 ContentModal Goals API Response:', data);
+        if (data.success && data.goals) {
+          console.log('✅ ContentModal setting available goals:', data.goals.length, 'goals');
+          setAvailableGoals(data.goals);
+        }
+      } catch (error) {
+        console.error('Failed to fetch goals:', error);
+      }
+    };
+    fetchGoals();
+  }, []);
 
   // Prevent background scroll when modal is open
   useEffect(() => {
@@ -85,9 +108,14 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
   // Export functions
   const exportAsImage = async () => {
+    console.log('🚀 EXPORT CLICKED - exportAsImage called!');
     const targetRef = scrollContainerRef.current;
-    if (!targetRef) return;
+    if (!targetRef) {
+      console.log('❌ No targetRef found!');
+      return;
+    }
     
+    console.log('✅ targetRef exists, proceeding...');
     setIsExporting(true);
     setShowExportMenu(false);
     
@@ -101,10 +129,21 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
       if (draftBar) (draftBar as HTMLElement).style.display = 'none';
       
-      // Get the scrollable content div (not the modal wrapper)
+      // Get the scrollable content div AND the modal container with max-h-[90vh]
       const contentDiv = targetRef;
+      const modalContainer = contentDiv.closest('[class*="max-h-[90vh]"]') as HTMLElement;
       
-      // Temporarily remove scroll and set to full height
+      console.log('🔍 Export Debug:', {
+        contentDiv,
+        modalContainer,
+        modalContainerClasses: modalContainer?.className,
+        hasMaxHeight: modalContainer?.className?.includes('max-h-[90vh]')
+      });
+      
+      // Store original className of modal container (has max-h-[90vh])
+      const originalModalClassName = modalContainer?.className || '';
+      
+      // Temporarily remove scroll and set to full height on content div
       const originalOverflow = contentDiv.style.overflow;
       const originalMaxHeight = contentDiv.style.maxHeight;
       const originalHeight = contentDiv.style.height;
@@ -112,6 +151,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       contentDiv.style.overflow = 'visible';
       contentDiv.style.maxHeight = 'none';
       contentDiv.style.height = 'auto';
+      
+      // Remove max-h-[90vh] from modal container className to allow full height
+      if (modalContainer) {
+        console.log('✅ Removing max-h-[90vh] from modal container');
+        modalContainer.className = originalModalClassName.replace('max-h-[90vh]', 'max-h-none');
+        console.log('📏 New className:', modalContainer.className);
+      } else {
+        console.warn('⚠️ Modal container with max-h-[90vh] not found!');
+      }
+      
+      // Wait for layout to settle
+      await new Promise(resolve => setTimeout(resolve, 200));
       
       // Use modern-screenshot which supports oklch colors and captures full content
       const dataUrl = await domToPng(contentDiv, {
@@ -121,10 +172,14 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         height: contentDiv.scrollHeight,
       });
       
-      // Restore original styles
+      // Restore original styles and className
       contentDiv.style.overflow = originalOverflow;
       contentDiv.style.maxHeight = originalMaxHeight;
       contentDiv.style.height = originalHeight;
+      
+      if (modalContainer) {
+        modalContainer.className = originalModalClassName;
+      }
       
       // Restore buttons
       if (exportBtn) (exportBtn as HTMLElement).style.display = '';
@@ -427,7 +482,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         itemSchema: content[`_${key}_itemSchema`], // New format
         chartConfig: content[chartConfigKey],
         subtitle,
-        displayTitle: content[`_${key}_displayTitle`] !== false // Default to true
+        displayTitle: content[`_${key}_displayTitle`] !== false, // Default to true
+        goalTag: content[`_${key}_goalTag`]
       });
     } else {
       // Multiple fields - create multi-field section
@@ -441,7 +497,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         layoutZone: content[`_${fieldKey}_layoutZone`] || 'full',
         assetTitle: content[`_${fieldKey}_assetTitle`] || '',
         displayAssetTitle: content[`_${fieldKey}_displayAssetTitle`] !== false,
-        alignment: content[`_${fieldKey}_alignment`] || 'left'
+        alignment: content[`_${fieldKey}_alignment`] || 'left',
+        goalTag: content[`_${fieldKey}_goalTag`]
       }));
       
       sections.push({
@@ -570,7 +627,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                   {/* Export Button with Dropdown */}
                   <div className="relative export-button">
                     <button
-                      onClick={() => setShowExportMenu(!showExportMenu)}
+                      onClick={() => {
+                        console.log('📂 ContentModal - Export menu toggle clicked! Current state:', showExportMenu);
+                        setShowExportMenu(!showExportMenu);
+                      }}
                       disabled={isExporting}
                       className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-roobert-medium flex items-center gap-2 transition-all disabled:opacity-50"
                     >
@@ -585,7 +645,11 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                     {showExportMenu && (
                       <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
                         <button
-                          onClick={exportAsImage}
+                          onClick={(e) => {
+                            console.log('🖼️ ContentModal - Export as Image button clicked!');
+                            e.stopPropagation();
+                            exportAsImage();
+                          }}
                           className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
                         >
                           <FileImage className="w-4 h-4 text-blue-500" />
@@ -593,6 +657,84 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                         </button>
                         <button
                           onClick={exportAsPDF}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
+                        >
+                          <FileText className="w-4 h-4 text-red-500" />
+                          Export as PDF
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Fullscreen Toggle Button */}
+                  <button
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                    title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                  >
+                    {isFullscreen ? <Minimize2 className="w-6 h-6 text-white" /> : <Maximize2 className="w-6 h-6 text-white" />}
+                  </button>
+
+                  <button
+                    onClick={onClose}
+                    className="close-button p-2 rounded-lg hover:bg-white/20 transition-colors ml-2"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Non-Draft Header - Simple header with Export and Close buttons */}
+          {!isDraft && (
+            <div className="no-print flex-shrink-0 sticky top-0 z-20 bg-gradient-to-r from-fis-eggplant to-fis-raspberry shadow-2xl rounded-t-3xl">
+              <div className="flex items-center justify-between px-6 py-3">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <h3 className="text-sm font-roobert-bold text-white">{title}</h3>
+                    <p className="text-xs text-white/80">Content Preview</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {/* Export Button with Dropdown */}
+                  <div className="relative export-button">
+                    <button
+                      onClick={() => {
+                        console.log('📂 ContentModal NON-DRAFT - Export menu toggle clicked! Current state:', showExportMenu);
+                        setShowExportMenu(!showExportMenu);
+                      }}
+                      disabled={isExporting}
+                      className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-roobert-medium flex items-center gap-2 transition-all disabled:opacity-50"
+                    >
+                      {isExporting ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Download className="w-4 h-4" />
+                      )}
+                      Export
+                    </button>
+                    
+                    {showExportMenu && (
+                      <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
+                        <button
+                          onClick={(e) => {
+                            console.log('🖼️ ContentModal NON-DRAFT - Export as Image button clicked!');
+                            e.stopPropagation();
+                            exportAsImage();
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
+                        >
+                          <FileImage className="w-4 h-4 text-blue-500" />
+                          Export as Image
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            console.log('📄 ContentModal NON-DRAFT - Export as PDF button clicked!');
+                            e.stopPropagation();
+                            exportAsPDF();
+                          }}
                           className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
                         >
                           <FileText className="w-4 h-4 text-red-500" />
@@ -952,12 +1094,36 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                 </AnimatePresence>
 
                 <div className={isFullscreen ? 'p-4 space-y-4' : 'p-6 space-y-8'}>
-                {sections.map((section) => (
+                {sections.map((section) => {
+                  const sectionGoal = section.goalTag ? availableGoals.find(g => g.id === section.goalTag) : null;
+                  console.log(`🎯 ContentModal Section "${section.label}":`, {
+                    key: section.key,
+                    goalTag: section.goalTag,
+                    foundGoal: sectionGoal?.shortName || 'none',
+                    availableGoalsCount: availableGoals.length
+                  });
+                  
+                  return (
                   <section key={section.key} id={`section-${section.key}`}>
                     {section.displayTitle !== false && (
-                      <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4">
-                        {section.label}
-                      </h3>
+                      <div className="flex items-center gap-3 mb-4">
+                        <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white">
+                          {section.label}
+                        </h3>
+                        {sectionGoal && (
+                          <button
+                            onClick={() => {
+                              setSelectedGoal(sectionGoal);
+                              setShowGoalModal(true);
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-roobert-medium bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/20 hover:underline transition-all cursor-pointer"
+                            title={`Click to view goal: ${sectionGoal.name}`}
+                          >
+                            <span className="text-sm">{sectionGoal.icon || '🎯'}</span>
+                            {sectionGoal.shortName}
+                          </button>
+                        )}
+                      </div>
                     )}
                     {section.subtitle && section.displayTitle !== false && (
                       <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -1040,14 +1206,30 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                 {row.map((field: any, fieldIndex: number) => {
                                   const alignment = field.alignment || 'left';
                                   const alignmentClass = alignment === 'center' ? 'text-center' : alignment === 'right' ? 'text-right' : 'text-left';
+                                  const fieldGoal = field.goalTag ? availableGoals.find(g => g.id === field.goalTag) : null;
                                   
                                   return (
                                     <div key={field.key} className={`flex flex-col ${alignmentClass}`}>
-                                      {field.displayAssetTitle && field.assetTitle && (
-                                        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">
-                                          {field.assetTitle}
-                                        </h4>
-                                      )}
+                                      <div className="flex items-center gap-2 mb-3">
+                                        {field.displayAssetTitle && field.assetTitle && (
+                                          <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300">
+                                            {field.assetTitle}
+                                          </h4>
+                                        )}
+                                        {fieldGoal && (
+                                          <button
+                                            onClick={() => {
+                                              setSelectedGoal(fieldGoal);
+                                              setShowGoalModal(true);
+                                            }}
+                                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/20 hover:underline transition-all cursor-pointer"
+                                            title={`Click to view goal: ${fieldGoal.name}`}
+                                          >
+                                            <span className="text-[11px]">{fieldGoal.icon || '🎯'}</span>
+                                            {fieldGoal.shortName}
+                                          </button>
+                                        )}
+                                      </div>
                                       <AssetRenderEngine
                                         type={field.type}
                                         data={field.data}
@@ -1068,7 +1250,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       />
                     )}
                   </section>
-                ))}
+                  );
+                })}
                 </div>
                 
                 {sections.length === 0 && (
@@ -1080,6 +1263,14 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
             </div>
           )}
         </motion.div>
+
+        {/* Goal Details Modal */}
+        {showGoalModal && selectedGoal && (
+          <ViewGoalModal
+            goal={selectedGoal}
+            onClose={() => setShowGoalModal(false)}
+          />
+        )}
       </motion.div>
     </AnimatePresence>
   );

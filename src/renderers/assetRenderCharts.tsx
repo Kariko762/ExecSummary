@@ -131,12 +131,12 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
     
     return (
       <div className="radial-chart">
-        <ResponsiveContainer width="100%" height={200}>
+        <ResponsiveContainer width="100%" height={160}>
           <RadialBarChart 
             cx="50%" 
             cy="50%" 
-            innerRadius="60%" 
-            outerRadius="90%" 
+            innerRadius="40%" 
+            outerRadius="95%" 
             data={chartData}
             startAngle={90}
             endAngle={-270}
@@ -171,12 +171,12 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
   
   return (
     <div className="radial-chart">
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={220}>
         <RadialBarChart 
           cx="50%" 
           cy="50%" 
-          innerRadius="20%" 
-          outerRadius="90%" 
+          innerRadius="15%" 
+          outerRadius="95%" 
           data={chartData}
           startAngle={90}
           endAngle={-270}
@@ -361,7 +361,7 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
     
     return (
       <div className="bar-chart">
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={220}>
           <BarChart data={items}>
             <CartesianGrid strokeDasharray="3 3" stroke="#E6E7E8" />
             <XAxis dataKey="name" stroke="#403040" />
@@ -396,7 +396,7 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
   
   return (
     <div className="bar-chart">
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={220}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#E6E7E8" />
           <XAxis dataKey="name" stroke="#403040" />

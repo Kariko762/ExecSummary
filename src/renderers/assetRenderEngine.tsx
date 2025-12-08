@@ -180,11 +180,11 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
     }
     
     if (['metricCard', 'nestedCards', 'riskCard'].includes(type)) {
-      return `${baseClasses} ${modeClasses} ${AssetStyles.spacing.md} ${className}`;
+      return `${baseClasses} ${modeClasses} ${className}`;
     }
     
     if (['radialProgressChart', 'pieChart', 'barChart', 'lineChart'].includes(type)) {
-      return `${baseClasses} ${modeClasses} ${AssetStyles.spacing.lg} ${className}`;
+      return `${baseClasses} ${modeClasses} ${className}`;
     }
     
     if (['statusBoard', 'timeline', 'twoColumnComparison'].includes(type)) {

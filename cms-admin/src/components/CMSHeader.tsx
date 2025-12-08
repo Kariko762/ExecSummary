@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target, BookText } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
@@ -12,9 +12,11 @@ interface CMSHeaderProps {
   onOpenOrgIQ?: () => void;
   onOpenSystemSettings?: () => void;
   onOpenComments?: () => void;
+  onOpenGoals?: () => void;
+  onOpenPlatformOverview?: () => void;
 }
 
-export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenComments }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenComments, onOpenGoals, onOpenPlatformOverview }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
@@ -250,6 +252,23 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                           </div>
                         </button>
 
+                        {/* Platform Overview */}
+                        <button
+                          onClick={() => {
+                            onOpenPlatformOverview?.();
+                            setIsNavDropdownOpen(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gradient-to-r hover:from-fis-eggplant/10 hover:to-fis-navy/10 dark:hover:from-fis-eggplant/20 dark:hover:to-fis-navy/20 text-gray-900 dark:text-white text-left"
+                        >
+                          <div className="p-2 rounded-lg bg-gradient-to-br from-fis-eggplant/10 to-fis-navy/10 dark:from-fis-eggplant/20 dark:to-fis-navy/20">
+                            <BookText className="w-5 h-5 text-fis-eggplant dark:text-fis-raspberry" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Platform Showcase</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Visual capabilities overview</div>
+                          </div>
+                        </button>
+
                         {/* Engine & Templates - WITH SUBMENU */}
                         <div className="relative">
                           <button
@@ -315,6 +334,25 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     <div className="flex-1">
                                       <div className="font-roobert-semibold text-sm">Template Builder</div>
                                       <div className="text-xs text-gray-600 dark:text-gray-400">Drag & drop template designer</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Goals */}
+                                  <button
+                                    onClick={() => {
+                                      console.log('Goals clicked!');
+                                      setIsNavDropdownOpen(false);
+                                      setEngineSubmenuOpen(false);
+                                      onOpenGoals?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-green-500/10 dark:hover:bg-green-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-green-500/10 dark:bg-green-500/20">
+                                      <Target className="w-4 h-4 text-green-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Strategic Goals</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Manage SMART goals & KPIs</div>
                                     </div>
                                   </button>
 

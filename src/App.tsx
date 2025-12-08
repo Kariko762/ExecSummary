@@ -8,12 +8,15 @@ import { renderWithExpressions } from './utils/expressionParser';
 import { Dashboard } from './components/Dashboard';
 import { ContentModal } from './components/ContentModal';
 import { ContentModalFixedMenu } from './components/ContentModalFixedMenu';
+import ViewGoalModal from './components/ViewGoalModal';
 import { Timeline } from './components/Timeline';
 import { StickyNav } from './components/StickyNav';
 import { OrganizationDashboard } from './components/OrganizationDashboard';
 import { StrategicInitiativesDashboard } from './components/StrategicInitiativesDashboard';
 import { KnowledgeBaseDashboard } from './components/KnowledgeBaseDashboard';
 import { SchemaTest } from './components/SchemaTest';
+import PlatformOverview from './components/PlatformOverview';
+import CardStyleGallery from './components/CardStyleGallery';
 import LoginPage from './components/LoginPage';
 import { timelineItems, isExecutiveSummary, loadTimelineData } from './data/timeline-loader';
 import { TimelineItem } from './types';
@@ -22,6 +25,7 @@ import { Building2, Target, AlertCircle, ChevronRight, Calendar, FileText, Check
 
 function App() {
   const [selectedSummary, setSelectedSummary] = useState<TimelineItem | null>(null);
+  const [selectedGoal, setSelectedGoal] = useState<any | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [requireAuth, setRequireAuth] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -38,8 +42,10 @@ function App() {
   // Organizations and Initiatives data
   const [organizations, setOrganizations] = useState<any[]>([]);
   const [initiatives, setInitiatives] = useState<any[]>([]);
+  const [goals, setGoals] = useState<any[]>([]);
   const [orgContent, setOrgContent] = useState<Map<string, any>>(new Map());
   const [initiativeContent, setInitiativeContent] = useState<Map<string, any>>(new Map());
+  const [goalContent, setGoalContent] = useState<Map<string, any>>(new Map());
 
   // Load timeline data from backend API
   useEffect(() => {
@@ -136,6 +142,30 @@ function App() {
         }
       })
       .catch(err => console.error('Failed to load initiatives:', err));
+
+    // Load goals from dedicated goals API
+    fetch('http://localhost:3001/api/goals')
+      .then(res => res.json())
+      .then(data => {
+        if (data.goals && Array.isArray(data.goals)) {
+          // Transform goals to match the same structure as initiatives
+          const transformedGoals = data.goals.map(goal => ({
+            id: goal.id,
+            slug: goal.id,
+            name: goal.title || goal.name,
+            description: goal.description || '',
+            category: goal.category
+          }));
+          setGoals(transformedGoals);
+          
+          // Goals don't have separate content - they ARE the content
+          // Store the goal data itself in goalContent
+          data.goals.forEach((goal: any) => {
+            setGoalContent(prev => new Map(prev).set(goal.id, goal));
+          });
+        }
+      })
+      .catch(err => console.error('Failed to load goals:', err));
   }, []);
 
   // Check system settings for auth requirement and authentication status
@@ -237,7 +267,12 @@ function App() {
                   {/* Main Dashboard Route */}
                   <Route path="/" element={
                     <AnimatePresence mode="wait">
-                      {selectedSummary ? (
+                      {selectedGoal ? (
+                        <ViewGoalModal
+                          goal={selectedGoal}
+                          onClose={() => setSelectedGoal(null)}
+                        />
+                      ) : selectedSummary ? (
                         selectedSummary._layout === 'tabbed' ? (
                           <ContentModalFixedMenu
                             content={selectedSummary}
@@ -255,18 +290,18 @@ function App() {
                           <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-center mb-8"
+                            className="text-center mb-6"
                           >
-                            <h1 className="text-3xl md:text-4xl font-roobert-heavy text-fis-navy dark:text-white mb-3">
+                            <h1 className="text-2xl md:text-3xl font-roobert-heavy text-fis-navy dark:text-white mb-2">
                               Executive Summary Dashboard
                             </h1>
-                            <p className="text-lg md:text-xl font-roobert-medium text-fis-green dark:text-green-400">
+                            <p className="text-base md:text-lg font-roobert-medium text-fis-green dark:text-green-400">
                               Demo Services Group | RevOps
                             </p>
                           </motion.div>
 
                           {/* Timeline */}
-                          <section id="timeline" className="mb-12">
+                          <section id="timeline" className="mb-0">
                           <Timeline
                             summaries={timelineItems}
                             onSelectSummary={setSelectedSummary}
@@ -275,13 +310,32 @@ function App() {
                           />
                           </section>
 
+                          {/* Decorative HR */}
+                          <motion.div
+                            initial={{ opacity: 0, scaleX: 0 }}
+                            animate={{ opacity: 1, scaleX: 1 }}
+                            transition={{ delay: 0.25, duration: 0.6 }}
+                            className="relative h-px -mt-4 mb-6 overflow-hidden rounded-full"
+                            style={{ 
+                              background: 'linear-gradient(90deg, transparent, rgba(3,30,75,0.75), rgba(178,26,83,0.6), rgba(3,30,75,0.75), transparent)'
+                            }}
+                          >
+                            <div 
+                              className="absolute inset-0 animate-pulse"
+                              style={{
+                                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+                                animation: 'shimmer 3s infinite'
+                              }}
+                            />
+                          </motion.div>
+
                           {/* Performance Dashboard */}
                           <motion.section
                             id="performance"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="mb-12"
+                            className="mb-6"
                           >
                             <Dashboard />
                           </motion.section>
@@ -293,25 +347,25 @@ function App() {
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               transition={{ delay: 0.4 }}
-                              className="mb-12"
+                              className="pt-2 mb-8"
                             >
                               {/* Centered Header */}
-                              <div className="text-center mb-8">
-                                <div className="inline-flex items-center justify-center gap-3 mb-3">
-                                  <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{ background: 'var(--brand-primary)' }}>
-                                    <Building2 className="w-6 h-6 text-white" />
+                              <div className="text-center mb-6">
+                                <div className="inline-flex items-center gap-3 mb-1">
+                                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ background: 'var(--brand-primary)' }}>
+                                    <Building2 className="w-5 h-5 text-white" />
                                   </div>
+                                  <h2 className="text-2xl font-roobert-heavy" style={{ color: 'var(--text-primary)' }}>
+                                    Organization Overview
+                                  </h2>
                                 </div>
-                                <h2 className="text-3xl font-roobert-heavy mb-2" style={{ color: 'var(--text-primary)' }}>
-                                  Organization Overview
-                                </h2>
-                                <p className="text-sm font-roobert-light" style={{ color: 'var(--text-secondary)' }}>
+                                <p className="text-xs font-roobert-light" style={{ color: 'var(--text-secondary)' }}>
                                   Real-time status across all lines of business
                                 </p>
                               </div>
                               
                               {/* 2x2 Grid for Organizations */}
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
                                 {organizations.map((org) => {
                                   const content = orgContent.get(org.slug);
                                   const hasRisk = content?.risks?.some((r: any) => r.severity === 'high' || r.severity === 'medium');
@@ -330,32 +384,9 @@ function App() {
                                       animate={{ opacity: 1, y: 0 }}
                                       whileHover={{ scale: 1.02, y: -4 }}
                                       onClick={() => content && setSelectedSummary(content)}
-                                      className="rounded-2xl p-6 hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden"
-                                      style={{ 
-                                        background: 'linear-gradient(135deg, rgba(96, 165, 250, 0.3) 0%, rgba(147, 197, 253, 0.2) 50%, rgba(219, 234, 254, 0.1) 100%)',
-                                        boxShadow: '0 4px 20px rgba(96, 165, 250, 0.15)'
-                                      }}
+                                      className="rounded-xl p-4 transition-all cursor-pointer group relative bg-white dark:bg-gray-800 hover:shadow-2xl"
+                                      style={{ boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(96, 165, 250, 0.1)' }}
                                     >
-                                      {/* Geometric SVG Background Pattern */}
-                                      <div className="absolute inset-0 opacity-50">
-                                        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                                          <defs>
-                                            <linearGradient id={`org-fade-${org.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                                              <stop offset="0%" style={{ stopColor: '#1e40af', stopOpacity: 0.7 }} />
-                                              <stop offset="100%" style={{ stopColor: '#1e40af', stopOpacity: 0 }} />
-                                            </linearGradient>
-                                          </defs>
-                                          {/* Geometric shapes */}
-                                          <circle cx="10%" cy="10%" r="80" fill={`url(#org-fade-${org.id})`} />
-                                          <rect x="70%" y="5%" width="60" height="60" fill={`url(#org-fade-${org.id})`} transform="rotate(45)" />
-                                          <polygon points="90,150 120,190 60,190" fill={`url(#org-fade-${org.id})`} transform="translate(200, 0)" />
-                                          <circle cx="85%" cy="85%" r="100" fill={`url(#org-fade-${org.id})`} />
-                                        </svg>
-                                      </div>
-                                      
-                                      {/* Content with relative positioning */}
-                                      <div className="relative z-10">
-                                      
                                       {/* Top-right status indicator replaced with badge */}
                                       <div className="absolute top-4 right-4">
                                         <div className={`px-3 py-1.5 rounded-full text-xs font-roobert-semibold ${
@@ -407,7 +438,7 @@ function App() {
 
                                       {/* Latest Update Preview */}
                                       {content && (
-                                        <div className="bg-white/40 rounded-lg p-3 backdrop-blur-sm">
+                                        <div className="bg-white/40 dark:bg-gray-700/40 rounded-lg p-2 backdrop-blur-sm">
                                           <div className="flex items-start gap-2">
                                             <div className="w-5 h-5 rounded bg-gray-200 flex items-center justify-center flex-shrink-0 mt-0.5">
                                               <svg className="w-3 h-3 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
@@ -424,12 +455,11 @@ function App() {
                                       )}
 
                                       {/* Click for Details */}
-                                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-300">
-                                        <span className="text-xs font-roobert-semibold text-gray-700 group-hover:text-gray-900 transition-colors">
+                                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-300 dark:border-gray-700">
+                                        <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
                                           Click for details
                                         </span>
-                                        <ChevronRight className="w-4 h-4 text-gray-700 group-hover:translate-x-1 transition-transform" />
-                                      </div>
+                                        <ChevronRight className="w-4 h-4 text-gray-700 dark:text-gray-300 group-hover:translate-x-1 transition-transform" />
                                       </div>
                                     </motion.div>
                                   );
@@ -438,8 +468,8 @@ function App() {
                             </motion.section>
                           )}
 
-                          {/* Initiatives Section */}
-                          {initiativesEnabled && initiatives.length > 0 && (
+                          {/* Initiatives and Goals Section */}
+                          {initiativesEnabled && (initiatives.length > 0 || goals.length > 0) && (
                             <motion.section
                               id="initiatives"
                               initial={{ opacity: 0 }}
@@ -448,24 +478,24 @@ function App() {
                               className="mb-12"
                             >
                               {/* Centered Header */}
-                              <div className="text-center mb-8">
-                                <div className="inline-flex items-center justify-center gap-3 mb-3">
-                                  <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" style={{ background: 'var(--brand-secondary)' }}>
-                                    <Target className="w-6 h-6 text-white" />
+                              <div className="text-center mb-6">
+                                <div className="inline-flex items-center gap-3 mb-1">
+                                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ background: 'var(--brand-secondary)' }}>
+                                    <Target className="w-5 h-5 text-white" />
                                   </div>
+                                  <h2 className="text-2xl font-roobert-heavy" style={{ color: 'var(--text-primary)' }}>
+                                    Initiatives and Goals
+                                  </h2>
                                 </div>
-                                <h2 className="text-3xl font-roobert-heavy mb-2" style={{ color: 'var(--text-primary)' }}>
-                                  Strategic Initiatives
-                                </h2>
-                                <p className="text-sm font-roobert-light" style={{ color: 'var(--text-secondary)' }}>
-                                  Key enterprise transformation programs
+                                <p className="text-xs font-roobert-light" style={{ color: 'var(--text-secondary)' }}>
+                                  Key enterprise transformation programs and strategic objectives
                                 </p>
                               </div>
                               
                               {/* Single Row - 4 per row */}
                               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                {initiatives.map((initiative) => {
-                                  const content = initiativeContent.get(initiative.slug);
+                                {[...initiatives.map((item: any) => ({ ...item, itemType: 'Initiative' })), ...goals.map((item: any) => ({ ...item, itemType: 'Goal' }))].map((item) => {
+                                  const content = item.itemType === 'Initiative' ? initiativeContent.get(item.slug) : goalContent.get(item.slug);
                                   const hasRisk = content?.risks?.some((r: any) => r.severity === 'high' || r.severity === 'medium');
                                   const riskLevel = content?.risks?.find((r: any) => r.severity === 'high') ? 'high' : 
                                                    content?.risks?.find((r: any) => r.severity === 'medium') ? 'medium' : 'low';
@@ -475,51 +505,48 @@ function App() {
                                   const openTickets = 0; // Will be populated when template updated
                                   const blockers = content?.risks?.filter((r: any) => r.severity === 'high').length || 0;
                                   
+                                  // Extract goals from content
+                                  const goals = content?.goals || (content?.sections?.find((s: any) => s.key === 'goals')?.multiFieldData) || [];
+                                  
                                   return (
                                     <motion.div
-                                      key={initiative.id}
+                                      key={item.id}
                                       initial={{ opacity: 0, y: 20 }}
                                       animate={{ opacity: 1, y: 0 }}
                                       whileHover={{ scale: 1.02, y: -4 }}
-                                      onClick={() => content && setSelectedSummary(content)}
-                                      className="rounded-2xl p-6 hover:shadow-2xl transition-all cursor-pointer group relative overflow-hidden"
-                                      style={{ 
-                                        background: 'linear-gradient(135deg, rgba(167, 139, 250, 0.3) 0%, rgba(196, 181, 253, 0.2) 50%, rgba(237, 233, 254, 0.1) 100%)',
-                                        boxShadow: '0 4px 20px rgba(167, 139, 250, 0.15)'
+                                      onClick={() => {
+                                        if (item.itemType === 'Goal') {
+                                          setSelectedGoal(content);
+                                        } else {
+                                          content && setSelectedSummary(content);
+                                        }
+                                      }}
+                                      className="rounded-xl p-4 transition-all cursor-pointer group relative overflow-hidden shadow-lg hover:shadow-2xl"
+                                      style={{
+                                        background: riskLevel === 'high' 
+                                          ? 'radial-gradient(circle at top right, rgba(178, 26, 83, 0.25) 0%, rgba(178, 26, 83, 0.1) 40%, transparent 100%), white'
+                                          : riskLevel === 'medium'
+                                          ? 'radial-gradient(circle at top right, rgba(3, 30, 75, 0.25) 0%, rgba(3, 30, 75, 0.1) 40%, transparent 100%), white'
+                                          : 'radial-gradient(circle at top right, rgba(0, 162, 90, 0.2) 0%, rgba(0, 162, 90, 0.05) 50%, transparent 100%), white'
                                       }}
                                     >
-                                      {/* Geometric SVG Background Pattern */}
-                                      <div className="absolute inset-0 opacity-40">
-                                        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                                          <defs>
-                                            <linearGradient id={`init-fade-${initiative.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                                              <stop offset="0%" style={{ stopColor: '#6b21a8', stopOpacity: 0.6 }} />
-                                              <stop offset="100%" style={{ stopColor: '#6b21a8', stopOpacity: 0 }} />
-                                            </linearGradient>
-                                          </defs>
-                                          {/* Geometric shapes - different pattern than orgs */}
-                                          <circle cx="10%" cy="10%" r="70" fill={`url(#init-fade-${initiative.id})`} />
-                                          <circle cx="85%" cy="15%" r="60" fill={`url(#init-fade-${initiative.id})`} />
-                                          <polygon points="0,0 50,0 25,50" fill={`url(#init-fade-${initiative.id})`} transform="translate(20, 150)" />
-                                          <polygon points="100,0 150,25 150,75 100,100 50,75 50,25" fill={`url(#init-fade-${initiative.id})`} transform="translate(280, 140)" />
-                                        </svg>
-                                      </div>
-                                      
-                                      {/* Content with relative positioning */}
-                                      <div className="relative z-10">
-                                      {/* Shine effect on hover */}
-                                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                                      
-                                      {/* Content */}
-                                      <div className="relative z-10 text-white">
                                         {/* Header */}
-                                        <div className="flex items-start justify-between mb-4">
+                                        <div className="flex items-start justify-between mb-2">
                                           <div className="flex-1">
+                                            <div className="flex items-center gap-2 mb-1">
+                                              <span className="inline-flex px-2 py-0.5 rounded text-xs font-roobert-semibold" 
+                                                    style={{ 
+                                                      background: item.itemType === 'Goal' ? 'var(--accent-green)' : 'var(--brand-secondary)',
+                                                      color: 'white' 
+                                                    }}>
+                                                {item.itemType}
+                                              </span>
+                                            </div>
                                             <h3 className="text-xl font-roobert-semibold mb-1 text-gray-900">
-                                              {initiative.name}
+                                              {item.name}
                                             </h3>
                                             <p className="text-sm text-gray-600 font-roobert-light line-clamp-2">
-                                              {initiative.description}
+                                              {item.description}
                                             </p>
                                           </div>
                                           <ChevronRight className="w-5 h-5 ml-2 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-gray-900" />
@@ -569,8 +596,6 @@ function App() {
                                               : 'No updates'}
                                           </span>
                                         </div>
-                                      </div>
-                                      </div>
                                     </motion.div>
                                   );
                                 })}
@@ -584,7 +609,7 @@ function App() {
                     </AnimatePresence>
                   } />
 
-                  {/* Strategic Initiatives Route */}
+                  {/* Initiatives and Goals Route */}
                   <Route path="/strategic-initiatives" element={
                     <StrategicInitiativesDashboard />
                   } />
@@ -592,6 +617,16 @@ function App() {
                   {/* Knowledge Base Route */}
                   <Route path="/knowledge-base" element={
                     <KnowledgeBaseDashboard />
+                  } />
+
+                  {/* Platform Overview Route */}
+                  <Route path="/platform-overview" element={
+                    <PlatformOverview onClose={() => window.history.back()} />
+                  } />
+
+                  {/* Card Style Gallery Route */}
+                  <Route path="/card-styles" element={
+                    <CardStyleGallery onClose={() => window.history.back()} />
                   } />
 
                   {/* Schema Test Route */}

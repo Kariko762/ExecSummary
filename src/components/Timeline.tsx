@@ -159,58 +159,43 @@ export const Timeline: React.FC<TimelineProps> = ({
                 )}
 
                 {/* Card */}
-                <div className="mt-20 glass-strong card-shadow hover:card-shadow-hover rounded-xl p-5 transition-all border-2 border-transparent hover:border-fis-eggplant duration-300 h-[200px] flex flex-col relative overflow-hidden">
-                  {/* Geometric SVG Background Pattern */}
-                  <div className="absolute inset-0 opacity-30">
-                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <linearGradient id={`timeline-fade-${summary.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" style={{ stopColor: '#B21A53', stopOpacity: 0.5 }} />
-                          <stop offset="100%" style={{ stopColor: '#B21A53', stopOpacity: 0 }} />
-                        </linearGradient>
-                      </defs>
-                      {/* Geometric shapes using raspberry color */}
-                      <circle cx="15%" cy="15%" r="50" fill={`url(#timeline-fade-${summary.id})`} />
-                      <polygon points="80,10 110,30 110,70 80,90 50,70 50,30" fill={`url(#timeline-fade-${summary.id})`} transform="translate(250, 20)" />
-                      <rect x="10%" y="70%" width="45" height="45" fill={`url(#timeline-fade-${summary.id})`} transform="rotate(20)" />
-                      <circle cx="85%" cy="80%" r="60" fill={`url(#timeline-fade-${summary.id})`} />
-                    </svg>
-                  </div>
+                <div className="mt-16 rounded-2xl transition-all hover:shadow-2xl duration-300 h-[160px] flex overflow-hidden bg-white dark:bg-gray-800 shadow-lg border-l-4 border-r-4"
+                     style={{ borderColor: isIQ ? 'var(--brand-secondary)' : 'var(--brand-primary)' }}>
                   
-                  {/* Content with relative positioning */}
-                  <div className="relative z-10">
+                  {/* Content */}
+                  <div className="p-4 flex-1 flex flex-col">
                   {/* Type Tag */}
-                  <div className="mb-3">
+                  <div className="mb-2">
                     <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-roobert-semibold ${isIQ ? 'bg-fis-raspberry/20 text-fis-raspberry' : 'bg-fis-navy/20 text-fis-navy dark:bg-blue-500/20 dark:text-blue-400'}`}>
                       {isIQ ? 'Executive-IQ' : 'Weekly Summary'}
                     </span>
                   </div>
                   
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between mb-2">
                     <div>
-                      <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+                      <h3 className="text-xl font-roobert-heavy text-gray-900 dark:text-white">
                         {summary.quarter}
                       </h3>
-                      <p className="text-sm font-roobert-medium text-gray-500 dark:text-gray-400">
+                      <p className="text-xs font-roobert-medium text-gray-500 dark:text-gray-400">
                         {summary.year}
                       </p>
                     </div>
                     {!isIQ && 'keyMetrics' in summary && summary.keyMetrics && (
-                      <div className="flex items-center space-x-1 px-3 py-1 rounded-full bg-green-500/20">
-                        <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
-                        <span className="text-sm font-roobert-heavy text-green-600 dark:text-green-400">
+                      <div className="flex items-center space-x-1 px-2 py-1 rounded-full bg-green-500/20">
+                        <TrendingUp className="w-3 h-3 text-green-600 dark:text-green-400" />
+                        <span className="text-xs font-roobert-heavy text-green-600 dark:text-green-400">
                           +{summary.keyMetrics.growth}%
                         </span>
                       </div>
                     )}
                   </div>
 
-                  <p className="text-sm font-roobert-light text-gray-600 dark:text-gray-300 line-clamp-2 flex-1">
+                  <p className="text-xs font-roobert-light text-gray-600 dark:text-gray-300 line-clamp-2 flex-1">
                     {summary.title}
                   </p>
 
                   {!isIQ && 'keyMetrics' in summary && summary.keyMetrics && (
-                    <div className="mt-auto pt-4 border-t border-white/10">
+                    <div className="mt-auto pt-2 border-t border-white/10 dark:border-gray-700">
                       <div className="flex items-center justify-between text-xs">
                       <span className="font-roobert-light text-gray-500 dark:text-gray-400">
                         Revenue

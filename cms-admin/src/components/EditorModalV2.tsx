@@ -48,6 +48,7 @@ export default function EditorModalV2({
   const [pendingSectionAction, setPendingSectionAction] = useState<{ sectionId: string; action: 'complete' | 'visibility' } | null>(null); // Track pending action
   const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set()); // Track which subsections are expanded
   const [availableTags, setAvailableTags] = useState<any[]>([]); // Available content tags
+  const [availableGoals, setAvailableGoals] = useState<any[]>([]); // Available goals for tagging
   const [showAddSectionModal, setShowAddSectionModal] = useState(false); // Add section modal
   const [selectedAssetType, setSelectedAssetType] = useState<string>('text'); // Selected asset type for new section
   const [selectedColumnLayout, setSelectedColumnLayout] = useState<string>('full'); // Selected column layout: full, 50-50, 70-30, 30-70, 33-33-33
@@ -62,23 +63,33 @@ export default function EditorModalV2({
   const [showDeleteAssetConfirm, setShowDeleteAssetConfirm] = useState(false); // Delete asset confirmation
   const [pendingDeleteAssetKey, setPendingDeleteAssetKey] = useState<string | null>(null); // Asset to delete
 
-  // Fetch available tags
+  // Fetch available tags and goals
   useEffect(() => {
-    const fetchTags = async () => {
+    const fetchTagsAndGoals = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/content-tags');
-        if (response.ok) {
-          const data = await response.json();
-          const tagsArray = Array.isArray(data) ? data : (data.tags || []);
+        // Fetch tags
+        const tagsResponse = await fetch('http://localhost:3001/api/content-tags');
+        if (tagsResponse.ok) {
+          const tagsData = await tagsResponse.json();
+          const tagsArray = Array.isArray(tagsData) ? tagsData : (tagsData.tags || []);
           console.log('EditorModalV2 - Tags loaded:', tagsArray);
           setAvailableTags(tagsArray);
         }
+
+        // Fetch goals
+        const goalsResponse = await fetch('http://localhost:3001/api/goals');
+        if (goalsResponse.ok) {
+          const goalsData = await goalsResponse.json();
+          const goalsArray = goalsData.goals || [];
+          console.log('EditorModalV2 - Goals loaded:', goalsArray);
+          setAvailableGoals(goalsArray);
+        }
       } catch (error) {
-        console.error('Failed to fetch tags:', error);
+        console.error('Failed to fetch tags/goals:', error);
       }
     };
     if (isOpen) {
-      fetchTags();
+      fetchTagsAndGoals();
     }
   }, [isOpen]);
 
@@ -298,9 +309,35 @@ export default function EditorModalV2({
                       onKeyDown={(e) => e.stopPropagation()}
                       onKeyUp={(e) => e.stopPropagation()}
                       placeholder="Asset title (optional)"
-                      className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-64 md:w-80 lg:w-96"
+                      className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry"
+                      style={{ width: '250px' }}
                     />
 
+                    {/* Goal Tagging Dropdown */}
+                    <select
+                      value={editedData[`_${fieldKey}_goalTag`] || ''}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        const goalTagKey = `_${fieldKey}_goalTag`;
+                        const value = e.target.value;
+                        console.log(`🎯 Tagging asset ${fieldKey} with goal: ${value}`);
+                        setEditedData((prev: any) => ({
+                          ...prev,
+                          [goalTagKey]: value || undefined
+                        }));
+                        setIsDirty(true);
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      className="px-1.5 py-0.5 rounded text-[10px] border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-44"
+                      title="Tag this content with a strategic goal"
+                    >
+                      <option value="">🎯 None</option>
+                      {availableGoals.map(goal => (
+                        <option key={goal.id} value={goal.id}>
+                          {goal.shortName}
+                        </option>
+                      ))}
+                    </select>
                     
                     {/* Asset Title Toggle */}
                     <div
@@ -421,6 +458,17 @@ export default function EditorModalV2({
                     <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
                       {positionLabel}
                     </span>
+                    
+                    {/* Goal Tag Badge */}
+                    {editedData[`_${fieldKey}_goalTag`] && (() => {
+                      const goalId = editedData[`_${fieldKey}_goalTag`];
+                      const goal = availableGoals.find(g => g.id === goalId);
+                      return goal ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry">
+                          🎯 {goal.shortName}
+                        </span>
+                      ) : null;
+                    })()}
                     
                     {/* Disabled Badge */}
                     {editedData[`_enabled_${fieldKey}`] === false && (
@@ -680,8 +728,33 @@ export default function EditorModalV2({
                 setIsDirty(true);
               }}
               placeholder="Asset title (optional)"
-              className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-64 md:w-80 lg:w-96"
+              className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry"
+              style={{ width: '220px' }}
             />
+            
+            {/* Goal Tagging Dropdown */}
+            <select
+              value={editedData[`_${sectionId}_goalTag`] || ''}
+              onChange={(e) => {
+                const goalTagKey = `_${sectionId}_goalTag`;
+                const value = e.target.value;
+                console.log(`🎯 Tagging section ${sectionId} with goal: ${value}`);
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [goalTagKey]: value || undefined
+                }));
+                setIsDirty(true);
+              }}
+              className="px-1.5 py-0.5 rounded text-[10px] border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-44"
+              title="Tag this content with a strategic goal"
+            >
+              <option value="">🎯 None</option>
+              {availableGoals.map(goal => (
+                <option key={goal.id} value={goal.id}>
+                  {goal.shortName}
+                </option>
+              ))}
+            </select>
             
             {/* Asset Title Toggle */}
             <div
@@ -886,8 +959,33 @@ export default function EditorModalV2({
                 setIsDirty(true);
               }}
               placeholder="Asset title (optional)"
-              className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-64 md:w-80 lg:w-96"
+              className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry"
+              style={{ width: '220px' }}
             />
+            
+            {/* Goal Tagging Dropdown */}
+            <select
+              value={editedData[`_${sectionId}_goalTag`] || ''}
+              onChange={(e) => {
+                const goalTagKey = `_${sectionId}_goalTag`;
+                const value = e.target.value;
+                console.log(`🎯 Tagging legacy section ${sectionId} with goal: ${value}`);
+                setEditedData((prev: any) => ({
+                  ...prev,
+                  [goalTagKey]: value || undefined
+                }));
+                setIsDirty(true);
+              }}
+              className="px-1.5 py-0.5 rounded text-[10px] border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-44"
+              title="Tag this content with a strategic goal"
+            >
+              <option value="">🎯 None</option>
+              {availableGoals.map(goal => (
+                <option key={goal.id} value={goal.id}>
+                  {goal.shortName}
+                </option>
+              ))}
+            </select>
             
             {/* Asset Title Toggle */}
             <div
@@ -1475,10 +1573,8 @@ export default function EditorModalV2({
     const asset = ASSET_LIBRARY.find(a => a.type === selectedAssetForSection);
     if (!asset) return;
     
-    const newData = { ...editedData };
-    
     // Get section's column layout
-    const sectionLayout = newData[`_${activeSectionId}_columnLayout`] || 'full';
+    const sectionLayout = editedData[`_${activeSectionId}_columnLayout`] || 'full';
     
     // Helper function to calculate layoutZone based on column layout and index
     const getLayoutZone = (index: number, layout: string): string => {
@@ -1495,19 +1591,24 @@ export default function EditorModalV2({
     };
     
     // Check if section already has data
-    const currentData = newData[activeSectionId];
+    const currentData = editedData[activeSectionId];
+    
+    // Build new data object preserving key order
+    const newData: any = {};
+    const keysToDelete = new Set<string>();
+    const newKeysToAdd: { [key: string]: any } = {};
     
     // If section is empty or undefined, initialize with asset data
     if (!currentData) {
-      newData[activeSectionId] = asset.exampleData;
-      newData[`_${activeSectionId}_type`] = asset.type;
-      newData[`_${activeSectionId}_assetTitle`] = newAssetName;
-      newData[`_${activeSectionId}_layoutZone`] = getLayoutZone(0, sectionLayout);
+      newKeysToAdd[activeSectionId] = asset.exampleData;
+      newKeysToAdd[`_${activeSectionId}_type`] = asset.type;
+      newKeysToAdd[`_${activeSectionId}_assetTitle`] = newAssetName;
+      newKeysToAdd[`_${activeSectionId}_layoutZone`] = getLayoutZone(0, sectionLayout);
     } else {
       // Section has data - need to convert to indexed format if not already
       // Check if it's already indexed (has _0, _1, etc.)
       const indexedPattern = new RegExp(`^${activeSectionId}_(\\d+)$`);
-      const existingIndexed = Object.keys(newData).filter(k => indexedPattern.test(k));
+      const existingIndexed = Object.keys(editedData).filter(k => indexedPattern.test(k));
       
       if (existingIndexed.length > 0) {
         // Already indexed - add new index
@@ -1515,36 +1616,67 @@ export default function EditorModalV2({
         const newIndex = maxIndex + 1;
         const newKey = `${activeSectionId}_${newIndex}`;
         
-        newData[newKey] = asset.exampleData;
-        newData[`_${newKey}_type`] = asset.type;
-        newData[`_${newKey}_assetTitle`] = newAssetName;
-        newData[`_${newKey}_layoutZone`] = getLayoutZone(newIndex, sectionLayout);
+        newKeysToAdd[newKey] = asset.exampleData;
+        newKeysToAdd[`_${newKey}_type`] = asset.type;
+        newKeysToAdd[`_${newKey}_assetTitle`] = newAssetName;
+        newKeysToAdd[`_${newKey}_layoutZone`] = getLayoutZone(newIndex, sectionLayout);
       } else {
         // Convert single item to indexed format
-        const existingData = newData[activeSectionId];
-        const existingType = newData[`_${activeSectionId}_type`];
-        const existingTitle = newData[`_${activeSectionId}_assetTitle`] || formatSectionTitle(activeSectionId);
-        const existingLayoutZone = newData[`_${activeSectionId}_layoutZone`];
+        const existingData = editedData[activeSectionId];
+        const existingType = editedData[`_${activeSectionId}_type`];
+        const existingTitle = editedData[`_${activeSectionId}_assetTitle`] || formatSectionTitle(activeSectionId);
+        const existingLayoutZone = editedData[`_${activeSectionId}_layoutZone`];
+        const existingGoalTag = editedData[`_${activeSectionId}_goalTag`];
+        const existingDisplayAssetTitle = editedData[`_${activeSectionId}_displayAssetTitle`];
+        const existingAlignment = editedData[`_${activeSectionId}_alignment`];
         
-        // Remove old single item
-        delete newData[activeSectionId];
-        delete newData[`_${activeSectionId}_type`];
-        delete newData[`_${activeSectionId}_assetTitle`];
-        delete newData[`_${activeSectionId}_layoutZone`];
+        // Mark old single item for deletion
+        keysToDelete.add(activeSectionId);
+        keysToDelete.add(`_${activeSectionId}_type`);
+        keysToDelete.add(`_${activeSectionId}_assetTitle`);
+        keysToDelete.add(`_${activeSectionId}_layoutZone`);
+        keysToDelete.add(`_${activeSectionId}_goalTag`);
+        keysToDelete.add(`_${activeSectionId}_displayAssetTitle`);
+        keysToDelete.add(`_${activeSectionId}_alignment`);
         
-        // Add as index 0
-        newData[`${activeSectionId}_0`] = existingData;
-        newData[`_${activeSectionId}_0_type`] = existingType;
-        newData[`_${activeSectionId}_0_assetTitle`] = existingTitle;
-        newData[`_${activeSectionId}_0_layoutZone`] = existingLayoutZone || getLayoutZone(0, sectionLayout);
+        // Add as index 0 with ALL metadata preserved
+        newKeysToAdd[`${activeSectionId}_0`] = existingData;
+        newKeysToAdd[`_${activeSectionId}_0_type`] = existingType;
+        newKeysToAdd[`_${activeSectionId}_0_assetTitle`] = existingTitle;
+        newKeysToAdd[`_${activeSectionId}_0_layoutZone`] = existingLayoutZone || getLayoutZone(0, sectionLayout);
+        if (existingGoalTag) newKeysToAdd[`_${activeSectionId}_0_goalTag`] = existingGoalTag;
+        if (existingDisplayAssetTitle !== undefined) newKeysToAdd[`_${activeSectionId}_0_displayAssetTitle`] = existingDisplayAssetTitle;
+        if (existingAlignment) newKeysToAdd[`_${activeSectionId}_0_alignment`] = existingAlignment;
         
         // Add new as index 1
-        newData[`${activeSectionId}_1`] = asset.exampleData;
-        newData[`_${activeSectionId}_1_type`] = asset.type;
-        newData[`_${activeSectionId}_1_assetTitle`] = newAssetName;
-        newData[`_${activeSectionId}_1_layoutZone`] = getLayoutZone(1, sectionLayout);
+        newKeysToAdd[`${activeSectionId}_1`] = asset.exampleData;
+        newKeysToAdd[`_${activeSectionId}_1_type`] = asset.type;
+        newKeysToAdd[`_${activeSectionId}_1_assetTitle`] = newAssetName;
+        newKeysToAdd[`_${activeSectionId}_1_layoutZone`] = getLayoutZone(1, sectionLayout);
       }
     }
+    
+    // Rebuild data preserving key order: copy all keys except deleted ones, then add new keys
+    Object.keys(editedData).forEach(key => {
+      if (!keysToDelete.has(key)) {
+        newData[key] = editedData[key];
+      }
+      // Insert new keys right after we've copied keys for this section
+      if (key === activeSectionId || key.startsWith(`_${activeSectionId}_`)) {
+        Object.keys(newKeysToAdd).forEach(newKey => {
+          if (!newData[newKey]) {
+            newData[newKey] = newKeysToAdd[newKey];
+          }
+        });
+      }
+    });
+    
+    // Add any new keys that weren't inserted yet (for empty section case)
+    Object.keys(newKeysToAdd).forEach(newKey => {
+      if (!newData[newKey]) {
+        newData[newKey] = newKeysToAdd[newKey];
+      }
+    });
     
     setEditedData(newData);
     setIsDirty(true);

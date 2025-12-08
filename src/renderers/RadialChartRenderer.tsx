@@ -93,13 +93,13 @@ export const RadialChartRenderer: React.FC<RendererProps> = ({
     }));
 
     return (
-      <div style={{ width: '100%', height: '320px', minHeight: '320px' }}>
+      <div style={{ width: '100%', height: '220px', minHeight: '220px' }}>
         <ResponsiveContainer width="100%" height="100%">
           <RadialBarChart
             cx="50%"
             cy="50%"
-            innerRadius="20%"
-            outerRadius="90%"
+            innerRadius="15%"
+            outerRadius="95%"
             data={chartData}
             startAngle={90}
             endAngle={-270}
@@ -169,8 +169,8 @@ export const RadialChartRenderer: React.FC<RendererProps> = ({
             <RadialBarChart
               cx="50%"
               cy="50%"
-              innerRadius="30%"
-              outerRadius="80%"
+              innerRadius="15%"
+              outerRadius="95%"
               data={items.map((item: any, index: number) => ({
                 ...item,
                 fill: colors[index % colors.length]
