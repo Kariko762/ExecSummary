@@ -314,9 +314,10 @@ const FONT_OPTIONS = [
 ];
 
 export default function DesignSystemManager({ onClose, onNotification }: DesignSystemManagerProps) {
-  // Load from localStorage on mount
+  // Load from API (with localStorage fallback) on mount
   const loadSavedData = (): { data: DesignSystemData; savedTheme: 'light' | 'dark' } => {
     try {
+      // Try localStorage first (synchronous for initial render)
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
@@ -441,17 +442,66 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
     };
   };
 
-  const { data: savedData, savedTheme } = loadSavedData();
-  const [lightProfile, setLightProfile] = useState<DesignSystemProfile>(savedData.light);
-  const [darkProfile, setDarkProfile] = useState<DesignSystemProfile>(savedData.dark);
+  // Initialize with defaults, will be replaced by API data
+  const [lightProfile, setLightProfile] = useState<DesignSystemProfile>({
+    typography: DEFAULT_TYPOGRAPHY,
+    colors: DEFAULT_COLORS,
+    spacing: DEFAULT_SPACING,
+    fonts: DEFAULT_FONTS,
+  });
+  const [darkProfile, setDarkProfile] = useState<DesignSystemProfile>({
+    typography: DEFAULT_TYPOGRAPHY,
+    colors: DEFAULT_COLORS,
+    spacing: DEFAULT_SPACING,
+    fonts: DEFAULT_FONTS,
+  });
   const [activeProfile, setActiveProfile] = useState<'light' | 'dark'>('light');
-  const [activeTheme, setActiveTheme] = useState<'light' | 'dark'>(savedTheme); // Which theme is currently applied
+  const [activeTheme, setActiveTheme] = useState<'light' | 'dark'>('light'); // Which theme is currently applied
+  const [isLoading, setIsLoading] = useState(true);
   const [pendingThemeChange, setPendingThemeChange] = useState<'light' | 'dark' | null>(null);
   const [showThemeChangeModal, setShowThemeChangeModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'fonts' | 'typography' | 'colors' | 'spacing' | 'preview'>('colors');
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
+
+  // Fetch from API on mount
+  useEffect(() => {
+    const fetchFromAPI = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch('http://localhost:3001/api/design-system');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.light && data.dark) {
+            setLightProfile(data.light);
+            setDarkProfile(data.dark);
+            setActiveTheme(data.activeTheme || 'light');
+            // Update localStorage cache
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            console.log('✅ Design System Manager: Loaded from API', data);
+          }
+        } else {
+          // Fallback to localStorage if API fails
+          const { data: savedData, savedTheme } = loadSavedData();
+          setLightProfile(savedData.light);
+          setDarkProfile(savedData.dark);
+          setActiveTheme(savedTheme);
+          console.warn('⚠️ Design System Manager: API failed, using localStorage');
+        }
+      } catch (error) {
+        // Fallback to localStorage if API fails
+        const { data: savedData, savedTheme } = loadSavedData();
+        setLightProfile(savedData.light);
+        setDarkProfile(savedData.dark);
+        setActiveTheme(savedTheme);
+        console.warn('⚠️ Design System Manager: Failed to load from API, using localStorage', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchFromAPI();
+  }, []);
 
   // Get current profile data based on active profile
   const currentProfile = activeProfile === 'light' ? lightProfile : darkProfile;
@@ -624,13 +674,40 @@ export default function DesignSystemManager({ onClose, onNotification }: DesignS
         activeTheme: activeTheme, // Save which theme is currently active
       };
       
+      // Save to backend API
+      const response = await fetch('http://localhost:3001/api/design-system', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSave),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save to API');
+      }
+
+      const result = await response.json();
+      console.log('✅ Design System saved:', result);
+
+      // Refetch from API to ensure UI is in sync
+      const refetchResponse = await fetch('http://localhost:3001/api/design-system');
+      if (refetchResponse.ok) {
+        const freshData = await refetchResponse.json();
+        setLightProfile(freshData.light);
+        setDarkProfile(freshData.dark);
+        setActiveTheme(freshData.activeTheme || 'light');
+        console.log('✅ Design System Manager: Refreshed from API after save');
+      }
+
+      // Also keep in localStorage as backup/cache
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
       
       setHasChanges(false);
       onNotification?.('success', 'Design system saved successfully!');
     } catch (error) {
       console.error('Failed to save design system:', error);
-      onNotification?.('error', 'Failed to save design system');
+      onNotification?.('error', 'Failed to save design system. Check if backend is running.');
     } finally {
       setIsSaving(false);
     }

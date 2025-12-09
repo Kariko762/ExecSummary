@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./renderers/assetRenderEngine.css";
+@variant dark (.dark &);
 
 /* Smooth Scrolling */
 html {

@@ -105,24 +105,46 @@ const generateDarkShade = (hexColor: string, percentage: number = 30): string =>
 
 export default function DesignSystemInjector() {
   useEffect(() => {
-    // Load design system from localStorage or use defaults
-    let colors = DEFAULT_COLORS;
-    let fonts = DEFAULT_FONTS;
-    
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.colors) {
-          colors = parsed.colors;
+    const loadAndInject = async () => {
+      let colors = DEFAULT_COLORS;
+      let fonts = DEFAULT_FONTS;
+      
+      try {
+        // Try to load from API first
+        const response = await fetch('http://localhost:3001/api/design-system');
+        if (response.ok) {
+          const data = await response.json();
+          // Use active theme (light or dark)
+          const activeProfile = data[data.activeTheme] || data.light;
+          if (activeProfile.colors) {
+            colors = activeProfile.colors;
+          }
+          if (activeProfile.fonts) {
+            fonts = activeProfile.fonts;
+          }
+          console.log('✅ Design System Injector: Loaded from API', { theme: data.activeTheme });
+        } else {
+          throw new Error('API not available');
         }
-        if (parsed.fonts) {
-          fonts = parsed.fonts;
+      } catch (error) {
+        // Fallback to localStorage
+        console.warn('⚠️ Design System Injector: API failed, trying localStorage', error);
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            const activeProfile = parsed[parsed.activeTheme] || parsed.light || parsed;
+            if (activeProfile.colors) {
+              colors = activeProfile.colors;
+            }
+            if (activeProfile.fonts) {
+              fonts = activeProfile.fonts;
+            }
+          }
+        } catch (storageError) {
+          console.error('Failed to load from localStorage:', storageError);
         }
       }
-    } catch (error) {
-      console.error('Failed to load saved design system:', error);
-    }
 
     // Inject all variables into :root
     const root = document.documentElement;
@@ -146,11 +168,14 @@ export default function DesignSystemInjector() {
       }
     });
 
-    console.log('✅ Design System: CSS variables injected', {
-      totalColors: colors.length,
-      semanticVariants: colors.filter(c => c.key.startsWith('semantic-')).length * 2, // light + dark
-      fonts: Object.keys(fonts).length
-    });
+      console.log('✅ Design System: CSS variables injected', {
+        totalColors: colors.length,
+        semanticVariants: colors.filter(c => c.key.startsWith('semantic-')).length * 2, // light + dark
+        fonts: Object.keys(fonts).length
+      });
+    };
+
+    loadAndInject();
   }, []); // Run once on mount
 
   // This component has no UI

@@ -1,10 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="light" style="color-scheme: light !important;">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>cms-admin</title>
+    <script>
+      // Force light theme before any rendering
+      document.documentElement.className = 'light';
+      document.documentElement.style.colorScheme = 'light';
+    </script>
   </head>
   <body>
     <div id="root"></div>

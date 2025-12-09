@@ -1,0 +1,357 @@
+{
+  "version": "2.0.0",
+  "timestamp": "2025-12-09T10:10:04.090Z",
+  "light": {
+    "colors": [
+      {
+        "key": "brand-primary-high-2",
+        "label": "primary High 2",
+        "value": "#FCB5B5",
+        "description": "Lightest primary variant"
+      },
+      {
+        "key": "brand-primary-high-1",
+        "label": "primary High 1",
+        "value": "#FC6969",
+        "description": "Light primary variant"
+      },
+      {
+        "key": "brand-primary",
+        "label": "primary Base",
+        "value": "#FF0000",
+        "description": "Base primary color"
+      },
+      {
+        "key": "brand-primary-low-1",
+        "label": "primary Low 1",
+        "value": "#B30000",
+        "description": "Dark primary variant"
+      },
+      {
+        "key": "brand-primary-low-2",
+        "label": "primary Low 2",
+        "value": "#660000",
+        "description": "Darkest primary variant"
+      },
+      {
+        "key": "brand-secondary",
+        "label": "Brand Secondary",
+        "value": "#B21A53",
+        "description": "Secondary brand color (Raspberry)"
+      },
+      {
+        "key": "brand-tertiary",
+        "label": "Brand Tertiary",
+        "value": "#1D1F48",
+        "description": "Tertiary brand color (Navy)"
+      },
+      {
+        "key": "accent-blue",
+        "label": "Accent Blue",
+        "value": "#3B82F6",
+        "description": "Blue accent"
+      },
+      {
+        "key": "accent-green",
+        "label": "Accent Green",
+        "value": "#4BCD3E",
+        "description": "FIS Brand Green accent"
+      },
+      {
+        "key": "accent-yellow",
+        "label": "Accent Yellow",
+        "value": "#F59E0B",
+        "description": "Yellow accent"
+      },
+      {
+        "key": "accent-orange",
+        "label": "Accent Orange",
+        "value": "#F97316",
+        "description": "Orange accent"
+      },
+      {
+        "key": "accent-red",
+        "label": "Accent Red",
+        "value": "#EF4444",
+        "description": "Red accent"
+      },
+      {
+        "key": "accent-purple",
+        "label": "Accent Purple",
+        "value": "#8B4789",
+        "description": "Purple accent"
+      },
+      {
+        "key": "semantic-info",
+        "label": "Info",
+        "value": "#3B82F6",
+        "description": "Information state"
+      },
+      {
+        "key": "semantic-success",
+        "label": "Success",
+        "value": "#10B981",
+        "description": "Success state"
+      },
+      {
+        "key": "semantic-warning",
+        "label": "Warning",
+        "value": "#F59E0B",
+        "description": "Warning state"
+      },
+      {
+        "key": "semantic-error",
+        "label": "Error",
+        "value": "#EF4444",
+        "description": "Error state"
+      },
+      {
+        "key": "surface-base",
+        "label": "Surface Base",
+        "value": "#FFFFFF",
+        "description": "Base surface color"
+      },
+      {
+        "key": "surface-card",
+        "label": "Surface Card",
+        "value": "#F9FAFB",
+        "description": "Card surface color"
+      },
+      {
+        "key": "surface-elevated",
+        "label": "Surface Elevated",
+        "value": "#FFFFFF",
+        "description": "Elevated surface color"
+      },
+      {
+        "key": "border-subtle",
+        "label": "Border Subtle",
+        "value": "#F3F4F6",
+        "description": "Subtle border"
+      },
+      {
+        "key": "border-default",
+        "label": "Border Default",
+        "value": "#E5E7EB",
+        "description": "Default border"
+      },
+      {
+        "key": "border-strong",
+        "label": "Border Strong",
+        "value": "#D1D5DB",
+        "description": "Strong border"
+      },
+      {
+        "key": "border-accent",
+        "label": "Border Accent",
+        "value": "#6B1B5E",
+        "description": "Accent border"
+      },
+      {
+        "key": "text-primary",
+        "label": "Text Primary",
+        "value": "#111827",
+        "description": "Primary text"
+      },
+      {
+        "key": "text-secondary",
+        "label": "Text Secondary",
+        "value": "#6B7280",
+        "description": "Secondary text"
+      },
+      {
+        "key": "text-tertiary",
+        "label": "Text Tertiary",
+        "value": "#9CA3AF",
+        "description": "Tertiary text"
+      },
+      {
+        "key": "text-inverse",
+        "label": "Text Inverse",
+        "value": "#FFFFFF",
+        "description": "Inverse text (on dark backgrounds)"
+      }
+    ],
+    "fonts": {
+      "primary": "Roobert, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "secondary": "Roobert Medium, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "mono": "Courier New, Monaco, Consolas, monospace",
+      "header": "Roobert Heavy, sans-serif",
+      "title": "Roobert Medium, sans-serif",
+      "subtitle": "Roobert Medium, sans-serif",
+      "label": "Roobert Medium, sans-serif",
+      "fieldLabel": "Roobert Light, sans-serif",
+      "body": "Roobert, sans-serif",
+      "bodySmall": "Roobert, sans-serif",
+      "quote": "Roobert, sans-serif",
+      "code": "Courier New, monospace",
+      "chartLabel": "Roobert, sans-serif",
+      "chartValue": "Roobert Medium, sans-serif"
+    }
+  },
+  "dark": {
+    "colors": [
+      {
+        "key": "brand-primary",
+        "label": "Brand Primary",
+        "value": "#B21A53",
+        "description": "Dark mode primary (Raspberry)"
+      },
+      {
+        "key": "brand-secondary",
+        "label": "Brand Secondary",
+        "value": "#431C5B",
+        "description": "Dark mode secondary (Eggplant)"
+      },
+      {
+        "key": "brand-tertiary",
+        "label": "Brand Tertiary",
+        "value": "#1D1F48",
+        "description": "Tertiary brand color (Navy)"
+      },
+      {
+        "key": "accent-blue",
+        "label": "Accent Blue",
+        "value": "#60A5FA",
+        "description": "Blue accent (lighter)"
+      },
+      {
+        "key": "accent-green",
+        "label": "Accent Green",
+        "value": "#4BCD3E",
+        "description": "FIS Brand Green accent"
+      },
+      {
+        "key": "accent-yellow",
+        "label": "Accent Yellow",
+        "value": "#FBBF24",
+        "description": "Yellow accent (lighter)"
+      },
+      {
+        "key": "accent-orange",
+        "label": "Accent Orange",
+        "value": "#FB923C",
+        "description": "Orange accent (lighter)"
+      },
+      {
+        "key": "accent-red",
+        "label": "Accent Red",
+        "value": "#F87171",
+        "description": "Red accent (lighter)"
+      },
+      {
+        "key": "accent-purple",
+        "label": "Accent Purple",
+        "value": "#A78BFA",
+        "description": "Purple accent (lighter)"
+      },
+      {
+        "key": "semantic-info",
+        "label": "Info",
+        "value": "#60A5FA",
+        "description": "Information state"
+      },
+      {
+        "key": "semantic-success",
+        "label": "Success",
+        "value": "#34D399",
+        "description": "Success state"
+      },
+      {
+        "key": "semantic-warning",
+        "label": "Warning",
+        "value": "#FBBF24",
+        "description": "Warning state"
+      },
+      {
+        "key": "semantic-error",
+        "label": "Error",
+        "value": "#F87171",
+        "description": "Error state"
+      },
+      {
+        "key": "surface-base",
+        "label": "Surface Base",
+        "value": "#111827",
+        "description": "Dark mode base surface"
+      },
+      {
+        "key": "surface-card",
+        "label": "Surface Card",
+        "value": "#1F2937",
+        "description": "Dark mode card surface"
+      },
+      {
+        "key": "surface-elevated",
+        "label": "Surface Elevated",
+        "value": "#374151",
+        "description": "Dark mode elevated surface"
+      },
+      {
+        "key": "border-subtle",
+        "label": "Border Subtle",
+        "value": "#374151",
+        "description": "Dark mode subtle border"
+      },
+      {
+        "key": "border-default",
+        "label": "Border Default",
+        "value": "#4B5563",
+        "description": "Dark mode default border"
+      },
+      {
+        "key": "border-strong",
+        "label": "Border Strong",
+        "value": "#6B7280",
+        "description": "Dark mode strong border"
+      },
+      {
+        "key": "border-accent",
+        "label": "Border Accent",
+        "value": "#B21A53",
+        "description": "Dark mode accent border"
+      },
+      {
+        "key": "text-primary",
+        "label": "Text Primary",
+        "value": "#F9FAFB",
+        "description": "Dark mode primary text"
+      },
+      {
+        "key": "text-secondary",
+        "label": "Text Secondary",
+        "value": "#D1D5DB",
+        "description": "Dark mode secondary text"
+      },
+      {
+        "key": "text-tertiary",
+        "label": "Text Tertiary",
+        "value": "#9CA3AF",
+        "description": "Dark mode tertiary text"
+      },
+      {
+        "key": "text-inverse",
+        "label": "Text Inverse",
+        "value": "#111827",
+        "description": "Inverse text (on light backgrounds)"
+      }
+    ],
+    "fonts": {
+      "primary": "Roobert, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "secondary": "Roobert Medium, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      "mono": "Courier New, Monaco, Consolas, monospace",
+      "header": "Roobert Heavy, sans-serif",
+      "title": "Roobert Medium, sans-serif",
+      "subtitle": "Roobert Medium, sans-serif",
+      "label": "Roobert Medium, sans-serif",
+      "fieldLabel": "Roobert Light, sans-serif",
+      "body": "Roobert, sans-serif",
+      "bodySmall": "Roobert, sans-serif",
+      "quote": "Roobert, sans-serif",
+      "code": "Courier New, monospace",
+      "chartLabel": "Roobert, sans-serif",
+      "chartValue": "Roobert Medium, sans-serif"
+    }
+  },
+  "activeTheme": "light"
+}
