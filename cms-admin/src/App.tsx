@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw, CheckCircle, AlertCircle, TrendingUp, Plus, Shield, ShieldOff, BookOpen, FolderOpen, GitBranch, Grid3x3, List, MessageCircle } from 'lucide-react';
+import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw, CheckCircle, AlertCircle, TrendingUp, Plus, Shield, ShieldOff, BookOpen, FolderOpen, GitBranch, Grid3x3, List, MessageCircle, StickyNote } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
@@ -15,6 +15,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import CommentsPanel from './components/CommentsPanel';
 import GoalsManager from './components/GoalsManager';
 import PlatformOverview from './components/PlatformOverview';
+import NotesManager from './components/NotesManager';
+import QuickActionsMenu from './components/QuickActionsMenu';
 import OrgIQ from './pages/OrgIQ';
 import './App.css';
 
@@ -87,6 +89,9 @@ function App() {
   const [showOrgIQ, setShowOrgIQ] = useState(false);
   const [showGoals, setShowGoals] = useState(false);
   const [showPlatformOverview, setShowPlatformOverview] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
+  const [autoOpenNoteModal, setAutoOpenNoteModal] = useState(false);
+  const [autoOpenSectionModal, setAutoOpenSectionModal] = useState(false);
   const [availableTemplates, setAvailableTemplates] = useState<any[]>([]);
   const [requireAuth, setRequireAuth] = useState(false);
   const [availableTags, setAvailableTags] = useState<any[]>([]);
@@ -96,7 +101,7 @@ function App() {
   const [activeCommentContent, setActiveCommentContent] = useState<{id: string, type: string, title: string} | null>(null);
   
   // Tenant content creation states
-  const [contentCreationType, setContentCreationType] = useState<'timeline' | 'performance' | 'organization' | 'initiative'>('timeline');
+  const [contentCreationType, setContentCreationType] = useState<'timeline' | 'performance' | 'organization' | 'initiative' | 'announcement'>('timeline');
   const [selectedOrgSlug, setSelectedOrgSlug] = useState<string>('');
   const [selectedInitiativeSlug, setSelectedInitiativeSlug] = useState<string>('');
   const [tenantOrganizations, setTenantOrganizations] = useState<any[]>([]);
@@ -226,12 +231,16 @@ function App() {
       
       if (orgsRes.ok) {
         const orgsData = await orgsRes.json();
-        setTenantOrganizations(orgsData);
+        if (orgsData.success && orgsData.tenants) {
+          setTenantOrganizations(orgsData.tenants);
+        }
       }
       
       if (initiativesRes.ok) {
         const initiativesData = await initiativesRes.json();
-        setTenantInitiatives(initiativesData);
+        if (initiativesData.success && initiativesData.tenants) {
+          setTenantInitiatives(initiativesData.tenants);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch tenants:', error);
@@ -240,6 +249,92 @@ function App() {
 
   const showNotification = (type: 'success' | 'error' | 'info' | 'warning', message: string) => {
     setNotification({ type, message });
+  };
+
+  // Quick Actions Handlers
+  const handleQuickNewNote = () => {
+    setAutoOpenNoteModal(true);
+    setAutoOpenSectionModal(false);
+    setShowNotes(true);
+  };
+
+  const handleQuickNewSection = () => {
+    setAutoOpenNoteModal(false);
+    setAutoOpenSectionModal(true);
+    setShowNotes(true);
+  };
+
+  const handleQuickClone = async (tagId: string, tagName: string) => {
+    try {
+      // Find all content with this tag
+      const taggedItems = allContentUnfiltered.filter(
+        item => item._contentTag === tagId
+      );
+
+      if (taggedItems.length === 0) {
+        showNotification('error', `No existing ${tagName} content found to duplicate`);
+        return;
+      }
+
+      // Sort by date to get the latest
+      const latestItem = taggedItems.sort((a, b) => {
+        const dateA = new Date(a.date || a.lastUpdated || '').getTime();
+        const dateB = new Date(b.date || b.lastUpdated || '').getTime();
+        return dateB - dateA;
+      })[0];
+
+      // Fetch full content
+      const response = await fetch(`${API_URL}/content/${latestItem.id}`);
+      if (!response.ok) throw new Error('Failed to fetch content');
+      const sourceData = await response.json();
+
+      // Create new ID with today's date
+      const today = new Date().toISOString().split('T')[0];
+      const newId = `${tagId}-${today}-${Date.now().toString(36)}`;
+
+      // Clone the content with updated date
+      const newContent = {
+        ...sourceData,
+        id: newId,
+        date: today,
+        title: sourceData.title ? `${sourceData.title} (Copy)` : `New ${tagName}`,
+        displayName: sourceData.displayName ? `${sourceData.displayName} (Copy)` : `${tagName} ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
+        status: 'draft',
+        lastUpdated: new Date().toISOString()
+      };
+
+      // Save the new content using generic /api/content endpoint
+      const saveResponse = await fetch(`${API_URL}/content`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newContent)
+      });
+
+      if (!saveResponse.ok) throw new Error('Failed to create content');
+
+      // Refresh data
+      await fetchData();
+
+      // Open in editor
+      setSelectedItem(newContent);
+      setModalOpen(true);
+      showNotification('success', `${tagName} created from latest content`);
+    } catch (error) {
+      console.error('Failed to create content:', error);
+      showNotification('error', `Failed to create ${tagName}`);
+    }
+  };
+
+  const handleQuickNewContent = (type: 'timeline' | 'announcement' | 'organization') => {
+    setContentCreationType(type);
+    if (type === 'timeline') {
+      setSelectedTag(availableTags.find(t => t.id === 'weekly-summary')?.id || availableTags[0]?.id || '');
+    } else if (type === 'announcement') {
+      setSelectedTag('announcement');
+    } else if (type === 'organization') {
+      setSelectedTag('organization');
+    }
+    setShowNewSummaryModal(true);
   };
 
   const fetchTemplates = async () => {
@@ -1203,6 +1298,7 @@ function App() {
                 onOpenPlatformOverview={() => setShowPlatformOverview(true)}
                 onOpenComments={() => setShowComments(true)}
                 onOpenGoals={() => setShowGoals(true)}
+                onOpenNotes={() => setShowNotes(true)}
               />
           
               {/* Notification */}
@@ -1805,6 +1901,20 @@ function App() {
             <PlatformOverview onClose={() => setShowPlatformOverview(false)} />
           )}
 
+          {/* Notes Manager */}
+          {showNotes && (
+            <NotesManager 
+              onClose={() => {
+                setShowNotes(false);
+                setAutoOpenNoteModal(false);
+                setAutoOpenSectionModal(false);
+              }} 
+              showNotification={showNotification}
+              autoOpenNote={autoOpenNoteModal}
+              autoOpenSection={autoOpenSectionModal}
+            />
+          )}
+
           {/* Comments Panel */}
           <CommentsPanel
             isOpen={showComments}
@@ -1813,6 +1923,14 @@ function App() {
             contentType={activeCommentContent?.type || null}
             contentTitle={activeCommentContent?.title}
             onCommentChange={fetchComments}
+          />
+
+          {/* Quick Actions Menu */}
+          <QuickActionsMenu
+            onNewNote={handleQuickNewNote}
+            onNewSection={handleQuickNewSection}
+            onQuickClone={handleQuickClone}
+            onNewContent={handleQuickNewContent}
           />
 
           {/* Delete Confirmation Modal */}
@@ -1858,6 +1976,14 @@ function App() {
               </motion.div>
             </div>
           )}
+
+          {/* Quick Actions Menu */}
+          <QuickActionsMenu
+            onNewNote={handleQuickNewNote}
+            onNewSection={handleQuickNewSection}
+            onQuickClone={handleQuickClone}
+            onNewContent={handleQuickNewContent}
+          />
 
           {/* Edit Warning Modal */}
           {showEditWarningModal && (

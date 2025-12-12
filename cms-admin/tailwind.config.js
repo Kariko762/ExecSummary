@@ -26,6 +26,11 @@ export default {
         'heavy': '800',
       },
       colors: {
+        'brand': {
+          'primary': 'var(--brand-primary)',
+          'secondary': 'var(--brand-secondary)',
+          'tertiary': 'var(--brand-tertiary)',
+        },
         'fis': {
           'eggplant': '#431C5B',      // Primary - Eggplant
           'navy': '#1D1F48',           // Primary - Navy  

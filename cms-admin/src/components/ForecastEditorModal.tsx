@@ -21,17 +21,23 @@ import {
   DollarSign,
   ChevronDown,
   ChevronRight,
-  AlertCircle
+  AlertCircle,
+  Edit3
 } from 'lucide-react';
 import { ForecastBreakdown } from '../renderers/assetRenderForecast';
 
 interface LineItem {
   id: string;
   name: string;
-  amount: number;
+  qty?: number;              // Quantity of units
+  unitCost?: number;         // Cost per unit
+  amount: number;            // Total cost (qty × unitCost, or legacy flat amount)
   description?: string;
+  descriptionVisible?: boolean;
   summary?: string;
+  summaryVisible?: boolean;
   justification?: string;
+  justificationVisible?: boolean;
   owner?: string;
   lastUpdated?: string;
 }
@@ -71,6 +77,12 @@ export const ForecastEditorModal: React.FC<ForecastEditorModalProps> = ({ data, 
   const [expandedInitiatives, setExpandedInitiatives] = useState<Set<string>>(new Set());
   const [expandedCostCenters, setExpandedCostCenters] = useState<Set<string>>(new Set());
   const [selectedInitiative, setSelectedInitiative] = useState<string | null>(null);
+  const [editingLineItemDetails, setEditingLineItemDetails] = useState<{
+    initiativeId: string;
+    costCenterId: string;
+    itemId: string;
+    item: LineItem;
+  } | null>(null);
 
   // Helper: Calculate totals with term-based Opex
   const calculateTotals = () => {
@@ -204,6 +216,8 @@ export const ForecastEditorModal: React.FC<ForecastEditorModalProps> = ({ data, 
               const newLineItem: LineItem = {
                 id: `item-${Date.now()}`,
                 name: 'New Line Item',
+                qty: 1,
+                unitCost: 0,
                 amount: 0,
                 description: '',
                 summary: '',
@@ -231,9 +245,45 @@ export const ForecastEditorModal: React.FC<ForecastEditorModalProps> = ({ data, 
             if (cc.id === costCenterId) {
               return {
                 ...cc,
-                lineItems: cc.lineItems.map(item =>
-                  item.id === itemId ? { ...item, [field]: value } : item
-                )
+                lineItems: cc.lineItems.map(item => {
+                  if (item.id === itemId) {
+                    const updatedItem = { ...item, [field]: value, lastUpdated: new Date().toISOString() };
+                    // Auto-calculate amount when qty or unitCost changes
+                    if (field === 'qty' || field === 'unitCost') {
+                      const qty = field === 'qty' ? value : (item.qty || 1);
+                      const unitCost = field === 'unitCost' ? value : (item.unitCost || 0);
+                      updatedItem.amount = qty * unitCost;
+                    }
+                    return updatedItem;
+                  }
+                  return item;
+                })
+              };
+            }
+            return cc;
+          })
+        };
+      }
+      return initiative;
+    });
+    onChange({ ...data, initiatives: updatedInitiatives });
+  };
+
+  const updateLineItemBatch = (initiativeId: string, costCenterId: string, itemId: string, updates: Partial<LineItem>) => {
+    const updatedInitiatives = data.initiatives.map(initiative => {
+      if (initiative.id === initiativeId) {
+        return {
+          ...initiative,
+          costCenters: initiative.costCenters.map(cc => {
+            if (cc.id === costCenterId) {
+              return {
+                ...cc,
+                lineItems: cc.lineItems.map(item => {
+                  if (item.id === itemId) {
+                    return { ...item, ...updates, lastUpdated: new Date().toISOString() };
+                  }
+                  return item;
+                })
               };
             }
             return cc;
@@ -313,6 +363,19 @@ export const ForecastEditorModal: React.FC<ForecastEditorModalProps> = ({ data, 
 
   const getInitiativeTotal = (initiative: Initiative): number => {
     return initiative.costCenters.reduce((sum, cc) => sum + getCostCenterTotal(cc, initiative.termYears), 0);
+  };
+
+  const getInitiativeFirstYearCost = (initiative: Initiative): number => {
+    return initiative.costCenters.reduce((sum, cc) => {
+      // For first year, we don't multiply by term - just sum all line items
+      const ccTotal = cc.lineItems.reduce((itemSum, item) => {
+        const amount = item.qty !== undefined && item.unitCost !== undefined 
+          ? (item.qty || 0) * (item.unitCost || 0) 
+          : item.amount;
+        return itemSum + amount;
+      }, 0);
+      return sum + ccTotal;
+    }, 0);
   };
 
   return (
@@ -516,6 +579,7 @@ export const ForecastEditorModal: React.FC<ForecastEditorModalProps> = ({ data, 
                 data.initiatives.map((initiative) => {
                   const isExpanded = expandedInitiatives.has(initiative.id);
                   const initiativeTotal = getInitiativeTotal(initiative);
+                  const firstYearCost = getInitiativeFirstYearCost(initiative);
 
                   return (
                     <div
@@ -567,6 +631,9 @@ export const ForecastEditorModal: React.FC<ForecastEditorModalProps> = ({ data, 
                                   <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">Total Cost</div>
                                   <div className="text-lg font-roobert-bold text-gray-900 dark:text-white">
                                     {formatCurrency(initiativeTotal)}
+                                  </div>
+                                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    {formatCurrency(firstYearCost)} year 1
                                   </div>
                                 </div>
                                 <button
@@ -711,53 +778,83 @@ export const ForecastEditorModal: React.FC<ForecastEditorModalProps> = ({ data, 
                                       <div className="space-y-2">
                                         {/* Table Header */}
                                         <div className="grid grid-cols-12 gap-2 px-2 text-xs font-roobert-semibold text-gray-500 dark:text-gray-400 uppercase">
-                                          <div className="col-span-4">Name</div>
-                                          <div className="col-span-2 text-right">Amount/yr</div>
-                                          <div className="col-span-3">Owner</div>
-                                          <div className="col-span-2">Last Updated</div>
+                                          <div className="col-span-3">Name</div>
+                                          <div className="col-span-1 text-right">Qty</div>
+                                          <div className="col-span-2 text-right">Unit Cost</div>
+                                          <div className="col-span-2 text-right">Total</div>
+                                          <div className="col-span-2">Owner</div>
+                                          <div className="col-span-1 text-center">Details</div>
                                           <div className="col-span-1"></div>
                                         </div>
 
                                         {/* Line Items */}
-                                        {costCenter.lineItems.map((item) => (
-                                          <div
-                                            key={item.id}
-                                            className="grid grid-cols-12 gap-2 p-2 bg-gray-50 dark:bg-gray-800 rounded items-center"
-                                          >
-                                            <input
-                                              type="text"
-                                              value={item.name}
-                                              onChange={(e) => updateLineItem(initiative.id, costCenter.id, item.id, 'name', e.target.value)}
-                                              className="col-span-4 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm"
-                                              placeholder="Line item name"
-                                            />
-                                            <input
-                                              type="number"
-                                              value={item.amount}
-                                              onChange={(e) => updateLineItem(initiative.id, costCenter.id, item.id, 'amount', parseFloat(e.target.value) || 0)}
-                                              className="col-span-2 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-right"
-                                              placeholder="0"
-                                            />
-                                            <input
-                                              type="text"
-                                              value={item.owner || ''}
-                                              onChange={(e) => updateLineItem(initiative.id, costCenter.id, item.id, 'owner', e.target.value)}
-                                              className="col-span-3 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm"
-                                              placeholder="Owner"
-                                            />
-                                            <div className="col-span-2 text-xs text-gray-500 dark:text-gray-400">
-                                              {item.lastUpdated
-                                                ? new Date(item.lastUpdated).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-                                                : '-'}
-                                            </div>
-                                            <button
-                                              onClick={() => deleteLineItem(initiative.id, costCenter.id, item.id)}
-                                              className="col-span-1 p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded justify-self-end"
+                                        {costCenter.lineItems.map((item) => {
+                                          const calculatedAmount = (item.qty || 0) * (item.unitCost || 0);
+                                          const displayAmount = item.qty !== undefined && item.unitCost !== undefined ? calculatedAmount : item.amount;
+                                          
+                                          return (
+                                            <div
+                                              key={item.id}
+                                              className="grid grid-cols-12 gap-2 p-2 bg-gray-50 dark:bg-gray-800 rounded items-center"
                                             >
-                                              <Trash2 className="w-3 h-3" />
-                                            </button>
-                                          </div>
-                                        ))}
+                                              <input
+                                                type="text"
+                                                value={item.name}
+                                                onChange={(e) => updateLineItem(initiative.id, costCenter.id, item.id, 'name', e.target.value)}
+                                                className="col-span-3 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm"
+                                                placeholder="Line item name"
+                                              />
+                                              <input
+                                                type="number"
+                                                value={item.qty ?? 1}
+                                                onChange={(e) => updateLineItem(initiative.id, costCenter.id, item.id, 'qty', parseFloat(e.target.value) || 0)}
+                                                className="col-span-1 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-right"
+                                                placeholder="1"
+                                                min="0"
+                                                step="0.01"
+                                              />
+                                              <input
+                                                type="number"
+                                                value={item.unitCost ?? 0}
+                                                onChange={(e) => updateLineItem(initiative.id, costCenter.id, item.id, 'unitCost', parseFloat(e.target.value) || 0)}
+                                                className="col-span-2 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-right"
+                                                placeholder="0.00"
+                                                min="0"
+                                                step="0.01"
+                                              />
+                                              <div className="col-span-2 px-2 py-1 text-sm text-right font-roobert-semibold text-gray-900 dark:text-white">
+                                                {formatCurrency(displayAmount)}
+                                              </div>
+                                              <input
+                                                type="text"
+                                                value={item.owner || ''}
+                                                onChange={(e) => updateLineItem(initiative.id, costCenter.id, item.id, 'owner', e.target.value)}
+                                                className="col-span-2 px-2 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm"
+                                                placeholder="Owner"
+                                              />
+                                              <button
+                                                onClick={() => {
+                                                  setEditingLineItemDetails({
+                                                    initiativeId: initiative.id,
+                                                    costCenterId: costCenter.id,
+                                                    itemId: item.id,
+                                                    item: { ...item }
+                                                  });
+                                                }}
+                                                className="col-span-1 p-1 bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry rounded justify-self-center"
+                                                title="Edit description, justification, summary"
+                                              >
+                                                <Edit3 className="w-3 h-3" />
+                                              </button>
+                                              <button
+                                                onClick={() => deleteLineItem(initiative.id, costCenter.id, item.id)}
+                                                className="col-span-1 p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded justify-self-end"
+                                              >
+                                                <Trash2 className="w-3 h-3" />
+                                              </button>
+                                            </div>
+                                          );
+                                        })}
                                       </div>
                                     )}
                                   </div>
@@ -811,6 +908,164 @@ export const ForecastEditorModal: React.FC<ForecastEditorModalProps> = ({ data, 
           </div>
         </div>
       </div>
+
+      {/* Line Item Details Modal */}
+      {editingLineItemDetails && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="p-6 text-white" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="text-xl font-roobert-bold mb-1">Edit Line Item Details</h3>
+                  <p className="text-white/80 text-sm">{editingLineItemDetails.item.name}</p>
+                </div>
+                <button
+                  onClick={() => setEditingLineItemDetails(null)}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4 overflow-y-auto max-h-[calc(80vh-180px)]">
+              {/* Description */}
+              <div>
+                <label className="flex items-center justify-between text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <span>Description</span>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editingLineItemDetails.item.descriptionVisible ?? true}
+                      onChange={(e) => {
+                        setEditingLineItemDetails({
+                          ...editingLineItemDetails,
+                          item: { ...editingLineItemDetails.item, descriptionVisible: e.target.checked }
+                        });
+                      }}
+                      className="w-4 h-4 text-fis-eggplant rounded focus:ring-2 focus:ring-fis-eggplant"
+                    />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Visible</span>
+                  </label>
+                </label>
+                <textarea
+                  value={editingLineItemDetails.item.description || ''}
+                  onChange={(e) => {
+                    setEditingLineItemDetails({
+                      ...editingLineItemDetails,
+                      item: { ...editingLineItemDetails.item, description: e.target.value }
+                    });
+                  }}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+                  rows={3}
+                  placeholder="Brief description of this line item..."
+                />
+              </div>
+
+              {/* Summary */}
+              <div>
+                <label className="flex items-center justify-between text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <span>Summary</span>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editingLineItemDetails.item.summaryVisible ?? true}
+                      onChange={(e) => {
+                        setEditingLineItemDetails({
+                          ...editingLineItemDetails,
+                          item: { ...editingLineItemDetails.item, summaryVisible: e.target.checked }
+                        });
+                      }}
+                      className="w-4 h-4 text-fis-eggplant rounded focus:ring-2 focus:ring-fis-eggplant"
+                    />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Visible</span>
+                  </label>
+                </label>
+                <textarea
+                  value={editingLineItemDetails.item.summary || ''}
+                  onChange={(e) => {
+                    setEditingLineItemDetails({
+                      ...editingLineItemDetails,
+                      item: { ...editingLineItemDetails.item, summary: e.target.value }
+                    });
+                  }}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+                  rows={3}
+                  placeholder="Key points and highlights..."
+                />
+              </div>
+
+              {/* Justification */}
+              <div>
+                <label className="flex items-center justify-between text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <span>Justification</span>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editingLineItemDetails.item.justificationVisible ?? true}
+                      onChange={(e) => {
+                        setEditingLineItemDetails({
+                          ...editingLineItemDetails,
+                          item: { ...editingLineItemDetails.item, justificationVisible: e.target.checked }
+                        });
+                      }}
+                      className="w-4 h-4 text-fis-eggplant rounded focus:ring-2 focus:ring-fis-eggplant"
+                    />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Visible</span>
+                  </label>
+                </label>
+                <textarea
+                  value={editingLineItemDetails.item.justification || ''}
+                  onChange={(e) => {
+                    setEditingLineItemDetails({
+                      ...editingLineItemDetails,
+                      item: { ...editingLineItemDetails.item, justification: e.target.value }
+                    });
+                  }}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+                  rows={3}
+                  placeholder="Business case and rationale..."
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="border-t border-gray-200 dark:border-gray-700 p-4 flex items-center justify-end gap-3 bg-gray-50 dark:bg-gray-800">
+              <button
+                onClick={() => setEditingLineItemDetails(null)}
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  // Save all fields including visibility toggles in a single batch update
+                  updateLineItemBatch(
+                    editingLineItemDetails.initiativeId,
+                    editingLineItemDetails.costCenterId,
+                    editingLineItemDetails.itemId,
+                    {
+                      description: editingLineItemDetails.item.description,
+                      descriptionVisible: editingLineItemDetails.item.descriptionVisible,
+                      summary: editingLineItemDetails.item.summary,
+                      summaryVisible: editingLineItemDetails.item.summaryVisible,
+                      justification: editingLineItemDetails.item.justification,
+                      justificationVisible: editingLineItemDetails.item.justificationVisible
+                    }
+                  );
+                  setEditingLineItemDetails(null);
+                }}
+                className="px-4 py-2 bg-fis-eggplant hover:bg-fis-raspberry text-white rounded-lg flex items-center gap-2 transition-colors"
+              >
+                <Save className="w-4 h-4" />
+                Save Details
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,0 +1,26 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background hexagon -->
+  <polygon points="60,10 100,35 100,85 60,110 20,85 20,35" fill="#8B5CF6" opacity="0.2" />
+
+  <!-- Inner geometric pattern -->
+  <polygon points="60,25 85,40 85,75 60,90 35,75 35,40" fill="none" stroke="#EC4899" stroke-width="3" />
+
+  <!-- Central diamond -->
+  <polygon points="60,45 75,60 60,75 45,60" fill="#06B6D4" opacity="0.8" />
+
+  <!-- Corner accents -->
+  <circle cx="35" cy="40" r="4" fill="#F59E0B" />
+  <circle cx="85" cy="40" r="4" fill="#F59E0B" />
+  <circle cx="85" cy="75" r="4" fill="#F59E0B" />
+  <circle cx="35" cy="75" r="4" fill="#F59E0B" />
+
+  <!-- Connecting lines -->
+  <line x1="35" y1="40" x2="45" y2="60" stroke="#EC4899" stroke-width="2" />
+  <line x1="85" y1="40" x2="75" y2="60" stroke="#EC4899" stroke-width="2" />
+  <line x1="85" y1="75" x2="75" y2="60" stroke="#EC4899" stroke-width="2" />
+  <line x1="35" y1="75" x2="45" y2="60" stroke="#EC4899" stroke-width="2" />
+
+  <!-- Center dot -->
+  <circle cx="60" cy="60" r="3" fill="#EF4444" />
+</svg></content>
+<parameter name="filePath">c:\ExecSummary\cms-admin\public\default-logo.svg

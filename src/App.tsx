@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
 import { Header } from './components/Header';
@@ -15,13 +15,14 @@ import { OrganizationDashboard } from './components/OrganizationDashboard';
 import { StrategicInitiativesDashboard } from './components/StrategicInitiativesDashboard';
 import { KnowledgeBaseDashboard } from './components/KnowledgeBaseDashboard';
 import { SchemaTest } from './components/SchemaTest';
+import { DesignSystemTest } from './pages/DesignSystemTest';
 import PlatformOverview from './components/PlatformOverview';
 import CardStyleGallery from './components/CardStyleGallery';
 import LoginPage from './components/LoginPage';
 import { timelineItems, isExecutiveSummary, loadTimelineData } from './data/timeline-loader';
 import { TimelineItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Target, AlertCircle, ChevronRight, Calendar, FileText, CheckCircle2 } from 'lucide-react';
+import { Building2, Target, AlertCircle, ChevronRight, CheckCircle2, ChevronLeft } from 'lucide-react';
 
 function App() {
   const [selectedSummary, setSelectedSummary] = useState<TimelineItem | null>(null);
@@ -32,8 +33,8 @@ function App() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [selectedTag, setSelectedTag] = useState<string>('all');
-  const [performanceDate, setPerformanceDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [initiativesScrollIndex, setInitiativesScrollIndex] = useState(0);
   
   // Feature flags from System Settings
   const [organizationsEnabled, setOrganizationsEnabled] = useState(true);
@@ -49,9 +50,15 @@ function App() {
 
   // Load timeline data from backend API
   useEffect(() => {
-    loadTimelineData().then(() => {
-      setIsLoadingData(false);
-    });
+    loadTimelineData()
+      .then(() => {
+        console.log('Timeline data loaded successfully');
+        setIsLoadingData(false);
+      })
+      .catch((error) => {
+        console.error('Failed to load timeline data:', error);
+        setIsLoadingData(false); // Still proceed even if it fails
+      });
   }, []);
 
   // Load announcements from API
@@ -149,7 +156,7 @@ function App() {
       .then(data => {
         if (data.goals && Array.isArray(data.goals)) {
           // Transform goals to match the same structure as initiatives
-          const transformedGoals = data.goals.map(goal => ({
+          const transformedGoals = data.goals.map((goal: any) => ({
             id: goal.id,
             slug: goal.id,
             name: goal.title || goal.name,
@@ -469,7 +476,12 @@ function App() {
                           )}
 
                           {/* Initiatives and Goals Section */}
-                          {initiativesEnabled && (initiatives.length > 0 || goals.length > 0) && (
+                          {initiativesEnabled && (initiatives.length > 0 || goals.length > 0) && (() => {
+                            const allItems = [...initiatives.map((item: any) => ({ ...item, itemType: 'Initiative' })), ...goals.map((item: any) => ({ ...item, itemType: 'Goal' }))];
+                            const itemsPerPage = 3;
+                            const visibleItems = allItems.slice(initiativesScrollIndex, initiativesScrollIndex + itemsPerPage);
+                            
+                            return (
                             <motion.section
                               id="initiatives"
                               initial={{ opacity: 0 }}
@@ -492,9 +504,34 @@ function App() {
                                 </p>
                               </div>
                               
-                              {/* Single Row - 4 per row */}
-                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                {[...initiatives.map((item: any) => ({ ...item, itemType: 'Initiative' })), ...goals.map((item: any) => ({ ...item, itemType: 'Goal' }))].map((item) => {
+                              {/* Scroll Controls */}
+                              {allItems.length > itemsPerPage && (
+                                <div className="flex items-center justify-between mb-4">
+                                  <button
+                                    onClick={() => setInitiativesScrollIndex((prev: number) => Math.max(0, prev - itemsPerPage))}
+                                    disabled={initiativesScrollIndex === 0}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                                  >
+                                    <ChevronLeft className="w-5 h-5" />
+                                    <span className="text-sm font-roobert-medium">Previous</span>
+                                  </button>
+                                  <span className="text-sm text-gray-600 dark:text-gray-400 font-roobert-medium">
+                                    Showing {initiativesScrollIndex + 1}-{Math.min(initiativesScrollIndex + itemsPerPage, allItems.length)} of {allItems.length}
+                                  </span>
+                                  <button
+                                    onClick={() => setInitiativesScrollIndex((prev: number) => Math.min(Math.ceil(allItems.length / itemsPerPage) * itemsPerPage - itemsPerPage, prev + itemsPerPage))}
+                                    disabled={initiativesScrollIndex >= Math.ceil(allItems.length / itemsPerPage) * itemsPerPage - itemsPerPage}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                                  >
+                                    <span className="text-sm font-roobert-medium">Next</span>
+                                    <ChevronRight className="w-5 h-5" />
+                                  </button>
+                                </div>
+                              )}
+                              
+                              {/* 3 Items per row */}
+                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {visibleItems.map((item) => {
                                   const content = item.itemType === 'Initiative' ? initiativeContent.get(item.slug) : goalContent.get(item.slug);
                                   const hasRisk = content?.risks?.some((r: any) => r.severity === 'high' || r.severity === 'medium');
                                   const riskLevel = content?.risks?.find((r: any) => r.severity === 'high') ? 'high' : 
@@ -524,10 +561,10 @@ function App() {
                                       className="rounded-xl p-4 transition-all cursor-pointer group relative overflow-hidden shadow-lg hover:shadow-2xl"
                                       style={{
                                         background: riskLevel === 'high' 
-                                          ? 'radial-gradient(circle at top right, rgba(178, 26, 83, 0.25) 0%, rgba(178, 26, 83, 0.1) 40%, transparent 100%), white'
+                                          ? 'radial-gradient(circle at top right, rgba(178, 26, 83, 0.08) 0%, rgba(178, 26, 83, 0.03) 40%, transparent 100%), white'
                                           : riskLevel === 'medium'
-                                          ? 'radial-gradient(circle at top right, rgba(3, 30, 75, 0.25) 0%, rgba(3, 30, 75, 0.1) 40%, transparent 100%), white'
-                                          : 'radial-gradient(circle at top right, rgba(0, 162, 90, 0.2) 0%, rgba(0, 162, 90, 0.05) 50%, transparent 100%), white'
+                                          ? 'radial-gradient(circle at top right, rgba(67, 28, 91, 0.08) 0%, rgba(67, 28, 91, 0.03) 40%, transparent 100%), white'
+                                          : 'radial-gradient(circle at top right, rgba(0, 162, 90, 0.08) 0%, rgba(0, 162, 90, 0.02) 50%, transparent 100%), white'
                                       }}
                                     >
                                         {/* Header */}
@@ -600,8 +637,30 @@ function App() {
                                   );
                                 })}
                               </div>
+
+                              {/* Pagination Dots */}
+                              {allItems.length > itemsPerPage && (
+                                <div className="flex items-center justify-center gap-2 mt-6">
+                                  {Array.from({ length: Math.ceil(allItems.length / itemsPerPage) }).map((_, pageIndex) => {
+                                    const isActive = Math.floor(initiativesScrollIndex / itemsPerPage) === pageIndex;
+                                    return (
+                                      <button
+                                        key={pageIndex}
+                                        onClick={() => setInitiativesScrollIndex(pageIndex * itemsPerPage)}
+                                        className="w-3 h-3 rounded-full transition-all hover:scale-110"
+                                        style={{
+                                          backgroundColor: isActive ? 'var(--brand-tertiary)' : 'transparent',
+                                          border: isActive ? 'none' : '2px solid var(--border-strong)'
+                                        }}
+                                        aria-label={`Go to page ${pageIndex + 1}`}
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              )}
                             </motion.section>
-                          )}
+                            );
+                          })()}
 
 
                         </>
@@ -632,6 +691,11 @@ function App() {
                   {/* Schema Test Route */}
                   <Route path="/schema-test" element={
                     <SchemaTest />
+                  } />
+
+                  {/* Design System Test Route */}
+                  <Route path="/design-test" element={
+                    <DesignSystemTest />
                   } />
                 </Routes>
               </div>

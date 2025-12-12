@@ -12,6 +12,7 @@ interface ContentTag {
   created: string;
   description?: string;
   protected?: boolean;
+  enableQuickClone?: boolean;
 }
 
 interface TagUsage {
@@ -51,7 +52,8 @@ export default function ContentTagManager() {
     name: '',
     color: 'purple',
     icon: 'FileText',
-    description: ''
+    description: '',
+    enableQuickClone: false
   });
 
   useEffect(() => {
@@ -88,7 +90,8 @@ export default function ContentTagManager() {
       name: '',
       color: 'purple',
       icon: 'FileText',
-      description: ''
+      description: '',
+      enableQuickClone: false
     });
     setShowCreateModal(true);
   };
@@ -100,7 +103,8 @@ export default function ContentTagManager() {
       name: tag.name,
       color: tag.color,
       icon: tag.icon,
-      description: tag.description || ''
+      description: tag.description || '',
+      enableQuickClone: tag.enableQuickClone || false
     });
     setShowEditModal(true);
   };
@@ -380,6 +384,26 @@ export default function ContentTagManager() {
                       className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
                       placeholder="Weekly executive summary reports"
                     />
+                  </div>
+
+                  {/* Quick Clone Toggle */}
+                  <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <label className="flex items-start gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        checked={formData.enableQuickClone}
+                        onChange={(e) => setFormData({ ...formData, enableQuickClone: e.target.checked })}
+                        className="mt-1 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-fis-raspberry focus:ring-fis-raspberry"
+                      />
+                      <div className="flex-1">
+                        <div className="text-sm font-roobert-semibold text-gray-900 dark:text-white group-hover:text-fis-raspberry transition-colors">
+                          Enable Quick Clone Action
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          Add "New {formData.name || 'Content'}" button to Quick Actions menu for one-click content duplication
+                        </div>
+                      </div>
+                    </label>
                   </div>
                 </div>
                 

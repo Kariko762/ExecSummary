@@ -107,7 +107,7 @@ export const RadialChartRenderer: React.FC<RendererProps> = ({
             <RadialBar
               background
               dataKey={dataKey}
-              label={showPercentage ? { position: 'insideStart', fill: '#fff' } : false}
+              label={showPercentage ? { position: 'insideStart', fill: 'white' } : false}
               activeShape={{
                 fill: undefined, // Keep original color
                 stroke: 'rgba(148, 77, 230, 0.3)',

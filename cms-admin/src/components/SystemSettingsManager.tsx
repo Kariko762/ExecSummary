@@ -219,8 +219,10 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
       const response = await fetch(`http://localhost:3001/api/tenants?type=${type}`);
       if (response.ok) {
         const data = await response.json();
-        if (type === 'org') setOrganizations(data);
-        else setInitiatives(data);
+        if (data.success && data.tenants) {
+          if (type === 'org') setOrganizations(data.tenants);
+          else setInitiatives(data.tenants);
+        }
       }
     } catch (error) {
       console.error(`Failed to fetch ${type}s:`, error);

@@ -147,7 +147,7 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data }) => {
     const html2canvas = (await import('html2canvas')).default;
     const canvas = await html2canvas(budgetRef.current, {
       scale: 2,
-      backgroundColor: '#ffffff',
+      backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--surface-primary').trim() || '#ffffff',
       logging: false,
     });
     const link = document.createElement('a');
@@ -308,12 +308,13 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data }) => {
                       </div>
 
                       {/* Line Items */}
-                      {category.lineItems.map((item) => (
-                        <button
-                          key={item.id}
-                          onClick={() => setSelectedLineItem({ category, item })}
-                          className="w-full grid grid-cols-12 gap-4 px-4 py-4 rounded-lg transition-all bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-fis-eggplant/5 hover:to-fis-raspberry/5 dark:hover:from-fis-eggplant/10 dark:hover:to-fis-raspberry/10 hover:shadow-md hover:scale-[1.01] border border-transparent hover:border-fis-eggplant/20 dark:hover:border-fis-raspberry/20 text-left"
-                        >
+                      {category.lineItems && category.lineItems.length > 0 ? (
+                        category.lineItems.map((item) => (
+                          <button
+                            key={item.id}
+                            onClick={() => setSelectedLineItem({ category, item })}
+                            className="w-full grid grid-cols-12 gap-4 px-4 py-4 rounded-lg transition-all bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-fis-eggplant/5 hover:to-fis-raspberry/5 dark:hover:from-fis-eggplant/10 dark:hover:to-fis-raspberry/10 hover:shadow-md hover:scale-[1.01] border border-transparent hover:border-fis-eggplant/20 dark:hover:border-fis-raspberry/20 text-left"
+                          >
                           <div className="col-span-4 flex items-center">
                             <span className="text-sm font-roobert-medium text-gray-900 dark:text-white">
                               {item.name}
@@ -336,7 +337,12 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data }) => {
                             <Info className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
                           </div>
                         </button>
-                      ))}
+                      ))
+                      ) : (
+                        <div className="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                          No line items available for this category
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}

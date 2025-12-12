@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" class="light" style="color-scheme: light !important;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Executive Summary Dashboard</title>
+    <script>
+      // CRITICAL: Initialize theme BEFORE any CSS loads
+      (function() {
+        // FORCE CLEAR dark mode first
+        localStorage.removeItem('theme'); // TEMP: Force reset
+        const saved = localStorage.getItem('theme');
+        const theme = saved === 'dark' ? 'dark' : 'light';
+        
+        // Force light mode
+        document.documentElement.className = 'light';
+        document.documentElement.setAttribute('class', 'light');
+        document.documentElement.style.colorScheme = 'light';
+        
+        localStorage.setItem('theme', 'light');
+        console.log('[THEME INIT] Forced light mode - class:', document.documentElement.className);
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-eVB0LawB.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DxqWh3Vq.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

@@ -8,6 +8,7 @@ import { StrategicInitiative } from '../types';
 export function StrategicInitiativesDashboard() {
   const [selectedInitiative, setSelectedInitiative] = useState<StrategicInitiative | null>(null);
   const [selectedTag, setSelectedTag] = useState<string>('All');
+  const [scrollIndex, setScrollIndex] = useState(0);
 
   // Extract all unique tags from initiatives
   const allTags = useMemo(() => {
@@ -20,11 +21,29 @@ export function StrategicInitiativesDashboard() {
 
   // Filter initiatives by selected tag
   const filteredInitiatives = useMemo(() => {
+    setScrollIndex(0); // Reset scroll when filter changes
     if (selectedTag === 'All') return strategicInitiatives;
     return strategicInitiatives.filter(initiative => 
       initiative.tags.includes(selectedTag)
     );
   }, [selectedTag]);
+
+  // Pagination controls
+  const itemsPerPage = 3;
+  const totalPages = Math.ceil(filteredInitiatives.length / itemsPerPage);
+  const visibleInitiatives = filteredInitiatives.slice(scrollIndex, scrollIndex + itemsPerPage);
+
+  const handleScrollForward = () => {
+    if (scrollIndex + itemsPerPage < filteredInitiatives.length) {
+      setScrollIndex(scrollIndex + itemsPerPage);
+    }
+  };
+
+  const handleScrollBackward = () => {
+    if (scrollIndex - itemsPerPage >= 0) {
+      setScrollIndex(scrollIndex - itemsPerPage);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -57,9 +76,10 @@ export function StrategicInitiativesDashboard() {
               onClick={() => setSelectedTag(tag)}
               className={`px-6 py-3 rounded-xl font-roobert-semibold text-sm transition-all whitespace-nowrap ${
                 selectedTag === tag
-                  ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white shadow-lg'
+                  ? 'text-white shadow-lg'
                   : 'bg-white/50 dark:bg-gray-800/50 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800'
               }`}
+              style={selectedTag === tag ? { background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' } : {}}
             >
               {tag}
               {tag !== 'All' && (
@@ -77,17 +97,47 @@ export function StrategicInitiativesDashboard() {
         </div>
       </motion.div>
 
-      {/* Initiative Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredInitiatives.map((initiative, index) => (
-          <StrategicInitiativeTile
-            key={initiative.id}
-            initiative={initiative}
-            onClick={() => setSelectedInitiative(initiative)}
-            index={index}
-          />
-        ))}
-      </div>
+      {/* Initiative Grid with Scroll Controls */}
+      {filteredInitiatives.length > 0 && (
+        <div className="relative">
+          {/* Scroll Controls */}
+          {filteredInitiatives.length > itemsPerPage && (
+            <div className="flex items-center justify-between mb-4">
+              <button
+                onClick={handleScrollBackward}
+                disabled={scrollIndex === 0}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span className="text-sm font-roobert-medium">Previous</span>
+              </button>
+              <span className="text-sm text-gray-600 dark:text-gray-400 font-roobert-medium">
+                Showing {scrollIndex + 1}-{Math.min(scrollIndex + itemsPerPage, filteredInitiatives.length)} of {filteredInitiatives.length}
+              </span>
+              <button
+                onClick={handleScrollForward}
+                disabled={scrollIndex + itemsPerPage >= filteredInitiatives.length}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              >
+                <span className="text-sm font-roobert-medium">Next</span>
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          )}
+
+          {/* Initiative Grid - Show 3 per row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {visibleInitiatives.map((initiative, index) => (
+              <StrategicInitiativeTile
+                key={initiative.id}
+                initiative={initiative}
+                onClick={() => setSelectedInitiative(initiative)}
+                index={index}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Empty State */}
       {filteredInitiatives.length === 0 && (
@@ -101,7 +151,14 @@ export function StrategicInitiativesDashboard() {
           </p>
           <button
             onClick={() => setSelectedTag('All')}
-            className="mt-4 px-6 py-2 bg-fis-eggplant text-white rounded-lg hover:bg-fis-raspberry transition-colors"
+            className="mt-4 px-6 py-2 text-white rounded-lg transition-all"
+            style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(to right, rgba(67, 28, 91, 0.9), rgba(178, 26, 83, 0.9))';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))';
+            }}
           >
             View All Initiatives
           </button>

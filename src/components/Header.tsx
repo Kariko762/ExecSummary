@@ -4,8 +4,8 @@ import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import html2canvas from 'html2canvas';
 import { renderWithExpressions } from '../utils/expressionParser';
+import { domToPng } from 'modern-screenshot';
 
 interface HeaderProps {
   onSearch: (query: string) => void;
@@ -116,36 +116,30 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
   };
 
   const handleExportDashboard = async () => {
-    const mainContent = document.querySelector('main') as HTMLElement;
-    
-    if (!mainContent) return;
-
     try {
-      // Capture the full dashboard
-      const canvas = await html2canvas(mainContent, {
+      // Capture the entire viewport including header and main content
+      const body = document.body;
+      
+      if (!body) {
+        alert('Content not found');
+        return;
+      }
+
+      // Use modern-screenshot instead of html2canvas (supports oklch colors)
+      const dataUrl = await domToPng(body, {
         scale: 2,
-        useCORS: true,
-        allowTaint: true,
         backgroundColor: '#ffffff',
-        logging: false,
-        windowHeight: mainContent.scrollHeight,
       });
 
-      // Convert to image and download
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          const timestamp = new Date().toISOString().split('T')[0];
-          link.download = `executive-dashboard-${timestamp}.png`;
-          link.href = url;
-          link.click();
-          URL.revokeObjectURL(url);
-        }
-      }, 'image/png');
+      // Download the image
+      const link = document.createElement('a');
+      const timestamp = new Date().toISOString().split('T')[0];
+      link.download = `executive-dashboard-${timestamp}.png`;
+      link.href = dataUrl;
+      link.click();
     } catch (error) {
-      console.error('Failed to export dashboard:', error);
-      alert('Failed to export dashboard. Please try again.');
+      console.error('Export error:', error);
+      alert('Failed to export dashboard. Error: ' + (error as Error).message);
     }
   };
 
@@ -153,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 glass-strong no-print"
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200/50 dark:border-gray-700/50 no-print"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -234,28 +228,8 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                           </div>
                         </Link>
 
-                        {/* Knowledge Base */}
-                        <Link
-                          to="/knowledge-base"
-                          onClick={() => setIsNavDropdownOpen(false)}
-                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                            location.pathname === '/knowledge-base' 
-                              ? 'bg-fis-raspberry/20 text-fis-raspberry dark:bg-fis-raspberry/30 dark:text-pink-300' 
-                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
-                          }`}
-                        >
-                          <div className={`p-2 rounded-lg ${
-                            location.pathname === '/knowledge-base' 
-                              ? 'bg-fis-raspberry/30 dark:bg-fis-raspberry/40' 
-                              : 'bg-gray-200 dark:bg-gray-700'
-                          }`}>
-                            <BookOpen className="w-5 h-5" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-roobert-semibold text-sm">Knowledge Base</div>
-                            <div className="text-xs text-gray-600 dark:text-gray-400">Guides and documentation</div>
-                          </div>
-                        </Link>
+                        {/* Divider */}
+                        <div className="h-px bg-gradient-to-r from-transparent via-fis-eggplant/30 to-transparent my-2" />
 
                         {/* Platform Overview */}
                         <Link
@@ -279,32 +253,6 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                             <div className="text-xs text-gray-600 dark:text-gray-400">Executive platform showcase</div>
                           </div>
                         </Link>
-
-                        {/* Card Style Gallery */}
-                        <Link
-                          to="/card-styles"
-                          onClick={() => setIsNavDropdownOpen(false)}
-                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                            location.pathname === '/card-styles' 
-                              ? 'bg-fis-raspberry/20 text-fis-raspberry dark:bg-fis-raspberry/30 dark:text-pink-300' 
-                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
-                          }`}
-                        >
-                          <div className={`p-2 rounded-lg ${
-                            location.pathname === '/card-styles' 
-                              ? 'bg-fis-raspberry/30 dark:bg-fis-raspberry/40' 
-                              : 'bg-gray-200 dark:bg-gray-700'
-                          }`}>
-                            <Settings className="w-5 h-5" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-roobert-semibold text-sm">Card Style Gallery</div>
-                            <div className="text-xs text-gray-600 dark:text-gray-400">Design style examples</div>
-                          </div>
-                        </Link>
-
-                        {/* Divider */}
-                        <div className="h-px bg-gradient-to-r from-transparent via-fis-eggplant/30 to-transparent my-2" />
 
                         {/* CMS Admin Link */}
                         <a

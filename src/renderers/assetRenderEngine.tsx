@@ -63,6 +63,7 @@ import {
 } from './assetRenderUtility';
 
 import { BudgetBreakdown } from './assetRenderBudget';
+import { ForecastBreakdown } from './assetRenderForecast';
 
 // ==========================================
 // ENGINE PROPS
@@ -163,6 +164,8 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
       // BUDGET & FINANCIAL
       case 'budgetBreakdown':
         return <BudgetBreakdown data={data} />;
+      case 'forecastBreakdown':
+        return <ForecastBreakdown data={data} />;
       
       default:
         return <div className="text-red-500">Unknown asset type: {type}</div>;
@@ -213,9 +216,9 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper.edit-mode {
-  border: 1px dashed #cbd5e1;
+  border: 1px dashed var(--surface-tertiary);
   border-radius: 0.5rem;
-  background: #f8fafc;
+  background: var(--surface-secondary);
 }
 
 .asset-wrapper.display-mode {
@@ -240,7 +243,7 @@ export const AssetRenderEngineStyles = `
 .asset-wrapper .text-edit input {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--surface-tertiary);
   border-radius: 0.375rem;
   font-size: 0.875rem;
   font-family: 'Roobert Light', sans-serif;
@@ -261,7 +264,7 @@ export const AssetRenderEngineStyles = `
 .asset-wrapper .textarea-edit textarea {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--surface-tertiary);
   border-radius: 0.375rem;
   font-size: 0.875rem;
   font-family: 'Roobert Light', sans-serif;
@@ -304,8 +307,8 @@ export const AssetRenderEngineStyles = `
 
 /* Code Block Pattern */
 .asset-wrapper .code-display {
-  background: #1e293b;
-  color: #e2e8f0;
+  background: var(--code-background);
+  color: var(--code-text);
   padding: 1rem;
   border-radius: 0.5rem;
   font-family: 'Courier New', monospace;
@@ -378,11 +381,11 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper .checklist-item .check-icon {
-  color: #10b981;
+  color: var(--semantic-success);
 }
 
 .asset-wrapper .checklist-item.incomplete .check-icon {
-  color: #cbd5e1;
+  color: var(--surface-tertiary);
 }
 
 .asset-wrapper .checklist-item span {
@@ -424,30 +427,30 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper .progress-status.status-on-track {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .asset-wrapper .progress-status.status-at-risk {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
 }
 
 .asset-wrapper .progress-status.status-blocked {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--status-error-bg);
+  color: var(--status-error-text);
 }
 
 .asset-wrapper .progress-subtitle {
   font-size: 0.75rem !important;
   font-family: 'Roobert Light', sans-serif !important;
-  color: #431C5B;
+  color: var(--brand-primary);
 }
 
 .asset-wrapper .progress-bar-container {
   width: 100%;
   height: 0.5rem;
-  background: #e2e8f0;
+  background: var(--surface-tertiary);
   border-radius: 9999px;
   overflow: hidden;
 }
@@ -521,7 +524,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .metric-card .label {
   ${AssetStyles.typography.label.default}
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .asset-wrapper .metric-card .value {
@@ -551,7 +554,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .nested-card .value {
   ${AssetStyles.typography.body.normal}
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 /* Risk Card Pattern */
@@ -564,13 +567,13 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper .risk-card.severity-medium {
-  border-left-color: #f59e0b;
-  background: #fffbeb;
+  border-left-color: var(--semantic-warning);
+  background: var(--status-warning-bg);
 }
 
 .asset-wrapper .risk-card.severity-high {
-  border-left-color: #ef4444;
-  background: #fef2f2;
+  border-left-color: var(--semantic-error);
+  background: var(--status-error-bg);
 }
 
 .asset-wrapper .risk-card .icon {
@@ -601,12 +604,12 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .risk-card .description {
   ${AssetStyles.typography.body.normal}
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .asset-wrapper .risk-card .mitigation-label {
   ${AssetStyles.typography.label.default}
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .asset-wrapper .risk-card .mitigation {
@@ -635,7 +638,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .outlook-card p {
   ${AssetStyles.typography.body.normal}
-  color: #64748b;
+  color: var(--text-secondary);
   max-width: 600px;
 }
 
@@ -653,23 +656,23 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper .category-box.color-green {
-  background: #d1fae5;
-  border-left-color: #10b981;
+  background: var(--status-success-bg);
+  border-left-color: var(--semantic-success);
 }
 
 .asset-wrapper .category-box.color-yellow {
-  background: #fef3c7;
-  border-left-color: #f59e0b;
+  background: var(--status-warning-bg);
+  border-left-color: var(--semantic-warning);
 }
 
 .asset-wrapper .category-box.color-red {
-  background: #fee2e2;
-  border-left-color: #ef4444;
+  background: var(--status-error-bg);
+  border-left-color: var(--semantic-error);
 }
 
 .asset-wrapper .category-box.color-blue {
-  background: #dbeafe;
-  border-left-color: #3b82f6;
+  background: var(--status-info-bg);
+  border-left-color: var(--semantic-info);
 }
 
 .asset-wrapper .category-box h4 {
@@ -720,7 +723,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .radial-chart-item .label {
   ${AssetStyles.typography.body.small}
-  color: #64748b;
+  color: var(--text-secondary);
   margin-top: 0.25rem;
 }
 
@@ -744,7 +747,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .chart-label .label {
   ${AssetStyles.typography.body.normal}
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .asset-wrapper .chart-label .badge {
@@ -756,18 +759,18 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper .chart-label .badge.status-onTrack {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--status-success-bg);
+  color: var(--status-success-text);
 }
 
 .asset-wrapper .chart-label .badge.status-atRisk {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--status-warning-bg);
+  color: var(--status-warning-text);
 }
 
 .asset-wrapper .chart-label .badge.status-blocked {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--status-error-bg);
+  color: var(--status-error-text);
 }
 
 /* ==========================================
@@ -804,23 +807,23 @@ export const AssetRenderEngineStyles = `
 .asset-wrapper .status-column h4 {
   ${AssetStyles.typography.heading.h5}
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--surface-tertiary);
 }
 
 .asset-wrapper .status-column.column-0 h4 {
-  color: #10b981;
+  color: var(--semantic-success);
 }
 
 .asset-wrapper .status-column.column-1 h4 {
-  color: #f59e0b;
+  color: var(--semantic-warning);
 }
 
 .asset-wrapper .status-column.column-2 h4 {
-  color: #ef4444;
+  color: var(--semantic-error);
 }
 
 .asset-wrapper .status-column.column-3 h4 {
-  color: #3b82f6;
+  color: var(--semantic-info);
 }
 
 .asset-wrapper .status-items {
@@ -831,7 +834,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .status-item {
   ${AssetStyles.spacing.sm}
-  background: #f8fafc;
+  background: var(--surface-secondary);
   border-radius: ${AssetStyles.radius.sm};
   ${AssetStyles.typography.body.small}
 }
@@ -862,15 +865,15 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper .timeline-event.completed .timeline-marker {
-  background: #10b981;
-  border-color: #10b981;
+  background: var(--semantic-success);
+  border-color: var(--semantic-success);
   color: white;
 }
 
 .asset-wrapper .timeline-event.pending .timeline-marker {
   background: white;
-  border-color: #cbd5e1;
-  color: #cbd5e1;
+  border-color: var(--surface-tertiary);
+  color: var(--surface-tertiary);
 }
 
 .asset-wrapper .timeline-content {
@@ -882,7 +885,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .timeline-date {
   ${AssetStyles.typography.label.badge}
-  color: #64748b;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -895,7 +898,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .timeline-description {
   ${AssetStyles.typography.body.normal}
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 /* Two Column Comparison Pattern */
@@ -955,11 +958,11 @@ export const AssetRenderEngineStyles = `
 }
 
 .asset-wrapper .problem-side {
-  border-left: 4px solid #ef4444;
+  border-left: 4px solid var(--semantic-error);
 }
 
 .asset-wrapper .solution-side {
-  border-left: 4px solid #10b981;
+  border-left: 4px solid var(--semantic-success);
 }
 
 .asset-wrapper .problem-side h4,
@@ -970,7 +973,7 @@ export const AssetRenderEngineStyles = `
 .asset-wrapper .problem-side p,
 .asset-wrapper .solution-side p {
   ${AssetStyles.typography.body.normal}
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 /* ==========================================
@@ -980,7 +983,7 @@ export const AssetRenderEngineStyles = `
 /* Horizontal Rule Pattern */
 .asset-wrapper hr {
   border: none;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--surface-tertiary);
   margin: 1rem 0;
 }
 
@@ -1013,7 +1016,7 @@ export const AssetRenderEngineStyles = `
 
 .asset-wrapper .number-label {
   ${AssetStyles.typography.label.default}
-  color: #64748b;
+  color: var(--text-secondary);
   margin-top: 0.5rem;
 }
 
@@ -1026,7 +1029,7 @@ export const AssetRenderEngineStyles = `
 .asset-wrapper.edit-mode select {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #cbd5e1;
+  border: 1px solid var(--surface-tertiary);
   border-radius: 0.375rem;
   ${AssetStyles.typography.body.normal}
   font-family: inherit;

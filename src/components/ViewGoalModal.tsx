@@ -145,16 +145,16 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
   };
 
   const categoryColors: Record<string, { bg: string; text: string; border: string }> = {
-    efficiency: { bg: 'bg-blue-50 dark:bg-blue-950/30', text: 'text-blue-700 dark:text-blue-300', border: 'border-blue-200 dark:border-blue-800' },
+    efficiency: { bg: '', text: '', border: '' }, // Will use inline styles
     quality: { bg: 'bg-green-50 dark:bg-green-950/30', text: 'text-green-700 dark:text-green-300', border: 'border-green-200 dark:border-green-800' },
-    customer: { bg: 'bg-purple-50 dark:bg-purple-950/30', text: 'text-purple-700 dark:text-purple-300', border: 'border-purple-200 dark:border-purple-800' },
+    customer: { bg: '', text: '', border: '' }, // Will use inline styles
     cost: { bg: 'bg-orange-50 dark:bg-orange-950/30', text: 'text-orange-700 dark:text-orange-300', border: 'border-orange-200 dark:border-orange-800' },
     innovation: { bg: 'bg-pink-50 dark:bg-pink-950/30', text: 'text-pink-700 dark:text-pink-300', border: 'border-pink-200 dark:border-pink-800' }
   };
 
   const statusColors: Record<string, { bg: string; text: string }> = {
     'not-started': { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300' },
-    'in-progress': { bg: 'bg-blue-100 dark:bg-blue-900', text: 'text-blue-700 dark:text-blue-300' },
+    'in-progress': { bg: '', text: '' }, // Will use inline styles with brand-primary
     'completed': { bg: 'bg-green-100 dark:bg-green-900', text: 'text-green-700 dark:text-green-300' },
     'achieved': { bg: 'bg-green-100 dark:bg-green-900', text: 'text-green-700 dark:text-green-300' },
     'on-hold': { bg: 'bg-yellow-100 dark:bg-yellow-900', text: 'text-yellow-700 dark:text-yellow-300' },
@@ -164,12 +164,63 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
 
   const priorityColors: Record<string, { bg: string; text: string }> = {
     low: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300' },
-    medium: { bg: 'bg-blue-100 dark:bg-blue-900', text: 'text-blue-700 dark:text-blue-300' },
+    medium: { bg: '', text: '' }, // Will use inline styles with brand-primary
     high: { bg: 'bg-orange-100 dark:bg-orange-900', text: 'text-orange-700 dark:text-orange-300' },
     critical: { bg: 'bg-red-100 dark:bg-red-900', text: 'text-red-700 dark:text-red-300' }
   };
 
   const colors = categoryColors[goal.category] || categoryColors.efficiency;
+
+  // Helper to get category styles
+  const getCategoryStyle = (category: string) => {
+    if (category === 'efficiency') {
+      return {
+        backgroundColor: 'rgba(67, 28, 91, 0.05)',
+        color: 'var(--brand-primary)',
+        border: '1px solid rgba(67, 28, 91, 0.2)'
+      };
+    } else if (category === 'customer') {
+      return {
+        backgroundColor: 'rgba(178, 26, 83, 0.05)',
+        color: 'var(--brand-secondary)',
+        border: '1px solid rgba(178, 26, 83, 0.2)'
+      };
+    }
+    return {};
+  };
+
+  // Helper to get status badge styles
+  const getStatusStyle = (status: string) => {
+    if (status === 'in-progress') {
+      return {
+        backgroundColor: 'rgba(67, 28, 91, 0.1)',
+        color: 'var(--brand-primary)'
+      };
+    }
+    return {};
+  };
+
+  // Helper to get priority badge styles
+  const getPriorityStyle = (priority: string) => {
+    if (priority === 'medium') {
+      return {
+        backgroundColor: 'rgba(67, 28, 91, 0.1)',
+        color: 'var(--brand-primary)'
+      };
+    }
+    return {};
+  };
+
+  // Helper to get progress bar color
+  const getProgressBarStyle = (category: string, progress: number) => {
+    let backgroundColor = 'var(--brand-primary)';
+    if (category === 'customer') backgroundColor = 'var(--brand-secondary)';
+    else if (category === 'quality') backgroundColor = '#16a34a';
+    else if (category === 'cost') backgroundColor = '#ea580c';
+    else if (category === 'innovation') backgroundColor = '#ec4899';
+    
+    return { width: `${progress}%`, backgroundColor };
+  };
 
   const calculateProgress = (baseline: string, current: string, target: string): number => {
     const parseValue = (str: string): number => {
@@ -210,24 +261,24 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className={`${colors.bg} ${colors.border} border-b p-6`}>
+          <div className="border-b p-6" style={goal.category === 'efficiency' || goal.category === 'customer' ? { ...getCategoryStyle(goal.category), border: '1px solid rgba(67, 28, 91, 0.2)', borderBottom: '1px solid #e5e7eb' } : { backgroundColor: colors.bg.includes('bg-') ? undefined : colors.bg }}>
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-4 flex-1">
-                <div className={`${colors.bg} ${colors.text} p-3 rounded-lg border ${colors.border}`}>
+                <div className={`p-3 rounded-lg border ${goal.category !== 'efficiency' && goal.category !== 'customer' ? `${colors.bg} ${colors.text} ${colors.border}` : ''}`} style={goal.category === 'efficiency' || goal.category === 'customer' ? getCategoryStyle(goal.category) : {}}>
                   <Target className="w-6 h-6" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{goal.name}</h2>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${colors.bg} ${colors.text} border ${colors.border}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${goal.category !== 'efficiency' && goal.category !== 'customer' ? `${colors.bg} ${colors.text} ${colors.border}` : ''}`} style={goal.category === 'efficiency' || goal.category === 'customer' ? getCategoryStyle(goal.category) : {}}>
                       {goal.shortName}
                     </span>
                   </div>
                   <div className="flex items-center gap-4 flex-wrap">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${statusColors[goal.status].bg} ${statusColors[goal.status].text}`}>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${goal.status !== 'in-progress' ? `${statusColors[goal.status].bg} ${statusColors[goal.status].text}` : ''}`} style={goal.status === 'in-progress' ? getStatusStyle(goal.status) : {}}>
                       {goal.status.replace('-', ' ').toUpperCase()}
                     </span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${priorityColors[goal.priority].bg} ${priorityColors[goal.priority].text}`}>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${goal.priority !== 'medium' ? `${priorityColors[goal.priority].bg} ${priorityColors[goal.priority].text}` : ''}`} style={goal.priority === 'medium' ? getPriorityStyle(goal.priority) : {}}>
                       {goal.priority.toUpperCase()} PRIORITY
                     </span>
                     <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
@@ -257,8 +308,8 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
               </div>
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                 <div
-                  className={`h-3 rounded-full transition-all duration-500 ${colors.bg.replace('50', '500').replace('dark:bg-', 'dark:bg-')}`}
-                  style={{ width: `${goal.progress}%` }}
+                  className="h-3 rounded-full transition-all duration-500"
+                  style={getProgressBarStyle(goal.category, goal.progress)}
                 />
               </div>
             </div>
@@ -269,10 +320,10 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
             {/* SMART Goal Statement */}
             <section>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <TrendingUp className="w-5 h-5" style={{ color: 'var(--brand-primary)' }} />
                 SMART Goal Statement
               </h3>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed bg-purple-50 dark:bg-purple-950/30 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed p-4 rounded-lg" style={{ backgroundColor: 'rgba(67, 28, 91, 0.05)', border: '1px solid rgba(67, 28, 91, 0.2)' }}>
                 {goal.smartGoal.statement}
               </p>
             </section>
@@ -299,7 +350,7 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📊 Measurable Metrics</h3>
                   <ul className="space-y-2">
                     {goal.smartGoal.measurable.metrics.map((metric, idx) => (
-                      <li key={idx} className="text-sm text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-blue-950/30 p-2 rounded border border-blue-200 dark:border-blue-800">
+                      <li key={idx} className="text-sm text-gray-700 dark:text-gray-300 p-2 rounded" style={{ backgroundColor: 'rgba(67, 28, 91, 0.05)', border: '1px solid rgba(67, 28, 91, 0.2)' }}>
                         {metric}
                       </li>
                     ))}
@@ -313,7 +364,8 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                     {goal.smartGoal.relevant.croAlignment.map((area, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-full text-xs font-medium"
+                        className="px-3 py-1 rounded-full text-xs font-medium"
+                        style={{ backgroundColor: 'rgba(178, 26, 83, 0.1)', color: 'var(--brand-secondary)' }}
                       >
                         {area}
                       </span>
@@ -341,7 +393,7 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                         <span className="font-semibold text-gray-700 dark:text-gray-300">Co-Owners:</span>
                         <div className="flex flex-wrap gap-2 mt-1">
                           {goal.coOwners.map((owner, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded text-xs">
+                            <span key={idx} className="px-2 py-1 rounded text-xs" style={{ backgroundColor: 'rgba(67, 28, 91, 0.1)', color: 'var(--brand-primary)' }}>
                               {owner}
                             </span>
                           ))}
@@ -410,20 +462,20 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
 
                 {/* Lagging Indicators */}
                 <div>
-                  <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-3 uppercase">Lagging Indicators</h4>
+                  <h4 className="text-sm font-bold mb-3 uppercase" style={{ color: 'var(--brand-primary)' }}>Lagging Indicators</h4>
                   <div className="space-y-3">
                     {goal.indicators.lagging.map((indicator, idx) => {
                       const progress = calculateProgress(indicator.baseline, indicator.current, indicator.target);
                       return (
-                        <div key={idx} className="bg-blue-50 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <div key={idx} className="p-3 rounded-lg" style={{ backgroundColor: 'rgba(67, 28, 91, 0.05)', border: '1px solid rgba(67, 28, 91, 0.2)' }}>
                           <div className="flex justify-between items-center mb-2">
                             <span className="text-sm font-semibold text-gray-900 dark:text-white">{indicator.name}</span>
-                            <span className="text-xs font-medium text-blue-700 dark:text-blue-300">{Math.round(progress)}%</span>
+                            <span className="text-xs font-medium" style={{ color: 'var(--brand-primary)' }}>{Math.round(progress)}%</span>
                           </div>
-                          <div className="w-full bg-blue-200 dark:bg-blue-900 rounded-full h-2 mb-2">
+                          <div className="w-full rounded-full h-2 mb-2" style={{ backgroundColor: 'rgba(67, 28, 91, 0.2)' }}>
                             <div
-                              className="bg-blue-600 dark:bg-blue-400 h-2 rounded-full transition-all duration-500"
-                              style={{ width: `${progress}%` }}
+                              className="h-2 rounded-full transition-all duration-500"
+                              style={{ width: `${progress}%`, backgroundColor: 'var(--brand-primary)' }}
                             />
                           </div>
                           <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
@@ -456,15 +508,16 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                         isCompleted
                           ? 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800'
                           : isInProgress
-                          ? 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800'
+                          ? ''
                           : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
                       }`}
+                      style={isInProgress ? { backgroundColor: 'rgba(67, 28, 91, 0.05)', border: '1px solid rgba(67, 28, 91, 0.2)' } : {}}
                     >
                       <div className="flex items-start gap-3">
                         {isCompleted ? (
                           <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
                         ) : isInProgress ? (
-                          <Circle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                          <Circle className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--brand-primary)' }} />
                         ) : (
                           <Circle className="w-5 h-5 text-gray-400 dark:text-gray-600 mt-0.5 flex-shrink-0" />
                         )}
@@ -479,9 +532,10 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                               isCompleted
                                 ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
                                 : isInProgress
-                                ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                                ? ''
                                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                             }`}
+                            style={isInProgress ? { backgroundColor: 'rgba(67, 28, 91, 0.1)', color: 'var(--brand-primary)' } : {}}
                           >
                             {milestone.status.replace('-', ' ').toUpperCase()}
                           </span>
@@ -497,8 +551,8 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
             {goal.linkedAssets > 0 && (
               <section>
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">🔗 Linked Assets</h3>
-                <div className="bg-purple-50 dark:bg-purple-950/30 p-4 rounded-lg border border-purple-200 dark:border-purple-800">
-                  <p className="text-sm text-purple-700 dark:text-purple-300">
+                <div className="p-4 rounded-lg" style={{ backgroundColor: 'rgba(178, 26, 83, 0.05)', border: '1px solid rgba(178, 26, 83, 0.2)' }}>
+                  <p className="text-sm" style={{ color: 'var(--brand-secondary)' }}>
                     This goal is linked to <span className="font-bold">{goal.linkedAssets}</span> content asset{goal.linkedAssets !== 1 ? 's' : ''} across your templates.
                   </p>
                 </div>
@@ -511,7 +565,18 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
             <button
               onClick={handleExportImage}
               disabled={isExporting}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+              className="px-6 py-2 text-white rounded-lg font-medium transition-all flex items-center gap-2"
+              style={{ background: isExporting ? 'rgba(67, 28, 91, 0.5)' : 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}
+              onMouseEnter={(e) => {
+                if (!isExporting) {
+                  e.currentTarget.style.background = 'linear-gradient(to right, rgba(67, 28, 91, 0.9), rgba(178, 26, 83, 0.9))';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isExporting) {
+                  e.currentTarget.style.background = 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))';
+                }
+              }}
             >
               {isExporting ? (
                 <>

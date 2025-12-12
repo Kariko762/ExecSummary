@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target, BookText } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target, BookText, StickyNote } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
@@ -13,10 +13,11 @@ interface CMSHeaderProps {
   onOpenSystemSettings?: () => void;
   onOpenComments?: () => void;
   onOpenGoals?: () => void;
+  onOpenNotes?: () => void;
   onOpenPlatformOverview?: () => void;
 }
 
-export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenComments, onOpenGoals, onOpenPlatformOverview }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenComments, onOpenGoals, onOpenNotes, onOpenPlatformOverview }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
@@ -353,6 +354,24 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     <div className="flex-1">
                                       <div className="font-roobert-semibold text-sm">Strategic Goals</div>
                                       <div className="text-xs text-gray-600 dark:text-gray-400">Manage SMART goals & KPIs</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Notes */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setEngineSubmenuOpen(false);
+                                      onOpenNotes?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-yellow-500/10 dark:hover:bg-yellow-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-yellow-500/10 dark:bg-yellow-500/20">
+                                      <StickyNote className="w-4 h-4 text-yellow-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Notes System</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Create weekly reports & updates</div>
                                     </div>
                                   </button>
 

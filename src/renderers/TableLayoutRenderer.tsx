@@ -160,7 +160,7 @@ export const TableLayoutRenderer: React.FC<RendererProps> = ({
 
                           {/* Detail fields (at bottom) */}
                           {detailFields.length > 0 && (
-                            <div className="mt-2 pt-2 border-t border-[#6B1B5E] dark:border-[#6B1B5E]">
+                            <div className="mt-2 pt-2 border-t border-[var(--brand-primary)] dark:border-[var(--brand-primary)]">
                               {detailFields.map(fieldKey => item[fieldKey] && (
                                 <p key={fieldKey} className="text-xs text-fis-eggplant dark:text-fis-raspberry">
                                   <span className="font-roobert-semibold">{fields[fieldKey].label}:</span> {item[fieldKey]}

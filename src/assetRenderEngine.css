@@ -881,7 +881,11 @@
   border-radius: 0.75rem;
   border: 1px solid var(--border-default);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  padding: 0.5rem;
+  min-height: 315px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .asset-wrapper .chart-label {
@@ -1005,33 +1009,31 @@
   color: var(--text-primary);
 }
 
-/* Project Milestones Timeline - Horizontal */
+/* Project Milestones Timeline - Horizontal - COMPACT */
 .asset-wrapper .timeline-horizontal {
   position: relative;
-  padding: 2rem 0;
-  overflow-x: auto;
-  min-height: 300px;
+  padding: 1rem 0 1.5rem 0;
+  min-height: 150px;
 }
 
 .asset-wrapper .timeline-line {
   position: absolute;
-  top: 1.2rem;
-  left: 1.25rem;
-  right: auto;
+  top: calc(1rem + 14px);
+  left: 1rem;
+  right: 1rem;
   height: 2px;
-  background: var(--brand-primary);
-  width: calc(100% * 7.5);
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary), var(--accent-blue), var(--accent-green));
   pointer-events: none;
-  transform: translateY(0);
+  z-index: 0;
 }
 
 .asset-wrapper .timeline-milestones {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   position: relative;
-  padding: 0 2rem;
-  min-width: 100%;
-  gap: 1rem;
+  padding: 0 1rem;
+  gap: 2rem;
 }
 
 .asset-wrapper .timeline-milestone {
@@ -1040,18 +1042,10 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.2s;
-  max-width: 9rem;
-  align-items: stretch;
-  justify-content: flex-end;
-}
-
-.asset-wrapper .milestone-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
-  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex: 1;
+  max-width: 150px;
+  z-index: 1;
 }
 
 .asset-wrapper .timeline-milestone:hover {
@@ -1095,23 +1089,22 @@
   filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.1));
 }
 
-/* Milestone circle marker */
+/* Milestone circle marker - COMPACT */
 .asset-wrapper .milestone-circle {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
   background: white;
-  border: 4px solid;
+  border: 3px solid;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 2;
-  align-self: center;
-  margin: 0 auto;
+  transition: all 0.2s ease;
 }
 
 /* Chevron hover indicator */
@@ -1128,10 +1121,10 @@
   }
 }
 
-/* Date and title */
+/* Date and title - COMPACT */
 .asset-wrapper .milestone-date {
-  margin-top: 0.75rem;
-  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
   font-family: var(--font-secondary);
   font-weight: 600;
   color: var(--text-primary);
@@ -1197,6 +1190,35 @@
   line-height: 1.2;
 }
 
+/* Tooltip title colors match circle border colors */
+.asset-wrapper .timeline-milestone:nth-child(1) .tooltip-title {
+  color: var(--brand-primary);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(2) .tooltip-title {
+  color: var(--brand-secondary);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(3) .tooltip-title {
+  color: var(--accent-blue);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(4) .tooltip-title {
+  color: var(--accent-green);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(5) .tooltip-title {
+  color: var(--accent-yellow);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(6) .tooltip-title {
+  color: var(--accent-red);
+}
+
+.asset-wrapper .timeline-milestone:nth-child(7) .tooltip-title {
+  color: var(--brand-tertiary);
+}
+
 .asset-wrapper .tooltip-description {
   font-size: 0.75rem;
   font-family: var(--font-primary);
@@ -1219,6 +1241,270 @@
 
 .asset-wrapper .timeline-milestone.pending .tooltip-status {
   color: currentColor;
+}
+
+/* ============================================
+   NEW TIMELINE LAYOUT
+   Timeline + Details Container
+   ============================================ */
+
+.asset-wrapper .timeline-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Make timeline more compact - remove chevrons */
+.asset-wrapper .milestone-chevron {
+  display: none;
+}
+
+/* Hide tooltips - data now in bottom container */
+.asset-wrapper .milestone-tooltip {
+  display: none;
+}
+
+/* Milestone title - compact */
+.asset-wrapper .milestone-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  color: var(--text-primary);
+}
+
+/* Selected state - thin colored outer ring */
+.asset-wrapper .timeline-milestone.selected .milestone-circle {
+  box-shadow: 0 0 0 2px var(--surface-card), 0 0 0 4px var(--brand-primary), 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.15);
+}
+
+.asset-wrapper .timeline-milestone.selected {
+  transform: translateY(-4px);
+}
+
+/* Bottom Details Container - Compact & Vibrant */
+.asset-wrapper .timeline-details-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+  background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-secondary) 100%);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.asset-wrapper .timeline-details-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary), var(--accent-blue));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Left: Timeline Overview (33%) - Compact */
+.asset-wrapper .timeline-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--surface-card);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border-left: 4px solid var(--brand-primary);
+}
+
+.asset-wrapper .overview-heading {
+  font-size: 1rem;
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: 0.25rem;
+}
+
+.asset-wrapper .overview-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.asset-wrapper .overview-item:last-of-type {
+  border-bottom: none;
+}
+
+.asset-wrapper .overview-label {
+  font-size: 0.875rem;
+  font-family: var(--font-primary);
+  color: var(--text-secondary);
+}
+
+.asset-wrapper .overview-value {
+  font-size: 1rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.asset-wrapper .overview-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background: var(--surface-secondary);
+  border-radius: 0.5rem;
+}
+
+.asset-wrapper .progress-bar-track {
+  width: 100%;
+  height: 0.5rem;
+  background: var(--surface-tertiary);
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.asset-wrapper .progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-green), var(--accent-blue), var(--brand-primary));
+  border-radius: 9999px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 8px var(--accent-blue);
+}
+
+.asset-wrapper .progress-percent {
+  font-size: 1.25rem;
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+
+/* Right: Milestone Details (66%) - Compact */
+.asset-wrapper .milestone-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--surface-card);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.asset-wrapper .details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.asset-wrapper .details-title {
+  font-size: 1.25rem;
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.asset-wrapper .details-status {
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid currentColor;
+}
+
+.asset-wrapper .details-status.completed {
+  background: linear-gradient(135deg, var(--accent-green), var(--semantic-success));
+  color: white;
+  box-shadow: 0 2px 8px var(--accent-green);
+}
+
+.asset-wrapper .details-status.upcoming {
+  background: linear-gradient(135deg, var(--accent-yellow), var(--brand-secondary));
+  color: white;
+  box-shadow: 0 2px 8px var(--accent-yellow);
+}
+
+.asset-wrapper .details-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  color: var(--brand-primary);
+  background: var(--surface-secondary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  width: fit-content;
+}
+
+.asset-wrapper .details-date svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--accent-blue);
+}
+
+/* Metadata Panel - Key Metrics Grid */
+.asset-wrapper .details-metadata {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, var(--surface-secondary), var(--surface-tertiary));
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.asset-wrapper .metadata-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: var(--surface-card);
+  border-radius: 0.375rem;
+  border-left: 3px solid var(--brand-primary);
+}
+
+.asset-wrapper .metadata-label {
+  font-size: 0.625rem;
+  font-family: var(--font-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.asset-wrapper .metadata-value {
+  font-size: 0.875rem;
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  color: var(--brand-primary);
+}
+
+.asset-wrapper .details-description {
+  font-size: 0.875rem;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  padding: 1rem;
+  background: var(--surface-secondary);
+  border-radius: 0.5rem;
+  border-left: 4px solid transparent;
+  border-image: linear-gradient(180deg, var(--brand-primary), var(--brand-secondary)) 1;
 }
 
 /* ============================================

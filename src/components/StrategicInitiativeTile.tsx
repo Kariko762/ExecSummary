@@ -112,8 +112,11 @@ export function StrategicInitiativeTile({ initiative, onClick, index }: Strategi
         </div>
         <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-fis-eggplant to-fis-raspberry transition-all duration-500"
-            style={{ width: `${progressPercentage}%` }}
+            className="h-full transition-all duration-500"
+            style={{ 
+              width: `${progressPercentage}%`,
+              background: 'linear-gradient(to right, rgba(67, 28, 91, 0.6), rgba(178, 26, 83, 0.6))'
+            }}
           />
         </div>
       </div>

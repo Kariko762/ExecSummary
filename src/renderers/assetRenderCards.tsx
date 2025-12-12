@@ -60,9 +60,9 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
                   }}
                 >
                   <option value="standard" style={{ background: 'white', color: 'black' }}>Standard</option>
-                  <option value="highlight" style={{ background: 'linear-gradient(135deg, #431C5B, #B21A53)', color: 'white', fontWeight: 700 }}>Highlight</option>
-                  <option value="bold" style={{ background: '#1D1F48', color: 'white', fontWeight: 700 }}>Bold</option>
-                  <option value="total" style={{ background: '#3bcd3e', color: 'white', fontWeight: 800 }}>Total</option>
+                  <option value="highlight" style={{ background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))', color: 'white', fontWeight: 700 }}>Highlight</option>
+                  <option value="bold" style={{ background: 'var(--accent-blue)', color: 'white', fontWeight: 700 }}>Bold</option>
+                  <option value="total" style={{ background: 'var(--semantic-success)', color: 'white', fontWeight: 800 }}>Total</option>
                 </select>
               </div>
               

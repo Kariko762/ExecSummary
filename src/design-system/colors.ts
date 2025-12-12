@@ -280,18 +280,26 @@ export const Colors = {
 } as const;
 
 /**
+ * Helper function to get CSS color variables at runtime
+ */
+const getCSSColor = (varName: string, fallback: string = ''): string => {
+  if (typeof window === 'undefined') return fallback;
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || fallback;
+};
+
+/**
  * Chart and Data Visualization Colors
- * Standardized color palette for all charts, graphs, and data visualizations
+ * NOW READS FROM CSS VARIABLES (centralized design system)
  */
 export const ChartColors = {
-  // Primary data series colors (FIS Brand Palette)
+  // Primary data series colors (from CSS variables)
   series: {
-    eggplant: '#431C5B',      // FIS Eggplant (Primary) - Dark purple
-    eggplantLight: '#6B1B5E', // Lighter eggplant variant
-    navy: '#1D1F48',          // FIS Navy - Deep blue
-    raspberry: '#B21A53',     // FIS Raspberry - Bright pink/red
-    green: '#3bcd3e',         // Success/Positive - Bright green
-    purple: '#403040',        // Neutral purple
+    eggplant: getCSSColor('--brand-primary', '#431C5B'),
+    eggplantLight: getCSSColor('--brand-primary', '#6B1B5E'),
+    navy: getCSSColor('--accent-blue', '#1D1F48'),
+    raspberry: getCSSColor('--brand-secondary', '#B21A53'),
+    green: getCSSColor('--accent-green', '#3bcd3e'),
+    purple: getCSSColor('--brand-primary', '#403040'),
   },
   
   // Chart UI elements (light mode)
@@ -319,28 +327,28 @@ export const ChartColors = {
   },
   
   // Data visualization palette (ordered for multiple series)
-  // Use for bar charts, line charts with multiple lines, pie charts, etc.
+  // NOW READS FROM CSS VARIABLES
   palette: [
-    '#431C5B',  // Eggplant
-    '#1D1F48',  // Navy
-    '#B21A53',  // Raspberry
-    '#3bcd3e',  // Green
-    '#3B82F6',  // Blue
-    '#F59E0B',  // Amber
+    getCSSColor('--brand-primary', '#431C5B'),
+    getCSSColor('--brand-secondary', '#B21A53'),
+    getCSSColor('--accent-blue', '#3B82F6'),
+    getCSSColor('--accent-green', '#10B981'),
+    getCSSColor('--accent-yellow', '#F59E0B'),
+    getCSSColor('--accent-red', '#EF4444'),
   ],
   
   // Extended palette for more series (if needed)
   paletteExtended: [
-    '#431C5B',  // Eggplant
-    '#1D1F48',  // Navy
-    '#B21A53',  // Raspberry
-    '#3bcd3e',  // Green
-    '#3B82F6',  // Blue
-    '#F59E0B',  // Amber
-    '#EF4444',  // Red
-    '#10B981',  // Emerald
-    '#8B5CF6',  // Violet
-    '#EC4899',  // Pink
+    getCSSColor('--brand-primary', '#431C5B'),
+    getCSSColor('--brand-secondary', '#B21A53'),
+    getCSSColor('--accent-blue', '#3B82F6'),
+    getCSSColor('--accent-green', '#10B981'),
+    getCSSColor('--accent-yellow', '#F59E0B'),
+    getCSSColor('--accent-red', '#EF4444'),
+    getCSSColor('--semantic-success', '#10B981'),
+    getCSSColor('--semantic-warning', '#F59E0B'),
+    getCSSColor('--semantic-error', '#EF4444'),
+    getCSSColor('--brand-secondary', '#EC4899'),
   ],
   
   // Performance/Status-specific colors

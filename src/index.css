@@ -1,13 +1,41 @@
 @import "tailwindcss";
 
-/* CSS Custom Properties */
+/* Tailwind v4: Disable automatic dark mode detection */
+@variant dark (.dark &);
+
+/* CRITICAL: Block all @media (prefers-color-scheme) queries */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light !important;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light !important;
+  }
+}
+
+/* Explicit color-scheme enforcement */
 :root {
-  /* Brand Colors */
-  --brand-primary: #431C5B;      /* eggplant */
-  --brand-secondary: #B21A53;    /* raspberry */
-  --brand-tertiary: #1D1F48;     /* navy */
+  color-scheme: light !important;
+}
+
+:root.dark {
+  color-scheme: dark !important;
+}
+
+/* CSS Custom Properties */
+/* ⚠️ NOTE: These values are now loaded dynamically from the backend API
+   via src/utils/designSystemLoader.ts. The declarations below are kept
+   as fallbacks in case the API is unavailable. */
+:root {
+  /* Brand Colors - Loaded from API */
+  --brand-primary: #431C5B;      /* fallback: eggplant */
+  --brand-secondary: #B21A53;    /* fallback: raspberry */
+  --brand-tertiary: #1D1F48;     /* fallback: navy */
   
-  /* Accent Colors */
+  /* Accent Colors - Loaded from API */
   --accent-yellow: #FFB800;
   --accent-orange: #f59e0b;
   --accent-green: #3bcd3e;
@@ -16,14 +44,14 @@
   --accent-purple: #8B4789;
   --accent-red: #DC2626;
   
-  /* Semantic Colors */
+  /* Semantic Colors - Loaded from API */
   --semantic-success: #10b981;
   --semantic-error: #ef4444;
   
-  /* Borders */
+  /* Borders - Loaded from API */
   --border-default: #e5e7eb;
   
-  /* Text */
+  /* Text - Loaded from API */
   --text-primary: #1f2937;
   --text-secondary: #6b7280;
 }

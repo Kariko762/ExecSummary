@@ -7,9 +7,11 @@
  * - Line item drill-down via hover tooltips and modals
  * - Visual indicators for budget performance
  * - Responsive layout with glassmorphism design
+ * 
+ * PRODUCTION VERSION - DISPLAY MODE ONLY
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -24,23 +26,21 @@ import {
   DollarSign,
   Calendar,
   User,
+  Download,
   Edit3
 } from 'lucide-react';
 import { BudgetEditorModal } from '../components/BudgetEditorModal';
 
 // Icon mapping
-const ICON_MAP: Record<string, React.ComponentType<any>> = {
+const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   Users,
   Server,
   Building2,
   TrendingUp,
-  DollarSign
+  DollarSign,
 };
 
-// ==========================================
-// BUDGET BREAKDOWN COMPONENT
-// ==========================================
-
+// TypeScript Interfaces
 interface LineItem {
   id: string;
   name: string;
@@ -90,13 +90,49 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [selectedLineItem, setSelectedLineItem] = useState<{ category: BudgetCategory; item: LineItem } | null>(null);
   const [showBudgetEditor, setShowBudgetEditor] = useState(false);
+  const budgetRef = React.useRef<HTMLDivElement>(null);
+
+  // Edit mode render
+  if (mode === 'edit') {
+    return (
+      <>
+        <div className="w-full space-y-4 p-6 bg-white/5 dark:bg-black/20 rounded-xl border border-white/10">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-roobert-semibold text-brand-primary dark:text-brand-secondary">
+              Budget General Settings
+            </h3>
+            <button
+              onClick={() => setShowBudgetEditor(true)}
+              className="px-4 py-2 text-white rounded-lg flex items-center gap-2 transition-colors shadow-lg"
+              style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}
+            >
+              <Edit3 className="w-4 h-4" />
+              Edit Budget Details
+            </button>
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400 italic">
+            Click "Edit Budget Details" to manage categories and line items →
+          </div>
+        </div>
+
+        {showBudgetEditor && (
+          <BudgetEditorModal
+            data={data}
+            onChange={(newData) => {
+              onChange?.(newData);
+            }}
+            onClose={() => setShowBudgetEditor(false)}
+          />
+        )}
+      </>
+    );
+  }
 
   // Listen for expand/collapse events from ContentModal
-  useEffect(() => {
+  React.useEffect(() => {
     const handleExpandAll = () => {
-      if (data?.categories) {
-        setExpandedCategories(new Set(data.categories.map(c => c.id)));
-      }
+      const allIds = new Set(data.categories.map(cat => cat.id));
+      setExpandedCategories(allIds);
     };
 
     const handleCollapseAll = () => {
@@ -110,7 +146,7 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
       window.removeEventListener('budget:expandAll', handleExpandAll);
       window.removeEventListener('budget:collapseAll', handleCollapseAll);
     };
-  }, [data]);
+  }, [data.categories]);
 
   if (!data || !data.categories) {
     return (
@@ -147,6 +183,20 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
     setExpandedCategories(newExpanded);
   };
 
+  const exportAsImage = async () => {
+    if (!budgetRef.current) return;
+    const html2canvas = (await import('html2canvas')).default;
+    const canvas = await html2canvas(budgetRef.current, {
+      scale: 2,
+      backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--surface-primary').trim() || '#ffffff',
+      logging: false,
+    });
+    const link = document.createElement('a');
+    link.download = `${data.title.replace(/\s+/g, '-')}-budget.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+  };
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'on-track':
@@ -179,135 +229,9 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
     };
     return colors[color] || colors.blue;
   };
-  // Edit Mode Handler Functions
-  const updateBudgetField = (field: keyof BudgetData, value: any) => {
-    if (!onChange) return;
-    onChange({ ...data, [field]: value });
-  };
 
-  // SIMPLIFIED EDIT MODE UI
-  if (mode === 'edit') {
-    return (
-      <>
-        <div className="w-full space-y-4 p-6 bg-white/5 dark:bg-black/20 rounded-xl border border-white/10">
-          {/* General Settings Only */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry">Budget General Settings</h3>
-              <button
-                onClick={() => setShowBudgetEditor(true)}
-                className="px-4 py-2 bg-fis-eggplant hover:bg-fis-raspberry text-white rounded-lg flex items-center gap-2 transition-colors shadow-lg"
-              >
-                <Edit3 className="w-4 h-4" />
-                Edit Budget Details
-              </button>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">Title</label>
-                <input
-                  type="text"
-                  value={data.title || ''}
-                  onChange={(e) => updateBudgetField('title', e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  placeholder="e.g., Q4 2025 Budget Review"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">Period</label>
-                <input
-                  type="text"
-                  value={data.period || ''}
-                  onChange={(e) => updateBudgetField('period', e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  placeholder="e.g., Q4 2025"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
-                <select
-                  value={data.currency || 'USD'}
-                  onChange={(e) => updateBudgetField('currency', e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                >
-                  <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (€)</option>
-                  <option value="GBP">GBP (£)</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">Total Budget</label>
-                <input
-                  type="number"
-                  value={data.totalBudget || 0}
-                  onChange={(e) => updateBudgetField('totalBudget', parseFloat(e.target.value) || 0)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">Total Actual</label>
-                <input
-                  type="number"
-                  value={data.totalActual || 0}
-                  onChange={(e) => updateBudgetField('totalActual', parseFloat(e.target.value) || 0)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">Executive Notes</label>
-              <textarea
-                value={data.notes || ''}
-                onChange={(e) => updateBudgetField('notes', e.target.value)}
-                rows={3}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                placeholder="Add executive summary notes or key insights..."
-              />
-            </div>
-
-            {/* Summary Stats */}
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-              <div className="flex items-center justify-between text-sm">
-                <div>
-                  <span className="text-blue-800 dark:text-blue-200 font-roobert-medium">
-                    {data.categories?.length || 0} categories
-                  </span>
-                  <span className="text-blue-600 dark:text-blue-400 mx-2">•</span>
-                  <span className="text-blue-800 dark:text-blue-200 font-roobert-medium">
-                    {data.categories?.reduce((sum, cat) => sum + (cat.lineItems?.length || 0), 0) || 0} line items
-                  </span>
-                </div>
-                <button
-                  onClick={() => setShowBudgetEditor(true)}
-                  className="text-blue-700 dark:text-blue-300 hover:underline font-roobert-medium"
-                >
-                  Click "Edit Budget Details" to manage categories →
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Budget Editor Modal */}
-        {showBudgetEditor && onChange && (
-          <BudgetEditorModal
-            data={data}
-            onChange={onChange}
-            onClose={() => setShowBudgetEditor(false)}
-          />
-        )}
-      </>
-    );
-  }
-
-  // DISPLAY MODE UI
   return (
-    <div className="w-full">
+    <div className="w-full" ref={budgetRef}>
       {/* Header Section */}
       <div className="bg-gradient-to-br from-fis-eggplant via-fis-raspberry to-fis-eggplant p-5 rounded-t-2xl">
         <div className="max-w-7xl mx-auto">
@@ -369,7 +293,7 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
             return (
               <div
                 key={category.id}
-                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-200"
+                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200"
               >
                 {/* Category Header */}
                 <button
@@ -377,7 +301,7 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
                   className="w-full p-6 flex items-center gap-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                 >
                   {/* Icon */}
-                  <div className={`flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br ${getCategoryColor(category.color)} border flex items-center justify-center`}>
+                  <div className={`flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br ${getCategoryColor(category.color)} border shadow-sm flex items-center justify-center`}>
                     <IconComponent className="w-7 h-7 text-gray-700 dark:text-gray-200" />
                   </div>
 
@@ -425,12 +349,13 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
                       </div>
 
                       {/* Line Items */}
-                      {category.lineItems.map((item) => (
-                        <button
-                          key={item.id}
-                          onClick={() => setSelectedLineItem({ category, item })}
-                          className="grid grid-cols-12 gap-4 px-4 py-4 rounded-lg transition-all cursor-pointer bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/70 hover:shadow-md w-full text-left"
-                        >
+                      {category.lineItems && category.lineItems.length > 0 ? (
+                        category.lineItems.map((item) => (
+                          <button
+                            key={item.id}
+                            onClick={() => setSelectedLineItem({ category, item })}
+                            className="w-full grid grid-cols-12 gap-4 px-4 py-4 rounded-lg transition-all bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-fis-eggplant/5 hover:to-fis-raspberry/5 dark:hover:from-fis-eggplant/10 dark:hover:to-fis-raspberry/10 hover:shadow-md hover:scale-[1.01] border border-transparent hover:border-fis-eggplant/20 dark:hover:border-fis-raspberry/20 text-left"
+                          >
                           <div className="col-span-4 flex items-center">
                             <span className="text-sm font-roobert-medium text-gray-900 dark:text-white">
                               {item.name}
@@ -450,12 +375,15 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
                             </span>
                           </div>
                           <div className="col-span-2 text-right flex items-center justify-end gap-2">
-                            <div className="text-xs text-gray-400 dark:text-gray-500">
-                              Click for details →
-                            </div>
+                            <Info className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
                           </div>
                         </button>
-                      ))}
+                      ))
+                      ) : (
+                        <div className="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                          No line items available for this category
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -491,12 +419,22 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
                   <h3 className="text-2xl font-roobert-bold mb-1">{selectedLineItem.item.name}</h3>
                   <p className="text-white/80 text-sm">{selectedLineItem.category.name}</p>
                 </div>
-                <button
-                  onClick={() => setSelectedLineItem(null)}
-                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={exportAsImage}
+                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                    title="Export as image"
+                  >
+                    <Download className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => setSelectedLineItem(null)}
+                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                    title="Close"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -504,71 +442,75 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
             <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
               {/* Financial Summary */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-4">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
                   <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Budgeted</div>
                   <div className="text-xl font-roobert-bold text-gray-900 dark:text-white">
                     {formatCurrency(selectedLineItem.item.budgeted)}
                   </div>
                 </div>
-                <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-4">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
                   <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Actual</div>
                   <div className="text-xl font-roobert-bold text-gray-900 dark:text-white">
                     {formatCurrency(selectedLineItem.item.actual)}
                   </div>
                 </div>
-                <div className="bg-gray-100 dark:bg-gray-700 rounded-xl p-4">
-                  <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Variance</div>
+                <div className={`rounded-xl p-4 border-2 ${
+                  selectedLineItem.item.variance < 0 
+                    ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800' 
+                    : 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800'
+                }`}>
+                  <div className={`text-xs uppercase tracking-wide mb-2 ${
+                    selectedLineItem.item.variance < 0 ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-400'
+                  }`}>Variance</div>
                   <div className={`text-xl font-roobert-bold ${
-                    selectedLineItem.item.variance < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'
+                    selectedLineItem.item.variance < 0 ? 'text-emerald-700 dark:text-emerald-300' : 'text-amber-700 dark:text-amber-300'
                   }`}>
                     {selectedLineItem.item.variance < 0 ? '-' : '+'}{formatCurrency(Math.abs(selectedLineItem.item.variance))}
                   </div>
                 </div>
               </div>
 
-              {/* Summary */}
+              {/* Summary Section (if visible) */}
               {selectedLineItem.item.summary && selectedLineItem.item.summaryVisible !== false && (
                 <div>
-                  <h4 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Info className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
+                  <h4 className="text-sm font-roobert-semibold text-fis-eggplant dark:text-fis-raspberry mb-3 flex items-center gap-2">
+                    <Info className="w-4 h-4" />
                     Summary
                   </h4>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 bg-gradient-to-r from-fis-eggplant/5 to-fis-raspberry/5 dark:from-fis-eggplant/10 dark:to-fis-raspberry/10 p-4 rounded-lg border-l-4 border-fis-eggplant dark:border-fis-raspberry">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
                     {selectedLineItem.item.summary}
                   </p>
                 </div>
               )}
 
-              {/* Challenges */}
+              {/* Challenges (formerly Variance Explanation) (if visible) */}
               {selectedLineItem.item.explanation && selectedLineItem.item.explanationVisible !== false && (
                 <div>
-                  <h4 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Info className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
+                  <h4 className="text-sm font-roobert-semibold text-amber-700 dark:text-amber-400 mb-3 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4" />
                     Challenges
                   </h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 italic mb-2">Problems being solved with this spend</p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 bg-amber-50/30 dark:bg-amber-900/10 p-4 rounded-lg border border-amber-200/50 dark:border-amber-800/30">
                     {selectedLineItem.item.explanation}
                   </p>
                 </div>
               )}
 
-              {/* Justification */}
+              {/* Justification (if visible) */}
               {selectedLineItem.item.justification && selectedLineItem.item.justificationVisible !== false && (
                 <div>
-                  <h4 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
+                  <h4 className="text-sm font-roobert-semibold text-emerald-700 dark:text-emerald-400 mb-3 flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4" />
                     Justification
                   </h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 italic mb-2">Why we went with this cost/approach</p>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 bg-emerald-50/30 dark:bg-emerald-900/10 p-4 rounded-lg border border-emerald-200/50 dark:border-emerald-800/30">
                     {selectedLineItem.item.justification}
                   </p>
                 </div>
               )}
 
               {/* Metadata */}
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 -mx-6 -mb-6 px-6 pb-6 mt-6">
                 <div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Owner</div>
                   <div className="text-sm font-roobert-medium text-gray-900 dark:text-white flex items-center gap-2">

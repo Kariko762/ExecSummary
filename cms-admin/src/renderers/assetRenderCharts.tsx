@@ -107,25 +107,37 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
     }
   }
   
-  // Display mode
-  const COLORS = ['var(--brand-primary)', 'var(--brand-secondary)', 'var(--accent-blue)', 'var(--accent-green)', 'var(--accent-yellow)'];
+  // Display mode - Use CSS variables for colors
+  const getCSSColor = (varName: string): string => {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  };
+  
+  const COLORS = [
+    getCSSColor('--brand-primary'),
+    getCSSColor('--brand-secondary'),
+    getCSSColor('--accent-blue'),
+    getCSSColor('--accent-green'),
+    getCSSColor('--accent-yellow')
+  ];
   
   if (!isArray && data) {
     // Single ring display (legacy format)
     const percentage = Number(data?.percentage || 0);
-    const chartData = [
-      { name: data?.label || 'Progress', value: percentage, fill: '#8884d8' },
-      { name: 'Remaining', value: 100 - percentage, fill: '#e0e0e0' }
-    ];
     
     const getColor = (status: string) => {
       switch(status) {
-        case 'onTrack': return 'var(--semantic-success)';
-        case 'atRisk': return 'var(--semantic-warning)';
-        case 'blocked': return 'var(--semantic-error)';
-        default: return 'var(--accent-blue)';
+        case 'onTrack': return getCSSColor('--semantic-success');
+        case 'atRisk': return getCSSColor('--semantic-warning');
+        case 'blocked': return getCSSColor('--semantic-error');
+        default: return getCSSColor('--accent-blue');
       }
     };
+    
+    // Create data with max value of 100 to force proper scaling
+    const chartData = [
+      { name: data?.label || 'Progress', value: percentage, fill: getColor(data?.status) },
+      { name: 'Scale', value: 100, fill: 'transparent' } // Force 100% scale
+    ];
     
     return (
       <div className="radial-chart">
@@ -156,26 +168,66 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
   }
   
   // Multi-ring display
-  const chartData = items.map((item, index) => ({
+  const maxValue = Math.max(...items.map(item => Number(item.value || item.percentage || 0)), 100);
+  
+  // Visible data (exclude the invisible scale ring)
+  const visibleData = items.map((item, index) => ({
     name: String(item.name || item.label || 'Item ' + (index + 1)),
     value: Number(item.value || item.percentage || 0),
     fill: COLORS[index % COLORS.length]
   }));
+  
+  // Chart data includes invisible scale ring for 100% sizing (background color makes it invisible)
+  const chartData = [
+    ...visibleData,
+    { name: 'Scale', value: 100, fill: 'var(--surface-primary, #ffffff)' } // Background color - invisible but maintains scale
+  ];
+  
+  // Custom tooltip showing ALL items at once
+  const CustomTooltip = ({ active }: any) => {
+    if (!active) return null;
+
+    return (
+      <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-4 min-w-[200px]">
+        <p className="text-xs font-medium text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+          Progress Overview
+        </p>
+        <div className="space-y-2">
+          {visibleData.map((item, index) => (
+            <div key={index} className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-sm flex-shrink-0" 
+                  style={{ backgroundColor: item.fill }}
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  {item.name}:
+                </span>
+              </div>
+              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                {item.value}%
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
   
   return (
     <div className="radial-chart">
       <ResponsiveContainer width="100%" height={300}>
         <RadialBarChart 
           cx="50%" 
-          cy="50%" 
-          innerRadius="20%" 
+          cy="45%" 
+          innerRadius="10%" 
           outerRadius="90%" 
           data={chartData}
           startAngle={90}
           endAngle={-270}
         >
           <RadialBar
-            background
+            background={{ fill: 'var(--surface-secondary, #f3f4f6)' }}
             dataKey="value"
             cornerRadius={10}
           />
@@ -184,9 +236,14 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
             layout="horizontal"
             verticalAlign="bottom"
             align="center"
-            wrapperStyle={{ paddingTop: '20px' }}
+            wrapperStyle={{ paddingTop: '5px' }}
+            payload={visibleData.map((item) => ({
+              value: item.name,
+              type: 'square',
+              color: item.fill
+            }))}
           />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
         </RadialBarChart>
       </ResponsiveContainer>
     </div>
@@ -247,7 +304,56 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
     );
   }
   
-  const COLORS = ['#431C5B', '#B21A53', '#3882F6', '#48CD3E', '#F59E0B', '#EF4444'];
+  const getCSSColor = (varName: string): string => {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  };
+  
+  const COLORS = [
+    getCSSColor('--brand-primary'),
+    getCSSColor('--brand-secondary'),
+    getCSSColor('--accent-blue'),
+    getCSSColor('--accent-green'),
+    getCSSColor('--accent-yellow'),
+    getCSSColor('--accent-red')
+  ];
+  
+  // Calculate total for percentages
+  const total = items.reduce((sum, item) => sum + (item.value || 0), 0);
+  
+  // Custom tooltip showing ALL slices at once
+  const CustomPieTooltip = ({ active }: any) => {
+    if (!active) return null;
+
+    return (
+      <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-4 min-w-[200px]">
+        <p className="text-xs font-medium text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+          Distribution
+        </p>
+        <div className="space-y-2">
+          {items.map((item, index) => {
+            const percentage = total > 0 ? ((item.value / total) * 100).toFixed(0) : 0;
+            const color = COLORS[index % COLORS.length];
+            return (
+              <div key={index} className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-sm flex-shrink-0" 
+                    style={{ backgroundColor: color }}
+                  />
+                  <span className="text-sm" style={{ color }}>
+                    {item.name}:
+                  </span>
+                </div>
+                <span className="text-sm font-medium" style={{ color }}>
+                  {item.value} ({percentage}%)
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
   
   return (
     <div className="pie-chart">
@@ -260,14 +366,13 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
             labelLine={false}
             label={({ name, percent }: any) => `${name}: ${(percent * 100).toFixed(0)}%`}
             outerRadius={80}
-            fill="#8884d8"
             dataKey="value"
           >
             {items.map((_entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip content={<CustomPieTooltip />} />
         </PieChart>
       </ResponsiveContainer>
     </div>
@@ -346,11 +451,53 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
   }
   
   // DSM Semantic Colors for series
-  const SERIES_COLORS = ['#431C5B', '#B21A53', '#3882F6', '#48CD3E', '#F59E0B', '#EF4444'];
+  const getCSSColor = (varName: string): string => {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  };
+  
+  const SERIES_COLORS = [
+    getCSSColor('--brand-primary'),
+    getCSSColor('--brand-secondary'),
+    getCSSColor('--accent-blue'),
+    getCSSColor('--accent-green'),
+    getCSSColor('--accent-yellow'),
+    getCSSColor('--accent-red')
+  ];
   
   if (isMultiSeries) {
     // Stacked bar chart
     const seriesKeys = Object.keys(items[0]).filter(key => key !== 'name');
+    
+    // Custom tooltip for stacked bars
+    const CustomBarTooltip = ({ active, payload, label }: any) => {
+      if (!active || !payload || !payload.length) return null;
+
+      return (
+        <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-4 min-w-[200px]">
+          <p className="text-sm font-medium text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+            {label}
+          </p>
+          <div className="space-y-2">
+            {payload.map((entry: any, index: number) => (
+              <div key={index} className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-3 h-3 rounded-sm flex-shrink-0" 
+                    style={{ backgroundColor: entry.fill || entry.color }}
+                  />
+                  <span className="text-sm" style={{ color: entry.fill || entry.color }}>
+                    {entry.name}:
+                  </span>
+                </div>
+                <span className="text-sm font-medium" style={{ color: entry.fill || entry.color }}>
+                  {entry.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
     
     return (
       <div className="bar-chart">
@@ -359,13 +506,7 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
             <CartesianGrid strokeDasharray="3 3" stroke="#E6E7E8" />
             <XAxis dataKey="name" stroke="#403040" />
             <YAxis stroke="#403040" />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: '#fff', 
-                border: '1px solid #E6E7E8',
-                borderRadius: '8px'
-              }}
-            />
+            <Tooltip content={<CustomBarTooltip />} />
             <Legend iconType="square" />
             {seriesKeys.map((key, index) => (
               <Bar 
@@ -388,6 +529,23 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
     fill: SERIES_COLORS[index % SERIES_COLORS.length]
   }));
   
+  // Custom tooltip for single bars
+  const CustomBarTooltip = ({ active, payload, label }: any) => {
+    if (!active || !payload || !payload.length) return null;
+    const entry = payload[0];
+
+    return (
+      <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-4">
+        <p className="text-sm font-medium" style={{ color: entry.payload.fill }}>
+          {label}
+        </p>
+        <p className="text-lg font-bold mt-1" style={{ color: entry.payload.fill }}>
+          {entry.value}
+        </p>
+      </div>
+    );
+  };
+  
   return (
     <div className="bar-chart">
       <ResponsiveContainer width="100%" height={300}>
@@ -395,13 +553,7 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
           <CartesianGrid strokeDasharray="3 3" stroke="#E6E7E8" />
           <XAxis dataKey="name" stroke="#403040" />
           <YAxis stroke="#403040" />
-          <Tooltip 
-            contentStyle={{ 
-              backgroundColor: '#fff', 
-              border: '1px solid #E6E7E8',
-              borderRadius: '8px'
-            }}
-          />
+          <Tooltip content={<CustomBarTooltip />} />
           <Legend 
             formatter={(value) => value === 'value' ? 'Amount' : value}
             iconType="square"
@@ -471,6 +623,25 @@ export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, 
     );
   }
   
+  // Display mode - Support multi-series
+  const getCSSColor = (varName: string): string => {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  };
+  
+  const SERIES_COLORS = [
+    getCSSColor('--brand-primary'),
+    getCSSColor('--brand-secondary'),
+    getCSSColor('--accent-blue'),
+    getCSSColor('--accent-green'),
+    getCSSColor('--accent-yellow'),
+    getCSSColor('--accent-red')
+  ];
+  
+  // Detect if multi-series (has keys other than 'name')
+  const seriesKeys = items.length > 0 
+    ? Object.keys(items[0]).filter(key => key !== 'name')
+    : ['value'];
+  
   return (
     <div className="line-chart">
       <ResponsiveContainer width="100%" height={300}>
@@ -480,7 +651,16 @@ export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, 
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="value" stroke="#8884d8" strokeWidth={2} />
+          {seriesKeys.map((key, index) => (
+            <Line 
+              key={key}
+              type="monotone" 
+              dataKey={key} 
+              stroke={SERIES_COLORS[index % SERIES_COLORS.length]}
+              strokeWidth={2}
+              name={key.charAt(0).toUpperCase() + key.slice(1)}
+            />
+          ))}
         </LineChart>
       </ResponsiveContainer>
     </div>

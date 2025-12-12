@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Calendar } from 'lucide-react';
 
 export interface ComplexPatternProps {
   data: any;
@@ -53,7 +53,7 @@ export const StatusBoardPattern: React.FC<ComplexPatternProps> = ({ data, onChan
     
     return (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        {columns.map((column, colIndex) => (
+        {columns.map((column: any, colIndex: number) => (
           <div key={colIndex} className="edit-item-container">
             <input
               type="text"
@@ -107,6 +107,7 @@ export const StatusBoardPattern: React.FC<ComplexPatternProps> = ({ data, onChan
 
 export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange, mode }) => {
   const events = Array.isArray(data) ? data : [];
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   
   if (mode === 'edit') {
     const addEvent = () => {
@@ -170,30 +171,99 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
     );
   }
   
-  // Display mode - horizontal timeline with circles
+  // Calculate timeline overview
+  const selectedEvent = events[selectedIndex] || events[0];
+  const startDate = events[0]?.date || 'TBD';
+  const endDate = events[events.length - 1]?.date || 'TBD';
+  const completedCount = events.filter(e => e.completed).length;
+  const progressPercent = events.length > 0 ? Math.round((completedCount / events.length) * 100) : 0;
+  
+  // Display mode - new layout with timeline + details container
   return (
-    <div className="timeline-horizontal">
-      <div className="timeline-milestones">
-        {events.map((event, index) => (
-          <div 
-            key={index} 
-            className={`timeline-milestone ${event.completed ? 'completed' : 'pending'}`}
-            data-milestone-index={index}
-          >
-            <div className="milestone-tooltip">
-              <div className="tooltip-title">{event.title}</div>
-              <div className="tooltip-description">{event.description}</div>
-              <div className="tooltip-status">{event.completed ? 'Completed' : 'Upcoming'}</div>
-            </div>
-            <div className="milestone-bottom">
-              {index === 0 && <div className="timeline-line"></div>}
-              <div className="milestone-chevron"></div>
+    <div className="timeline-container">
+      {/* Top Timeline */}
+      <div className="timeline-horizontal">
+        <div className="timeline-line"></div>
+        <div className="timeline-milestones">
+          {events.map((event, index) => (
+            <div 
+              key={index} 
+              className={`timeline-milestone ${event.completed ? 'completed' : 'pending'} ${index === selectedIndex ? 'selected' : ''}`}
+              onClick={() => setSelectedIndex(index)}
+              data-milestone-index={index}
+            >
               <div className="milestone-circle">{index + 1}</div>
               <div className="milestone-date">{event.date}</div>
               <div className="milestone-title">{event.title}</div>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom Details Container */}
+      <div className="timeline-details-container">
+        {/* Left: Timeline Overview (33%) */}
+        <div className="timeline-overview">
+          <h3 className="overview-heading">Timeline Overview</h3>
+          
+          <div className="overview-item">
+            <span className="overview-label">Start Date</span>
+            <span className="overview-value">{startDate}</span>
           </div>
-        ))}
+          
+          <div className="overview-item">
+            <span className="overview-label">End Date</span>
+            <span className="overview-value">{endDate}</span>
+          </div>
+          
+          <div className="overview-item">
+            <span className="overview-label">Total Milestones</span>
+            <span className="overview-value">{events.length}</span>
+          </div>
+          
+          <div className="overview-item">
+            <span className="overview-label">Progress</span>
+            <span className="overview-value">{completedCount} of {events.length}</span>
+          </div>
+          
+          <div className="overview-progress">
+            <div className="progress-bar-track">
+              <div className="progress-bar-fill" style={{ width: `${progressPercent}%` }}></div>
+            </div>
+            <span className="progress-percent">{progressPercent}%</span>
+          </div>
+        </div>
+
+        {/* Right: Selected Milestone Details (66%) */}
+        <div className="milestone-details">
+          <div className="details-header">
+            <h3 className="details-title">{selectedEvent?.title || 'Select a milestone'}</h3>
+            <span className={`details-status ${selectedEvent?.completed ? 'completed' : 'upcoming'}`}>
+              {selectedEvent?.completed ? 'Completed' : 'Upcoming'}
+            </span>
+          </div>
+          
+          <div className="details-date">
+            <Calendar size={16} />
+            <span>{selectedEvent?.date || 'TBD'}</span>
+          </div>
+          
+          {/* Metadata Panel */}
+          {selectedEvent && (selectedEvent as any).metadata && (
+            <div className="details-metadata">
+              {Object.entries((selectedEvent as any).metadata).map(([key, value]) => (
+                <div key={key} className="metadata-item">
+                  <span className="metadata-label">{key}</span>
+                  <span className="metadata-value">{value as string}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          <div className="details-description">
+            {selectedEvent?.description || 'No description available'}
+          </div>
+        </div>
       </div>
     </div>
   );

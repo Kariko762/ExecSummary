@@ -15,28 +15,31 @@ export function StickyNav() {
     // Set up intersection observer for active section tracking
     const observerOptions = {
       root: null,
-      rootMargin: '-120px 0px -50%',
-      threshold: 0.1
+      rootMargin: '-20% 0px -35% 0px', // Top 20%, keep middle 45% as detection zone, bottom 35%
+      threshold: 0
     };
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      // Find the section that's most visible
-      const visibleEntries = entries.filter(entry => entry.isIntersecting);
-      
-      if (visibleEntries.length > 0) {
-        // Sort by intersection ratio (most visible first)
-        visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        setActiveSection(visibleEntries[0].target.id);
-      }
+      entries.forEach(entry => {
+        // When a section enters the viewport detection zone, make it active
+        if (entry.isIntersecting) {
+          const targetId = entry.target.id;
+          if (targetId) {
+            setActiveSection(targetId);
+          }
+        }
+      });
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    // Observe all sections
+    // Observe all sections that exist in the DOM
     const sections = ['timeline', 'performance', 'organizations', 'initiatives'];
     sections.forEach(id => {
       const element = document.getElementById(id);
-      if (element) observer.observe(element);
+      if (element) {
+        observer.observe(element);
+      }
     });
 
     window.addEventListener('scroll', handleScroll);
@@ -72,7 +75,7 @@ export function StickyNav() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="fixed top-16 left-0 right-0 z-40 glass-strong"
+          className="fixed top-16 left-0 right-0 z-40 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-gray-200/50 dark:border-gray-700/50"
           style={{ borderBottom: '2px solid', borderBottomColor: 'rgb(209 213 219)' }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

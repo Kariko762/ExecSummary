@@ -535,7 +535,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         >
           {/* Draft Preview Control Bar - Only shown in draft mode */}
           {isDraft && (
-            <div className="draft-bar no-print flex-shrink-0 sticky top-0 z-20 bg-gradient-to-r from-fis-eggplant to-fis-raspberry shadow-2xl rounded-t-3xl">
+            <div className="draft-bar no-print flex-shrink-0 sticky top-0 z-20 shadow-2xl rounded-t-3xl" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
               <div className="flex items-center justify-between px-6 py-3">
                 <div className="flex items-center gap-4">
                   <div>
@@ -688,7 +688,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
           {/* Non-Draft Header - Simple header with Export and Close buttons */}
           {!isDraft && (
-            <div className="no-print flex-shrink-0 sticky top-0 z-20 bg-gradient-to-r from-fis-eggplant to-fis-raspberry shadow-2xl rounded-t-3xl">
+            <div className="no-print flex-shrink-0 sticky top-0 z-20 shadow-2xl rounded-t-3xl" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
               <div className="flex items-center justify-between px-6 py-3">
                 <div className="flex items-center gap-4">
                   <div>
@@ -766,7 +766,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
           {/* Show Validation view if in draft mode and validation tab is active */}
           {isDraft && activePreviewTab === 'validation' ? (
-            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant">
+            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-brand-tertiary dark:to-brand-primary">
               <div className="max-w-7xl mx-auto">
                 <div className="mb-6">
                   <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
@@ -910,7 +910,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
             </div>
           ) : isDraft && activePreviewTab === 'json' ? (
             /* JSON view for draft mode */
-            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant">
+            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-brand-tertiary dark:to-brand-primary">
               <div className="max-w-4xl mx-auto">
                 <div className="mb-6">
                   <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
@@ -930,7 +930,17 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       onClick={() => {
                         navigator.clipboard.writeText(JSON.stringify(content, null, 2));
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry text-xs font-roobert-medium transition-all"
+                      className="px-3 py-1.5 rounded-lg text-xs font-roobert-medium transition-all"
+                      style={{ 
+                        backgroundColor: 'rgba(67, 28, 91, 0.1)',
+                        color: 'var(--brand-primary)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.1)';
+                      }}
                     >
                       Copy JSON
                     </button>
@@ -1009,7 +1019,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       <button
                         onClick={() => setShowExportMenu(!showExportMenu)}
                         disabled={isExporting}
-                        className="w-10 h-10 rounded-xl bg-gradient-to-r from-fis-eggplant to-fis-raspberry hover:from-fis-eggplant/90 hover:to-fis-raspberry/90 text-white transition-all disabled:opacity-50 flex items-center justify-center"
+                        className="w-10 h-10 rounded-xl text-white transition-all disabled:opacity-50 flex items-center justify-center"
+                        style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}
+                        onMouseEnter={(e) => {
+                          if (!e.currentTarget.disabled) {
+                            e.currentTarget.style.background = 'linear-gradient(to right, rgba(67, 28, 91, 0.9), rgba(178, 26, 83, 0.9))';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!e.currentTarget.disabled) {
+                            e.currentTarget.style.background = 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))';
+                          }
+                        }}
                         title="Export"
                       >
                         {isExporting ? (
@@ -1080,10 +1101,11 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                               flex-shrink-0 rounded-lg font-roobert-medium transition-all duration-200
                               ${isFullscreen ? 'px-2 py-1 text-[9px]' : 'px-3 py-1.5 text-[10px]'}
                               ${activeSection === `section-${section.key}`
-                                ? 'bg-gradient-to-r from-fis-eggplant to-fis-navy text-white shadow-md'
+                                ? 'text-white shadow-md'
                                 : 'text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800/50'
                               }
                             `}
+                            style={activeSection === `section-${section.key}` ? { background: 'linear-gradient(to right, var(--brand-primary), var(--brand-tertiary))' } : {}}
                           >
                             {section.label}
                           </button>
@@ -1116,7 +1138,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                               setSelectedGoal(sectionGoal);
                               setShowGoalModal(true);
                             }}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-roobert-medium bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/20 hover:underline transition-all cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-roobert-medium hover:underline transition-all cursor-pointer"
+                            style={{
+                              backgroundColor: 'rgba(67, 28, 91, 0.1)',
+                              color: 'var(--brand-primary)',
+                              border: '1px solid rgba(67, 28, 91, 0.2)'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.2)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.1)';
+                            }}
                             title={`Click to view goal: ${sectionGoal.name}`}
                           >
                             <span className="text-sm">{sectionGoal.icon || '🎯'}</span>
@@ -1222,7 +1255,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                               setSelectedGoal(fieldGoal);
                                               setShowGoalModal(true);
                                             }}
-                                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/20 hover:underline transition-all cursor-pointer"
+                                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium hover:underline transition-all cursor-pointer"
+                                            style={{
+                                              backgroundColor: 'rgba(67, 28, 91, 0.1)',
+                                              color: 'var(--brand-primary)',
+                                              border: '1px solid rgba(67, 28, 91, 0.2)'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                              e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.2)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                              e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.1)';
+                                            }}
                                             title={`Click to view goal: ${fieldGoal.name}`}
                                           >
                                             <span className="text-[11px]">{fieldGoal.icon || '🎯'}</span>

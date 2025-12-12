@@ -1,0 +1,20 @@
+{
+  "id": "section-1765397770853-4b2gktdlf",
+  "name": "Weekly Update Dec 9",
+  "description": "Test weekly update",
+  "type": "weekly",
+  "startDate": null,
+  "endDate": null,
+  "status": "active",
+  "noteOrder": [],
+  "createdAt": "2025-12-10T20:16:10.854Z",
+  "updatedAt": "2025-12-10T20:16:10.855Z",
+  "author": "current-user",
+  "color": "blue",
+  "icon": "FileText",
+  "exportSettings": {
+    "includeTableOfContents": true,
+    "groupBy": "category",
+    "format": "detailed"
+  }
+}

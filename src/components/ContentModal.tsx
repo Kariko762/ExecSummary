@@ -638,7 +638,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         >
           {/* Draft Preview Control Bar - Only shown in draft mode */}
           {isDraft && (
-            <div className="draft-bar no-print flex-shrink-0 sticky top-0 z-20 bg-gradient-to-r from-fis-eggplant to-fis-raspberry shadow-2xl rounded-t-3xl">
+            <div className="draft-bar no-print flex-shrink-0 sticky top-0 z-20 shadow-2xl rounded-t-3xl" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
               <div className="flex items-center justify-between px-6 py-3">
                 <div className="flex items-center gap-4">
                   <div>
@@ -901,7 +901,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                       {check.severity === 'success' && <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />}
                                       {check.severity === 'error' && <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />}
                                       {check.severity === 'warning' && <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />}
-                                      {check.severity === 'info' && <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />}
+                                      {check.severity === 'info' && <AlertCircle className="w-4 h-4 text-accent-blue dark:text-accent-blue flex-shrink-0 mt-0.5" />}
                                       <div className="flex-1">
                                         <div className="font-roobert-medium text-gray-900 dark:text-white">
                                           {check.field.replace(`${formatLabel(section as string)}: `, '')}
@@ -954,7 +954,17 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       onClick={() => {
                         navigator.clipboard.writeText(JSON.stringify(content, null, 2));
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-fis-eggplant/10 hover:bg-fis-eggplant/20 text-fis-eggplant dark:text-fis-raspberry text-xs font-roobert-medium transition-all"
+                      className="px-3 py-1.5 rounded-lg text-xs font-roobert-medium transition-all"
+                      style={{ 
+                        backgroundColor: 'rgba(67, 28, 91, 0.1)',
+                        color: 'var(--brand-primary)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.1)';
+                      }}
                     >
                       Copy JSON
                     </button>
@@ -1033,7 +1043,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       <button
                         onClick={() => setShowExportMenu(!showExportMenu)}
                         disabled={isExporting}
-                        className="w-10 h-10 rounded-xl bg-gradient-to-r from-fis-eggplant to-fis-raspberry hover:from-fis-eggplant/90 hover:to-fis-raspberry/90 text-white transition-all disabled:opacity-50 flex items-center justify-center"
+                        className="w-10 h-10 rounded-xl text-white transition-all disabled:opacity-50 flex items-center justify-center"
+                        style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}
+                        onMouseEnter={(e) => {
+                          if (!e.currentTarget.disabled) {
+                            e.currentTarget.style.background = 'linear-gradient(to right, rgba(67, 28, 91, 0.9), rgba(178, 26, 83, 0.9))';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!e.currentTarget.disabled) {
+                            e.currentTarget.style.background = 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))';
+                          }
+                        }}
                         title="Export"
                       >
                         {isExporting ? (
@@ -1049,7 +1070,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                             onClick={exportAsImage}
                             className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
                           >
-                            <FileImage className="w-4 h-4 text-blue-500" />
+                            <FileImage className="w-4 h-4 text-accent-blue" />
                             Export as Image
                           </button>
                           <button
@@ -1226,7 +1247,17 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                                 setSelectedGoal(fieldGoal);
                                                 setShowGoalModal(true);
                                               }}
-                                              className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded-md bg-fis-eggplant/10 text-fis-eggplant dark:bg-fis-raspberry/20 dark:text-fis-raspberry hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/30 hover:underline transition-all cursor-pointer"
+                                              className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded-md hover:underline transition-all cursor-pointer"
+                                              style={{
+                                                backgroundColor: 'rgba(67, 28, 91, 0.1)',
+                                                color: 'var(--brand-primary)'
+                                              }}
+                                              onMouseEnter={(e) => {
+                                                e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.2)';
+                                              }}
+                                              onMouseLeave={(e) => {
+                                                e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.1)';
+                                              }}
                                               title="Click to view goal details"
                                             >
                                               <span className="text-sm">{fieldGoal.icon || '🎯'}</span>

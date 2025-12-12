@@ -4,7 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
+  darkMode: ['class'], // ONLY use class strategy, ignore media queries
   theme: {
     colorFormat: 'rgb', // Force RGB format instead of oklch for html2canvas compatibility
     extend: {
@@ -16,6 +16,11 @@ export default {
         'roobert-heavy': ['Roobert Heavy', 'sans-serif'],
       },
       colors: {
+        'brand': {
+          'primary': 'var(--brand-primary)',
+          'secondary': 'var(--brand-secondary)',
+          'tertiary': 'var(--brand-tertiary)',
+        },
         'fis': {
           'eggplant': '#431C5B',      // Primary - Eggplant
           'navy': '#1D1F48',           // Primary - Navy

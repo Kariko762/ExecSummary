@@ -49,6 +49,14 @@ A premium, modern executive summary website built with React, TypeScript, and cu
 - **📊 Dual View Modes**: 🆕 Toggle between Grid (cards) and Table (professional data table) views
 - **🎨 Table View**: 🆕 Sidebar navigation with gradient blend, Live/Draft badges, completion %, tag pills
 - **🔄 Smart Filtering**: 🆕 Click tags to filter content instantly - works in both Grid and Table views
+- **📊 Forecast System**: 🆕 Comprehensive financial planning with qty/unit cost line items
+  - Initiative-based forecasting with multi-year terms
+  - Capex, Opex, and custom cost centers
+  - First year budget impact display
+  - Line item details with visibility controls (description, summary, justification)
+  - Opex/Yearly costs show yearly rate with term total subtitle
+  - Auto-calculation: qty × unit cost = amount
+  - Budget Breakdown with categories and variance tracking
 
 ## 🎯 Key Components
 

@@ -41,8 +41,8 @@ export function ActivityHoursChart({ hoursByLOB }: ActivityHoursChartProps) {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart - 2/3 width */}
-        <div className="lg:col-span-2">
-          <ResponsiveContainer width="100%" height={350}>
+        <div className="lg:col-span-2 flex items-center">
+          <ResponsiveContainer width="100%" height={300}>
             <BarChart data={data} style={{ cursor: 'default' }}>
               <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />
               <XAxis 
@@ -68,9 +68,9 @@ export function ActivityHoursChart({ hoursByLOB }: ActivityHoursChartProps) {
               <Legend 
                 wrapperStyle={{ fontFamily: 'Roobert', fontSize: '14px' }}
               />
+              <Bar dataKey="Support" stackId="a" fill={ChartColors.series.raspberry} radius={[0, 0, 0, 0]} activeBar={false} />
               <Bar dataKey="Prep" stackId="a" fill={ChartColors.series.eggplant} radius={[0, 0, 0, 0]} activeBar={false} />
-              <Bar dataKey="Demo" stackId="a" fill={ChartColors.series.navy} radius={[0, 0, 0, 0]} activeBar={false} />
-              <Bar dataKey="Support" stackId="a" fill={ChartColors.series.raspberry} radius={[4, 4, 0, 0]} activeBar={false} />
+              <Bar dataKey="Demo" stackId="a" fill={ChartColors.series.navy} radius={[4, 4, 0, 0]} activeBar={false} />
             </BarChart>
           </ResponsiveContainer>
         </div>

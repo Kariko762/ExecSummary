@@ -23,7 +23,7 @@ export function KeyActivityInsights({ data }: KeyActivityInsightsProps) {
         {/* Activity Mix Percentages - 1/3 width */}
         <div className="lg:col-span-1 space-y-4">
           {/* Banking */}
-          <div className="glass-strong rounded-xl p-5">
+          <div className="glass-strong rounded-xl p-3">
             <h4 className="text-lg font-roobert-semibold text-fis-navy dark:text-blue-300 mb-4">
               Banking
             </h4>
@@ -88,7 +88,7 @@ export function KeyActivityInsights({ data }: KeyActivityInsightsProps) {
           </div>
 
           {/* Capital Markets */}
-          <div className="glass-strong rounded-xl p-5">
+          <div className="glass-strong rounded-xl p-3">
             <h4 className="text-lg font-roobert-semibold text-fis-eggplant dark:text-purple-300 mb-4">
               Capital Markets
             </h4>
