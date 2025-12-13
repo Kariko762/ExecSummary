@@ -66,6 +66,7 @@ import OrgChartRenderer from './OrgChartRenderer';
 
 import { BudgetBreakdown } from './assetRenderBudget';
 import { ForecastBreakdown } from './assetRenderForecast';
+import { ExecutiveSynthesisRenderer } from './ExecutiveSynthesisRenderer';
 
 // ==========================================
 // ENGINE PROPS
@@ -173,6 +174,10 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
       case 'forecastBreakdown':
         return <ForecastBreakdown data={data} mode={mode} onChange={onChange} />;
       
+      // EXECUTIVE SYNTHESIS
+      case 'executiveSynthesis':
+        return <ExecutiveSynthesisRenderer data={data} isEditMode={mode === 'edit'} onChange={onChange} />;
+      
       default:
         console.error('❌ AssetRenderEngine - Unknown type received:', type);
         console.log('Available types:', [
@@ -181,7 +186,7 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
           'metricCard', 'radialProgressChart', 'pieChart', 'barChart', 'lineChart',
           'statusBoard', 'timeline', 'twoColumnComparison', 'problemSolutionBox',
           'hr', 'number', 'nestedCards', 'riskCard', 'outlookCard', 'categoryList',
-          'orgChart', 'budgetBreakdown', 'forecastBreakdown'
+          'orgChart', 'budgetBreakdown', 'forecastBreakdown', 'executiveSynthesis'
         ]);
         return <div className="text-red-500">Unknown asset type: {type}</div>;
     }

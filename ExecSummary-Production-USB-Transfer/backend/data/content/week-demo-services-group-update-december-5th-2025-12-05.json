@@ -1,0 +1,223 @@
+{
+  "id": "week-demo-services-group-update-december-5th-2025-12-05",
+  "quarter": "Dec 5",
+  "year": 2025,
+  "date": "2025-12-05",
+  "title": "Demo Services Group - Update December 5th",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_highlights_0_type": "textarea",
+  "_highlights_0_layoutZone": "full",
+  "_highlights_0_rowIndex": 0,
+  "highlights_0": "Demo Services Group continues strategic initiatives across governance, platform development, and operational excellence. Key progress includes E6 governance document completion, platform releases (Shift Management / Executive Visibility), and Coast 2026 renewal progress. Operational focus remains on environment stability, external access enablement and Q4 audit completion.",
+  "_highlights_1_type": "metricCard",
+  "_highlights_1_layoutZone": "full",
+  "_highlights_1_rowIndex": 1,
+  "_highlights_1_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "_highlights_1_alignment": "center",
+  "highlights_1": [
+    {
+      "title": "Demo Preparation",
+      "value": "330 hrs",
+      "style": "highlight",
+      "icon": "trending",
+      "iconColor": "green"
+    },
+    {
+      "title": "Demo Support",
+      "value": "16 hrs",
+      "style": "total",
+      "icon": "star",
+      "iconColor": "navy"
+    },
+    {
+      "title": "Demo Presentation",
+      "value": "172 hrs",
+      "style": "standard",
+      "icon": "users",
+      "iconColor": "green"
+    }
+  ],
+  "_highlights_2_type": "highlightsList",
+  "_highlights_2_layoutZone": "full",
+  "_highlights_2_rowIndex": 2,
+  "highlights_2": [
+    "[[bold]]Coast 2026 Renewal  [[/bold]]  – Critical Path Owners :Robert Rossetti, Mario Batiz | Status: Justifying renewal for >$400K BU spending. Platform team and previous budget owners impacted by latest RIF. Working to establish new sponsorship and governance framework.",
+    "[[bold]]E6 / International Issuing Hub Governance [[/bold]] Status : Completed | Governance document finalized and in legal review with Christian Battelley. Establishes shared-asset controls, edit pathways, and reporting obligations.",
+    "[[bold]]Shift Management Platform [[/bold]] Status : Release Phase | Shift management and audit platform launched due to Shift Governance issue with India Ops. Provides enhanced visibility and control over Demo Operations shift scheduling.",
+    "[[bold]]Executive Summary Platform [[/bold]] Status : Release Phase | Centralized reporting platform, increasing executive and leadership visibility on Demo Services initiatives, processes, and data. Standardizes weekly and monthly reporting."
+  ],
+  "_highlights_3_type": "hr",
+  "_highlights_3_layoutZone": "full",
+  "_highlights_3_rowIndex": 3,
+  "highlights_3": "",
+  "_highlights_sectionLayoutType": "full",
+  "_enabled_highlights": true,
+  "_completed_highlights": false,
+  "_demo_services_0_type": "statusBoard",
+  "_demo_services_0_layoutZone": "full",
+  "_demo_services_0_rowIndex": 0,
+  "_demo_services_0_alignment": "center",
+  "demo_services_0": {
+    "columns": [
+      {
+        "title": "Operations - In Progress",
+        "items": [
+          "DIM / NEXTGEN Environment Stability - Resolving Rec Inventory issues, Recollector Field enhancement",
+          "External DNS / Akamai Enablement - FISDEV VM exposure for external demo audiences",
+          "Azure Monitoring Uplift - FISDEV SDL Server proposal, cost review pending"
+        ]
+      },
+      {
+        "title": "Operations - Next Week",
+        "items": [
+          "Complete Akamai DNS publishing workflow",
+          "Finalize Azure monitoring proposal with budget sponsors",
+          "Maintain NEXTGEN uptime for scheduled client demos"
+        ]
+      },
+      {
+        "title": "Enablement - In Progress",
+        "items": [
+          "E6 - Demo Asset Governance Document"
+        ]
+      },
+      {
+        "title": "Enablement - Next Week",
+        "items": [
+          "E6 - Demo Asset Governance Document Legal Review",
+          "Tiled / Figma : Deployment and Cost planning"
+        ]
+      }
+    ]
+  },
+  "_demo_services_1_type": "hr",
+  "_demo_services_1_layoutZone": "full",
+  "_demo_services_1_rowIndex": 1,
+  "demo_services_1": "",
+  "_demo_services_sectionLayoutType": "full",
+  "_enabled_demo_services": true,
+  "_completed_demo_services": false,
+  "_strategic_initiatives_type": "checklistItems",
+  "_strategic_initiatives_layoutZone": "full",
+  "_strategic_initiatives_rowIndex": 0,
+  "strategic_initiatives": [
+    "Coast AI Review & Enterprise Agreement - Evaluating AI usage constraints and pricing tiers",
+    "E6 Demo Controls Model - Banking NA wider demo enablement framework",
+    "TSYS Coast Integration Efforts - Support selling and seller enablement",
+    "Tiled / Figma Deployment Standardization - Cost modeling and workflow definition for 2025-2026 scaling",
+    "2026 Budget Requirements for Software and Tools"
+  ],
+  "_strategic_initiatives_sectionLayoutType": "full",
+  "_enabled_strategic_initiatives": true,
+  "_completed_strategic_initiatives": false,
+  "_risks_blockers_type": "riskCard",
+  "_risks_blockers_layoutZone": "full",
+  "_risks_blockers_rowIndex": 0,
+  "_risks_blockers_fields": {
+    "severity": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Severity (low/medium/high)"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Risk Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Description"
+    },
+    "mitigation": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Mitigation Plan"
+    }
+  },
+  "risks_blockers": [
+    {
+      "severity": "high",
+      "title": "Coast MSA Ownership Gap",
+      "description": "Platform team and previous budget owners caught up in latest RIF. Renewal essential for maintaining service continuity for BUs spending >$400K on Coast workspaces.",
+      "mitigation": "Demo Services is working with Robert Rossetti and Mario Batiz to provide renewal justification. Working to identify new budget sponsors and establish financial governance framework."
+    },
+    {
+      "severity": "medium",
+      "title": "Figma Licenses for Tiled Deployment at Scale",
+      "description": "Scaling Tiled/Figma deployment requires additional licenses. Cost modelling needed to support 2025-2026 expansion plans and SKO Launch.",
+      "mitigation": "Documenting platform usage structure and cost structure, including Figma licenses. Preparing business case for license procurement to enable standardized deployment workflow."
+    }
+  ],
+  "_risks_blockers_sectionLayoutType": "full",
+  "_enabled_risks_blockers": true,
+  "_completed_risks_blockers": false,
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "Weekly-Update-v1",
+  "_template_description": "",
+  "_template_created": "2025-12-05T23:14:03.302Z",
+  "_template_updated": "2025-12-05T23:14:03.302Z",
+  "_layout": "one-pager",
+  "_contentTag": "weekly-summary",
+  "_highlights_0_displayAssetTitle": true,
+  "_highlights_1_assetTitle": "Key Activity Insights ( Nov 24 - Nov 28)",
+  "_highlights_2_displayAssetTitle": false,
+  "_type": "weekly-summary",
+  "_highlights_0_assetTitle": "Testing TITLE"
+}

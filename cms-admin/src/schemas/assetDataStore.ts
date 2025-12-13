@@ -1405,6 +1405,59 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       container: 'w-full',
       padding: AssetStyles.spacing.lg
     }
+  },
+
+  // ==========================================
+  // EXECUTIVE SYNTHESIS (CPSAR Framework)
+  // ==========================================
+
+  {
+    id: 'executiveSynthesis',
+    name: 'Executive Synthesis',
+    type: 'executiveSynthesis',
+    category: 'complex',
+    description: 'Executive communication framework: Context, Problem, Solution, Recommendation, Asks (CPSAR)',
+    useCase: 'Executive summaries, status reports, decision briefs - clear synthesis for leadership',
+    schema: {
+      type: 'object',
+      renderAs: 'executiveSynthesis',
+      label: 'Executive Synthesis',
+      required: false
+    },
+    exampleData: {
+      context: 'Q4 2026 strategic initiative tracking across 12 programs ($45M total investment)',
+      problem: '3 critical path projects at risk (15% budget overrun, 2-month delay potential)',
+      solution: 'Reallocated $2M from Project X, added 3 FTEs, fast-tracked vendor procurement',
+      recommendation: 'Approve emergency funding drawdown and extend Q1 deadline by 30 days',
+      asks: [
+        {
+          type: 'budget',
+          item: 'Approve $2M emergency funding from Q1 reserves',
+          urgency: 'high',
+          owner: 'CFO',
+          deadline: 'Dec 15, 2025'
+        },
+        {
+          type: 'decision',
+          item: 'Extend Project Alpha deadline to Jan 31, 2026',
+          urgency: 'medium',
+          owner: 'CEO',
+          deadline: 'Dec 20, 2025'
+        },
+        {
+          type: 'resource',
+          item: 'Approve 3 contractor positions for Q1',
+          urgency: 'high',
+          owner: 'CHRO',
+          deadline: 'Dec 18, 2025'
+        }
+      ]
+    },
+    supportsMultiColumn: false,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.md
+    }
   }
 ];
 

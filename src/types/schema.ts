@@ -28,7 +28,8 @@ export type RenderType =
   | 'video'             // Video upload/display
   | 'embeddedVideo'     // Embedded video URL
   | 'statusBoard'       // Table layout
-  | 'orgChart';         // Organizational chart with hierarchy
+  | 'orgChart'          // Organizational chart with hierarchy
+  | 'executiveSynthesis'; // Executive synthesis (Context/Problem/Solution/Recommendation/Asks)
 
 export type ValidationRule = {
   rule: 'required' | 'min' | 'max' | 'minItems' | 'maxItems' | 'pattern' | 'email' | 'url' | 'custom';

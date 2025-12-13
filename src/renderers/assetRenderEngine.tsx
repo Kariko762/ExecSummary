@@ -64,6 +64,7 @@ import {
 
 import { BudgetBreakdown } from './assetRenderBudget';
 import { ForecastBreakdown } from './assetRenderForecast';
+import { ExecutiveSynthesisRenderer } from './ExecutiveSynthesisRenderer';
 
 // ==========================================
 // ENGINE PROPS
@@ -166,6 +167,10 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <BudgetBreakdown data={data} />;
       case 'forecastBreakdown':
         return <ForecastBreakdown data={data} />;
+      
+      // EXECUTIVE SYNTHESIS
+      case 'executiveSynthesis':
+        return <ExecutiveSynthesisRenderer data={data} isEditMode={false} />;
       
       default:
         return <div className="text-red-500">Unknown asset type: {type}</div>;

@@ -13,9 +13,11 @@ import {
   DollarSign,
   Info,
   AlertCircle,
-  X
+  X,
+  FileDown
 } from 'lucide-react';
 import { domToPng } from 'modern-screenshot';
+import jsPDF from 'jspdf';
 
 interface LineItem {
   id: string;
@@ -112,10 +114,57 @@ export const ForecastPrintView: React.FC<ForecastPrintViewProps> = ({
     }
   };
 
+  const exportToPdf = async () => {
+    const el = printViewRef.current;
+    if (!el) return;
+    try {
+      // Use domToPng (same as PNG export) to avoid html2canvas oklab issues
+      const dataUrl = await domToPng(el, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        filter: (node) => {
+          // Hide elements with no-screenshot class
+          if (node instanceof HTMLElement && node.classList.contains('no-screenshot')) {
+            return false;
+          }
+          return true;
+        },
+      });
+
+      // Convert data URL to image to get dimensions
+      const img = new Image();
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = dataUrl;
+      });
+
+      const imgData = dataUrl;
+      
+      // Calculate PDF dimensions based on actual image size to maintain aspect ratio
+      const pxToMm = 0.264583; // conversion factor (96 DPI to mm)
+      const pageWidthMm = img.width * pxToMm;
+      const pageHeightMm = img.height * pxToMm;
+      
+      const pdf = new jsPDF({
+        orientation: pageHeightMm > pageWidthMm ? 'portrait' : 'landscape',
+        unit: 'mm',
+        format: [pageWidthMm, pageHeightMm], // Custom size matching exact content dimensions
+      });
+
+      // Add the full image as a single page with exact dimensions
+      pdf.addImage(imgData, 'PNG', 0, 0, pageWidthMm, pageHeightMm, undefined, 'FAST');
+
+      pdf.save(`${data.title.replace(/\s+/g, '-')}-Complete-Breakdown.pdf`);
+    } catch (error) {
+      console.error('PDF export failed:', error);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 overflow-y-auto">
       <div className="min-h-screen p-8">
-        <div ref={printViewRef} className="max-w-7xl mx-auto bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden print-view">
+        <div ref={printViewRef} className="light max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden print-view" style={{ colorScheme: 'light' }}>
           {/* Header - Stunning gradient */}
           <div className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 50%, var(--brand-primary) 100%)' }}>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)]" />
@@ -143,6 +192,13 @@ export const ForecastPrintView: React.FC<ForecastPrintViewProps> = ({
                   </div>
                 </div>
                 <div className="flex items-center gap-2 print:hidden no-screenshot">
+                  <button
+                    onClick={exportToPdf}
+                    className="p-2 hover:bg-white/20 rounded-lg transition-all"
+                    title="Export PDF"
+                  >
+                    <FileDown className="w-5 h-5" />
+                  </button>
                   <button
                     onClick={exportToPng}
                     className="p-2 hover:bg-white/20 rounded-lg transition-all"

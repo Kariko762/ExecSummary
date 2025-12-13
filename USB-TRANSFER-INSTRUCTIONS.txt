@@ -1,0 +1,101 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║        EXECUTIVE SUMMARY PLATFORM - USB TRANSFER            ║
+║                  Quick Reference Card                        ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+📦 FILE INFO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ZIP Filename: ExecSummary-Production-READY-Dec-12-2025.zip
+Compressed Size: 31.32 MB
+Uncompressed Size: 113.46 MB
+Build Date: December 12, 2025
+Git Commit: 4ba600a
+
+🎯 3-STEP INSTALLATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: COPY TO TARGET PC
+  • Copy ZIP file to USB drive
+  • Transfer to target PC (e.g., C:\ExecSummary\)
+  • Extract ZIP file
+  • You'll get folder: ExecSummary-Production-USB-Transfer/
+
+STEP 2: INSTALL NODE.JS (if not installed)
+  • Visit: https://nodejs.org/
+  • Download: LTS version (v20.x or v22.x)
+  • Install with default settings
+  • Restart computer after installation
+
+STEP 3: RUN APPLICATION
+  • Open folder: ExecSummary-Production-USB-Transfer/
+  • Double-click: START-SERVER.bat
+  • Wait for "Server running" message
+  • Browser opens automatically!
+
+🌐 ACCESS URLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 CMS Admin (Content Editing):
+   http://localhost:3001/cms-admin/
+
+📊 Dashboard (Executive View):
+   http://localhost:3001/
+
+⚠️ IMPORTANT NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ All dependencies PRE-INSTALLED (node_modules included)
+✅ NO npm install needed
+✅ NO internet required (after Node.js installation)
+✅ Runs completely offline
+✅ Data stored locally in backend/data/
+
+❌ Do NOT run "npm install" (already done)
+❌ Do NOT modify node_modules folder
+❌ Do NOT delete backend/data/ folder (contains your content)
+
+🔄 TO STOP SERVER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Press Ctrl+C in the terminal window
+Or simply close the terminal window
+
+🔧 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: "Node.js not found"
+Solution: Install Node.js from https://nodejs.org/
+
+Problem: "Port 3001 already in use"
+Solution: Another app is using port 3001. 
+          Stop that app, or change port in backend/server.js
+
+Problem: Blank page or errors
+Solution: Make sure entire folder was extracted from ZIP
+          Check that backend/node_modules/ exists
+
+📞 SUPPORT INFO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Package Built: December 12, 2025, 22:00 UTC
+Production Ready: YES ✅
+Tested On: Windows 10/11, Node.js v20.x
+
+✨ NEW FEATURES IN THIS BUILD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Forecast system with Qty/Unit Cost calculations
+• First year budget displays
+• Opex/Yearly cost formatting
+• Line item visibility controls
+• Notes system with section grouping
+• Quick Actions menu (Ctrl+K)
+• Budget edit mode
+• Full dark/light mode support
+
+═══════════════════════════════════════════════════════════════
+        Ready to Transfer - No Additional Setup Needed
+═══════════════════════════════════════════════════════════════

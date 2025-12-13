@@ -22,6 +22,7 @@ import { EmbeddedVideoRenderer } from './EmbeddedVideoRenderer';
 import { TableLayoutRenderer } from './TableLayoutRenderer';
 import { KeyValueListRenderer } from './KeyValueListRenderer';
 import { OrgChartRenderer } from './OrgChartRenderer';
+import { ExecutiveSynthesisRenderer } from './ExecutiveSynthesisRenderer';
 import { BudgetBreakdown } from './assetRenderBudget';
 import { ForecastBreakdown } from './assetRenderForecast';
 
@@ -137,6 +138,10 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
     
     case 'orgChart':
       renderer = <OrgChartRenderer {...props} />;
+      break;
+    
+    case 'executiveSynthesis':
+      renderer = <ExecutiveSynthesisRenderer {...props} />;
       break;
     
     case 'budgetBreakdown':

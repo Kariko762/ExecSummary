@@ -3,411 +3,11 @@
   "quarter": "Dec 12",
   "year": 2025,
   "date": "2025-12-12",
-  "title": "asdfg",
+  "title": "2026 Technology Planning 1",
   "_enabled_standard_header": true,
   "_completed_standard_header": false,
-  "_funding_0_type": "budgetBreakdown",
-  "_funding_0_layoutZone": "full",
   "_funding_0_rowIndex": 0,
-  "funding_0": {
-    "title": "Q4 2025 Operating Budget",
-    "currency": "USD",
-    "period": "Q4 2025",
-    "totalBudget": 5250000,
-    "totalActual": 4875000,
-    "categories": [
-      {
-        "id": "personnel",
-        "name": "Personnel & Compensation",
-        "icon": "Users",
-        "budgeted": 3200000,
-        "actual": 3150000,
-        "variance": -50000,
-        "variancePercent": -1.6,
-        "status": "on-track",
-        "color": "emerald",
-        "lineItems": [
-          {
-            "id": "salaries",
-            "name": "Base Salaries",
-            "budgeted": 2400000,
-            "actual": 2380000,
-            "variance": -20000,
-            "summary": "Personnel costs running 0.8% under budget due to delayed hiring",
-            "explanation": "Savings from delayed Q3 hires rolling into Q4",
-            "justification": "Two senior positions remained open through Q3 reorganization",
-            "owner": "HR Director",
-            "lastUpdated": "2025-11-15"
-          },
-          {
-            "id": "benefits",
-            "name": "Benefits & Insurance",
-            "budgeted": 550000,
-            "actual": 545000,
-            "variance": -5000,
-            "summary": "Employee benefits tracking slightly under budget with improved coverage terms",
-            "explanation": "Lower health insurance premiums than projected",
-            "justification": "Negotiated favorable group rates with new provider",
-            "owner": "Benefits Manager",
-            "lastUpdated": "2025-11-10"
-          },
-          {
-            "id": "bonuses",
-            "name": "Performance Bonuses",
-            "budgeted": 250000,
-            "actual": 225000,
-            "variance": -25000,
-            "explanation": "Q3 performance metrics below target",
-            "justification": "Market conditions impacted sales targets by 12%",
-            "owner": "Compensation Lead",
-            "lastUpdated": "2025-11-20"
-          }
-        ]
-      },
-      {
-        "id": "technology",
-        "name": "Technology & Infrastructure",
-        "icon": "Server",
-        "budgeted": 1200000,
-        "actual": 1050000,
-        "variance": -150000,
-        "variancePercent": -12.5,
-        "status": "on-track",
-        "color": "blue",
-        "lineItems": [
-          {
-            "id": "cloud",
-            "name": "Cloud Services (AWS, Azure)",
-            "budgeted": 650000,
-            "actual": 580000,
-            "variance": -70000,
-            "explanation": "Optimization initiatives reduced compute costs",
-            "justification": "Infrastructure team implemented auto-scaling and reserved instances",
-            "owner": "Cloud Architect",
-            "lastUpdated": "2025-11-18"
-          },
-          {
-            "id": "licenses",
-            "name": "Software Licenses",
-            "budgeted": 350000,
-            "actual": 310000,
-            "variance": -40000,
-            "explanation": "Enterprise license renegotiation savings",
-            "justification": "Consolidated vendors and secured multi-year discount",
-            "owner": "IT Procurement",
-            "lastUpdated": "2025-11-05"
-          },
-          {
-            "id": "hardware",
-            "name": "Hardware & Equipment",
-            "budgeted": 200000,
-            "actual": 160000,
-            "variance": -40000,
-            "explanation": "Deferred laptop refresh to Q1 2026",
-            "justification": "Extended lifecycle by 6 months based on performance data",
-            "owner": "IT Director",
-            "lastUpdated": "2025-11-12"
-          }
-        ]
-      },
-      {
-        "id": "operations",
-        "name": "Operations & Facilities",
-        "icon": "Building2",
-        "budgeted": 550000,
-        "actual": 475000,
-        "variance": -75000,
-        "variancePercent": -13.6,
-        "status": "on-track",
-        "color": "violet",
-        "lineItems": [
-          {
-            "id": "rent",
-            "name": "Office Rent & Utilities",
-            "budgeted": 350000,
-            "actual": 325000,
-            "variance": -25000,
-            "explanation": "Reduced office footprint with hybrid work model",
-            "justification": "Sublease of 2 floors generating $25K/month revenue",
-            "owner": "Facilities Manager",
-            "lastUpdated": "2025-11-08"
-          },
-          {
-            "id": "supplies",
-            "name": "Office Supplies & Equipment",
-            "budgeted": 120000,
-            "actual": 90000,
-            "variance": -30000,
-            "explanation": "Lower in-office headcount reduced supply needs",
-            "justification": "Average 40% remote work across all departments",
-            "owner": "Office Manager",
-            "lastUpdated": "2025-11-14"
-          },
-          {
-            "id": "travel",
-            "name": "Business Travel",
-            "budgeted": 80000,
-            "actual": 60000,
-            "variance": -20000,
-            "explanation": "Virtual meetings replacing some in-person conferences",
-            "justification": "Travel policy update prioritizing essential trips only",
-            "owner": "Operations Director",
-            "lastUpdated": "2025-11-16"
-          }
-        ]
-      },
-      {
-        "id": "marketing",
-        "name": "Marketing & Customer Acquisition",
-        "icon": "TrendingUp",
-        "budgeted": 300000,
-        "actual": 325000,
-        "variance": 25000,
-        "variancePercent": 8.3,
-        "status": "at-risk",
-        "color": "amber",
-        "lineItems": [
-          {
-            "id": "digital",
-            "name": "Digital Advertising",
-            "budgeted": 180000,
-            "actual": 195000,
-            "variance": 15000,
-            "explanation": "Increased spend to capitalize on Q4 market opportunity",
-            "justification": "ROI tracking shows 3.2x return on incremental investment",
-            "owner": "Marketing Director",
-            "lastUpdated": "2025-11-22"
-          },
-          {
-            "id": "events",
-            "name": "Events & Sponsorships",
-            "budgeted": 80000,
-            "actual": 90000,
-            "variance": 10000,
-            "explanation": "Added last-minute industry conference sponsorship",
-            "justification": "Strategic opportunity to reach 2000+ qualified leads",
-            "owner": "Events Manager",
-            "lastUpdated": "2025-11-19"
-          },
-          {
-            "id": "content",
-            "name": "Content Production",
-            "budgeted": 40000,
-            "actual": 40000,
-            "variance": 0,
-            "explanation": "On budget - video production and design as planned",
-            "justification": "Quarterly content calendar executed per schedule",
-            "owner": "Content Lead",
-            "lastUpdated": "2025-11-17"
-          }
-        ]
-      }
-    ],
-    "notes": "Overall tracking 7.1% under budget. Marketing overage justified by ROI metrics. Technology savings from optimization initiatives."
-  },
-  "_funding_1_type": "forecastBreakdown",
-  "_funding_1_layoutZone": "full",
   "_funding_1_rowIndex": 1,
-  "funding_1": {
-    "title": "2026 Technology Investment Forecast",
-    "currency": "USD",
-    "period": "FY 2026",
-    "initiatives": [
-      {
-        "id": "cloud-migration",
-        "name": "Cloud Migration Project",
-        "termYears": 3,
-        "costCenters": [
-          {
-            "id": "capex",
-            "type": "capex",
-            "name": "Capex",
-            "removable": false,
-            "lineItems": [
-              {
-                "id": "1",
-                "name": "Azure Reserved Instances",
-                "amount": 1200,
-                "description": "One-time 3-year commitment for compute and storage123",
-                "summary": "Multi-year Azure reservation provides 40% savings vs on-demand pricing123",
-                "justification": "Current on-premise infrastructure reaching end-of-life. Cloud-first strategy approved.123",
-                "owner": "Cloud Architect",
-                "lastUpdated": "2025-12-12T21:36:57.844Z",
-                "summaryVisible": false,
-                "unitCost": 100,
-                "qty": 12
-              },
-              {
-                "id": "2",
-                "name": "Migration Services",
-                "amount": 80000,
-                "description": "Professional services for workload migration and optimization",
-                "summary": "Third-party consulting to accelerate migration timeline",
-                "owner": "Cloud Program Manager",
-                "lastUpdated": "2025-12-05"
-              }
-            ]
-          },
-          {
-            "id": "opex",
-            "type": "opex",
-            "name": "Opex",
-            "removable": false,
-            "lineItems": [
-              {
-                "id": "3",
-                "name": "Annual Cloud Services",
-                "amount": 20000,
-                "description": "Ongoing compute, storage, networking costs beyond reserved capacity",
-                "summary": "Variable workloads and development environments",
-                "owner": "IT Operations",
-                "lastUpdated": "2025-12-12T21:37:06.356Z",
-                "unitCost": 20,
-                "qty": 1000
-              },
-              {
-                "id": "4",
-                "name": "Monitoring & Observability",
-                "amount": 50000,
-                "description": "Datadog Enterprise license and APM",
-                "summary": "Real-time monitoring across cloud infrastructure",
-                "owner": "DevOps Team",
-                "lastUpdated": "2025-12-05"
-              }
-            ]
-          },
-          {
-            "id": "idsw-1",
-            "type": "custom",
-            "name": "IDSW",
-            "removable": true,
-            "lineItems": [
-              {
-                "id": "5",
-                "name": "IDSW Support Services",
-                "amount": 45000,
-                "description": "Dedicated support from IDSW for cloud migration",
-                "summary": "Architecture review and optimization guidance",
-                "owner": "Cloud Architect",
-                "lastUpdated": "2025-12-05"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "security-compliance",
-        "name": "Security & Compliance Initiative",
-        "termYears": 1,
-        "costCenters": [
-          {
-            "id": "capex",
-            "type": "capex",
-            "name": "Capex",
-            "removable": false,
-            "lineItems": [
-              {
-                "id": "6",
-                "name": "SIEM Platform Implementation",
-                "amount": 60000,
-                "description": "Splunk Enterprise Security deployment and configuration",
-                "summary": "Centralized security event management and threat detection",
-                "justification": "SOC 2 Type II compliance requirement. Audit findings require centralized logging.",
-                "owner": "Security Architect",
-                "lastUpdated": "2025-12-05"
-              }
-            ]
-          },
-          {
-            "id": "opex",
-            "type": "opex",
-            "name": "Opex",
-            "removable": false,
-            "lineItems": [
-              {
-                "id": "7",
-                "name": "Managed Security Services",
-                "amount": 80000,
-                "description": "SOC services, threat intelligence, incident response",
-                "summary": "24/7 security monitoring and response",
-                "owner": "CISO",
-                "lastUpdated": "2025-12-05"
-              },
-              {
-                "id": "8",
-                "name": "Compliance & Audit",
-                "amount": 40000,
-                "description": "Annual audit fees, penetration testing, compliance consulting",
-                "summary": "SOC 2, ISO 27001, and industry-specific compliance",
-                "owner": "Compliance Manager",
-                "lastUpdated": "2025-12-05"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "erp-modernization",
-        "name": "ERP System Modernization",
-        "termYears": 1,
-        "costCenters": [
-          {
-            "id": "capex",
-            "type": "capex",
-            "name": "Capex",
-            "removable": false,
-            "lineItems": [
-              {
-                "id": "9",
-                "name": "NetSuite Upgrade",
-                "amount": 100000,
-                "description": "Major version upgrade with new financial modules",
-                "summary": "Enhanced reporting, multi-currency support, advanced revenue recognition",
-                "justification": "Current version end-of-support in Q2 2026. New features required for global expansion.",
-                "owner": "ERP Program Manager",
-                "lastUpdated": "2025-12-05"
-              }
-            ]
-          },
-          {
-            "id": "opex",
-            "type": "opex",
-            "name": "Opex",
-            "removable": false,
-            "lineItems": [
-              {
-                "id": "10",
-                "name": "Training & Change Management",
-                "amount": 30000,
-                "description": "User training, documentation, change management support",
-                "summary": "Ensure successful adoption across 150 users",
-                "owner": "ERP Program Manager",
-                "lastUpdated": "2025-12-05"
-              }
-            ]
-          },
-          {
-            "id": "consulting",
-            "type": "custom",
-            "name": "Consulting",
-            "removable": true,
-            "lineItems": [
-              {
-                "id": "11",
-                "name": "NetSuite Implementation Partner",
-                "amount": 75000,
-                "description": "Certified NetSuite consultants for upgrade and customization",
-                "summary": "Expert guidance to minimize downtime and ensure data integrity",
-                "owner": "ERP Program Manager",
-                "lastUpdated": "2025-12-05"
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "notes": "Three strategic initiatives totaling $850K. Cloud Migration (3-year, $445K) is largest investment. Security & Compliance ($180K) addresses audit findings. ERP Modernization ($205K) enables global expansion. Overall split: 42% Capex / 38% Opex / 20% Custom (IDSW & Consulting)."
-  },
   "_funding_sectionLayoutType": "full",
   "_enabled_funding": true,
   "_completed_funding": false,
@@ -418,5 +18,140 @@
   "_template_created": "2025-12-12T21:10:47.684Z",
   "_template_updated": "2025-12-12T21:10:47.684Z",
   "_layout": "one-pager",
-  "_contentTag": "weekly-summary"
+  "_contentTag": "executive-iq",
+  "_type": "executive-iq",
+  "funding_0": {
+    "title": "Demo Services 2026 Transformation",
+    "currency": "USD",
+    "period": "FY 2026",
+    "initiatives": [
+      {
+        "id": "cloud-migration",
+        "name": "Demo Operations : Services Transformation",
+        "termYears": 1,
+        "costCenters": [
+          {
+            "id": "capex",
+            "type": "capex",
+            "name": "Capex",
+            "removable": false,
+            "lineItems": []
+          },
+          {
+            "id": "opex",
+            "type": "opex",
+            "name": "Opex",
+            "removable": false,
+            "lineItems": [
+              {
+                "id": "item-1765579821820",
+                "name": "Figma (Full License)",
+                "qty": 25,
+                "unitCost": 1100,
+                "amount": 27500,
+                "description": "Provide Figma licenses for Tiled power users to enable template automation and scalability.",
+                "summary": "To deliver high-quality, standardized microapps in Tiled, we propose granting Figma licenses to a select group of specialists. These users will design central templates, customize them for strategic deals and clients, and publish them into Tiled for end-user refinement, ensuring agility and consistency across all interactive content.",
+                "justification": "Figma integration is critical for introducing template automation, enforcing design standards, and accelerating development timelines. This approach reduces time-to-market, supports scale, and ensures our interactive content meets brand and quality expectations while enabling Pre-Sales and Sales teams to quickly tailor demos for client engagements.",
+                "owner": "TBC",
+                "lastUpdated": "2025-12-13T00:06:36.103Z",
+                "summaryVisible": true,
+                "justificationVisible": true
+              },
+              {
+                "id": "item-1765580114622",
+                "name": "PowToon (UAL)",
+                "qty": 30,
+                "unitCost": 1000,
+                "amount": 30000,
+                "description": "Expand Powtoon licenses for Capital Markets",
+                "summary": "Powtoon is used by Capital Markets to create engaging, marketing-style videos that complement AI avatar content and support sales cycles. We propose expanding existing licenses to meet growing demand for dynamic, visually compelling content tailored to client opportunities.",
+                "justification": "Increasing Powtoon licenses ensures Capital Markets can continue producing high-impact, creative video assets that differentiate our offerings and enhance client engagement. This investment supports strategic deals, accelerates content delivery, and strengthens our ability to deliver innovative, multimedia sales experiences.",
+                "owner": "TBC",
+                "lastUpdated": "2025-12-13T00:06:32.688Z",
+                "summaryVisible": true,
+                "justificationVisible": true
+              },
+              {
+                "id": "item-1765580276463",
+                "name": "Tiled.co (UAL)",
+                "qty": 280,
+                "unitCost": 200,
+                "amount": 56000,
+                "description": "Expand Tiled licenses and deliver SKO training for interactive microapps.",
+                "summary": "Tiled enables the creation of interactive microapps hosted on Seismic, transforming static content into engaging, client-facing experiences and guided sales tools for Pre-Sales. With 80 licenses already in use and strong adoption across Pre-Sales, Sales Enablement, and GTM teams, we propose expanding licenses to empower Pre-Sales during SKO, where Tiled will provide on-site training sessions.",
+                "justification": "This investment supports our strategy to revolutionize content delivery and enhance client engagement. By scaling Tiled adoption and providing SKO training, we equip teams to create dynamic, interactive sales content that drives differentiation, accelerates deal cycles, and strengthens alignment across GTM initiatives.",
+                "owner": "TBC",
+                "lastUpdated": "2025-12-12T23:33:10.863Z"
+              },
+              {
+                "id": "item-1765580423580",
+                "name": "Coast (MSA)",
+                "qty": 1,
+                "unitCost": 267300,
+                "amount": 267300,
+                "description": "Renew Master Service Agreement (MSA) with Coast.",
+                "summary": "The Coast MSA provides subsidized license costs for multiple business units and enables critical demo capabilities. Coast also delivers event support for SKO and Emerald at their own expense, creating significant value for the organization.",
+                "justification": "Without renewal, several lines of business will lose demo functionality, impacting sales readiness and client engagement. Current Coast license spend is approximately $350K and projected to exceed $600K in 2026. The MSA underpins this investment, ensuring cost efficiency, continuity of service, and strategic support for major corporate events.",
+                "owner": "RevOps",
+                "lastUpdated": "2025-12-13T00:06:37.886Z"
+              },
+              {
+                "id": "item-1765580472195",
+                "name": "Coast (CM Demos)",
+                "qty": 20,
+                "unitCost": 10000,
+                "amount": 200000,
+                "description": "Additional budget for Coast engagement dedicated to Capital Markets.",
+                "summary": "Capital Markets has received complimentary Coast services to support strategic deals on products that currently do not exist in our demo portfolio. We are requesting dedicated funding to expand this engagement, leveraging Coast’s expertise to accelerate development of new demo experiences and extend these capabilities across more Capital Markets products.",
+                "justification": "This investment capitalizes on a unique opportunity: Coast is already providing high-value services at no cost, demonstrating strong partnership and strategic alignment. By funding this expansion, we enable Capital Markets to deliver differentiated demos for emerging products, drive innovation in client engagements, and scale the new demo experience across additional FIS solutions, ultimately strengthening competitive positioning and revenue growth.",
+                "owner": "RevOps",
+                "lastUpdated": "2025-12-13T00:06:39.718Z"
+              },
+              {
+                "id": "item-1765580522496",
+                "name": "Synthesia",
+                "qty": 100,
+                "unitCost": 2160,
+                "amount": 216000,
+                "description": "Expand Synthesia.io licenses from 30 to 130, to be used by all business lines.",
+                "summary": "To enhance sales enablement and accelerate deal-specific content creation, we propose increasing Synthesia licenses by 100 (from 30 to 130). This expansion supports the growing demand for AI-generated avatar videos and interactive demos tailored to client opportunities. This will also enable the other business lines to take advantage of the technology as part of their sales cycles.",
+                "justification": "Synthesia is a proven tool for creating personalized, scalable video content that shortens sales cycles and improves client engagement. Expanding licenses ensures Capital Markets and the wider business lines can meet rising demand for customized demos, maintain competitive differentiation, and deliver consistent, high-quality messaging across strategic deals.",
+                "owner": "TBC",
+                "lastUpdated": "2025-12-12T23:29:07.677Z"
+              },
+              {
+                "id": "item-1765582755649",
+                "name": "Onshore Hire",
+                "qty": 1,
+                "unitCost": 100000,
+                "amount": 100000,
+                "description": "Hire an On-Shore Demo Enablement Lead (Native English Speaker).",
+                "summary": "To accelerate adoption of Demo Services and emerging Demo Technologies, the Demo Services Group requires a dedicated on-shore resource to orchestrate engagement across Sales, Pre-Sales, Lines of Business, Product, Go-To-Market, and Brand teams. This role will own the creation of standardized templates, interactive designs, and best-practice frameworks that enable consistent, high-quality demo experiences across the organization.",
+                "justification": "This position is critical to maximize ROI on our technology investments and ensure rapid time-to-market for demo initiatives. By centralizing enablement and content creation, we guarantee alignment with brand standards, improved stakeholder collaboration, and a measurable reduction in cycle time from concept to go-live, ultimately driving greater impact in client engagements and revenue growth.",
+                "owner": "RevOps",
+                "lastUpdated": "2025-12-12T23:40:37.295Z"
+              },
+              {
+                "id": "item-1765582756100",
+                "name": "Promotions",
+                "qty": 4,
+                "unitCost": 2500,
+                "amount": 10000,
+                "description": "Promote two existing team members into Demo Operations leadership (Team Lead and Technical Lead) roles and migrate two existing team members to Demo Enablement (Demo Content Creation)\n",
+                "summary": "To strengthen our demo delivery model, we will promote two existing team members into Demo Operations leadership positions (Team Lead and Technical Lead) and transition two resources into Demo Enablement for content creation. This ensures operational stability while building a dedicated enablement capability.",
+                "justification": "These changes leverage internal expertise to maintain 24/7 operational coverage and accelerate enablement readiness. By promoting proven talent and reallocating resources, we minimize risk, preserve knowledge, and support the adoption of new demo technologies for greater impact.",
+                "owner": "RevOps",
+                "lastUpdated": "2025-12-12T23:40:49.601Z"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "notes": "A RevOps lead strategic initiatives totaling $906.8K to transform demo capabilities and sales enablement.\n\nDemo Enablement & Talent ($130K): Includes on-shore hire and internal promotions to establish a dedicated enablement team.\nTechnology Partnerships ($467.3K): Coast MSA renewal and Capital Markets expansion to sustain and scale demo services across FIS products.\n\nContent Innovation ($309.5K): License expansions for Tiled, Synthesia, Powtoon, and Figma to deliver interactive microapps, AI-driven videos, and creative marketing assets.\n\nOverall focus: accelerate adoption of new demo technologies, standardize content delivery, and enhance client engagement at scale."
+  },
+  "_funding_0_type": "forecastBreakdown",
+  "_funding_0_layoutZone": "full",
+  "_funding_0_displayAssetTitle": false,
+  "_funding_displayTitle": false
 }
