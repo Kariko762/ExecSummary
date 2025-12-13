@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { domToPng } from 'modern-screenshot';
 import { ForecastEditorModal } from '../components/ForecastEditorModal';
+import { ForecastPrintView } from './ForecastPrintView';
 
 // ==========================================
 // TYPE DEFINITIONS
@@ -104,10 +105,12 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
   } | null>(null);
   const [showForecastEditor, setShowForecastEditor] = useState(false);
   const [showYoYChart, setShowYoYChart] = useState(false);
+  const [showPrintView, setShowPrintView] = useState(false);
   const [yoyViewMode, setYoyViewMode] = useState<'all' | string>('all'); // 'all' or initiative.id
   const [hoveredYear, setHoveredYear] = useState<number | null>(null);
   const [selectedYearDetail, setSelectedYearDetail] = useState<any | null>(null);
   const yoyChartRef = React.useRef<HTMLDivElement>(null);
+  const printViewRef = React.useRef<HTMLDivElement>(null);
 
   // Listen for expand/collapse events from ContentModal
   useEffect(() => {
@@ -741,6 +744,25 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
             <BarChart3 className="w-4 h-4" />
             YoY Chart
           </button>
+          <button
+            onClick={() => setShowPrintView(true)}
+            className="px-3 py-2 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg font-roobert-medium text-sm"
+            style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(135deg, #764ba2 0%, #F093FB 100%)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }}
+            title="Comprehensive Print View with All Details"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Print View
+          </button>
         </div>
       </div>
 
@@ -960,6 +982,20 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
           </div>
         )}
       </div>
+
+      {/* Comprehensive Print View Modal */}
+      {showPrintView && (
+        <ForecastPrintView
+          data={data}
+          onClose={() => setShowPrintView(false)}
+          formatCurrency={formatCurrency}
+          getCostCenterLabel={getCostCenterLabel}
+          getInitiativeTotal={getInitiativeTotal}
+          getInitiativeFirstYearCost={getInitiativeFirstYearCost}
+          getCostCenterTotal={getCostCenterTotal}
+          totals={totals}
+        />
+      )}
 
       {/* Line Item Detail Modal */}
       {selectedLineItem && (
