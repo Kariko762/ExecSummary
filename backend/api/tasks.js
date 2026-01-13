@@ -62,23 +62,71 @@ const getTasks = async (req, res) => {
   try {
     await ensureDataFile();
     
-    const { status, priority, owner, search } = req.query;
+    const { 
+      status, 
+      priority, 
+      businessUnit,
+      product,
+      owner, 
+      tags,
+      goalId,
+      startDate,
+      endDate,
+      limit,
+      sortBy,
+      sortOrder,
+      search 
+    } = req.query;
+    
     const tasksData = await readTasks();
     let filtered = tasksData.tasks;
     
-    // Apply filters
+    // Apply filters (comma-separated values = OR logic)
     if (status) {
-      filtered = filtered.filter(t => t.status === status);
+      const statusValues = status.split(',').map(s => s.trim());
+      filtered = filtered.filter(t => statusValues.includes(t.status));
     }
     
     if (priority) {
-      filtered = filtered.filter(t => t.priority === priority);
+      const priorityValues = priority.split(',').map(p => p.trim());
+      filtered = filtered.filter(t => priorityValues.includes(t.priority));
+    }
+    
+    if (businessUnit) {
+      const buValues = businessUnit.split(',').map(b => b.trim());
+      filtered = filtered.filter(t => t.businessUnit && buValues.includes(t.businessUnit));
+    }
+    
+    if (product) {
+      const productValues = product.split(',').map(p => p.trim());
+      filtered = filtered.filter(t => t.product && productValues.includes(t.product));
     }
     
     if (owner) {
+      const ownerValues = owner.split(',').map(o => o.trim().toLowerCase());
       filtered = filtered.filter(t => 
-        t.owner && t.owner.toLowerCase().includes(owner.toLowerCase())
+        t.owner && ownerValues.some(ov => t.owner.toLowerCase().includes(ov))
       );
+    }
+    
+    if (tags) {
+      const tagIds = tags.split(',').map(tag => tag.trim());
+      filtered = filtered.filter(t => 
+        t.tags && Array.isArray(t.tags) && tagIds.some(tagId => t.tags.includes(tagId))
+      );
+    }
+    
+    if (goalId) {
+      filtered = filtered.filter(t => t.goalId === goalId);
+    }
+    
+    // Date range filtering
+    if (startDate) {
+      filtered = filtered.filter(t => t.targetDate && new Date(t.targetDate) >= new Date(startDate));
+    }
+    
+    if (endDate) {
+      filtered = filtered.filter(t => t.targetDate && new Date(t.targetDate) <= new Date(endDate));
     }
     
     if (search) {
@@ -89,8 +137,37 @@ const getTasks = async (req, res) => {
       );
     }
     
-    // Sort by creation date (newest first)
-    filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    // Apply sorting
+    const sortField = sortBy || 'createdAt';
+    const order = sortOrder === 'desc' ? -1 : 1;
+    
+    filtered.sort((a, b) => {
+      let aVal = a[sortField];
+      let bVal = b[sortField];
+      
+      // Handle special cases
+      if (sortField === 'targetDate' || sortField === 'createdAt') {
+        aVal = new Date(aVal || 0);
+        bVal = new Date(bVal || 0);
+      } else if (sortField === 'progress' || sortField === 'percentage') {
+        aVal = a.percentage || 0;
+        bVal = b.percentage || 0;
+      } else if (sortField === 'priority') {
+        const priorityMap = { 'High': 3, 'Medium': 2, 'Low': 1 };
+        aVal = priorityMap[a.priority] || 0;
+        bVal = priorityMap[b.priority] || 0;
+      }
+      
+      if (aVal < bVal) return -1 * order;
+      if (aVal > bVal) return 1 * order;
+      return 0;
+    });
+    
+    // Apply limit
+    if (limit) {
+      const limitNum = parseInt(limit, 10);
+      filtered = filtered.slice(0, limitNum);
+    }
     
     res.json({
       success: true,

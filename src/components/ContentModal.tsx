@@ -5,6 +5,8 @@ import { useEffect, useState, useRef } from 'react';
 import { validateSection } from '../schemas/validationSchema';
 import { domToPng } from 'modern-screenshot';
 import jsPDF from 'jspdf';
+import { TaskEditorModal } from '../../cms-admin/src/components/TaskEditorModal';
+import type { Task } from '../../cms-admin/src/components/TaskEditorModal';
 
 interface ContentModalProps {
   content: any; // The content object (Organization, ExecutiveIQ, Initiative, etc.)
@@ -35,6 +37,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   const [selectedGoal, setSelectedGoal] = useState<any | null>(null);
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [isExportingGoal, setIsExportingGoal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const exportWrapperRef = useRef<HTMLDivElement>(null); // New ref for the entire exportable area
   const goalModalRef = useRef<HTMLDivElement>(null); // Ref for goal modal export
@@ -43,6 +46,11 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
   // Detect if this is a draft
   const isDraft = content?.status === 'draft';
+
+  // Task click handler for task connector
+  const handleTaskClick = (task: any) => {
+    setSelectedTask(task as Task);
+  };
 
   // Fetch available goals
   useEffect(() => {
@@ -1263,6 +1271,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                             type={field.type}
                                             data={field.data}
                                             displayMode="hero"
+                                            onTaskClick={handleTaskClick}
                                           />
                                         </div>
                                       </div>
@@ -1339,6 +1348,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                         type={field.type}
                                         data={field.data}
                                         displayMode={isHeroLayout ? 'connected' : 'spaced'}
+                                        onTaskClick={handleTaskClick}
                                       />
                                     </div>
                                   );
@@ -1377,6 +1387,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                         <AssetRenderEngine
                           type={section.type}
                           data={section.data}
+                          onTaskClick={handleTaskClick}
                         />
                       </div>
                     )}
@@ -1700,6 +1711,16 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* Task Editor Modal (View Only) */}
+      {selectedTask && (
+        <TaskEditorModal
+          task={selectedTask}
+          onSave={() => {}} // No-op in frontend (view-only)
+          onClose={() => setSelectedTask(null)}
+          viewOnly={true}
+        />
+      )}
     </AnimatePresence>
   );
 };

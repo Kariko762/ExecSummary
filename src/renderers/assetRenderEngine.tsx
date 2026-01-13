@@ -72,6 +72,7 @@ import ExecutiveSummaryCPSAR from './ExecutiveSummaryCPSAR';
 import ExecutiveSummaryBLUF from './ExecutiveSummaryBLUF';
 import ExecutiveSummarySBAR from './ExecutiveSummarySBAR';
 import ExecutiveSummaryPyramid from './ExecutiveSummaryPyramid';
+import { TaskConnectorRenderer } from './assetRenderTasks';
 
 // ==========================================
 // ENGINE PROPS
@@ -84,6 +85,7 @@ export interface AssetRenderEngineProps {
   mode?: 'edit' | 'display';
   className?: string;
   displayMode?: 'spaced' | 'connected' | 'hero'; // For hero layouts
+  onTaskClick?: (task: any) => void; // Callback for task connector clicks
 }
 
 // ==========================================
@@ -96,7 +98,8 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
   onChange,
   mode = 'display',
   className = '',
-  displayMode = 'spaced'
+  displayMode = 'spaced',
+  onTaskClick
 }) => {
   
   // Route to correct pattern component
@@ -127,6 +130,10 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <ProgressBarListPattern {...props} />;
       case 'keyValueList':
         return <KeyValueListPattern {...props} />;
+      
+      // CONNECTORS
+      case 'taskConnector':
+        return <TaskConnectorRenderer data={data} onTaskClick={onTaskClick} />;
       
       // CARD ASSETS
       case 'metricCard':

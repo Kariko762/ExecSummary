@@ -40,6 +40,47 @@
         "milestones": true,
         "steps": true
       }
+    },
+    {
+      "id": "task-1768332003603-rmxnclgxl",
+      "title": "Second Task",
+      "owner": "Jason Hanscomb",
+      "team": "Demo Services Group",
+      "businessUnit": "Capital Markets",
+      "product": "Adaptiv 360",
+      "startDate": "2026-01-13",
+      "targetDate": "2026-03-31",
+      "percentage": 75,
+      "status": "At Risk",
+      "budget": "150,000",
+      "priority": "High",
+      "description": "Test Task",
+      "milestones": "Nothing Special | Something Else",
+      "risks": "Not getting this published",
+      "dependencies": "",
+      "steps": [
+        {
+          "id": "step-1768331878130",
+          "step": "Follow Claude 4.5 on LinkedIn.",
+          "state": "Pending"
+        }
+      ],
+      "createdAt": "2026-01-13T19:20:03.603Z",
+      "updatedAt": "2026-01-13T19:20:44.660Z",
+      "enabledFields": {
+        "owner": true,
+        "product": true,
+        "budget": true,
+        "risks": true,
+        "team": true,
+        "startDate": true,
+        "description": true,
+        "dependencies": true,
+        "businessUnit": true,
+        "targetDate": true,
+        "milestones": true,
+        "steps": true
+      }
     }
   ]
 }

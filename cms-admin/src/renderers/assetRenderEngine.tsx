@@ -75,6 +75,7 @@ import ExecutiveSummaryCPSAR from './ExecutiveSummaryCPSAR';
 import ExecutiveSummaryBLUF from './ExecutiveSummaryBLUF';
 import ExecutiveSummarySBAR from './ExecutiveSummarySBAR';
 import ExecutiveSummaryPyramid from './ExecutiveSummaryPyramid';
+import { TaskConnectorRenderer } from './assetRenderTasks';
 
 // ==========================================
 // ENGINE PROPS
@@ -132,6 +133,10 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <ProgressBarListDetailedPattern {...props} />;
       case 'keyValueList':
         return <KeyValueListPattern {...props} />;
+      
+      // CONNECTORS
+      case 'taskConnector':
+        return <TaskConnectorRenderer {...props} />;
       
       // CARD ASSETS
       case 'metricCard':

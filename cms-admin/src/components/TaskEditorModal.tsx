@@ -16,7 +16,7 @@ interface TaskStep {
   state: 'Pending' | 'Scheduled' | 'In-Progress' | 'Cancelled' | 'Complete';
 }
 
-interface Task {
+export interface Task {
   id?: string;
   title: string;
   owner: string;
@@ -56,9 +56,10 @@ interface TaskEditorModalProps {
   task?: Task;
   onSave: (task: Task) => void;
   onClose: () => void;
+  viewOnly?: boolean; // True for frontend view-only mode
 }
 
-export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, onClose }) => {
+export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, onClose, viewOnly = false }) => {
   const [activeTab, setActiveTab] = useState<'task' | 'dataPoints'>('task');
   const [editMode, setEditMode] = useState(!task); // True for new tasks, false for existing
   const [tags, setTags] = useState<Array<{ id: string; name: string; color: string }>>([]);
@@ -189,7 +190,8 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
   return (
     <div className="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative">
-        {/* Tag Panel Button */}
+        {/* Tag Panel Button - Hide in view-only mode */}
+        {!viewOnly && (
         <motion.button
           onClick={() => setShowTagPanel(!showTagPanel)}
           className="absolute right-0 top-[68px] bg-white/20 text-white px-2 py-3 rounded-l-lg shadow-lg z-10 hover:bg-white/30 transition-colors"
@@ -197,6 +199,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
         >
           <span className="text-xs font-roobert-medium writing-mode-vertical transform rotate-180">Tag</span>
         </motion.button>
+        )}
         
         {/* Tag Panel */}
         <AnimatePresence>
@@ -342,10 +345,11 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
         <div className="p-6 bg-gradient-to-r from-[var(--brand-primary)] via-[var(--brand-secondary)] to-[var(--brand-tertiary)] border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-2xl font-roobert-semibold text-white">
-              {task ? 'Edit Task' : 'New Task'}
+              {viewOnly ? formData.title : (task ? 'Edit Task' : 'New Task')}
             </h2>
             <div className="flex items-center gap-3">
-              {/* Tags in Header */}
+              {/* Tags in Header - Hide in view-only mode */}
+              {!viewOnly && (
               <div className="flex flex-wrap gap-2 items-center">
                 <span className="text-xs font-roobert-medium text-white/80">Tags:</span>
                 {(formData.tags || []).length > 0 ? (
@@ -365,11 +369,14 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                   <span className="text-xs text-white/60">No tags</span>
                 )}
               </div>
+              )}
               <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-lg transition-colors text-white">
                 <X className="w-6 h-6" />
               </button>
             </div>
           </div>
+          {/* Tabs and controls - Hide in view-only mode */}
+          {!viewOnly && (
           <div>
             <div className="flex items-center gap-2">
               <button
@@ -404,13 +411,15 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               )}
             </div>
           </div>
+          )}
         </div>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
           {activeTab === 'task' && (
             <div className="space-y-3">
-              {/* Title - Always visible */}
+              {/* Title - Hide in view-only mode (already in header) */}
+              {!viewOnly && (
               <div>
                 {editMode ? (
                   <input
@@ -424,6 +433,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                   <h2 className="text-2xl font-roobert-semibold text-gray-900 dark:text-white">{formData.title}</h2>
                 )}
               </div>
+              )}
 
               {/* Row: Owner & Team */}
               {(fields.owner || fields.team) && (
@@ -727,7 +737,8 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
           )}
         </div>
 
-        {/* Footer */}
+        {/* Footer - Hide in view-only mode */}
+        {!viewOnly && (
         <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
           <button onClick={onClose} className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
             Cancel
@@ -736,6 +747,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
             {task ? 'Update Task' : 'Create Task'}
           </button>
         </div>
+        )}
       </div>
     </div>
   );

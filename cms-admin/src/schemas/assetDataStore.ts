@@ -1982,6 +1982,68 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       container: 'w-full',
       padding: AssetStyles.spacing.md
     }
+  },
+
+  // ==========================================
+  // DATA CONNECTORS
+  // ==========================================
+  
+  {
+    id: 'taskConnector',
+    name: 'Task Connector',
+    type: 'taskConnector',
+    category: 'connectors',
+    description: 'Dynamic task display with configurable filters - shows live tasks from the system',
+    useCase: 'Display filtered tasks by status, priority, owner, business unit, product, tags, or goals',
+    schema: {
+      type: 'object',
+      renderAs: 'taskConnector',
+      label: 'Task Connector',
+      filters: {
+        status: [],
+        priority: [],
+        businessUnit: [],
+        product: [],
+        owner: [],
+        tags: [],
+        goalId: '',
+        dateRange: {
+          start: '',
+          end: ''
+        },
+        limit: 10
+      },
+      layout: {
+        sortBy: 'targetDate',
+        sortOrder: 'asc'
+      }
+    },
+    exampleData: {
+      filters: {
+        status: ['On Track', 'At Risk'],
+        priority: ['High'],
+        businessUnit: [],
+        product: [],
+        owner: [],
+        tags: [],
+        goalId: '',
+        dateRange: {
+          start: '',
+          end: ''
+        },
+        limit: 10
+      },
+      layout: {
+        sortBy: 'targetDate',
+        sortOrder: 'asc'
+      }
+    },
+    supportsMultiColumn: true,
+    supportsHero: true,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.lg
+    }
   }
 ];
 
@@ -2046,6 +2108,7 @@ export function groupAssetsByCategory() {
     { id: 'complex', name: 'Complex Layouts', color: 'purple' },
     { id: 'rich', name: 'Rich Content', color: 'orange' },
     { id: 'executiveSummary', name: 'Executive Summary', color: 'red' },
+    { id: 'connectors', name: 'Data Connectors', color: 'indigo' },
     { id: 'media', name: 'Media (Coming Soon)', color: 'cyan' },
   ];
 

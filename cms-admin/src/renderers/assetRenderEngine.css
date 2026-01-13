@@ -3880,3 +3880,46 @@
     gap: 0.5rem;
   }
 }
+
+/* ==========================================
+   TASK CONNECTOR - Responsive Scaling Grid
+   ========================================== */
+
+.task-connector-wrapper {
+  width: 100%;
+  padding: 1rem;
+  container-type: inline-size;
+  container-name: taskgrid;
+}
+
+.task-connector-grid {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  /* Default: scale tiles to fill width, naturally adding columns */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Constrain based on container width using container queries */
+/* Wide containers (>900px): Max 3 columns */
+@container taskgrid (min-width: 900px) {
+  .task-connector-grid {
+    grid-template-columns: repeat(auto-fit, minmax(max(280px, calc(33.33% - 1rem)), 1fr));
+  }
+}
+
+/* Medium containers (600-899px): Max 2 columns */
+@container taskgrid (min-width: 600px) and (max-width: 899px) {
+  .task-connector-grid {
+    grid-template-columns: repeat(auto-fit, minmax(max(280px, calc(50% - 1rem)), 1fr));
+  }
+}
+
+/* Narrow containers (<600px): 1 column */
+@container taskgrid (max-width: 599px) {
+  .task-connector-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
