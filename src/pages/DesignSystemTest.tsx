@@ -44,17 +44,54 @@ export const DesignSystemTest: React.FC = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         
+        {/* Hero Banner with Gauge */}
+        <div className="bg-gradient-to-r from-fis-eggplant to-fis-raspberry dark:from-fis-eggplant/90 dark:to-fis-raspberry/90 rounded-2xl p-12 shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent)]" />
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h1 className="text-5xl font-roobert-bold text-white mb-4">
+                🌟 Hero Layout Example
+              </h1>
+              <p className="text-white/90 text-lg mb-6">
+                Full-width hero banner with large gauge showing key metric
+              </p>
+              <div className="flex gap-3 text-sm">
+                <div className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg border border-white/30">
+                  supportsHero: true
+                </div>
+                <div className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg border border-white/30">
+                  Connected Display Mode
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <AssetRenderEngine
+                type="gauge"
+                data={{
+                  value: 94,
+                  label: 'Success Rate',
+                  suffix: '%',
+                  size: 'large'
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
           <h1 className="text-4xl font-roobert-bold text-gray-900 dark:text-white mb-2">
             Complete Design System Test Page
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            All 21 asset types + 4 legacy renderers - Test light/dark theme compatibility
+            All 26 asset types + Hero layout + 4 legacy renderers - Test light/dark theme compatibility
           </p>
-          <div className="flex gap-4 text-sm">
+          <div className="flex gap-4 text-sm flex-wrap">
+            <div className="px-3 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-400 rounded-lg">
+              \ud83c\udf1f Hero Layout
+            </div>
             <div className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg">
-              6 Chart Types
+              7 Chart Types
             </div>
             <div className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg">
               6 List Types
@@ -65,6 +102,9 @@ export const DesignSystemTest: React.FC = () => {
             <div className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 rounded-lg">
               5 Complex Types
             </div>
+            <div className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg">
+              4 Executive Formats
+            </div>
           </div>
         </div>
 
@@ -72,10 +112,10 @@ export const DesignSystemTest: React.FC = () => {
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white">
-              📊 Chart Types (6)
+              📊 Chart Types (7)
             </h2>
             <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg text-sm">
-              Modern Asset Renderers
+              Includes Gauge
             </span>
           </div>
           
@@ -145,8 +185,21 @@ export const DesignSystemTest: React.FC = () => {
               />
             </AssetTestCard>
 
-            {/* 6. Code Block */}
-            <AssetTestCard title="6. Code Block" assetId="code-1">
+            {/* 6. Gauge (Single Metric) */}
+            <AssetTestCard title="6. Gauge (Single Metric)" assetId="gauge-1">
+              <AssetRenderEngine
+                type="gauge"
+                data={{
+                  value: 82,
+                  label: 'Overall Adoption Rate',
+                  suffix: '%',
+                  size: 'large'
+                }}
+              />
+            </AssetTestCard>
+
+            {/* 7. Code Block */}
+            <AssetTestCard title="7. Code Block" assetId="code-1">
               <AssetRenderEngine
                 type="codeBlock"
                 data="const example = 'Design System Test';\nconsole.log(example);"
@@ -169,7 +222,7 @@ export const DesignSystemTest: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* 7. Highlights List */}
+            {/* 8. Highlights List */}
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow border border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
                 7. Highlights List (Numbered)
@@ -918,6 +971,116 @@ export const DesignSystemTest: React.FC = () => {
           </div>
         </section>
 
+        {/* EXECUTIVE SUMMARY FORMATS - 4 types */}
+        <section className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white">
+              📋 Executive Summary Formats (4)
+            </h2>
+            <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-lg text-sm">
+              Strategic Communication
+            </span>
+          </div>
+          
+          <div className="grid grid-cols-1 gap-6">
+            
+            {/* 1. CPSAR Format */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow border border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
+                1. CPSAR (Context, Problem, Solution, Action, Recommendation)
+              </h3>
+              <AssetRenderEngine
+                type="executiveSummaryCPSAR"
+                data={{
+                  context: "Our current client portal generates 200+ support calls monthly and contributed to the loss of two major clients ($800K AUM). Competitors have launched modern, mobile-first portals that our solution cannot match.",
+                  problem: "Legacy technology stack with outdated UI/UX creates poor user experience. 78% of clients now expect banking-grade digital experiences. Current portal lacks mobile optimization and modern security features.",
+                  solution: "Build next-generation client portal with React 18, implement responsive design, integrate modern authentication (OAuth 2.0 + SAML), and deploy microservices architecture supporting 50K+ concurrent users.",
+                  recommendation: "Approve $2.4M budget for 18-month development initiative. Phased rollout starting Q4 2024. Expected ROI: 60% reduction in support costs ($90K annually) and prevention of future client churn.",
+                  asks: [
+                    { text: "Budget approval for $2.4M over 18 months", owner: "CFO", dueDate: "2024-12-15" },
+                    { text: "Executive sponsor assignment", owner: "CEO", dueDate: "2024-12-10" },
+                    { text: "IT resource allocation (12 FTEs)", owner: "CTO", dueDate: "2024-12-20" }
+                  ]
+                }}
+                mode="display"
+              />
+            </div>
+
+            {/* 2. BLUF Format */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow border border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
+                2. BLUF (Bottom Line Up Front) - Military Style
+              </h3>
+              <AssetRenderEngine
+                type="executiveSummaryBLUF"
+                data={{
+                  bottomLine: "Recommend immediate approval of $2.4M client portal modernization to prevent further client attrition and reduce $150K annual support costs by 60%. Project ROI breaks even in 18 months.",
+                  background: "Current portal built on legacy technology (2015). Generates 200+ monthly support calls. Lost 2 major clients ($800K AUM) citing poor digital experience. Market research shows 78% of clients expect banking-grade portals.",
+                  assessment: "Technical debt has reached critical mass. Competitors have modern solutions in production. Current architecture cannot support mobile access or modern security protocols. Support costs trending upward 15% YoY.",
+                  recommendation: "Execute 18-month modernization program. Deploy React-based responsive UI, microservices backend, OAuth 2.0 authentication. Phased rollout beginning Q4 2024. Team of 12 FTEs required.",
+                  asks: [
+                    { text: "Budget approval: $2.4M capital expenditure", owner: "Board of Directors", dueDate: "2024-12-20" },
+                    { text: "Executive sponsorship from C-suite", owner: "CEO", dueDate: "2024-12-15" },
+                    { text: "Cross-functional team allocation", owner: "COO", dueDate: "2025-01-05" }
+                  ]
+                }}
+                mode="display"
+              />
+            </div>
+
+            {/* 3. SBAR Format */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow border border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
+                3. SBAR (Situation, Background, Assessment, Recommendation)
+              </h3>
+              <AssetRenderEngine
+                type="executiveSummarySBAR"
+                data={{
+                  situation: "Client portal modernization required urgently. Current system causing client churn (2 losses = $800K AUM) and excessive support costs ($150K annually). Competitive disadvantage growing as peers deploy modern solutions.",
+                  background: "Portal launched 2015 on legacy stack. Never received major upgrade. Mobile usage attempts up 300% but platform not responsive. Security audit flagged authentication vulnerabilities. Support ticket volume increased 15% YoY.",
+                  assessment: "Technical assessment confirms complete rebuild necessary - patching not viable. Market analysis shows 78% client expectation for banking-grade digital experience. Risk: Continue losing high-value clients without action. Opportunity: Modern portal positions for growth.",
+                  recommendation: "Approve $2.4M modernization initiative. Deploy modern tech stack (React 18, Node.js microservices, OAuth 2.0). 18-month timeline with phased rollout. Team: 12 FTEs across Engineering, Product, Design. Expected outcomes: 60% support cost reduction, zero security vulnerabilities, 50K+ concurrent user capacity.",
+                  asks: [
+                    { text: "Capital budget approval: $2.4M", owner: "Finance Committee", dueDate: "2024-12-18" },
+                    { text: "Technology roadmap alignment", owner: "CTO", dueDate: "2024-12-22" },
+                    { text: "Change management support", owner: "VP Operations", dueDate: "2025-01-10" }
+                  ]
+                }}
+                mode="display"
+              />
+            </div>
+
+            {/* 4. Pyramid Format */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow border border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
+                4. Pyramid Principle (McKinsey Style)
+              </h3>
+              <AssetRenderEngine
+                type="executiveSummaryPyramid"
+                data={{
+                  mainArgument: "We must modernize our client portal immediately to stop client attrition, reduce support costs by $90K annually, and maintain competitive positioning in the wealth management market.",
+                  keyPoints: [
+                    "Current portal drove loss of $800K AUM and generates $150K annual support costs",
+                    "78% of clients expect banking-grade digital experience; we deliver 2015 technology",
+                    "Modern solution delivers 60% cost reduction and 50K+ user capacity",
+                    "$2.4M investment breaks even in 18 months through saved costs and prevented churn"
+                  ],
+                  supportingDetails: "Technical analysis confirms legacy architecture cannot be patched - only complete rebuild viable. Market research across 500 wealth management firms shows mobile-first portals now industry standard. Competitive intelligence reveals 8 of 10 direct competitors launched modern portals in past 24 months. Our security audit identified critical authentication vulnerabilities that cannot be resolved without modernization. Customer satisfaction scores for portal declined from 7.2 to 4.8 (out of 10) over past 18 months. Support ticket analysis shows 65% related to mobile access issues and outdated UI. Load testing confirms current infrastructure cannot scale beyond 5K concurrent users - growth projections require 50K capacity by 2026.",
+                  nextSteps: "Week 1: Secure executive sponsor and budget approval. Week 2-3: Finalize technical architecture and vendor selection for supplementary services. Week 4: Begin recruitment for 12-person cross-functional team (8 Engineering, 2 Product, 2 Design). Month 2: Complete detailed requirements gathering with top 50 clients. Month 3: Sprint 0 - establish development environment, CI/CD pipeline, and project governance. Months 4-15: Agile development in 2-week sprints with monthly stakeholder demos. Months 16-18: QA, security testing, and phased production rollout (10% → 25% → 50% → 100%).",
+                  asks: [
+                    { text: "Board approval for $2.4M capital expenditure", owner: "CEO to Board", dueDate: "2024-12-20" },
+                    { text: "Executive sponsor assignment (C-level)", owner: "CEO", dueDate: "2024-12-15" },
+                    { text: "Resource commitment: 12 FTEs for 18 months", owner: "CTO + VP Product", dueDate: "2025-01-05" },
+                    { text: "Marketing alignment for launch communications", owner: "CMO", dueDate: "2025-01-15" }
+                  ]
+                }}
+                mode="display"
+              />
+            </div>
+
+          </div>
+        </section>
+
         {/* Color Reference */}
         <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow border border-gray-200 dark:border-gray-700">
           <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white mb-6">
@@ -943,7 +1106,7 @@ export const DesignSystemTest: React.FC = () => {
           
           <div className="mb-4">
             <p className="text-blue-800 dark:text-blue-400 font-roobert-medium mb-2">
-              This page contains ALL 21 asset types + 4 legacy renderers (25 total components)
+              This page contains ALL 25 asset types + 4 legacy renderers (29 total components)
             </p>
           </div>
 

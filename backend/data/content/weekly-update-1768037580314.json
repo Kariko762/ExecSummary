@@ -1,0 +1,225 @@
+{
+  "id": "weekly-update-1768037580314",
+  "quarter": "Q1 2026",
+  "year": 2025,
+  "date": "2026-01-10",
+  "title": "Weekly Summary - Week of Jan 5 - Jan 11",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_summary_0_type": "executiveSummaryBLUF",
+  "_summary_0_layoutZone": "full",
+  "_summary_0_rowIndex": 0,
+  "summary_0": {
+    "bottomLine": "In 2025, the team helped facilitate a year-on-year reduction of 1,721 hours spent on Demo Support (a 52% reduction). Additionally there are potential escalations for the Episode 6 \"Change Control\" process and shift-allowance overpayments.",
+    "background": "The week of Jan 5-11 marked the transition to 2026 planning, including the initiation of Azure OpenAI infrastructure for Credit Assessment, a new Vendor Executive Summary framework and continued efforts to bring online Episode6 Demo Assets for Int. Banking. Concurrently, a legacy payroll audit in the India TPO revealed shift-allowance overpayments over a two-year period.",
+    "assessment": "While operational efficiency is a big win for the team, the shift-allowance issue—requiring a team member to repay up to 200,000 INR—creates a significant morale issue. Strategic focus for 2026 is shifting toward AI enablement and improved Demo Services (Operations and Enablement) visibility.",
+    "recommendation": "Finalize the 2026 Strategic Product priorities to populate the Demo Services Gantt, approve the new Vendor Summary template and work with Coast, E6 and FIS Legal on the \"Change Control\" process. Simultaneously, leadership needs to be aware and monitor the India TPO payroll dispute and the impact on the affected employee and wider team.",
+    "asks": [
+      {
+        "type": "escalation",
+        "item": "Resolution of India TPO shift-allowance overpayment (100k-200k INR) to prevent further team attrition/concern.",
+        "urgency": "medium",
+        "owner": "India TPO / Payroll",
+        "deadline": "Jan 14, 2026"
+      },
+      {
+        "type": "decision",
+        "item": "Identify and prioritize 'Strategic Products' to finalize the 2026 Demo Services Gantt chart.",
+        "urgency": "medium",
+        "owner": "Executive Leadership",
+        "deadline": "Jan 23, 2026"
+      },
+      {
+        "type": "approval",
+        "item": "Complete AI Operational Review for Azure OpenAI Endpoint deployment. Has direct impact on 2026 Sales.",
+        "urgency": "high",
+        "owner": "Alexandra M.",
+        "deadline": "Jan 20, 2026"
+      },
+      {
+        "type": "budget",
+        "item": "Follow up with Finance on Coast 2026 Funding ",
+        "urgency": "high",
+        "owner": "Jason.H / Robert.R",
+        "deadline": "23/01/2026"
+      },
+      {
+        "type": "decision",
+        "item": "Work with Episode 6 / Coast to resolve the \"Change Control\" process so that we can make Demo Assets available by EoM.",
+        "urgency": "medium",
+        "owner": "Jason.H",
+        "deadline": "31/01/2026"
+      }
+    ]
+  },
+  "_summary_1_type": "hr",
+  "_summary_1_layoutZone": "full",
+  "_summary_1_rowIndex": 1,
+  "summary_1": "",
+  "_summary_sectionLayoutType": "full",
+  "_enabled_summary": true,
+  "_completed_summary": false,
+  "_data_summary_0_type": "highlightsList",
+  "_data_summary_0_layoutZone": "left-30",
+  "_data_summary_0_rowIndex": 0,
+  "_data_summary_0_displayAssetTitle": true,
+  "data_summary_0": [
+    "Demo Prep : 1031 hrs",
+    "Demo Support : 23 hrs",
+    "Demo Presentations : 606 hrs",
+    "[[bold]]44% Reduction Nov - Dec (-1,660 hrs)[[/bold]] {{trend:down}}"
+  ],
+  "_data_summary_1_type": "quote",
+  "_data_summary_1_layoutZone": "right-70",
+  "_data_summary_1_rowIndex": 0,
+  "data_summary_1": "\"In November and December, total time spent on demo-related activities dropped by 44%, signalling a strategic shift from pipeline generation to year-end closing. Demo presentations alone fell from 1,078 to 606 hours, reflecting the typical Q4 \"wind down\" as the team prioritized finalizing existing deals over starting new cycles.\"[[highlight]] (sources: Key Activity Insights)[[/highlight]]",
+  "_data_summary_sectionLayoutType": "full",
+  "_enabled_data_summary": true,
+  "_completed_data_summary": false,
+  "_data_summary_label": "Weekly Metrics Summary",
+  "_data_summary_displayTitle": true,
+  "_demo_trends_0_type": "lineChart",
+  "_demo_trends_0_layoutZone": "left-70",
+  "_demo_trends_0_rowIndex": 0,
+  "_demo_trends_0_displayAssetTitle": false,
+  "demo_trends_0": [
+    {
+      "name": "Jan",
+      "Support": 235,
+      "Presentation": 804,
+      "Preparation": 1642
+    },
+    {
+      "name": "Feb",
+      "Support": 144,
+      "Presentation": 1019,
+      "Preparation": 1007
+    },
+    {
+      "name": "Mar",
+      "Support": 159,
+      "Presentation": 1250,
+      "Preparation": 1751
+    },
+    {
+      "name": "Apr",
+      "Support": 247,
+      "Presentation": 1188,
+      "Preparation": 2076
+    },
+    {
+      "name": "May",
+      "Support": 172,
+      "Presentation": 1306,
+      "Preparation": 1859
+    },
+    {
+      "name": "Jun",
+      "Support": 93,
+      "Presentation": 1567,
+      "Preparation": 1768
+    },
+    {
+      "name": "Jul",
+      "Support": 143,
+      "Presentation": 988,
+      "Preparation": 2080
+    },
+    {
+      "name": "Aug",
+      "Support": 89,
+      "Presentation": 1064,
+      "Preparation": 1816
+    },
+    {
+      "name": "Sep",
+      "Support": 118,
+      "Presentation": 1279,
+      "Preparation": 2724
+    },
+    {
+      "name": "Oct",
+      "Support": 93,
+      "Presentation": 1360,
+      "Preparation": 2327
+    },
+    {
+      "name": "Nov",
+      "Support": 95,
+      "Presentation": 1078,
+      "Preparation": 1834
+    },
+    {
+      "name": "Dec",
+      "Support": 23,
+      "Presentation": 606,
+      "Preparation": 1031
+    }
+  ],
+  "_demo_trends_1_type": "pieChart",
+  "_demo_trends_1_layoutZone": "right-30",
+  "_demo_trends_1_rowIndex": 0,
+  "_demo_trends_1_assetTitle": "Distribution",
+  "_demo_trends_1_displayAssetTitle": false,
+  "demo_trends_1": [
+    {
+      "name": "Demo Preparation",
+      "value": 21915
+    },
+    {
+      "name": "Demo Support",
+      "value": 1613
+    },
+    {
+      "name": "Demo Presentation",
+      "value": 13478
+    }
+  ],
+  "_demo_trends_sectionLayoutType": "left-70",
+  "_enabled_demo_trends": true,
+  "_completed_demo_trends": false,
+  "_demo_trends_label": "Trends Over Time",
+  "_demo_trends_displayTitle": false,
+  "_teams_focus_0_type": "highlightsList",
+  "_teams_focus_0_layoutZone": "left-50",
+  "_teams_focus_0_rowIndex": 0,
+  "_teams_focus_0_assetTitle": "This Week",
+  "_teams_focus_0_alignment": "left",
+  "teams_focus_0": [
+    "AI Governance Approval : Supporting Credit Assessment Demos",
+    "Demo Enablement 2026 H1 Gantt Timeline",
+    "Demo Services 2026 Goal Setting",
+    "Vendor Executive Summary View"
+  ],
+  "_teams_focus_sectionLayoutType": "left-50",
+  "_enabled_teams_focus": true,
+  "_completed_teams_focus": false,
+  "_teams_focus_label": "",
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "WEEKLY-UPDATE-BLUF",
+  "_template_description": "BLUF-style weekly update template with executive summary, metrics, trends, and team focus areas",
+  "_template_created": "2025-12-15T20:45:00.000Z",
+  "_template_updated": "2025-12-15T20:45:00.000Z",
+  "_layout": "one-pager",
+  "_contentTag": "weekly-summary",
+  "_type": "weekly-update",
+  "_data_summary_0_assetTitle": "December Period",
+  "_summary_displayTitle": false,
+  "tags": [
+    "weekly-update",
+    "template"
+  ],
+  "createdAt": "2026-01-10T09:33:00.314Z",
+  "updatedAt": "2026-01-10T09:33:00.314Z",
+  "_summary_0_aiGenerated": true,
+  "_summary_0_sourceNoteIds": [
+    "note-1768031985596",
+    "note-1768034356322",
+    "note-1768034545578",
+    "note-1768036589102",
+    "note-1768037196712"
+  ],
+  "_summary_0_generatedAt": "2026-01-10T09:33:00.314Z",
+  "_demo_trends_0_assetTitle": ""
+}

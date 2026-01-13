@@ -114,9 +114,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
   // Export functions
   const exportAsImage = async () => {
     console.log('🚀 PRODUCTION Frontend - exportAsImage called!');
-    const targetRef = scrollContainerRef.current;
+    const targetRef = exportWrapperRef.current;
     if (!targetRef) {
-      console.error('❌ No scrollContainerRef found!');
+      console.error('❌ No exportWrapperRef found!');
       return;
     }
     
@@ -126,14 +126,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
     try {
       console.log('📂 Starting export process...');
       
-      // Hide the export button and close button temporarily
+      // Hide the export button, close button, fullscreen button, and sticky nav temporarily
       const exportBtn = document.querySelector('.export-button');
       const closeBtn = document.querySelector('.close-button');
+      const fullscreenBtn = document.querySelector('[title*="fullscreen"]');
       const draftBar = document.querySelector('.draft-bar');
+      const stickyNav = document.querySelector('.sticky-nav');
       
       if (exportBtn) (exportBtn as HTMLElement).style.display = 'none';
       if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
+      if (fullscreenBtn) (fullscreenBtn as HTMLElement).style.display = 'none';
       if (draftBar) (draftBar as HTMLElement).style.display = 'none';
+      if (stickyNav) (stickyNav as HTMLElement).style.display = 'none';
       
       // Get the scrollable content div AND the modal container with max-h-[90vh]
       const contentDiv = targetRef;
@@ -195,7 +199,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       // Restore buttons
       if (exportBtn) (exportBtn as HTMLElement).style.display = '';
       if (closeBtn) (closeBtn as HTMLElement).style.display = '';
+      if (fullscreenBtn) (fullscreenBtn as HTMLElement).style.display = '';
       if (draftBar) (draftBar as HTMLElement).style.display = '';
+      if (stickyNav) (stickyNav as HTMLElement).style.display = '';
       
       const link = document.createElement('a');
       const title = content.title || content.name || 'content';
@@ -222,14 +228,18 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
     setShowExportMenu(false);
     
     try {
-      // Hide buttons temporarily
+      // Hide buttons and sticky nav temporarily
       const exportBtn = document.querySelector('.export-button');
       const closeBtn = document.querySelector('.close-button');
+      const fullscreenBtn = document.querySelector('[title*="fullscreen"]');
       const draftBar = document.querySelector('.draft-bar');
+      const stickyNav = document.querySelector('.sticky-nav');
       
       if (exportBtn) (exportBtn as HTMLElement).style.display = 'none';
       if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
+      if (fullscreenBtn) (fullscreenBtn as HTMLElement).style.display = 'none';
       if (draftBar) (draftBar as HTMLElement).style.display = 'none';
+      if (stickyNav) (stickyNav as HTMLElement).style.display = 'none';
       
       // Get the wrapper div that includes header + content
       const contentDiv = targetRef;
@@ -266,7 +276,9 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
       // Restore buttons
       if (exportBtn) (exportBtn as HTMLElement).style.display = '';
       if (closeBtn) (closeBtn as HTMLElement).style.display = '';
+      if (fullscreenBtn) (fullscreenBtn as HTMLElement).style.display = '';
       if (draftBar) (draftBar as HTMLElement).style.display = '';
+      if (stickyNav) (stickyNav as HTMLElement).style.display = '';
       
       // Convert to image and get dimensions
       const img = new Image();
@@ -598,6 +610,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         itemSchema: content[`_${fieldKey}_itemSchema`],
         chartConfig: content[`_${fieldKey}_chartConfig`],
         layoutZone: content[`_${fieldKey}_layoutZone`] || 'full',
+        gridPosition: content[`_${fieldKey}_gridPosition`], // Hero grid positioning
         assetTitle: content[`_${fieldKey}_assetTitle`] || '',
         displayAssetTitle: content[`_${fieldKey}_displayAssetTitle`] !== false,
         alignment: content[`_${fieldKey}_alignment`] || 'left',
@@ -790,7 +803,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
           {/* Show Validation view if in draft mode and validation tab is active */}
           {isDraft && activePreviewTab === 'validation' ? (
-            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant">
+            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-brand-tertiary dark:to-brand-primary">
               <div className="max-w-7xl mx-auto">
                 <div className="mb-6">
                   <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
@@ -934,7 +947,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
             </div>
           ) : isDraft && activePreviewTab === 'json' ? (
             /* JSON view for draft mode */
-            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant">
+            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-brand-tertiary dark:to-brand-primary">
               <div className="max-w-4xl mx-auto">
                 <div className="mb-6">
                   <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
@@ -980,13 +993,13 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
             <div ref={exportWrapperRef} className="flex flex-col flex-1 overflow-hidden">
               {/* Header - Only shown if NOT in draft mode */}
               {!isDraft && (
-                <div className={`sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between z-10 rounded-t-3xl flex-shrink-0 ${isFullscreen ? 'p-3' : 'p-6'}`}>
+                <div className={`sticky top-0 bg-gradient-to-r from-fis-eggplant to-fis-raspberry shadow-lg flex items-center justify-between z-20 flex-shrink-0 ${isFullscreen ? 'p-3' : 'p-6'}`}>
                   <div>
-                    <h2 className={`font-roobert-heavy text-gray-900 dark:text-white ${isFullscreen ? 'text-xl mb-0' : 'text-3xl mb-1'}`}>
+                    <h2 className={`font-roobert-heavy text-white ${isFullscreen ? 'text-xl mb-0' : 'text-3xl mb-1'}`}>
                       {title}
                     </h2>
                     {date && !isFullscreen && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-white/80">
                         {new Date(date).toLocaleDateString('en-US', { 
                           month: 'long', 
                           day: 'numeric', 
@@ -1043,18 +1056,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       <button
                         onClick={() => setShowExportMenu(!showExportMenu)}
                         disabled={isExporting}
-                        className="w-10 h-10 rounded-xl text-white transition-all disabled:opacity-50 flex items-center justify-center"
-                        style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}
-                        onMouseEnter={(e) => {
-                          if (!e.currentTarget.disabled) {
-                            e.currentTarget.style.background = 'linear-gradient(to right, rgba(67, 28, 91, 0.9), rgba(178, 26, 83, 0.9))';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!e.currentTarget.disabled) {
-                            e.currentTarget.style.background = 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))';
-                          }
-                        }}
+                        className="w-10 h-10 rounded-xl bg-gradient-to-r from-brand-primary to-brand-secondary hover:from-brand-primary/90 hover:to-brand-secondary/90 text-white transition-all disabled:opacity-50 flex items-center justify-center"
                         title="Export"
                       >
                         {isExporting ? (
@@ -1065,7 +1067,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       </button>
                       
                       {showExportMenu && (
-                        <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
+                        <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[9999] min-w-[180px]">
                           <button
                             onClick={exportAsImage}
                             className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
@@ -1114,7 +1116,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2, ease: 'easeInOut' }}
-                      className={`sticky top-0 z-10 glass-strong border-b border-gray-200 dark:border-gray-700 ${isFullscreen ? 'px-3 py-1.5' : 'px-6 py-3'}`}
+                      className={`sticky-nav sticky top-0 z-10 bg-gradient-to-r from-purple-50 to-pink-50 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 border-b-2 border-fis-eggplant/20 dark:border-gray-700 shadow-sm ${isFullscreen ? 'px-3 py-1.5' : 'px-6 py-3'}`}
                     >
                       <nav className="flex items-center gap-2 overflow-x-auto pb-1">
                         {sections.filter(section => section.type !== 'hr').map((section) => (
@@ -1125,8 +1127,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                               flex-shrink-0 rounded-lg font-roobert-medium transition-all duration-200
                               ${isFullscreen ? 'px-2 py-1 text-[9px]' : 'px-3 py-1.5 text-[10px]'}
                               ${activeSection === `section-${section.key}`
-                                ? 'bg-gradient-to-r from-fis-eggplant to-fis-navy text-white shadow-md'
-                                : 'text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800/50'
+                                ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white shadow-md'
+                                : 'text-gray-800 dark:text-gray-100 hover:bg-white dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
                               }
                             `}
                           >
@@ -1171,6 +1173,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                             let rowType = 'full';
                             if (zone.includes('left-70') || zone.includes('right-30')) {
                               rowType = '70-30';
+                            } else if (zone.includes('left-30') || zone.includes('right-70')) {
+                              rowType = '30-70';
                             } else if (zone.includes('left-50') || zone.includes('right-50')) {
                               rowType = '50-50';
                             } else if (zone.includes('left-33') || zone.includes('middle-33') || zone.includes('right-33')) {
@@ -1180,13 +1184,14 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                             // Start new row if:
                             // 1. Row type changes
                             // 2. Full width item
-                            // 3. 70-30 row has 2 items
+                            // 3. 70-30 or 30-70 row has 2 items
                             // 4. 50-50 row has 2 items
                             // 5. 33-33-33 row has 3 items
                             if (
                               (currentRowType && currentRowType !== rowType) ||
                               rowType === 'full' ||
                               (currentRowType === '70-30' && currentRow.length >= 2) ||
+                              (currentRowType === '30-70' && currentRow.length >= 2) ||
                               (currentRowType === '50-50' && currentRow.length >= 2) ||
                               (currentRowType === '33-33-33' && currentRow.length >= 3)
                             ) {
@@ -1213,8 +1218,65 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                             rows.push(currentRow);
                           }
 
+                          // Check if ALL fields in section are Hero containers (masonry layout)
+                          const heroFields = section.multiFieldData || [];
+                          const allFieldsHero = heroFields.length > 0 && heroFields.every((f: any) => f.gridPosition);
+                          
+                          if (allFieldsHero) {
+                            console.log('🌟 Rendering Hero Grid with fields:', heroFields);
+                            // Hero Masonry Layout - CSS Grid with flexible positioning
+                            return (
+                              <div className="bg-gradient-to-br from-brand-primary via-brand-secondary to-brand-primary text-white rounded-2xl p-8 shadow-2xl">
+                                <div className="grid grid-cols-8 auto-rows-[120px] gap-4">
+                                  {heroFields.map((field: any) => {
+                                    // Use gridPosition data for exact positioning
+                                    const gridStyle = field.gridPosition ? {
+                                      gridColumn: `${field.gridPosition.col + 1} / span ${field.gridPosition.colSpan}`,
+                                      gridRow: `${field.gridPosition.row + 1} / span ${field.gridPosition.rowSpan}`
+                                    } : {};
+                                    
+                                    const fieldGoal = field.goalTag ? availableGoals.find(g => g.id === field.goalTag) : null;
+                                    
+                                    return (
+                                      <div key={field.key} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 flex flex-col overflow-hidden hover:bg-white/15 transition-all" style={gridStyle}>
+                                        {field.displayAssetTitle && field.assetTitle && (
+                                          <div className="flex items-center gap-2 mb-2">
+                                            <h4 className="text-xs font-roobert-semibold text-white/90 truncate">
+                                              {field.assetTitle}
+                                            </h4>
+                                            {fieldGoal && (
+                                              <button
+                                                onClick={() => {
+                                                  setSelectedGoal(fieldGoal);
+                                                  setShowGoalModal(true);
+                                                }}
+                                                className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded-md bg-white/20 text-white hover:bg-white/30 transition-all cursor-pointer"
+                                                title="Click to view goal details"
+                                              >
+                                                <span className="text-sm">{fieldGoal.icon || '🎯'}</span>
+                                              </button>
+                                            )}
+                                          </div>
+                                        )}
+                                        <div className="flex-1 overflow-auto flex items-center justify-center">
+                                          <AssetRenderEngine
+                                            type={field.type}
+                                            data={field.data}
+                                            displayMode="hero"
+                                          />
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          }
+
+                          // Standard grid layouts (non-Hero)
                           return rows.map((row, rowIndex) => {
                             const firstZone = row[0]?.layoutZone || 'full';
+                            const isHeroLayout = firstZone === 'hero';
                             let gridCols = 'grid-cols-1';
                             
                             if (firstZone.includes('left-33') || firstZone.includes('middle-33') || firstZone.includes('right-33')) {
@@ -1223,10 +1285,17 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                               gridCols = 'grid-cols-2';
                             } else if (firstZone.includes('left-70') || firstZone.includes('right-30')) {
                               gridCols = 'grid-cols-[2.33fr_1fr]';
+                            } else if (firstZone.includes('left-30') || firstZone.includes('right-70')) {
+                              gridCols = 'grid-cols-[1fr_2.33fr]';
                             }
 
+                            // Hero layout special styling
+                            const heroClasses = isHeroLayout 
+                              ? 'bg-gradient-to-r from-brand-primary to-brand-secondary text-white rounded-xl p-8 shadow-lg' 
+                              : '';
+
                             return (
-                              <div key={rowIndex} className={`grid ${gridCols} gap-6 items-start w-full`}>
+                              <div key={rowIndex} className={`grid ${gridCols} gap-6 items-start w-full ${heroClasses}`}>
                                 {row.map((field: any, fieldIndex: number) => {
                                   const alignment = field.alignment || 'left';
                                   const alignmentClass = alignment === 'center' ? 'text-center' : alignment === 'right' ? 'text-right' : 'text-left';
@@ -1269,6 +1338,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                       <AssetRenderEngine
                                         type={field.type}
                                         data={field.data}
+                                        displayMode={isHeroLayout ? 'connected' : 'spaced'}
                                       />
                                     </div>
                                   );
@@ -1294,7 +1364,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                                     setSelectedGoal(assetGoal);
                                     setShowGoalModal(true);
                                   }}
-                                  className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded-md bg-fis-eggplant/10 text-fis-eggplant dark:bg-fis-raspberry/20 dark:text-fis-raspberry hover:bg-fis-eggplant/20 dark:hover:bg-fis-raspberry/30 hover:underline transition-all cursor-pointer"
+                                  className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded-md bg-brand-primary/10 text-brand-primary dark:bg-brand-secondary/20 dark:text-brand-secondary hover:bg-brand-primary/20 dark:hover:bg-brand-secondary/30 hover:underline transition-all cursor-pointer"
                                   title="Click to view goal details"
                                 >
                                   <span className="text-sm">{assetGoal.icon || '🎯'}</span>

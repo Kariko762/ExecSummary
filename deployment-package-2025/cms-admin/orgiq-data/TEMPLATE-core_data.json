@@ -1,0 +1,64 @@
+{
+  "productId": "financial-services-company",
+  "productName": "Financial Services Company",
+  "description": "Product and business unit organizational structure",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  "organizationStructure": [
+    {
+      "id": "root",
+      "parentId": null,
+      "name": "COMPANY",
+      "title": "Financial Services",
+      "department": "Corporate",
+      "productRole": "Parent Organization"
+    },
+    {
+      "id": "banking",
+      "parentId": "root",
+      "name": "BANKING",
+      "title": "Banking Division",
+      "department": "Banking",
+      "productRole": "Business Unit"
+    },
+    {
+      "id": "capital-markets",
+      "parentId": "root",
+      "name": "CAPITAL MARKETS",
+      "title": "Capital Markets Division",
+      "department": "Capital Markets",
+      "productRole": "Business Unit"
+    },
+    {
+      "id": "risk",
+      "parentId": "capital-markets",
+      "name": "RISK",
+      "title": "Risk Management",
+      "department": "Capital Markets",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "lending",
+      "parentId": "capital-markets",
+      "name": "LENDING",
+      "title": "Lending Services",
+      "department": "Capital Markets",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "wealth-retirement",
+      "parentId": "capital-markets",
+      "name": "WEALTH & RETIREMENT",
+      "title": "Wealth & Retirement Planning",
+      "department": "Capital Markets",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "ctrm",
+      "parentId": "risk",
+      "name": "CTRM",
+      "title": "Commodity Trading Risk Management Platform",
+      "department": "Risk",
+      "productRole": "Product Platform"
+    }
+  ]
+}

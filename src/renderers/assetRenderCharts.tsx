@@ -370,8 +370,8 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
             cx="50%"
             cy="50%"
             labelLine={false}
-            label={({ name, percent }: any) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            outerRadius={80}
+            label={({ name, percent }: any) => `${(percent * 100).toFixed(0)}%`}
+            outerRadius={70}
             dataKey="value"
           >
             {items.map((_entry, index) => (
@@ -379,6 +379,17 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
             ))}
           </Pie>
           <Tooltip content={<CustomPieTooltip />} />
+          <Legend 
+            verticalAlign="bottom" 
+            height={50}
+            wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
+            formatter={(value: string) => {
+              const item = items.find(i => i.name === value);
+              if (!item) return value;
+              const percentage = total > 0 ? ((item.value / total) * 100).toFixed(0) : 0;
+              return `${value}: ${percentage}%`;
+            }}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>

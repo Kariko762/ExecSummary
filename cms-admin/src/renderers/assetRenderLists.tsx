@@ -71,7 +71,7 @@ export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChan
         const displayText = typeof item === 'object' ? (item.name || item.value || '') : item;
         return (
           <div key={index} className="highlight-item">
-            <div className={`highlight-badge ${isMultiColumn ? 'compact' : ''}`}>{index + 1}</div>
+            <div className={`highlight-badge ${isMultiColumn ? 'compact' : ''}`} data-index={index}>{index + 1}</div>
             <div className="highlight-text">{renderWithExpressions(displayText)}</div>
           </div>
         );

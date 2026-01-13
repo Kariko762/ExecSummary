@@ -1,0 +1,87 @@
+{
+  "contentTypeTagMapping": {
+    "timeline": {
+      "description": "Timeline/Summary content shown on main dashboard",
+      "autoTag": null,
+      "allowedTags": ["weekly-summary", "executive-iq"],
+      "defaultTag": "weekly-summary"
+    },
+    "performance": {
+      "description": "Performance dashboard metrics and analytics",
+      "autoTag": "performance",
+      "allowedTags": ["performance"],
+      "defaultTag": "performance"
+    },
+    "organization": {
+      "description": "Organization-specific content (tenant-based)",
+      "autoTag": "organization",
+      "allowedTags": ["organization"],
+      "defaultTag": "organization"
+    },
+    "initiative": {
+      "description": "Strategic initiative content (tenant-based)",
+      "autoTag": "initiative",
+      "allowedTags": ["initiative"],
+      "defaultTag": "initiative"
+    }
+  },
+  "tagDefinitions": {
+    "summary": {
+      "id": "summary",
+      "name": "Summary",
+      "color": "#431C5B",
+      "description": "General executive summaries"
+    },
+    "weekly": {
+      "id": "weekly",
+      "name": "Weekly",
+      "color": "#B21A53",
+      "description": "Weekly updates"
+    },
+    "monthly": {
+      "id": "monthly",
+      "name": "Monthly",
+      "color": "#1D1F48",
+      "description": "Monthly reports"
+    },
+    "quarterly": {
+      "id": "quarterly",
+      "name": "Quarterly",
+      "color": "#3bcd3e",
+      "description": "Quarterly reviews"
+    },
+    "performance": {
+      "id": "performance",
+      "name": "Performance",
+      "color": "#0066CC",
+      "description": "Performance metrics and dashboards",
+      "locked": true
+    },
+    "organization": {
+      "id": "organization",
+      "name": "Organization",
+      "color": "#0066CC",
+      "description": "Organization-specific content",
+      "locked": true
+    },
+    "initiative": {
+      "id": "initiative",
+      "name": "Initiative",
+      "color": "#8B4789",
+      "description": "Strategic initiative content",
+      "locked": true
+    },
+    "custom": {
+      "id": "custom",
+      "name": "Custom",
+      "color": "#6b7280",
+      "description": "Custom tagged content"
+    }
+  },
+  "rules": {
+    "performance": "Performance content is always tagged as 'performance' - cannot be changed",
+    "organization": "Organization content is always tagged as 'organization' and includes _tenant metadata",
+    "initiative": "Initiative content is always tagged as 'initiative' and includes _tenant metadata",
+    "timeline": "Timeline content can use any non-locked tag (summary, weekly, monthly, quarterly, custom)"
+  }
+}

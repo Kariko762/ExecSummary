@@ -49,6 +49,14 @@
       "description": "Knowledge base category definitions"
     },
     {
+      "id": "vendor",
+      "name": "Vendors",
+      "color": "tertiary",
+      "icon": "Building2",
+      "created": "2026-01-06T00:00:00.000Z",
+      "description": "Vendor and partner management"
+    },
+    {
       "id": "strategiciq",
       "name": "StrategicIQ",
       "color": "red",

@@ -617,3 +617,298 @@ html {
 .dark .metric-card .value {
   color: #f9fafb;
 }
+
+/* ==========================================
+   VENDOR STRATEGIC IDENTITY PATTERN
+   Asymmetrical layout: 60% Problems + 40% Capabilities
+   ========================================== */
+
+/* Vendor Asset Display Container */
+.vendor-asset-display {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+/* Top Row: 60/40 Split */
+.vendor-top-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+  .vendor-top-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Problems Card - The Narrative (Left, White Card) */
+.vendor-problems-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 40px rgba(67, 28, 91, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(67, 28, 91, 0.1);
+  border-left: 5px solid #431C5B;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.vendor-problems-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(67, 28, 91, 0.03) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.vendor-problems-card::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(59, 205, 62, 0.04) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.vendor-section-label {
+  font-size: 0.75rem;
+  font-family: 'Roobert Medium', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #431C5B 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.vendor-problems-content {
+  font-size: 1.125rem;
+  font-family: 'Roobert', sans-serif;
+  font-weight: 600;
+  line-height: 1.7;
+  color: #1f2937;
+  position: relative;
+  z-index: 1;
+}
+
+.vendor-problems-content strong {
+  font-weight: 700;
+}
+
+/* Capabilities Card - The Split (Right, Dark Card) */
+.vendor-capabilities-card {
+  background: linear-gradient(135deg, #1D1F48 0%, #0f172a 50%, #0a0b1a 100%);
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.vendor-capabilities-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -25%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(59, 205, 62, 0.08) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulse-green 8s ease-in-out infinite;
+}
+
+.vendor-capabilities-card::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  right: -20%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulse-blue 10s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% { transform: scale(1) translateY(0); opacity: 0.6; }
+  50% { transform: scale(1.1) translateY(-10px); opacity: 0.8; }
+}
+
+@keyframes pulse-blue {
+  0%, 100% { transform: scale(1) translateY(0); opacity: 0.5; }
+  50% { transform: scale(1.15) translateY(10px); opacity: 0.7; }
+}
+
+.vendor-capabilities-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.vendor-extended-column {
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 1.5rem;
+}
+
+.vendor-capability-title {
+  font-size: 0.875rem;
+  font-family: 'Roobert Medium', sans-serif;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.vendor-capability-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.vendor-capability-title.core {
+  color: #3bcd3e;
+}
+
+.vendor-capability-title.extended {
+  color: #3b82f6;
+}
+
+.vendor-function-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vendor-function-list li {
+  font-size: 0.75rem;
+  font-family: 'Roobert', sans-serif;
+  opacity: 0.9;
+}
+
+.vendor-function-list li::before {
+  content: "• ";
+  color: #3bcd3e;
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+.vendor-function-list.extended li {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.vendor-function-list.extended li::before {
+  color: #3b82f6;
+}
+
+/* Success Gallery - Bottom Row (Full Width) */
+.vendor-success-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .vendor-success-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vendor-win-card {
+  background: linear-gradient(135deg, white 0%, #fafafa 100%);
+  padding: 1.75rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(67, 28, 91, 0.08);
+  box-shadow: 0 4px 20px rgba(67, 28, 91, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.vendor-win-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #431C5B 0%, #7c3aed 50%, #3b82f6 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.vendor-win-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(67, 28, 91, 0.15), 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.vendor-win-card:hover::before {
+  opacity: 1;
+}
+
+.vendor-win-metric {
+  font-size: 2.75rem;
+  font-family: 'Roobert Medium', sans-serif;
+  font-weight: 800;
+  background: linear-gradient(135deg, #431C5B 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.vendor-win-title {
+  font-size: 1.125rem;
+  font-family: 'Roobert', sans-serif;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+}
+
+.vendor-win-description {
+  font-size: 0.875rem;
+  font-family: 'Roobert', sans-serif;
+  color: #6b7280;
+  line-height: 1.5;
+}

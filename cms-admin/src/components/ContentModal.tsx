@@ -1090,7 +1090,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2, ease: 'easeInOut' }}
-                      className={`sticky top-0 z-10 glass-strong border-b border-gray-200 dark:border-gray-700 ${isFullscreen ? 'px-3 py-1.5' : 'px-6 py-3'}`}
+                      className={`sticky top-0 z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 ${isFullscreen ? 'px-3 py-1.5' : 'px-6 py-3'}`}
                     >
                       <nav className="flex items-center gap-2 overflow-x-auto pb-1">
                         {sections.filter(section => section.type !== 'hr').map((section) => (
@@ -1101,11 +1101,10 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                               flex-shrink-0 rounded-lg font-roobert-medium transition-all duration-200
                               ${isFullscreen ? 'px-2 py-1 text-[9px]' : 'px-3 py-1.5 text-[10px]'}
                               ${activeSection === `section-${section.key}`
-                                ? 'text-white shadow-md'
-                                : 'text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-gray-800/50'
+                                ? 'bg-gradient-to-r from-brand-secondary to-brand-tertiary text-white shadow-md'
+                                : 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
                               }
                             `}
-                            style={activeSection === `section-${section.key}` ? { background: 'linear-gradient(to right, var(--brand-primary), var(--brand-tertiary))' } : {}}
                           >
                             {section.label}
                           </button>
@@ -1180,6 +1179,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                             let rowType = 'full';
                             if (zone.includes('left-70') || zone.includes('right-30')) {
                               rowType = '70-30';
+                            } else if (zone.includes('left-30') || zone.includes('right-70')) {
+                              rowType = '30-70';
                             } else if (zone.includes('left-50') || zone.includes('right-50')) {
                               rowType = '50-50';
                             } else if (zone.includes('left-33') || zone.includes('middle-33') || zone.includes('right-33')) {
@@ -1189,13 +1190,14 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                             // Start new row if:
                             // 1. Row type changes
                             // 2. Full width item
-                            // 3. 70-30 row has 2 items
+                            // 3. 70-30 or 30-70 row has 2 items
                             // 4. 50-50 row has 2 items
                             // 5. 33-33-33 row has 3 items
                             if (
                               (currentRowType && currentRowType !== rowType) ||
                               rowType === 'full' ||
                               (currentRowType === '70-30' && currentRow.length >= 2) ||
+                              (currentRowType === '30-70' && currentRow.length >= 2) ||
                               (currentRowType === '50-50' && currentRow.length >= 2) ||
                               (currentRowType === '33-33-33' && currentRow.length >= 3)
                             ) {
@@ -1232,6 +1234,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                               gridCols = 'grid-cols-2';
                             } else if (firstZone.includes('left-70') || firstZone.includes('right-30')) {
                               gridCols = 'grid-cols-[2.33fr_1fr]';
+                            } else if (firstZone.includes('left-30') || firstZone.includes('right-70')) {
+                              gridCols = 'grid-cols-[1fr_2.33fr]';
                             }
 
                             return (

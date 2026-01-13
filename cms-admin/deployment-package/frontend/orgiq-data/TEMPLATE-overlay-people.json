@@ -1,0 +1,86 @@
+{
+  "overlayId": "people-assignment-2025",
+  "overlayName": "People Assignment",
+  "description": "Team members assigned to each product/business unit",
+  "dataType": "people-metrics",
+  "createdDate": "2025-12-03T10:30:00Z",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  
+  "visualizationConfig": {
+    "title": "People",
+    "icon": "Users",
+    "primaryColor": "blue",
+    "hotspotEnabled": true,
+    "hotspotMetric": "headcount",
+    "hotspotLabel": "Team Size",
+    "hotspotRanges": [
+      { "min": 0, "max": 5, "color": "#dbeafe", "label": "Small (0-5)" },
+      { "min": 6, "max": 15, "color": "#93c5fd", "label": "Medium (6-15)" },
+      { "min": 16, "max": 30, "color": "#60a5fa", "label": "Large (16-30)" },
+      { "min": 31, "max": 999999, "color": "#3b82f6", "label": "Very Large (30+)" }
+    ],
+    "aggregateMetrics": [
+      {
+        "id": "totalHeadcount",
+        "label": "Total Headcount",
+        "calculation": "sum",
+        "field": "headcount",
+        "format": "number"
+      },
+      {
+        "id": "avgTeamSize",
+        "label": "Avg Team Size",
+        "calculation": "average",
+        "field": "headcount",
+        "format": "number"
+      }
+    ]
+  },
+  
+  "nodeMetrics": [
+    {
+      "nodeId": "root",
+      "headcount": 250,
+      "keyPeople": ["CEO", "CFO", "CTO"],
+      "location": "New York HQ"
+    },
+    {
+      "nodeId": "banking",
+      "headcount": 100,
+      "keyPeople": ["VP Banking", "Head of Retail", "Head of Commercial"],
+      "location": "New York, London"
+    },
+    {
+      "nodeId": "capital-markets",
+      "headcount": 150,
+      "keyPeople": ["VP Capital Markets", "Managing Director"],
+      "location": "New York, Singapore"
+    },
+    {
+      "nodeId": "risk",
+      "headcount": 45,
+      "keyPeople": ["Head of Risk", "Chief Risk Officer"],
+      "location": "New York"
+    },
+    {
+      "nodeId": "lending",
+      "headcount": 35,
+      "keyPeople": ["Head of Lending", "Credit Director"],
+      "location": "Chicago"
+    },
+    {
+      "nodeId": "wealth-retirement",
+      "headcount": 70,
+      "keyPeople": ["Head of Wealth Management", "Retirement Services Director"],
+      "location": "Boston, San Francisco"
+    },
+    {
+      "nodeId": "ctrm",
+      "headcount": 12,
+      "keyPeople": ["Product Manager - CTRM", "Lead Engineer", "Solutions Architect"],
+      "location": "New York",
+      "techStack": ["Java", "React", "PostgreSQL"],
+      "clientCount": 8
+    }
+  ]
+}

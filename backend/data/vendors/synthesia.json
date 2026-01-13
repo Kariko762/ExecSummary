@@ -1,0 +1,73 @@
+{
+  "id": "vendor-synthesia-2026-01-06",
+  "title": "Synthesia AI Video",
+  "_contentTag": "vendor",
+  "_layout": "one-pager",
+  "status": "published",
+  "date": "2026-01-06",
+  "vendorHero": {
+    "vendorName": "Synthesia",
+    "vendorLogo": "",
+    "vendorTagline": "AI-powered video creation platform",
+    "activeProjects": 2,
+    "totalBudget": "$125,000",
+    "healthStatus": "At Risk"
+  },
+  "activeProjects": {
+    "_assetTitle_activeProjects": "Active Projects",
+    "_renderAs_activeProjects": "nestedCards",
+    "activeProjects": [
+      {
+        "title": "Executive Announcements",
+        "content": "AI avatar videos for CEO communications",
+        "metadata": "Status: Pilot Phase | Videos Created: 3 | Feedback: Mixed"
+      },
+      {
+        "title": "Global Training Content",
+        "content": "Multi-language training videos using AI",
+        "metadata": "Status: Development | Languages: 5 | Progress: 30%"
+      }
+    ]
+  },
+  "pipeline": {
+    "_assetTitle_pipeline": "Projects in Pipeline",
+    "_renderAs_pipeline": "bulletList",
+    "pipeline": [
+      "Scale AI video production to all departments",
+      "Custom avatar creation for leadership team",
+      "Localization of existing content library",
+      "Integration with LMS platform"
+    ]
+  },
+  "keyContacts": {
+    "_assetTitle_keyContacts": "Key Contacts",
+    "_renderAs_keyContacts": "keyValueList",
+    "keyContacts": {
+      "Enterprise Account Manager": "Alex Thompson (alex@synthesia.io)",
+      "Solutions Architect": "Maria Rodriguez (maria@synthesia.io)",
+      "Support Team": "enterprise@synthesia.io",
+      "Implementation Lead": "James Kim (james@synthesia.io)"
+    }
+  },
+  "budgetOverview": {
+    "_assetTitle_budgetOverview": "Budget Overview",
+    "_renderAs_budgetOverview": "keyValueList",
+    "budgetOverview": {
+      "Annual Contract": "$125,000",
+      "YTD Spent": "$62,500",
+      "Remaining": "$62,500",
+      "Utilization": "50%",
+      "At Risk Reason": "Low adoption rate, technical issues reported"
+    }
+  },
+  "performanceMetrics": {
+    "_assetTitle_performanceMetrics": "Performance Metrics",
+    "_renderAs_performanceMetrics": "metricCard",
+    "performanceMetrics": {
+      "label": "User Satisfaction",
+      "value": "62%",
+      "trend": "down",
+      "subtitle": "Needs improvement - technical challenges"
+    }
+  }
+}

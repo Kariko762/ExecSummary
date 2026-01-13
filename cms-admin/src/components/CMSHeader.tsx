@@ -11,13 +11,14 @@ interface CMSHeaderProps {
   onOpenTemplateBuilder?: () => void;
   onOpenOrgIQ?: () => void;
   onOpenSystemSettings?: () => void;
+  onOpenDataSources?: () => void;
   onOpenComments?: () => void;
   onOpenGoals?: () => void;
   onOpenNotes?: () => void;
   onOpenPlatformOverview?: () => void;
 }
 
-export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenComments, onOpenGoals, onOpenNotes, onOpenPlatformOverview }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenDataSources, onOpenComments, onOpenGoals, onOpenNotes, onOpenPlatformOverview }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
@@ -30,6 +31,8 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
   const [requireAuth, setRequireAuth] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const engineMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const [engineSubmenuOpenUpward, setEngineSubmenuOpenUpward] = useState(false);
 
   // Load custom logo and auth settings from system settings
   useEffect(() => {
@@ -98,6 +101,21 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
       };
     }
   }, [isNavDropdownOpen, isUserMenuOpen]);
+
+  // Detect if submenu should open upward (when near bottom of viewport)
+  const handleEngineSubmenuOpen = () => {
+    setEngineSubmenuOpen(true);
+    
+    if (engineMenuButtonRef.current) {
+      const buttonRect = engineMenuButtonRef.current.getBoundingClientRect();
+      const submenuHeight = 400; // Approximate submenu height
+      const viewportHeight = window.innerHeight;
+      const spaceBelow = viewportHeight - buttonRect.bottom;
+      
+      // If not enough space below (less than submenu height), open upward
+      setEngineSubmenuOpenUpward(spaceBelow < submenuHeight);
+    }
+  };
 
   // Handle ESC key to close navigation menu
   useEffect(() => {
@@ -253,6 +271,23 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                           </div>
                         </button>
 
+                        {/* Data Engine */}
+                        <button
+                          onClick={() => {
+                            onOpenDataSources?.();
+                            setIsNavDropdownOpen(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-900 dark:text-white text-left"
+                        >
+                          <div className="p-2 rounded-lg bg-green-500/10">
+                            <Database className="w-5 h-5 text-green-500" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Data Engine</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Performance data sources</div>
+                          </div>
+                        </button>
+
                         {/* Platform Overview */}
                         <button
                           onClick={() => {
@@ -273,7 +308,8 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                         {/* Engine & Templates - WITH SUBMENU */}
                         <div className="relative">
                           <button
-                            onMouseEnter={() => setEngineSubmenuOpen(true)}
+                            ref={engineMenuButtonRef}
+                            onMouseEnter={handleEngineSubmenuOpen}
                             onMouseLeave={() => setEngineSubmenuOpen(false)}
                             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white text-left"
                           >
@@ -287,7 +323,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                             <ChevronRight className="w-4 h-4 text-gray-400" />
                           </button>
 
-                          {/* Submenu - Slides out to the right */}
+                          {/* Submenu - Slides out to the right, opens upward if near bottom */}
                           <AnimatePresence>
                             {engineSubmenuOpen && (
                               <motion.div
@@ -295,9 +331,11 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -10 }}
                                 transition={{ duration: 0.15 }}
-                                onMouseEnter={() => setEngineSubmenuOpen(true)}
+                                onMouseEnter={handleEngineSubmenuOpen}
                                 onMouseLeave={() => setEngineSubmenuOpen(false)}
-                                className="absolute left-full top-0 ml-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[53]"
+                                className={`absolute left-full ml-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[53] ${
+                                  engineSubmenuOpenUpward ? 'bottom-0' : 'top-0'
+                                }`}
                               >
                                 <div className="p-2">
                                   {/* Asset Reference */}
@@ -315,7 +353,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     </div>
                                     <div className="flex-1">
                                       <div className="font-roobert-semibold text-sm">Asset Reference</div>
-                                      <div className="text-xs text-gray-600 dark:text-gray-400">All render types & examples</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">22 assets with live previews & note labels</div>
                                     </div>
                                   </button>
 

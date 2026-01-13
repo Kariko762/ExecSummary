@@ -1,0 +1,78 @@
+{
+  "id": "vendor-coast-video-2026-01-06",
+  "title": "Coast Video Production",
+  "_contentTag": "vendor",
+  "_layout": "one-pager",
+  "status": "published",
+  "date": "2026-01-06",
+  "vendorHero": {
+    "vendorName": "Coast Video Production",
+    "vendorLogo": "",
+    "vendorTagline": "Premium video production for enterprise",
+    "activeProjects": 3,
+    "totalBudget": "$145,000",
+    "healthStatus": "On Track"
+  },
+  "activeProjects": {
+    "_assetTitle_activeProjects": "Active Projects",
+    "_renderAs_activeProjects": "nestedCards",
+    "activeProjects": [
+      {
+        "title": "Q1 Leadership Updates",
+        "content": "Executive video series for quarterly town halls",
+        "metadata": "Status: In Production | Deadline: Feb 15, 2026 | Progress: 65%"
+      },
+      {
+        "title": "Employee Onboarding Series",
+        "content": "12-part video series for new hire orientation",
+        "metadata": "Status: Post-Production | Deadline: Mar 1, 2026 | Progress: 40%"
+      },
+      {
+        "title": "Product Launch Campaign",
+        "content": "Marketing video package for Q2 product release",
+        "metadata": "Status: Pre-Production | Deadline: Apr 15, 2026 | Progress: 15%"
+      }
+    ]
+  },
+  "pipeline": {
+    "_assetTitle_pipeline": "Projects in Pipeline",
+    "_renderAs_pipeline": "bulletList",
+    "pipeline": [
+      "Executive Town Hall Series (Q2 2026)",
+      "Customer Success Story Videos",
+      "Training Module Updates",
+      "Annual Report Video Production"
+    ]
+  },
+  "keyContacts": {
+    "_assetTitle_keyContacts": "Key Contacts",
+    "_renderAs_keyContacts": "keyValueList",
+    "keyContacts": {
+      "Account Manager": "Sarah Johnson (sjohnson@coastvideo.com)",
+      "Creative Director": "Mike Chen (mchen@coastvideo.com)",
+      "Project Lead": "Emma Williams (ewilliams@coastvideo.com)",
+      "Support Contact": "support@coastvideo.com"
+    }
+  },
+  "budgetOverview": {
+    "_assetTitle_budgetOverview": "Budget Overview",
+    "_renderAs_budgetOverview": "keyValueList",
+    "budgetOverview": {
+      "Annual Contract": "$150,000",
+      "YTD Spent": "$98,500",
+      "Remaining": "$51,500",
+      "Utilization": "66%",
+      "Next Invoice": "Feb 1, 2026 ($12,500)"
+    }
+  },
+  "performanceMetrics": {
+    "_assetTitle_performanceMetrics": "Performance Metrics",
+    "_renderAs_performanceMetrics": "metricCard",
+    "performanceMetrics": {
+      "label": "On-Time Delivery Rate",
+      "value": "94%",
+      "trend": "up",
+      "subtitle": "Last 12 months"
+    }
+  }
+}

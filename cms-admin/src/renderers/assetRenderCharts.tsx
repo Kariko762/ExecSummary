@@ -5,7 +5,7 @@
  * assetRenderEngine.tsx applies design system styling on top.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { RadialBarChart, RadialBar, PieChart, Pie, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
 import { Plus, X } from 'lucide-react';
 
@@ -364,8 +364,8 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
             cx="50%"
             cy="50%"
             labelLine={false}
-            label={({ name, percent }: any) => `${name}: ${(percent * 100).toFixed(0)}%`}
-            outerRadius={80}
+            label={({ name, percent }: any) => `${(percent * 100).toFixed(0)}%`}
+            outerRadius={70}
             dataKey="value"
           >
             {items.map((_entry, index) => (
@@ -373,6 +373,17 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
             ))}
           </Pie>
           <Tooltip content={<CustomPieTooltip />} />
+          <Legend 
+            verticalAlign="bottom" 
+            height={50}
+            wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
+            formatter={(value: string) => {
+              const item = items.find(i => i.name === value);
+              if (!item) return value;
+              const percentage = total > 0 ? ((item.value / total) * 100).toFixed(0) : 0;
+              return `${value}: ${percentage}%`;
+            }}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>
@@ -577,8 +588,22 @@ export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, 
   const items = Array.isArray(data) ? data : [];
   
   if (mode === 'edit') {
+    // Detect all series keys dynamically (same as display mode)
+    const seriesKeys = items.length > 0 
+      ? Object.keys(items[0]).filter(key => key !== 'name')
+      : ['value']; // Default to 'value' for empty charts
+    
+    // Local state for series renaming to avoid losing focus
+    const [editingSeriesName, setEditingSeriesName] = useState<string>('');
+    const [editingSeriesOriginal, setEditingSeriesOriginal] = useState<string>('');
+    
     const addPoint = () => {
-      onChange?.([...items, { name: '', value: 0 }]);
+      // Create new point with all existing series columns
+      const newPoint: any = { name: '' };
+      seriesKeys.forEach(key => {
+        newPoint[key] = 0;
+      });
+      onChange?.([...items, newPoint]);
     };
     
     const removePoint = (index: number) => {
@@ -587,33 +612,125 @@ export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, 
     
     const updatePoint = (index: number, field: string, value: string) => {
       const updated = [...items];
-      updated[index] = { ...updated[index], [field]: field === 'value' ? Number(value) : value };
+      // Convert to number for series fields, keep as string for 'name'
+      updated[index] = { ...updated[index], [field]: field === 'name' ? value : Number(value) };
       onChange?.(updated);
+    };
+    
+    const addSeries = () => {
+      const seriesName = `Series${seriesKeys.length + 1}`;
+      const updated = items.map(point => ({ ...point, [seriesName]: 0 }));
+      onChange?.(updated);
+    };
+    
+    const removeSeries = (seriesKey: string) => {
+      if (seriesKeys.length <= 1) return; // Keep at least one series
+      const updated = items.map(point => {
+        const { [seriesKey]: removed, ...rest } = point;
+        return rest;
+      });
+      onChange?.(updated);
+    };
+    
+    const commitSeriesRename = () => {
+      if (!editingSeriesName || editingSeriesName === editingSeriesOriginal || editingSeriesName === 'name') {
+        setEditingSeriesName('');
+        setEditingSeriesOriginal('');
+        return;
+      }
+      // Check if new name already exists
+      if (seriesKeys.includes(editingSeriesName) && editingSeriesName !== editingSeriesOriginal) {
+        setEditingSeriesName('');
+        setEditingSeriesOriginal('');
+        return;
+      }
+      
+      const updated = items.map(point => {
+        const { [editingSeriesOriginal]: value, ...rest } = point;
+        return { ...rest, [editingSeriesName]: value };
+      });
+      onChange?.(updated);
+      setEditingSeriesName('');
+      setEditingSeriesOriginal('');
     };
     
     return (
       <div>
+        {/* Series Management */}
+        <div className="edit-series-manager" style={{ marginBottom: '16px', padding: '12px', backgroundColor: 'var(--surface-secondary)', borderRadius: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)' }}>Series:</span>
+            {seriesKeys.map(key => (
+              <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 8px', backgroundColor: 'var(--surface-primary)', border: '1px solid var(--border-primary)', borderRadius: '4px' }}>
+                <input
+                  type="text"
+                  value={editingSeriesOriginal === key ? editingSeriesName : key}
+                  onFocus={() => {
+                    setEditingSeriesOriginal(key);
+                    setEditingSeriesName(key);
+                  }}
+                  onChange={(e) => setEditingSeriesName(e.target.value)}
+                  onBlur={commitSeriesRename}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      commitSeriesRename();
+                      e.currentTarget.blur();
+                    } else if (e.key === 'Escape') {
+                      setEditingSeriesName('');
+                      setEditingSeriesOriginal('');
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  style={{ fontSize: '13px', color: 'var(--text-primary)', backgroundColor: 'transparent', border: 'none', width: `${Math.max(key.length * 8, 60)}px`, padding: '0' }}
+                />
+                {seriesKeys.length > 1 && (
+                  <button
+                    onClick={() => removeSeries(key)}
+                    className="icon-button"
+                    title={`Remove ${key}`}
+                    style={{ padding: '2px', color: 'var(--accent-red)' }}
+                  >
+                    <X size={12} />
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              onClick={addSeries}
+              className="secondary-action"
+              style={{ fontSize: '13px', padding: '4px 8px' }}
+            >
+              <Plus size={12} /> Add Series
+            </button>
+          </div>
+        </div>
+
+        {/* Data Points */}
         {items.map((item, index) => (
-          <div key={index} className="edit-item-container">
-            <div className="edit-field-row" style={{ marginBottom: '8px' }}>
+          <div key={index} className="edit-item-container" style={{ marginBottom: '12px' }}>
+            <div className="edit-field-row" style={{ marginBottom: '8px', display: 'flex', gap: '8px', alignItems: 'center' }}>
               <input
                 type="text"
                 value={item.name || ''}
                 onChange={(e) => updatePoint(index, 'name', e.target.value)}
                 placeholder="Label (e.g., Jan)..."
-                style={{ flex: 1 }}
+                style={{ width: '100px' }}
               />
+              {seriesKeys.map(key => (
+                <input
+                  key={key}
+                  type="number"
+                  value={item[key] || 0}
+                  onChange={(e) => updatePoint(index, key, e.target.value)}
+                  placeholder={key}
+                  min="0"
+                  style={{ width: '80px' }}
+                />
+              ))}
               <button className="delete-button" onClick={() => removePoint(index)}>
                 <X size={16} />
               </button>
             </div>
-            <input
-              type="number"
-              value={item.value || 0}
-              onChange={(e) => updatePoint(index, 'value', e.target.value)}
-              placeholder="Value..."
-              min="0"
-            />
           </div>
         ))}
         <button className="primary-action" onClick={addPoint}>

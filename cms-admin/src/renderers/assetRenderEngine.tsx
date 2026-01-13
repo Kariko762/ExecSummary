@@ -34,6 +34,8 @@ import {
   Top5ListPattern
 } from './assetRenderLists';
 
+import { GaugeRenderer } from './GaugeRenderer';
+
 import {
   MetricCardPattern,
   NestedCardsPattern,
@@ -53,7 +55,10 @@ import {
   StatusBoardPattern,
   TimelinePattern,
   TwoColumnComparisonPattern,
-  ProblemSolutionBoxPattern
+  ProblemSolutionBoxPattern,
+  GanttChartPattern,
+  VendorAssetPattern,
+  ProgressBarListDetailedPattern
 } from './assetRenderComplex';
 
 import {
@@ -66,7 +71,10 @@ import OrgChartRenderer from './OrgChartRenderer';
 
 import { BudgetBreakdown } from './assetRenderBudget';
 import { ForecastBreakdown } from './assetRenderForecast';
-import { ExecutiveSynthesisRenderer } from './ExecutiveSynthesisRenderer';
+import ExecutiveSummaryCPSAR from './ExecutiveSummaryCPSAR';
+import ExecutiveSummaryBLUF from './ExecutiveSummaryBLUF';
+import ExecutiveSummarySBAR from './ExecutiveSummarySBAR';
+import ExecutiveSummaryPyramid from './ExecutiveSummaryPyramid';
 
 // ==========================================
 // ENGINE PROPS
@@ -78,6 +86,7 @@ export interface AssetRenderEngineProps {
   onChange?: (value: any) => void;
   mode?: 'edit' | 'display';
   className?: string;
+  displayMode?: 'spaced' | 'connected'; // For hero layouts
 }
 
 // ==========================================
@@ -89,7 +98,8 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
   data,
   onChange,
   mode = 'display',
-  className = ''
+  className = '',
+  displayMode = 'spaced'
 }) => {
   
   // Route to correct pattern component
@@ -118,12 +128,16 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <ChecklistItemsPattern {...props} />;
       case 'progressBarList':
         return <ProgressBarListPattern {...props} />;
+      case 'progressBarListDetailed':
+        return <ProgressBarListDetailedPattern {...props} />;
       case 'keyValueList':
         return <KeyValueListPattern {...props} />;
       
       // CARD ASSETS
       case 'metricCard':
-        return <MetricCardPattern {...props} />;
+        return <MetricCardPattern {...props} displayMode={displayMode} />;
+      case 'gauge':
+        return <GaugeRenderer data={data} isEditMode={mode === 'edit'} displayMode={displayMode} />;
       case 'nestedCards':
         return <NestedCardsPattern {...props} />;
       case 'riskCard':
@@ -153,6 +167,10 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <TwoColumnComparisonPattern {...props} />;
       case 'problemSolutionBox':
         return <ProblemSolutionBoxPattern {...props} />;
+      case 'ganttChart':
+        return <GanttChartPattern {...props} />;
+      case 'vendorAsset':
+        return <VendorAssetPattern {...props} />;
       
       // UTILITY ASSETS
       case 'hr':
@@ -174,9 +192,19 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
       case 'forecastBreakdown':
         return <ForecastBreakdown data={data} mode={mode} onChange={onChange} />;
       
-      // EXECUTIVE SYNTHESIS
-      case 'executiveSynthesis':
-        return <ExecutiveSynthesisRenderer data={data} isEditMode={mode === 'edit'} onChange={onChange} />;
+      // EXECUTIVE SUMMARIES
+      case 'executiveSummaryCPSAR':
+      case 'executiveSynthesis': // backward compatibility
+        return <ExecutiveSummaryCPSAR data={data} isEditMode={mode === 'edit'} onChange={onChange} />;
+      
+      case 'executiveSummaryBLUF':
+        return <ExecutiveSummaryBLUF data={data} isEditMode={mode === 'edit'} onChange={onChange} />;
+      
+      case 'executiveSummarySBAR':
+        return <ExecutiveSummarySBAR data={data} isEditMode={mode === 'edit'} onChange={onChange} />;
+      
+      case 'executiveSummaryPyramid':
+        return <ExecutiveSummaryPyramid data={data} isEditMode={mode === 'edit'} onChange={onChange} />;
       
       default:
         console.error('❌ AssetRenderEngine - Unknown type received:', type);

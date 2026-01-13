@@ -1,0 +1,98 @@
+{
+  "overlayId": "license-distribution-2025-q4",
+  "overlayName": "License Distribution Q4 2025",
+  "description": "Software license allocation across cloud platform organization",
+  "dataType": "license-metrics",
+  "createdDate": "2025-12-03T10:30:00Z",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  
+  "visualizationConfig": {
+    "title": "License Distribution",
+    "icon": "Key",
+    "primaryColor": "purple",
+    "hotspotEnabled": true,
+    "hotspotMetric": "licenseCount",
+    "hotspotLabel": "Licenses",
+    "hotspotRanges": [
+      { "min": 0, "max": 50, "color": "#e0e7ff", "label": "Low (0-50)" },
+      { "min": 51, "max": 100, "color": "#c7d2fe", "label": "Medium (51-100)" },
+      { "min": 101, "max": 200, "color": "#a5b4fc", "label": "High (101-200)" },
+      { "min": 201, "max": 999999, "color": "#818cf8", "label": "Very High (200+)" }
+    ],
+    "aggregateMetrics": [
+      {
+        "id": "totalLicenses",
+        "label": "Total Licenses",
+        "calculation": "sum",
+        "field": "licenseCount",
+        "format": "number"
+      },
+      {
+        "id": "avgPerPerson",
+        "label": "Avg Per Person",
+        "calculation": "average",
+        "field": "licenseCount",
+        "format": "number"
+      },
+      {
+        "id": "topHolder",
+        "label": "Top License Holder",
+        "calculation": "max",
+        "field": "licenseCount",
+        "format": "person"
+      }
+    ]
+  },
+  
+  "nodeMetrics": [
+    {
+      "nodeId": "1",
+      "licenseCount": 450,
+      "licenseTypes": ["Enterprise", "Professional", "Developer"],
+      "utilizationRate": 87,
+      "lastAudit": "2025-11-28"
+    },
+    {
+      "nodeId": "2",
+      "licenseCount": 180,
+      "licenseTypes": ["Enterprise", "Developer"],
+      "utilizationRate": 92,
+      "lastAudit": "2025-11-28"
+    },
+    {
+      "nodeId": "3",
+      "licenseCount": 220,
+      "licenseTypes": ["Professional", "Developer"],
+      "utilizationRate": 85,
+      "lastAudit": "2025-11-28"
+    },
+    {
+      "nodeId": "4",
+      "licenseCount": 95,
+      "licenseTypes": ["Developer"],
+      "utilizationRate": 78,
+      "lastAudit": "2025-11-28"
+    },
+    {
+      "nodeId": "5",
+      "licenseCount": 120,
+      "licenseTypes": ["Professional", "Developer"],
+      "utilizationRate": 91,
+      "lastAudit": "2025-11-28"
+    },
+    {
+      "nodeId": "6",
+      "licenseCount": 45,
+      "licenseTypes": ["Developer"],
+      "utilizationRate": 95,
+      "lastAudit": "2025-11-28"
+    },
+    {
+      "nodeId": "7",
+      "licenseCount": 68,
+      "licenseTypes": ["Professional"],
+      "utilizationRate": 88,
+      "lastAudit": "2025-11-28"
+    }
+  ]
+}

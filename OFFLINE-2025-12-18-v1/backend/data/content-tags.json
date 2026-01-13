@@ -1,0 +1,116 @@
+{
+  "tags": [
+    {
+      "id": "environment-health",
+      "name": "Environment Health",
+      "description": "Uptime, performance, demo stability",
+      "color": "blue",
+      "icon": "Server",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "data-operations",
+      "name": "Data Operations",
+      "description": "Resets, personas, Gold Tenant maintenance",
+      "color": "purple",
+      "icon": "Database",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "platform-integration",
+      "name": "Platform Integration",
+      "description": "CRM sync, automation tools, API connectivity",
+      "color": "indigo",
+      "icon": "Link",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "high-value-deals",
+      "name": "High-Value Deals",
+      "description": "Tier-1 enterprise configurations",
+      "color": "gold",
+      "icon": "Gem",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "poc-trial-support",
+      "name": "POC/Trial Support",
+      "description": "Active proof of concepts",
+      "color": "teal",
+      "icon": "FlaskConical",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "sales-enablement",
+      "name": "Sales Enablement",
+      "description": "Training, technical enablement",
+      "color": "green",
+      "icon": "GraduationCap",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "expansion-ops",
+      "name": "Expansion Ops",
+      "description": "Upsell/cross-sell initiatives",
+      "color": "emerald",
+      "icon": "TrendingUp",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "process-automation",
+      "name": "Process Automation",
+      "description": "Workflow optimization, efficiency gains",
+      "color": "cyan",
+      "icon": "Zap",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "capacity-planning",
+      "name": "Capacity Planning",
+      "description": "Resource management, bandwidth",
+      "color": "slate",
+      "icon": "BarChart3",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "documentation",
+      "name": "Documentation",
+      "description": "SOPs, guides, knowledge sharing",
+      "color": "gray",
+      "icon": "BookOpen",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "revenue-at-risk",
+      "name": "Revenue at Risk",
+      "description": "Issues impacting opportunities",
+      "color": "red",
+      "icon": "AlertTriangle",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "critical-blocker",
+      "name": "Critical Blocker",
+      "description": "High-priority pipeline risks",
+      "color": "orange",
+      "icon": "AlertOctagon",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "strategic-milestone",
+      "name": "Strategic Milestone",
+      "description": "Major achievements, platform overhauls",
+      "color": "primary",
+      "icon": "Trophy",
+      "created": "2025-12-16T00:00:00.000Z"
+    },
+    {
+      "id": "product-intelligence",
+      "name": "Product Intelligence",
+      "description": "Field feedback to Engineering",
+      "color": "secondary",
+      "icon": "Lightbulb",
+      "created": "2025-12-16T00:00:00.000Z"
+    }
+  ]
+}

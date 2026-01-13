@@ -1,0 +1,19 @@
+{
+  "id": "note-1765397784303-xj7hqlwca",
+  "title": "Executive Summary Launch",
+  "content": "Successful launch with 500+ users",
+  "category": "key-highlight",
+  "linkedTo": {
+    "name": "Banking Org",
+    "type": "organization",
+    "slug": "banking"
+  },
+  "sectionIds": [
+    "section-1765397770853-4b2gktdlf",
+    "section-1765437801440-0ndw1604n"
+  ],
+  "tags": [],
+  "createdAt": "2025-12-10T20:16:24.303Z",
+  "updatedAt": "2025-12-10T20:16:24.305Z",
+  "author": "current-user"
+}

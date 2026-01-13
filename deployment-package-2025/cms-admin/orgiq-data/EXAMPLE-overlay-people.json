@@ -1,0 +1,125 @@
+{
+  "overlayId": "people-assignments-2025",
+  "overlayName": "People Assignments",
+  "description": "Team members and leadership assigned to each product/business unit",
+  "dataType": "people-assignments",
+  "createdDate": "2025-12-03T10:30:00Z",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  
+  "visualizationConfig": {
+    "title": "People",
+    "icon": "Users",
+    "primaryColor": "blue",
+    "hotspotEnabled": true,
+    "hotspotMetric": "headcount",
+    "hotspotLabel": "Headcount",
+    "hotspotRanges": [
+      { "min": 0, "max": 10, "color": "#dbeafe", "label": "0-10 people" },
+      { "min": 11, "max": 30, "color": "#93c5fd", "label": "11-30 people" },
+      { "min": 31, "max": 100, "color": "#60a5fa", "label": "31-100 people" },
+      { "min": 101, "max": 999999, "color": "#3b82f6", "label": "100+ people" }
+    ],
+    "aggregateMetrics": [
+      {
+        "id": "totalPeople",
+        "label": "Total People",
+        "calculation": "sum",
+        "field": "headcount",
+        "format": "number"
+      }
+    ]
+  },
+  
+  "nodeMetrics": [
+    {
+      "nodeId": "root",
+      "headcount": 250,
+      "leader": "Sarah Johnson",
+      "leaderTitle": "Chief Executive Officer",
+      "leaderEmail": "sarah.johnson@company.com",
+      "leaderPhone": "+1 (555) 100-0001",
+      "keyPeople": [
+        { "name": "Michael Chen", "title": "Chief Technology Officer", "email": "michael.chen@company.com" },
+        { "name": "Emily Rodriguez", "title": "Chief Financial Officer", "email": "emily.rodriguez@company.com" },
+        { "name": "David Park", "title": "Chief Operating Officer", "email": "david.park@company.com" }
+      ]
+    },
+    {
+      "nodeId": "banking",
+      "headcount": 100,
+      "leader": "James Wilson",
+      "leaderTitle": "VP of Banking",
+      "leaderEmail": "james.wilson@company.com",
+      "leaderPhone": "+1 (555) 200-0001",
+      "keyPeople": [
+        { "name": "Amanda Lee", "title": "Director of Retail Banking", "email": "amanda.lee@company.com" },
+        { "name": "Robert Martinez", "title": "Director of Commercial Banking", "email": "robert.martinez@company.com" }
+      ]
+    },
+    {
+      "nodeId": "capital-markets",
+      "headcount": 150,
+      "leader": "Jennifer Brooks",
+      "leaderTitle": "VP of Capital Markets",
+      "leaderEmail": "jennifer.brooks@company.com",
+      "leaderPhone": "+1 (555) 300-0001",
+      "keyPeople": [
+        { "name": "Thomas Anderson", "title": "Managing Director", "email": "thomas.anderson@company.com" },
+        { "name": "Maria Garcia", "title": "Head of Trading", "email": "maria.garcia@company.com" }
+      ]
+    },
+    {
+      "nodeId": "risk",
+      "headcount": 45,
+      "leader": "Christopher Lee",
+      "leaderTitle": "Head of Risk Management",
+      "leaderEmail": "christopher.lee@company.com",
+      "leaderPhone": "+1 (555) 400-0001",
+      "keyPeople": [
+        { "name": "Nicole Taylor", "title": "Chief Risk Officer", "email": "nicole.taylor@company.com" },
+        { "name": "Daniel Kim", "title": "Director of Compliance", "email": "daniel.kim@company.com" }
+      ]
+    },
+    {
+      "nodeId": "lending",
+      "headcount": 35,
+      "leader": "Michelle White",
+      "leaderTitle": "Head of Lending",
+      "leaderEmail": "michelle.white@company.com",
+      "leaderPhone": "+1 (555) 500-0001",
+      "keyPeople": [
+        { "name": "Kevin Brown", "title": "Credit Director", "email": "kevin.brown@company.com" },
+        { "name": "Rachel Green", "title": "Underwriting Manager", "email": "rachel.green@company.com" }
+      ]
+    },
+    {
+      "nodeId": "wealth-retirement",
+      "headcount": 70,
+      "leader": "Steven Harris",
+      "leaderTitle": "Head of Wealth Management",
+      "leaderEmail": "steven.harris@company.com",
+      "leaderPhone": "+1 (555) 600-0001",
+      "keyPeople": [
+        { "name": "Patricia Moore", "title": "Director of Retirement Services", "email": "patricia.moore@company.com" },
+        { "name": "Andrew Clark", "title": "Investment Advisory Lead", "email": "andrew.clark@company.com" }
+      ]
+    },
+    {
+      "nodeId": "ctrm",
+      "headcount": 12,
+      "leader": "Alex Thompson",
+      "leaderTitle": "Product Manager - CTRM",
+      "leaderEmail": "alex.thompson@company.com",
+      "leaderPhone": "+1 (555) 700-0001",
+      "imageUrl": "https://i.pravatar.cc/150?img=33",
+      "keyPeople": [
+        { "name": "Jessica Liu", "title": "Lead Engineer", "email": "jessica.liu@company.com", "imageUrl": "https://i.pravatar.cc/150?img=45" },
+        { "name": "Marcus Johnson", "title": "Solutions Architect", "email": "marcus.johnson@company.com", "imageUrl": "https://i.pravatar.cc/150?img=12" },
+        { "name": "Sophia Patel", "title": "Senior Developer", "email": "sophia.patel@company.com", "imageUrl": "https://i.pravatar.cc/150?img=47" },
+        { "name": "Oliver Smith", "title": "QA Lead", "email": "oliver.smith@company.com", "imageUrl": "https://i.pravatar.cc/150?img=68" }
+      ],
+      "techStack": ["Java", "Spring Boot", "React", "PostgreSQL", "AWS"],
+      "clientFacing": ["Alex Thompson", "Marcus Johnson"]
+    }
+  ]
+}

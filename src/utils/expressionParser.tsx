@@ -225,7 +225,7 @@ function renderTrend(direction: string): React.ReactNode {
  */
 function renderHighlight(text: string): React.ReactNode {
   return (
-    <span className="bg-yellow-200/50 dark:bg-yellow-500/20 px-1 rounded font-roobert-medium">
+    <span className="text-sm font-roobert-light" style={{ color: 'var(--brand-primary)' }}>
       {text}
     </span>
   );

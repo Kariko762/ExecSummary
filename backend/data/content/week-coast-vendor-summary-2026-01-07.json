@@ -1,0 +1,717 @@
+{
+  "id": "week-coast-vendor-summary-2026-01-07",
+  "quarter": "Jan 7",
+  "year": 2026,
+  "date": "2026-01-07",
+  "title": "Coast Vendor Summary - Q1 2026",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_details_0_type": "vendorAsset",
+  "_details_0_layoutZone": "full",
+  "_details_0_rowIndex": 0,
+  "details_0": {
+    "problemsSolved": "**AI-powered interactive demo platform** that transforms static API documentation into live, personalized product experiences for Sales and Pre-Sales teams. Coast eliminates the 'duct tape demo' problem—enabling FIS to showcase complex products without weeks of custom development.",
+    "coreFunctions": [
+      "Interactive API Demos",
+      "Sales Demo Assets",
+      "Personalized Demo Links",
+      "Live Product Experiences",
+      "Template-Based Demo Builder"
+    ],
+    "extendedFunctions": [
+      "Multi-Environment Support (Mock/Sandbox/Production)",
+      "Analytics & Engagement Tracking",
+      "Website Embeds",
+      "Multi-Tenant Workspace Management",
+      "Enterprise SSO & RBAC"
+    ],
+    "bigWins": [
+      {
+        "metric": "20%",
+        "title": "Faster Sales Cycles",
+        "description": "Sardine reduced sales cycles by 20% using Coast demos"
+      },
+      {
+        "metric": "47 Days",
+        "title": "Time-to-Close Reduction",
+        "description": "Spreedly accelerated deal closure with Coast"
+      },
+      {
+        "metric": "2x",
+        "title": "Conversion Increase",
+        "description": "Middesk doubled conversion on qualified buyers"
+      }
+    ]
+  },
+  "_details_1_type": "hr",
+  "_details_1_layoutZone": "full",
+  "_details_1_rowIndex": 1,
+  "details_1": "",
+  "_details_sectionLayoutType": "full",
+  "_enabled_details": true,
+  "_completed_details": false,
+  "_activeProjects_type": "progressBarList",
+  "_activeProjects_layoutZone": "full",
+  "_activeProjects_rowIndex": 0,
+  "_activeProjects_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Initiative Title"
+    },
+    "subtitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Team/Owner"
+    },
+    "percentage": {
+      "type": "number",
+      "renderAs": "number",
+      "label": "Completion %"
+    },
+    "status": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Status (On Track/At Risk/Blocked)"
+    }
+  },
+  "activeProjects": [
+    {
+      "title": "Payments Workspace - $250,000",
+      "subtitle": "Budget Approval Submitted",
+      "percentage": 75,
+      "status": "On Track"
+    },
+    {
+      "title": "Modern Banking Platform (APAC) - $37,000",
+      "subtitle": "Budget Approval Submitted",
+      "percentage": 85,
+      "status": "On Track"
+    },
+    {
+      "title": "Payments One Debit & Credit - $50-100K",
+      "subtitle": "Estimated Budget",
+      "percentage": 40,
+      "status": "On Track"
+    },
+    {
+      "title": "International Issuing Hub - $35-50K",
+      "subtitle": "Estimated Budget",
+      "percentage": 30,
+      "status": "On Track"
+    },
+    {
+      "title": "Capital Markets CLO/CA - $75-150K",
+      "subtitle": "Estimated Budget",
+      "percentage": 25,
+      "status": "On Track"
+    },
+    {
+      "title": "Sales Growth Office - $250-500K",
+      "subtitle": "Pending Budget Submit",
+      "percentage": 15,
+      "status": "On Track"
+    }
+  ],
+  "_activeProjects_sectionLayoutType": "full",
+  "_enabled_activeProjects": true,
+  "_completed_activeProjects": false,
+  "_projectGantt_type": "ganttChart",
+  "_projectGantt_layoutZone": "full",
+  "_projectGantt_rowIndex": 0,
+  "projectGantt": {
+    "title": "Q1 2026 Strategic Initiatives",
+    "startDate": "2026-01-01",
+    "endDate": "2026-03-31",
+    "organizations": [
+      {
+        "id": "capital-markets",
+        "name": "Capital Markets",
+        "color": "var(--brand-primary)",
+        "collapsed": false,
+        "projects": [
+          {
+            "id": "titled-rollout",
+            "name": "Tiled Rollout",
+            "tasks": [
+              {
+                "id": "license-procurement",
+                "name": "License Procurement",
+                "startDate": "2026-01-05",
+                "endDate": "2026-01-20",
+                "progress": 85,
+                "status": "on-track",
+                "owner": "Sarah Chen",
+                "details": {
+                  "description": "Procure licenses for 500 users across 3 regions (NA, EMEA, APAC)",
+                  "milestones": [
+                    {
+                      "date": "2026-01-08",
+                      "title": "Vendor Selection Complete",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-01-15",
+                      "title": "Contract Signed",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-01-20",
+                      "title": "Licenses Activated",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": []
+                }
+              },
+              {
+                "id": "infrastructure-setup",
+                "name": "Infrastructure Setup",
+                "startDate": "2026-01-18",
+                "endDate": "2026-02-05",
+                "progress": 45,
+                "status": "on-track",
+                "owner": "Mike Rodriguez",
+                "details": {
+                  "description": "Configure servers, databases, and networking for production deployment",
+                  "milestones": [
+                    {
+                      "date": "2026-01-22",
+                      "title": "Server Provisioning",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-01-28",
+                      "title": "Database Migration",
+                      "completed": false
+                    },
+                    {
+                      "date": "2026-02-05",
+                      "title": "Load Testing Complete",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [
+                    "Waiting for security audit approval"
+                  ],
+                  "dependencies": [
+                    "license-procurement"
+                  ]
+                }
+              },
+              {
+                "id": "user-training",
+                "name": "User Training & Documentation",
+                "startDate": "2026-02-01",
+                "endDate": "2026-02-28",
+                "progress": 0,
+                "status": "on-track",
+                "owner": "Jennifer Lee",
+                "details": {
+                  "description": "Create training materials and conduct user onboarding sessions",
+                  "milestones": [
+                    {
+                      "date": "2026-02-10",
+                      "title": "Training Materials Complete",
+                      "completed": false
+                    },
+                    {
+                      "date": "2026-02-20",
+                      "title": "Pilot Training Sessions",
+                      "completed": false
+                    },
+                    {
+                      "date": "2026-02-28",
+                      "title": "All Users Trained",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": [
+                    "infrastructure-setup"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "banking-na",
+        "name": "Banking (NA)",
+        "color": "var(--accent-blue)",
+        "collapsed": true,
+        "projects": [
+          {
+            "id": "core-modernization",
+            "name": "Core Banking Modernization",
+            "tasks": [
+              {
+                "id": "api-migration",
+                "name": "API Migration",
+                "startDate": "2026-01-10",
+                "endDate": "2026-02-15",
+                "progress": 60,
+                "status": "on-track",
+                "owner": "Robert Kim",
+                "details": {
+                  "description": "Migrate legacy APIs to modern RESTful architecture",
+                  "milestones": [
+                    {
+                      "date": "2026-01-20",
+                      "title": "API Design Complete",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-02-01",
+                      "title": "Development Complete",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": []
+                }
+              },
+              {
+                "id": "data-migration",
+                "name": "Customer Data Migration",
+                "startDate": "2026-02-10",
+                "endDate": "2026-03-20",
+                "progress": 15,
+                "status": "blocked",
+                "owner": "Amanda Torres",
+                "details": {
+                  "description": "Migrate 2.5M customer records to new platform",
+                  "milestones": [
+                    {
+                      "date": "2026-02-15",
+                      "title": "Data Mapping Complete",
+                      "completed": false
+                    },
+                    {
+                      "date": "2026-03-01",
+                      "title": "Pilot Migration",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [
+                    "Data quality issues identified",
+                    "Compliance review pending"
+                  ],
+                  "dependencies": [
+                    "api-migration"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "banking-int",
+        "name": "Banking (INT)",
+        "color": "var(--accent-green)",
+        "collapsed": true,
+        "projects": [
+          {
+            "id": "multi-currency",
+            "name": "Multi-Currency Support",
+            "tasks": [
+              {
+                "id": "forex-integration",
+                "name": "Forex Rate Integration",
+                "startDate": "2026-01-15",
+                "endDate": "2026-02-28",
+                "progress": 90,
+                "status": "completed",
+                "owner": "David Park",
+                "details": {
+                  "description": "Integrate real-time forex rates from multiple providers",
+                  "milestones": [
+                    {
+                      "date": "2026-01-25",
+                      "title": "Provider Integration",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-02-10",
+                      "title": "Rate Caching System",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-02-25",
+                      "title": "Production Deployment",
+                      "completed": true
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": []
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "payments",
+        "name": "PAYMENTS",
+        "color": "var(--brand-secondary)",
+        "collapsed": true,
+        "projects": [
+          {
+            "id": "instant-payments",
+            "name": "Instant Payments Platform",
+            "tasks": [
+              {
+                "id": "real-time-processing",
+                "name": "Real-Time Processing Engine",
+                "startDate": "2026-01-08",
+                "endDate": "2026-03-15",
+                "progress": 55,
+                "status": "at-risk",
+                "owner": "Lisa Wong",
+                "details": {
+                  "description": "Build high-performance real-time payment processing system",
+                  "milestones": [
+                    {
+                      "date": "2026-01-30",
+                      "title": "Architecture Review",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-02-20",
+                      "title": "Beta Testing",
+                      "completed": false
+                    },
+                    {
+                      "date": "2026-03-10",
+                      "title": "Security Audit",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [
+                    "Performance bottleneck at 10k TPS"
+                  ],
+                  "dependencies": []
+                }
+              },
+              {
+                "id": "fraud-detection",
+                "name": "AI-Powered Fraud Detection",
+                "startDate": "2026-02-01",
+                "endDate": "2026-03-25",
+                "progress": 30,
+                "status": "on-track",
+                "owner": "Carlos Mendez",
+                "details": {
+                  "description": "Machine learning model for real-time fraud detection",
+                  "milestones": [
+                    {
+                      "date": "2026-02-15",
+                      "title": "Model Training",
+                      "completed": false
+                    },
+                    {
+                      "date": "2026-03-01",
+                      "title": "Integration Testing",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": [
+                    "real-time-processing"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "_projectGantt_sectionLayoutType": "full",
+  "_enabled_projectGantt": true,
+  "_completed_projectGantt": false,
+  "_futureProjects_0_type": "timeline",
+  "_futureProjects_0_layoutZone": "full",
+  "_futureProjects_0_rowIndex": 0,
+  "_futureProjects_0_fields": {
+    "date": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Date"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Milestone Title"
+    },
+    "note": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Note Label"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Details"
+    },
+    "completed": {
+      "type": "boolean",
+      "renderAs": "checkbox",
+      "label": "Completed"
+    }
+  },
+  "futureProjects_0": [
+    {
+      "date": "Q1 2024",
+      "title": "Project Kickoff",
+      "note": "TEXT NOTE",
+      "description": "Initial planning session with stakeholders and core team formation",
+      "completed": true
+    },
+    {
+      "date": "Q2 2024",
+      "title": "Development Phase",
+      "note": "TEXT NOTE",
+      "description": "Technical specifications and business requirements documented",
+      "completed": true
+    },
+    {
+      "date": "Q3 2024",
+      "title": "Testing & QA",
+      "note": "TEXT NOTE",
+      "description": "Core infrastructure and foundational features deployed to staging",
+      "completed": false
+    },
+    {
+      "date": "Q4 2024",
+      "title": "Launch",
+      "note": "TEXT NOTE",
+      "description": "Limited release to pilot customers for feedback and validation",
+      "completed": false
+    }
+  ],
+  "_futureProjects_1_type": "hr",
+  "_futureProjects_1_layoutZone": "full",
+  "_futureProjects_1_rowIndex": 1,
+  "futureProjects_1": "",
+  "_futureProjects_sectionLayoutType": "full",
+  "_enabled_futureProjects": true,
+  "_completed_futureProjects": false,
+  "_risks_0_type": "riskCard",
+  "_risks_0_layoutZone": "full",
+  "_risks_0_rowIndex": 0,
+  "_risks_0_fields": {
+    "type": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Type (high-impact/high-severity/medium-impact/medium-severity/low-impact/low-severity)"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Risk Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Description"
+    },
+    "mitigation": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Mitigation Plan"
+    }
+  },
+  "risks_0": [
+    {
+      "type": "low-severity",
+      "title": "Vendor Documentation Update Required",
+      "description": "API documentation needs minor updates for new endpoints",
+      "mitigation": "Technical writing team scheduled to complete updates by end of sprint"
+    },
+    {
+      "type": "high-impact",
+      "title": "International Issuing Hub delayed due to Money 20/20 and EG-Coast availability",
+      "description": "Timeline delays expected due to conference schedule conflicts",
+      "mitigation": "ER expected to approve asset transfer this week, Coast dropped Matthews LIBs to expedite"
+    },
+    {
+      "severity": "high",
+      "title": "Critical Security Vulnerability in Payment Gateway",
+      "description": "Zero-day exploit discovered in third-party payment processing library",
+      "mitigation": "Emergency patch deployment scheduled for tonight, all transactions temporarily routed through backup system"
+    }
+  ],
+  "_risks_1_type": "hr",
+  "_risks_1_layoutZone": "full",
+  "_risks_1_rowIndex": 1,
+  "risks_1": "",
+  "_risks_sectionLayoutType": "full",
+  "_enabled_risks": true,
+  "_completed_risks": false,
+  "_keyContacts_0_type": "keyValueList",
+  "_keyContacts_0_layoutZone": "full",
+  "_keyContacts_0_rowIndex": 0,
+  "keyContacts_0": {
+    "Founder": "Spencer Levitt",
+    "Global Account Manager": "James Smith",
+    "Account Support": "Elijah Flowmen",
+    "Partnership Status": "Active MSA - Critical Demo Infrastructure Partner"
+  },
+  "_keyContacts_1_type": "hr",
+  "_keyContacts_1_layoutZone": "full",
+  "_keyContacts_1_rowIndex": 1,
+  "keyContacts_1": "",
+  "_keyContacts_sectionLayoutType": "full",
+  "_enabled_keyContacts": true,
+  "_completed_keyContacts": false,
+  "_budgetSummary_type": "budgetBreakdown",
+  "_budgetSummary_layoutZone": "full",
+  "_budgetSummary_rowIndex": 0,
+  "budgetSummary": {
+    "title": "2026 Coast Annual Spend",
+    "currency": "USD",
+    "period": "2026",
+    "totalBudget": 883740,
+    "totalActual": 883740,
+    "categories": [
+      {
+        "id": "lob-workspaces",
+        "name": "Line of Business Workspaces",
+        "icon": "Building2",
+        "budgeted": 616440,
+        "actual": 616440,
+        "variance": 0,
+        "variancePercent": 0,
+        "status": "on-track",
+        "color": "blue",
+        "lineItems": [
+          {
+            "id": "digital-banking",
+            "name": "Digital Banking, Open Banking, Demo Studio",
+            "budgeted": 95040,
+            "actual": 95040,
+            "variance": 0,
+            "summary": "Active workspace for digital banking demos",
+            "explanation": "Daily use by Sales/Pre-Sales teams",
+            "justification": "Critical demo infrastructure - subsidized by MSA",
+            "owner": "Digital Banking BU",
+            "lastUpdated": "2026-01-07"
+          },
+          {
+            "id": "code-connect",
+            "name": "Code Connect",
+            "budgeted": 55440,
+            "actual": 55440,
+            "variance": 0,
+            "summary": "Developer-focused demo workspace",
+            "explanation": "API demonstration capabilities",
+            "justification": "Essential for technical sales cycles",
+            "owner": "Code Connect BU",
+            "lastUpdated": "2026-01-07"
+          },
+          {
+            "id": "loyalty",
+            "name": "Loyalty Workspace",
+            "budgeted": 30690,
+            "actual": 30690,
+            "variance": 0,
+            "summary": "Loyalty program demonstration platform",
+            "explanation": "Customer engagement demos",
+            "justification": "Would lose demo capability without MSA subsidy",
+            "owner": "Loyalty BU",
+            "lastUpdated": "2026-01-07"
+          },
+          {
+            "id": "automated-finance",
+            "name": "Automated Finance Workspace",
+            "budgeted": 243210,
+            "actual": 243210,
+            "variance": 0,
+            "summary": "Largest workspace - automated finance demos",
+            "explanation": "High-volume demo usage across finance products",
+            "justification": "Mission-critical for finance product sales",
+            "owner": "Automated Finance BU",
+            "lastUpdated": "2026-01-07"
+          },
+          {
+            "id": "fintel",
+            "name": "Fintel Workspace",
+            "budgeted": 58080,
+            "actual": 58080,
+            "variance": 0,
+            "summary": "Financial intelligence demo platform",
+            "explanation": "Analytics and insights demonstrations",
+            "justification": "Key differentiator in competitive deals",
+            "owner": "Fintel BU",
+            "lastUpdated": "2026-01-07"
+          },
+          {
+            "id": "embedded-finance",
+            "name": "Embedded Finance Workspace",
+            "budgeted": 56100,
+            "actual": 56100,
+            "variance": 0,
+            "summary": "Embedded finance product demos",
+            "explanation": "Partner and integration demonstrations",
+            "justification": "Enables partner sales enablement",
+            "owner": "Embedded Finance BU",
+            "lastUpdated": "2026-01-07"
+          },
+          {
+            "id": "money-movement",
+            "name": "Money Movement Hub Workspace",
+            "budgeted": 77880,
+            "actual": 77880,
+            "variance": 0,
+            "summary": "Payment and transfer demo capabilities",
+            "explanation": "Real-time payment flow demonstrations",
+            "justification": "Critical for payments product portfolio",
+            "owner": "Money Movement Hub BU",
+            "lastUpdated": "2026-01-07"
+          }
+        ]
+      },
+      {
+        "id": "msa-subsidy",
+        "name": "MSA Subsidy (Corporate)",
+        "icon": "Shield",
+        "budgeted": 267300,
+        "actual": 267300,
+        "variance": 0,
+        "variancePercent": 0,
+        "status": "on-track",
+        "color": "emerald",
+        "lineItems": [
+          {
+            "id": "msa-discount",
+            "name": "Master Service Agreement Subsidy",
+            "budgeted": 267300,
+            "actual": 267300,
+            "variance": 0,
+            "summary": "Corporate-level MSA provides subsidized pricing to all BUs",
+            "explanation": "Without MSA subsidy, individual BU costs would be prohibitive",
+            "justification": "CRITICAL: If MSA is removed, BUs would lose demo capabilities entirely. Coast is daily-use infrastructure for Sales/Pre-Sales teams.",
+            "owner": "Corporate Procurement",
+            "lastUpdated": "2026-01-07"
+          }
+        ]
+      }
+    ],
+    "notes": "Total FIS Annual Spend: $883,740 ($616,440 LoB + $267,300 MSA). MSA provides critical subsidy enabling 7 business units to maintain demo capabilities. Without MSA, individual BUs cannot afford Coast licenses and would lose essential sales demo infrastructure used nearly daily."
+  },
+  "_budgetSummary_sectionLayoutType": "full",
+  "_enabled_budgetSummary": true,
+  "_completed_budgetSummary": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "Vendor-Template-v1",
+  "_template_description": "",
+  "_template_created": "2026-01-07T21:23:33.854Z",
+  "_template_updated": "2026-01-07T21:23:33.854Z",
+  "_layout": "one-pager",
+  "_contentTag": "vendor-summary"
+}

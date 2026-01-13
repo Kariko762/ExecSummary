@@ -24,8 +24,16 @@ interface AuthenticationSettings {
   };
 }
 
+interface AITemplateSettings {
+  cpsar?: string; // Content ID of Weekly Update template for CPSAR
+  bluf?: string; // Content ID of Weekly Update template for BLUF
+  sbar?: string; // Content ID of Weekly Update template for SBAR
+  pyramid?: string; // Content ID of Weekly Update template for Pyramid
+}
+
 interface SystemSettings {
   authentication: AuthenticationSettings;
+  aiTemplates?: AITemplateSettings;
   customLogo?: string; // Path to custom logo image
   version: string;
   lastUpdated: string;
@@ -69,7 +77,7 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   const [settings, setSettings] = useState<SystemSettings>(loadSettings());
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'general' | 'authentication' | 'users' | 'security' | 'documentation'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'authentication' | 'users' | 'ai' | 'tags' | 'security' | 'documentation'>('general');
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [showChangeManagement, setShowChangeManagement] = useState(false);
   
@@ -468,6 +476,18 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
               label="Users"
             />
             <TabButton
+              active={activeTab === 'ai'}
+              onClick={() => setActiveTab('ai')}
+              icon={<FileText className="w-4 h-4" />}
+              label="AI Configuration"
+            />
+            <TabButton
+              active={activeTab === 'tags'}
+              onClick={() => setActiveTab('tags')}
+              icon={<Tag className="w-4 h-4" />}
+              label="Tags"
+            />
+            <TabButton
               active={activeTab === 'security'}
               onClick={() => setActiveTab('security')}
               icon={<Shield className="w-4 h-4" />}
@@ -680,6 +700,20 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
             onDeleteUser={setUserToDelete}
             onToggleUserStatus={(userId, isActive) => updateUser(userId, { isActive })}
           />
+        )}
+        
+        {activeTab === 'ai' && (
+          <AIConfigurationPanel
+            aiTemplates={settings.aiTemplates || {}}
+            onUpdate={(templates) => {
+              setSettings({ ...settings, aiTemplates: templates });
+              setHasChanges(true);
+            }}
+          />
+        )}
+        
+        {activeTab === 'tags' && (
+          <TagsManagementPanel onNotification={onNotification} />
         )}
         
         {activeTab === 'security' && (
@@ -1600,6 +1634,549 @@ function AuthenticationPanel({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// AI Configuration Panel Component
+function AIConfigurationPanel({ 
+  aiTemplates, 
+  onUpdate 
+}: { 
+  aiTemplates: AITemplateSettings; 
+  onUpdate: (templates: AITemplateSettings) => void;
+}) {
+  const [weeklyUpdateTemplates, setWeeklyUpdateTemplates] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchWeeklyUpdateTemplates();
+  }, []);
+
+  const fetchWeeklyUpdateTemplates = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/content?tag=weekly-update');
+      const data = await response.json();
+      if (data.success) {
+        setWeeklyUpdateTemplates(data.content || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch Weekly Update templates:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTemplateChange = (summaryType: keyof AITemplateSettings, templateId: string) => {
+    onUpdate({
+      ...aiTemplates,
+      [summaryType]: templateId || undefined
+    });
+  };
+
+  const summaryTypes = [
+    { id: 'cpsar' as const, name: 'CPSAR', description: 'Context, Problem, Solution, Action, Results', icon: '📋' },
+    { id: 'bluf' as const, name: 'BLUF', description: 'Bottom Line Up Front - Key message first', icon: '🎯' },
+    { id: 'sbar' as const, name: 'SBAR', description: 'Situation, Background, Assessment, Recommendation', icon: '🏥' },
+    { id: 'pyramid' as const, name: 'Pyramid', description: 'Inverted pyramid - Most important to supporting details', icon: '📊' }
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+            <FileText className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          </div>
+          <div>
+            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">AI Weekly Summary Configuration</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Select which Weekly Update templates to use for each AI summary type
+            </p>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="text-center py-8 text-gray-500">
+            Loading Weekly Update templates...
+          </div>
+        ) : weeklyUpdateTemplates.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            No Weekly Update templates found. Create content tagged with "weekly-update" first.
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {summaryTypes.map((type) => (
+              <div key={type.id} className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="flex items-start gap-3 mb-3">
+                  <span className="text-2xl">{type.icon}</span>
+                  <div className="flex-1">
+                    <h4 className="font-roobert-semibold text-gray-900 dark:text-white mb-1">
+                      {type.name}
+                    </h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {type.description}
+                    </p>
+                  </div>
+                </div>
+                
+                <select
+                  value={aiTemplates[type.id] || ''}
+                  onChange={(e) => handleTemplateChange(type.id, e.target.value)}
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                >
+                  <option value="">-- Select Weekly Update Template --</option>
+                  {weeklyUpdateTemplates.map((template) => (
+                    <option key={template.id} value={template.id}>
+                      {template.title} ({new Date(template.date || template.createdAt).toLocaleDateString()})
+                    </option>
+                  ))}
+                </select>
+                
+                {aiTemplates[type.id] && (
+                  <div className="mt-2 text-xs text-green-600 dark:text-green-400">
+                    ✓ Configured - {type.name} will appear in AI Weekly Summary modal
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Instructions */}
+      <div className="glass-strong rounded-2xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-6">
+        <h4 className="font-roobert-semibold text-blue-900 dark:text-blue-300 mb-3">
+          How AI Weekly Summary Works
+        </h4>
+        <ol className="space-y-2 text-sm text-blue-800 dark:text-blue-400">
+          <li>1. Configure templates for each summary type you want to use</li>
+          <li>2. Open Timeline Notes Manager and click "AI: Weekly Summary"</li>
+          <li>3. Select a week and the notes you want to include</li>
+          <li>4. Choose a summary type (only configured types will appear)</li>
+          <li>5. Copy the AI prompt and paste into ChatGPT/Claude</li>
+          <li>6. Paste the JSON response back to create a new Weekly Update</li>
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+// Tags Management Panel Component
+interface TagsManagementPanelProps {
+  onNotification?: (type: 'success' | 'error', message: string) => void;
+}
+
+interface Tag {
+  id: string;
+  name: string;
+  color: string;
+  description?: string;
+  createdAt: string;
+}
+
+function TagsManagementPanel({ onNotification }: TagsManagementPanelProps) {
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [tagUsage, setTagUsage] = useState<Record<string, number>>({});
+  const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
+
+  // Fetch tags
+  const fetchTags = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/tags');
+      const data = await response.json();
+      if (data.success) {
+        setTags(data.tags);
+        
+        // Fetch usage count for each tag
+        const usageCounts: Record<string, number> = {};
+        for (const tag of data.tags) {
+          const usageRes = await fetch(`http://localhost:3001/api/tags/${tag.id}/usage`);
+          const usageData = await usageRes.json();
+          if (usageData.success) {
+            usageCounts[tag.id] = usageData.count;
+          }
+        }
+        setTagUsage(usageCounts);
+      }
+    } catch (error) {
+      console.error('Failed to fetch tags:', error);
+      onNotification?.('error', 'Failed to load tags');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTags();
+  }, []);
+
+  const handleCreate = () => {
+    setShowCreateModal(true);
+  };
+
+  const handleEdit = (tag: Tag) => {
+    setSelectedTag(tag);
+    setShowEditModal(true);
+  };
+
+  const handleDelete = (tag: Tag) => {
+    setSelectedTag(tag);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedTag) return;
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/tags/${selectedTag.id}`, {
+        method: 'DELETE'
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        onNotification?.('success', 'Tag deleted successfully');
+        fetchTags();
+        setShowDeleteModal(false);
+        setSelectedTag(null);
+      } else {
+        onNotification?.('error', data.error || 'Failed to delete tag');
+      }
+    } catch (error) {
+      console.error('Failed to delete tag:', error);
+      onNotification?.('error', 'Failed to delete tag');
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-4">
+            <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+              <Tag className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">
+                Timeline Note Tags
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Create and manage tags for organizing timeline notes by initiative or context
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleCreate}
+            className="flex items-center gap-2 px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 font-roobert-semibold"
+          >
+            <Plus className="w-4 h-4" />
+            Create Tag
+          </button>
+        </div>
+
+        {/* Info Box */}
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <h4 className="text-sm font-roobert-semibold text-blue-900 dark:text-blue-300 mb-2">
+            About Tags
+          </h4>
+          <p className="text-sm text-blue-800 dark:text-blue-400">
+            Tags help organize timeline notes by initiative, project, or context. Each note can have one tag to keep context focused and enable future AI context engine features.
+          </p>
+        </div>
+      </div>
+
+      {/* Tags List */}
+      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+        {loading ? (
+          <div className="text-center py-8 text-gray-500">
+            Loading tags...
+          </div>
+        ) : tags.length === 0 ? (
+          <div className="text-center py-12">
+            <Tag className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+            <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+              No tags yet
+            </h4>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Create your first tag to start organizing timeline notes
+            </p>
+            <button
+              onClick={handleCreate}
+              className="px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 font-roobert-semibold"
+            >
+              Create First Tag
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {tags.map((tag) => (
+              <div
+                key={tag.id}
+                className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all"
+              >
+                <div className="flex items-center gap-4 flex-1">
+                  <div
+                    className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600"
+                    style={{ backgroundColor: tag.color }}
+                  />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-roobert-semibold text-gray-900 dark:text-white">
+                        {tag.name}
+                      </h4>
+                      {tagUsage[tag.id] !== undefined && (
+                        <span className="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                          {tagUsage[tag.id]} note{tagUsage[tag.id] !== 1 ? 's' : ''}
+                        </span>
+                      )}
+                    </div>
+                    {tag.description && (
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {tag.description}
+                      </p>
+                    )}
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                      Created {new Date(tag.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleEdit(tag)}
+                    className="p-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400"
+                    title="Edit tag"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(tag)}
+                    className="p-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 text-red-600 dark:text-red-400"
+                    title="Delete tag"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Create Tag Modal */}
+      {showCreateModal && (
+        <TagFormModal
+          mode="create"
+          onClose={() => setShowCreateModal(false)}
+          onSave={() => {
+            fetchTags();
+            setShowCreateModal(false);
+          }}
+          onNotification={onNotification}
+        />
+      )}
+
+      {/* Edit Tag Modal */}
+      {showEditModal && selectedTag && (
+        <TagFormModal
+          mode="edit"
+          tag={selectedTag}
+          onClose={() => {
+            setShowEditModal(false);
+            setSelectedTag(null);
+          }}
+          onSave={() => {
+            fetchTags();
+            setShowEditModal(false);
+            setSelectedTag(null);
+          }}
+          onNotification={onNotification}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && selectedTag && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6"
+          >
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+                <Trash2 className="w-6 h-6 text-red-600 dark:text-red-400" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white mb-1">
+                  Delete Tag
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Are you sure you want to delete <strong>{selectedTag.name}</strong>?
+                  {tagUsage[selectedTag.id] > 0 && (
+                    <span className="block mt-2 text-red-600 dark:text-red-400 font-roobert-medium">
+                      This tag is used by {tagUsage[selectedTag.id]} note{tagUsage[selectedTag.id] !== 1 ? 's' : ''} and cannot be deleted.
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setSelectedTag(null);
+                }}
+                className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-roobert-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={tagUsage[selectedTag.id] > 0}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
+              >
+                Delete Tag
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Tag Form Modal (Create/Edit)
+interface TagFormModalProps {
+  mode: 'create' | 'edit';
+  tag?: Tag;
+  onClose: () => void;
+  onSave: () => void;
+  onNotification?: (type: 'success' | 'error', message: string) => void;
+}
+
+function TagFormModal({ mode, tag, onClose, onSave, onNotification }: TagFormModalProps) {
+  const [name, setName] = useState(tag?.name || '');
+  const [color, setColor] = useState(tag?.color || '#8B5CF6');
+  const [description, setDescription] = useState(tag?.description || '');
+  const [saving, setSaving] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!name.trim()) {
+      onNotification?.('error', 'Tag name is required');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const url = mode === 'create'
+        ? 'http://localhost:3001/api/tags'
+        : `http://localhost:3001/api/tags/${tag!.id}`;
+
+      const response = await fetch(url, {
+        method: mode === 'create' ? 'POST' : 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), color, description: description.trim() })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        onNotification?.('success', `Tag ${mode === 'create' ? 'created' : 'updated'} successfully`);
+        onSave();
+      } else {
+        onNotification?.('error', data.error || `Failed to ${mode} tag`);
+      }
+    } catch (error) {
+      console.error(`Failed to ${mode} tag:`, error);
+      onNotification?.('error', `Failed to ${mode} tag`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6"
+      >
+        <h3 className="text-xl font-roobert-bold text-gray-900 dark:text-white mb-4">
+          {mode === 'create' ? 'Create New Tag' : 'Edit Tag'}
+        </h3>
+
+        <div className="space-y-4">
+          {/* Name */}
+          <div>
+            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+              Tag Name *
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g., Coast 2026 MSA Renewal"
+              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              autoFocus
+            />
+          </div>
+
+          {/* Color */}
+          <div>
+            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+              Color
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className="w-16 h-10 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer"
+              />
+              <div className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white font-mono text-sm">
+                {color}
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+              Description (Optional)
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Brief description of this initiative..."
+              rows={3}
+              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white resize-none"
+            />
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-end gap-3 mt-6">
+          <button
+            onClick={onClose}
+            disabled={saving}
+            className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-roobert-medium"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!name.trim() || saving}
+            className="px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
+          >
+            {saving ? 'Saving...' : mode === 'create' ? 'Create Tag' : 'Save Changes'}
+          </button>
+        </div>
+      </motion.div>
     </div>
   );
 }

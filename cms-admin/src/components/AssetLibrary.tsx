@@ -21,11 +21,13 @@ interface AssetLibraryProps {
   isOpen: boolean;
   onClose: () => void;
   initialAssetType?: string; // Auto-scroll to this type when opened
+  onSelect?: (assetId: string, assetConfig: AssetDefinition) => void; // Callback when asset selected
+  heroOnly?: boolean; // Filter to show only Hero-compatible assets
 }
 
-type CategoryType = 'All' | 'basic' | 'lists' | 'complex' | 'rich' | 'charts' | 'media';
+type CategoryType = 'All' | 'basic' | 'lists' | 'complex' | 'rich' | 'charts' | 'executiveSummary' | 'media';
 
-const AssetLibrary: React.FC<AssetLibraryProps> = ({ isOpen, onClose, initialAssetType }) => {
+const AssetLibrary: React.FC<AssetLibraryProps> = ({ isOpen, onClose, initialAssetType, onSelect, heroOnly = false }) => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedCode, setExpandedCode] = useState<Set<string>>(new Set());
@@ -57,14 +59,15 @@ const AssetLibrary: React.FC<AssetLibraryProps> = ({ isOpen, onClose, initialAss
     }
   }, [isOpen, initialAssetType]);
 
-  // Filter assets by category and search
+  // Filter assets by category, search, and Hero compatibility
   const filteredAssets = ASSET_LIBRARY.filter(asset => {
     const matchesCategory = selectedCategory === 'All' || asset.category === selectedCategory;
     const matchesSearch = !searchQuery || 
       asset.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       asset.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       asset.useCase.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    const matchesHeroFilter = !heroOnly || asset.supportsHero;
+    return matchesCategory && matchesSearch && matchesHeroFilter;
   });
 
   // Group by category
@@ -144,11 +147,18 @@ const AssetLibrary: React.FC<AssetLibraryProps> = ({ isOpen, onClose, initialAss
           {/* HEADER */}
           <div className="flex items-center justify-between px-8 py-6 border-b border-gray-200 dark:border-gray-700">
             <div>
-              <h2 className="text-2xl font-roobert-bold text-fis-navy dark:text-white">
-                Asset Library
-              </h2>
+              <div className="flex items-center gap-3">
+                <h2 className="text-2xl font-roobert-bold text-fis-navy dark:text-white">
+                  Asset Library
+                </h2>
+                {heroOnly && (
+                  <span className="px-3 py-1 rounded-full text-xs font-roobert-semibold bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white flex items-center gap-1">
+                    🌟 Hero Compatible Only
+                  </span>
+                )}
+              </div>
               <p className="text-sm font-roobert-regular text-gray-500 dark:text-gray-400 mt-1">
-                {ASSET_LIBRARY.length} assets available • Interactive previews with live editing
+                {filteredAssets.length} assets {heroOnly ? 'compatible with Hero layouts' : 'available'} • Interactive previews with live editing
               </p>
             </div>
             <button
@@ -176,7 +186,7 @@ const AssetLibrary: React.FC<AssetLibraryProps> = ({ isOpen, onClose, initialAss
 
               {/* Category Filter */}
               <div className="flex gap-2">
-                {(['All', 'basic', 'lists', 'complex', 'rich', 'charts', 'media'] as CategoryType[]).map(category => (
+                {(['All', 'basic', 'lists', 'complex', 'rich', 'charts', 'executiveSummary', 'media'] as CategoryType[]).map(category => (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
@@ -227,6 +237,11 @@ const AssetLibrary: React.FC<AssetLibraryProps> = ({ isOpen, onClose, initialAss
                                   Multi-column
                                 </span>
                               )}
+                              {asset.supportsHero && (
+                                <span className="px-2 py-1 rounded text-xs font-roobert-medium bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 text-purple-700 dark:text-purple-300 flex items-center gap-1">
+                                  🌟 Hero
+                                </span>
+                              )}
                             </div>
                             <p className="text-sm font-roobert-regular text-gray-600 dark:text-gray-300 mt-1">
                               {asset.description}
@@ -237,9 +252,23 @@ const AssetLibrary: React.FC<AssetLibraryProps> = ({ isOpen, onClose, initialAss
                           </div>
 
                           {/* Controls Row */}
-                          <div className="flex items-center gap-3">
-                            {/* Alignment Controls */}
-                            <div className="flex items-center gap-1.5">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-3 flex-1">
+                              {/* Select Button (if onSelect provided) */}
+                              {onSelect && (
+                                <button
+                                  onClick={() => {
+                                    onSelect(asset.id, asset);
+                                    onClose();
+                                  }}
+                                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-semibold hover:from-fis-eggplant/90 hover:to-fis-raspberry/90 transition-all shadow-md"
+                                >
+                                  Select Asset
+                                </button>
+                              )}
+                              
+                              {/* Alignment Controls */}
+                              <div className="flex items-center gap-1.5">
                               <span className="text-xs font-roobert-medium text-gray-500 dark:text-gray-400">
                                 Align:
                               </span>
@@ -278,6 +307,7 @@ const AssetLibrary: React.FC<AssetLibraryProps> = ({ isOpen, onClose, initialAss
                                   <AlignRight className="w-3.5 h-3.5" />
                                 </button>
                               </div>
+                            </div>
                             </div>
 
                             {/* Inter-Asset Border Toggle (for multi-column) */}

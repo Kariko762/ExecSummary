@@ -34,6 +34,8 @@ import {
   Top5ListPattern
 } from './assetRenderLists';
 
+import { GaugeRenderer } from './GaugeRenderer';
+
 import {
   MetricCardPattern,
   NestedCardsPattern,
@@ -53,7 +55,9 @@ import {
   StatusBoardPattern,
   TimelinePattern,
   TwoColumnComparisonPattern,
-  ProblemSolutionBoxPattern
+  ProblemSolutionBoxPattern,
+  GanttChartPattern,
+  VendorAssetPattern
 } from './assetRenderComplex';
 
 import {
@@ -64,7 +68,10 @@ import {
 
 import { BudgetBreakdown } from './assetRenderBudget';
 import { ForecastBreakdown } from './assetRenderForecast';
-import { ExecutiveSynthesisRenderer } from './ExecutiveSynthesisRenderer';
+import ExecutiveSummaryCPSAR from './ExecutiveSummaryCPSAR';
+import ExecutiveSummaryBLUF from './ExecutiveSummaryBLUF';
+import ExecutiveSummarySBAR from './ExecutiveSummarySBAR';
+import ExecutiveSummaryPyramid from './ExecutiveSummaryPyramid';
 
 // ==========================================
 // ENGINE PROPS
@@ -76,6 +83,7 @@ export interface AssetRenderEngineProps {
   onChange?: (value: any) => void;
   mode?: 'edit' | 'display';
   className?: string;
+  displayMode?: 'spaced' | 'connected' | 'hero'; // For hero layouts
 }
 
 // ==========================================
@@ -87,7 +95,8 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
   data,
   onChange,
   mode = 'display',
-  className = ''
+  className = '',
+  displayMode = 'spaced'
 }) => {
   
   // Route to correct pattern component
@@ -121,7 +130,9 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
       
       // CARD ASSETS
       case 'metricCard':
-        return <MetricCardPattern {...props} />;
+        return <MetricCardPattern {...props} displayMode={displayMode} />;
+      case 'gauge':
+        return <GaugeRenderer data={data} isEditMode={mode === 'edit'} />;
       case 'nestedCards':
         return <NestedCardsPattern {...props} />;
       case 'riskCard':
@@ -151,6 +162,10 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
         return <TwoColumnComparisonPattern {...props} />;
       case 'problemSolutionBox':
         return <ProblemSolutionBoxPattern {...props} />;
+      case 'ganttChart':
+        return <GanttChartPattern {...props} />;
+      case 'vendorAsset':
+        return <VendorAssetPattern {...props} />;
       
       // UTILITY ASSETS
       case 'hr':
@@ -168,9 +183,19 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
       case 'forecastBreakdown':
         return <ForecastBreakdown data={data} />;
       
-      // EXECUTIVE SYNTHESIS
-      case 'executiveSynthesis':
-        return <ExecutiveSynthesisRenderer data={data} isEditMode={false} />;
+      // EXECUTIVE SUMMARIES
+      case 'executiveSummaryCPSAR':
+      case 'executiveSynthesis': // backward compatibility
+        return <ExecutiveSummaryCPSAR data={data} isEditMode={false} />;
+      
+      case 'executiveSummaryBLUF':
+        return <ExecutiveSummaryBLUF data={data} isEditMode={false} />;
+      
+      case 'executiveSummarySBAR':
+        return <ExecutiveSummarySBAR data={data} isEditMode={false} />;
+      
+      case 'executiveSummaryPyramid':
+        return <ExecutiveSummaryPyramid data={data} isEditMode={false} />;
       
       default:
         return <div className="text-red-500">Unknown asset type: {type}</div>;
@@ -197,6 +222,11 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
     
     if (['statusBoard', 'timeline', 'twoColumnComparison'].includes(type)) {
       return `${baseClasses} ${modeClasses} ${AssetStyles.spacing.md} ${className}`;
+    }
+    
+    // Gantt chart needs NO padding wrapper - it has its own internal spacing
+    if (type === 'ganttChart') {
+      return `${baseClasses} ${modeClasses} ${className}`;
     }
     
     return `${baseClasses} ${modeClasses} ${className}`;

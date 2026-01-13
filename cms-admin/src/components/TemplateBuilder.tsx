@@ -12,6 +12,7 @@ import type { FieldSchema } from '../../../src/types/schema';
 import { ChartColors } from '../../../src/design-system';
 import EditorModalV2 from './EditorModalV2';
 import AssetLibrary from './AssetLibrary';
+import HeroGridBuilder from './HeroGridBuilder';
 import { groupAssetsByCategory, type AssetDefinition } from '../schemas/assetDataStore';
 
 // Get grouped assets for Template Builder UI
@@ -25,6 +26,7 @@ interface TemplateBuilderProps {
 // Layout zone types for snap layout feature
 type LayoutZone = 
   | 'full'        // 100% width
+  | 'hero'        // Full-width hero banner with special styling
   | 'left-50'     // Left half (50%)
   | 'right-50'    // Right half (50%)
   | 'left-70'     // Left 70%
@@ -33,7 +35,14 @@ type LayoutZone =
   | 'right-70'    // Right 70%
   | 'left-33'     // Left third
   | 'middle-33'   // Middle third
-  | 'right-33';   // Right third
+  | 'right-33'    // Right third
+  // Hero Masonry Grid Zones (flexible positioning)
+  | 'hero-big-square'        // Large square container (2x2 grid cells)
+  | 'hero-wide-rect'         // Horizontal rectangle (2x1)
+  | 'hero-tall-rect'         // Vertical rectangle (1x2)
+  | 'hero-small-square'      // Small square container (1x1)
+  | 'hero-full-height'       // Full height sidebar (1x3)
+  | 'hero-medium-rect';      // Medium rectangle (varies)
 
 interface TemplateSection {
   id: string;
@@ -88,11 +97,63 @@ interface SnapZoneOverlayProps {
   onZoneDrop: (zone: LayoutZone) => void;
   hoveredZone: LayoutZone | null;
   onZoneHover: (zone: LayoutZone | null) => void;
+  sections: TemplateSection[]; // Need sections to check if Hero layout
 }
 
-const SnapZoneOverlay = ({ sectionId, onZoneDrop, hoveredZone, onZoneHover }: SnapZoneOverlayProps) => {
-  // Each layout choice represents a complete pattern
+const SnapZoneOverlay = ({ sectionId, onZoneDrop, hoveredZone, onZoneHover, sections }: SnapZoneOverlayProps) => {
+  // Check if section already has Hero layout by looking at existing fields
+  const section = sections.find(s => s.id === sectionId);
+  const isHeroSection = section?.fields.some(f => f.layoutZone?.startsWith('hero'));
+
+  // Hero container size choices for masonry layout
+  const heroContainerChoices: Array<{ zone: LayoutZone; label: string; preview: React.ReactNode; description: string }> = [
+    {
+      zone: 'hero-big-square',
+      label: '■ Big Square',
+      description: '2x2 cells - Perfect for main metrics',
+      preview: <div className="w-full h-24 border-2 border-purple-600 rounded bg-gradient-to-br from-purple-600 to-pink-600"></div>
+    },
+    {
+      zone: 'hero-wide-rect',
+      label: '▬ Wide Rectangle',
+      description: '2x1 cells - Horizontal content',
+      preview: <div className="w-full h-12 border-2 border-purple-500 rounded bg-gradient-to-r from-purple-500 to-pink-500"></div>
+    },
+    {
+      zone: 'hero-tall-rect',
+      label: '▮ Tall Rectangle',
+      description: '1x2 cells - Vertical list',
+      preview: <div className="w-1/2 h-24 border-2 border-purple-500 rounded bg-gradient-to-b from-purple-500 to-pink-500"></div>
+    },
+    {
+      zone: 'hero-small-square',
+      label: '▪ Small Square',
+      description: '1x1 cell - Compact widget',
+      preview: <div className="w-1/2 h-12 border-2 border-purple-400 rounded bg-gradient-to-br from-purple-400 to-pink-400"></div>
+    },
+    {
+      zone: 'hero-full-height',
+      label: '▐ Full Height',
+      description: '1x3 cells - Sidebar',
+      preview: <div className="w-1/3 h-32 border-2 border-purple-600 rounded bg-gradient-to-b from-purple-600 via-pink-600 to-purple-700"></div>
+    }
+  ];
+
+  // Standard layout choices
   const layoutChoices: Array<{ zone: LayoutZone; label: string; preview: React.ReactNode }> = [
+    {
+      zone: 'hero',
+      label: '🌟 Hero Masonry',
+      preview: (
+        <div className="w-full h-16 border-2 border-purple-600 rounded bg-gradient-to-r from-purple-600 to-pink-600 p-2 grid grid-cols-3 gap-1">
+          <div className="bg-white/30 rounded"></div>
+          <div className="bg-white/30 rounded col-span-2"></div>
+          <div className="bg-white/30 rounded row-span-2"></div>
+          <div className="bg-white/30 rounded"></div>
+          <div className="bg-white/30 rounded"></div>
+        </div>
+      )
+    },
     {
       zone: 'full',
       label: 'Full Width',
@@ -141,6 +202,71 @@ const SnapZoneOverlay = ({ sectionId, onZoneDrop, hoveredZone, onZoneHover }: Sn
     }
   ];
 
+  // If Hero section, show container size choices instead of layout choices
+  if (isHeroSection) {
+    return (
+      <div className="absolute inset-0 z-20 bg-gradient-to-br from-purple-900/95 to-pink-900/95 dark:from-purple-950/95 dark:to-pink-950/95 backdrop-blur-sm rounded-lg p-6 flex flex-col items-center justify-center pointer-events-auto">
+        <div className="text-center mb-6">
+          <h3 className="text-lg font-roobert-bold text-white mb-2">
+            🌟 Choose Container Size
+          </h3>
+          <p className="text-sm text-purple-200">
+            Pick a size for this Hero container
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 gap-3 w-full max-w-md">
+          {heroContainerChoices.map(({ zone, label, preview, description }) => (
+            <div
+              key={zone}
+              onDragOver={(e) => { 
+                e.preventDefault(); 
+                e.stopPropagation(); 
+                onZoneHover(zone); 
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onZoneHover(null);
+              }}
+              onDrop={(e) => { 
+                e.preventDefault(); 
+                e.stopPropagation(); 
+                onZoneDrop(zone); 
+                onZoneHover(null);
+              }}
+              className={`p-3 border-2 border-dashed rounded-lg cursor-pointer transition-all ${
+                hoveredZone === zone
+                  ? 'bg-white/20 border-white scale-[1.02] shadow-lg'
+                  : 'bg-purple-800/30 border-purple-300/50 hover:border-white/70 hover:bg-white/10'
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-20">
+                  {preview}
+                </div>
+                <div className="flex-1">
+                  <div className="font-roobert-semibold text-sm text-white mb-1">
+                    {label}
+                  </div>
+                  <div className="text-xs text-purple-200">
+                    {description}
+                  </div>
+                </div>
+                {hoveredZone === zone && (
+                  <span className="text-xs text-white font-roobert-semibold">
+                    Drop
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Standard layout picker
   return (
     <div className="absolute inset-0 z-20 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-lg p-6 flex flex-col items-center justify-center pointer-events-auto">
       <div className="text-center mb-6">
@@ -305,6 +431,10 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
   const [showLayoutPicker, setShowLayoutPicker] = useState(false);
   const [showLayoutGuide, setShowLayoutGuide] = useState(false);
   
+  // Hero Grid Builder
+  const [showHeroGridBuilder, setShowHeroGridBuilder] = useState(false);
+  const [heroGridSectionId, setHeroGridSectionId] = useState<string | null>(null);
+  
   // Standard header default values
   const [headerDefaults, setHeaderDefaults] = useState({
     id: 'template-new',
@@ -364,6 +494,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
   const getLayoutSequence = (baseZone: LayoutZone): LayoutZone[] => {
     const sequences: Record<string, LayoutZone[]> = {
       'full': ['full'],
+      'hero': ['hero'], // Hero layout - always single full-width zone
       'left-50': ['left-50', 'right-50'],
       'right-50': ['left-50', 'right-50'],
       'left-70': ['left-70', 'right-30'],
@@ -408,6 +539,9 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
   // NEW: Get icon for layout type
   const getLayoutIcon = (layoutType?: LayoutZone) => {
     if (!layoutType) return null;
+    
+    // Special icon for hero layout
+    if (layoutType === 'hero') return '🌟'; // Hero banner indicator
     
     const sequence = getLayoutSequence(layoutType);
     if (sequence.length === 1) return '□'; // Full width
@@ -1011,6 +1145,38 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
     setShowRemoveSectionModal(true);
   };
 
+  // Hero Grid Builder Save Handler
+  const handleHeroGridSave = (containers: any[]) => {
+    if (!heroGridSectionId) return;
+    
+    // Convert grid containers to template fields
+    const fields = containers.map((container, index) => ({
+      id: container.id,
+      key: `hero_container_${index + 1}`,
+      label: container.label || `Container ${index + 1}`,
+      renderType: container.assetType || 'text',
+      schema: { type: 'object' },
+      exampleData: container.assetData || {},
+      layoutZone: `hero-grid-${container.row}-${container.col}` as LayoutZone,
+      gridPosition: {
+        row: container.row,
+        col: container.col,
+        rowSpan: container.rowSpan,
+        colSpan: container.colSpan
+      }
+    }));
+
+    setSections(prev => prev.map(section => 
+      section.id === heroGridSectionId
+        ? { ...section, fields }
+        : section
+    ));
+
+    showNotification('success', `Hero grid configured with ${containers.length} containers`);
+    setShowHeroGridBuilder(false);
+    setHeroGridSectionId(null);
+  };
+
   const confirmRemoveSection = () => {
     if (pendingRemoveSectionId) {
       setSections(prev => prev.filter(s => s.id !== pendingRemoveSectionId));
@@ -1022,11 +1188,15 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
 
   // Add layout asset as a section (generic for all layout assets)
   const addLayoutAsset = (asset: AssetItem) => {
+    // Determine if this asset is hero-compatible
+    const heroCompatibleTypes = ['metricCard', 'gauge', 'number'];
+    const defaultLayoutZone = heroCompatibleTypes.includes(asset.type) ? 'full' : 'full';
+    
     const layoutSection: TemplateSection = {
       id: `layout-${Date.now()}`,
       name: `${asset.name} ${sections.filter(s => s.fields[0]?.renderType === asset.type).length + 1}`,
       expanded: true,
-      sectionLayoutType: 'full', // Layout assets always full width
+      sectionLayoutType: defaultLayoutZone, // Layout assets always full width or hero
       fields: [{
         id: `field-${Date.now()}`,
         key: `${asset.id}_${Date.now()}`,
@@ -1034,7 +1204,7 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
         renderType: asset.type,
         schema: { ...asset.schema },
         exampleData: asset.exampleData,
-        layoutZone: 'full'
+        layoutZone: defaultLayoutZone
       }]
     };
     setSections([...sections, layoutSection]);
@@ -1249,12 +1419,20 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
       setIsSaving(true);
     }
 
+    // Helper function to convert section names to camelCase (matching EditorModalV2 expectations)
+    const toCamelCase = (str: string): string => {
+      return str
+        .toLowerCase()
+        .replace(/[^a-z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+        .replace(/^./, (chr) => chr.toLowerCase());
+    };
+
     try {
       // Convert sections to flat data structure (like summary-template.json)
       const templateData: Record<string, any> = {};
       
       sections.forEach(section => {
-        const sectionKey = section.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+        const sectionKey = toCamelCase(section.name); // Use camelCase instead of snake_case
         
         // Special handling for standard_header - expand to individual fields
         if (section.id === 'section-header' || sectionKey === 'standard_header') {
@@ -1288,6 +1466,10 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
             }
             if (field.rowIndex !== undefined) {
               templateData[`_${fieldKey}_rowIndex`] = field.rowIndex;
+            }
+            // Save grid position for Hero masonry layout
+            if (field.gridPosition) {
+              templateData[`_${fieldKey}_gridPosition`] = field.gridPosition;
             }
             
             // Save full itemSchema for array types (nestedCards, metricCards, charts, lists)
@@ -1670,17 +1852,21 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                   onDragEnd={handleSectionDragEnd}
                   onDragOver={(e) => handleSectionDragOverSection(e, section.id)}
                   className={`rounded-xl border-2 shadow-sm overflow-hidden ${
-                    isHeaderSection 
-                      ? 'bg-fis-eggplant/5 dark:bg-fis-eggplant/10 border-fis-eggplant dark:border-fis-raspberry' 
-                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 cursor-move'
+                    section.sectionLayoutType === 'hero'
+                      ? 'bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 border-purple-400 dark:border-purple-600'
+                      : isHeaderSection 
+                        ? 'bg-fis-eggplant/5 dark:bg-fis-eggplant/10 border-fis-eggplant dark:border-fis-raspberry' 
+                        : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 cursor-move'
                   } ${draggedSection === section.id ? 'opacity-50' : ''}`}
                 >
                   {/* Section Header */}
                   <div 
                     className={`flex items-center justify-between p-4 border-b cursor-pointer ${
-                      isHeaderSection 
-                        ? 'bg-fis-eggplant/10 dark:bg-fis-eggplant/20 border-fis-eggplant dark:border-fis-raspberry' 
-                        : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700'
+                      section.sectionLayoutType === 'hero'
+                        ? 'bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 border-purple-300 dark:border-purple-700'
+                        : isHeaderSection 
+                          ? 'bg-fis-eggplant/10 dark:bg-fis-eggplant/20 border-fis-eggplant dark:border-fis-raspberry' 
+                          : 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700'
                     } ${selectedSection === section.id ? 'ring-2 ring-fis-raspberry' : ''}`}
                     onClick={() => {
                       setSelectedSection(section.id);
@@ -1764,8 +1950,8 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                   {/* Section Content */}
                   {section.expanded && (
                     <div
-                      onDrop={() => handleSectionDrop(section.id)}
-                      onDragOver={(e) => handleSectionDragOver(e, section.id)}
+                      onDrop={() => section.sectionLayoutType !== 'hero' && handleSectionDrop(section.id)}
+                      onDragOver={(e) => section.sectionLayoutType !== 'hero' && handleSectionDragOver(e, section.id)}
                       onDragLeave={handleSectionDragLeave}
                       className={`p-4 transition-colors relative min-h-[120px] ${
                         dragOverSection === section.id
@@ -1773,7 +1959,34 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
                           : ''
                       }`}
                     >
-                      {section.fields.length === 0 ? (
+                      {/* HERO SECTION - Show Configure Button */}
+                      {section.sectionLayoutType === 'hero' ? (
+                        <div className="flex flex-col items-center justify-center py-12">
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-fis-eggplant to-fis-raspberry flex items-center justify-center text-white text-2xl mb-4 shadow-lg">
+                            🌟
+                          </div>
+                          <h4 className="text-lg font-roobert-bold text-gray-900 dark:text-white mb-2">
+                            Hero Grid Layout
+                          </h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center max-w-sm">
+                            Configure a masonry-style grid with flexible container sizes
+                          </p>
+                          <button
+                            onClick={() => {
+                              setShowHeroGridBuilder(true);
+                              setHeroGridSectionId(section.id);
+                            }}
+                            className="px-6 py-3 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-bold hover:from-fis-eggplant/90 hover:to-fis-raspberry/90 transition-all shadow-lg hover:shadow-xl"
+                          >
+                            CONFIGURE GRID
+                          </button>
+                          {section.fields.length > 0 && (
+                            <div className="mt-4 text-xs text-gray-500 dark:text-gray-500">
+                              {section.fields.length} container{section.fields.length !== 1 ? 's' : ''} configured
+                            </div>
+                          )}
+                        </div>
+                      ) : section.fields.length === 0 ? (
                         <div className="text-center text-gray-500 dark:text-gray-500 py-8 text-sm">
                           Drag assets here to add fields
                         </div>
@@ -3654,6 +3867,28 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
         initialAssetType={assetReferenceType}
       />
 
+      {/* Hero Grid Builder Modal */}
+      <HeroGridBuilder
+        isOpen={showHeroGridBuilder}
+        onClose={() => {
+          setShowHeroGridBuilder(false);
+          setHeroGridSectionId(null);
+        }}
+        onSave={handleHeroGridSave}
+        initialContainers={heroGridSectionId ? 
+          sections.find(s => s.id === heroGridSectionId)?.fields.map(f => ({
+            id: f.id,
+            row: f.gridPosition?.row || 0,
+            col: f.gridPosition?.col || 0,
+            rowSpan: f.gridPosition?.rowSpan || 1,
+            colSpan: f.gridPosition?.colSpan || 1,
+            assetType: f.renderType,
+            assetData: f.exampleData,
+            label: f.label
+          })) || [] : []
+        }
+      />
+
       {/* Layout Picker Modal */}
       {showLayoutPicker && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -3681,6 +3916,23 @@ export default function TemplateBuilder({ onBack, showNotification: showNotifica
               </div>
 
               <div className="space-y-3 mb-4">
+                {/* Hero Banner Layout */}
+                <button
+                  onClick={() => createSectionWithLayout('hero')}
+                  className="w-full p-4 border-2 border-purple-300 dark:border-purple-700 rounded-xl hover:border-fis-eggplant dark:hover:border-fis-raspberry hover:bg-fis-eggplant/5 dark:hover:bg-fis-eggplant/10 transition-all group text-left bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <div className="text-white text-2xl">🌟</div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-roobert-bold text-gray-900 dark:text-white mb-1">Hero Banner</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Full-width banner with gradient background - perfect for key metrics</div>
+                    </div>
+                    <div className="text-2xl text-purple-400 dark:text-purple-500 group-hover:text-fis-eggplant dark:group-hover:text-fis-raspberry font-mono">⬛</div>
+                  </div>
+                </button>
+
                 {/* Full Width Layout */}
                 <button
                   onClick={() => createSectionWithLayout('full')}

@@ -80,33 +80,26 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
 
   // Export functions
   const exportAsImage = async () => {
-    const targetRef = scrollContainerRef.current;
+    const targetRef = exportWrapperRef.current;
     if (!targetRef) return;
     
     setIsExporting(true);
     setShowExportMenu(false);
     
     try {
-      // Hide the export button and close button temporarily
+      // Hide all header buttons during export
       const exportBtn = document.querySelector('.export-button');
       const closeBtn = document.querySelector('.close-button');
+      const fullscreenBtn = document.querySelector('[title*="fullscreen"]');
       const draftBar = document.querySelector('.draft-bar');
       
       if (exportBtn) (exportBtn as HTMLElement).style.display = 'none';
       if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
+      if (fullscreenBtn) (fullscreenBtn as HTMLElement).style.display = 'none';
       if (draftBar) (draftBar as HTMLElement).style.display = 'none';
       
-      // Get the scrollable content div (not the modal wrapper)
+      // Get the export wrapper (includes header + content)
       const contentDiv = targetRef;
-      
-      // Temporarily remove scroll and set to full height
-      const originalOverflow = contentDiv.style.overflow;
-      const originalMaxHeight = contentDiv.style.maxHeight;
-      const originalHeight = contentDiv.style.height;
-      
-      contentDiv.style.overflow = 'visible';
-      contentDiv.style.maxHeight = 'none';
-      contentDiv.style.height = 'auto';
       
       // Use modern-screenshot which supports oklch colors and captures full content
       const dataUrl = await domToPng(contentDiv, {
@@ -116,14 +109,10 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
         height: contentDiv.scrollHeight,
       });
       
-      // Restore original styles
-      contentDiv.style.overflow = originalOverflow;
-      contentDiv.style.maxHeight = originalMaxHeight;
-      contentDiv.style.height = originalHeight;
-      
       // Restore buttons
       if (exportBtn) (exportBtn as HTMLElement).style.display = '';
       if (closeBtn) (closeBtn as HTMLElement).style.display = '';
+      if (fullscreenBtn) (fullscreenBtn as HTMLElement).style.display = '';
       if (draftBar) (draftBar as HTMLElement).style.display = '';
       
       const link = document.createElement('a');
@@ -142,7 +131,7 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
   };
 
   const exportAsPDF = async () => {
-    const targetRef = scrollContainerRef.current;
+    const targetRef = exportWrapperRef.current;
     if (!targetRef) return;
     
     setIsExporting(true);
@@ -753,7 +742,7 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
             </div>
           ) : (
             /* Normal visual view (works for both draft and published) - WITH FIXED SIDEBAR */
-            <div className="flex flex-col flex-1 overflow-hidden">
+            <div ref={exportWrapperRef} className="flex flex-col flex-1 overflow-hidden">
               {/* Header - Spans full width above sidebar and content */}
               {!isDraft && (
                 <div className={`bg-gradient-to-r from-fis-eggplant to-fis-raspberry shadow-lg flex items-center justify-between z-10 flex-shrink-0 ${isFullscreen ? 'p-3' : 'p-6'}`}>
@@ -794,7 +783,7 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
                             onClick={exportAsImage}
                             className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
                           >
-                            <FileImage className="w-4 h-4 text-blue-500" />
+                            <FileImage className="w-4 h-4 text-accent-blue" />
                             Export as Image
                           </button>
                           <button
@@ -855,7 +844,7 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
               )}
 
               {/* Right Content Area */}
-              <div ref={exportWrapperRef} className="flex flex-col flex-1 overflow-hidden">
+              <div className="flex flex-col flex-1 overflow-hidden">
 
               {/* Content Sections */}
               <div ref={scrollContainerRef} className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
@@ -889,6 +878,8 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
                             let rowType = 'full';
                             if (zone.includes('left-70') || zone.includes('right-30')) {
                               rowType = '70-30';
+                            } else if (zone.includes('left-30') || zone.includes('right-70')) {
+                              rowType = '30-70';
                             } else if (zone.includes('left-50') || zone.includes('right-50')) {
                               rowType = '50-50';
                             } else if (zone.includes('left-33') || zone.includes('middle-33') || zone.includes('right-33')) {
@@ -898,13 +889,14 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
                             // Start new row if:
                             // 1. Row type changes
                             // 2. Full width item
-                            // 3. 70-30 row has 2 items
+                            // 3. 70-30 or 30-70 row has 2 items
                             // 4. 50-50 row has 2 items
                             // 5. 33-33-33 row has 3 items
                             if (
                               (currentRowType && currentRowType !== rowType) ||
                               rowType === 'full' ||
                               (currentRowType === '70-30' && currentRow.length >= 2) ||
+                              (currentRowType === '30-70' && currentRow.length >= 2) ||
                               (currentRowType === '50-50' && currentRow.length >= 2) ||
                               (currentRowType === '33-33-33' && currentRow.length >= 3)
                             ) {
@@ -941,6 +933,8 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
                               gridCols = 'grid-cols-2';
                             } else if (firstZone.includes('left-70') || firstZone.includes('right-30')) {
                               gridCols = 'grid-cols-[2.33fr_1fr]';
+                            } else if (firstZone.includes('left-30') || firstZone.includes('right-70')) {
+                              gridCols = 'grid-cols-[1fr_2.33fr]';
                             }
 
                             return (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw, CheckCircle, AlertCircle, TrendingUp, Plus, Shield, ShieldOff, BookOpen, FolderOpen, GitBranch, Grid3x3, List, MessageCircle, StickyNote } from 'lucide-react';
+import { FileText, Lightbulb, Building2, Upload, Trash2, ExternalLink, RefreshCw, CheckCircle, AlertCircle, TrendingUp, Plus, Shield, ShieldOff, BookOpen, FolderOpen, GitBranch, Grid3x3, List, MessageCircle, StickyNote, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
@@ -10,13 +10,16 @@ import AssetLibrary from './components/AssetLibrary';
 import DesignSystemManager from './components/DesignSystemManager';
 import DesignSystemInjector from './components/DesignSystemInjector';
 import SystemSettingsManager from './components/SystemSettingsManager';
+import DataSourcesManager from './components/DataSourcesManager';
 import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
 import CommentsPanel from './components/CommentsPanel';
 import GoalsManager from './components/GoalsManager';
 import PlatformOverview from './components/PlatformOverview';
-import NotesManager from './components/NotesManager';
+import TimelineNotesManager from './components/TimelineNotesManager';
 import QuickActionsMenu from './components/QuickActionsMenu';
+import { TaskEditorModal } from './components/TaskEditorModal';
+import { AllTasksModal } from './components/AllTasksModal';
 import OrgIQ from './pages/OrgIQ';
 import './App.css';
 
@@ -62,17 +65,11 @@ interface Performance {
 function App() {
   const [activeSection, setActiveSection] = useState<Section>('all-content');
   const [activeTagFilter, setActiveTagFilter] = useState<string>(''); // For filtering content by tag
-  const [summaries, setSummaries] = useState<Summary[]>([]);
-  const [executiveIQ, setExecutiveIQ] = useState<ExecutiveIQ[]>([]);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [performances, setPerformances] = useState<Performance[]>([]);
-  const [kbArticles, setKbArticles] = useState<any[]>([]);
-  const [kbCategories, setKbCategories] = useState<any[]>([]);
   const [allContent, setAllContent] = useState<any[]>([]); // Unified content list (filtered)
   const [allContentUnfiltered, setAllContentUnfiltered] = useState<any[]>([]); // Complete unfiltered list for cloning
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [importType, setImportType] = useState<'summaries' | 'executive-iq' | 'organizations' | 'performance'>('summaries');
+  const [importType, setImportType] = useState<'content'>('content');
   const [notification, setNotification] = useState<{type: 'success' | 'error' | 'info' | 'warning', message: string} | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -85,13 +82,16 @@ function App() {
   const [assetReferenceType, setAssetReferenceType] = useState<string | undefined>();
   const [showStyleScheme, setShowStyleScheme] = useState(false);
   const [showSystemSettings, setShowSystemSettings] = useState(false);
+  const [showDataSources, setShowDataSources] = useState(false);
   const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
   const [showOrgIQ, setShowOrgIQ] = useState(false);
   const [showGoals, setShowGoals] = useState(false);
   const [showPlatformOverview, setShowPlatformOverview] = useState(false);
-  const [showNotes, setShowNotes] = useState(false);
-  const [autoOpenNoteModal, setAutoOpenNoteModal] = useState(false);
-  const [autoOpenSectionModal, setAutoOpenSectionModal] = useState(false);
+  const [showTimelineNotes, setShowTimelineNotes] = useState(false);
+  const [autoOpenAddNote, setAutoOpenAddNote] = useState(false);
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showAllTasksModal, setShowAllTasksModal] = useState(false);
+  const [editingTask, setEditingTask] = useState<any>();
   const [availableTemplates, setAvailableTemplates] = useState<any[]>([]);
   const [requireAuth, setRequireAuth] = useState(false);
   const [availableTags, setAvailableTags] = useState<any[]>([]);
@@ -101,7 +101,7 @@ function App() {
   const [activeCommentContent, setActiveCommentContent] = useState<{id: string, type: string, title: string} | null>(null);
   
   // Tenant content creation states
-  const [contentCreationType, setContentCreationType] = useState<'timeline' | 'performance' | 'organization' | 'initiative' | 'announcement'>('timeline');
+  const [contentCreationType, setContentCreationType] = useState<'timeline' | 'performance' | 'organization' | 'initiative' | 'announcement' | 'vendor'>('timeline');
   const [selectedOrgSlug, setSelectedOrgSlug] = useState<string>('');
   const [selectedInitiativeSlug, setSelectedInitiativeSlug] = useState<string>('');
   const [tenantOrganizations, setTenantOrganizations] = useState<any[]>([]);
@@ -214,6 +214,18 @@ function App() {
     }
   }, [notification]);
 
+  const fetchTemplates = async () => {
+    try {
+      const response = await fetch(`${API_URL}/templates`);
+      if (!response.ok) throw new Error('Failed to fetch templates');
+      const data = await response.json();
+      setAvailableTemplates(Array.isArray(data.templates) ? data.templates : []);
+    } catch (error) {
+      console.error('Failed to fetch templates:', error);
+      setAvailableTemplates([]); // Ensure it's always an array
+    }
+  };
+
   // Load templates when modal opens
   useEffect(() => {
     if (showNewSummaryModal) {
@@ -221,6 +233,17 @@ function App() {
       fetchTenants();
     }
   }, [showNewSummaryModal]);
+
+  // Listen for "Follow Goal" events from tasks
+  useEffect(() => {
+    const handleOpenGoal = (event: any) => {
+      setShowGoals(true);
+      // TODO: Pass goalId to GoalsManager to open specific goal
+    };
+    
+    window.addEventListener('openGoal', handleOpenGoal as EventListener);
+    return () => window.removeEventListener('openGoal', handleOpenGoal as EventListener);
+  }, []);
 
   const fetchTenants = async () => {
     try {
@@ -251,19 +274,32 @@ function App() {
     setNotification({ type, message });
   };
 
+  // Task Handlers
+  const handleTaskSave = async (task: any) => {
+    try {
+      const url = task.id 
+        ? `http://localhost:3001/api/tasks/${task.id}` 
+        : 'http://localhost:3001/api/tasks';
+      const method = task.id ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(task)
+      });
+
+      if (!response.ok) throw new Error('Failed to save task');
+      
+      showNotification('success', task.id ? 'Task updated successfully' : 'Task created successfully');
+      setShowTaskModal(false);
+      setEditingTask(undefined);
+    } catch (error) {
+      console.error('Error saving task:', error);
+      showNotification('error', 'Failed to save task');
+    }
+  };
+
   // Quick Actions Handlers
-  const handleQuickNewNote = () => {
-    setAutoOpenNoteModal(true);
-    setAutoOpenSectionModal(false);
-    setShowNotes(true);
-  };
-
-  const handleQuickNewSection = () => {
-    setAutoOpenNoteModal(false);
-    setAutoOpenSectionModal(true);
-    setShowNotes(true);
-  };
-
   const handleQuickClone = async (tagId: string, tagName: string) => {
     try {
       // Find all content with this tag
@@ -325,7 +361,7 @@ function App() {
     }
   };
 
-  const handleQuickNewContent = (type: 'timeline' | 'announcement' | 'organization') => {
+  const handleQuickNewContent = (type: 'timeline' | 'announcement' | 'organization' | 'vendor') => {
     setContentCreationType(type);
     if (type === 'timeline') {
       setSelectedTag(availableTags.find(t => t.id === 'weekly-summary')?.id || availableTags[0]?.id || '');
@@ -333,20 +369,10 @@ function App() {
       setSelectedTag('announcement');
     } else if (type === 'organization') {
       setSelectedTag('organization');
+    } else if (type === 'vendor') {
+      setSelectedTag('vendor');
     }
     setShowNewSummaryModal(true);
-  };
-
-  const fetchTemplates = async () => {
-    try {
-      const response = await fetch(`${API_URL}/templates`);
-      if (!response.ok) throw new Error('Failed to fetch templates');
-      const data = await response.json();
-      setAvailableTemplates(Array.isArray(data.templates) ? data.templates : []);
-    } catch (error) {
-      console.error('Failed to fetch templates:', error);
-      setAvailableTemplates([]); // Ensure it's always an array
-    }
   };
 
   const handleFileUpload = async (e: React.FormEvent) => {
@@ -395,18 +421,7 @@ function App() {
     if (!itemToDelete) return;
 
     // All content uses unified /api/content/ endpoint
-    let endpoint = 'content';
-    
-    // Only use specific endpoints when in dedicated section views
-    if (activeSection !== 'all-content') {
-      endpoint = activeSection === 'summaries' ? 'summaries' 
-        : activeSection === 'executive-iq' ? 'executive-iq' 
-        : activeSection === 'performance' ? 'performance'
-        : activeSection === 'knowledge-base' ? 'knowledge-base'
-        : activeSection === 'kb-categories' ? 'kb-categories'
-        : activeSection === 'organizations' ? 'organizations'
-        : 'content';
-    }
+    const endpoint = 'content';
 
     try {
       const response = await fetch(`${API_URL}/${endpoint}/${itemToDelete.id}`, {
@@ -433,7 +448,7 @@ function App() {
     }
   };
 
-  const handleEditItem = (item: any, type: 'summaries' | 'executive-iq' | 'organizations' | 'performance' | 'knowledge-base' | 'kb-categories') => {
+  const handleEditItem = (item: any, type: 'content') => {
     // Warn if editing published content
     if (item.status === 'published') {
       setItemToEdit(item);
@@ -604,7 +619,7 @@ function App() {
 
       let sourceData;
       
-      // For announcements, always use the announcement template
+      // Announcements use a specific template
       if (contentCreationType === 'announcement') {
         try {
           const response = await fetch(`${API_URL}/templates/announcement-template`);
@@ -694,6 +709,7 @@ function App() {
                    : contentCreationType === 'organization' ? 'organization'
                    : contentCreationType === 'initiative' ? 'initiative'
                    : contentCreationType === 'announcement' ? 'announcement'
+                   : contentCreationType === 'vendor' ? 'vendor'
                    : selectedTag, // Timeline uses selected tag
         _fileExists: false // Mark as new - file will be created on first save
       };
@@ -730,15 +746,7 @@ function App() {
     }
   };
 
-  const navigationItems = [
-    { id: 'summaries' as Section, label: 'Weekly Summaries', icon: FileText },
-    { id: 'executive-iq' as Section, label: 'Executive IQ', icon: Lightbulb },
-    { id: 'organizations' as Section, label: 'Organizations', icon: Building2 },
-    { id: 'performance' as Section, label: 'Performance', icon: TrendingUp },
-    { id: 'knowledge-base' as Section, label: 'Knowledge Base', icon: BookOpen },
-    { id: 'kb-categories' as Section, label: 'KB Categories', icon: FolderOpen },
-    { id: 'import' as Section, label: 'Import Data', icon: Upload },
-  ];
+  // Navigation items removed - now using Notes system with dynamic content tags
 
   const renderContent = () => {
     if (activeSection === 'import') {
@@ -762,62 +770,6 @@ function App() {
           
           <form onSubmit={handleFileUpload} className="glass-strong rounded-2xl p-8 card-shadow border-2 border-white/20">
             <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3">
-                  Select Data Type
-                </label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setImportType('summaries')}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      importType === 'summaries'
-                        ? 'bg-gradient-to-br from-fis-eggplant to-fis-raspberry border-fis-raspberry text-white'
-                        : 'glass border-white/20 hover:border-fis-eggplant text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    <FileText className="w-6 h-6 mx-auto mb-2" />
-                    <div className="text-sm font-roobert-medium">Summaries</div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setImportType('executive-iq')}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      importType === 'executive-iq'
-                        ? 'bg-gradient-to-br from-fis-eggplant to-fis-raspberry border-fis-raspberry text-white'
-                        : 'glass border-white/20 hover:border-fis-eggplant text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    <Lightbulb className="w-6 h-6 mx-auto mb-2" />
-                    <div className="text-sm font-roobert-medium">ExecutiveIQ</div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setImportType('organizations')}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      importType === 'organizations'
-                        ? 'bg-gradient-to-br from-fis-eggplant to-fis-raspberry border-fis-raspberry text-white'
-                        : 'glass border-white/20 hover:border-fis-eggplant text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    <Building2 className="w-6 h-6 mx-auto mb-2" />
-                    <div className="text-sm font-roobert-medium">Organizations</div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setImportType('performance')}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      importType === 'performance'
-                        ? 'bg-gradient-to-br from-fis-eggplant to-fis-raspberry border-fis-raspberry text-white'
-                        : 'glass border-white/20 hover:border-fis-eggplant text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    <TrendingUp className="w-6 h-6 mx-auto mb-2" />
-                    <div className="text-sm font-roobert-medium">Performance</div>
-                  </button>
-                </div>
-              </div>
-              
               <div>
                 <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3">
                   Upload JSON File
@@ -870,10 +822,10 @@ function App() {
       );
     }
 
-    // Filter content by active tag
+    // Filter content by active tag AND exclude vendors from main view
     let items: any[] = activeTagFilter 
       ? allContent.filter(item => item._contentTag === activeTagFilter)
-      : allContent;
+      : allContent.filter(item => item._contentTag !== 'vendor');
 
     return (
       <>
@@ -1276,6 +1228,134 @@ function App() {
             </div>
           </div>
         )}
+
+        {/* Vendors Section - Hero Card Display */}
+        {!activeTagFilter && viewMode === 'grid' && (() => {
+          const vendorItems = allContent.filter(item => item._contentTag === 'vendor');
+          if (vendorItems.length === 0) return null;
+          
+          return (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mt-12"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+                  Vendor Partners
+                </h2>
+                <button
+                  onClick={() => {
+                    setContentCreationType('vendor');
+                    setShowNewSummaryModal(true);
+                  }}
+                  className="px-4 py-2 rounded-lg bg-fis-navy/10 hover:bg-fis-navy/20 text-fis-navy dark:text-blue-400 transition-all flex items-center gap-2 font-roobert-semibold text-sm"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Vendor
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {vendorItems.map((vendor, index) => {
+                  const heroData = vendor.vendorHero || {};
+                  const statusColor = heroData.healthStatus === 'On Track' ? 'green'
+                    : heroData.healthStatus === 'At Risk' ? 'yellow'
+                    : 'red';
+
+                  return (
+                    <motion.div
+                      key={vendor.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      whileHover={{ scale: 1.05, y: -8 }}
+                      onClick={() => handleEditItem(vendor, 'content')}
+                      className="relative overflow-hidden rounded-2xl cursor-pointer group"
+                      style={{ height: '320px' }}
+                    >
+                      {/* Hero Background with Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-fis-navy via-fis-eggplant to-fis-raspberry">
+                        {heroData.vendorLogo && (
+                          <img 
+                            src={heroData.vendorLogo} 
+                            alt={heroData.vendorName}
+                            className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity"
+                          />
+                        )}
+                      </div>
+
+                      {/* Dark Gradient Overlay for Text Readability */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
+                      {/* Content */}
+                      <div className="relative h-full p-6 flex flex-col justify-between text-white">
+                        {/* Top: Status Badge */}
+                        <div className="flex justify-end">
+                          <span className={`px-3 py-1 rounded-full text-xs font-roobert-semibold ${
+                            statusColor === 'green' ? 'bg-green-500/90' 
+                            : statusColor === 'yellow' ? 'bg-yellow-500/90'
+                            : 'bg-red-500/90'
+                          }`}>
+                            {heroData.healthStatus || 'Unknown'}
+                          </span>
+                        </div>
+
+                        {/* Middle: Vendor Info */}
+                        <div className="text-center">
+                          <h3 className="text-2xl font-roobert-heavy mb-2">
+                            {heroData.vendorName || vendor.title}
+                          </h3>
+                          {heroData.vendorTagline && (
+                            <p className="text-sm text-white/80 font-roobert-light">
+                              {heroData.vendorTagline}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Bottom: Key Metrics */}
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                            <div className="text-2xl font-roobert-bold">
+                              {heroData.activeProjects || 0}
+                            </div>
+                            <div className="text-xs text-white/70 font-roobert-medium">
+                              Active
+                            </div>
+                          </div>
+                          <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                            <div className="text-lg font-roobert-bold">
+                              {vendor.status === 'published' ? '🟢' : '⚪'}
+                            </div>
+                            <div className="text-xs text-white/70 font-roobert-medium">
+                              Status
+                            </div>
+                          </div>
+                          <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                            <div className="text-sm font-roobert-bold truncate">
+                              {heroData.totalBudget || '$0'}
+                            </div>
+                            <div className="text-xs text-white/70 font-roobert-medium">
+                              Budget
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Hover Effect: View Details */}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <span className="text-white font-roobert-semibold text-lg flex items-center gap-2">
+                            View Details <ChevronRight className="w-5 h-5" />
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          );
+        })()}
       </>
     );
   };
@@ -1293,12 +1373,12 @@ function App() {
                 onOpenAssetReference={() => setShowAssetReference(true)}
                 onOpenStyleScheme={() => setShowStyleScheme(true)}
                 onOpenSystemSettings={() => setShowSystemSettings(true)}
+                onOpenDataSources={() => setShowDataSources(true)}
                 onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
                 onOpenOrgIQ={() => setShowOrgIQ(true)}
                 onOpenPlatformOverview={() => setShowPlatformOverview(true)}
                 onOpenComments={() => setShowComments(true)}
                 onOpenGoals={() => setShowGoals(true)}
-                onOpenNotes={() => setShowNotes(true)}
               />
           
               {/* Notification */}
@@ -1386,11 +1466,7 @@ function App() {
                       setActiveSection('import');
                       setActiveTagFilter('');
                     }}
-                    className={`px-4 py-2 rounded-lg transition-all font-roobert-semibold text-sm ${
-                      activeSection === 'import'
-                        ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white shadow-lg'
-                        : 'bg-white/50 dark:bg-white/10 hover:bg-white/70 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200'
-                    }`}
+                    className="px-4 py-2 rounded-lg bg-white/50 dark:bg-white/10 hover:bg-white/70 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 transition-all font-roobert-semibold text-sm"
                   >
                     Import
                   </button>
@@ -1539,6 +1615,22 @@ function App() {
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 dark:bg-blue-400" />
                       )}
                     </button>
+                    <button
+                      onClick={() => {
+                        setContentCreationType('vendor');
+                        setSelectedTag('vendor'); // Auto-tag as 'vendor'
+                      }}
+                      className={`px-3 py-2 font-roobert-semibold text-xs transition-all relative whitespace-nowrap ${
+                        contentCreationType === 'vendor'
+                          ? 'text-fis-navy dark:text-blue-400'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                      }`}
+                    >
+                      Vendor
+                      {contentCreationType === 'vendor' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-fis-navy dark:bg-blue-400" />
+                      )}
+                    </button>
                   </div>
 
                   <div className="space-y-4">
@@ -1612,6 +1704,13 @@ function App() {
                         <div className="px-4 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 text-gray-900 dark:text-white flex items-center justify-between">
                           <span className="font-roobert-medium">Announcement</span>
                           <span className="text-xs text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/40 px-2 py-1 rounded-md">Auto-assigned</span>
+                        </div>
+                      )}
+
+                      {contentCreationType === 'vendor' && (
+                        <div className="px-4 py-3 rounded-lg bg-fis-navy/10 dark:bg-blue-900/20 border-2 border-fis-navy/20 dark:border-blue-800 text-gray-900 dark:text-white flex items-center justify-between">
+                          <span className="font-roobert-medium">Vendor</span>
+                          <span className="text-xs text-fis-navy dark:text-blue-400 bg-fis-navy/10 dark:bg-blue-900/40 px-2 py-1 rounded-md">Auto-assigned</span>
                         </div>
                       )}
                     </div>
@@ -1768,13 +1867,13 @@ function App() {
                         onKeyDown={(e) => e.key === 'Enter' && handleCreateNewSummary()}
                         placeholder="e.g., Demo Services Group - Weekly Update"
                         className={`w-full px-4 py-3 rounded-lg border-2 bg-white dark:bg-gray-700 focus:border-fis-raspberry outline-none transition-all text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
-                          newSummaryName.trim() && summaries.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase())
+                          newSummaryName.trim() && allContent.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase())
                             ? 'border-red-500 dark:border-red-400'
                             : 'border-gray-200 dark:border-gray-600'
                         }`}
                         autoFocus
                       />
-                      {newSummaryName.trim() && summaries.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase()) && (
+                      {newSummaryName.trim() && allContent.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase()) && (
                         <p className="text-xs text-red-600 dark:text-red-400 mt-1">
                           A summary with this name already exists
                         </p>
@@ -1789,7 +1888,7 @@ function App() {
                           (creationMode === 'clone' && !selectedSourceId) || 
                           (contentCreationType === 'organization' && !selectedOrgSlug) ||
                           (contentCreationType === 'initiative' && !selectedInitiativeSlug) ||
-                          summaries.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase())
+                          allContent.some(s => s.title.toLowerCase() === newSummaryName.trim().toLowerCase())
                         }
                         className="flex-1 px-6 py-3 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -1887,6 +1986,14 @@ function App() {
             </div>
           )}
 
+          {/* Data Sources Manager */}
+          {showDataSources && (
+            <DataSourcesManager
+              onClose={() => setShowDataSources(false)}
+              showNotification={showNotification}
+            />
+          )}
+
           {/* Goals Manager */}
           {showGoals && (
             <GoalsManager
@@ -1901,17 +2008,27 @@ function App() {
             <PlatformOverview onClose={() => setShowPlatformOverview(false)} />
           )}
 
-          {/* Notes Manager */}
-          {showNotes && (
-            <NotesManager 
+          {/* Timeline Notes Manager */}
+          {showTimelineNotes && (
+            <TimelineNotesManager
               onClose={() => {
-                setShowNotes(false);
-                setAutoOpenNoteModal(false);
-                setAutoOpenSectionModal(false);
-              }} 
+                setShowTimelineNotes(false);
+                setAutoOpenAddNote(false);
+              }}
               showNotification={showNotification}
-              autoOpenNote={autoOpenNoteModal}
-              autoOpenSection={autoOpenSectionModal}
+              autoOpenAddModal={autoOpenAddNote}
+            />
+          )}
+
+          {/* Task Editor Modal */}
+          {showTaskModal && (
+            <TaskEditorModal
+              task={editingTask}
+              onSave={handleTaskSave}
+              onClose={() => {
+                setShowTaskModal(false);
+                setEditingTask(undefined);
+              }}
             />
           )}
 
@@ -1927,11 +2044,31 @@ function App() {
 
           {/* Quick Actions Menu */}
           <QuickActionsMenu
-            onNewNote={handleQuickNewNote}
-            onNewSection={handleQuickNewSection}
+            onNewNote={() => {
+              setAutoOpenAddNote(true);
+              setShowTimelineNotes(true);
+            }}
             onQuickClone={handleQuickClone}
             onNewContent={handleQuickNewContent}
+            onTimelineNotes={() => setShowTimelineNotes(true)}
+            onNewTask={() => {
+              setShowTaskModal(true);
+              setEditingTask(undefined);
+            }}
+            onAllTasks={() => setShowAllTasksModal(true)}
           />
+
+          {/* All Tasks Modal */}
+          {showAllTasksModal && (
+            <AllTasksModal
+              onClose={() => setShowAllTasksModal(false)}
+              onEditTask={(task) => {
+                setEditingTask(task);
+                setShowTaskModal(true);
+                setShowAllTasksModal(false);
+              }}
+            />
+          )}
 
           {/* Delete Confirmation Modal */}
           {showDeleteModal && (
@@ -1976,14 +2113,6 @@ function App() {
               </motion.div>
             </div>
           )}
-
-          {/* Quick Actions Menu */}
-          <QuickActionsMenu
-            onNewNote={handleQuickNewNote}
-            onNewSection={handleQuickNewSection}
-            onQuickClone={handleQuickClone}
-            onNewContent={handleQuickNewContent}
-          />
 
           {/* Edit Warning Modal */}
           {showEditWarningModal && (
@@ -2031,11 +2160,11 @@ function App() {
               </motion.div>
             </div>
           )}
-            </div>
-          </ProtectedRoute>
-        </PresentationProvider>
-      </AuthProvider>
-    </ThemeProvider>
+        </div>
+      </ProtectedRoute>
+    </PresentationProvider>
+  </AuthProvider>
+</ThemeProvider>
   );
 }
 

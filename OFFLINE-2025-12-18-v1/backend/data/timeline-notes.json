@@ -1,0 +1,74 @@
+{
+  "notes": [
+    {
+      "id": "note-1765819155265",
+      "title": "Embedded Finance : Coast Renewal",
+      "content": "James (Coast) and Melissa.K (FIS) meeting dicussing the January 2026 Renewal of the EF Workspace in Coast . 56K and its \"approved\"",
+      "date": "2025-12-15",
+      "category": "expansion-ops",
+      "tags": [
+        "expansion-ops",
+        "high-value-deals"
+      ],
+      "createdAt": "2025-12-15T17:19:15.265Z",
+      "updatedAt": "2025-12-16T23:45:34.960Z",
+      "tag": "tag-1765871299139-hexs02v4s"
+    },
+    {
+      "id": "note-1765824389614",
+      "title": "Note System : Exec Summary",
+      "content": "Working on the Executive Summary Platform - implementing the Notes with AI funtionality. whilst also updating the Notes timeline feature for simple viewing of day to day notes!",
+      "date": "2025-12-15",
+      "category": "platform-integration",
+      "tags": [
+        "process-automation",
+        "product-intelligence"
+      ],
+      "createdAt": "2025-12-15T18:46:29.614Z",
+      "updatedAt": "2025-12-16T23:48:43.622Z",
+      "tag": "tag-1765928918627-vslgkphi8"
+    },
+    {
+      "id": "note-1765833301550",
+      "title": "Coast MSA Renewal",
+      "content": "The Coast MSA renewal in January 2026 - we need to talk with the heads of each Business to confirm that they have received approval or are pending approval for 2026 renewal budget. Identify gaps or overages in budgets and sync back with Robert and Mario.",
+      "date": "2025-12-15",
+      "category": "critical-blocker",
+      "tags": [
+        "revenue-at-risk",
+        "capacity-planning"
+      ],
+      "createdAt": "2025-12-15T21:15:01.550Z",
+      "updatedAt": "2025-12-16T23:47:38.207Z",
+      "tag": "tag-1765871299139-hexs02v4s"
+    },
+    {
+      "id": "note-1765927049907",
+      "title": "(NA) Banking Interlock",
+      "content": "Really positive feedback from Richard Chapman on the Tiled / Synthesia / Coast initiative and current progress of adoption within banking. Pushing forward with Planning or SKO.",
+      "date": "2025-12-16",
+      "category": "sales-enablement",
+      "tags": [
+        "strategic-milestone",
+        "sales-enablement"
+      ],
+      "tag": "tag-1765927041901-3er6laubc",
+      "createdAt": "2025-12-16T23:17:29.907Z",
+      "updatedAt": "2025-12-16T23:49:05.902Z"
+    },
+    {
+      "id": "note-1765927207490",
+      "title": "TSYS Coast Integration",
+      "content": "Discussion with Jordan on TSYS and their TSA renewal, which we believe is in 2027. Ideally, we should be looking to migrate their Demo Assets into FIS Coast Workspace.",
+      "date": "2025-12-16",
+      "category": "platform-integration",
+      "tags": [
+        "data-operations",
+        "platform-integration"
+      ],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2025-12-16T23:20:07.490Z",
+      "updatedAt": "2025-12-16T23:49:36.988Z"
+    }
+  ]
+}

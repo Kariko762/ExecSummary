@@ -15,6 +15,7 @@ export type RenderType =
   | 'dateRange'         // Timeline/date picker
   | 'statusBadge'       // Dropdown with badge preview
   | 'progressBar'       // Number with visual bar
+  | 'gauge'             // Single metric gauge (hero banners)
   | 'pieChart'          // Pie chart visualization
   | 'barChart'          // Bar chart visualization
   | 'lineChart'         // Line chart visualization
@@ -29,7 +30,8 @@ export type RenderType =
   | 'embeddedVideo'     // Embedded video URL
   | 'statusBoard'       // Table layout
   | 'orgChart'          // Organizational chart with hierarchy
-  | 'executiveSynthesis'; // Executive synthesis (Context/Problem/Solution/Recommendation/Asks)
+  | 'executiveSynthesis' // Executive synthesis (Context/Problem/Solution/Recommendation/Asks)
+  | 'vendorAsset';      // Vendor strategic identity with problems/capabilities/wins
 
 export type ValidationRule = {
   rule: 'required' | 'min' | 'max' | 'minItems' | 'maxItems' | 'pattern' | 'email' | 'url' | 'custom';

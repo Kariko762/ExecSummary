@@ -1,0 +1,105 @@
+{
+  "overlayId": "demo-activity-2025-q4",
+  "overlayName": "Demo Activity November 2025",
+  "description": "Product demonstrations conducted this month",
+  "dataType": "sales-metrics",
+  "createdDate": "2025-12-03T10:30:00Z",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  
+  "visualizationConfig": {
+    "title": "Demo Activity",
+    "icon": "Presentation",
+    "primaryColor": "green",
+    "hotspotEnabled": true,
+    "hotspotMetric": "demoCount",
+    "hotspotLabel": "Demos Delivered",
+    "hotspotRanges": [
+      { "min": 0, "max": 3, "color": "#d1fae5", "label": "Low (0-3)" },
+      { "min": 4, "max": 7, "color": "#a7f3d0", "label": "Medium (4-7)" },
+      { "min": 8, "max": 12, "color": "#6ee7b7", "label": "High (8-12)" },
+      { "min": 13, "max": 999999, "color": "#34d399", "label": "Very High (13+)" }
+    ],
+    "aggregateMetrics": [
+      {
+        "id": "totalDemos",
+        "label": "Total Demos",
+        "calculation": "sum",
+        "field": "demoCount",
+        "format": "number"
+      },
+      {
+        "id": "conversionRate",
+        "label": "Avg Conversion",
+        "calculation": "average",
+        "field": "conversionRate",
+        "format": "percentage"
+      },
+      {
+        "id": "totalLeads",
+        "label": "Leads Generated",
+        "calculation": "sum",
+        "field": "leadsGenerated",
+        "format": "number"
+      }
+    ]
+  },
+  
+  "nodeMetrics": [
+    {
+      "nodeId": "1",
+      "demoCount": 12,
+      "conversionRate": 45,
+      "leadsGenerated": 18,
+      "avgDemoDuration": "45 min",
+      "topProspects": ["Acme Corp", "TechVision Inc", "Global Systems"]
+    },
+    {
+      "nodeId": "2",
+      "demoCount": 5,
+      "conversionRate": 60,
+      "leadsGenerated": 8,
+      "avgDemoDuration": "35 min",
+      "topProspects": ["DataFlow LLC", "Cloud Nine"]
+    },
+    {
+      "nodeId": "3",
+      "demoCount": 7,
+      "conversionRate": 42,
+      "leadsGenerated": 11,
+      "avgDemoDuration": "40 min",
+      "topProspects": ["Enterprise Solutions", "Mega Corp"]
+    },
+    {
+      "nodeId": "4",
+      "demoCount": 2,
+      "conversionRate": 50,
+      "leadsGenerated": 3,
+      "avgDemoDuration": "30 min",
+      "topProspects": ["StartUp Inc"]
+    },
+    {
+      "nodeId": "5",
+      "demoCount": 4,
+      "conversionRate": 75,
+      "leadsGenerated": 6,
+      "avgDemoDuration": "50 min",
+      "topProspects": ["API Partners", "DevOps Co"]
+    },
+    {
+      "nodeId": "6",
+      "demoCount": 1,
+      "conversionRate": 100,
+      "leadsGenerated": 2,
+      "avgDemoDuration": "25 min",
+      "topProspects": ["Tech Startup"]
+    },
+    {
+      "nodeId": "7",
+      "demoCount": 3,
+      "conversionRate": 33,
+      "leadsGenerated": 4,
+      "avgDemoDuration": "38 min",
+      "topProspects": ["Platform Users"]
+    }
+  ]
+}

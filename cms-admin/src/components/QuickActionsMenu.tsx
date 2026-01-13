@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Zap, ChevronRight, StickyNote, Plus, Folder, FolderOpen, Tag,
-  TrendingUp, Copy, FileText, Lightbulb, Rocket
+  TrendingUp, Copy, FileText, Lightbulb, Rocket, Calendar, Building2, ClipboardList
 } from 'lucide-react';
 
 interface ContentTag {
@@ -22,16 +22,22 @@ interface ContentTag {
 
 interface QuickActionsMenuProps {
   onNewNote: () => void;
-  onNewSection: () => void;
+  onNewSection?: () => void;
   onQuickClone: (tagId: string, tagName: string) => void;
-  onNewContent: (type: 'timeline' | 'announcement' | 'organization') => void;
+  onNewContent: (type: 'timeline' | 'announcement' | 'organization' | 'vendor') => void;
+  onTimelineNotes?: () => void;
+  onNewTask?: () => void;
+  onAllTasks?: () => void;
 }
 
 export default function QuickActionsMenu({
   onNewNote,
   onNewSection,
   onQuickClone,
-  onNewContent
+  onNewContent,
+  onTimelineNotes,
+  onNewTask,
+  onAllTasks
 }: QuickActionsMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [quickCloneTags, setQuickCloneTags] = useState<ContentTag[]>([]);
@@ -158,22 +164,110 @@ export default function QuickActionsMenu({
                       </div>
                     </button>
 
+                    {onTimelineNotes && (
+                      <button
+                        onClick={() => {
+                          onTimelineNotes();
+                          setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all text-left group"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                            Timeline Notes
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">
+                            View notes by date
+                          </div>
+                        </div>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Tasks Section */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3 px-2">
+                    <ClipboardList className="w-4 h-4 text-blue-500" />
+                    <h3 className="text-sm font-roobert-bold text-gray-900 dark:text-white uppercase tracking-wider">
+                      Tasks
+                    </h3>
+                  </div>
+                  <div className="space-y-2">
+                    {onNewTask && (
+                      <button
+                        onClick={() => {
+                          onNewTask();
+                          setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all text-left group"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                            New Task
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">
+                            Create a new task
+                          </div>
+                        </div>
+                      </button>
+                    )}
+
+                    {onAllTasks && (
+                      <button
+                        onClick={() => {
+                          onAllTasks();
+                          setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all text-left group"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <ClipboardList className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                            All Tasks
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">
+                            View and manage all tasks
+                          </div>
+                        </div>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Content Creation Section */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3 px-2">
+                    <Folder className="w-4 h-4 text-purple-500" />
+                    <h3 className="text-sm font-roobert-bold text-gray-900 dark:text-white uppercase tracking-wider">
+                      Content Creation
+                    </h3>
+                  </div>
+                  <div className="space-y-2">
                     <button
                       onClick={() => {
-                        onNewSection();
+                        onNewContent('vendor');
                         setIsOpen(false);
                       }}
-                      className="w-full flex items-center gap-3 p-3 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 hover:bg-yellow-100 dark:hover:bg-yellow-900/30 transition-all text-left group"
+                      className="w-full flex items-center gap-3 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-all text-left group"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <Folder className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+                      <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Building2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div className="flex-1">
                         <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
-                          New Section
+                          New Vendor
                         </div>
                         <div className="text-xs text-gray-600 dark:text-gray-400">
-                          Create weekly/monthly report
+                          Create a new vendor partner
                         </div>
                       </div>
                     </button>

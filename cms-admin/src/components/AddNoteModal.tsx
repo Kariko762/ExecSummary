@@ -41,9 +41,11 @@ interface AddNoteModalProps {
   organizations?: Array<{ id: string; name: string; slug: string }>;
   initiatives?: Array<{ id: string; name: string; slug: string }>;
   goals?: Array<{ id: string; title: string; slug: string }>;
+  categoryConfig?: any; // Dynamic category config from parent
 }
 
-const CATEGORY_CONFIG = {
+// Default fallback categories (used if not provided)
+const DEFAULT_CATEGORY_CONFIG = {
   'key-highlight': { label: 'Key Highlight', icon: Star, color: 'text-yellow-500', bg: 'bg-yellow-50' },
   'goal-progression': { label: 'Goal Progression', icon: Target, color: 'text-blue-500', bg: 'bg-blue-50' },
   'big-win': { label: 'Big Win', icon: Trophy, color: 'text-green-500', bg: 'bg-green-50' },
@@ -60,7 +62,8 @@ export default function AddNoteModal({
   sections,
   organizations = [],
   initiatives = [],
-  goals = []
+  goals = [],
+  categoryConfig = DEFAULT_CATEGORY_CONFIG
 }: AddNoteModalProps) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -238,7 +241,7 @@ export default function AddNoteModal({
               Category
             </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {Object.entries(CATEGORY_CONFIG).map(([key, config]) => {
+              {Object.entries(categoryConfig).map(([key, config]) => {
                 const Icon = config.icon;
                 const isSelected = category === key;
                 

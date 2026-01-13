@@ -1,0 +1,2224 @@
+{
+  "productId": "financial-services-company",
+  "productName": "Financial Services Company",
+  "description": "Product and business unit organizational structure",
+  "lastUpdated": "2025-12-03T21:17:16Z",
+  "organizationStructure": [
+    {
+      "id": "root",
+      "parentId": null,
+      "name": "COMPANY",
+      "title": "Financial Services",
+      "department": "Corporate",
+      "productRole": "Parent Organization"
+    },
+    {
+      "id": "node-1",
+      "parentId": "root",
+      "name": "BANKING SOLUTIONS",
+      "title": "Banking Solutions",
+      "department": "Corporate",
+      "productRole": "Business Unit"
+    },
+    {
+      "id": "node-2",
+      "parentId": "node-1",
+      "name": "BANKING SOLUTIONS ADMIN",
+      "title": "Banking Solutions Admin",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-3",
+      "parentId": "node-2",
+      "name": "BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "title": "Banking Solutions Admin Adjustments",
+      "department": "node-2",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-4",
+      "parentId": "node-2",
+      "name": "BANKING SOLUTIONS LEVERAGED SERVICES",
+      "title": "Banking Solutions Leveraged Services",
+      "department": "node-2",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-5",
+      "parentId": "node-1",
+      "name": "CARDS AND MONEY MOVEMENT",
+      "title": "Cards and Money Movement",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-6",
+      "parentId": "node-5",
+      "name": "ISSUING",
+      "title": "Issuing",
+      "department": "node-5",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-7",
+      "parentId": "node-6",
+      "name": "CARD PRODUCTION",
+      "title": "Card Production",
+      "department": "node-6",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-8",
+      "parentId": "node-6",
+      "name": "CREDIT PROCESSING",
+      "title": "Credit Processing",
+      "department": "node-6",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-9",
+      "parentId": "node-6",
+      "name": "DEBIT PROCESSING",
+      "title": "Debit Processing",
+      "department": "node-6",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-10",
+      "parentId": "node-9",
+      "name": "BROWN DEER DEBIT PROCESSING",
+      "title": "Brown Deer Debit Processing",
+      "department": "node-9",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-11",
+      "parentId": "node-9",
+      "name": "NEW BERLIN DEBIT PROCESSING",
+      "title": "New Berlin Debit Processing",
+      "department": "node-9",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-12",
+      "parentId": "node-9",
+      "name": "NORCROSS DEBIT PROCESSING",
+      "title": "Norcross Debit Processing",
+      "department": "node-9",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-13",
+      "parentId": "node-9",
+      "name": "PTS DEBIT PROCESSING",
+      "title": "PTS Debit Processing",
+      "department": "node-9",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-14",
+      "parentId": "node-9",
+      "name": "PAYMENTS SOFTWARE AND SAAS",
+      "title": "Payments Software and SaaS",
+      "department": "node-9",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-15",
+      "parentId": "node-9",
+      "name": "ST PETE DEBIT PROCESSING",
+      "title": "St Pete Debit Processing",
+      "department": "node-9",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-16",
+      "parentId": "node-6",
+      "name": "VALUE ADDED SERVICES",
+      "title": "Value Added Services",
+      "department": "node-6",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-17",
+      "parentId": "node-16",
+      "name": "CARD FRAUD",
+      "title": "Card Fraud",
+      "department": "node-16",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-18",
+      "parentId": "node-17",
+      "name": "DEPOSIT FRAUD AND COMPLIANCE",
+      "title": "Deposit Fraud and Compliance",
+      "department": "node-17",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-19",
+      "parentId": "node-16",
+      "name": "CHARGEBACKS",
+      "title": "Chargebacks",
+      "department": "node-16",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-20",
+      "parentId": "node-19",
+      "name": "CREDIT CHARGEBACKS",
+      "title": "Credit Chargebacks",
+      "department": "node-19",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-21",
+      "parentId": "node-16",
+      "name": "PAYMENTS EDGE",
+      "title": "Payments Edge",
+      "department": "node-16",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-22",
+      "parentId": "node-16",
+      "name": "VALUE ADDED SERVICES - DIGITAL",
+      "title": "Value Added Services - Digital",
+      "department": "node-16",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-23",
+      "parentId": "node-22",
+      "name": "EZ",
+      "title": "eZ",
+      "department": "node-22",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-24",
+      "parentId": "node-16",
+      "name": "VALUE ADDED SERVICES OTS AND CBK",
+      "title": "Value Added Services OTS and CBK",
+      "department": "node-16",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-25",
+      "parentId": "node-5",
+      "name": "MONEY MOVEMENT AND EMBEDDED FINANCE",
+      "title": "Money Movement and Embedded Finance",
+      "department": "node-5",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-26",
+      "parentId": "node-25",
+      "name": "EMBEDDED FINANCE",
+      "title": "Embedded Finance",
+      "department": "node-25",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-27",
+      "parentId": "node-25",
+      "name": "MONEY MOVEMENT AND RETAIL SOLUTIONS",
+      "title": "Money Movement and Retail Solutions",
+      "department": "node-25",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-28",
+      "parentId": "node-27",
+      "name": "BUSINESS-TO-BUSINESS - ADMIN",
+      "title": "Business-to-Business - Admin",
+      "department": "node-27",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-29",
+      "parentId": "node-27",
+      "name": "ENTERPRISE PAYMENTS COMMERCIAL",
+      "title": "Enterprise Payments Commercial",
+      "department": "node-27",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-30",
+      "parentId": "node-27",
+      "name": "ENTERPRISE PAYMENTS HOSTED",
+      "title": "Enterprise Payments Hosted",
+      "department": "node-27",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-31",
+      "parentId": "node-30",
+      "name": "ACH",
+      "title": "ACH",
+      "department": "node-30",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-32",
+      "parentId": "node-30",
+      "name": "COMMERCIAL TREASURY",
+      "title": "Commercial Treasury",
+      "department": "node-30",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-33",
+      "parentId": "node-30",
+      "name": "REAL TIME PAYMENTS B2B",
+      "title": "Real Time Payments B2B",
+      "department": "node-30",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-34",
+      "parentId": "node-27",
+      "name": "RETAIL SOLUTIONS",
+      "title": "Retail Solutions",
+      "department": "node-27",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-35",
+      "parentId": "node-34",
+      "name": "BILL PAY",
+      "title": "Bill Pay",
+      "department": "node-34",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-36",
+      "parentId": "node-5",
+      "name": "PAYMENTS NETWORK",
+      "title": "Payments Network",
+      "department": "node-5",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-37",
+      "parentId": "node-36",
+      "name": "LOYALTY",
+      "title": "Loyalty",
+      "department": "node-36",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-38",
+      "parentId": "node-36",
+      "name": "NETWORK SERVICES",
+      "title": "Network Services",
+      "department": "node-36",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-39",
+      "parentId": "node-38",
+      "name": "NYCE",
+      "title": "NYCE",
+      "department": "node-38",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-40",
+      "parentId": "node-38",
+      "name": "TSI AFFN",
+      "title": "TSI AFFN",
+      "department": "node-38",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-41",
+      "parentId": "node-36",
+      "name": "PREPAID",
+      "title": "Prepaid",
+      "department": "node-36",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-42",
+      "parentId": "node-41",
+      "name": "PREPAID NORTH",
+      "title": "Prepaid North",
+      "department": "node-41",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-43",
+      "parentId": "node-41",
+      "name": "PREPAID SUNRISE",
+      "title": "Prepaid Sunrise",
+      "department": "node-41",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-44",
+      "parentId": "node-1",
+      "name": "COMMERCIAL SERVICES AND BPAAS",
+      "title": "Commercial Services and BPaaS",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-45",
+      "parentId": "node-44",
+      "name": "BOTS",
+      "title": "BOTS",
+      "department": "node-44",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-46",
+      "parentId": "node-45",
+      "name": "BACK OFFICE SERVICES",
+      "title": "Back Office Services",
+      "department": "node-45",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-47",
+      "parentId": "node-46",
+      "name": "APP SERVICES",
+      "title": "App Services",
+      "department": "node-46",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-48",
+      "parentId": "node-46",
+      "name": "BANKING BACK OFFICE",
+      "title": "Banking Back Office",
+      "department": "node-46",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-49",
+      "parentId": "node-48",
+      "name": "BANKING BPM",
+      "title": "Banking BPM",
+      "department": "node-48",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-50",
+      "parentId": "node-48",
+      "name": "COLLECTIONS",
+      "title": "Collections",
+      "department": "node-48",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-51",
+      "parentId": "node-46",
+      "name": "PAYMENT PBPM",
+      "title": "Payment PBPM",
+      "department": "node-46",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-52",
+      "parentId": "node-51",
+      "name": "PAYMENTS BPM FI",
+      "title": "Payments BPM FI",
+      "department": "node-51",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-53",
+      "parentId": "node-51",
+      "name": "PAYMENTS BPM NFI",
+      "title": "Payments BPM NFI",
+      "department": "node-51",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-54",
+      "parentId": "node-46",
+      "name": "WORKFORCE TECH SOLUTIONS",
+      "title": "Workforce Tech Solutions",
+      "department": "node-46",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-55",
+      "parentId": "node-54",
+      "name": "BANKING BPM - VRU",
+      "title": "Banking BPM - VRU",
+      "department": "node-54",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-56",
+      "parentId": "node-45",
+      "name": "MANAGED SOLUTIONS",
+      "title": "Managed Solutions",
+      "department": "node-45",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-57",
+      "parentId": "node-44",
+      "name": "IMAGE AND REMITTANCE PROCESSING",
+      "title": "Image and Remittance Processing",
+      "department": "node-44",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-58",
+      "parentId": "node-57",
+      "name": "FIS CONTENT MANAGEMENT",
+      "title": "FIS Content Management",
+      "department": "node-57",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-59",
+      "parentId": "node-57",
+      "name": "ITEM PROCESSING - OUTSOURCING",
+      "title": "Item Processing - Outsourcing",
+      "department": "node-57",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-60",
+      "parentId": "node-59",
+      "name": "ITEM PROCESSING - SOFTWARE",
+      "title": "Item Processing - Software",
+      "department": "node-59",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-61",
+      "parentId": "node-57",
+      "name": "LOCKBOX PROCESSING",
+      "title": "Lockbox Processing",
+      "department": "node-57",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-62",
+      "parentId": "node-61",
+      "name": "REMITTANCE PROCESSING",
+      "title": "Remittance Processing",
+      "department": "node-61",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-63",
+      "parentId": "node-61",
+      "name": "VICOR",
+      "title": "Vicor",
+      "department": "node-61",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-64",
+      "parentId": "node-44",
+      "name": "OUTPUT SOLUTIONS",
+      "title": "Output Solutions",
+      "department": "node-44",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-65",
+      "parentId": "node-64",
+      "name": "PRINT AND MAIL",
+      "title": "Print and Mail",
+      "department": "node-64",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-66",
+      "parentId": "node-1",
+      "name": "CORE BANKING SOLUTIONS",
+      "title": "Core Banking Solutions",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-67",
+      "parentId": "node-66",
+      "name": "COMMUNITY CORES",
+      "title": "Community Cores",
+      "department": "node-66",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-68",
+      "parentId": "node-67",
+      "name": "COMMUNITY HERITAGE",
+      "title": "Community Heritage",
+      "department": "node-67",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-69",
+      "parentId": "node-68",
+      "name": "BANCPAC",
+      "title": "BancPac",
+      "department": "node-68",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-70",
+      "parentId": "node-68",
+      "name": "BANKWAY",
+      "title": "Bankway",
+      "department": "node-68",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-71",
+      "parentId": "node-68",
+      "name": "MERCURY",
+      "title": "Mercury",
+      "department": "node-68",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-72",
+      "parentId": "node-67",
+      "name": "COMMUNITY STRATEGIC",
+      "title": "Community Strategic",
+      "department": "node-67",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-73",
+      "parentId": "node-72",
+      "name": "HORIZON",
+      "title": "Horizon",
+      "department": "node-72",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-74",
+      "parentId": "node-72",
+      "name": "SHARED SOLUTIONS",
+      "title": "Shared Solutions",
+      "department": "node-72",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-75",
+      "parentId": "node-66",
+      "name": "CORE BANKING SOLUTIONS ADMIN",
+      "title": "Core Banking Solutions Admin",
+      "department": "node-66",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-76",
+      "parentId": "node-75",
+      "name": "REGIONAL AND COMMUNITY BANKING EXEC ADMIN",
+      "title": "Regional and Community Banking Exec Admin",
+      "department": "node-75",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-77",
+      "parentId": "node-66",
+      "name": "CREDIT UNION CORES",
+      "title": "Credit Union Cores",
+      "department": "node-66",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-78",
+      "parentId": "node-77",
+      "name": "AFFINITYEDGE",
+      "title": "AffinityEdge",
+      "department": "node-77",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-79",
+      "parentId": "node-66",
+      "name": "GLOBAL CORE SOLUTIONS",
+      "title": "Global Core Solutions",
+      "department": "node-66",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-80",
+      "parentId": "node-79",
+      "name": "LFI BANKING SOLUTIONS",
+      "title": "LFI Banking Solutions",
+      "department": "node-79",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-81",
+      "parentId": "node-80",
+      "name": "LFI - LATAM",
+      "title": "LFI - Latam",
+      "department": "node-80",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-82",
+      "parentId": "node-81",
+      "name": "LFI - LATAM OTHER",
+      "title": "LFI - LATAM Other",
+      "department": "node-81",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-83",
+      "parentId": "node-80",
+      "name": "LFI - OTHER - NORTH AMERICA",
+      "title": "LFI - Other - North America",
+      "department": "node-80",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-84",
+      "parentId": "node-83",
+      "name": "TOUCHPOINT - NA",
+      "title": "TouchPoint - NA",
+      "department": "node-83",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-85",
+      "parentId": "node-80",
+      "name": "LFI - PROFILE - NORTH AMERICA",
+      "title": "LFI - Profile - North America",
+      "department": "node-80",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-86",
+      "parentId": "node-85",
+      "name": "PROFILE - NA",
+      "title": "Profile - NA",
+      "department": "node-85",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-87",
+      "parentId": "node-80",
+      "name": "LFI - SYSTEMATICS - NORTH AMERICA",
+      "title": "LFI - Systematics - North America",
+      "department": "node-80",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-88",
+      "parentId": "node-87",
+      "name": "SYSTEMATICS - NA",
+      "title": "Systematics - NA",
+      "department": "node-87",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-89",
+      "parentId": "node-79",
+      "name": "MODERN BANKING PLATFORM",
+      "title": "Modern Banking Platform",
+      "department": "node-79",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-90",
+      "parentId": "node-89",
+      "name": "MBP DOMESTIC",
+      "title": "MBP Domestic",
+      "department": "node-89",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-91",
+      "parentId": "node-90",
+      "name": "MBP CODE CONNECT",
+      "title": "MBP Code Connect",
+      "department": "node-90",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-92",
+      "parentId": "node-90",
+      "name": "MBP CORE",
+      "title": "MBP Core",
+      "department": "node-90",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-93",
+      "parentId": "node-66",
+      "name": "REGIONAL CORES",
+      "title": "Regional Cores",
+      "department": "node-66",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-94",
+      "parentId": "node-93",
+      "name": "IBS",
+      "title": "IBS",
+      "department": "node-93",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-95",
+      "parentId": "node-1",
+      "name": "DIGITAL BUSINESS BANKING",
+      "title": "Digital Business Banking",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-96",
+      "parentId": "node-95",
+      "name": "DIGITAL ONE BUSINESS BANKING",
+      "title": "Digital One Business Banking",
+      "department": "node-95",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-97",
+      "parentId": "node-96",
+      "name": "DIGITAL BUSINESS EBANKING HUB",
+      "title": "Digital Business eBanking Hub",
+      "department": "node-96",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-98",
+      "parentId": "node-1",
+      "name": "DIGITAL RETAIL AND OPEN BANKING",
+      "title": "Digital Retail and Open Banking",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-99",
+      "parentId": "node-98",
+      "name": "DIGITAL ADMIN PRODUCT UX DEV",
+      "title": "Digital Admin Product UX Dev",
+      "department": "node-98",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-100",
+      "parentId": "node-99",
+      "name": "DIGITAL ADMIN",
+      "title": "Digital Admin",
+      "department": "node-99",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-101",
+      "parentId": "node-98",
+      "name": "DIGITAL OPEN BANKING",
+      "title": "Digital Open Banking",
+      "department": "node-98",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-102",
+      "parentId": "node-98",
+      "name": "DIGITAL RETAIL CONSUMER BANKING",
+      "title": "Digital Retail Consumer Banking",
+      "department": "node-98",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-103",
+      "parentId": "node-102",
+      "name": "DIGITAL CONSUMER MOBILE",
+      "title": "Digital Consumer Mobile",
+      "department": "node-102",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-104",
+      "parentId": "node-102",
+      "name": "DIGITAL CONSUMER WEB SERVICES",
+      "title": "Digital Consumer Web Services",
+      "department": "node-102",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-105",
+      "parentId": "node-102",
+      "name": "DIGITAL CONSUMER EBANKING FLEX",
+      "title": "Digital Consumer eBanking Flex",
+      "department": "node-102",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-106",
+      "parentId": "node-98",
+      "name": "DIGITAL RETAIL LFI BANKING",
+      "title": "Digital Retail LFI Banking",
+      "department": "node-98",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-107",
+      "parentId": "node-106",
+      "name": "DIGITAL LFI BANKING",
+      "title": "Digital LFI Banking",
+      "department": "node-106",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-108",
+      "parentId": "node-1",
+      "name": "FINTEL",
+      "title": "Fintel",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-109",
+      "parentId": "node-108",
+      "name": "DATA SOLUTIONS",
+      "title": "Data Solutions",
+      "department": "node-108",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-110",
+      "parentId": "node-108",
+      "name": "DECISION SOLUTIONS",
+      "title": "Decision Solutions",
+      "department": "node-108",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-111",
+      "parentId": "node-1",
+      "name": "PLATFORMS",
+      "title": "Platforms",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-112",
+      "parentId": "node-111",
+      "name": "AUTOMATED FINANCE",
+      "title": "Automated Finance",
+      "department": "node-111",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-113",
+      "parentId": "node-112",
+      "name": "COMMERCIAL SOLUTIONS",
+      "title": "Commercial Solutions",
+      "department": "node-112",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-114",
+      "parentId": "node-113",
+      "name": "PAYABLES SOLUTIONS",
+      "title": "Payables Solutions",
+      "department": "node-113",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-115",
+      "parentId": "node-114",
+      "name": "INTEGRATED PAYABLES",
+      "title": "Integrated Payables",
+      "department": "node-114",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-116",
+      "parentId": "node-113",
+      "name": "RECEIVABLES",
+      "title": "Receivables",
+      "department": "node-113",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-117",
+      "parentId": "node-113",
+      "name": "TRANSMISSION AND BILLING SOLUTIONS",
+      "title": "Transmission and Billing Solutions",
+      "department": "node-113",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-118",
+      "parentId": "node-117",
+      "name": "EXTENDED ACCOUNT ANALYSIS",
+      "title": "Extended Account Analysis",
+      "department": "node-117",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-119",
+      "parentId": "node-1",
+      "name": "RETAIL LENDING AND PARTNERSHIPS",
+      "title": "Retail Lending and Partnerships",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-120",
+      "parentId": "node-119",
+      "name": "PARTNERSHIPS",
+      "title": "Partnerships",
+      "department": "node-119",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-121",
+      "parentId": "node-120",
+      "name": "MBP PARTNERSHIPS",
+      "title": "MBP Partnerships",
+      "department": "node-120",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-122",
+      "parentId": "node-119",
+      "name": "RETAIL LOAN ORIGINATION",
+      "title": "Retail Loan Origination",
+      "department": "node-119",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-123",
+      "parentId": "node-122",
+      "name": "LFI - NORTH AMERICAN LENDING",
+      "title": "LFI - North American Lending",
+      "department": "node-122",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-124",
+      "parentId": "node-123",
+      "name": "NAL 3RD PARTY SOLUTIONS",
+      "title": "NAL 3rd Party Solutions",
+      "department": "node-123",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-125",
+      "parentId": "node-123",
+      "name": "NAL CREDITWORX",
+      "title": "NAL CreditWorx",
+      "department": "node-123",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-126",
+      "parentId": "node-123",
+      "name": "NAL FLO",
+      "title": "NAL FLO",
+      "department": "node-123",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-127",
+      "parentId": "node-123",
+      "name": "NAL INTERNET DIRECT",
+      "title": "NAL Internet Direct",
+      "department": "node-123",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-128",
+      "parentId": "node-123",
+      "name": "NAL ORIGENATE",
+      "title": "NAL Origenate",
+      "department": "node-123",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-129",
+      "parentId": "node-1",
+      "name": "WEALTH RETIREMENT AND INTERNATIONAL",
+      "title": "Wealth Retirement and International",
+      "department": "node-1",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-130",
+      "parentId": "node-129",
+      "name": "INTERNATIONAL BANKING",
+      "title": "International Banking",
+      "department": "node-129",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-131",
+      "parentId": "node-130",
+      "name": "BANKING - APAC AND EMEA",
+      "title": "Banking - APAC and EMEA",
+      "department": "node-130",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-132",
+      "parentId": "node-131",
+      "name": "BANKING - INTL",
+      "title": "Banking - INTL",
+      "department": "node-131",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-133",
+      "parentId": "node-131",
+      "name": "KORDOBA - INTL",
+      "title": "Kordoba - Intl",
+      "department": "node-131",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-134",
+      "parentId": "node-129",
+      "name": "INTERNATIONAL PAYMENTS",
+      "title": "International Payments",
+      "department": "node-129",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-135",
+      "parentId": "node-134",
+      "name": "PAYMENTS - APAC AND EMEA",
+      "title": "Payments - APAC and EMEA",
+      "department": "node-134",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-136",
+      "parentId": "node-135",
+      "name": "CARD SOLUTIONS - INTL",
+      "title": "Card Solutions - Intl",
+      "department": "node-135",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-137",
+      "parentId": "node-135",
+      "name": "OTHER PAYMENTS - INTL",
+      "title": "Other Payments - Intl",
+      "department": "node-135",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-138",
+      "parentId": "node-135",
+      "name": "RETAIL PAYMENTS - INTL",
+      "title": "Retail Payments - Intl",
+      "department": "node-135",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-139",
+      "parentId": "node-134",
+      "name": "PAYMENTS - LATIN AMERICA",
+      "title": "Payments - Latin America",
+      "department": "node-134",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-140",
+      "parentId": "node-139",
+      "name": "CARD SOLUTIONS - LATAM",
+      "title": "Card Solutions - LATAM",
+      "department": "node-139",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-141",
+      "parentId": "node-139",
+      "name": "RETAIL PAYMENTS - LATAM",
+      "title": "Retail Payments - LATAM",
+      "department": "node-139",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-142",
+      "parentId": "node-129",
+      "name": "RETIREMENT",
+      "title": "Retirement",
+      "department": "node-129",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-143",
+      "parentId": "node-142",
+      "name": "RETIREMENT TECH",
+      "title": "Retirement Tech",
+      "department": "node-142",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-144",
+      "parentId": "node-143",
+      "name": "OMNI TECH",
+      "title": "Omni Tech",
+      "department": "node-143",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-145",
+      "parentId": "node-143",
+      "name": "RELIUS TECH",
+      "title": "Relius Tech",
+      "department": "node-143",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-146",
+      "parentId": "node-129",
+      "name": "WEALTH",
+      "title": "Wealth",
+      "department": "node-129",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-147",
+      "parentId": "node-146",
+      "name": "PLATFORM SECURITIES",
+      "title": "Platform Securities",
+      "department": "node-146",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-148",
+      "parentId": "node-146",
+      "name": "RELIANCE TRUST",
+      "title": "Reliance Trust",
+      "department": "node-146",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-149",
+      "parentId": "node-148",
+      "name": "RELIANCE TRUST - RETIREMENT SOLUTIONS",
+      "title": "Reliance Trust - Retirement Solutions",
+      "department": "node-148",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-150",
+      "parentId": "node-146",
+      "name": "WEALTH TECHNOLOGY",
+      "title": "Wealth Technology",
+      "department": "node-146",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-151",
+      "parentId": "node-150",
+      "name": "TRUST",
+      "title": "Trust",
+      "department": "node-150",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-152",
+      "parentId": "node-150",
+      "name": "WEALTH TRUST",
+      "title": "Wealth Trust",
+      "department": "node-150",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-153",
+      "parentId": "node-150",
+      "name": "WEALTHWARE",
+      "title": "WealthWare",
+      "department": "node-150",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-154",
+      "parentId": "node-129",
+      "name": "WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "title": "Wealth Retirement and International Admin",
+      "department": "node-129",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-155",
+      "parentId": "root",
+      "name": "CAPITAL MARKETS",
+      "title": "Capital Markets",
+      "department": "Corporate",
+      "productRole": "Business Unit"
+    },
+    {
+      "id": "node-156",
+      "parentId": "node-155",
+      "name": "CM FINTECH SOLUTIONS",
+      "title": "CM FinTech Solutions",
+      "department": "node-155",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-157",
+      "parentId": "node-156",
+      "name": "CAPITAL MARKETS ADMIN",
+      "title": "Capital Markets Admin",
+      "department": "node-156",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-158",
+      "parentId": "node-157",
+      "name": "CAPITAL MARKETS ADMIN - OPS",
+      "title": "Capital Markets Admin - Ops",
+      "department": "node-157",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-159",
+      "parentId": "node-157",
+      "name": "CAPITAL MARKETS ADMIN - OTHER",
+      "title": "Capital Markets Admin - Other",
+      "department": "node-157",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-160",
+      "parentId": "node-156",
+      "name": "CAPITAL MARKETS VALUE PORTFOLIO",
+      "title": "Capital Markets Value Portfolio",
+      "department": "node-156",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-161",
+      "parentId": "node-160",
+      "name": "CM VALUE IODS",
+      "title": "CM Value IODS",
+      "department": "node-160",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-162",
+      "parentId": "node-161",
+      "name": "INVESTIER",
+      "title": "InvesTier",
+      "department": "node-161",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-163",
+      "parentId": "node-161",
+      "name": "SECURITIES TRANSFER STG",
+      "title": "Securities Transfer STG",
+      "department": "node-161",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-164",
+      "parentId": "node-160",
+      "name": "CM VALUE TP",
+      "title": "CM Value TP",
+      "department": "node-160",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-165",
+      "parentId": "node-164",
+      "name": "CM VALUE PFT",
+      "title": "CM Value PFT",
+      "department": "node-164",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-166",
+      "parentId": "node-165",
+      "name": "INTRADER",
+      "title": "InTrader",
+      "department": "node-165",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-167",
+      "parentId": "node-165",
+      "name": "RIMS",
+      "title": "RIMS",
+      "department": "node-165",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-168",
+      "parentId": "node-164",
+      "name": "CM VALUE TCD",
+      "title": "CM Value TCD",
+      "department": "node-164",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-169",
+      "parentId": "node-168",
+      "name": "LEGACY FRONT",
+      "title": "Legacy Front",
+      "department": "node-168",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-170",
+      "parentId": "node-168",
+      "name": "MARKETMAP - ENERGY",
+      "title": "MarketMap - Energy",
+      "department": "node-168",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-171",
+      "parentId": "node-168",
+      "name": "MARKETMAP SELECT FEED",
+      "title": "MarketMap Select FEED",
+      "department": "node-168",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-172",
+      "parentId": "node-168",
+      "name": "MARKETMAP- ANALYTIC PLATFORM",
+      "title": "MarketMap- Analytic Platform",
+      "department": "node-168",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-173",
+      "parentId": "node-168",
+      "name": "SGN SECURITIES",
+      "title": "SGN Securities",
+      "department": "node-168",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-174",
+      "parentId": "node-160",
+      "name": "CM VALUE TR",
+      "title": "CM Value TR",
+      "department": "node-160",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-175",
+      "parentId": "node-174",
+      "name": "CM VALUE RISK",
+      "title": "CM Value RISK",
+      "department": "node-174",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-176",
+      "parentId": "node-175",
+      "name": "APT",
+      "title": "APT",
+      "department": "node-175",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-177",
+      "parentId": "node-175",
+      "name": "ENERGY",
+      "title": "Energy",
+      "department": "node-175",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-178",
+      "parentId": "node-175",
+      "name": "KIODEX",
+      "title": "Kiodex",
+      "department": "node-175",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-179",
+      "parentId": "node-174",
+      "name": "CM VALUE TREASURY",
+      "title": "CM Value TREASURY",
+      "department": "node-174",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-180",
+      "parentId": "node-179",
+      "name": "CORE ADMIN",
+      "title": "Core Admin",
+      "department": "node-179",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-181",
+      "parentId": "node-179",
+      "name": "INVESTMENTS AND STATUTORY",
+      "title": "Investments and Statutory",
+      "department": "node-179",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-182",
+      "parentId": "node-179",
+      "name": "MAINTENANCE",
+      "title": "Maintenance",
+      "department": "node-179",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-183",
+      "parentId": "node-179",
+      "name": "MESSAGING",
+      "title": "Messaging",
+      "department": "node-179",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-184",
+      "parentId": "node-179",
+      "name": "WORKFLOW",
+      "title": "Workflow",
+      "department": "node-179",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-185",
+      "parentId": "node-156",
+      "name": "LENDING",
+      "title": "Lending",
+      "department": "node-156",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-186",
+      "parentId": "node-185",
+      "name": "ACBS",
+      "title": "ACBS",
+      "department": "node-185",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-187",
+      "parentId": "node-186",
+      "name": "ACBS COMMERCIAL LENDING",
+      "title": "ACBS Commercial Lending",
+      "department": "node-186",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-188",
+      "parentId": "node-186",
+      "name": "ACBS SYNDTRAK",
+      "title": "ACBS SyndTrak",
+      "department": "node-186",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-189",
+      "parentId": "node-185",
+      "name": "AMBIT ASSET FINANCE",
+      "title": "Ambit Asset Finance",
+      "department": "node-185",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-190",
+      "parentId": "node-185",
+      "name": "AMBIT LENDING",
+      "title": "Ambit Lending",
+      "department": "node-185",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-191",
+      "parentId": "node-185",
+      "name": "AUTOFINANCE",
+      "title": "AutoFinance",
+      "department": "node-185",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-192",
+      "parentId": "node-191",
+      "name": "DEFAULT MANAGER",
+      "title": "Default Manager",
+      "department": "node-191",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-193",
+      "parentId": "node-156",
+      "name": "TRADING AND ASSET SERVICES",
+      "title": "Trading and Asset Services",
+      "department": "node-156",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-194",
+      "parentId": "node-193",
+      "name": "BACK OFFICE",
+      "title": "Back Office",
+      "department": "node-193",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-195",
+      "parentId": "node-194",
+      "name": "INVESTMENT OPERATIONS",
+      "title": "Investment Operations",
+      "department": "node-194",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-196",
+      "parentId": "node-195",
+      "name": "INFINITY PROCESS PLATFORM",
+      "title": "Infinity Process Platform",
+      "department": "node-195",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-197",
+      "parentId": "node-194",
+      "name": "PRIVATE EQUITY",
+      "title": "Private Equity",
+      "department": "node-194",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-198",
+      "parentId": "node-197",
+      "name": "INVESTRAN",
+      "title": "Investran",
+      "department": "node-197",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-199",
+      "parentId": "node-194",
+      "name": "SECURITIES PROCESSING",
+      "title": "Securities Processing",
+      "department": "node-194",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-200",
+      "parentId": "node-199",
+      "name": "PHASE 3",
+      "title": "Phase 3",
+      "department": "node-199",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-201",
+      "parentId": "node-199",
+      "name": "TORSTONE",
+      "title": "Torstone",
+      "department": "node-199",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-202",
+      "parentId": "node-194",
+      "name": "TAX INFORMATION REPORTING",
+      "title": "Tax Information Reporting",
+      "department": "node-194",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-203",
+      "parentId": "node-202",
+      "name": "WALL ST CONCEPTS",
+      "title": "Wall St Concepts",
+      "department": "node-202",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-204",
+      "parentId": "node-193",
+      "name": "DATA",
+      "title": "Data",
+      "department": "node-193",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-205",
+      "parentId": "node-204",
+      "name": "DATA SERVICES",
+      "title": "Data Services",
+      "department": "node-204",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-206",
+      "parentId": "node-205",
+      "name": "ASTEC",
+      "title": "Astec",
+      "department": "node-205",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-207",
+      "parentId": "node-205",
+      "name": "PRICING AND DATA SERVICES",
+      "title": "Pricing and Data Services",
+      "department": "node-205",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-208",
+      "parentId": "node-205",
+      "name": "XSP",
+      "title": "XSP",
+      "department": "node-205",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-209",
+      "parentId": "node-204",
+      "name": "ENTERPRISE DATA AND PLATFORM MANAGEMENT",
+      "title": "Enterprise Data and Platform Management",
+      "department": "node-204",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-210",
+      "parentId": "node-204",
+      "name": "RECONCILIATION",
+      "title": "Reconciliation",
+      "department": "node-204",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-211",
+      "parentId": "node-210",
+      "name": "BASE VENTURE",
+      "title": "Base Venture",
+      "department": "node-210",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-212",
+      "parentId": "node-210",
+      "name": "DATA RECONCILIATION",
+      "title": "Data Reconciliation",
+      "department": "node-210",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-213",
+      "parentId": "node-193",
+      "name": "FRONT OFFICE",
+      "title": "Front Office",
+      "department": "node-193",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-214",
+      "parentId": "node-213",
+      "name": "ELECTRONIC TRADING",
+      "title": "Electronic Trading",
+      "department": "node-213",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-215",
+      "parentId": "node-214",
+      "name": "VALDI SOFTWARE",
+      "title": "Valdi Software",
+      "department": "node-214",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-216",
+      "parentId": "node-213",
+      "name": "FRONT ARENA",
+      "title": "Front Arena",
+      "department": "node-213",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-217",
+      "parentId": "node-216",
+      "name": "ADAPTIV 360 AND OPS",
+      "title": "ADAPTIV 360 AND OPS",
+      "department": "node-216",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-218",
+      "parentId": "node-216",
+      "name": "FASTVAL",
+      "title": "FastVal",
+      "department": "node-216",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-219",
+      "parentId": "node-216",
+      "name": "MONIS",
+      "title": "Monis",
+      "department": "node-216",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-220",
+      "parentId": "node-213",
+      "name": "PROTEGENT",
+      "title": "Protegent",
+      "department": "node-213",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-221",
+      "parentId": "node-213",
+      "name": "SECURITIES FINANCE AND COLLATERAL",
+      "title": "Securities Finance and Collateral",
+      "department": "node-213",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-222",
+      "parentId": "node-221",
+      "name": "COLLATERAL",
+      "title": "Collateral",
+      "department": "node-221",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-223",
+      "parentId": "node-221",
+      "name": "SSF SERVICES",
+      "title": "SSF Services",
+      "department": "node-221",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-224",
+      "parentId": "node-221",
+      "name": "SSF SOFTWARE",
+      "title": "SSF Software",
+      "department": "node-221",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-225",
+      "parentId": "node-221",
+      "name": "SECURITIES FINANCE MATCHING PLATFORM",
+      "title": "Securities Finance Matching Platform",
+      "department": "node-221",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-226",
+      "parentId": "node-193",
+      "name": "INVESTOR SERVICES AND TRANSFER AGENCY",
+      "title": "Investor Services and Transfer Agency",
+      "department": "node-193",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-227",
+      "parentId": "node-226",
+      "name": "INVESTOR SERVICES",
+      "title": "Investor Services",
+      "department": "node-226",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-228",
+      "parentId": "node-226",
+      "name": "TRANSFER AGENCY",
+      "title": "Transfer Agency",
+      "department": "node-226",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-229",
+      "parentId": "node-228",
+      "name": "TRANSFER AGENCIES BPO",
+      "title": "Transfer Agencies BPO",
+      "department": "node-228",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-230",
+      "parentId": "node-228",
+      "name": "TRANSFER AGENCY ITO",
+      "title": "Transfer Agency ITO",
+      "department": "node-228",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-231",
+      "parentId": "node-193",
+      "name": "TAS MIDDLE OFFICE",
+      "title": "TAS Middle Office",
+      "department": "node-193",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-232",
+      "parentId": "node-231",
+      "name": "CLEARED DERIVATIVES",
+      "title": "Cleared Derivatives",
+      "department": "node-231",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-233",
+      "parentId": "node-232",
+      "name": "DERIVATIVES UTILITY",
+      "title": "Derivatives Utility",
+      "department": "node-232",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-234",
+      "parentId": "node-232",
+      "name": "FIS CD BACK OFFICE",
+      "title": "FIS CD Back Office",
+      "department": "node-232",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-235",
+      "parentId": "node-232",
+      "name": "FIS CD MIDDLE OFFICE",
+      "title": "FIS CD Middle Office",
+      "department": "node-232",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-236",
+      "parentId": "node-232",
+      "name": "FIS CD MODULE",
+      "title": "FIS CD Module",
+      "department": "node-232",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-237",
+      "parentId": "node-231",
+      "name": "VIRTUS",
+      "title": "Virtus",
+      "department": "node-231",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-238",
+      "parentId": "node-237",
+      "name": "COLLATERAL ADMIN",
+      "title": "Collateral Admin",
+      "department": "node-237",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-239",
+      "parentId": "node-237",
+      "name": "FUND SERVICES",
+      "title": "Fund Services",
+      "department": "node-237",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-240",
+      "parentId": "node-237",
+      "name": "GLOBAL DATA",
+      "title": "Global Data",
+      "department": "node-237",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-241",
+      "parentId": "node-237",
+      "name": "VIRTUS MIDDLE OFFICE",
+      "title": "Virtus Middle Office",
+      "department": "node-237",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-242",
+      "parentId": "node-193",
+      "name": "TRADE AND ASSET SERVICES ADMIN",
+      "title": "Trade and Asset Services Admin",
+      "department": "node-193",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-243",
+      "parentId": "node-242",
+      "name": "TAS EXEC ADMIN",
+      "title": "TAS Exec Admin",
+      "department": "node-242",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-244",
+      "parentId": "node-156",
+      "name": "TREASURY AND RISK",
+      "title": "Treasury and Risk",
+      "department": "node-156",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-245",
+      "parentId": "node-244",
+      "name": "RISK",
+      "title": "Risk",
+      "department": "node-244",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-246",
+      "parentId": "node-245",
+      "name": "ADAPTIV",
+      "title": "Adaptiv",
+      "department": "node-245",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-247",
+      "parentId": "node-245",
+      "name": "AMBIT RISK AND PERFORMANCE",
+      "title": "Ambit Risk and Performance",
+      "department": "node-245",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-248",
+      "parentId": "node-245",
+      "name": "RISK MANAGEMENT",
+      "title": "Risk Management",
+      "department": "node-245",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-249",
+      "parentId": "node-248",
+      "name": "ENTERPRISE ACCOUNTING SYSTEM",
+      "title": "Enterprise Accounting System",
+      "department": "node-248",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-250",
+      "parentId": "node-244",
+      "name": "TREASURY",
+      "title": "Treasury",
+      "department": "node-244",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-251",
+      "parentId": "node-250",
+      "name": "ENTERPRISE TREASURY AND MESSAGING",
+      "title": "Enterprise Treasury and Messaging",
+      "department": "node-250",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-252",
+      "parentId": "node-251",
+      "name": "AMBIT QUANTUM",
+      "title": "Ambit Quantum",
+      "department": "node-251",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-253",
+      "parentId": "node-251",
+      "name": "ENTERPRISE TREASURY OTHER",
+      "title": "Enterprise Treasury Other",
+      "department": "node-251",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-254",
+      "parentId": "node-251",
+      "name": "MANAGED BANK CONNECTIVITY",
+      "title": "Managed Bank Connectivity",
+      "department": "node-251",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-255",
+      "parentId": "node-251",
+      "name": "QUANTUM",
+      "title": "Quantum",
+      "department": "node-251",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-256",
+      "parentId": "node-250",
+      "name": "PAYMENTS",
+      "title": "Payments",
+      "department": "node-250",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-257",
+      "parentId": "node-250",
+      "name": "SAAS TREASURY",
+      "title": "SaaS Treasury",
+      "department": "node-250",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-258",
+      "parentId": "node-257",
+      "name": "INTEGRITY",
+      "title": "Integrity",
+      "department": "node-257",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-259",
+      "parentId": "node-257",
+      "name": "LEGACY TREASURY",
+      "title": "Legacy Treasury",
+      "department": "node-257",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-260",
+      "parentId": "root",
+      "name": "CORPORATE AND OTHER",
+      "title": "Corporate and Other",
+      "department": "Corporate",
+      "productRole": "Business Unit"
+    },
+    {
+      "id": "node-261",
+      "parentId": "node-260",
+      "name": "CORPORATE",
+      "title": "Corporate",
+      "department": "node-260",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-262",
+      "parentId": "node-260",
+      "name": "CORPORATE - OTHER BUSINESS",
+      "title": "Corporate - Other Business",
+      "department": "node-260",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-263",
+      "parentId": "node-262",
+      "name": "CGO INITIATIVES",
+      "title": "CGO Initiatives",
+      "department": "node-262",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-264",
+      "parentId": "node-263",
+      "name": "STRATEGIC INITIATIVES",
+      "title": "Strategic Initiatives",
+      "department": "node-263",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-265",
+      "parentId": "node-264",
+      "name": "REALNET CENTRAL",
+      "title": "RealNet Central",
+      "department": "node-264",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-266",
+      "parentId": "node-262",
+      "name": "COMMERCIAL - OTHER BUSINESS",
+      "title": "Commercial - Other Business",
+      "department": "node-262",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-267",
+      "parentId": "node-266",
+      "name": "ATM - INTL",
+      "title": "ATM - Intl",
+      "department": "node-266",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-268",
+      "parentId": "node-266",
+      "name": "COMMERCIAL ACCOUNTS",
+      "title": "Commercial Accounts",
+      "department": "node-266",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-269",
+      "parentId": "node-262",
+      "name": "FINTECH - OTHER BUSINESS",
+      "title": "FinTech - Other Business",
+      "department": "node-262",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-270",
+      "parentId": "node-269",
+      "name": "BROKERAGE",
+      "title": "Brokerage",
+      "department": "node-269",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-271",
+      "parentId": "node-270",
+      "name": "FOX RIVER",
+      "title": "Fox River",
+      "department": "node-270",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-272",
+      "parentId": "node-269",
+      "name": "ELECTRONIC TRADE",
+      "title": "Electronic Trade",
+      "department": "node-269",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-273",
+      "parentId": "node-272",
+      "name": "TCC",
+      "title": "TCC",
+      "department": "node-272",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-274",
+      "parentId": "node-269",
+      "name": "MARKET MAP AND TERMINAL",
+      "title": "Market Map and Terminal",
+      "department": "node-269",
+      "productRole": "Product Category"
+    },
+    {
+      "id": "node-275",
+      "parentId": "root",
+      "name": "MERCHANT SOLUTIONS",
+      "title": "Merchant Solutions",
+      "department": "Corporate",
+      "productRole": "Business Unit"
+    },
+    {
+      "id": "node-276",
+      "parentId": "node-275",
+      "name": "MERCHANT SOLUTIONS ADMIN",
+      "title": "Merchant Solutions Admin",
+      "department": "node-275",
+      "productRole": "Product Category"
+    }
+  ]
+}

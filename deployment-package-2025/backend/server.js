@@ -1,0 +1,1021 @@
+import express from 'express';
+import cors from 'cors';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import multer from 'multer';
+import authRoutes from './api/auth.js';
+import goalsRoutes from './api/goals.js';
+import designSystemRoutes from './api/design-system.js';
+import tagsRoutes from './api/tags.js';
+import dataEngineRoutes from './api/data-engine.js';
+import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats, updateTenantStats } from './api/tenants.js';
+import {
+  getNotes, getNote, createNote, updateNote, deleteNote,
+  getSections, getSection, createSection, updateSection, archiveSection, deleteSection,
+  addNotesToSection, removeNoteFromSection, reorderNotesInSection
+} from './api/notes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const PORT = 3001;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
+
+// Authentication routes
+app.use('/api/auth', authRoutes);
+
+// Goals Management Routes
+app.use('/api/goals', goalsRoutes);
+
+// Design System Routes
+app.use('/api/design-system', designSystemRoutes);
+
+// Tags Management Routes
+app.use('/api/tags', tagsRoutes);
+
+// Data Engine Routes
+app.use('/api/data-engine', dataEngineRoutes);
+
+// Tenant Management Routes (Organizations & Initiatives)
+app.get('/api/tenants', getTenants);
+app.post('/api/tenants', createTenant);
+app.delete('/api/tenants/:type/:slug', deleteTenant);
+app.get('/api/tenants/:type/:slug/content', getTenantContent);
+app.get('/api/tenants/:type/:slug/stats', getTenantStats);
+
+// Notes System Routes
+app.get('/api/notes', getNotes);
+app.get('/api/notes/:id', getNote);
+app.post('/api/notes', createNote);
+app.put('/api/notes/:id', updateNote);
+app.delete('/api/notes/:id', deleteNote);
+
+// Sections Routes
+app.get('/api/sections', getSections);
+app.get('/api/sections/:id', getSection);
+app.post('/api/sections', createSection);
+app.put('/api/sections/:id', updateSection);
+app.put('/api/sections/:id/archive', archiveSection);
+app.delete('/api/sections/:id', deleteSection);
+
+// Section-Note Linking Routes
+app.post('/api/sections/:id/notes', addNotesToSection);
+app.delete('/api/sections/:id/notes/:noteId', removeNoteFromSection);
+app.put('/api/sections/:id/reorder', reorderNotesInSection);
+
+// Timeline Notes Routes
+const TIMELINE_NOTES_FILE = path.join(__dirname, 'data', 'timeline-notes.json');
+
+app.get('/api/timeline-notes', async (req, res) => {
+  try {
+    const notes = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    res.json({ success: true, notes: notes.notes || [] });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post('/api/timeline-notes', async (req, res) => {
+  try {
+    const data = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    const newNote = {
+      id: `note-${Date.now()}`,
+      ...req.body,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    data.notes.push(newNote);
+    await writeJSONFile(TIMELINE_NOTES_FILE, data);
+    res.json({ success: true, note: newNote });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.put('/api/timeline-notes/:id', async (req, res) => {
+  try {
+    const data = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    const index = data.notes.findIndex(n => n.id === req.params.id);
+    if (index === -1) {
+      return res.status(404).json({ success: false, error: 'Note not found' });
+    }
+    data.notes[index] = {
+      ...data.notes[index],
+      ...req.body,
+      id: req.params.id,
+      updatedAt: new Date().toISOString()
+    };
+    await writeJSONFile(TIMELINE_NOTES_FILE, data);
+    res.json({ success: true, note: data.notes[index] });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/api/timeline-notes/:id', async (req, res) => {
+  try {
+    const data = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    data.notes = data.notes.filter(n => n.id !== req.params.id);
+    await writeJSONFile(TIMELINE_NOTES_FILE, data);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// AI Weekly Summary - Create from Timeline Notes
+app.post('/api/weekly-summary/create', async (req, res) => {
+  try {
+    const { weekLabel, summaryType, summaryData, noteIds, templateId } = req.body;
+    
+    if (!weekLabel || !summaryType || !summaryData || !templateId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Missing required fields: weekLabel, summaryType, summaryData, templateId' 
+      });
+    }
+
+    // Map summary type to renderer name
+    const summaryTypeMap = {
+      'cpsar': 'executiveSummaryCPSAR',
+      'bluf': 'executiveSummaryBLUF',
+      'sbar': 'executiveSummarySBAR',
+      'pyramid': 'executiveSummaryPyramid'
+    };
+    const targetRenderer = summaryTypeMap[summaryType];
+
+    // Read the specified template by ID
+    const CONTENT_DIR = path.join(__dirname, 'data', 'content');
+    const templatePath = path.join(CONTENT_DIR, `${templateId}.json`);
+    
+    let template;
+    try {
+      template = await readJSONFile(templatePath);
+    } catch (error) {
+      return res.status(404).json({ 
+        success: false, 
+        error: `Template not found: ${templateId}` 
+      });
+    }
+
+    // Clone the template
+    const newContent = JSON.parse(JSON.stringify(template));
+    
+    // Update metadata
+    const now = new Date();
+    const dateOnly = now.toISOString().split('T')[0]; // Just YYYY-MM-DD
+    newContent.id = `weekly-update-${Date.now()}`;
+    newContent.title = `Weekly Update - ${weekLabel}`;
+    newContent.date = dateOnly;
+    newContent.createdAt = now.toISOString();
+    newContent.updatedAt = now.toISOString();
+
+    // Find the executive summary field and inject the AI data
+    // Template structure uses fields like summary_0 with _summary_0_type metadata
+    let injected = false;
+    
+    // Look for summary_0, summary_1, etc. that match the summary renderer type
+    for (let i = 0; i < 10; i++) {
+      const fieldName = `summary_${i}`;
+      const typeField = `_summary_${i}_type`;
+      
+      if (newContent[typeField] === targetRenderer) {
+        // Inject the AI-generated summary data
+        newContent[fieldName] = summaryData;
+        
+        // Add metadata about AI generation
+        newContent[`_${fieldName}_aiGenerated`] = true;
+        newContent[`_${fieldName}_sourceNoteIds`] = noteIds || [];
+        newContent[`_${fieldName}_generatedAt`] = now.toISOString();
+        injected = true;
+        break;
+      }
+    }
+    
+    if (!injected) {
+      console.warn(`No section found with type ${targetRenderer} in template ${templateId}`);
+    }
+
+    // Save the new content file
+    const newFilePath = path.join(CONTENT_DIR, `${newContent.id}.json`);
+    await writeJSONFile(newFilePath, newContent);
+
+    res.json({ 
+      success: true, 
+      contentId: newContent.id,
+      message: `Weekly Update created successfully: ${newContent.title}`
+    });
+
+  } catch (error) {
+    console.error('Failed to create weekly summary:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
+// Path to data directory
+const DATA_DIR = path.join(__dirname, 'data');
+const CONTENT_DIR = path.join(__dirname, 'data', 'content'); // Unified content directory
+const TAGS_FILE = path.join(__dirname, 'data', 'content-tags.json');
+const COMMENTS_FILE = path.join(__dirname, 'data', 'comments.json');
+
+// Helper function to read JSON file
+async function readJSONFile(filePath) {
+  try {
+    const data = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    throw new Error(`Failed to read file: ${error.message}`);
+  }
+}
+
+// Helper function to write JSON file
+async function writeJSONFile(filePath, data) {
+  try {
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
+    return true;
+  } catch (error) {
+    throw new Error(`Failed to write file: ${error.message}`);
+  }
+}
+
+// Helper function to list files in directory
+async function listFiles(directory) {
+  try {
+    const files = await fs.readdir(directory);
+    return files.filter(file => file.endsWith('.json'));
+  } catch (error) {
+    throw new Error(`Failed to list files: ${error.message}`);
+  }
+}
+
+// ============================================
+// UNIFIED CONTENT ENDPOINTS (Tag-Based)
+// ============================================
+
+// GET all content (with optional tag/tenant filtering)
+app.get('/api/content', async (req, res) => {
+  try {
+    const { tag, tenant, tenantType } = req.query;
+    const allContent = [];
+    
+    // If tenant filtering is requested, only read from that specific tenant folder
+    if (tenant && tenantType) {
+      try {
+        const tenantDir = tenantType === 'org' 
+          ? path.join(DATA_DIR, 'orgs', tenant)
+          : path.join(DATA_DIR, 'initiatives', tenant);
+        
+        const files = await listFiles(tenantDir);
+        const tenantContent = await Promise.all(
+          files.map(async (file) => {
+            const filePath = path.join(tenantDir, file);
+            return await readJSONFile(filePath);
+          })
+        );
+        allContent.push(...tenantContent);
+      } catch (error) {
+        console.log(`No content for ${tenantType} ${tenant}:`, error.message);
+      }
+    } else {
+      // Read all content from all locations
+      
+      // Read from main content directory
+      try {
+        const files = await listFiles(CONTENT_DIR);
+        const contentItems = await Promise.all(
+          files.map(async (file) => {
+            const filePath = path.join(CONTENT_DIR, file);
+            return await readJSONFile(filePath);
+          })
+        );
+        allContent.push(...contentItems);
+      } catch (error) {
+        console.log('No content in main directory:', error.message);
+      }
+      
+      // Read from organization folders
+      try {
+        const orgsDir = path.join(DATA_DIR, 'orgs');
+        const orgFolders = await fs.readdir(orgsDir);
+        for (const orgSlug of orgFolders) {
+          if (orgSlug === 'registry.json') continue;
+          const orgContentDir = path.join(orgsDir, orgSlug);
+          const stat = await fs.stat(orgContentDir);
+          if (stat.isDirectory()) {
+            const files = await listFiles(orgContentDir);
+            const orgContent = await Promise.all(
+              files.map(async (file) => {
+                const filePath = path.join(orgContentDir, file);
+                return await readJSONFile(filePath);
+              })
+            );
+            allContent.push(...orgContent);
+          }
+        }
+      } catch (error) {
+        console.log('No organization content:', error.message);
+      }
+      
+      // Read from initiative folders
+      try {
+        const initiativesDir = path.join(DATA_DIR, 'initiatives');
+        const initiativeFolders = await fs.readdir(initiativesDir);
+        for (const initiativeSlug of initiativeFolders) {
+          if (initiativeSlug === 'registry.json') continue;
+          const initiativeContentDir = path.join(initiativesDir, initiativeSlug);
+          const stat = await fs.stat(initiativeContentDir);
+          if (stat.isDirectory()) {
+            const files = await listFiles(initiativeContentDir);
+            const initiativeContent = await Promise.all(
+              files.map(async (file) => {
+                const filePath = path.join(initiativeContentDir, file);
+                return await readJSONFile(filePath);
+              })
+            );
+            allContent.push(...initiativeContent);
+          }
+        }
+      } catch (error) {
+        console.log('No initiative content:', error.message);
+      }
+    }
+    
+    // Filter by tag if provided
+    const filteredContent = tag 
+      ? allContent.filter(item => item._contentTag === tag)
+      : allContent;
+    
+    // Sort by date (newest first)
+    filteredContent.sort((a, b) => {
+      const dateA = new Date(a.date || a.lastUpdated || a.updatedAt || 0);
+      const dateB = new Date(b.date || b.lastUpdated || b.updatedAt || 0);
+      return dateB - dateA;
+    });
+    
+    res.json({ success: true, content: filteredContent });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// GET single content item by ID
+app.get('/api/content/:id', async (req, res) => {
+  try {
+    const filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+    const content = await readJSONFile(filePath);
+    res.json(content);
+  } catch (error) {
+    res.status(404).json({ error: 'Content not found' });
+  }
+});
+
+// POST create new content
+app.post('/api/content', async (req, res) => {
+  try {
+    const content = req.body;
+    console.log('📝 POST /api/content - Content ID:', content.id);
+    console.log('📝 POST /api/content - _tenant:', JSON.stringify(content._tenant));
+    
+    // Check if content is assigned to a tenant (organization or initiative)
+    let filePath;
+    if (content._tenant) {
+      const { type, slug } = content._tenant;
+      const tenantDir = path.join(DATA_DIR, type === 'org' ? 'orgs' : 'initiatives', slug);
+      filePath = path.join(tenantDir, `${content.id}.json`);
+      
+      // Ensure tenant directory exists
+      await fs.mkdir(tenantDir, { recursive: true });
+      
+      // Update tenant stats after save
+      await writeJSONFile(filePath, content);
+      await updateTenantStats(type, slug);
+    } else {
+      // Save to regular content directory
+      filePath = path.join(CONTENT_DIR, `${content.id}.json`);
+      await writeJSONFile(filePath, content);
+    }
+    
+    res.status(201).json({ message: 'Content created', data: content });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing content
+app.put('/api/content/:id', async (req, res) => {
+  try {
+    const content = req.body;
+    
+    // Check if content is assigned to a tenant (organization or initiative)
+    let filePath;
+    if (content._tenant) {
+      const { type, slug } = content._tenant;
+      const tenantDir = path.join(DATA_DIR, type === 'org' ? 'orgs' : 'initiatives', slug);
+      filePath = path.join(tenantDir, `${req.params.id}.json`);
+      
+      // Ensure tenant directory exists
+      await fs.mkdir(tenantDir, { recursive: true });
+      
+      // Update tenant stats after save
+      await writeJSONFile(filePath, content);
+      await updateTenantStats(type, slug);
+    } else {
+      // Save to regular content directory
+      filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+      await writeJSONFile(filePath, content);
+    }
+    
+    res.json({ message: 'Content updated', data: content });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE content
+app.delete('/api/content/:id', async (req, res) => {
+  try {
+    const filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+    await fs.unlink(filePath);
+    res.json({ message: 'Content deleted' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
+// LEGACY TYPE-SPECIFIC ENDPOINTS (Deprecated - kept for backwards compatibility)
+// ============================================
+
+
+
+
+
+
+
+// ============================================
+// FILE IMPORT ENDPOINT
+// ============================================
+
+// Configure multer for file uploads
+const upload = multer({ dest: 'uploads/' });
+
+// POST import JSON file
+app.post('/api/import/:type', upload.single('file'), async (req, res) => {
+  try {
+    const { type } = req.params; // 'summaries', 'executive-iq', 'organizations'
+    const file = req.file;
+    
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    // Read uploaded file
+    const fileContent = await fs.readFile(file.path, 'utf8');
+    const jsonData = JSON.parse(fileContent);
+    
+    // Determine target directory
+    let targetDir;
+    switch (type) {
+      case 'summaries':
+        targetDir = path.join(DATA_DIR, 'summaries');
+        break;
+      case 'executive-iq':
+        targetDir = path.join(DATA_DIR, 'executive-iq');
+        break;
+      case 'organizations':
+        targetDir = path.join(DATA_DIR, 'organizations');
+        break;
+      case 'performance':
+        targetDir = path.join(DATA_DIR, 'performance');
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid type' });
+    }
+    
+    // Write to appropriate location
+    const targetPath = path.join(targetDir, `${jsonData.id}.json`);
+    await writeJSONFile(targetPath, jsonData);
+    
+    // Clean up uploaded file
+    await fs.unlink(file.path);
+    
+    res.json({ 
+      message: 'File imported successfully', 
+      data: jsonData 
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
+// LOGO UPLOAD
+// ============================================
+
+// POST upload custom logo
+app.post('/api/upload-logo', upload.single('logo'), async (req, res) => {
+  try {
+    const file = req.file;
+    
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    // Create public/logos directory if it doesn't exist
+    const logosDir = path.join(__dirname, 'public', 'logos');
+    await fs.mkdir(logosDir, { recursive: true });
+    
+    // Generate filename with timestamp
+    const ext = path.extname(file.originalname);
+    const filename = `custom-logo-${Date.now()}${ext}`;
+    const targetPath = path.join(logosDir, filename);
+    
+    // Move file from uploads to public/logos
+    await fs.rename(file.path, targetPath);
+    
+    // Return URL
+    const logoUrl = `/logos/${filename}`;
+    res.json({ url: logoUrl });
+  } catch (error) {
+    console.error('Logo upload error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
+// TEMPLATES
+// ============================================
+
+// Get all templates
+app.get('/api/templates', async (req, res) => {
+  try {
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const files = await listFiles(templatesDir);
+    
+    const templates = await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(templatesDir, file);
+        const data = await readJSONFile(filePath);
+        
+        // Count non-metadata keys as sections
+        const sectionCount = Object.keys(data).filter(key => 
+          !key.startsWith('_template_') && 
+          !key.startsWith('_enabled_') && 
+          !key.startsWith('_completed_') &&
+          !['id', 'status', 'protectionEnabled', 'quarter', 'year', 'date', 'title'].includes(key)
+        ).length;
+        
+        return {
+          id: file.replace('.json', ''),
+          name: data._template_name || file.replace('.json', '').replace(/-/g, ' '),
+          description: data._template_description || '',
+          fileName: file,
+          sectionCount: sectionCount,
+          createdAt: data._template_created || new Date().toISOString(),
+          updatedAt: data._template_updated || new Date().toISOString()
+        };
+      })
+    );
+    
+    res.json({ success: true, templates });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get a specific template
+app.get('/api/templates/:id', async (req, res) => {
+  try {
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const filePath = path.join(templatesDir, `${req.params.id}.json`);
+    const data = await readJSONFile(filePath);
+    res.json({ success: true, template: data });
+  } catch (error) {
+    res.status(404).json({ error: 'Template not found' });
+  }
+});
+
+// Save a new template
+app.post('/api/templates', async (req, res) => {
+  try {
+    const { name, description, template } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ error: 'Template name is required' });
+    }
+    
+    // Generate template ID from name
+    const templateId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const filePath = path.join(templatesDir, `${templateId}.json`);
+    
+    // Create templates directory if it doesn't exist
+    await fs.mkdir(templatesDir, { recursive: true });
+    
+    // Save template data directly (already in correct format from frontend)
+    // Add metadata
+    const templateWithMetadata = {
+      ...template,
+      _template_name: name,
+      _template_description: description || '',
+      _template_created: new Date().toISOString(),
+      _template_updated: new Date().toISOString()
+    };
+    
+    await writeJSONFile(filePath, templateWithMetadata);
+    
+    res.json({ 
+      success: true, 
+      id: templateId,
+      message: `Template "${name}" saved successfully`,
+      template: templateWithMetadata
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update an existing template
+app.put('/api/templates/:id', async (req, res) => {
+  try {
+    const { name, description, sections } = req.body;
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const filePath = path.join(templatesDir, `${req.params.id}.json`);
+    
+    // Read existing template
+    const existing = await readJSONFile(filePath);
+    
+    // Update template
+    const template = {
+      ...existing,
+      name: name || existing.name,
+      description: description || existing.description,
+      sections: sections || existing.sections,
+      updatedAt: new Date().toISOString()
+    };
+    
+    await writeJSONFile(filePath, template);
+    
+    res.json({ 
+      success: true, 
+      message: `Template "${template.name}" updated successfully`,
+      template
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete a template
+app.delete('/api/templates/:id', async (req, res) => {
+  try {
+    const templatesDir = path.join(__dirname, '../cms-admin/src/templates');
+    const filePath = path.join(templatesDir, `${req.params.id}.json`);
+    await fs.unlink(filePath);
+    res.json({ success: true, message: 'Template deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
+
+// ============================================
+// HEALTH CHECK
+// ============================================
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Backend API is running' });
+});
+
+// ============================================
+// CONTENT TAGS ENDPOINTS
+// ============================================
+
+// GET all content tags
+app.get('/api/content-tags', async (req, res) => {
+  try {
+    const tags = await readJSONFile(TAGS_FILE);
+    res.json(tags.tags || []);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET single tag by ID
+app.get('/api/content-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(TAGS_FILE);
+    const tag = tagsData.tags.find(t => t.id === req.params.id);
+    if (!tag) {
+      return res.status(404).json({ error: 'Tag not found' });
+    }
+    res.json(tag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST create new tag
+app.post('/api/content-tags', async (req, res) => {
+  try {
+    const newTag = {
+      ...req.body,
+      created: new Date().toISOString()
+    };
+    
+    const tagsData = await readJSONFile(TAGS_FILE);
+    
+    // Check for duplicate ID
+    if (tagsData.tags.some(t => t.id === newTag.id)) {
+      return res.status(400).json({ error: 'Tag ID already exists' });
+    }
+    
+    tagsData.tags.push(newTag);
+    await writeJSONFile(TAGS_FILE, tagsData);
+    
+    res.status(201).json(newTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing tag
+app.put('/api/content-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(TAGS_FILE);
+    const tagIndex = tagsData.tags.findIndex(t => t.id === req.params.id);
+    
+    if (tagIndex === -1) {
+      return res.status(404).json({ error: 'Tag not found' });
+    }
+    
+    // Preserve created date
+    const updatedTag = {
+      ...req.body,
+      created: tagsData.tags[tagIndex].created
+    };
+    
+    tagsData.tags[tagIndex] = updatedTag;
+    await writeJSONFile(TAGS_FILE, tagsData);
+    
+    res.json(updatedTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE tag
+app.delete('/api/content-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(TAGS_FILE);
+    const initialLength = tagsData.tags.length;
+    
+    tagsData.tags = tagsData.tags.filter(t => t.id !== req.params.id);
+    
+    if (tagsData.tags.length === initialLength) {
+      return res.status(404).json({ error: 'Tag not found' });
+    }
+    
+    await writeJSONFile(TAGS_FILE, tagsData);
+    res.json({ message: 'Tag deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET tag usage statistics (count published/draft content with this tag)
+app.get('/api/content-tags/:id/usage', async (req, res) => {
+  try {
+    const tagId = req.params.id;
+    let publishedCount = 0;
+    let draftCount = 0;
+
+    // Helper function to scan directory for tag usage
+    const scanDirectory = async (dirPath) => {
+      try {
+        const files = await listFiles(dirPath);
+        for (const file of files) {
+          const filePath = path.join(dirPath, file);
+          const content = await readJSONFile(filePath);
+
+          // Check if content has this tag (check both old and new tag formats)
+          const hasTag = content._contentTag === tagId ||
+                        content.contentTag === tagId ||
+                        content.standard_header?.contentTag === tagId;
+
+          if (hasTag) {
+            if (content.status === 'published') {
+              publishedCount++;
+            } else {
+              draftCount++;
+            }
+          }
+        }
+      } catch (error) {
+        // Directory might not exist, skip silently
+      }
+    };
+
+    // Scan main content directory
+    await scanDirectory(CONTENT_DIR);
+
+    // Scan organization directories
+    try {
+      const orgsDir = path.join(DATA_DIR, 'orgs');
+      const orgFolders = await fs.readdir(orgsDir);
+      for (const orgSlug of orgFolders) {
+        if (orgSlug === 'registry.json') continue;
+        const orgContentDir = path.join(orgsDir, orgSlug);
+        const stat = await fs.stat(orgContentDir);
+        if (stat.isDirectory()) {
+          await scanDirectory(orgContentDir);
+        }
+      }
+    } catch (error) {
+      // No organization content, skip
+    }
+
+    // Scan initiative directories
+    try {
+      const initiativesDir = path.join(DATA_DIR, 'initiatives');
+      const initiativeFolders = await fs.readdir(initiativesDir);
+      for (const initiativeSlug of initiativeFolders) {
+        if (initiativeSlug === 'registry.json') continue;
+        const initiativeContentDir = path.join(initiativesDir, initiativeSlug);
+        const stat = await fs.stat(initiativeContentDir);
+        if (stat.isDirectory()) {
+          await scanDirectory(initiativeContentDir);
+        }
+      }
+    } catch (error) {
+      // No initiative content, skip
+    }
+
+    res.json({
+      tagId,
+      publishedCount,
+      draftCount,
+      totalCount: publishedCount + draftCount
+    });
+  } catch (error) {
+    console.error('Tag usage error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
+// COMMENTS ENDPOINTS
+// ============================================
+
+// GET all comments for a specific content item
+app.get('/api/comments/:contentType/:contentId', async (req, res) => {
+  try {
+    const { contentType, contentId } = req.params;
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    
+    const itemComments = commentsData.comments.filter(
+      c => c.contentId === contentId && c.contentType === contentType
+    );
+    
+    // Sort by timestamp (newest first)
+    itemComments.sort((a, b) => b.timestamp - a.timestamp);
+    
+    res.json(itemComments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET all comments (for displaying counts across all content)
+app.get('/api/comments', async (req, res) => {
+  try {
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    res.json(commentsData.comments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST create new comment
+app.post('/api/comments', async (req, res) => {
+  try {
+    const newComment = {
+      id: `comment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      contentId: req.body.contentId,
+      contentType: req.body.contentType,
+      author: req.body.author,
+      text: req.body.text,
+      timestamp: Date.now(),
+      edited: false
+    };
+    
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    commentsData.comments.push(newComment);
+    await writeJSONFile(COMMENTS_FILE, commentsData);
+    
+    res.status(201).json(newComment);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing comment
+app.put('/api/comments/:id', async (req, res) => {
+  try {
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    const commentIndex = commentsData.comments.findIndex(c => c.id === req.params.id);
+    
+    if (commentIndex === -1) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+    
+    // Update only text, mark as edited
+    commentsData.comments[commentIndex] = {
+      ...commentsData.comments[commentIndex],
+      text: req.body.text,
+      edited: true,
+      editedAt: Date.now()
+    };
+    
+    await writeJSONFile(COMMENTS_FILE, commentsData);
+    
+    res.json(commentsData.comments[commentIndex]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE comment
+app.delete('/api/comments/:id', async (req, res) => {
+  try {
+    const commentsData = await readJSONFile(COMMENTS_FILE);
+    const initialLength = commentsData.comments.length;
+    
+    commentsData.comments = commentsData.comments.filter(c => c.id !== req.params.id);
+    
+    if (commentsData.comments.length === initialLength) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+    
+    await writeJSONFile(COMMENTS_FILE, commentsData);
+    
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Backend API running on http://localhost:${PORT}`);
+  console.log(`📁 Data directory: ${DATA_DIR}`);
+  console.log(`\nAvailable endpoints:`);
+  console.log(`  GET    /api/content`);
+  console.log(`  POST   /api/content`);
+  console.log(`  PUT    /api/content/:id`);
+  console.log(`  DELETE /api/content/:id`);
+  console.log(`  GET    /api/tenants`);
+  console.log(`  POST   /api/tenants`);
+  console.log(`  DELETE /api/tenants/:type/:slug`);
+  console.log(`  GET    /api/tenants/:type/:slug/content`);
+  console.log(`  GET    /api/tenants/:type/:slug/stats`);
+  console.log(`  GET    /api/templates`);
+  console.log(`  GET    /api/templates/:id`);
+  console.log(`  POST   /api/templates`);
+  console.log(`  PUT    /api/templates/:id`);
+  console.log(`  DELETE /api/templates/:id`);
+  console.log(`  POST   /api/import/:type (with file upload)`);
+  console.log(`  POST   /api/upload-logo`);
+  console.log(`  POST   /api/auth/login`);
+  console.log(`  POST   /api/auth/verify`);
+  console.log(`  POST   /api/auth/logout`);
+  console.log(`  GET    /api/auth/users (admin)`);
+  console.log(`  POST   /api/auth/users (admin)`);
+  console.log(`  PUT    /api/auth/users/:id (admin)`);
+  console.log(`  PUT    /api/auth/users/:id/password (admin)`);
+  console.log(`  DELETE /api/auth/users/:id (admin)`);
+  console.log(`  GET    /api/health`);
+  console.log(`\n📌 Content Tags:`);
+  console.log(`  GET    /api/content-tags`);
+  console.log(`  GET    /api/content-tags/:id`);
+  console.log(`  POST   /api/content-tags`);
+  console.log(`  PUT    /api/content-tags/:id`);
+  console.log(`  DELETE /api/content-tags/:id`);
+  console.log(`  GET    /api/content-tags/:id/usage`);
+  console.log(`\n💬 Comments:`);
+  console.log(`  GET    /api/comments`);
+  console.log(`  GET    /api/comments/:contentType/:contentId`);
+  console.log(`  POST   /api/comments`);
+  console.log(`  PUT    /api/comments/:id`);
+  console.log(`  DELETE /api/comments/:id`);
+});

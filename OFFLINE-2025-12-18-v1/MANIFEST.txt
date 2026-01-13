@@ -1,0 +1,134 @@
+DEPLOYMENT PACKAGE MANIFEST
+Generated: December 11, 2025
+Build: Production
+
+DIRECTORY STRUCTURE:
+====================
+/frontend/
+  - Built React application (main Executive Summary viewer)
+  - All assets bundled and optimized
+  - Ready to serve from web server
+
+/cms-admin/
+  - Built React CMS Admin Panel
+  - Template Builder, Content Manager, Notes System
+  - Serves from /cms-admin path
+
+/backend/
+  - Node.js Express server
+  - API endpoints for all CMS features
+  - Data storage in /data folder
+  - File uploads in /uploads folder
+  - Serves both frontend and CMS builds
+
+FEATURES IN THIS BUILD:
+=======================
+✅ Notes System (December 11, 2025)
+   - Section-grouped note display
+   - Right panel filtering with checkboxes
+   - Archive/restore sections
+   - Edit/delete section dropdown menus
+   - Drag-and-drop between sections
+   - Link to multiple sections
+   - Brand color compliance (no hardcoded purple)
+
+✅ Quick Actions Menu (December 11, 2025)
+   - Dynamic content cloning based on tags
+   - Keyboard shortcut (Ctrl+Q)
+   - Auto-refresh on menu open
+   - enableQuickClone tag field
+
+✅ Asset Library (November 11, 2025)
+   - 22 asset types
+   - 6 pattern renderers
+   - Design system semantic variables
+   - Live preview with example data
+
+✅ Template System
+   - Template Builder with properties panel
+   - Engine Assets Preview
+   - Master Template with 25 sections
+   - JSON schema validation
+
+✅ Content Management
+   - Organizations, Initiatives, Goals
+   - Performance tracking
+   - Timeline view
+   - Content tagging
+
+BUILD DETAILS:
+==============
+Frontend Size: ~2.2 MB (minified)
+CMS Admin Size: ~3.1 MB (minified)
+Backend Dependencies: Express, cors, body-parser, multer
+
+DEPLOYMENT METHODS:
+===================
+1. Local Development Server (START-SERVER.ps1)
+2. IIS Deployment (see IIS_DEPLOYMENT_GUIDE.md)
+3. Azure Deployment (see AZURE_DEPLOYMENT_GUIDE.md)
+
+PORT CONFIGURATION:
+===================
+Default: 3001
+Change in: backend/server.js
+
+ENDPOINTS:
+==========
+GET  /                           → Frontend app
+GET  /cms-admin                  → CMS admin panel
+GET  /api/content                → List all content
+GET  /api/organizations          → Organizations
+GET  /api/initiatives            → Initiatives
+GET  /api/goals                  → Goals
+GET  /api/performance            → Performance data
+GET  /api/templates              → Templates list
+GET  /api/templates/:name        → Get template
+POST /api/templates              → Save template
+GET  /api/notes                  → Notes list
+POST /api/notes                  → Create note
+PUT  /api/notes/:id              → Update note
+DELETE /api/notes/:id            → Delete note
+GET  /api/sections               → Sections list
+POST /api/sections               → Create section
+PUT  /api/sections/:id           → Update section
+DELETE /api/sections/:id         → Delete section
+POST /api/sections/:id/notes     → Add notes to section
+DELETE /api/sections/:id/notes/:noteId → Remove note from section
+GET  /api/content-tags           → Content tags
+POST /api/content-tags           → Create tag
+PUT  /api/content-tags/:id       → Update tag
+DELETE /api/content-tags/:id     → Delete tag
+
+DATA PERSISTENCE:
+=================
+All data stored in: backend/data/
+- content.json (main content items)
+- templates/*.json (report templates)
+- notes.json (notes database)
+- sections.json (sections database)
+- content-tags.json (tagging system)
+
+Files stored in: backend/uploads/
+
+BROWSER COMPATIBILITY:
+======================
+✅ Chrome 90+
+✅ Edge 90+
+✅ Firefox 88+
+✅ Safari 14+
+
+SECURITY NOTES:
+===============
+⚠️ This build includes NO authentication
+⚠️ Backend API is open (CORS enabled)
+⚠️ For production, implement authentication
+⚠️ Add rate limiting for API endpoints
+⚠️ Secure file upload validation
+
+BACKUP RECOMMENDATIONS:
+=======================
+1. Backup backend/data/ folder regularly
+2. Backup backend/uploads/ folder
+3. Version control templates separately
+4. Export content as JSON periodically

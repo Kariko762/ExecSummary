@@ -13,13 +13,14 @@ export interface CardPatternProps {
   data: any;
   onChange?: (value: any) => void;
   mode: 'edit' | 'display';
+  displayMode?: 'spaced' | 'connected'; // For hero layouts
 }
 
 // ==========================================
 // METRIC CARD PATTERN
 // ==========================================
 
-export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mode }) => {
+export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mode, displayMode = 'spaced' }) => {
   const items = Array.isArray(data) ? data : [];
   
   if (mode === 'edit') {
@@ -185,8 +186,11 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
     return styles[styleName] || '';
   };
   
+  // Apply displayMode class to grid
+  const gridClass = displayMode === 'connected' ? 'metric-grid connected' : 'metric-grid';
+  
   return (
-    <div className="metric-grid">
+    <div className={gridClass}>
       {items.map((item, index) => {
         const styleClass = getStyleClass(item.style || 'standard');
         const iconColor = getColorVar(item.iconColor || 'eggplant');

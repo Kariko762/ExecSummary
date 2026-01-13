@@ -7,6 +7,9 @@ import multer from 'multer';
 import authRoutes from './api/auth.js';
 import goalsRoutes from './api/goals.js';
 import designSystemRoutes from './api/design-system.js';
+import tagsRoutes from './api/tags.js';
+import dataEngineRoutes from './api/data-engine.js';
+import tasksRoutes from './api/tasks.js';
 import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats, updateTenantStats } from './api/tenants.js';
 import {
   getNotes, getNote, createNote, updateNote, deleteNote,
@@ -34,6 +37,15 @@ app.use('/api/goals', goalsRoutes);
 // Design System Routes
 app.use('/api/design-system', designSystemRoutes);
 
+// Tags Management Routes
+app.use('/api/tags', tagsRoutes);
+
+// Data Engine Routes
+app.use('/api/data-engine', dataEngineRoutes);
+
+// Tasks Management Routes
+tasksRoutes(app);
+
 // Tenant Management Routes (Organizations & Initiatives)
 app.get('/api/tenants', getTenants);
 app.post('/api/tenants', createTenant);
@@ -41,12 +53,16 @@ app.delete('/api/tenants/:type/:slug', deleteTenant);
 app.get('/api/tenants/:type/:slug/content', getTenantContent);
 app.get('/api/tenants/:type/:slug/stats', getTenantStats);
 
-// Notes System Routes
-app.get('/api/notes', getNotes);
-app.get('/api/notes/:id', getNote);
-app.post('/api/notes', createNote);
-app.put('/api/notes/:id', updateNote);
-app.delete('/api/notes/:id', deleteNote);
+// ============================================
+// DEPRECATED: Notes System Routes
+// Replaced by Timeline Notes (/api/timeline-notes)
+// Kept for backward compatibility only
+// ============================================
+// app.get('/api/notes', getNotes);
+// app.get('/api/notes/:id', getNote);
+// app.post('/api/notes', createNote);
+// app.put('/api/notes/:id', updateNote);
+// app.delete('/api/notes/:id', deleteNote);
 
 // Sections Routes
 app.get('/api/sections', getSections);
@@ -61,10 +77,163 @@ app.post('/api/sections/:id/notes', addNotesToSection);
 app.delete('/api/sections/:id/notes/:noteId', removeNoteFromSection);
 app.put('/api/sections/:id/reorder', reorderNotesInSection);
 
+// Timeline Notes Routes
+const TIMELINE_NOTES_FILE = path.join(__dirname, 'data', 'timeline-notes.json');
+
+app.get('/api/timeline-notes', async (req, res) => {
+  try {
+    const notes = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    res.json({ success: true, notes: notes.notes || [] });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post('/api/timeline-notes', async (req, res) => {
+  try {
+    const data = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    const newNote = {
+      id: `note-${Date.now()}`,
+      ...req.body,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    data.notes.push(newNote);
+    await writeJSONFile(TIMELINE_NOTES_FILE, data);
+    res.json({ success: true, note: newNote });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.put('/api/timeline-notes/:id', async (req, res) => {
+  try {
+    const data = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    const index = data.notes.findIndex(n => n.id === req.params.id);
+    if (index === -1) {
+      return res.status(404).json({ success: false, error: 'Note not found' });
+    }
+    data.notes[index] = {
+      ...data.notes[index],
+      ...req.body,
+      id: req.params.id,
+      updatedAt: new Date().toISOString()
+    };
+    await writeJSONFile(TIMELINE_NOTES_FILE, data);
+    res.json({ success: true, note: data.notes[index] });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/api/timeline-notes/:id', async (req, res) => {
+  try {
+    const data = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    data.notes = data.notes.filter(n => n.id !== req.params.id);
+    await writeJSONFile(TIMELINE_NOTES_FILE, data);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// AI Weekly Summary - Create from Timeline Notes
+app.post('/api/weekly-summary/create', async (req, res) => {
+  try {
+    const { weekLabel, summaryType, summaryData, noteIds, templateId } = req.body;
+    
+    if (!weekLabel || !summaryType || !summaryData || !templateId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Missing required fields: weekLabel, summaryType, summaryData, templateId' 
+      });
+    }
+
+    // Map summary type to renderer name
+    const summaryTypeMap = {
+      'cpsar': 'executiveSummaryCPSAR',
+      'bluf': 'executiveSummaryBLUF',
+      'sbar': 'executiveSummarySBAR',
+      'pyramid': 'executiveSummaryPyramid'
+    };
+    const targetRenderer = summaryTypeMap[summaryType];
+
+    // Read the specified template by ID
+    const CONTENT_DIR = path.join(__dirname, 'data', 'content');
+    const templatePath = path.join(CONTENT_DIR, `${templateId}.json`);
+    
+    let template;
+    try {
+      template = await readJSONFile(templatePath);
+    } catch (error) {
+      return res.status(404).json({ 
+        success: false, 
+        error: `Template not found: ${templateId}` 
+      });
+    }
+
+    // Clone the template
+    const newContent = JSON.parse(JSON.stringify(template));
+    
+    // Update metadata
+    const now = new Date();
+    const dateOnly = now.toISOString().split('T')[0]; // Just YYYY-MM-DD
+    newContent.id = `weekly-update-${Date.now()}`;
+    newContent.title = `Weekly Update - ${weekLabel}`;
+    newContent.date = dateOnly;
+    newContent.createdAt = now.toISOString();
+    newContent.updatedAt = now.toISOString();
+
+    // Find the executive summary field and inject the AI data
+    // Template structure uses fields like summary_0 with _summary_0_type metadata
+    let injected = false;
+    
+    // Look for summary_0, summary_1, etc. that match the summary renderer type
+    for (let i = 0; i < 10; i++) {
+      const fieldName = `summary_${i}`;
+      const typeField = `_summary_${i}_type`;
+      
+      if (newContent[typeField] === targetRenderer) {
+        // Inject the AI-generated summary data
+        newContent[fieldName] = summaryData;
+        
+        // Add metadata about AI generation
+        newContent[`_${fieldName}_aiGenerated`] = true;
+        newContent[`_${fieldName}_sourceNoteIds`] = noteIds || [];
+        newContent[`_${fieldName}_generatedAt`] = now.toISOString();
+        injected = true;
+        break;
+      }
+    }
+    
+    if (!injected) {
+      console.warn(`No section found with type ${targetRenderer} in template ${templateId}`);
+    }
+
+    // Save the new content file
+    const newFilePath = path.join(CONTENT_DIR, `${newContent.id}.json`);
+    await writeJSONFile(newFilePath, newContent);
+
+    res.json({ 
+      success: true, 
+      contentId: newContent.id,
+      message: `Weekly Update created successfully: ${newContent.title}`
+    });
+
+  } catch (error) {
+    console.error('Failed to create weekly summary:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+
 // Path to data directory
 const DATA_DIR = path.join(__dirname, 'data');
 const CONTENT_DIR = path.join(__dirname, 'data', 'content'); // Unified content directory
 const TAGS_FILE = path.join(__dirname, 'data', 'content-tags.json');
+const NOTE_TAGS_FILE = path.join(__dirname, 'data', 'note-tags.json');
 const COMMENTS_FILE = path.join(__dirname, 'data', 'comments.json');
 
 // Helper function to read JSON file
@@ -810,6 +979,132 @@ app.delete('/api/comments/:id', async (req, res) => {
     await writeJSONFile(COMMENTS_FILE, commentsData);
     
     res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================
+// NOTE TAGS ENDPOINTS (separate from content tags)
+// ============================================
+
+// GET all note tags
+app.get('/api/note-tags', async (req, res) => {
+  try {
+    const tags = await readJSONFile(NOTE_TAGS_FILE);
+    res.json(tags.tags || []);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET single note tag by ID
+app.get('/api/note-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(NOTE_TAGS_FILE);
+    const tag = tagsData.tags.find(t => t.id === req.params.id);
+    if (!tag) {
+      return res.status(404).json({ error: 'Note tag not found' });
+    }
+    res.json(tag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST create new note tag
+app.post('/api/note-tags', async (req, res) => {
+  try {
+    const newTag = {
+      ...req.body,
+      created: new Date().toISOString()
+    };
+    
+    const tagsData = await readJSONFile(NOTE_TAGS_FILE);
+    
+    // Check for duplicate ID
+    if (tagsData.tags.some(t => t.id === newTag.id)) {
+      return res.status(400).json({ error: 'Note tag ID already exists' });
+    }
+    
+    tagsData.tags.push(newTag);
+    await writeJSONFile(NOTE_TAGS_FILE, tagsData);
+    
+    res.status(201).json(newTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// PUT update existing note tag
+app.put('/api/note-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(NOTE_TAGS_FILE);
+    const tagIndex = tagsData.tags.findIndex(t => t.id === req.params.id);
+    
+    if (tagIndex === -1) {
+      return res.status(404).json({ error: 'Note tag not found' });
+    }
+    
+    // Preserve created date
+    const updatedTag = {
+      ...req.body,
+      created: tagsData.tags[tagIndex].created
+    };
+    
+    tagsData.tags[tagIndex] = updatedTag;
+    await writeJSONFile(NOTE_TAGS_FILE, tagsData);
+    
+    res.json(updatedTag);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// DELETE note tag
+app.delete('/api/note-tags/:id', async (req, res) => {
+  try {
+    const tagsData = await readJSONFile(NOTE_TAGS_FILE);
+    const initialLength = tagsData.tags.length;
+    
+    tagsData.tags = tagsData.tags.filter(t => t.id !== req.params.id);
+    
+    if (tagsData.tags.length === initialLength) {
+      return res.status(404).json({ error: 'Note tag not found' });
+    }
+    
+    await writeJSONFile(NOTE_TAGS_FILE, tagsData);
+    res.json({ message: 'Note tag deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET note tag usage statistics
+app.get('/api/note-tags/:id/usage', async (req, res) => {
+  try {
+    const tagId = req.params.id;
+    const NOTES_DIR = path.join(__dirname, 'data', 'notes', 'notes');
+    let count = 0;
+
+    try {
+      const files = await listFiles(NOTES_DIR);
+      for (const file of files) {
+        const filePath = path.join(NOTES_DIR, file);
+        const note = await readJSONFile(filePath);
+        
+        if (note.category === tagId) {
+          count++;
+        }
+      }
+    } catch (error) {
+      // Directory might not exist, skip silently
+    }
+
+    res.json({
+      tagId,
+      noteCount: count
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

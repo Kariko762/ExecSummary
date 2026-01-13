@@ -10,9 +10,9 @@ export default defineConfig({
       // Shared code aliases for cleaner imports
       '@shared': path.resolve(__dirname, '../src'),
       '@design-system': path.resolve(__dirname, '../src/design-system'),
-      '@renderers': path.resolve(__dirname, '../src/renderers'),
       '@types': path.resolve(__dirname, '../src/types'),
       '@schemas': path.resolve(__dirname, '../src/schemas'),
+      '@renderers': path.resolve(__dirname, '../src/renderers'),
       
       // Force all React imports to use CMS's React instance
       'react': path.resolve(__dirname, './node_modules/react'),

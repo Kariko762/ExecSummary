@@ -25,6 +25,8 @@ import { OrgChartRenderer } from './OrgChartRenderer';
 import { ExecutiveSynthesisRenderer } from './ExecutiveSynthesisRenderer';
 import { BudgetBreakdown } from './assetRenderBudget';
 import { ForecastBreakdown } from './assetRenderForecast';
+import { GanttChartRenderer } from './GanttChartRenderer';
+import { VendorAssetRenderer } from './VendorAssetRenderer';
 
 /**
  * Factory component that routes to the appropriate renderer based on schema type
@@ -150,6 +152,14 @@ export const RenderFactory: React.FC<RendererProps> = (props) => {
     
     case 'forecastBreakdown':
       renderer = <ForecastBreakdown data={props.data} />;
+      break;
+    
+    case 'ganttChart':
+      renderer = <GanttChartRenderer data={props.data} />;
+      break;
+    
+    case 'vendorAsset':
+      renderer = <VendorAssetRenderer {...props} />;
       break;
     
     default:

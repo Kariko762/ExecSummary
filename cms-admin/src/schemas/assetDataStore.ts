@@ -92,7 +92,7 @@ export interface AssetDefinition {
   id: string;                    // Unique identifier (e.g., 'metricCard', 'progressBarList')
   name: string;                  // Display name in Template Builder
   type: string;                  // renderAs type for RenderFactory routing
-  category: 'basic' | 'lists' | 'complex' | 'rich' | 'charts' | 'media';
+  category: 'basic' | 'lists' | 'complex' | 'rich' | 'charts' | 'media' | 'executiveSummary';
   description: string;           // What this asset does
   useCase: string;              // When/where to use it (with real examples)
   schema: any;                  // Field schema for rendering
@@ -130,6 +130,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     },
     exampleData: 'Sample text content',
     supportsMultiColumn: true,
+    supportsHero: true,
     styling: {
       typography: AssetStyles.typography.body.normal
     }
@@ -170,6 +171,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     },
     exampleData: 'This is **bold text** and this is *italic text* with inline formatting support.',
     supportsMultiColumn: true,
+    supportsHero: true,
     styling: {
       typography: AssetStyles.typography.body.normal,
       padding: AssetStyles.spacing.md
@@ -199,6 +201,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       'SNOW Migration - Built comprehensive reports, dashboard launch by Nov 14'
     ],
     supportsMultiColumn: true,
+    supportsHero: true,
     styling: {
       container: AssetStyles.effects.card,
       padding: AssetStyles.spacing.md,
@@ -249,6 +252,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       'Detailed preliminary requirements document'
     ],
     supportsMultiColumn: true,
+    supportsHero: true,
     styling: {
       container: 'bg-green-50 dark:bg-green-900/10',
       padding: AssetStyles.spacing.md
@@ -280,6 +284,90 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       { title: 'International Issuing Hub', subtitle: 'Demo Enablement', percentage: 30, status: 'At Risk' }
     ],
     supportsMultiColumn: true,
+    supportsHero: true,
+    styling: {
+      container: AssetStyles.effects.card,
+      padding: AssetStyles.spacing.lg
+    }
+  },
+  
+  {
+    id: 'progressBarListDetailed',
+    name: 'Progress Bar List (Detailed)',
+    type: 'progressBarListDetailed',
+    category: 'complex',
+    description: 'Enhanced progress tracking with executive drill-down. Shows project/task details with owner, dates, budget, and clickable modal for full details.',
+    useCase: 'Executive project tracking, strategic initiative monitoring, portfolio management with drill-down capability',
+    schema: {
+      type: 'progressBarListDetailed',
+      renderAs: 'progressBarListDetailed',
+      label: 'Strategic Projects',
+      required: false,
+      fields: {
+        title: { type: 'string', renderAs: 'text', label: 'Project Title' },
+        owner: { type: 'string', renderAs: 'text', label: 'Project Owner' },
+        team: { type: 'string', renderAs: 'text', label: 'Team/Department' },
+        startDate: { type: 'string', renderAs: 'text', label: 'Start Date' },
+        targetDate: { type: 'string', renderAs: 'text', label: 'Target Completion' },
+        percentage: { type: 'number', renderAs: 'number', label: 'Completion %' },
+        status: { type: 'string', renderAs: 'text', label: 'Status (On Track/At Risk/Blocked/Complete)' },
+        budget: { type: 'string', renderAs: 'text', label: 'Budget/Cost' },
+        priority: { type: 'string', renderAs: 'text', label: 'Priority (High/Medium/Low)' },
+        description: { type: 'string', renderAs: 'textarea', label: 'Description' },
+        milestones: { type: 'string', renderAs: 'textarea', label: 'Key Milestones' },
+        risks: { type: 'string', renderAs: 'textarea', label: 'Risks/Issues' },
+        dependencies: { type: 'string', renderAs: 'textarea', label: 'Dependencies' }
+      }
+    },
+    exampleData: [
+      { 
+        title: 'Enterprise Data Platform Modernization', 
+        owner: 'Sarah Chen',
+        team: 'Platform Engineering',
+        startDate: '2025-10-01',
+        targetDate: '2026-06-30',
+        percentage: 42, 
+        status: 'On Track',
+        budget: '$2.4M',
+        priority: 'High',
+        description: 'Migration from legacy data warehouse to modern cloud-based analytics platform with real-time processing capabilities.',
+        milestones: 'Phase 1 Complete (Data Migration) | Phase 2 In Progress (API Integration) | Phase 3 Planned (Analytics Dashboards)',
+        risks: 'Vendor API integration delays, team capacity constraints in Q2',
+        dependencies: 'AWS Infrastructure upgrade, Security compliance review'
+      },
+      { 
+        title: 'Customer 360 Integration Initiative', 
+        owner: 'Michael Rodriguez',
+        team: 'Customer Experience',
+        startDate: '2025-11-15',
+        targetDate: '2026-04-15',
+        percentage: 68, 
+        status: 'On Track',
+        budget: '$1.8M',
+        priority: 'High',
+        description: 'Unified customer data platform integrating CRM, support, and transaction systems for complete customer view.',
+        milestones: 'Data Model Defined | CRM Integration Complete | Support System 75% | Transactions Pending',
+        risks: 'None currently',
+        dependencies: 'Marketing automation platform upgrade'
+      },
+      { 
+        title: 'AI-Powered Support Assistant', 
+        owner: 'Dr. Emily Watson',
+        team: 'AI/ML Research',
+        startDate: '2026-01-05',
+        targetDate: '2026-09-30',
+        percentage: 15, 
+        status: 'At Risk',
+        budget: '$3.2M',
+        priority: 'Medium',
+        description: 'Development of AI assistant for tier-1 customer support with natural language processing and automated ticket resolution.',
+        milestones: 'Requirements Gathering Complete | Model Training In Progress | Integration Design Pending',
+        risks: 'Model accuracy below target (72% vs 85% goal), training data quality issues',
+        dependencies: 'Cloud GPU allocation, Legal compliance review for AI usage'
+      }
+    ],
+    supportsMultiColumn: true,
+    supportsHero: true,
     styling: {
       container: AssetStyles.effects.card,
       padding: AssetStyles.spacing.lg
@@ -317,9 +405,44 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       { title: 'NPS Score', value: '0', style: 'total', icon: 'award', iconColor: 'eggplant' }
     ],
     supportsMultiColumn: false,
+    supportsHero: true,
     styling: {
       container: AssetStyles.effects.glassStrong,
       padding: AssetStyles.spacing.lg
+    }
+  },
+  
+  {
+    id: 'gauge',
+    name: 'Gauge (Single Metric)',
+    type: 'gauge',
+    category: 'charts',
+    description: 'Single circular gauge showing percentage or value with color-coded progress ring',
+    useCase: 'Hero banners - Overall Adoption Rate 82%, Completion Percentage, Success Rate',
+    schema: {
+      type: 'object',
+      renderAs: 'gauge',
+      label: 'Gauge Metric',
+      required: false,
+      fields: {
+        value: { type: 'number', renderAs: 'number', label: 'Value (0-100 for %)' },
+        label: { type: 'string', renderAs: 'text', label: 'Label' },
+        suffix: { type: 'string', renderAs: 'text', label: 'Suffix (%, K, M, etc)' },
+        color: { type: 'string', renderAs: 'text', label: 'Custom Color (optional)' },
+        size: { type: 'string', renderAs: 'select', label: 'Size', options: ['small', 'medium', 'large'] }
+      }
+    },
+    exampleData: {
+      value: 82,
+      label: 'Overall Adoption Rate',
+      suffix: '%',
+      size: 'large'
+    },
+    supportsMultiColumn: true,
+    supportsHero: true,
+    styling: {
+      container: AssetStyles.effects.card,
+      padding: AssetStyles.spacing.md
     }
   },
   
@@ -386,6 +509,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       { name: 'Strategic Initiatives', value: 70 }
     ],
     supportsMultiColumn: true,
+    supportsHero: true,
     styling: {
       container: AssetStyles.effects.card,
       padding: AssetStyles.spacing.xl
@@ -422,7 +546,8 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       { name: 'Category B', value: 300 },
       { name: 'Category C', value: 200 }
     ],
-    supportsMultiColumn: true
+    supportsMultiColumn: true,
+    supportsHero: true
   },
   
   {
@@ -458,7 +583,8 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       { name: 'Q3', value: 800 },
       { name: 'Q4', value: 1000 }
     ],
-    supportsMultiColumn: true
+    supportsMultiColumn: true,
+    supportsHero: true
   },
   
   {
@@ -466,8 +592,8 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     name: 'Line Chart',
     type: 'lineChart',
     category: 'charts',
-    description: 'Line chart showing trends over time',
-    useCase: 'Time series data, trend analysis, monthly metrics',
+    description: 'Line chart showing trends over time. Supports multiple series for comparison.',
+    useCase: 'Time series data, trend analysis, monthly metrics, multi-series comparison',
     schema: {
       type: 'lineChart',
       renderAs: 'lineChart',
@@ -486,14 +612,15 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       }
     },
     exampleData: [
-      { name: 'Jan', value: 45 },
-      { name: 'Feb', value: 52 },
-      { name: 'Mar', value: 61 },
-      { name: 'Apr', value: 58 },
-      { name: 'May', value: 67 },
-      { name: 'Jun', value: 74 }
+      { name: 'Jan', Series1: 105, Series2: 85, Series3: 60 },
+      { name: 'Feb', Series1: 120, Series2: 88, Series3: 70 },
+      { name: 'Mar', Series1: 110, Series2: 90, Series3: 75 },
+      { name: 'Apr', Series1: 130, Series2: 95, Series3: 80 },
+      { name: 'May', Series1: 125, Series2: 102, Series3: 85 },
+      { name: 'Jun', Series1: 140, Series2: 105, Series3: 90 }
     ],
-    supportsMultiColumn: true
+    supportsMultiColumn: true,
+    supportsHero: true
   },
   
   {
@@ -640,6 +767,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
     },
     exampleData: 'Strong momentum across Demo Services Group with key wins in Banking Microsite and SNOW migration.',
     supportsMultiColumn: true,
+    supportsHero: true,
     styling: {
       container: AssetStyles.effects.glassStrong,
       padding: AssetStyles.spacing.lg,
@@ -689,6 +817,7 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       'Reports To': 'Board of Directors'
     },
     supportsMultiColumn: true,
+    supportsHero: true,
     styling: {
       typography: AssetStyles.typography.body.normal
     }
@@ -780,18 +909,16 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
       fields: {
         date: { type: 'string', renderAs: 'text', label: 'Date' },
         title: { type: 'string', renderAs: 'text', label: 'Milestone Title' },
+        note: { type: 'string', renderAs: 'text', label: 'Note Label' },
         description: { type: 'string', renderAs: 'text', label: 'Details' },
         completed: { type: 'boolean', renderAs: 'checkbox', label: 'Completed' }
       }
     },
     exampleData: [
-      { date: 'Jan 2025', title: 'Project Kickoff', description: 'Initial planning session with stakeholders and core team formation', completed: true },
-      { date: 'Feb 2025', title: 'Requirements Finalized', description: 'Technical specifications and business requirements documented', completed: true },
-      { date: 'Apr 2025', title: 'Phase 1 Development', description: 'Core infrastructure and foundational features deployed to staging', completed: true },
-      { date: 'Jun 2025', title: 'Beta Launch', description: 'Limited release to pilot customers for feedback and validation', completed: false },
-      { date: 'Aug 2025', title: 'Feature Expansion', description: 'Additional capabilities based on beta feedback implemented', completed: false },
-      { date: 'Oct 2025', title: 'Production Release', description: 'Full rollout to all markets with complete feature set', completed: false },
-      { date: 'Dec 2025', title: 'Year-End Review', description: 'Performance analysis, metrics review, and next year planning', completed: false }
+      { date: 'Q1 2024', title: 'Project Kickoff', note: 'TEXT NOTE', description: 'Initial planning session with stakeholders and core team formation', completed: true },
+      { date: 'Q2 2024', title: 'Development Phase', note: 'TEXT NOTE', description: 'Technical specifications and business requirements documented', completed: true },
+      { date: 'Q3 2024', title: 'Testing & QA', note: 'TEXT NOTE', description: 'Core infrastructure and foundational features deployed to staging', completed: false },
+      { date: 'Q4 2024', title: 'Launch', note: 'TEXT NOTE', description: 'Limited release to pilot customers for feedback and validation', completed: false }
     ],
     supportsMultiColumn: false,
     styling: {
@@ -867,6 +994,57 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   // ==========================================
   // ORGANIZATIONAL CHARTS
   // ==========================================
+  
+  {
+    id: 'vendorAsset',
+    name: 'Vendor Strategic Identity',
+    type: 'vendorAsset',
+    category: 'complex',
+    description: 'Executive vendor identity card with problems solved, core/extended functions, and success gallery',
+    useCase: 'Vendor management pages - displays strategic purpose, capability split (core vs extended), and big wins in a modern asymmetrical layout',
+    schema: {
+      type: 'object',
+      renderAs: 'vendorAsset',
+      label: 'Vendor Identity',
+      required: false
+    },
+    exampleData: {
+      problemsSolved: '**Manages high-volume customer data processing** to reduce manual entry errors and latency.',
+      coreFunctions: [
+        'API Integration',
+        'Real-time Dashboarding',
+        'Automated Reporting'
+      ],
+      extendedFunctions: [
+        'Predictive Analytics',
+        'Bulk Data Export',
+        'Custom Workflows'
+      ],
+      bigWins: [
+        {
+          metric: '-30%',
+          title: 'Operational Overhead Saved',
+          description: 'Reduced cloud costs by 20%'
+        },
+        {
+          metric: '1M+',
+          title: 'Q3 Scale',
+          description: 'Supported 1M+ concurrent users.'
+        },
+        {
+          metric: '99.9%',
+          title: 'System Uptime',
+          description: 'Ensured uninterrupted service delivery'
+        }
+      ]
+    },
+    supportsMultiColumn: false,
+    supportsHero: true,
+    styling: {
+      container: 'min-h-[400px]',
+      padding: AssetStyles.spacing.lg
+    }
+  },
   
   {
     id: 'orgChart',
@@ -1193,6 +1371,239 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   },
 
   {
+    id: 'ganttChart',
+    name: 'Gantt Chart (Project Timeline)',
+    type: 'ganttChart',
+    category: 'complex',
+    description: 'Interactive project timeline with organizational groupings, task bars, status tracking, progress indicators, and detailed drill-down modals',
+    useCase: 'Strategic initiatives, project roadmaps, multi-org coordination - showing timelines, milestones, dependencies, and progress with collapsible organizational structure',
+    schema: {
+      type: 'object',
+      renderAs: 'ganttChart',
+      label: 'Gantt Chart',
+      required: false
+    },
+    exampleData: {
+      title: 'Q1 2026 Strategic Initiatives',
+      startDate: '2026-01-01',
+      endDate: '2026-03-31',
+      organizations: [
+        {
+          id: 'capital-markets',
+          name: 'Capital Markets',
+          color: 'var(--brand-primary)',
+          collapsed: false,
+          projects: [
+            {
+              id: 'titled-rollout',
+              name: 'Tiled Rollout',
+              tasks: [
+                {
+                  id: 'license-procurement',
+                  name: 'License Procurement',
+                  startDate: '2026-01-05',
+                  endDate: '2026-01-20',
+                  progress: 85,
+                  status: 'on-track',
+                  owner: 'Sarah Chen',
+                  details: {
+                    description: 'Procure licenses for 500 users across 3 regions (NA, EMEA, APAC)',
+                    milestones: [
+                      { date: '2026-01-08', title: 'Vendor Selection Complete', completed: true },
+                      { date: '2026-01-15', title: 'Contract Signed', completed: true },
+                      { date: '2026-01-20', title: 'Licenses Activated', completed: false }
+                    ],
+                    blockers: [],
+                    dependencies: []
+                  }
+                },
+                {
+                  id: 'infrastructure-setup',
+                  name: 'Infrastructure Setup',
+                  startDate: '2026-01-18',
+                  endDate: '2026-02-05',
+                  progress: 45,
+                  status: 'on-track',
+                  owner: 'Mike Rodriguez',
+                  details: {
+                    description: 'Configure servers, databases, and networking for production deployment',
+                    milestones: [
+                      { date: '2026-01-22', title: 'Server Provisioning', completed: true },
+                      { date: '2026-01-28', title: 'Database Migration', completed: false },
+                      { date: '2026-02-05', title: 'Load Testing Complete', completed: false }
+                    ],
+                    blockers: ['Waiting for security audit approval'],
+                    dependencies: ['license-procurement']
+                  }
+                },
+                {
+                  id: 'user-training',
+                  name: 'User Training & Documentation',
+                  startDate: '2026-02-01',
+                  endDate: '2026-02-28',
+                  progress: 0,
+                  status: 'on-track',
+                  owner: 'Jennifer Lee',
+                  details: {
+                    description: 'Create training materials and conduct user onboarding sessions',
+                    milestones: [
+                      { date: '2026-02-10', title: 'Training Materials Complete', completed: false },
+                      { date: '2026-02-20', title: 'Pilot Training Sessions', completed: false },
+                      { date: '2026-02-28', title: 'All Users Trained', completed: false }
+                    ],
+                    blockers: [],
+                    dependencies: ['infrastructure-setup']
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'banking-na',
+          name: 'Banking (NA)',
+          color: 'var(--accent-blue)',
+          collapsed: true,
+          projects: [
+            {
+              id: 'core-modernization',
+              name: 'Core Banking Modernization',
+              tasks: [
+                {
+                  id: 'api-migration',
+                  name: 'API Migration',
+                  startDate: '2026-01-10',
+                  endDate: '2026-02-15',
+                  progress: 60,
+                  status: 'on-track',
+                  owner: 'Robert Kim',
+                  details: {
+                    description: 'Migrate legacy APIs to modern RESTful architecture',
+                    milestones: [
+                      { date: '2026-01-20', title: 'API Design Complete', completed: true },
+                      { date: '2026-02-01', title: 'Development Complete', completed: false }
+                    ],
+                    blockers: [],
+                    dependencies: []
+                  }
+                },
+                {
+                  id: 'data-migration',
+                  name: 'Customer Data Migration',
+                  startDate: '2026-02-10',
+                  endDate: '2026-03-20',
+                  progress: 15,
+                  status: 'blocked',
+                  owner: 'Amanda Torres',
+                  details: {
+                    description: 'Migrate 2.5M customer records to new platform',
+                    milestones: [
+                      { date: '2026-02-15', title: 'Data Mapping Complete', completed: false },
+                      { date: '2026-03-01', title: 'Pilot Migration', completed: false }
+                    ],
+                    blockers: ['Data quality issues identified', 'Compliance review pending'],
+                    dependencies: ['api-migration']
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'banking-int',
+          name: 'Banking (INT)',
+          color: 'var(--accent-green)',
+          collapsed: true,
+          projects: [
+            {
+              id: 'multi-currency',
+              name: 'Multi-Currency Support',
+              tasks: [
+                {
+                  id: 'forex-integration',
+                  name: 'Forex Rate Integration',
+                  startDate: '2026-01-15',
+                  endDate: '2026-02-28',
+                  progress: 90,
+                  status: 'completed',
+                  owner: 'David Park',
+                  details: {
+                    description: 'Integrate real-time forex rates from multiple providers',
+                    milestones: [
+                      { date: '2026-01-25', title: 'Provider Integration', completed: true },
+                      { date: '2026-02-10', title: 'Rate Caching System', completed: true },
+                      { date: '2026-02-25', title: 'Production Deployment', completed: true }
+                    ],
+                    blockers: [],
+                    dependencies: []
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'payments',
+          name: 'PAYMENTS',
+          color: 'var(--brand-secondary)',
+          collapsed: true,
+          projects: [
+            {
+              id: 'instant-payments',
+              name: 'Instant Payments Platform',
+              tasks: [
+                {
+                  id: 'real-time-processing',
+                  name: 'Real-Time Processing Engine',
+                  startDate: '2026-01-08',
+                  endDate: '2026-03-15',
+                  progress: 55,
+                  status: 'at-risk',
+                  owner: 'Lisa Wong',
+                  details: {
+                    description: 'Build high-performance real-time payment processing system',
+                    milestones: [
+                      { date: '2026-01-30', title: 'Architecture Review', completed: true },
+                      { date: '2026-02-20', title: 'Beta Testing', completed: false },
+                      { date: '2026-03-10', title: 'Security Audit', completed: false }
+                    ],
+                    blockers: ['Performance bottleneck at 10k TPS'],
+                    dependencies: []
+                  }
+                },
+                {
+                  id: 'fraud-detection',
+                  name: 'AI-Powered Fraud Detection',
+                  startDate: '2026-02-01',
+                  endDate: '2026-03-25',
+                  progress: 30,
+                  status: 'on-track',
+                  owner: 'Carlos Mendez',
+                  details: {
+                    description: 'Machine learning model for real-time fraud detection',
+                    milestones: [
+                      { date: '2026-02-15', title: 'Model Training', completed: false },
+                      { date: '2026-03-01', title: 'Integration Testing', completed: false }
+                    ],
+                    blockers: [],
+                    dependencies: ['real-time-processing']
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    supportsMultiColumn: false,
+    supportsHero: false,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.md
+    }
+  },
+
+  {
     id: 'forecastBreakdown',
     name: 'Financial Forecast (Capex/Opex)',
     type: 'forecastBreakdown',
@@ -1408,19 +1819,20 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
   },
 
   // ==========================================
-  // EXECUTIVE SYNTHESIS (CPSAR Framework)
+  // EXECUTIVE SUMMARIES
   // ==========================================
 
+  // CPSAR: Context, Problem, Solution, Action, Results
   {
-    id: 'executiveSynthesis',
-    name: 'Executive Synthesis',
-    type: 'executiveSynthesis',
-    category: 'complex',
-    description: 'Executive communication framework: Context, Problem, Solution, Recommendation, Asks (CPSAR)',
-    useCase: 'Executive summaries, status reports, decision briefs - clear synthesis for leadership',
+    id: 'executiveSummaryCPSAR',
+    name: 'Executive Summary (CPSAR)',
+    type: 'executiveSummaryCPSAR',
+    category: 'executiveSummary',
+    description: 'CPSAR Framework: Context, Problem, Solution, Action/Recommendation, Results/Asks',
+    useCase: 'Executive summaries, status reports, decision briefs - structured for C-suite',
     schema: {
       type: 'object',
-      renderAs: 'executiveSynthesis',
+      renderAs: 'executiveSummaryCPSAR',
       label: 'Executive Synthesis',
       required: false
     },
@@ -1450,6 +1862,118 @@ export const ASSET_LIBRARY: AssetDefinition[] = [
           urgency: 'high',
           owner: 'CHRO',
           deadline: 'Dec 18, 2025'
+        }
+      ]
+    },
+    supportsMultiColumn: false,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.md
+    }
+  },
+
+  // BLUF: Bottom Line Up Front (Military/Government Style)
+  {
+    id: 'executiveSummaryBLUF',
+    name: 'Executive Summary (BLUF)',
+    type: 'executiveSummaryBLUF',
+    category: 'executiveSummary',
+    description: 'BLUF Framework: Bottom Line Up Front - Answer first, then context',
+    useCase: 'Military-style brief, urgent decisions, time-sensitive communications',
+    schema: {
+      type: 'object',
+      renderAs: 'executiveSummaryBLUF',
+      label: 'Executive Summary (BLUF)',
+      required: false
+    },
+    exampleData: {
+      bottomLine: 'Approve $2M emergency funding by Dec 15 to prevent 3 critical projects from 2-month delay',
+      background: 'Q4 tracking 12 strategic programs ($45M). Recent RIF eliminated platform team, creating budget ownership gap.',
+      assessment: '3 projects at risk: 15% overrun, resource shortage, vendor procurement delays. Without action, Q1 delivery jeopardized.',
+      recommendation: 'Reallocate Q1 reserves, extend deadlines 30 days, approve 3 contractor positions',
+      asks: [
+        {
+          type: 'budget',
+          item: 'Approve $2M emergency funding from Q1 reserves',
+          urgency: 'high',
+          owner: 'CFO',
+          deadline: 'Dec 15, 2025'
+        }
+      ]
+    },
+    supportsMultiColumn: false,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.md
+    }
+  },
+
+  // SBAR: Situation, Background, Assessment, Recommendation (Healthcare/Operations)
+  {
+    id: 'executiveSummarySBAR',
+    name: 'Executive Summary (SBAR)',
+    type: 'executiveSummarySBAR',
+    category: 'executiveSummary',
+    description: 'SBAR Framework: Situation, Background, Assessment, Recommendation',
+    useCase: 'Healthcare, operations, incident reports - standardized clinical communication',
+    schema: {
+      type: 'object',
+      renderAs: 'executiveSummarySBAR',
+      label: 'Executive Summary (SBAR)',
+      required: false
+    },
+    exampleData: {
+      situation: '3 critical projects facing 2-month delay and 15% budget overrun as of Dec 13, 2025',
+      background: 'Q4 portfolio: 12 programs, $45M investment. Recent RIF eliminated platform team and budget sponsors.',
+      assessment: 'Resource shortage critical. Vendor procurement delayed. Without intervention, Q1 deliverables at risk.',
+      recommendation: 'Emergency funding $2M, deadline extension 30 days, 3 contractor approvals',
+      asks: [
+        {
+          type: 'decision',
+          item: 'Extend Project Alpha deadline to Jan 31, 2026',
+          urgency: 'medium',
+          owner: 'CEO',
+          deadline: 'Dec 20, 2025'
+        }
+      ]
+    },
+    supportsMultiColumn: false,
+    styling: {
+      container: 'w-full',
+      padding: AssetStyles.spacing.md
+    }
+  },
+
+  // Pyramid Principle: Main argument first, then supporting points (McKinsey/Consulting)
+  {
+    id: 'executiveSummaryPyramid',
+    name: 'Executive Summary (Pyramid)',
+    type: 'executiveSummaryPyramid',
+    category: 'executiveSummary',
+    description: 'Pyramid Principle: Main argument, key points, supporting details, next steps',
+    useCase: 'Consulting briefs, strategic recommendations - structured logical arguments',
+    schema: {
+      type: 'object',
+      renderAs: 'executiveSummaryPyramid',
+      label: 'Executive Summary (Pyramid)',
+      required: false
+    },
+    exampleData: {
+      mainArgument: 'Immediate $2M funding approval required to salvage Q4 strategic portfolio and prevent cascading Q1 failures',
+      keyPoints: [
+        'Resource Crisis: RIF eliminated platform team, creating critical skill gaps',
+        'Budget Impact: 3 projects showing 15% overrun ($6.75M at risk)',
+        'Timeline Pressure: 2-month slip threatens Q1 commitments to board'
+      ],
+      supportingDetails: 'Portfolio: 12 programs, $45M total investment. Risk concentration: Project Alpha ($18M), Project Beta ($12M), Project Gamma ($15.75M). Mitigation started: reallocated $2M internally, fast-tracked vendor procurement, identified 3 contractor candidates.',
+      nextSteps: 'Dec 15: CFO approves emergency funding. Dec 20: CEO extends deadlines. Dec 22: HR approves contractor positions. Jan 5: Resume full velocity.',
+      asks: [
+        {
+          type: 'budget',
+          item: 'Approve $2M emergency funding from Q1 reserves',
+          urgency: 'high',
+          owner: 'CFO',
+          deadline: 'Dec 15, 2025'
         }
       ]
     },
@@ -1521,6 +2045,7 @@ export function groupAssetsByCategory() {
     { id: 'charts', name: 'Charts & Metrics', color: 'pink' },
     { id: 'complex', name: 'Complex Layouts', color: 'purple' },
     { id: 'rich', name: 'Rich Content', color: 'orange' },
+    { id: 'executiveSummary', name: 'Executive Summary', color: 'red' },
     { id: 'media', name: 'Media (Coming Soon)', color: 'cyan' },
   ];
 

@@ -1,12 +1,13 @@
 /**
- * Complex Layout Asset Patterns - LOGIC ONLY (No Styling)
+ * Complex Layout Asset Patterns - FRONTEND DISPLAY VERSION
  * 
- * These patterns return pure structure and logic.
- * assetRenderEngine.tsx applies design system styling on top.
+ * These patterns return pure structure and logic for DISPLAY ONLY.
+ * Edit modes are handled in CMS version only.
  */
 
-import React from 'react';
-import { Plus, X, Calendar } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar } from 'lucide-react';
+import { renderWithExpressions } from '../utils/expressionParser';
 
 export interface ComplexPatternProps {
   data: any;
@@ -18,72 +19,13 @@ export interface ComplexPatternProps {
 // STATUS BOARD PATTERN (4 Columns)
 // ==========================================
 
-export const StatusBoardPattern: React.FC<ComplexPatternProps> = ({ data, onChange, mode }) => {
+export const StatusBoardPattern: React.FC<ComplexPatternProps> = ({ data }) => {
   const columns = data?.columns || [
     { title: 'On Track', items: [] },
     { title: 'At Risk', items: [] },
     { title: 'Blocked', items: [] },
     { title: 'Completed', items: [] }
   ];
-  
-  if (mode === 'edit') {
-    const updateColumnTitle = (colIndex: number, title: string) => {
-      const updated = [...columns];
-      updated[colIndex] = { ...updated[colIndex], title };
-      onChange?.({ ...data, columns: updated });
-    };
-    
-    const addItem = (colIndex: number) => {
-      const updated = [...columns];
-      updated[colIndex].items = [...(updated[colIndex].items || []), ''];
-      onChange?.({ ...data, columns: updated });
-    };
-    
-    const removeItem = (colIndex: number, itemIndex: number) => {
-      const updated = [...columns];
-      updated[colIndex].items = updated[colIndex].items.filter((_: any, i: number) => i !== itemIndex);
-      onChange?.({ ...data, columns: updated });
-    };
-    
-    const updateItem = (colIndex: number, itemIndex: number, value: string) => {
-      const updated = [...columns];
-      updated[colIndex].items[itemIndex] = value;
-      onChange?.({ ...data, columns: updated });
-    };
-    
-    return (
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        {columns.map((column: any, colIndex: number) => (
-          <div key={colIndex} className="edit-item-container">
-            <input
-              type="text"
-              value={column.title || ''}
-              onChange={(e) => updateColumnTitle(colIndex, e.target.value)}
-              placeholder="Column Title..."
-              style={{ marginBottom: '12px', fontWeight: 600 }}
-            />
-            {(column.items || []).map((item: string, itemIndex: number) => (
-              <div key={itemIndex} className="edit-list-item">
-                <input
-                  type="text"
-                  value={item}
-                  onChange={(e) => updateItem(colIndex, itemIndex, e.target.value)}
-                  placeholder="Item..."
-                  style={{ flex: 1 }}
-                />
-                <button className="delete-button" onClick={() => removeItem(colIndex, itemIndex)}>
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
-            <button className="secondary-action" onClick={() => addItem(colIndex)} style={{ width: '100%', marginTop: '8px' }}>
-              <Plus size={16} /> Add Item
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  }
   
   return (
     <div className="status-board">
@@ -105,71 +47,9 @@ export const StatusBoardPattern: React.FC<ComplexPatternProps> = ({ data, onChan
 // PROJECT MILESTONES TIMELINE (Horizontal)
 // ==========================================
 
-export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange, mode }) => {
+export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data }) => {
   const events = Array.isArray(data) ? data : [];
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  
-  if (mode === 'edit') {
-    const addEvent = () => {
-      onChange?.([...events, { date: '', title: '', description: '', completed: false }]);
-    };
-    
-    const removeEvent = (index: number) => {
-      onChange?.(events.filter((_, i) => i !== index));
-    };
-    
-    const updateEvent = (index: number, field: string, value: any) => {
-      const updated = [...events];
-      updated[index] = { ...updated[index], [field]: value };
-      onChange?.(updated);
-    };
-    
-    return (
-      <div>
-        {events.map((event, index) => (
-          <div key={index} className="edit-item-container">
-            <div className="edit-field-row" style={{ marginBottom: '12px' }}>
-              <input
-                type="text"
-                value={event.date || ''}
-                onChange={(e) => updateEvent(index, 'date', e.target.value)}
-                placeholder="Date (e.g., Jan 2025)..."
-                style={{ width: '150px' }}
-              />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Completed</span>
-                <div 
-                  className={`toggle-switch ${event.completed ? 'active' : ''}`}
-                  onClick={() => updateEvent(index, 'completed', !event.completed)}
-                >
-                  <div className="toggle-switch-knob"></div>
-                </div>
-              </div>
-              <button className="delete-button" onClick={() => removeEvent(index)}>
-                <X size={16} />
-              </button>
-            </div>
-            <input
-              type="text"
-              value={event.title || ''}
-              onChange={(e) => updateEvent(index, 'title', e.target.value)}
-              placeholder="Milestone Title..."
-              style={{ marginBottom: '12px' }}
-            />
-            <textarea
-              value={event.description || ''}
-              onChange={(e) => updateEvent(index, 'description', e.target.value)}
-              placeholder="Description..."
-              rows={2}
-            />
-          </div>
-        ))}
-        <button className="primary-action" onClick={addEvent}>
-          <Plus size={16} /> Add Milestone
-        </button>
-      </div>
-    );
-  }
   
   // Calculate timeline overview
   const selectedEvent = events[selectedIndex] || events[0];
@@ -178,7 +58,6 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
   const completedCount = events.filter(e => e.completed).length;
   const progressPercent = events.length > 0 ? Math.round((completedCount / events.length) * 100) : 0;
   
-  // Display mode - new layout with timeline + details container
   return (
     <div className="timeline-container">
       {/* Top Timeline */}
@@ -192,6 +71,12 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
               onClick={() => setSelectedIndex(index)}
               data-milestone-index={index}
             >
+              {/* Note Label */}
+              {event.note && (
+                <div className="milestone-note">
+                  <span>{renderWithExpressions(event.note)}</span>
+                </div>
+              )}
               <div className="milestone-circle">{index + 1}</div>
               <div className="milestone-date">{event.date}</div>
               <div className="milestone-title">{event.title}</div>
@@ -273,7 +158,7 @@ export const TimelinePattern: React.FC<ComplexPatternProps> = ({ data, onChange,
 // TWO COLUMN COMPARISON PATTERN (2x2 Grid)
 // ==========================================
 
-export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data, onChange, mode }) => {
+export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data }) => {
   const defaultData = {
     topLeftTitle: '',
     topLeftContent: '',
@@ -286,77 +171,6 @@ export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data
   };
   
   const compData = { ...defaultData, ...data };
-  
-  if (mode === 'edit') {
-    const updateField = (field: string, value: string) => {
-      onChange?.({ ...compData, [field]: value });
-    };
-    
-    return (
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        <div className="edit-item-container">
-          <input
-            type="text"
-            value={compData.topLeftTitle}
-            onChange={(e) => updateField('topLeftTitle', e.target.value)}
-            placeholder="Top Left Title..."
-            style={{ marginBottom: '8px' }}
-          />
-          <textarea
-            value={compData.topLeftContent}
-            onChange={(e) => updateField('topLeftContent', e.target.value)}
-            placeholder="Top Left Content..."
-            rows={4}
-          />
-        </div>
-        <div className="edit-item-container">
-          <input
-            type="text"
-            value={compData.topRightTitle}
-            onChange={(e) => updateField('topRightTitle', e.target.value)}
-            placeholder="Top Right Title..."
-            style={{ marginBottom: '8px' }}
-          />
-          <textarea
-            value={compData.topRightContent}
-            onChange={(e) => updateField('topRightContent', e.target.value)}
-            placeholder="Top Right Content..."
-            rows={4}
-          />
-        </div>
-        <div className="edit-item-container">
-          <input
-            type="text"
-            value={compData.bottomLeftTitle}
-            onChange={(e) => updateField('bottomLeftTitle', e.target.value)}
-            placeholder="Bottom Left Title..."
-            style={{ marginBottom: '8px' }}
-          />
-          <textarea
-            value={compData.bottomLeftContent}
-            onChange={(e) => updateField('bottomLeftContent', e.target.value)}
-            placeholder="Bottom Left Content..."
-            rows={4}
-          />
-        </div>
-        <div className="edit-item-container">
-          <input
-            type="text"
-            value={compData.bottomRightTitle}
-            onChange={(e) => updateField('bottomRightTitle', e.target.value)}
-            placeholder="Bottom Right Title..."
-            style={{ marginBottom: '8px' }}
-          />
-          <textarea
-            value={compData.bottomRightContent}
-            onChange={(e) => updateField('bottomRightContent', e.target.value)}
-            placeholder="Bottom Right Content..."
-            rows={4}
-          />
-        </div>
-      </div>
-    );
-  }
   
   return (
     <div className="four-block-grid">
@@ -384,36 +198,7 @@ export const TwoColumnComparisonPattern: React.FC<ComplexPatternProps> = ({ data
 // PROBLEM SOLUTION BOX PATTERN
 // ==========================================
 
-export const ProblemSolutionBoxPattern: React.FC<ComplexPatternProps> = ({ data, onChange, mode }) => {
-  if (mode === 'edit') {
-    const updateField = (field: string, value: string) => {
-      onChange?.({ ...data, [field]: value });
-    };
-    
-    return (
-      <div className="problem-solution-edit">
-        <div className="problem-section">
-          <label>Problem</label>
-          <textarea
-            value={data?.problem || ''}
-            onChange={(e) => updateField('problem', e.target.value)}
-            placeholder="Describe the problem..."
-            rows={5}
-          />
-        </div>
-        <div className="solution-section">
-          <label>Solution</label>
-          <textarea
-            value={data?.solution || ''}
-            onChange={(e) => updateField('solution', e.target.value)}
-            placeholder="Describe the solution..."
-            rows={5}
-          />
-        </div>
-      </div>
-    );
-  }
-  
+export const ProblemSolutionBoxPattern: React.FC<ComplexPatternProps> = ({ data }) => {
   return (
     <div className="problem-solution-box">
       <div className="problem-side">
@@ -429,5 +214,76 @@ export const ProblemSolutionBoxPattern: React.FC<ComplexPatternProps> = ({ data,
 };
 
 // ==========================================
-// COMPLEX PROJECT TIMELINE (Gantt-style with Phases)
+// GANTT CHART PATTERN
 // ==========================================
+
+export const GanttChartPattern: React.FC<ComplexPatternProps> = ({ data }) => {
+  const GanttChartRenderer = React.lazy(() => 
+    import('./assetRenderGantt').then(module => ({ default: module.GanttChartRenderer }))
+  );
+  
+  return (
+    <React.Suspense fallback={<div className="text-center py-8 text-gray-500">Loading Gantt chart...</div>}>
+      <GanttChartRenderer data={data} mode="display" />
+    </React.Suspense>
+  );
+};
+
+// ==========================================
+// VENDOR STRATEGIC IDENTITY PATTERN
+// ==========================================
+
+export const VendorAssetPattern: React.FC<ComplexPatternProps> = ({ data }) => {
+  const problemsSolved = data?.problemsSolved || '';
+  const coreFunctions = data?.coreFunctions || [];
+  const extendedFunctions = data?.extendedFunctions || [];
+  const bigWins = data?.bigWins || [];
+
+  return (
+    <div className="vendor-asset-display">
+      {/* Top Row: Problems (60%) + Capabilities (40%) */}
+      <div className="vendor-top-row">
+        {/* Problems Being Solved - The Narrative */}
+        <div className="vendor-problems-card">
+          <h3 className="vendor-section-label">Strategic Purpose</h3>
+          <div className="vendor-problems-content">
+            {renderWithExpressions(problemsSolved)}
+          </div>
+        </div>
+
+        {/* Core vs Extended - The Capability Split */}
+        <div className="vendor-capabilities-card">
+          <div className="vendor-capabilities-grid">
+            <div className="vendor-core-column">
+              <h4 className="vendor-capability-title core">Core Functions</h4>
+              <ul className="vendor-function-list">
+                {coreFunctions.map((func: string, index: number) => (
+                  <li key={index}>{func}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="vendor-extended-column">
+              <h4 className="vendor-capability-title extended">Extended Value</h4>
+              <ul className="vendor-function-list extended">
+                {extendedFunctions.map((func: string, index: number) => (
+                  <li key={index}>{func}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Row: Success Gallery - The Proof */}
+      <div className="vendor-success-gallery">
+        {bigWins.map((win: any, index: number) => (
+          <div key={index} className="vendor-win-card">
+            <div className="vendor-win-metric">{win.metric}</div>
+            <div className="vendor-win-title">{win.title}</div>
+            <p className="vendor-win-description">{win.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};

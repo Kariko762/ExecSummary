@@ -1,0 +1,32 @@
+{
+  "tags": [
+    {
+      "id": "tag-1765871299139-hexs02v4s",
+      "name": "Coast-Renewals-2026",
+      "color": "#4bcd3e",
+      "description": "This Tag is for all Coast 2026 renewals, LoB and MSA",
+      "createdAt": "2025-12-16T07:48:19.139Z"
+    },
+    {
+      "id": "tag-1765927041901-3er6laubc",
+      "name": "Leadership Interlock",
+      "color": "#8B5CF6",
+      "description": "",
+      "createdAt": "2025-12-16T23:17:21.901Z"
+    },
+    {
+      "id": "tag-1765928918627-vslgkphi8",
+      "name": "Demo Admin",
+      "color": "#ffc905",
+      "description": "",
+      "createdAt": "2025-12-16T23:48:38.627Z"
+    },
+    {
+      "id": "tag-1765928973168-l6anydq8v",
+      "name": "Strategic Goals",
+      "color": "#a027b0",
+      "description": "",
+      "createdAt": "2025-12-16T23:49:33.168Z"
+    }
+  ]
+}

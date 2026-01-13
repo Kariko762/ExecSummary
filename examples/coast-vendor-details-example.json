@@ -1,0 +1,72 @@
+{
+  "vendorName": "Coast.io",
+  "vendorTagline": "AI-Powered Interactive Demo Platform for Technical Products",
+  "logoUrl": "/assets/coast-logo.png",
+  "engagementStart": "Q2 2023",
+  "contractRenewal": "Dec 2026",
+  "contractValue": "$883,740/year",
+  
+  "primaryContact": {
+    "name": "James Smith",
+    "role": "Global Account Manager",
+    "email": "james.smith@coast.io",
+    "phone": "+1 (555) 123-4567"
+  },
+  
+  "problemStatement": "**Critical Sales Infrastructure Gap:** FIS Sales and Pre-Sales teams lacked the ability to demonstrate complex API products and technical workflows to prospects without weeks of custom development. The 'duct tape demo' problem was costing deals and slowing sales cycles across 7 business units. Static documentation and slide decks couldn't convey the real value of FIS products, leading to longer evaluation periods and lower conversion rates.",
+  
+  "solutionDelivered": "Coast provides **daily-use demo infrastructure** enabling FIS teams to create personalized, interactive product demonstrations in minutes instead of weeks. The platform transforms static API documentation into live, branded experiences that prospects can interact with immediately. Coast eliminates demo development bottlenecks while providing analytics on prospect engagement and intent signals.",
+  
+  "coreFunctions": [
+    "Interactive API Demo Builder",
+    "Personalized Demo Links (AI-Powered)",
+    "Multi-Environment Support (Mock/Sandbox/Production)",
+    "Real-Time Analytics & Engagement Tracking",
+    "Template Library for Reusable Demo Assets",
+    "Website Embed Capabilities",
+    "Enterprise SSO & Role-Based Access Control"
+  ],
+  
+  "smartGoals": {
+    "specific": "Provide demo capabilities to 7 FIS business units (Digital Banking, Code Connect, Loyalty, Automated Finance, Fintel, Embedded Finance, Money Movement Hub) with subsidized corporate MSA pricing",
+    "measurable": "Support daily demo usage across Sales/Pre-Sales teams, track engagement metrics, achieve 20%+ reduction in sales cycle length (baseline: Sardine case study)",
+    "achievable": "Corporate MSA subsidy ($267,300) makes individual BU costs affordable, maintaining critical demo infrastructure at scale",
+    "relevant": "Direct impact on revenue generation - demos are proven to accelerate deal closure (47-day improvement), increase conversion rates (2x), and enable competitive differentiation",
+    "timeBound": "Current contract through Dec 2026. Active pilots (6 in flight) targeting budget approval by Q2 2026 for expansion to additional business units",
+    "currentStatus": "on-track"
+  },
+  
+  "quickStats": {
+    "activeWorkspaces": 7,
+    "annualSpend": "$883K",
+    "pilotsInFlight": 6,
+    "userCount": 150
+  },
+  
+  "bigWins": [
+    {
+      "metric": "20%",
+      "title": "Faster Sales Cycles",
+      "description": "Sardine reduced sales cycles by 20% using Coast interactive demos",
+      "icon": "⚡"
+    },
+    {
+      "metric": "47 Days",
+      "title": "Time-to-Close Reduction",
+      "description": "Spreedly accelerated deal closure by 47 days with Coast",
+      "icon": "🎯"
+    },
+    {
+      "metric": "2x",
+      "title": "Conversion Increase",
+      "description": "Middesk doubled conversion on qualified buyers using Coast demos",
+      "icon": "📈"
+    },
+    {
+      "metric": "$616K",
+      "title": "LoB Value Delivered",
+      "description": "Seven business units actively using Coast daily for demos",
+      "icon": "💎"
+    }
+  ]
+}

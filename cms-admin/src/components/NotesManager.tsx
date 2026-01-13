@@ -59,7 +59,8 @@ interface NotesManagerProps {
   autoOpenSection?: boolean;
 }
 
-const CATEGORY_CONFIG = {
+// Default fallback categories (used if API call fails)
+const DEFAULT_CATEGORY_CONFIG = {
   'key-highlight': { label: 'Key Highlight', icon: Star, color: 'text-yellow-500', bg: 'bg-yellow-50' },
   'goal-progression': { label: 'Goal Progression', icon: Target, color: 'text-blue-500', bg: 'bg-blue-50' },
   'big-win': { label: 'Big Win', icon: Trophy, color: 'text-green-500', bg: 'bg-green-50' },
@@ -68,10 +69,21 @@ const CATEGORY_CONFIG = {
   'general': { label: 'General', icon: List, color: 'text-gray-500', bg: 'bg-gray-50' }
 };
 
+// Icon mapping helper
+const getIconComponent = (iconName: string) => {
+  const iconMap: Record<string, any> = {
+    'Star': Star, 'Target': Target, 'Trophy': Trophy, 'Briefcase': Briefcase, 
+    'Rocket': Rocket, 'List': List, 'CheckCircle': CheckCircle
+  };
+  return iconMap[iconName] || List;
+};
+
 export default function NotesManager({ onClose, showNotification, autoOpenNote, autoOpenSection }: NotesManagerProps) {
   const [activeView, setActiveView] = useState<'notes' | 'sections'>('notes');
   const [notes, setNotes] = useState<Note[]>([]);
   const [sections, setSections] = useState<Section[]>([]);
+  const [noteTags, setNoteTags] = useState<any[]>([]);
+  const [categoryConfig, setCategoryConfig] = useState<any>(DEFAULT_CATEGORY_CONFIG);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState<string>('all');
@@ -100,6 +112,31 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
   const [organizations, setOrganizations] = useState<any[]>([]);
   const [initiatives, setInitiatives] = useState<any[]>([]);
   const [goals, setGoals] = useState<any[]>([]);
+
+  // Fetch note tags (categories)
+  const fetchNoteTags = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/note-tags');
+      const tags = await response.json();
+      setNoteTags(tags);
+
+      // Build dynamic category config from tags
+      const config: any = {};
+      tags.forEach((tag: any) => {
+        config[tag.id] = {
+          label: tag.name,
+          icon: getIconComponent(tag.icon),
+          color: `text-${tag.color}-500`,
+          bg: `bg-${tag.color}-50`
+        };
+      });
+      setCategoryConfig(config);
+    } catch (error) {
+      console.error('Failed to fetch note tags:', error);
+      // Fall back to default config
+      setCategoryConfig(DEFAULT_CATEGORY_CONFIG);
+    }
+  };
 
   // Fetch notes
   const fetchNotes = async () => {
@@ -160,7 +197,7 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      await Promise.all([fetchNotes(), fetchSections(), fetchLinkableData()]);
+      await Promise.all([fetchNoteTags(), fetchNotes(), fetchSections(), fetchLinkableData()]);
       setLoading(false);
     };
     loadData();
@@ -518,16 +555,34 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
           <div className="flex gap-6">
             {/* Main Area - Grouped Notes */}
             <div className="flex-1">
-              {/* Search Bar */}
-              <div className="mb-6 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search notes..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                />
+              {/* Search and Filter Bar */}
+              <div className="mb-6 flex gap-3">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search notes..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  />
+                </div>
+                
+                {/* Category Filter Dropdown */}
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <select
+                    value={filterCategory}
+                    onChange={(e) => setFilterCategory(e.target.value)}
+                    className="pl-9 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm appearance-none cursor-pointer"
+                  >
+                    <option value="all">All Categories</option>
+                    {Object.entries(categoryConfig).map(([key, config]) => (
+                      <option key={key} value={key}>{config.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                </div>
               </div>
 
               {/* Grouped Notes by Section */}
@@ -583,8 +638,8 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
                           {/* Compact Note Cards */}
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                             {sectionNotes.map(note => {
-                              const categoryConfig = CATEGORY_CONFIG[note.category];
-                              const CategoryIcon = categoryConfig.icon;
+                              const noteCategoryConfig = categoryConfig[note.category] || categoryConfig['general'];
+                              const CategoryIcon = noteCategoryConfig.icon;
                               
                               return (
                                 <motion.div
@@ -598,8 +653,8 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
                                 >
                                   {/* Compact Header */}
                                   <div className="flex items-start justify-between gap-2 mb-2">
-                                    <div className={`p-1 rounded ${categoryConfig.bg}`}>
-                                      <CategoryIcon className={`w-3 h-3 ${categoryConfig.color}`} />
+                                    <div className={`p-1 rounded ${noteCategoryConfig.bg}`}>
+                                      <CategoryIcon className={`w-3 h-3 ${noteCategoryConfig.color}`} />
                                     </div>
                                     <div className="flex gap-1">
                                       <button
@@ -896,6 +951,7 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
         organizations={organizations}
         initiatives={initiatives}
         goals={goals}
+        categoryConfig={categoryConfig}
       />
 
       {/* Create/Edit Section Modal */}

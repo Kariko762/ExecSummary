@@ -1,0 +1,45 @@
+{
+  "tasks": [
+    {
+      "id": "task-1768301728091-ekfao33br",
+      "title": "Task 123",
+      "owner": "Jason Hanscomb",
+      "team": "Demo Operations Team",
+      "businessUnit": "Capital Markets",
+      "product": "Enterprise Risk",
+      "startDate": "2026-01-13",
+      "targetDate": "",
+      "percentage": 25,
+      "status": "On Track",
+      "budget": "",
+      "priority": "Medium",
+      "description": "",
+      "milestones": "Milestone 1 | Milestone 2 | Milestone 3",
+      "risks": "Risk 1",
+      "dependencies": "dependanct 1",
+      "steps": [
+        {
+          "id": "step-1768301716983",
+          "step": "This is the first step",
+          "state": "Pending"
+        }
+      ],
+      "createdAt": "2026-01-13T10:55:28.091Z",
+      "updatedAt": "2026-01-13T11:25:04.271Z",
+      "enabledFields": {
+        "owner": true,
+        "product": true,
+        "budget": true,
+        "risks": true,
+        "team": true,
+        "startDate": true,
+        "description": true,
+        "dependencies": true,
+        "businessUnit": true,
+        "targetDate": true,
+        "milestones": true,
+        "steps": true
+      }
+    }
+  ]
+}

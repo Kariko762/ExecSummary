@@ -27,14 +27,21 @@ const AiPromptModal: React.FC<AiPromptModalProps> = ({
 
   const generatePrompt = () => {
     switch (promptType) {
-      case 'executiveSynthesis':
-        return generateExecutiveSynthesisPrompt(userData);
+      case 'cpsar':
+      case 'executiveSynthesis': // backward compatibility
+        return generateCPSARPrompt(userData);
+      case 'bluf':
+        return generateBLUFPrompt(userData);
+      case 'sbar':
+        return generateSBARPrompt(userData);
+      case 'pyramid':
+        return generatePyramidPrompt(userData);
       default:
         return 'No prompt template available for this component type.';
     }
   };
 
-  const generateExecutiveSynthesisPrompt = (data: any) => {
+  const generateCPSARPrompt = (data: any) => {
     const hasContext = data?.context?.trim();
     const hasProblem = data?.problem?.trim();
     const hasSolution = data?.solution?.trim();
@@ -99,6 +106,92 @@ IMPORTANT:
 - Return ONLY the JSON object, no explanations before or after`;
   };
 
+  const generateBLUFPrompt = (data: any) => {
+    return `You are an executive communication expert. I need help structuring an Executive Summary using the BLUF framework (Bottom Line Up Front - Military/Government Style).
+
+**MY CURRENT DATA:**
+
+${data?.bottomLine ? `**Bottom Line:**\n${data.bottomLine}\n` : '**Bottom Line:** [Not provided yet]'}
+${data?.background ? `**Background:**\n${data.background}\n` : '**Background:** [Not provided yet]'}
+${data?.assessment ? `**Assessment:**\n${data.assessment}\n` : '**Assessment:** [Not provided yet]'}
+${data?.recommendation ? `**Recommendation:**\n${data.recommendation}\n` : '**Recommendation:** [Not provided yet]'}
+${data?.asks?.length > 0 ? `**Current Asks:**\n${data.asks.map((ask: any, idx: number) => `${idx + 1}. [${ask.type?.toUpperCase()}] ${ask.item} (Urgency: ${ask.urgency || 'medium'})${ask.owner ? ` - Owner: ${ask.owner}` : ''}${ask.deadline ? ` - Deadline: ${ask.deadline}` : ''}`).join('\n')}\n` : '**Asks:** [Not provided yet]'}
+
+**BLUF PRINCIPLES:**
+- Bottom Line FIRST - The answer/decision needed in 1-2 sentences
+- Then provide context to support that bottom line
+- Time-sensitive, action-oriented language
+
+**OUTPUT JSON FORMAT:**
+{
+  "bottomLine": "THE answer/decision needed (1-2 sentences)",
+  "background": "Context that led to this situation",
+  "assessment": "Analysis of what's happening and why it matters",
+  "recommendation": "Specific actions to take",
+  "asks": [{"type": "budget|decision|resource|approval|escalation", "item": "...", "urgency": "high|medium|low", "owner": "...", "deadline": "..."}]
+}
+
+Return ONLY valid JSON, no markdown, no explanations.`;
+  };
+
+  const generateSBARPrompt = (data: any) => {
+    return `You are an executive communication expert. I need help structuring an Executive Summary using the SBAR framework (Situation, Background, Assessment, Recommendation - Healthcare/Operations Standard).
+
+**MY CURRENT DATA:**
+
+${data?.situation ? `**Situation:**\n${data.situation}\n` : '**Situation:** [Not provided yet]'}
+${data?.background ? `**Background:**\n${data.background}\n` : '**Background:** [Not provided yet]'}
+${data?.assessment ? `**Assessment:**\n${data.assessment}\n` : '**Assessment:** [Not provided yet]'}
+${data?.recommendation ? `**Recommendation:**\n${data.recommendation}\n` : '**Recommendation:** [Not provided yet]'}
+${data?.asks?.length > 0 ? `**Current Asks:**\n${data.asks.map((ask: any, idx: number) => `${idx + 1}. [${ask.type?.toUpperCase()}] ${ask.item} (Urgency: ${ask.urgency || 'medium'})${ask.owner ? ` - Owner: ${ask.owner}` : ''}${ask.deadline ? ` - Deadline: ${ask.deadline}` : ''}`).join('\n')}\n` : '**Asks:** [Not provided yet]'}
+
+**SBAR PRINCIPLES:**
+- Situation: What is happening RIGHT NOW (current state)
+- Background: Context/history that led here
+- Assessment: Your analysis/diagnosis of the problem
+- Recommendation: What you think should be done
+
+**OUTPUT JSON FORMAT:**
+{
+  "situation": "What's happening now (current state, immediate issue)",
+  "background": "Context and history that led to this situation",
+  "assessment": "Your professional assessment/diagnosis of the problem",
+  "recommendation": "What you recommend should be done",
+  "asks": [{"type": "budget|decision|resource|approval|escalation", "item": "...", "urgency": "high|medium|low", "owner": "...", "deadline": "..."}]
+}
+
+Return ONLY valid JSON, no markdown, no explanations.`;
+  };
+
+  const generatePyramidPrompt = (data: any) => {
+    return `You are an executive communication expert. I need help structuring an Executive Summary using the Pyramid Principle (McKinsey/Consulting methodology).
+
+**MY CURRENT DATA:**
+
+${data?.mainArgument ? `**Main Argument:**\n${data.mainArgument}\n` : '**Main Argument:** [Not provided yet]'}
+${data?.keyPoints?.length > 0 ? `**Key Points:**\n${data.keyPoints.map((p: string, i: number) => `${i + 1}. ${p}`).join('\n')}\n` : '**Key Points:** [Not provided yet]'}
+${data?.supportingDetails ? `**Supporting Details:**\n${data.supportingDetails}\n` : '**Supporting Details:** [Not provided yet]'}
+${data?.nextSteps ? `**Next Steps:**\n${data.nextSteps}\n` : '**Next Steps:** [Not provided yet]'}
+${data?.asks?.length > 0 ? `**Current Asks:**\n${data.asks.map((ask: any, idx: number) => `${idx + 1}. [${ask.type?.toUpperCase()}] ${ask.item} (Urgency: ${ask.urgency || 'medium'})${ask.owner ? ` - Owner: ${ask.owner}` : ''}${ask.deadline ? ` - Deadline: ${ask.deadline}` : ''}`).join('\n')}\n` : '**Asks:** [Not provided yet]'}
+
+**PYRAMID PRINCIPLES:**
+- Start with the answer (main argument/conclusion)
+- Support with 3 key reasons/points (grouped logically)
+- Provide supporting evidence/details
+- End with clear next steps
+
+**OUTPUT JSON FORMAT:**
+{
+  "mainArgument": "The main conclusion/recommendation (the answer)",
+  "keyPoints": ["Key reason 1", "Key reason 2", "Key reason 3"],
+  "supportingDetails": "Evidence, data, and details that support the key points",
+  "nextSteps": "Specific actions, timeline, and sequence",
+  "asks": [{"type": "budget|decision|resource|approval|escalation", "item": "...", "urgency": "high|medium|low", "owner": "...", "deadline": "..."}]
+}
+
+Return ONLY valid JSON, no markdown, no explanations.`;
+  };
+
   const parseAiResponse = (response: string): any => {
     try {
       // Try to extract JSON if wrapped in markdown code blocks
@@ -112,19 +205,32 @@ IMPORTANT:
       // Parse JSON
       const parsed = JSON.parse(jsonStr);
       
-      // Validate structure for executiveSynthesis
-      if (promptType === 'executiveSynthesis') {
+      // Validate structure based on prompt type
+      if (promptType === 'cpsar' || promptType === 'executiveSynthesis') {
         if (!parsed.context && !parsed.problem && !parsed.solution && !parsed.recommendation && !parsed.asks) {
           throw new Error('Response must contain at least one field: context, problem, solution, recommendation, or asks');
         }
+      } else if (promptType === 'bluf') {
+        if (!parsed.bottomLine && !parsed.background && !parsed.assessment && !parsed.recommendation && !parsed.asks) {
+          throw new Error('Response must contain at least one field: bottomLine, background, assessment, recommendation, or asks');
+        }
+      } else if (promptType === 'sbar') {
+        if (!parsed.situation && !parsed.background && !parsed.assessment && !parsed.recommendation && !parsed.asks) {
+          throw new Error('Response must contain at least one field: situation, background, assessment, recommendation, or asks');
+        }
+      } else if (promptType === 'pyramid') {
+        if (!parsed.mainArgument && !parsed.keyPoints && !parsed.supportingDetails && !parsed.nextSteps && !parsed.asks) {
+          throw new Error('Response must contain at least one field: mainArgument, keyPoints, supportingDetails, nextSteps, or asks');
+        }
+      }
         
-        // Validate asks array if present
-        if (parsed.asks && Array.isArray(parsed.asks)) {
-          parsed.asks.forEach((ask: any, idx: number) => {
-            if (!ask.type || !ask.item) {
-              throw new Error(`Ask ${idx + 1} must have 'type' and 'item' fields`);
-            }
-            if (!['budget', 'decision', 'resource', 'approval', 'escalation'].includes(ask.type)) {
+      // Validate asks array if present (common to all formats)
+      if (parsed.asks && Array.isArray(parsed.asks)) {
+        parsed.asks.forEach((ask: any, idx: number) => {
+          if (!ask.type || !ask.item) {
+            throw new Error(`Ask ${idx + 1} must have 'type' and 'item' fields`);
+          }
+          if (!['budget', 'decision', 'resource', 'approval', 'escalation'].includes(ask.type)) {
               throw new Error(`Ask ${idx + 1} has invalid type. Must be: budget, decision, resource, approval, or escalation`);
             }
             if (ask.urgency && !['low', 'medium', 'high'].includes(ask.urgency)) {
@@ -132,10 +238,9 @@ IMPORTANT:
             }
           });
         }
-      }
       
       return parsed;
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof SyntaxError) {
         throw new Error('Invalid JSON format. Please ensure the AI response is valid JSON.');
       }
@@ -307,39 +412,70 @@ IMPORTANT:
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                 <h4 className="text-sm font-roobert-bold text-purple-900 mb-2">Preview Changes:</h4>
                 <div className="space-y-2 text-sm">
+                  {/* CPSAR fields */}
                   {parsedPreview.context && (
-                    <div>
-                      <span className="font-roobert-bold text-purple-800">Context:</span>
-                      <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.context}</p>
-                    </div>
+                    <div><span className="font-roobert-bold text-purple-800">Context:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.context}</p></div>
                   )}
                   {parsedPreview.problem && (
-                    <div>
-                      <span className="font-roobert-bold text-purple-800">Problem:</span>
-                      <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.problem}</p>
-                    </div>
+                    <div><span className="font-roobert-bold text-purple-800">Problem:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.problem}</p></div>
                   )}
                   {parsedPreview.solution && (
-                    <div>
-                      <span className="font-roobert-bold text-purple-800">Solution:</span>
-                      <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.solution}</p>
-                    </div>
+                    <div><span className="font-roobert-bold text-purple-800">Solution:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.solution}</p></div>
+                  )}
+                  {/* BLUF fields */}
+                  {parsedPreview.bottomLine && (
+                    <div><span className="font-roobert-bold text-purple-800">Bottom Line:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.bottomLine}</p></div>
+                  )}
+                  {/* SBAR fields */}
+                  {parsedPreview.situation && (
+                    <div><span className="font-roobert-bold text-purple-800">Situation:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.situation}</p></div>
+                  )}
+                  {/* Pyramid fields */}
+                  {parsedPreview.mainArgument && (
+                    <div><span className="font-roobert-bold text-purple-800">Main Argument:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.mainArgument}</p></div>
+                  )}
+                  {parsedPreview.keyPoints && Array.isArray(parsedPreview.keyPoints) && (
+                    <div><span className="font-roobert-bold text-purple-800">Key Points:</span>
+                    <ul className="text-purple-700 font-roobert-regular mt-1 space-y-1">
+                      {parsedPreview.keyPoints.map((point: string, idx: number) => (
+                        <li key={idx}>• {point}</li>
+                      ))}
+                    </ul></div>
+                  )}
+                  {parsedPreview.supportingDetails && (
+                    <div><span className="font-roobert-bold text-purple-800">Supporting Details:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.supportingDetails}</p></div>
+                  )}
+                  {parsedPreview.nextSteps && (
+                    <div><span className="font-roobert-bold text-purple-800">Next Steps:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.nextSteps}</p></div>
+                  )}
+                  {/* Common fields */}
+                  {parsedPreview.background && (
+                    <div><span className="font-roobert-bold text-purple-800">Background:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.background}</p></div>
+                  )}
+                  {parsedPreview.assessment && (
+                    <div><span className="font-roobert-bold text-purple-800">Assessment:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.assessment}</p></div>
                   )}
                   {parsedPreview.recommendation && (
-                    <div>
-                      <span className="font-roobert-bold text-purple-800">Recommendation:</span>
-                      <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.recommendation}</p>
-                    </div>
+                    <div><span className="font-roobert-bold text-purple-800">Recommendation:</span>
+                    <p className="text-purple-700 font-roobert-regular mt-1">{parsedPreview.recommendation}</p></div>
                   )}
                   {parsedPreview.asks && parsedPreview.asks.length > 0 && (
-                    <div>
-                      <span className="font-roobert-bold text-purple-800">Asks ({parsedPreview.asks.length}):</span>
-                      <ul className="text-purple-700 font-roobert-regular mt-1 space-y-1">
-                        {parsedPreview.asks.map((ask: any, idx: number) => (
-                          <li key={idx}>• [{ask.type}] {ask.item}</li>
-                        ))}
-                      </ul>
-                    </div>
+                    <div><span className="font-roobert-bold text-purple-800">Asks ({parsedPreview.asks.length}):</span>
+                    <ul className="text-purple-700 font-roobert-regular mt-1 space-y-1">
+                      {parsedPreview.asks.map((ask: any, idx: number) => (
+                        <li key={idx}>• [{ask.type}] {ask.item}</li>
+                      ))}
+                    </ul></div>
                   )}
                 </div>
               </div>
