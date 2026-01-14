@@ -180,45 +180,50 @@ export default function ContentTagManager() {
   }
 
   return (
-    <div className="p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Content Tags</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Organize and categorize your content with custom tags
-          </p>
+    <div className="space-y-8">
+      {/* Header - Outside Container */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+            <Tag className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          </div>
+          <div>
+            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Content Tags</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              Organize and categorize your content with custom tags
+            </p>
+          </div>
         </div>
         <button
           onClick={handleCreate}
-          className="flex items-center justify-center gap-2 px-6 py-2.5 min-w-[200px] rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-medium hover:shadow-lg transition-all"
+          className="flex items-center justify-center gap-2 px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-roobert-semibold transition-colors"
         >
           <Plus className="w-4 h-4" />
           Create Tag
         </button>
       </div>
 
-      {/* Tags Table */}
-      <div className="glass-strong rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+      {/* Tags Table - Inside Container */}
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Tag
               </th>
-              <th className="px-4 py-3 text-left text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Description
               </th>
-              <th className="px-4 py-3 text-center text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-center text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Published
               </th>
-              <th className="px-4 py-3 text-center text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-center text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Drafts
               </th>
-              <th className="px-4 py-3 text-left text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Created
               </th>
-              <th className="px-4 py-3 text-right text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -230,8 +235,8 @@ export default function ContentTagManager() {
               const canDelete = usage.totalCount === 0 && !tag.protected;
               
               return (
-                <tr key={tag.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                  <td className="px-4 py-4">
+                <tr key={tag.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                  <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div 
                         className="w-10 h-10 rounded-lg flex items-center justify-center"
@@ -252,23 +257,23 @@ export default function ContentTagManager() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                     {tag.description || '—'}
                   </td>
-                  <td className="px-4 py-4 text-center">
+                  <td className="px-6 py-4 text-center">
                     <span className="px-2 py-1 rounded-full bg-green-500/10 text-green-600 text-xs font-roobert-medium">
                       {usage.publishedCount}
                     </span>
                   </td>
-                  <td className="px-4 py-4 text-center">
+                  <td className="px-6 py-4 text-center">
                     <span className="px-2 py-1 rounded-full bg-yellow-500/10 text-yellow-600 text-xs font-roobert-medium">
                       {usage.draftCount}
                     </span>
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-600 dark:text-gray-400">
+                  <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
                     {new Date(tag.created).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-4">
+                  <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleEdit(tag)}

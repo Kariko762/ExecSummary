@@ -706,12 +706,13 @@
   "_budgetSummary_sectionLayoutType": "full",
   "_enabled_budgetSummary": true,
   "_completed_budgetSummary": false,
-  "status": "draft",
+  "status": "published",
   "protectionEnabled": false,
   "_template_name": "Vendor-Template-v1",
   "_template_description": "",
   "_template_created": "2026-01-07T21:23:33.854Z",
   "_template_updated": "2026-01-07T21:23:33.854Z",
   "_layout": "one-pager",
-  "_contentTag": "vendor-summary"
+  "_contentTag": "vendor-summary",
+  "_type": "vendor-summary"
 }

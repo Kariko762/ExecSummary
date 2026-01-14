@@ -10,6 +10,9 @@ import designSystemRoutes from './api/design-system.js';
 import tagsRoutes from './api/tags.js';
 import dataEngineRoutes from './api/data-engine.js';
 import tasksRoutes from './api/tasks.js';
+import businessUnitsRoutes from './api/businessUnits.js';
+import peopleRoutes from './api/people.js';
+import technologiesMenuRoutes from './api/technologiesMenu.js';
 import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats, updateTenantStats } from './api/tenants.js';
 import {
   getNotes, getNote, createNote, updateNote, deleteNote,
@@ -45,6 +48,15 @@ app.use('/api/data-engine', dataEngineRoutes);
 
 // Tasks Management Routes
 tasksRoutes(app);
+
+// Business Units Management Routes
+app.use('/api/business-units', businessUnitsRoutes);
+
+// People Management Routes
+app.use('/api/people', peopleRoutes);
+
+// Technologies Menu Routes
+app.use('/api/technologies-menu', technologiesMenuRoutes);
 
 // Tenant Management Routes (Organizations & Initiatives)
 app.get('/api/tenants', getTenants);

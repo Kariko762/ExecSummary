@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X, FileText, Tag, Building2, Target, Plus, Trash2, Edit } from 'lucide-react';
+import { Settings, Shield, ArrowLeft, Save, RotateCcw, Eye, EyeOff, Upload, Image as ImageIcon, X, FileText, Tag, Building2, Target, Plus, Trash2, Edit, Users, Cpu } from 'lucide-react';
 import { ChangeManagementModal } from './ChangeManagementModal';
 import ContentTagManager from './ContentTagManager';
+import BusinessUnitsManager from './BusinessUnitsManager';
+import PeopleManager from './PeopleManager';
+import TechnologiesMenuManager from './TechnologiesMenuManager';
 import { useAuth } from '../contexts/AuthContext';
 
 /**
@@ -77,7 +80,7 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
   const [settings, setSettings] = useState<SystemSettings>(loadSettings());
   const [hasChanges, setHasChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState<'general' | 'authentication' | 'users' | 'ai' | 'tags' | 'security' | 'documentation'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'security' | 'organization' | 'content' | 'documentation'>('general');
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [showChangeManagement, setShowChangeManagement] = useState(false);
   
@@ -464,35 +467,22 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
               label="General"
             />
             <TabButton
-              active={activeTab === 'authentication'}
-              onClick={() => setActiveTab('authentication')}
-              icon={<Shield className="w-4 h-4" />}
-              label="Authentication"
-            />
-            <TabButton
-              active={activeTab === 'users'}
-              onClick={() => setActiveTab('users')}
-              icon={<Shield className="w-4 h-4" />}
-              label="Users"
-            />
-            <TabButton
-              active={activeTab === 'ai'}
-              onClick={() => setActiveTab('ai')}
-              icon={<FileText className="w-4 h-4" />}
-              label="AI Configuration"
-            />
-            <TabButton
-              active={activeTab === 'tags'}
-              onClick={() => setActiveTab('tags')}
-              icon={<Tag className="w-4 h-4" />}
-              label="Tags"
-            />
-            <TabButton
               active={activeTab === 'security'}
               onClick={() => setActiveTab('security')}
               icon={<Shield className="w-4 h-4" />}
               label="Security"
-              disabled
+            />
+            <TabButton
+              active={activeTab === 'organization'}
+              onClick={() => setActiveTab('organization')}
+              icon={<Building2 className="w-4 h-4" />}
+              label="Organization"
+            />
+            <TabButton
+              active={activeTab === 'content'}
+              onClick={() => setActiveTab('content')}
+              icon={<FileText className="w-4 h-4" />}
+              label="Content"
             />
             <TabButton
               active={activeTab === 'documentation'}
@@ -507,10 +497,10 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {activeTab === 'general' && (
-          <div className="space-y-6">
-            {/* Organizations Section */}
-            <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
-              <div className="flex items-center justify-between mb-6">
+          <div className="space-y-8">
+            {/* Organizations Section - Header Outside Container */}
+            <div className="space-y-8">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
                     <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -535,61 +525,70 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
                         {organizationsEnabled ? 'Visible in main app' : 'Hidden in main app'}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Manage organizational content tenants</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage organizational content tenants</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowCreateOrgModal(true)}
-                  className="flex items-center justify-center gap-2 px-6 py-2.5 min-w-[200px] bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white rounded-lg font-roobert-medium hover:shadow-lg transition-all"
+                  className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-roobert-semibold transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   Create Organization
                 </button>
               </div>
 
-              <div className="space-y-3">
-                {organizations.map((org) => (
-                  <div key={org.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <h4 className="font-roobert-semibold text-gray-900 dark:text-white">{org.name}</h4>
-                        <span className="text-xs px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-roobert-medium">
-                          {org.slug}
-                        </span>
+              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                {organizations.length > 0 ? (
+                  <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {organizations.map((org) => (
+                      <div key={org.id} className="flex items-center justify-between p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3">
+                            <h4 className="font-roobert-semibold text-gray-900 dark:text-white">{org.name}</h4>
+                            <span className="text-xs px-2 py-1 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-roobert-medium">
+                              {org.slug}
+                            </span>
+                          </div>
+                          {org.description && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{org.description}</p>
+                          )}
+                          <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span>{org.contentCount} content items</span>
+                            <span className="text-green-600 dark:text-green-400">{org.publishedCount} published</span>
+                            <span className="text-yellow-600 dark:text-yellow-400">{org.draftCount} draft</span>
+                            <span>Created {org.createdDate}</span>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => setTenantToDelete({ type: 'org', slug: org.slug, name: org.name })}
+                          disabled={org.contentCount > 0}
+                          className={`p-2 rounded-lg transition-colors ${
+                            org.contentCount > 0
+                              ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                              : 'text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
+                          }`}
+                          title={org.contentCount > 0 ? 'Cannot delete: contains content' : 'Delete organization'}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
-                      {org.description && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{org.description}</p>
-                      )}
-                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                        <span>{org.contentCount} content items</span>
-                        <span className="text-green-600 dark:text-green-400">{org.publishedCount} published</span>
-                        <span className="text-yellow-600 dark:text-yellow-400">{org.draftCount} draft</span>
-                        <span>Created {org.createdDate}</span>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setTenantToDelete({ type: 'org', slug: org.slug, name: org.name })}
-                      disabled={org.contentCount > 0}
-                      className={`p-2 rounded-lg transition-colors ${
-                        org.contentCount > 0
-                          ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                          : 'text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
-                      }`}
-                      title={org.contentCount > 0 ? 'Cannot delete: contains content' : 'Delete organization'}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    ))}
                   </div>
-                ))}
-                {organizations.length === 0 && (
-                  <p className="text-center py-8 text-gray-500 dark:text-gray-400">No organizations created yet</p>
+                ) : (
+                  <div className="p-12 text-center">
+                    <Building2 className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3 opacity-50" />
+                    <p className="text-gray-500 dark:text-gray-400">No organizations created yet</p>
+                  </div>
                 )}
               </div>
             </div>
 
-            {/* Initiatives Section */}
-            <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
-              <div className="flex items-center justify-between mb-6">
+            {/* HR Divider */}
+            <div className="border-t border-gray-200 dark:border-gray-700"></div>
+
+            {/* Initiatives Section - Header Outside Container */}
+            <div className="space-y-8">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
                     <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -614,111 +613,123 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
                         {initiativesEnabled ? 'Visible in main app' : 'Hidden in main app'}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Manage initiative/project content tenants</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage initiative/project content tenants</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowCreateInitiativeModal(true)}
-                  className="flex items-center justify-center gap-2 px-6 py-2.5 min-w-[200px] bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg font-roobert-medium hover:shadow-lg transition-all"
+                  className="flex items-center justify-center gap-2 px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-roobert-semibold transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   Create Initiative
                 </button>
               </div>
 
-              <div className="space-y-3">
-                {initiatives.map((initiative) => (
-                  <div key={initiative.id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <h4 className="font-roobert-semibold text-gray-900 dark:text-white">{initiative.name}</h4>
-                        <span className="text-xs px-2 py-1 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-roobert-medium">
-                          {initiative.slug}
-                        </span>
+              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                {initiatives.length > 0 ? (
+                  <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {initiatives.map((initiative) => (
+                      <div key={initiative.id} className="flex items-center justify-between p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3">
+                            <h4 className="font-roobert-semibold text-gray-900 dark:text-white">{initiative.name}</h4>
+                            <span className="text-xs px-2 py-1 rounded bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-roobert-medium">
+                              {initiative.slug}
+                            </span>
+                          </div>
+                          {initiative.description && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{initiative.description}</p>
+                          )}
+                          <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span>{initiative.contentCount} content items</span>
+                            <span className="text-green-600 dark:text-green-400">{initiative.publishedCount} published</span>
+                            <span className="text-yellow-600 dark:text-yellow-400">{initiative.draftCount} draft</span>
+                            <span>Created {initiative.createdDate}</span>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => setTenantToDelete({ type: 'initiative', slug: initiative.slug, name: initiative.name })}
+                          disabled={initiative.contentCount > 0}
+                          className={`p-2 rounded-lg transition-colors ${
+                            initiative.contentCount > 0
+                              ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                              : 'text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
+                          }`}
+                          title={initiative.contentCount > 0 ? 'Cannot delete: contains content' : 'Delete initiative'}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
-                      {initiative.description && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{initiative.description}</p>
-                      )}
-                      <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                        <span>{initiative.contentCount} content items</span>
-                        <span className="text-green-600 dark:text-green-400">{initiative.publishedCount} published</span>
-                        <span className="text-yellow-600 dark:text-yellow-400">{initiative.draftCount} draft</span>
-                        <span>Created {initiative.createdDate}</span>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setTenantToDelete({ type: 'initiative', slug: initiative.slug, name: initiative.name })}
-                      disabled={initiative.contentCount > 0}
-                      className={`p-2 rounded-lg transition-colors ${
-                        initiative.contentCount > 0
-                          ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                          : 'text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
-                      }`}
-                      title={initiative.contentCount > 0 ? 'Cannot delete: contains content' : 'Delete initiative'}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    ))}
                   </div>
-                ))}
-                {initiatives.length === 0 && (
-                  <p className="text-center py-8 text-gray-500 dark:text-gray-400">No initiatives created yet</p>
+                ) : (
+                  <div className="p-12 text-center">
+                    <Target className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3 opacity-50" />
+                    <p className="text-gray-500 dark:text-gray-400">No initiatives created yet</p>
+                  </div>
                 )}
               </div>
             </div>
 
+            {/* HR Divider */}
+            <div className="border-t border-gray-200 dark:border-gray-700"></div>
+
             {/* Content Tags Section */}
-            <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700">
-              <ContentTagManager />
-            </div>
+            <ContentTagManager />
           </div>
         )}
         
-        {activeTab === 'authentication' && (
-          <AuthenticationPanel
-            settings={settings.authentication}
-            customLogo={settings.customLogo}
-            onUpdate={updateAuthSetting}
-            onLogoUpload={handleLogoUpload}
-            onLogoRemove={handleRemoveLogo}
-            uploadingLogo={uploadingLogo}
-          />
-        )}
-        
-        {activeTab === 'users' && (
-          <UserManagementPanel
-            users={users}
-            roles={roles}
-            onCreateUser={() => setShowCreateUserModal(true)}
-            onEditUser={(user) => {
-              setSelectedUser(user);
-              setShowEditUserModal(true);
-            }}
-            onChangePassword={(user) => {
-              setSelectedUser(user);
-              setShowChangePasswordModal(true);
-            }}
-            onDeleteUser={setUserToDelete}
-            onToggleUserStatus={(userId, isActive) => updateUser(userId, { isActive })}
-          />
-        )}
-        
-        {activeTab === 'ai' && (
-          <AIConfigurationPanel
-            aiTemplates={settings.aiTemplates || {}}
-            onUpdate={(templates) => {
-              setSettings({ ...settings, aiTemplates: templates });
-              setHasChanges(true);
-            }}
-          />
-        )}
-        
-        {activeTab === 'tags' && (
-          <TagsManagementPanel onNotification={onNotification} />
-        )}
         
         {activeTab === 'security' && (
-          <div className="text-center py-12 text-gray-500">
-            Security settings coming soon...
+          <div className="space-y-8">
+            <UserManagementPanel
+              users={users}
+              roles={roles}
+              onCreateUser={() => setShowCreateUserModal(true)}
+              onEditUser={(user) => {
+                setSelectedUser(user);
+                setShowEditUserModal(true);
+              }}
+              onChangePassword={(user) => {
+                setSelectedUser(user);
+                setShowChangePasswordModal(true);
+              }}
+              onDeleteUser={setUserToDelete}
+              onToggleUserStatus={(userId, isActive) => updateUser(userId, { isActive })}
+            />
+            <div className="border-t border-gray-200 dark:border-gray-700"></div>
+            <AuthenticationPanel
+              settings={settings.authentication}
+              customLogo={settings.customLogo}
+              onUpdate={updateAuthSetting}
+              onLogoUpload={handleLogoUpload}
+              onLogoRemove={handleRemoveLogo}
+              uploadingLogo={uploadingLogo}
+            />
+          </div>
+        )}
+        
+        {activeTab === 'organization' && (
+          <div className="space-y-8">
+            <BusinessUnitsManager onNotification={onNotification} />
+            <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+            <PeopleManager onNotification={onNotification} />
+          </div>
+        )}
+
+        {activeTab === 'content' && (
+          <div className="space-y-8">
+            <TechnologiesMenuManager onNotification={onNotification} />
+            <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+            <TagsManagementPanel onNotification={onNotification} />
+            <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
+            <AIConfigurationPanel
+              aiTemplates={settings.aiTemplates || {}}
+              onUpdate={(templates) => {
+                setSettings({ ...settings, aiTemplates: templates });
+                setHasChanges(true);
+              }}
+            />
           </div>
         )}
 
@@ -1003,28 +1014,28 @@ function UserManagementPanel({
   onToggleUserStatus: (userId: string, isActive: boolean) => void;
 }) {
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
+      {/* Header - Outside Container */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-roobert-semibold text-gray-900 dark:text-white">User Management</h2>
+          <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">User Management</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             Manage user accounts, roles, and permissions
           </p>
         </div>
         <button
           onClick={onCreateUser}
-          className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white rounded-lg font-roobert-medium hover:shadow-lg transition-all"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-roobert-semibold transition-colors"
         >
           <Plus className="w-4 h-4" />
           Create User
         </button>
       </div>
 
-      {/* Users List */}
-      <div className="space-y-3">
+      {/* Users List - Inside Container */}
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden divide-y divide-gray-200 dark:divide-gray-700">
         {users.map((user) => (
-          <div key={user.id} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+          <div key={user.id} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
@@ -1497,20 +1508,21 @@ function AuthenticationPanel({
   uploadingLogo: boolean;
 }) {
   return (
-    <div className="space-y-6">
-      {/* Authentication Settings */}
-      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-            <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          </div>
-          <div>
-            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Authentication Settings</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Control login requirements for different applications</p>
-          </div>
+    <div className="space-y-8">
+      {/* Authentication Settings Header - Outside Container */}
+      <div className="flex items-center gap-4">
+        <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+          <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
         </div>
+        <div>
+          <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Authentication Settings</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Control login requirements for different applications</p>
+        </div>
+      </div>
 
-        <div className="space-y-4">
+      {/* Authentication Toggles - Inside Container */}
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="space-y-0">
           {/* Parent App Authentication */}
           <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
             <div>
@@ -1536,7 +1548,7 @@ function AuthenticationPanel({
           </div>
 
           {/* CMS Admin Authentication */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+          <div className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
             <div>
               <div className="font-roobert-medium text-sm text-gray-900 dark:text-white mb-1">
                 CMS Admin Login
@@ -1561,21 +1573,25 @@ function AuthenticationPanel({
         </div>
       </div>
 
-      {/* Custom Logo Section */}
-      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-            <ImageIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-          </div>
-          <div>
-            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Custom Logo</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Upload a custom logo for the application</p>
-          </div>
-        </div>
+      {/* HR Divider */}
+      <div className="border-t border-gray-200 dark:border-gray-700"></div>
 
+      {/* Custom Logo Header - Outside Container */}
+      <div className="flex items-center gap-4">
+        <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+          <ImageIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+        </div>
+        <div>
+          <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Custom Logo</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Upload a custom logo for the application</p>
+        </div>
+      </div>
+
+      {/* Custom Logo Content - Inside Container */}
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
         <div className="space-y-4">
           {customLogo ? (
-            <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+            <div className="flex items-center gap-4">
               <img
                 src={`http://localhost:3001${customLogo}`}
                 alt="Custom Logo"
@@ -1855,51 +1871,49 @@ function TagsManagementPanel({ onNotification }: TagsManagementPanelProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4">
-            <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-              <Tag className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-            </div>
-            <div>
-              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">
-                Timeline Note Tags
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Create and manage tags for organizing timeline notes by initiative or context
-              </p>
-            </div>
+      {/* Header - Outside Container */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+            <Tag className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           </div>
-          <button
-            onClick={handleCreate}
-            className="flex items-center gap-2 px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 font-roobert-semibold"
-          >
-            <Plus className="w-4 h-4" />
-            Create Tag
-          </button>
+          <div>
+            <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">
+              Timeline Note Tags
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Create and manage tags for organizing timeline notes by initiative or context
+            </p>
+          </div>
         </div>
-
-        {/* Info Box */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-          <h4 className="text-sm font-roobert-semibold text-blue-900 dark:text-blue-300 mb-2">
-            About Tags
-          </h4>
-          <p className="text-sm text-blue-800 dark:text-blue-400">
-            Tags help organize timeline notes by initiative, project, or context. Each note can have one tag to keep context focused and enable future AI context engine features.
-          </p>
-        </div>
+        <button
+          onClick={handleCreate}
+          className="flex items-center gap-2 px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 font-roobert-semibold"
+        >
+          <Plus className="w-4 h-4" />
+          Create Tag
+        </button>
       </div>
 
-      {/* Tags List */}
-      <div className="glass-strong rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+      {/* Info Box - Outside Container */}
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <h4 className="text-sm font-roobert-semibold text-blue-900 dark:text-blue-300 mb-2">
+          About Tags
+        </h4>
+        <p className="text-sm text-blue-800 dark:text-blue-400">
+          Tags help organize timeline notes by initiative, project, or context. Each note can have one tag to keep context focused and enable future AI context engine features.
+        </p>
+      </div>
+
+      {/* Tags List - Inside Container */}
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
         {loading ? (
           <div className="text-center py-8 text-gray-500">
             Loading tags...
           </div>
         ) : tags.length === 0 ? (
           <div className="text-center py-12">
-            <Tag className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+            <Tag className="w-12 h-12 text-gray-400 mx-auto mb-3 opacity-50" />
             <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
               No tags yet
             </h4>
@@ -1914,11 +1928,11 @@ function TagsManagementPanel({ onNotification }: TagsManagementPanelProps) {
             </button>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {tags.map((tag) => (
               <div
                 key={tag.id}
-                className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700 transition-all"
+                className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
                 <div className="flex items-center gap-4 flex-1">
                   <div
@@ -2100,7 +2114,7 @@ function TagFormModal({ mode, tag, onClose, onSave, onNotification }: TagFormMod
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
