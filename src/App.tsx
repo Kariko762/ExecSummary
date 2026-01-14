@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
 import { Header } from './components/Header';
@@ -16,13 +16,15 @@ import { StrategicInitiativesDashboard } from './components/StrategicInitiatives
 import { KnowledgeBaseDashboard } from './components/KnowledgeBaseDashboard';
 import { SchemaTest } from './components/SchemaTest';
 import { DesignSystemTest } from './pages/DesignSystemTest';
+import GoalsHome from './pages/GoalsHome';
+import TechnologiesHome from './pages/TechnologiesHome';
 import PlatformOverview from './components/PlatformOverview';
 import CardStyleGallery from './components/CardStyleGallery';
 import LoginPage from './components/LoginPage';
 import { timelineItems, isExecutiveSummary, loadTimelineData } from './data/timeline-loader';
 import { TimelineItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Target, AlertCircle, ChevronRight, CheckCircle2, ChevronLeft } from 'lucide-react';
+import { Building2, Target, AlertCircle, ChevronRight, CheckCircle2, ChevronLeft, FileText, Cpu } from 'lucide-react';
 
 function App() {
   const [selectedSummary, setSelectedSummary] = useState<TimelineItem | null>(null);
@@ -265,34 +267,38 @@ function App() {
               onSearch={setSearchQuery} 
               isAuthenticated={requireAuth && isAuthenticated}
               onLogout={handleLogout}
+              onSelectContent={setSelectedSummary}
             />
             <StickyNav />
+            
+            {/* Global Modals - Render outside Routes */}
+            <AnimatePresence mode="wait">
+              {selectedGoal ? (
+                <ViewGoalModal
+                  goal={selectedGoal}
+                  onClose={() => setSelectedGoal(null)}
+                />
+              ) : selectedSummary ? (
+                selectedSummary._layout === 'tabbed' ? (
+                  <ContentModalFixedMenu
+                    content={selectedSummary}
+                    onClose={() => setSelectedSummary(null)}
+                  />
+                ) : (
+                  <ContentModal
+                    content={selectedSummary}
+                    onClose={() => setSelectedSummary(null)}
+                  />
+                )
+              ) : null}
+            </AnimatePresence>
             
             <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8">
               <div className="max-w-7xl mx-auto">
                 <Routes>
                   {/* Main Dashboard Route */}
                   <Route path="/" element={
-                    <AnimatePresence mode="wait">
-                      {selectedGoal ? (
-                        <ViewGoalModal
-                          goal={selectedGoal}
-                          onClose={() => setSelectedGoal(null)}
-                        />
-                      ) : selectedSummary ? (
-                        selectedSummary._layout === 'tabbed' ? (
-                          <ContentModalFixedMenu
-                            content={selectedSummary}
-                            onClose={() => setSelectedSummary(null)}
-                          />
-                        ) : (
-                          <ContentModal
-                            content={selectedSummary}
-                            onClose={() => setSelectedSummary(null)}
-                          />
-                        )
-                      ) : (
-                        <>
+                    <>
                           {/* Hero Section */}
                           <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -347,8 +353,115 @@ function App() {
                             <Dashboard />
                           </motion.section>
 
-                          {/* Organizations Section */}
-                          {organizationsEnabled && organizations.length > 0 && (
+                          {/* Additional Content Section */}
+                          <motion.section
+                            id="additional-content"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="pt-2 mb-8"
+                          >
+                            {/* Centered Header */}
+                            <div className="text-center mb-6">
+                              <div className="inline-flex items-center gap-3 mb-1">
+                                <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ background: 'var(--brand-tertiary)' }}>
+                                  <FileText className="w-5 h-5 text-white" />
+                                </div>
+                                <h2 className="text-2xl font-roobert-heavy" style={{ color: 'var(--text-primary)' }}>
+                                  Additional Content
+                                </h2>
+                              </div>
+                              <p className="text-xs font-roobert-light" style={{ color: 'var(--text-secondary)' }}>
+                                Explore strategic goals, initiatives, and technology solutions
+                              </p>
+                            </div>
+                            
+                            {/* 3 Content Tiles */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                              {/* Strategic Goals Tile */}
+                              <Link to="/goals" className="h-full">
+                                <motion.div
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  whileHover={{ scale: 1.05, y: -4 }}
+                                  className="h-full rounded-xl p-6 transition-all cursor-pointer group relative bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 hover:shadow-2xl border border-purple-200 dark:border-purple-700"
+                                >
+                                  <div className="flex flex-col items-center text-center h-full justify-between">
+                                    <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #9333ea 0%, #7e22ce 100%)' }}>
+                                      <Target className="w-8 h-8 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-roobert-heavy text-gray-900 dark:text-white mb-2 group-hover:text-purple-700 dark:group-hover:text-purple-300 transition-colors">
+                                      Goals
+                                    </h3>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-roobert-light mb-4">
+                                      Browse and track all goals and objectives
+                                    </p>
+                                    <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400 text-sm font-roobert-semibold group-hover:gap-3 transition-all">
+                                      <span>Explore Goals</span>
+                                      <ChevronRight className="w-4 h-4" />
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              </Link>
+
+                              {/* Strategic Initiatives Tile */}
+                              <Link to="/strategic-initiatives" className="h-full">
+                                <motion.div
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.1 }}
+                                  whileHover={{ scale: 1.05, y: -4 }}
+                                  className="h-full rounded-xl p-6 transition-all cursor-pointer group relative bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 hover:shadow-2xl border border-pink-200 dark:border-pink-700"
+                                >
+                                  <div className="flex flex-col items-center text-center h-full justify-between">
+                                    <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #ec4899 0%, #db2777 100%)' }}>
+                                      <Target className="w-8 h-8 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-roobert-heavy text-gray-900 dark:text-white mb-2 group-hover:text-pink-700 dark:group-hover:text-pink-300 transition-colors">
+                                      Initiatives
+                                    </h3>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-roobert-light mb-4">
+                                      View transformation programs and key projects
+                                    </p>
+                                    <div className="flex items-center gap-2 text-pink-600 dark:text-pink-400 text-sm font-roobert-semibold group-hover:gap-3 transition-all">
+                                      <span>Explore Initiatives</span>
+                                      <ChevronRight className="w-4 h-4" />
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              </Link>
+
+                              {/* Technologies Tile */}
+                              <Link to="/technologies" className="h-full">
+                                <motion.div
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.2 }}
+                                  whileHover={{ scale: 1.05, y: -4 }}
+                                  className="h-full rounded-xl p-6 transition-all cursor-pointer group relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 hover:shadow-2xl border border-blue-200 dark:border-blue-700"
+                                >
+                                  <div className="flex flex-col items-center text-center h-full justify-between">
+                                    <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' }}>
+                                      <Cpu className="w-8 h-8 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-roobert-heavy text-gray-900 dark:text-white mb-2 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors">
+                                      Technologies
+                                    </h3>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-roobert-light mb-4">
+                                      Discover vendor summaries and tech solutions
+                                    </p>
+                                    <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 text-sm font-roobert-semibold group-hover:gap-3 transition-all">
+                                      <span>Explore Technologies</span>
+                                      <ChevronRight className="w-4 h-4" />
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              </Link>
+                            </div>
+                          </motion.section>
+
+                          {/* Organizations Section - Hidden */}
+                          {false && organizationsEnabled && organizations.length > 0 && (
                             <motion.section
                               id="organizations"
                               initial={{ opacity: 0 }}
@@ -475,8 +588,8 @@ function App() {
                             </motion.section>
                           )}
 
-                          {/* Initiatives and Goals Section */}
-                          {initiativesEnabled && (initiatives.length > 0 || goals.length > 0) && (() => {
+                          {/* Initiatives and Goals Section - Hidden */}
+                          {false && initiativesEnabled && (initiatives.length > 0 || goals.length > 0) && (() => {
                             const allItems = [...initiatives.map((item: any) => ({ ...item, itemType: 'Initiative' })), ...goals.map((item: any) => ({ ...item, itemType: 'Goal' }))];
                             const itemsPerPage = 3;
                             const visibleItems = allItems.slice(initiativesScrollIndex, initiativesScrollIndex + itemsPerPage);
@@ -664,8 +777,6 @@ function App() {
 
 
                         </>
-                      )}
-                    </AnimatePresence>
                   } />
 
                   {/* Initiatives and Goals Route */}
@@ -696,6 +807,16 @@ function App() {
                   {/* Design System Test Route */}
                   <Route path="/design-test" element={
                     <DesignSystemTest />
+                  } />
+
+                  {/* Goals Home Route */}
+                  <Route path="/goals" element={
+                    <GoalsHome onSelectGoal={setSelectedGoal} />
+                  } />
+
+                  {/* Technologies Home Route */}
+                  <Route path="/technologies" element={
+                    <TechnologiesHome onSelectContent={setSelectedSummary} />
                   } />
                 </Routes>
               </div>

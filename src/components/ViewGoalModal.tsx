@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Target, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2 } from 'lucide-react';
+import { X, Target, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import { domToPng } from 'modern-screenshot';
 
 interface Goal {
@@ -46,6 +46,7 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
   
   const modalContentRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   console.log('📍 ViewGoalModal - modalContentRef defined:', modalContentRef);
   console.log('📍 ViewGoalModal - handleExportImage function will be defined next');
@@ -248,18 +249,23 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999] p-4"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999]"
         onClick={onClose}
       >
-        <motion.div
-          ref={modalContentRef}
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: 'spring', duration: 0.3 }}
-          className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className={isFullscreen ? "fixed inset-2.5" : "w-full h-full flex items-center justify-center p-4"}>
+          <motion.div
+            ref={modalContentRef}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: 'spring', duration: 0.3 }}
+            className={`bg-white dark:bg-gray-900 shadow-2xl overflow-hidden flex flex-col ${
+              isFullscreen 
+                ? 'w-full h-full rounded-xl' 
+                : 'rounded-xl max-w-5xl w-full max-h-[90vh]'
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
           {/* Header */}
           <div className="border-b p-6" style={goal.category === 'efficiency' || goal.category === 'customer' ? { ...getCategoryStyle(goal.category), border: '1px solid rgba(67, 28, 91, 0.2)', borderBottom: '1px solid #e5e7eb' } : { backgroundColor: colors.bg.includes('bg-') ? undefined : colors.bg }}>
             <div className="flex items-start justify-between">
@@ -292,12 +298,42 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   </div>
                 </div>
               </div>
-              <button
-                onClick={onClose}
-                className="ml-4 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-              </button>
+              <div className="ml-4 flex items-center gap-2">
+                {/* Export Button */}
+                <button
+                  onClick={handleExportImage}
+                  disabled={isExporting}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  title="Export as Image"
+                >
+                  {isExporting ? (
+                    <Loader2 className="w-5 h-5 text-gray-500 dark:text-gray-400 animate-spin" />
+                  ) : (
+                    <Download className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  )}
+                </button>
+                
+                {/* Fullscreen Toggle */}
+                <button
+                  onClick={() => setIsFullscreen(!isFullscreen)}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  ) : (
+                    <Maximize2 className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  )}
+                </button>
+                
+                {/* Close Button */}
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                </button>
+              </div>
             </div>
 
             {/* Progress Bar */}
@@ -561,35 +597,7 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 flex justify-between items-center">
-            <button
-              onClick={handleExportImage}
-              disabled={isExporting}
-              className="px-6 py-2 text-white rounded-lg font-medium transition-all flex items-center gap-2"
-              style={{ background: isExporting ? 'rgba(67, 28, 91, 0.5)' : 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}
-              onMouseEnter={(e) => {
-                if (!isExporting) {
-                  e.currentTarget.style.background = 'linear-gradient(to right, rgba(67, 28, 91, 0.9), rgba(178, 26, 83, 0.9))';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isExporting) {
-                  e.currentTarget.style.background = 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))';
-                }
-              }}
-            >
-              {isExporting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Exporting...
-                </>
-              ) : (
-                <>
-                  <Download className="w-4 h-4" />
-                  Export as Image
-                </>
-              )}
-            </button>
+          <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 flex justify-end">
             <button
               onClick={onClose}
               className="px-6 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-medium transition-colors"
@@ -598,7 +606,8 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
             </button>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
+    </motion.div>
     </AnimatePresence>
   );
 };
