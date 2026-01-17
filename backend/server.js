@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import multer from 'multer';
 import authRoutes from './api/auth.js';
 import goalsRoutes from './api/goals.js';
+import initiativesRoutes from './api/initiatives.js';
 import designSystemRoutes from './api/design-system.js';
 import tagsRoutes from './api/tags.js';
 import dataEngineRoutes from './api/data-engine.js';
@@ -15,7 +16,7 @@ import peopleRoutes from './api/people.js';
 import technologiesMenuRoutes from './api/technologiesMenu.js';
 import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats, updateTenantStats } from './api/tenants.js';
 import {
-  getNotes, getNote, createNote, updateNote, deleteNote,
+  getNotes, getNote, createNote, updateNote, deleteNote, getNoteCountsByTask,
   getSections, getSection, createSection, updateSection, archiveSection, deleteSection,
   addNotesToSection, removeNoteFromSection, reorderNotesInSection
 } from './api/notes.js';
@@ -36,6 +37,9 @@ app.use('/api/auth', authRoutes);
 
 // Goals Management Routes
 app.use('/api/goals', goalsRoutes);
+
+// Initiatives Management Routes
+app.use('/api/initiatives', initiativesRoutes);
 
 // Design System Routes
 app.use('/api/design-system', designSystemRoutes);
@@ -66,15 +70,14 @@ app.get('/api/tenants/:type/:slug/content', getTenantContent);
 app.get('/api/tenants/:type/:slug/stats', getTenantStats);
 
 // ============================================
-// DEPRECATED: Notes System Routes
-// Replaced by Timeline Notes (/api/timeline-notes)
-// Kept for backward compatibility only
+// Notes System Routes
 // ============================================
-// app.get('/api/notes', getNotes);
-// app.get('/api/notes/:id', getNote);
-// app.post('/api/notes', createNote);
-// app.put('/api/notes/:id', updateNote);
-// app.delete('/api/notes/:id', deleteNote);
+app.get('/api/notes', getNotes);
+app.get('/api/notes/count/by-task', getNoteCountsByTask); // Must be before /:id route
+app.get('/api/notes/:id', getNote);
+app.post('/api/notes', createNote);
+app.put('/api/notes/:id', updateNote);
+app.delete('/api/notes/:id', deleteNote);
 
 // Sections Routes
 app.get('/api/sections', getSections);

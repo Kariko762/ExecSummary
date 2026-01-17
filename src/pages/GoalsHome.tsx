@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Target, TrendingUp, Clock, ChevronRight } from 'lucide-react';
+import { Target, TrendingUp, Clock, ChevronRight, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface Goal {
@@ -10,9 +10,18 @@ interface Goal {
   owner: string;
   status: string;
   priority: string;
+  progress?: number;
+  targetDate?: string;
   smartGoal?: {
     statement: string;
   };
+  indicators?: {
+    leading: Array<{ name: string; baseline: string; target: string; current: string; unit: string }>;
+    lagging: Array<{ name: string; baseline: string; target: string; current: string; unit: string }>;
+  };
+  linkedAssets?: number;
+  icon?: string;
+  color?: string;
 }
 
 interface GoalsHomeProps {
@@ -164,7 +173,7 @@ export default function GoalsHome({ onSelectGoal }: GoalsHomeProps) {
                   <div className="relative z-10">
                     <div className="flex items-start justify-between mb-4">
                       <div className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 rounded-xl group-hover:scale-110 transition-transform">
-                        <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                        {goal.icon ? <span className="text-2xl">{goal.icon}</span> : <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />}
                       </div>
                       <motion.div
                         animate={{ rotate: 0 }}
@@ -178,33 +187,89 @@ export default function GoalsHome({ onSelectGoal }: GoalsHomeProps) {
                     <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                       {goal.name}
                     </h3>
+                    
+                    {goal.shortName && (
+                      <span className="inline-block px-2 py-1 rounded-full text-xs font-roobert-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 mb-2">
+                        {goal.shortName}
+                      </span>
+                    )}
 
                     {goal.smartGoal?.statement && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3 font-roobert-light">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 font-roobert-light">
                         {goal.smartGoal.statement}
                       </p>
                     )}
 
+                    {/* Progress Bar */}
+                    {goal.progress !== undefined && (
+                      <div className="mb-4">
+                        <div className="flex items-center justify-between text-xs mb-1">
+                          <span className="text-gray-600 dark:text-gray-400">Progress</span>
+                          <span className="font-roobert-semibold text-gray-900 dark:text-white">{goal.progress}%</span>
+                        </div>
+                        <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all"
+                            style={{ width: `${goal.progress}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Key Metrics Preview */}
+                    {goal.indicators?.leading && goal.indicators.leading.length > 0 && (
+                      <div className="grid grid-cols-2 gap-2 mb-4">
+                        {goal.indicators.leading.slice(0, 2).map((metric, idx) => (
+                          <div key={idx} className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
+                            <div className="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5 font-roobert-medium truncate">{metric.name}</div>
+                            <div className="text-sm font-roobert-bold text-gray-900 dark:text-white truncate">
+                              {metric.current}
+                            </div>
+                            <div className="text-[10px] text-gray-500 dark:text-gray-400">→ {metric.target}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     {/* Stats Footer */}
-                    <div className="flex items-center gap-2 flex-wrap text-xs border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                    <div className="flex items-center gap-2 flex-wrap text-xs border-t border-gray-200 dark:border-gray-700 pt-3">
                       <span className="px-2 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-roobert-medium capitalize">
                         {goal.category}
                       </span>
                       <span className={`px-2 py-1 rounded-full font-roobert-medium capitalize ${
-                        goal.status === 'complete' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
+                        goal.status === 'complete' || goal.status === 'achieved' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
                         goal.status === 'in-progress' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
+                        goal.status === 'at-risk' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' :
+                        goal.status === 'blocked' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
                         'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                       }`}>
                         {goal.status.replace('-', ' ')}
                       </span>
                       <span className={`px-2 py-1 rounded-full font-roobert-medium capitalize ${
-                        goal.priority === 'high' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
+                        goal.priority === 'high' || goal.priority === 'critical' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
                         goal.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' :
                         'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                       }`}>
                         {goal.priority}
                       </span>
                     </div>
+                    
+                    {/* Owner & Assets Footer */}
+                    {(goal.owner || goal.linkedAssets !== undefined) && (
+                      <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400 mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                        {goal.owner && (
+                          <span className="flex items-center gap-1 font-roobert-medium">
+                            <Users className="w-3 h-3" />
+                            {goal.owner}
+                          </span>
+                        )}
+                        {goal.linkedAssets !== undefined && (
+                          <span className="font-roobert-medium">
+                            {goal.linkedAssets} asset{goal.linkedAssets !== 1 ? 's' : ''}
+                          </span>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}

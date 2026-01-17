@@ -61,13 +61,13 @@ function generateId(prefix) {
 /**
  * GET /api/notes
  * List all notes with optional filters
- * Query params: category, linkedType, linkedSlug, sectionId, search
+ * Query params: category, linkedType, linkedSlug, sectionId, taskId, search
  */
 const getNotes = async (req, res) => {
   try {
     await ensureDirectories();
     
-    const { category, linkedType, linkedSlug, sectionId, search } = req.query;
+    const { category, linkedType, linkedSlug, sectionId, taskId, search } = req.query;
     
     // Read all note files
     const noteFiles = await fs.readdir(NOTES_DIR);
@@ -98,6 +98,11 @@ const getNotes = async (req, res) => {
     
     if (sectionId) {
       filtered = filtered.filter(n => n.sectionIds.includes(sectionId));
+    }
+    
+    // NEW: Filter by taskId
+    if (taskId) {
+      filtered = filtered.filter(n => n.taskId === taskId);
     }
     
     if (search) {
@@ -616,6 +621,52 @@ const removeNoteFromSection = async (req, res) => {
 };
 
 /**
+ * GET /api/notes/count/by-task
+ * Get note counts grouped by task ID
+ * Query params: taskIds (comma-separated) or returns all
+ */
+const getNoteCountsByTask = async (req, res) => {
+  try {
+    await ensureDirectories();
+    
+    const { taskIds } = req.query;
+    
+    // Read all note files
+    const noteFiles = await fs.readdir(NOTES_DIR);
+    const taskCounts = {};
+    
+    for (const file of noteFiles) {
+      if (file.endsWith('.json')) {
+        const noteData = await fs.readFile(path.join(NOTES_DIR, file), 'utf8');
+        const note = JSON.parse(noteData);
+        
+        if (note.taskId) {
+          taskCounts[note.taskId] = (taskCounts[note.taskId] || 0) + 1;
+        }
+      }
+    }
+    
+    // Filter by requested taskIds if provided
+    let result = taskCounts;
+    if (taskIds) {
+      const requestedIds = taskIds.split(',');
+      result = {};
+      requestedIds.forEach(id => {
+        result[id] = taskCounts[id] || 0;
+      });
+    }
+    
+    res.json({
+      success: true,
+      counts: result
+    });
+  } catch (error) {
+    console.error('Error getting note counts:', error);
+    res.status(500).json({ success: false, error: 'Failed to retrieve note counts' });
+  }
+};
+
+/**
  * PUT /api/sections/:id/reorder
  * Reorder notes in section
  * Body: { noteOrder: string[] } - array of note IDs in desired order
@@ -664,6 +715,7 @@ export {
   createNote,
   updateNote,
   deleteNote,
+  getNoteCountsByTask,
   
   // Sections
   getSections,

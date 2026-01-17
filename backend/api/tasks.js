@@ -70,6 +70,7 @@ const getTasks = async (req, res) => {
       owner, 
       tags,
       goalId,
+      initiativeId,
       startDate,
       endDate,
       limit,
@@ -118,6 +119,10 @@ const getTasks = async (req, res) => {
     
     if (goalId) {
       filtered = filtered.filter(t => t.goalId === goalId);
+    }
+    
+    if (initiativeId) {
+      filtered = filtered.filter(t => t.initiativeId === initiativeId);
     }
     
     // Date range filtering

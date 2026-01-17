@@ -89,34 +89,8 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
     // Always show sticky nav (no scroll trigger needed since header is fixed)
     setShowStickyNav(true);
 
-    // Set up intersection observer for active section tracking
-    const observerOptions = {
-      root: scrollContainer,
-      rootMargin: '-120px 0px -50%',
-      threshold: 0.1
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      const visibleEntries = entries.filter(entry => entry.isIntersecting);
-      
-      if (visibleEntries.length > 0) {
-        visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        const sectionId = visibleEntries[0].target.id;
-        if (sectionId) {
-          setActiveSection(sectionId);
-        }
-      }
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    // Observe all section elements
-    const sectionElements = scrollContainer.querySelectorAll('section[id]');
-    sectionElements.forEach(el => observer.observe(el));
-
-    return () => {
-      observer.disconnect();
-    };
+    // No automatic section highlighting - it causes scrolling issues with dynamic content
+    // Users can still click menu buttons to navigate
   }, [activePreviewTab, content]);
 
   // Export functions
@@ -508,11 +482,16 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
 
     const element = scrollContainer.querySelector(`#section-${sectionKey}`);
     if (element) {
-      // Get actual sticky nav height
+      // Use getBoundingClientRect for accurate positioning
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
       const navHeight = stickyNavRef.current?.offsetHeight || 0;
-      const yOffset = -navHeight - 124; // Extra 124px for spacing (adjusted by ~100px)
-      const y = (element as HTMLElement).offsetTop + yOffset;
-      scrollContainer.scrollTo({ top: y, behavior: 'smooth' });
+      const offset = 24; // Additional spacing
+      
+      const scrollTop = scrollContainer.scrollTop;
+      const targetScrollTop = scrollTop + elementRect.top - containerRect.top - navHeight - offset;
+      
+      scrollContainer.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
     }
   };
 
@@ -644,7 +623,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className={isFullscreen 
-          ? "fixed inset-0 bg-black z-50"
+          ? "fixed inset-2.5 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant z-50"
           : "fixed top-0 left-0 right-0 bottom-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"}
         onClick={onClose}
       >
@@ -653,7 +632,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           className={isFullscreen
-            ? "fixed inset-0 bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden"
+            ? "w-full h-full bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden rounded-xl"
             : "bg-white/60 dark:bg-gray-900/60 backdrop-blur-2xl rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-white/20 dark:border-white/10 flex flex-col"}
           onClick={(e) => e.stopPropagation()}
         >
@@ -1124,7 +1103,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2, ease: 'easeInOut' }}
-                      className={`sticky-nav sticky top-0 z-10 bg-gradient-to-r from-purple-50 to-pink-50 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 border-b-2 border-fis-eggplant/20 dark:border-gray-700 shadow-sm ${isFullscreen ? 'px-3 py-1.5' : 'px-6 py-3'}`}
+                      className={`sticky-nav sticky top-0 z-20 bg-gradient-to-r from-purple-50 to-pink-50 dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 border-b-2 border-fis-eggplant/20 dark:border-gray-700 shadow-lg ${isFullscreen ? 'px-3 py-1.5' : 'px-6 py-3'}`}
                     >
                       <nav className="flex items-center gap-2 overflow-x-auto pb-1">
                         {sections.filter(section => section.type !== 'hr').map((section) => (
@@ -1153,7 +1132,7 @@ export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) 
                   console.log(`🎯 Frontend ContentModal Section "${section.label}":`, { goalTag: section.goalTag, availableGoalsCount: availableGoals.length });
                   
                   return (
-                  <section key={section.key} id={`section-${section.key}`}>
+                  <section key={section.key} id={`section-${section.key}`} className="relative z-0">
                     {section.displayTitle !== false && (
                       <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-4">
                         {section.label}

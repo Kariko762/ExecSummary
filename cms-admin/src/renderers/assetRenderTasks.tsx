@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { ClipboardList, Calendar, Users, Target, AlertCircle, TrendingUp, Eye } from 'lucide-react';
+import { ClipboardList, Calendar, Users, Target, AlertCircle, TrendingUp, Eye, StickyNote } from 'lucide-react';
 import TaskFiltersModal from '../components/TaskFiltersModal';
 import { TaskEditorModal } from '../components/TaskEditorModal';
 import type { Task as FullTask } from '../components/TaskEditorModal';
@@ -17,6 +17,7 @@ interface TaskFilters {
   owner?: string[];
   tags?: string[];
   goalId?: string;
+  initiativeId?: string;
   dateRange?: {
     start?: string;
     end?: string;
@@ -63,6 +64,7 @@ export const TaskConnectorRenderer: React.FC<TaskConnectorProps> = ({ data, onTa
   const [selectedTask, setSelectedTask] = useState<FullTask | null>(null);
   const [availableTags, setAvailableTags] = useState<any[]>([]);
   const [availableGoals, setAvailableGoals] = useState<any[]>([]);
+  const [noteCounts, setNoteCounts] = useState<Record<string, number>>({}); // NEW
   
   // Local state for text inputs (always initialize, even if not in edit mode)
   const [localBusinessUnit, setLocalBusinessUnit] = useState('');
@@ -407,6 +409,7 @@ export const TaskConnectorRenderer: React.FC<TaskConnectorProps> = ({ data, onTa
       if (filters.owner?.length) params.append('owner', filters.owner.join(','));
       if (filters.tags?.length) params.append('tags', filters.tags.join(','));
       if (filters.goalId) params.append('goalId', filters.goalId);
+      if (filters.initiativeId) params.append('initiativeId', filters.initiativeId);
       if (filters.dateRange?.start) params.append('startDate', filters.dateRange.start);
       if (filters.dateRange?.end) params.append('endDate', filters.dateRange.end);
       if (filters.limit) params.append('limit', filters.limit.toString());
@@ -425,6 +428,22 @@ export const TaskConnectorRenderer: React.FC<TaskConnectorProps> = ({ data, onTa
       console.log('✅ Tasks received:', result.tasks?.length || 0, 'tasks');
       
       setTasks(result.tasks || []);
+      
+      // Fetch note counts for these tasks
+      if (result.tasks && result.tasks.length > 0) {
+        const taskIds = result.tasks.map((t: Task) => t.id).join(',');
+        try {
+          const notesResponse = await fetch(`http://localhost:3001/api/notes/count/by-task?taskIds=${taskIds}`);
+          const notesData = await notesResponse.json();
+          if (notesData.success) {
+            setNoteCounts(notesData.counts || {});
+          }
+        } catch (err) {
+          console.error('Failed to fetch note counts:', err);
+        }
+      } else {
+        setNoteCounts({});
+      }
     } catch (err) {
       console.error('❌ Failed to fetch tasks:', err);
       setError('Failed to load tasks');
@@ -576,6 +595,16 @@ export const TaskConnectorRenderer: React.FC<TaskConnectorProps> = ({ data, onTa
                 <div className="flex items-center gap-2">
                   <Target className={`w-4 h-4 ${getPriorityColor(task.priority)}`} />
                   <span className={`font-roobert-semibold ${getPriorityColor(task.priority)}`}>{task.priority}</span>
+                </div>
+              )}
+              
+              {/* Notes Count */}
+              {noteCounts[task.id] > 0 && (
+                <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                  <StickyNote className="w-4 h-4 text-amber-500 dark:text-amber-400" />
+                  <span className="font-roobert-semibold text-amber-700 dark:text-amber-300">
+                    {noteCounts[task.id]} {noteCounts[task.id] === 1 ? 'note' : 'notes'}
+                  </span>
                 </div>
               )}
               

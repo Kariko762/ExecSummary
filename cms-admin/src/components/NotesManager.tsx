@@ -112,6 +112,7 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
   const [organizations, setOrganizations] = useState<any[]>([]);
   const [initiatives, setInitiatives] = useState<any[]>([]);
   const [goals, setGoals] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<any[]>([]); // NEW
 
   // Fetch note tags (categories)
   const fetchNoteTags = async () => {
@@ -169,9 +170,11 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
   // Fetch organizations, initiatives, goals for linking
   const fetchLinkableData = async () => {
     try {
-      const [orgsRes, initsRes] = await Promise.all([
+      const [orgsRes, initsRes, goalsRes, tasksRes] = await Promise.all([
         fetch('http://localhost:3001/api/tenants?type=org'),
-        fetch('http://localhost:3001/api/tenants?type=initiative')
+        fetch('http://localhost:3001/api/tenants?type=initiative'),
+        fetch('http://localhost:3001/api/goals'),
+        fetch('http://localhost:3001/api/tasks') // NEW
       ]);
 
       if (orgsRes.ok) {
@@ -188,7 +191,19 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
         }
       }
 
-      // TODO: Fetch goals when API is ready
+      if (goalsRes.ok) {
+        const goalsData = await goalsRes.json();
+        if (goalsData.success && goalsData.goals) {
+          setGoals(goalsData.goals);
+        }
+      }
+
+      if (tasksRes.ok) {
+        const tasksData = await tasksRes.json();
+        if (tasksData.success && tasksData.tasks) {
+          setTasks(tasksData.tasks);
+        }
+      }
     } catch (error) {
       console.error('Failed to fetch linkable data:', error);
     }
@@ -948,9 +963,9 @@ export default function NotesManager({ onClose, showNotification, autoOpenNote, 
         onSave={handleSaveNote}
         existingNote={editingNote}
         sections={sections}
-        organizations={organizations}
         initiatives={initiatives}
         goals={goals}
+        tasks={tasks}
         categoryConfig={categoryConfig}
       />
 

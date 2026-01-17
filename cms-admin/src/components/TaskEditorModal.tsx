@@ -35,7 +35,9 @@ export interface Task {
   dependencies: string;
   steps: TaskStep[];
   tags?: string[]; // Array of tag IDs
-  goalId?: string; // Strategic Goal ID
+  linkType?: 'goal' | 'initiative'; // NEW: What this task links to
+  goalId?: string; // Strategic Goal ID (used when linkType = 'goal')
+  initiativeId?: string; // NEW: Initiative ID (used when linkType = 'initiative')
   enabledFields?: {
     owner?: boolean;
     team?: boolean;
@@ -60,10 +62,13 @@ interface TaskEditorModalProps {
 }
 
 export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, onClose, viewOnly = false }) => {
-  const [activeTab, setActiveTab] = useState<'task' | 'dataPoints'>('task');
+  const [activeTab, setActiveTab] = useState<'task' | 'notes' | 'dataPoints'>('task');
   const [editMode, setEditMode] = useState(!task); // True for new tasks, false for existing
   const [tags, setTags] = useState<Array<{ id: string; name: string; color: string }>>([]);
   const [goals, setGoals] = useState<Array<{ id: string; name: string; shortName: string; color: string }>>([]);
+  const [initiatives, setInitiatives] = useState<Array<{ id: string; name: string; slug: string }>>([]);
+  const [notes, setNotes] = useState<any[]>([]); // NEW: Linked notes
+  const [notesLoading, setNotesLoading] = useState(false); // NEW
   
   // Tag panel state
   const [showTagPanel, setShowTagPanel] = useState(false);
@@ -88,7 +93,9 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
     dependencies: '',
     steps: [],
     tags: [],
+    linkType: 'goal', // NEW: Default to linking to goal
     goalId: '',
+    initiativeId: '', // NEW
     enabledFields: {
       owner: true,
       team: true,
@@ -129,9 +136,43 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
       }
     };
 
+    const fetchInitiatives = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/initiatives');
+        const data = await response.json();
+        if (data.success) {
+          setInitiatives(data.initiatives || []);
+        }
+      } catch (error) {
+        console.error('Failed to fetch initiatives:', error);
+      }
+    };
+
     fetchTags();
     fetchGoals();
-  }, []);
+    fetchInitiatives();
+    
+    // Fetch notes if viewing existing task
+    if (task?.id) {
+      fetchTaskNotes(task.id);
+    }
+  }, [task?.id]);
+
+  // NEW: Fetch notes for this task
+  const fetchTaskNotes = async (taskId: string) => {
+    setNotesLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3001/api/notes?taskId=${taskId}`);
+      const data = await response.json();
+      if (data.success) {
+        setNotes(data.notes || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch task notes:', error);
+    } finally {
+      setNotesLoading(false);
+    }
+  };
 
   const fields = formData.enabledFields || {};
   
@@ -188,7 +229,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/60 z-[70] flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative">
         {/* Tag Panel Button - Hide in view-only mode */}
         {!viewOnly && (
@@ -377,7 +418,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
           </div>
           {/* Tabs and controls - Hide in view-only mode */}
           {!viewOnly && (
-          <div>
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setActiveTab('task')}
@@ -387,7 +428,17 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                     : 'bg-white/20 text-white hover:bg-white/30'
                 }`}
               >
-                Task {task && `(${editMode ? 'Edit Mode' : 'View Mode'})`}
+                Task
+              </button>
+              <button
+                onClick={() => setActiveTab('notes')}
+                className={`px-4 py-2 rounded-lg font-roobert-medium transition-colors ${
+                  activeTab === 'notes'
+                    ? 'bg-white text-[var(--brand-primary)] shadow-md'
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+              >
+                Notes {notes.length > 0 && `(${notes.length})`}
               </button>
               <button
                 onClick={() => setActiveTab('dataPoints')}
@@ -399,17 +450,21 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               >
                 Data Points
               </button>
-              {/* Edit Mode Toggle - inline with tabs */}
-              {task && activeTab === 'task' && (
-                <button
-                  onClick={() => setEditMode(!editMode)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-roobert-medium text-white hover:bg-white/20 rounded-lg transition-colors ml-4 border border-white/30"
-                >
-                  <Edit3 className="w-4 h-4" />
-                  {editMode ? 'Switch to View Mode' : 'Switch to Edit Mode'}
-                </button>
-              )}
             </div>
+            {/* Edit Mode Toggle Icon - Task tab only */}
+            {task && activeTab === 'task' && (
+              <button
+                onClick={() => setEditMode(!editMode)}
+                className={`p-2 rounded-lg transition-colors ${
+                  editMode 
+                    ? 'bg-white text-[var(--brand-primary)] shadow-md' 
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+                title={editMode ? 'View Mode' : 'Edit Mode'}
+              >
+                <Edit3 className="w-5 h-5" />
+              </button>
+            )}
           </div>
           )}
         </div>
@@ -544,60 +599,132 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                 </div>
               </div>
 
-              {/* Goal - Always visible */}
-              <div>
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
-                  <span className="flex items-center gap-2"><Target className="w-4 h-4" />Strategic Goal</span>
+              {/* Link Type Toggle & Selection */}
+              <div className="space-y-3">
+                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+                  <span className="flex items-center gap-2">
+                    <Target className="w-4 h-4" />
+                    Link Task To
+                  </span>
                 </label>
-                <div className="flex gap-2">
-                  {editMode ? (
-                    <select
-                      value={formData.goalId || ''}
-                      onChange={(e) => updateField('goalId', e.target.value)}
-                      className="flex-1 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                    >
-                      <option value="">No goal linked</option>
-                      {goals.map(goal => (
-                        <option key={goal.id} value={goal.id}>{goal.name}</option>
-                      ))}
-                    </select>
-                  ) : (
+                
+                {editMode ? (
+                  <>
+                    {/* Toggle between Goal and Initiative */}
+                    <div className="flex gap-4 mb-3">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="linkType"
+                          value="goal"
+                          checked={formData.linkType === 'goal'}
+                          onChange={() => {
+                            setFormData({ ...formData, linkType: 'goal', initiativeId: '' });
+                          }}
+                          className="w-4 h-4 text-purple-600"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">Strategic Goal</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="linkType"
+                          value="initiative"
+                          checked={formData.linkType === 'initiative'}
+                          onChange={() => {
+                            setFormData({ ...formData, linkType: 'initiative', goalId: '' });
+                          }}
+                          className="w-4 h-4 text-pink-600"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">Initiative (Project)</span>
+                      </label>
+                    </div>
+
+                    {/* Conditional Dropdowns */}
+                    {formData.linkType === 'goal' && (
+                      <select
+                        value={formData.goalId || ''}
+                        onChange={(e) => updateField('goalId', e.target.value)}
+                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                      >
+                        <option value="">Select a strategic goal...</option>
+                        {goals.map(goal => (
+                          <option key={goal.id} value={goal.id}>{goal.name}</option>
+                        ))}
+                      </select>
+                    )}
+
+                    {formData.linkType === 'initiative' && (
+                      <select
+                        value={formData.initiativeId || ''}
+                        onChange={(e) => updateField('initiativeId', e.target.value)}
+                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                      >
+                        <option value="">Select an initiative...</option>
+                        {initiatives.map(initiative => (
+                          <option key={initiative.id} value={initiative.id}>{initiative.name}</option>
+                        ))}
+                      </select>
+                    )}
+                  </>
+                ) : (
+                  /* View Mode */
+                  <div className="flex gap-2">
                     <div className="flex-1">
-                      {formData.goalId ? (
+                      {formData.linkType === 'goal' && formData.goalId ? (
                         (() => {
                           const goal = goals.find(g => g.id === formData.goalId);
                           return goal ? (
-                            <span
-                              className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium text-white"
-                              style={{ backgroundColor: goal.color }}
-                            >
-                              {goal.name}
-                            </span>
+                            <div>
+                              <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Strategic Goal</span>
+                              <span
+                                className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium text-white"
+                                style={{ backgroundColor: goal.color }}
+                              >
+                                {goal.name}
+                              </span>
+                            </div>
                           ) : (
                             <span className="text-sm text-gray-500 dark:text-gray-400">Goal not found</span>
                           );
                         })()
+                      ) : formData.linkType === 'initiative' && formData.initiativeId ? (
+                        (() => {
+                          const initiative = initiatives.find(i => i.id === formData.initiativeId);
+                          return initiative ? (
+                            <div>
+                              <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Initiative</span>
+                              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium bg-pink-600 text-white">
+                                {initiative.name}
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-sm text-gray-500 dark:text-gray-400">Initiative not found</span>
+                          );
+                        })()
                       ) : (
-                        <span className="text-sm text-gray-500 dark:text-gray-400">No goal linked</span>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">No link assigned</span>
                       )}
                     </div>
-                  )}
-                  {formData.goalId && (
-                    <button
-                      onClick={() => {
-                        // Close this modal first, then open the goal
-                        onClose();
-                        setTimeout(() => {
-                          window.dispatchEvent(new CustomEvent('openGoal', { detail: formData.goalId }));
-                        }, 100);
-                      }}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-roobert-medium transition-colors flex items-center gap-2"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Follow
-                    </button>
-                  )}
-                </div>
+                    {((formData.linkType === 'goal' && formData.goalId) || (formData.linkType === 'initiative' && formData.initiativeId)) && (
+                      <button
+                        onClick={() => {
+                          onClose();
+                          setTimeout(() => {
+                            if (formData.linkType === 'goal') {
+                              window.dispatchEvent(new CustomEvent('openGoal', { detail: formData.goalId }));
+                            }
+                            // TODO: Add initiative modal trigger when available
+                          }, 100);
+                        }}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-roobert-medium transition-colors flex items-center gap-2"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Follow
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Description */}
@@ -692,6 +819,76 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                       </button>
                     )}
                   </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'notes' && (
+            <div>
+              <div className="mb-6">
+                <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                  Linked Notes ({notes.length})
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Notes specifically linked to this task
+                </p>
+              </div>
+
+              {notesLoading ? (
+                <div className="flex items-center justify-center p-12">
+                  <div className="flex items-center gap-3 text-gray-500">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[var(--brand-primary)]"></div>
+                    <span className="font-roobert-regular">Loading notes...</span>
+                  </div>
+                </div>
+              ) : notes.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                    <FileText className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <p className="text-gray-500 dark:text-gray-400 mb-4">No notes linked to this task yet</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                    Create a note from the Notes Manager and link it to this task
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {notes.map((note) => (
+                    <div
+                      key={note.id}
+                      className="p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="font-roobert-semibold text-gray-900 dark:text-white">
+                          {note.title}
+                        </h4>
+                        <span className={`px-2 py-1 text-xs rounded ${
+                          note.category === 'key-highlight' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300' :
+                          note.category === 'goal-progression' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300' :
+                          note.category === 'big-win' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' :
+                          'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                        }`}>
+                          {note.category}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                        {note.content}
+                      </p>
+                      {note.tags && note.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          {note.tags.map((tag: string) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Target, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, Maximize2, Minimize2 } from 'lucide-react';
+import { X, Target, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, Maximize2, Minimize2, ChevronDown, ChevronUp, Rocket, CheckSquare, FileText, ExternalLink } from 'lucide-react';
 import { domToPng } from 'modern-screenshot';
 
 interface Goal {
@@ -18,7 +18,7 @@ interface Goal {
     specific: { objectives: string[] };
     measurable: { metrics: string[] };
     achievable: { resources: string; ownership: string };
-    relevant: { croAlignment: string[] };
+    relevant: { croAlignment: string[]; rationale?: string[] };
     timeBound: { timeline: Array<{ phase: string; deliverable: string; dueDate: string; status: string }> };
   };
   
@@ -47,6 +47,55 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
   const modalContentRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+  
+  // Linked content state
+  const [linkedContent, setLinkedContent] = useState<{
+    initiativeTasks: Array<{ initiative: any; tasks: any[] }>;
+    generalTasks: any[];
+    notes: any[];
+  }>({ initiativeTasks: [], generalTasks: [], notes: [] });
+  const [linkedContentLoading, setLinkedContentLoading] = useState(true);
+  
+  // Expandable sections state
+  const [expandedSections, setExpandedSections] = useState({
+    tasksAndInitiatives: false,
+    notes: false
+  });
+
+  // Fetch linked content
+  useEffect(() => {
+    const fetchLinkedContent = async () => {
+      if (!goal?.id) return;
+      
+      try {
+        setLinkedContentLoading(true);
+        const response = await fetch(`http://localhost:3001/api/goals/${goal.id}/linked/all`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setLinkedContent(data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch linked content:', error);
+      } finally {
+        setLinkedContentLoading(false);
+      }
+    };
+    
+    fetchLinkedContent();
+  }, [goal?.id]);
+  
+  const toggleSection = (section: 'tasksAndInitiatives' | 'notes') => {
+    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
 
   console.log('📍 ViewGoalModal - modalContentRef defined:', modalContentRef);
   console.log('📍 ViewGoalModal - handleExportImage function will be defined next');
@@ -381,6 +430,8 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   </ul>
                 </section>
 
+                <hr className="border-t border-gray-300 dark:border-gray-600 my-4" />
+
                 {/* Metrics */}
                 <section>
                   <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📊 Measurable Metrics</h3>
@@ -393,10 +444,12 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   </ul>
                 </section>
 
+                <hr className="border-t border-gray-300 dark:border-gray-600 my-4" />
+
                 {/* CRO Alignment */}
                 <section>
                   <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">🎯 CRO Impact Areas</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {goal.smartGoal.relevant.croAlignment.map((area, idx) => (
                       <span
                         key={idx}
@@ -439,26 +492,29 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   </div>
                 </section>
 
-                {/* Dates */}
+                <hr className="border-t border-gray-300 dark:border-gray-600 my-4" />
+
+                {/* Strategic Alignment */}
                 <section>
-                  <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📅 Timeline</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded">
-                      <span className="text-gray-600 dark:text-gray-400">Created:</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{new Date(goal.createdDate).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded">
-                      <span className="text-gray-600 dark:text-gray-400">Last Updated:</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{new Date(goal.lastUpdated).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex justify-between bg-green-50 dark:bg-green-950/30 p-2 rounded border border-green-200 dark:border-green-800">
-                      <span className="text-green-700 dark:text-green-300 font-semibold">Target Date:</span>
-                      <span className="font-bold text-green-900 dark:text-green-100">{new Date(goal.targetDate).toLocaleDateString()}</span>
-                    </div>
-                  </div>
+                  <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📍 Strategic Alignment</h3>
+                  {goal.smartGoal.relevant.rationale && goal.smartGoal.relevant.rationale.length > 0 ? (
+                    <ul className="space-y-1.5">
+                      {goal.smartGoal.relevant.rationale.map((item, idx) => (
+                        <li key={idx} className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                          <span className="text-pink-600 dark:text-pink-400 mt-0.5">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic">No strategic alignment rationale provided</p>
+                  )}
                 </section>
               </div>
             </div>
+
+            {/* Horizontal Rule */}
+            <hr className="border-t border-gray-300 dark:border-gray-600 my-6" />
 
             {/* Indicators */}
             <section>
@@ -527,6 +583,9 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
               </div>
             </section>
 
+            {/* Horizontal Rule */}
+            <hr className="border-t border-gray-300 dark:border-gray-600 my-6" />
+
             {/* Milestones */}
             <section>
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -594,16 +653,281 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                 </div>
               </section>
             )}
+
+            {/* Horizontal Rule - Always show before linked content */}
+            {!linkedContentLoading && (
+              <hr className="border-t border-gray-300 dark:border-gray-600 my-6" />
+            )}
+
+            {/* Linked Content Sections */}
+            {!linkedContentLoading && (
+              <>
+                {/* Tasks and Initiatives Section - ALWAYS SHOW */}
+                <section>
+                  <button
+                    onClick={() => toggleSection('tasksAndInitiatives')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-800 hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-center gap-3">
+                      <CheckSquare className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                          Tasks & Initiatives ({linkedContent.initiativeTasks.reduce((sum, group) => sum + group.tasks.length, 0) + linkedContent.generalTasks.length})
+                        </h3>
+                      </div>
+                      {expandedSections.tasksAndInitiatives ? (
+                        <ChevronUp className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      )}
+                    </button>
+                    
+                    <AnimatePresence>
+                      {expandedSections.tasksAndInitiatives && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          {linkedContent.initiativeTasks.length === 0 && linkedContent.generalTasks.length === 0 ? (
+                            <div className="mt-3 text-center py-12">
+                              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                <CheckSquare className="w-8 h-8 text-gray-400" />
+                              </div>
+                              <p className="text-gray-500 dark:text-gray-400 mb-2">No initiatives or tasks linked yet</p>
+                              <p className="text-sm text-gray-400 dark:text-gray-500">
+                                Link tasks to this goal from the Task Editor
+                              </p>
+                            </div>
+                          ) : (
+                          <div className="mt-3 space-y-6">
+                            {/* Initiative Groups */}
+                            {linkedContent.initiativeTasks.map(group => (
+                              <div key={group.initiative.id} className="space-y-3">
+                                {/* Initiative Header */}
+                                <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/20 dark:to-purple-900/20 border border-pink-200 dark:border-pink-800 rounded-lg">
+                                  <Rocket className="w-4 h-4 text-pink-600 dark:text-pink-400" />
+                                  <h4 className="font-semibold text-gray-900 dark:text-white">
+                                    {group.initiative.name}
+                                  </h4>
+                                  <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1 rounded-full">
+                                    {group.tasks.length} task{group.tasks.length !== 1 ? 's' : ''}
+                                  </span>
+                                </div>
+                                
+                                {/* Tasks under this initiative */}
+                                <div className="ml-6 space-y-2">
+                                  {group.tasks.map((task: any) => {
+                                    const statusColor = 
+                                      task.status === 'Complete' ? 'green' :
+                                      task.status === 'At Risk' ? 'red' :
+                                      task.status === 'On Track' ? 'blue' : 'gray';
+                                    
+                                    return (
+                                      <div
+                                        key={task.id}
+                                        className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700 transition-colors cursor-pointer"
+                                      >
+                                        <div className="flex items-start justify-between mb-2">
+                                          <h5 className="font-semibold text-gray-900 dark:text-white flex-1">{task.title}</h5>
+                                          <span className={`ml-2 w-3 h-3 rounded-full bg-${statusColor}-500 flex-shrink-0 mt-1`} title={task.status}></span>
+                                        </div>
+                                        <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400 mb-2">
+                                          {task.owner && (
+                                            <span className="flex items-center gap-1">
+                                              <Users className="w-3 h-3" />
+                                              {task.owner}
+                                            </span>
+                                          )}
+                                          {task.targetDate && (
+                                            <span className="flex items-center gap-1">
+                                              <Calendar className="w-3 h-3" />
+                                              Due: {task.targetDate}
+                                            </span>
+                                          )}
+                                        </div>
+                                        {task.percentage !== undefined && (
+                                          <div className="mt-2">
+                                            <div className="flex items-center justify-between text-xs mb-1">
+                                              <span className="text-gray-600 dark:text-gray-400">Progress</span>
+                                              <span className="font-semibold text-gray-900 dark:text-white">{task.percentage}%</span>
+                                            </div>
+                                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                              <div
+                                                className={`h-2 rounded-full bg-${statusColor}-500`}
+                                                style={{ width: `${task.percentage}%` }}
+                                              />
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+
+                            {/* General Tasks Section */}
+                            {linkedContent.generalTasks.length > 0 && (
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                  <CheckSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                  <h4 className="font-semibold text-gray-900 dark:text-white">
+                                    General Tasks
+                                  </h4>
+                                  <span className="ml-auto text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-1 rounded-full">
+                                    {linkedContent.generalTasks.length} task{linkedContent.generalTasks.length !== 1 ? 's' : ''}
+                                  </span>
+                                </div>
+                                
+                                <div className="ml-6 space-y-2">
+                                  {linkedContent.generalTasks.slice(0, 10).map((task: any) => {
+                                    const statusColor = 
+                                      task.status === 'Complete' ? 'green' :
+                                      task.status === 'At Risk' ? 'red' :
+                                      task.status === 'On Track' ? 'blue' : 'gray';
+                                    
+                                    return (
+                                      <div
+                                        key={task.id}
+                                        className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-700 transition-colors cursor-pointer"
+                                      >
+                                        <div className="flex items-start justify-between mb-2">
+                                          <h5 className="font-semibold text-gray-900 dark:text-white flex-1">{task.title}</h5>
+                                          <span className={`ml-2 w-3 h-3 rounded-full bg-${statusColor}-500 flex-shrink-0 mt-1`} title={task.status}></span>
+                                        </div>
+                                        <div className="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400 mb-2">
+                                          {task.owner && (
+                                            <span className="flex items-center gap-1">
+                                              <Users className="w-3 h-3" />
+                                              {task.owner}
+                                            </span>
+                                          )}
+                                          {task.targetDate && (
+                                            <span className="flex items-center gap-1">
+                                              <Calendar className="w-3 h-3" />
+                                              Due: {task.targetDate}
+                                            </span>
+                                          )}
+                                        </div>
+                                        {task.percentage !== undefined && (
+                                          <div className="mt-2">
+                                            <div className="flex items-center justify-between text-xs mb-1">
+                                              <span className="text-gray-600 dark:text-gray-400">Progress</span>
+                                              <span className="font-semibold text-gray-900 dark:text-white">{task.percentage}%</span>
+                                            </div>
+                                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                              <div
+                                                className={`h-2 rounded-full bg-${statusColor}-500`}
+                                                style={{ width: `${task.percentage}%` }}
+                                              />
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                  {linkedContent.generalTasks.length > 10 && (
+                                    <button className="w-full text-center text-sm text-blue-600 dark:text-blue-400 hover:underline py-2">
+                                      View All {linkedContent.generalTasks.length} General Tasks →
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </section>
+
+                {/* Linked Notes */}
+                {linkedContent.notes.length > 0 && (
+                  <section>
+                    <button
+                      onClick={() => toggleSection('notes')}
+                      className="w-full flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border border-amber-200 dark:border-amber-800 hover:shadow-md transition-all"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                          Linked Notes ({linkedContent.notes.length})
+                        </h3>
+                      </div>
+                      {expandedSections.notes ? (
+                        <ChevronUp className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      )}
+                    </button>
+                    
+                    <AnimatePresence>
+                      {expandedSections.notes && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="mt-3 space-y-3">
+                            {linkedContent.notes.slice(0, 5).map((note: any) => (
+                              <div
+                                key={note.id}
+                                className="p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-amber-300 dark:hover:border-amber-700 transition-colors"
+                              >
+                                <div className="flex items-start justify-between mb-2">
+                                  <h4 className="font-semibold text-gray-900 dark:text-white">{note.title}</h4>
+                                  <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap ml-2">{note.date}</span>
+                                </div>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
+                                  {note.content}
+                                </p>
+                                {note.tags && note.tags.length > 0 && (
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    {note.tags.slice(0, 3).map((tag: string, idx: number) => (
+                                      <span
+                                        key={idx}
+                                        className="px-2 py-1 rounded-full text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
+                                      >
+                                        {tag}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                            {linkedContent.notes.length > 5 && (
+                              <button className="w-full text-center text-sm text-amber-600 dark:text-amber-400 hover:underline py-2">
+                                View All {linkedContent.notes.length} Notes →
+                              </button>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </section>
+                )}
+              </>
+            )}
           </div>
 
           {/* Footer */}
-          <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 flex justify-end">
-            <button
-              onClick={onClose}
-              className="px-6 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-medium transition-colors"
-            >
-              Close
-            </button>
+          <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6 text-xs text-gray-600 dark:text-gray-400" style={{ marginLeft: '20px' }}>
+                <span>📅 Created: <strong className="text-gray-900 dark:text-white">{new Date(goal.createdDate).toLocaleDateString()}</strong></span>
+                <span>🔄 Updated: <strong className="text-gray-900 dark:text-white">{new Date(goal.lastUpdated).toLocaleDateString()}</strong></span>
+              </div>
+              <button
+                onClick={onClose}
+                className="px-6 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-medium transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </motion.div>
       </div>

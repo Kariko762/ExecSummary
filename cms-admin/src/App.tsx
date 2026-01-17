@@ -15,6 +15,7 @@ import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
 import CommentsPanel from './components/CommentsPanel';
 import GoalsManager from './components/GoalsManager';
+import InitiativesManager from './components/InitiativesManager';
 import PlatformOverview from './components/PlatformOverview';
 import TimelineNotesManager from './components/TimelineNotesManager';
 import QuickActionsMenu from './components/QuickActionsMenu';
@@ -86,6 +87,7 @@ function App() {
   const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
   const [showOrgIQ, setShowOrgIQ] = useState(false);
   const [showGoals, setShowGoals] = useState(false);
+  const [showInitiatives, setShowInitiatives] = useState(false);
   const [showPlatformOverview, setShowPlatformOverview] = useState(false);
   const [showTimelineNotes, setShowTimelineNotes] = useState(false);
   const [autoOpenAddNote, setAutoOpenAddNote] = useState(false);
@@ -1379,6 +1381,9 @@ function App() {
                 onOpenPlatformOverview={() => setShowPlatformOverview(true)}
                 onOpenComments={() => setShowComments(true)}
                 onOpenGoals={() => setShowGoals(true)}
+                onOpenInitiatives={() => setShowInitiatives(true)}
+                onOpenNotes={() => setShowTimelineNotes(true)}
+                onOpenTasks={() => setShowAllTasksModal(true)}
               />
           
               {/* Notification */}
@@ -2003,6 +2008,15 @@ function App() {
             />
           )}
 
+          {/* Initiatives Manager */}
+          {showInitiatives && (
+            <InitiativesManager
+              isOpen={showInitiatives}
+              onClose={() => setShowInitiatives(false)}
+              showNotification={showNotification}
+            />
+          )}
+
           {/* Platform Overview */}
           {showPlatformOverview && (
             <PlatformOverview onClose={() => setShowPlatformOverview(false)} />
@@ -2066,6 +2080,14 @@ function App() {
                 setEditingTask(task);
                 setShowTaskModal(true);
                 setShowAllTasksModal(false);
+              }}
+              onCreateTask={() => {
+                setEditingTask(undefined);
+                setShowTaskModal(true);
+              }}
+              onOpenNotes={() => {
+                setShowAllTasksModal(false);
+                setShowTimelineNotes(true);
               }}
             />
           )}

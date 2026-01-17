@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Target, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2 } from 'lucide-react';
+import { X, Target, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, CheckSquare, ChevronDown, ChevronUp, Rocket, Maximize2, Minimize2 } from 'lucide-react';
 import { domToPng } from 'modern-screenshot';
 
 interface Goal {
@@ -18,7 +18,7 @@ interface Goal {
     specific: { objectives: string[] };
     measurable: { metrics: string[] };
     achievable: { resources: string; ownership: string };
-    relevant: { croAlignment: string[] };
+    relevant: { croAlignment: string[]; rationale?: string[] };
     timeBound: { timeline: Array<{ phase: string; deliverable: string; dueDate: string; status: string }> };
   };
   
@@ -46,6 +46,56 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
   
   const modalContentRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  // Linked content state
+  const [linkedContent, setLinkedContent] = useState<{
+    initiativeTasks: Array<{ initiative: any; tasks: any[] }>;
+    generalTasks: any[];
+    notes: any[];
+  }>({ initiativeTasks: [], generalTasks: [], notes: [] });
+  const [linkedContentLoading, setLinkedContentLoading] = useState(true);
+  
+  // Expandable sections state
+  const [expandedSections, setExpandedSections] = useState({
+    tasksAndInitiatives: false,
+    notes: false
+  });
+
+  // Fetch linked content
+  useEffect(() => {
+    const fetchLinkedContent = async () => {
+      if (!goal?.id) return;
+      
+      try {
+        setLinkedContentLoading(true);
+        const response = await fetch(`http://localhost:3001/api/goals/${goal.id}/linked/all`);
+        const data = await response.json();
+        
+        if (data.success) {
+          setLinkedContent(data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch linked content:', error);
+      } finally {
+        setLinkedContentLoading(false);
+      }
+    };
+    
+    fetchLinkedContent();
+  }, [goal?.id]);
+  
+  const toggleSection = (section: 'tasksAndInitiatives' | 'notes') => {
+    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
 
   console.log('📍 ViewGoalModal - modalContentRef defined:', modalContentRef);
   console.log('📍 ViewGoalModal - handleExportImage function will be defined next');
@@ -200,15 +250,20 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
         className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999] p-4"
         onClick={onClose}
       >
-        <motion.div
-          ref={modalContentRef}
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: 'spring', duration: 0.3 }}
-          className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className={isFullscreen ? "fixed inset-2.5" : "w-full h-full flex items-center justify-center p-4"}>
+          <motion.div
+            ref={modalContentRef}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: 'spring', duration: 0.3 }}
+            className={`bg-white dark:bg-gray-900 shadow-2xl overflow-hidden flex flex-col ${
+              isFullscreen 
+                ? 'w-full h-full rounded-xl' 
+                : 'rounded-xl max-w-5xl w-full max-h-[90vh]'
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
           {/* Header */}
           <div className={`${colors.bg} ${colors.border} border-b p-6`}>
             <div className="flex items-start justify-between">
@@ -241,12 +296,42 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   </div>
                 </div>
               </div>
-              <button
-                onClick={onClose}
-                className="ml-4 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-              </button>
+              <div className="ml-4 flex items-center gap-2">
+                {/* Export Button */}
+                <button
+                  onClick={handleExportImage}
+                  disabled={isExporting}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  title="Export as Image"
+                >
+                  {isExporting ? (
+                    <Loader2 className="w-5 h-5 text-gray-500 dark:text-gray-400 animate-spin" />
+                  ) : (
+                    <Download className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  )}
+                </button>
+                
+                {/* Fullscreen Toggle */}
+                <button
+                  onClick={() => setIsFullscreen(!isFullscreen)}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  ) : (
+                    <Maximize2 className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  )}
+                </button>
+                
+                {/* Close Button */}
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                </button>
+              </div>
             </div>
 
             {/* Progress Bar */}
@@ -294,6 +379,8 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   </ul>
                 </section>
 
+                <hr className="border-t border-gray-300 dark:border-gray-600 my-4" />
+
                 {/* Metrics */}
                 <section>
                   <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📊 Measurable Metrics</h3>
@@ -306,10 +393,12 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   </ul>
                 </section>
 
+                <hr className="border-t border-gray-300 dark:border-gray-600 my-4" />
+
                 {/* CRO Alignment */}
                 <section>
                   <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">🎯 CRO Impact Areas</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {goal.smartGoal.relevant.croAlignment.map((area, idx) => (
                       <span
                         key={idx}
@@ -351,23 +440,23 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   </div>
                 </section>
 
-                {/* Dates */}
+                <hr className="border-t border-gray-300 dark:border-gray-600 my-4" />
+
+                {/* Strategic Alignment */}
                 <section>
-                  <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📅 Timeline</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded">
-                      <span className="text-gray-600 dark:text-gray-400">Created:</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{new Date(goal.createdDate).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded">
-                      <span className="text-gray-600 dark:text-gray-400">Last Updated:</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{new Date(goal.lastUpdated).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex justify-between bg-green-50 dark:bg-green-950/30 p-2 rounded border border-green-200 dark:border-green-800">
-                      <span className="text-green-700 dark:text-green-300 font-semibold">Target Date:</span>
-                      <span className="font-bold text-green-900 dark:text-green-100">{new Date(goal.targetDate).toLocaleDateString()}</span>
-                    </div>
-                  </div>
+                  <h3 className="text-md font-bold text-gray-900 dark:text-white mb-3">📍 Strategic Alignment</h3>
+                  {goal.smartGoal.relevant.rationale && goal.smartGoal.relevant.rationale.length > 0 ? (
+                    <ul className="space-y-1.5">
+                      {goal.smartGoal.relevant.rationale.map((item, idx) => (
+                        <li key={idx} className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                          <span className="text-purple-600 dark:text-purple-400 mt-0.5">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic">No strategic alignment rationale provided</p>
+                  )}
                 </section>
               </div>
             </div>
@@ -504,35 +593,85 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                 </div>
               </section>
             )}
+
+            {/* Horizontal Rule */}
+            {!linkedContentLoading && (
+              <hr className="border-t border-gray-300 dark:border-gray-600 my-6" />
+            )}
+
+            {/* Linked Content Sections */}
+            {!linkedContentLoading && (
+              <>
+                {/* Tasks and Initiatives Section - ALWAYS SHOW */}
+                <section>
+                  <button
+                    onClick={() => toggleSection('tasksAndInitiatives')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-200 dark:border-blue-800 hover:shadow-md transition-all"
+                  >
+                    <div className="flex items-center gap-3">
+                      <CheckSquare className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                          Tasks & Initiatives ({linkedContent.initiativeTasks.reduce((sum, group) => sum + group.tasks.length, 0) + linkedContent.generalTasks.length})
+                        </h3>
+                      </div>
+                      {expandedSections.tasksAndInitiatives ? (
+                        <ChevronUp className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      )}
+                    </button>
+                    
+                    <AnimatePresence>
+                      {expandedSections.tasksAndInitiatives && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          {linkedContent.initiativeTasks.length === 0 && linkedContent.generalTasks.length === 0 ? (
+                            <div className="mt-3 text-center py-12">
+                              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                <CheckSquare className="w-8 h-8 text-gray-400" />
+                              </div>
+                              <p className="text-gray-500 dark:text-gray-400 mb-2">No initiatives or tasks linked yet</p>
+                              <p className="text-sm text-gray-400 dark:text-gray-500">
+                                Link tasks to this goal from the Task Editor
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="mt-3 text-center py-8">
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                                {linkedContent.initiativeTasks.reduce((sum, group) => sum + group.tasks.length, 0) + linkedContent.generalTasks.length} linked task(s) - View in frontend application for details
+                              </p>
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </section>
+              </>
+            )}
           </div>
 
           {/* Footer */}
-          <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800 flex justify-between items-center">
-            <button
-              onClick={handleExportImage}
-              disabled={isExporting}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-            >
-              {isExporting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Exporting...
-                </>
-              ) : (
-                <>
-                  <Download className="w-4 h-4" />
-                  Export as Image
-                </>
-              )}
-            </button>
-            <button
-              onClick={onClose}
-              className="px-6 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-medium transition-colors"
-            >
-              Close
-            </button>
+          <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6 text-xs text-gray-600 dark:text-gray-400" style={{ marginLeft: '20px' }}>
+                <span>📅 Created: <strong className="text-gray-900 dark:text-white">{new Date(goal.createdDate).toLocaleDateString()}</strong></span>
+                <span>🔄 Updated: <strong className="text-gray-900 dark:text-white">{new Date(goal.lastUpdated).toLocaleDateString()}</strong></span>
+              </div>
+              <button
+                onClick={onClose}
+                className="px-6 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-medium transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </motion.div>
+        </div>
       </motion.div>
     </AnimatePresence>
   );

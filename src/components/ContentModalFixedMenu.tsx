@@ -51,7 +51,7 @@ export const ContentModalFixedMenu: React.FC<ContentModalFixedMenuProps> = ({ co
     // Set up intersection observer for active section tracking
     const observerOptions = {
       root: scrollContainer,
-      rootMargin: '-120px 0px -50%',
+      rootMargin: '-120px 0px -70%', // Top offset for header, bottom 70% triggers earlier for sections near end
       threshold: 0.1
     };
 

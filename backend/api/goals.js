@@ -328,4 +328,163 @@ router.delete('/cro-impact/:id', async (req, res) => {
   }
 });
 
+// ============================================
+// LINKED CONTENT ENDPOINTS
+// ============================================
+
+// GET linked tasks for a goal
+router.get('/:id/linked/tasks', async (req, res) => {
+  try {
+    const TASKS_FILE = path.join(__dirname, '../data/tasks.json');
+    const tasksData = await fs.readFile(TASKS_FILE, 'utf8');
+    const { tasks } = JSON.parse(tasksData);
+    
+    // Filter tasks that have this goal ID in their tags or a linkedGoals field
+    const linkedTasks = tasks.filter(task => {
+      // Check if task has a linkedGoals array field
+      if (task.linkedGoals && task.linkedGoals.includes(req.params.id)) {
+        return true;
+      }
+      // Check if task has a goalId field (singular)
+      if (task.goalId === req.params.id) {
+        return true;
+      }
+      // Check if goal ID is in task description or title
+      return task.title?.toLowerCase().includes(req.params.id) || 
+             task.description?.toLowerCase().includes(req.params.id);
+    });
+    
+    res.json({ success: true, tasks: linkedTasks, count: linkedTasks.length });
+  } catch (error) {
+    console.error('Error fetching linked tasks:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch linked tasks' });
+  }
+});
+
+// GET linked notes for a goal
+router.get('/:id/linked/notes', async (req, res) => {
+  try {
+    const NOTES_FILE = path.join(__dirname, '../data/timeline-notes.json');
+    const notesData = await fs.readFile(NOTES_FILE, 'utf8');
+    const { notes } = JSON.parse(notesData);
+    
+    // Filter notes that mention this goal or have related tags
+    const linkedNotes = notes.filter(note => {
+      // Check if note has a linkedGoals field
+      if (note.linkedGoals && note.linkedGoals.includes(req.params.id)) {
+        return true;
+      }
+      // Check if goal ID is in note content or title
+      return note.title?.toLowerCase().includes(req.params.id) || 
+             note.content?.toLowerCase().includes(req.params.id);
+    });
+    
+    res.json({ success: true, notes: linkedNotes, count: linkedNotes.length });
+  } catch (error) {
+    console.error('Error fetching linked notes:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch linked notes' });
+  }
+});
+
+// GET linked initiatives for a goal
+router.get('/:id/linked/initiatives', async (req, res) => {
+  try {
+    const INITIATIVES_FILE = path.join(__dirname, '../data/initiatives/registry.json');
+    const initiativesData = await fs.readFile(INITIATIVES_FILE, 'utf8');
+    const { initiatives } = JSON.parse(initiativesData);
+    
+    // Filter initiatives that are linked to this goal
+    const linkedInitiatives = initiatives.filter(initiative => {
+      // Check if initiative has a linkedGoals field
+      if (initiative.linkedGoals && initiative.linkedGoals.includes(req.params.id)) {
+        return true;
+      }
+      return false;
+    });
+    
+    res.json({ success: true, initiatives: linkedInitiatives, count: linkedInitiatives.length });
+  } catch (error) {
+    console.error('Error fetching linked initiatives:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch linked initiatives' });
+  }
+});
+
+// GET all linked content for a goal (combined endpoint with hierarchical structure)
+router.get('/:id/linked/all', async (req, res) => {
+  try {
+    const TASKS_FILE = path.join(__dirname, '../data/tasks.json');
+    const NOTES_FILE = path.join(__dirname, '../data/timeline-notes.json');
+    const INITIATIVES_FILE = path.join(__dirname, '../data/initiatives/registry.json');
+    
+    const [tasksData, notesData, initiativesData] = await Promise.all([
+      fs.readFile(TASKS_FILE, 'utf8').catch(() => '{"tasks":[]}'),
+      fs.readFile(NOTES_FILE, 'utf8').catch(() => '{"notes":[]}'),
+      fs.readFile(INITIATIVES_FILE, 'utf8').catch(() => '{"initiatives":[]}')
+    ]);
+    
+    const { tasks } = JSON.parse(tasksData);
+    const { notes } = JSON.parse(notesData);
+    const { initiatives } = JSON.parse(initiativesData);
+    
+    const goalId = req.params.id;
+    
+    // Find initiatives linked to this goal
+    const linkedInitiatives = initiatives.filter(initiative => 
+      initiative.linkedGoals?.includes(goalId) ||
+      initiative.goalId === goalId
+    );
+    
+    // Group tasks by initiative
+    const initiativeTasks = linkedInitiatives.map(initiative => {
+      const tasksForInit = tasks.filter(task => 
+        task.initiativeId === initiative.id
+      );
+      return {
+        initiative,
+        tasks: tasksForInit
+      };
+    }).filter(group => group.tasks.length > 0); // Only include initiatives with tasks
+    
+    // Get general tasks (linked to goal but NOT to any initiative)
+    const generalTasks = tasks.filter(task => 
+      !task.initiativeId && 
+      (task.goalId === goalId || 
+       task.linkedGoals?.includes(goalId) ||
+       task.title?.toLowerCase().includes(goalId) ||
+       task.description?.toLowerCase().includes(goalId))
+    );
+    
+    // Get notes
+    const linkedNotes = notes.filter(note => 
+      note.linkedGoals?.includes(goalId) ||
+      note.goalId === goalId ||
+      note.title?.toLowerCase().includes(goalId) ||
+      note.content?.toLowerCase().includes(goalId)
+    );
+    
+    // Calculate totals
+    const totalTasks = initiativeTasks.reduce((sum, group) => sum + group.tasks.length, 0) + generalTasks.length;
+    
+    res.json({ 
+      success: true, 
+      data: {
+        initiativeTasks,  // [{ initiative: {...}, tasks: [...] }]
+        generalTasks,     // [task1, task2, ...]
+        notes: linkedNotes
+      },
+      counts: {
+        initiativeTasks: initiativeTasks.length,
+        generalTasks: generalTasks.length,
+        totalTasks,
+        notes: linkedNotes.length,
+        total: totalTasks + linkedNotes.length
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching all linked content:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch linked content' });
+  }
+});
+
 export default router;
+

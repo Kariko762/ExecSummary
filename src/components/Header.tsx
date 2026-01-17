@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, FileText, Lightbulb, Download, Settings, BookOpen, LogOut, Bell } from 'lucide-react';
+import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, ChevronRight, FileText, Lightbulb, Download, Settings, BookOpen, LogOut, Bell, Target, Cpu, CheckSquare, Rocket } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState, useEffect, useRef } from 'react';
@@ -11,18 +11,21 @@ interface HeaderProps {
   onSearch: (query: string) => void;
   isAuthenticated?: boolean;
   onLogout?: () => void;
+  onSelectContent?: (content: any) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = false, onLogout }) => {
+export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = false, onLogout, onSelectContent }) => {
   const { theme, toggleTheme } = useTheme();
   const { isPresentationMode, togglePresentationMode } = usePresentation();
   const [searchQuery, setSearchQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
+  const [isTechnologiesOpen, setIsTechnologiesOpen] = useState(false);
   const [isAnnouncementsOpen, setIsAnnouncementsOpen] = useState(false);
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [customLogo, setCustomLogo] = useState<string | null>(null);
+  const [technologiesMenu, setTechnologiesMenu] = useState<any[]>([]);
   const location = useLocation();
   const menuRef = useRef<HTMLDivElement>(null);
   const announcementsRef = useRef<HTMLDivElement>(null);
@@ -68,11 +71,29 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
     fetchAnnouncements();
   }, []);
 
+  // Load technologies menu
+  useEffect(() => {
+    const fetchTechnologies = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/technologies-menu');
+        const data = await response.json();
+        if (data.success) {
+          setTechnologiesMenu(data.items);
+        }
+      } catch (error) {
+        console.error('Failed to fetch technologies menu:', error);
+      }
+    };
+    
+    fetchTechnologies();
+  }, []);
+
   // Handle clicks outside the menu to close it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsNavDropdownOpen(false);
+        setIsTechnologiesOpen(false);
       }
       if (announcementsRef.current && !announcementsRef.current.contains(event.target as Node)) {
         setIsAnnouncementsOpen(false);
@@ -205,10 +226,13 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
 
                       {/* Menu Items */}
                       <div className="space-y-1">
-                        {/* Executive Summary Dashboard */}
+                        {/* Executive Summary */}
                         <Link
                           to="/"
-                          onClick={() => setIsNavDropdownOpen(false)}
+                          onClick={() => {
+                            setIsNavDropdownOpen(false);
+                            setIsTechnologiesOpen(false);
+                          }}
                           className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                             location.pathname === '/' 
                               ? 'bg-fis-eggplant/20 text-fis-eggplant dark:bg-fis-eggplant/30 dark:text-purple-300' 
@@ -223,8 +247,110 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                             <FileText className="w-5 h-5" />
                           </div>
                           <div className="flex-1">
-                            <div className="font-roobert-semibold text-sm">Executive Summary Dashboard</div>
-                            <div className="text-xs text-gray-600 dark:text-gray-400">Performance dashboards & updates</div>
+                            <div className="font-roobert-semibold text-sm">Executive Summary</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Leadership dashboard and insights</div>
+                          </div>
+                        </Link>
+
+                        {/* Initiatives */}
+                        <Link
+                          to="/strategic-initiatives"
+                          onClick={() => {
+                            setIsNavDropdownOpen(false);
+                            setIsTechnologiesOpen(false);
+                          }}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/strategic-initiatives' 
+                              ? 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/strategic-initiatives' 
+                              ? 'bg-pink-200 dark:bg-pink-800/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <Rocket className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Initiatives</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Transformation programs and projects</div>
+                          </div>
+                        </Link>
+
+                        {/* Goals */}
+                        <Link
+                          to="/goals"
+                          onClick={() => {
+                            setIsNavDropdownOpen(false);
+                            setIsTechnologiesOpen(false);
+                          }}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/goals' 
+                              ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/goals' 
+                              ? 'bg-purple-200 dark:bg-purple-800/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <Target className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Goals</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Strategic objectives and targets</div>
+                          </div>
+                        </Link>
+
+                        {/* Technologies button (slideout renders outside modal) */}
+                        <button
+                          onMouseEnter={() => setIsTechnologiesOpen(true)}
+                          onClick={() => setIsTechnologiesOpen(!isTechnologiesOpen)}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/technologies' || isTechnologiesOpen
+                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/technologies' || isTechnologiesOpen
+                              ? 'bg-blue-200 dark:bg-blue-800/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <Cpu className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1 text-left">
+                            <div className="font-roobert-semibold text-sm">Technologies</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Vendor summaries and solutions</div>
+                          </div>
+                          <ChevronRight className={`w-4 h-4 transition-transform ${isTechnologiesOpen ? 'rotate-90' : ''}`} />
+                        </button>
+
+                        {/* Task List */}
+                        <Link
+                          to="/knowledge-base"
+                          onClick={() => {
+                            setIsNavDropdownOpen(false);
+                            setIsTechnologiesOpen(false);
+                          }}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/knowledge-base' 
+                              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/knowledge-base' 
+                              ? 'bg-green-200 dark:bg-green-800/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <CheckSquare className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Task List</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Action items and knowledge base</div>
                           </div>
                         </Link>
 
@@ -272,6 +398,67 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                       </div>
                     </div>
                   </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Technologies Slideout - Rendered OUTSIDE the nav modal */}
+            <AnimatePresence>
+              {isTechnologiesOpen && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.2 }}
+                  onMouseLeave={() => setIsTechnologiesOpen(false)}
+                  className="absolute left-[320px] top-[calc(100%+8px+200px)] w-64 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[60]"
+                >
+                  <div className="p-3">
+                    <div className="px-3 py-2 mb-2">
+                      <div className="text-xs font-roobert-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Technology Summaries
+                      </div>
+                    </div>
+                    <div className="h-px bg-gray-200 dark:bg-gray-700 mb-2" />
+                    <div className="space-y-1 max-h-96 overflow-y-auto">
+                      {technologiesMenu.map((tech) => (
+                        <button
+                          key={tech.id}
+                          onClick={async () => {
+                            console.log('Technology clicked:', tech);
+                            setIsNavDropdownOpen(false);
+                            setIsTechnologiesOpen(false);
+                            if (tech.contentId) {
+                              try {
+                                console.log('Fetching content:', tech.contentId);
+                                const response = await fetch(`http://localhost:3001/api/content/${tech.contentId}`);
+                                const data = await response.json();
+                                console.log('Content data received:', data);
+                                if (onSelectContent) {
+                                  // API returns content directly, not wrapped in {success, content}
+                                  console.log('Opening content modal with:', data);
+                                  onSelectContent(data);
+                                }
+                              } catch (error) {
+                                console.error('Failed to fetch content:', error);
+                              }
+                            } else {
+                              console.log('No contentId for tech:', tech.name);
+                            }
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white transition-all"
+                        >
+                          <Cpu className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                          <span className="text-sm font-roobert-medium">{tech.name}</span>
+                        </button>
+                      ))}
+                      {technologiesMenu.length === 0 && (
+                        <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                          No technologies available
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
               )}
             </AnimatePresence>
           </div>

@@ -24,9 +24,11 @@ interface Task {
 interface AllTasksModalProps {
   onClose: () => void;
   onEditTask: (task: Task) => void;
+  onCreateTask?: () => void;
+  onOpenNotes?: () => void;
 }
 
-export const AllTasksModal: React.FC<AllTasksModalProps> = ({ onClose, onEditTask }) => {
+export const AllTasksModal: React.FC<AllTasksModalProps> = ({ onClose, onEditTask, onCreateTask, onOpenNotes }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -91,9 +93,29 @@ export const AllTasksModal: React.FC<AllTasksModalProps> = ({ onClose, onEditTas
                 {filteredTasks.length} {filteredTasks.length === 1 ? 'task' : 'tasks'}
               </span>
             </div>
-            <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-lg transition-colors text-white">
-              <X className="w-6 h-6" />
-            </button>
+            <div className="flex items-center gap-2">
+              {onCreateTask && (
+                <button
+                  onClick={onCreateTask}
+                  className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-white font-roobert-medium text-sm flex items-center gap-2"
+                >
+                  <ClipboardList className="w-4 h-4" />
+                  Create Task
+                </button>
+              )}
+              {onOpenNotes && (
+                <button
+                  onClick={onOpenNotes}
+                  className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-white font-roobert-medium text-sm flex items-center gap-2"
+                >
+                  <Calendar className="w-4 h-4" />
+                  Timeline Notes
+                </button>
+              )}
+              <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-lg transition-colors text-white">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
           </div>
 
           {/* Filters */}

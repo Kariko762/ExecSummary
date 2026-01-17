@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Edit2, Trash2, Save, Target, TrendingUp, CheckCircle, AlertCircle, Clock, Users, HelpCircle, Eye, Settings, Download } from 'lucide-react';
+import { X, Plus, Edit2, Save, Target, TrendingUp, CheckCircle, AlertCircle, Users, HelpCircle, Settings, Download, Sparkles } from 'lucide-react';
 import ViewGoalModal from './ViewGoalModal';
 import GoalsSettingsModal from './GoalsSettingsModal';
+import AIGoalBuilderWizard from './AIGoalBuilderWizard';
 
 interface Goal {
   id: string;
@@ -18,7 +19,7 @@ interface Goal {
     specific: { objectives: string[] };
     measurable: { metrics: string[] };
     achievable: { resources: string; ownership: string };
-    relevant: { croAlignment: string[] };
+    relevant: { croAlignment: string[]; rationale?: string[] };
     timeBound: { timeline: Array<{ phase: string; deliverable: string; dueDate: string; status: string }> };
   };
   indicators: {
@@ -67,6 +68,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
   const [showIndicatorsHelp, setShowIndicatorsHelp] = useState(false);
   const [viewingGoal, setViewingGoal] = useState<Goal | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showAIBuilder, setShowAIBuilder] = useState(false);
 
   // Fetch goals from API
   useEffect(() => {
@@ -107,7 +109,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
         specific: { objectives: [''] },
         measurable: { metrics: [''] },
         achievable: { resources: '', ownership: '' },
-        relevant: { croAlignment: [''] },
+        relevant: { croAlignment: [''], rationale: [] },
         timeBound: { timeline: [{ phase: 'Phase 1', deliverable: '', dueDate: '', status: 'not-started' }] }
       },
       indicators: {
@@ -131,20 +133,29 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
     setShowEditor(true);
   };
 
+  const handleAIGoalCreate = (goalData: any) => {
+    // AI wizard provides the goal, open it in editor for review/tweaking
+    setEditingGoal(goalData);
+    setShowEditor(true);
+  };
+
   const handleSaveGoal = async () => {
     if (!editingGoal) return;
 
     try {
+      // Determine if this is a new goal (no ID or empty ID)
+      const isNewGoal = !editingGoal.id || editingGoal.id.trim() === '';
+      
       // Generate ID if new goal
-      if (!editingGoal.id) {
+      if (isNewGoal) {
         editingGoal.id = editingGoal.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       }
 
-      const url = editingGoal.createdDate === new Date().toISOString().split('T')[0]
+      const url = isNewGoal
         ? 'http://localhost:3001/api/goals'
         : `http://localhost:3001/api/goals/${editingGoal.id}`;
 
-      const method = editingGoal.createdDate === new Date().toISOString().split('T')[0] ? 'POST' : 'PUT';
+      const method = isNewGoal ? 'POST' : 'PUT';
 
       const response = await fetch(url, {
         method,
@@ -253,26 +264,6 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
     showNotification?.('success', `${filteredGoals.length} goal(s) exported successfully`);
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'achieved': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'in-progress': return <TrendingUp className="w-4 h-4 text-blue-600" />;
-      case 'at-risk': return <AlertCircle className="w-4 h-4 text-orange-600" />;
-      case 'blocked': return <AlertCircle className="w-4 h-4 text-red-600" />;
-      default: return <Clock className="w-4 h-4 text-gray-400" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'achieved': return 'bg-green-100 text-green-700';
-      case 'in-progress': return 'bg-blue-100 text-blue-700';
-      case 'at-risk': return 'bg-orange-100 text-orange-700';
-      case 'blocked': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-600';
-    }
-  };
-
   const filteredGoals = selectedCategory === 'all' 
     ? goals 
     : goals.filter(g => g.category === selectedCategory);
@@ -295,66 +286,72 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="relative w-[95vw] h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          className="relative w-full max-w-7xl mx-4 h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-8 py-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between px-8 py-6 bg-gradient-to-br from-purple-900 via-fis-eggplant to-fis-navy">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fis-eggplant to-fis-raspberry flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
                 <Target className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-roobert-bold text-fis-navy dark:text-white">
+                <h2 className="text-2xl font-roobert-bold text-white">
                   Strategic Goals
                 </h2>
-                <p className="text-sm font-roobert-regular text-gray-500 dark:text-gray-400">
+                <p className="text-sm font-roobert-regular text-white/80">
                   Manage SMART goals and track progress
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <button
+                onClick={() => setShowAIBuilder(true)}
+                className="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-sm font-roobert-medium transition-all flex items-center gap-1.5"
+                title="AI Goal Builder"
+              >
+                <Sparkles className="w-4 h-4" />
+                AI Builder
+              </button>
+              <button
                 onClick={handleExportAllGoals}
-                className="px-4 py-2 rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-roobert-semibold hover:bg-blue-200 dark:hover:bg-blue-800 transition-all flex items-center gap-2"
+                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
                 title={`Export ${selectedCategory === 'all' ? 'All' : selectedCategory} Goals`}
               >
-                <Download className="w-4 h-4" />
-                Export
+                <Download className="w-4 h-4 text-white" />
               </button>
               <button
                 onClick={() => setShowSettings(true)}
-                className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white font-roobert-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all flex items-center gap-2"
+                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
                 title="Manage Categories & CRO Impact Areas"
               >
-                <Settings className="w-4 h-4" />
-                Settings
+                <Settings className="w-4 h-4 text-white" />
               </button>
               <button
                 onClick={handleCreateGoal}
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-semibold hover:shadow-lg transition-all flex items-center gap-2"
+                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
+                title="New Goal"
               >
-                <Plus className="w-4 h-4" />
-                New Goal
+                <Plus className="w-4 h-4 text-white" />
               </button>
               <button
                 onClick={onClose}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
               >
-                <X className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <X className="w-5 h-5 text-white" />
               </button>
             </div>
           </div>
 
           {/* Category Filter */}
-          <div className="px-8 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+          <div className="px-8 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
             <div className="flex gap-2">
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`px-4 py-2 rounded-lg font-roobert-medium text-sm transition-colors ${
+                className={`px-3 py-1.5 rounded-lg font-roobert-medium text-xs transition-colors ${
                   selectedCategory === 'all'
-                    ? 'bg-fis-eggplant dark:bg-fis-raspberry text-white'
-                    : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-300 dark:border-gray-600'
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                 }`}
               >
                 All ({goals.length})
@@ -363,13 +360,13 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-2 rounded-lg font-roobert-medium text-sm transition-colors capitalize ${
+                  className={`px-3 py-1.5 rounded-lg font-roobert-medium text-xs transition-colors capitalize ${
                     selectedCategory === cat.id
-                      ? 'bg-fis-eggplant dark:bg-fis-raspberry text-white'
-                      : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-300 dark:border-gray-600'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  {cat.icon} {cat.name} ({goals.filter(g => g.category === cat.id).length})
+                  {cat.name} ({goals.filter(g => g.category === cat.id).length})
                 </button>
               ))}
             </div>
@@ -394,110 +391,155 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {filteredGoals.map(goal => {
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredGoals.map((goal, index) => {
                   const category = categories.find(c => c.id === goal.category);
                   return (
-                    <div
+                    <motion.div
                       key={goal.id}
-                      className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ 
+                        delay: index * 0.05,
+                        type: "spring",
+                        stiffness: 100
+                      }}
+                      whileHover={{ 
+                        y: -8, 
+                        scale: 1.02,
+                        transition: { type: "spring", stiffness: 300 }
+                      }}
+                      onClick={() => setViewingGoal(goal)}
+                      className="relative bg-white dark:bg-gray-800 rounded-xl p-6 cursor-pointer group overflow-hidden shadow-md hover:shadow-2xl transition-shadow"
                     >
-                      {/* Goal Header */}
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-2xl">{goal.icon}</span>
-                            <span className={`px-2 py-1 rounded text-xs font-roobert-semibold ${getStatusColor(goal.status)}`}>
-                              {goal.status.replace('-', ' ').toUpperCase()}
-                            </span>
-                            {goal.priority === 'high' && (
-                              <span className="px-2 py-1 rounded text-xs font-roobert-semibold bg-red-100 text-red-700">
-                                HIGH PRIORITY
+                      {/* Gradient Overlay on Hover */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-purple-500/10 group-hover:via-purple-500/5 group-hover:to-pink-500/10 transition-all duration-500 rounded-xl" />
+                      
+                      {/* Admin Controls Overlay - Top Right */}
+                      <div className="absolute top-3 right-3 z-20 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleExportGoal(goal); }}
+                          className="p-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors shadow-sm"
+                          title="Export Goal"
+                        >
+                          <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleEditGoal(goal); }}
+                          className="p-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                          title="Edit Goal"
+                        >
+                          <Edit2 className="w-3.5 h-3.5 text-gray-500" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleDeleteGoal(goal.id); }}
+                          className="p-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors shadow-sm"
+                          title="Delete Goal"
+                        >
+                          <X className="w-3.5 h-3.5 text-red-600" />
+                        </button>
+                      </div>
+
+                      {/* Content - Matches Frontend Exactly */}
+                      <div className="relative z-10">
+                        {/* Icon */}
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 rounded-xl group-hover:scale-110 transition-transform">
+                            {goal.icon ? <span className="text-2xl">{goal.icon}</span> : <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />}
+                          </div>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                          {goal.name}
+                        </h3>
+
+                        {/* Short Name Badge */}
+                        {goal.shortName && (
+                          <span className="inline-block px-2 py-1 rounded-full text-xs font-roobert-medium bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 mb-2">
+                            {goal.shortName}
+                          </span>
+                        )}
+
+                        {/* SMART Statement */}
+                        {goal.smartGoal?.statement && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 font-roobert-light">
+                            {goal.smartGoal.statement}
+                          </p>
+                        )}
+
+                        {/* Progress Bar */}
+                        {goal.progress !== undefined && (
+                          <div className="mb-4">
+                            <div className="flex items-center justify-between text-xs mb-1">
+                              <span className="text-gray-600 dark:text-gray-400">Progress</span>
+                              <span className="font-roobert-semibold text-gray-900 dark:text-white">{goal.progress}%</span>
+                            </div>
+                            <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all"
+                                style={{ width: `${goal.progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Key Metrics Preview */}
+                        {goal.indicators?.leading && goal.indicators.leading.length > 0 && (
+                          <div className="grid grid-cols-2 gap-2 mb-4">
+                            {goal.indicators.leading.slice(0, 2).map((metric, idx) => (
+                              <div key={idx} className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
+                                <div className="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5 font-roobert-medium truncate">{metric.name}</div>
+                                <div className="text-sm font-roobert-bold text-gray-900 dark:text-white truncate">
+                                  {metric.current}
+                                </div>
+                                <div className="text-[10px] text-gray-500 dark:text-gray-400">→ {metric.target}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Stats Footer - Category, Status, Priority */}
+                        <div className="flex items-center gap-2 flex-wrap text-xs border-t border-gray-200 dark:border-gray-700 pt-3">
+                          <span className="px-2 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-roobert-medium capitalize">
+                            {category?.icon} {category?.name}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full font-roobert-medium capitalize ${
+                            goal.status === 'achieved' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
+                            goal.status === 'in-progress' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
+                            goal.status === 'at-risk' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' :
+                            goal.status === 'blocked' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
+                            'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                          }`}>
+                            {goal.status.replace('-', ' ')}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full font-roobert-medium capitalize ${
+                            goal.priority === 'high' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
+                            goal.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' :
+                            'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                          }`}>
+                            {goal.priority}
+                          </span>
+                        </div>
+
+                        {/* Owner & Assets Footer */}
+                        {(goal.owner || goal.linkedAssets !== undefined) && (
+                          <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400 mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                            {goal.owner && (
+                              <span className="flex items-center gap-1 font-roobert-medium">
+                                <Users className="w-3 h-3" />
+                                {goal.owner}
+                              </span>
+                            )}
+                            {goal.linkedAssets !== undefined && (
+                              <span className="font-roobert-medium">
+                                {goal.linkedAssets} asset{goal.linkedAssets !== 1 ? 's' : ''}
                               </span>
                             )}
                           </div>
-                          <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-1">
-                            {goal.name}
-                          </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {category?.name} • Target: {new Date(goal.targetDate).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => setViewingGoal(goal)}
-                            className="p-2 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
-                            title="View Details"
-                          >
-                            <Eye className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                          </button>
-                          <button
-                            onClick={() => handleExportGoal(goal)}
-                            className="p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
-                            title="Export Goal"
-                          >
-                            <Download className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                          </button>
-                          <button
-                            onClick={() => handleEditGoal(goal)}
-                            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                            title="Edit Goal"
-                          >
-                            <Edit2 className="w-4 h-4 text-gray-500" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteGoal(goal.id)}
-                            className="p-2 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
-                            title="Delete Goal"
-                          >
-                            <Trash2 className="w-4 h-4 text-red-600" />
-                          </button>
-                        </div>
+                        )}
                       </div>
-
-                      {/* Progress Bar */}
-                      <div className="mb-4">
-                        <div className="flex items-center justify-between text-sm mb-2">
-                          <span className="text-gray-600 dark:text-gray-400">Progress</span>
-                          <span className="font-roobert-semibold text-gray-900 dark:text-white">{goal.progress}%</span>
-                        </div>
-                        <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-fis-eggplant to-fis-raspberry transition-all"
-                            style={{ width: `${goal.progress}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* SMART Statement (truncated) */}
-                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-4 line-clamp-2">
-                        {goal.smartGoal.statement}
-                      </p>
-
-                      {/* Key Metrics */}
-                      <div className="grid grid-cols-2 gap-3 mb-4">
-                        {goal.indicators.leading.slice(0, 2).map((metric, idx) => (
-                          <div key={idx} className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3">
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">{metric.name}</div>
-                            <div className="text-lg font-roobert-bold text-gray-900 dark:text-white">
-                              {metric.current}
-                            </div>
-                            <div className="text-xs text-gray-500">Target: {metric.target}</div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Footer */}
-                      <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4" />
-                          <span>{goal.owner}</span>
-                        </div>
-                        <div>
-                          {goal.linkedAssets} asset{goal.linkedAssets !== 1 ? 's' : ''} linked
-                        </div>
-                      </div>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -510,12 +552,32 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
       {showEditor && editingGoal && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
-            {/* Header */}
+            {/* Header with Icon Controls */}
             <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-fis-eggplant to-fis-raspberry">
-              <h3 className="text-xl font-roobert-bold text-white">
-                {editingGoal.createdDate === new Date().toISOString().split('T')[0] ? 'Create New' : 'Edit'} Strategic Goal
-              </h3>
-              <p className="text-white/80 text-xs mt-0.5">SMART framework aligned with CRO/RevOps priorities</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-roobert-bold text-white">
+                    {editingGoal.createdDate === new Date().toISOString().split('T')[0] ? 'Create New' : 'Edit'} Strategic Goal
+                  </h3>
+                  <p className="text-white/80 text-xs mt-0.5">SMART framework aligned with CRO/RevOps priorities</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleSaveGoal}
+                    className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                    title="Save Goal"
+                  >
+                    <Save className="w-5 h-5 text-white" />
+                  </button>
+                  <button
+                    onClick={() => { setShowEditor(false); setEditingGoal(null); }}
+                    className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                    title="Close"
+                  >
+                    <X className="w-5 h-5 text-white" />
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Form Content - Scrollable */}
@@ -661,7 +723,10 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                                 ...editingGoal,
                                 smartGoal: {
                                   ...editingGoal.smartGoal,
-                                  relevant: { croAlignment: updated }
+                                  relevant: { 
+                                    croAlignment: updated,
+                                    rationale: editingGoal.smartGoal.relevant.rationale || []
+                                  }
                                 }
                               });
                             }}
@@ -675,6 +740,72 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                           </button>
                         );
                       })}
+                    </div>
+                    
+                    {/* Rationale Section */}
+                    <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <label className="block text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 mb-2">
+                        Strategic Alignment Rationale (Optional)
+                      </label>
+                      {(editingGoal.smartGoal.relevant.rationale || []).map((item, idx) => (
+                        <div key={idx} className="flex gap-1 mb-1">
+                          <input
+                            type="text"
+                            value={item}
+                            onChange={(e) => {
+                              const updated = [...(editingGoal.smartGoal.relevant.rationale || [])];
+                              updated[idx] = e.target.value;
+                              setEditingGoal({
+                                ...editingGoal,
+                                smartGoal: {
+                                  ...editingGoal.smartGoal,
+                                  relevant: { 
+                                    ...editingGoal.smartGoal.relevant,
+                                    rationale: updated
+                                  }
+                                }
+                              });
+                            }}
+                            className="flex-1 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+                            placeholder="Why this matters..."
+                          />
+                          <button
+                            onClick={() => {
+                              const updated = (editingGoal.smartGoal.relevant.rationale || []).filter((_, i) => i !== idx);
+                              setEditingGoal({
+                                ...editingGoal,
+                                smartGoal: {
+                                  ...editingGoal.smartGoal,
+                                  relevant: {
+                                    ...editingGoal.smartGoal.relevant,
+                                    rationale: updated
+                                  }
+                                }
+                              });
+                            }}
+                            className="px-2 py-1 rounded bg-red-100 dark:bg-red-900/30 text-red-600"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => {
+                          setEditingGoal({
+                            ...editingGoal,
+                            smartGoal: {
+                              ...editingGoal.smartGoal,
+                              relevant: {
+                                ...editingGoal.smartGoal.relevant,
+                                rationale: [...(editingGoal.smartGoal.relevant.rationale || []), '']
+                              }
+                            }
+                          });
+                        }}
+                        className="text-xs text-fis-raspberry hover:text-fis-eggplant font-roobert-semibold"
+                      >
+                        + Add Rationale
+                      </button>
                     </div>
                   </div>
 
@@ -758,7 +889,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                               }}
                               className="px-2 py-1 rounded bg-red-100 dark:bg-red-900/30 text-red-600"
                             >
-                              <Trash2 className="w-3 h-3" />
+                              <X className="w-3 h-3" />
                             </button>
                           )}
                         </div>
@@ -810,7 +941,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                               }}
                               className="px-2 py-1 rounded bg-red-100 dark:bg-red-900/30 text-red-600"
                             >
-                              <Trash2 className="w-3 h-3" />
+                              <X className="w-3 h-3" />
                             </button>
                           )}
                         </div>
@@ -875,7 +1006,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                           <input type="text" value={ind.baseline} onChange={(e) => { const u = [...editingGoal.indicators.leading]; u[idx].baseline = e.target.value; setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, leading: u}}); }} className="w-14 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" placeholder="Base" />
                           <input type="text" value={ind.current} onChange={(e) => { const u = [...editingGoal.indicators.leading]; u[idx].current = e.target.value; setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, leading: u}}); }} className="w-14 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" placeholder="Curr" />
                           <input type="text" value={ind.target} onChange={(e) => { const u = [...editingGoal.indicators.leading]; u[idx].target = e.target.value; setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, leading: u}}); }} className="w-14 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" placeholder="Tgt" />
-                          <button onClick={() => { const u = editingGoal.indicators.leading.filter((_, i) => i !== idx); setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, leading: u}}); }} className="px-1.5 rounded bg-red-100 dark:bg-red-900/30 text-red-600"><Trash2 className="w-3 h-3" /></button>
+                          <button onClick={() => { const u = editingGoal.indicators.leading.filter((_, i) => i !== idx); setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, leading: u}}); }} className="px-1.5 rounded bg-red-100 dark:bg-red-900/30 text-red-600"><X className="w-3 h-3" /></button>
                         </div>
                       ))}
                       <button onClick={() => { setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, leading: [...editingGoal.indicators.leading, { name: '', baseline: '', target: '', current: '', unit: '%' }]}}); }} className="text-xs text-fis-raspberry hover:text-fis-eggplant font-roobert-semibold">+ Add</button>
@@ -889,7 +1020,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                           <input type="text" value={ind.baseline} onChange={(e) => { const u = [...editingGoal.indicators.lagging]; u[idx].baseline = e.target.value; setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, lagging: u}}); }} className="w-14 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" placeholder="Base" />
                           <input type="text" value={ind.current} onChange={(e) => { const u = [...editingGoal.indicators.lagging]; u[idx].current = e.target.value; setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, lagging: u}}); }} className="w-14 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" placeholder="Curr" />
                           <input type="text" value={ind.target} onChange={(e) => { const u = [...editingGoal.indicators.lagging]; u[idx].target = e.target.value; setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, lagging: u}}); }} className="w-14 px-2 py-1 text-xs rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800" placeholder="Tgt" />
-                          <button onClick={() => { const u = editingGoal.indicators.lagging.filter((_, i) => i !== idx); setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, lagging: u}}); }} className="px-1.5 rounded bg-red-100 dark:bg-red-900/30 text-red-600"><Trash2 className="w-3 h-3" /></button>
+                          <button onClick={() => { const u = editingGoal.indicators.lagging.filter((_, i) => i !== idx); setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, lagging: u}}); }} className="px-1.5 rounded bg-red-100 dark:bg-red-900/30 text-red-600"><X className="w-3 h-3" /></button>
                         </div>
                       ))}
                       <button onClick={() => { setEditingGoal({...editingGoal, indicators: {...editingGoal.indicators, lagging: [...editingGoal.indicators.lagging, { name: '', baseline: '', target: '', current: '', unit: '%' }]}}); }} className="text-xs text-fis-raspberry hover:text-fis-eggplant font-roobert-semibold">+ Add</button>
@@ -917,7 +1048,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                         <option value="completed">Done</option>
                         <option value="delayed">Delayed</option>
                       </select>
-                      <button onClick={() => { const u = editingGoal.smartGoal.timeBound.timeline.filter((_, i) => i !== idx); setEditingGoal({...editingGoal, smartGoal: {...editingGoal.smartGoal, timeBound: { timeline: u }}}); }} className="px-1.5 rounded bg-red-100 dark:bg-red-900/30 text-red-600"><Trash2 className="w-3 h-3" /></button>
+                      <button onClick={() => { const u = editingGoal.smartGoal.timeBound.timeline.filter((_, i) => i !== idx); setEditingGoal({...editingGoal, smartGoal: {...editingGoal.smartGoal, timeBound: { timeline: u }}}); }} className="px-1.5 rounded bg-red-100 dark:bg-red-900/30 text-red-600"><X className="w-3 h-3" /></button>
                     </div>
                   ))}
                   <button onClick={() => { setEditingGoal({...editingGoal, smartGoal: {...editingGoal.smartGoal, timeBound: { timeline: [...editingGoal.smartGoal.timeBound.timeline, { phase: '', deliverable: '', dueDate: '', status: 'not-started' }]}}}); }} className="text-xs text-fis-raspberry hover:text-fis-eggplant font-roobert-semibold">+ Add</button>
@@ -925,16 +1056,6 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
               </div>
             </div>
 
-            {/* Footer Actions */}
-            <div className="px-6 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex gap-2">
-              <button onClick={handleSaveGoal} className="flex-1 px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 text-sm">
-                <Save className="w-4 h-4" />
-                Save Goal
-              </button>
-              <button onClick={() => { setShowEditor(false); setEditingGoal(null); }} className="px-6 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white font-roobert-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all text-sm">
-                Cancel
-              </button>
-            </div>
           </div>
         </div>
       )}
@@ -1361,6 +1482,14 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
         showNotification={showNotification}
       />
     )}
+
+    {/* AI Goal Builder Wizard */}
+    <AIGoalBuilderWizard
+      isOpen={showAIBuilder}
+      onClose={() => setShowAIBuilder(false)}
+      onCreateGoal={handleAIGoalCreate}
+      showNotification={showNotification}
+    />
 
     {/* View Goal Modal */}
     {viewingGoal && (

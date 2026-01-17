@@ -27,6 +27,7 @@ interface Note {
     slug: string;
     name: string;
   } | null;
+  taskId?: string; // NEW: Link to specific task
   sectionIds: string[];
   tags: string[];
   author: string;
@@ -38,9 +39,9 @@ interface AddNoteModalProps {
   onSave: (note: Note) => Promise<void>;
   existingNote?: Note | null;
   sections: Array<{ id: string; name: string; status: string }>;
-  organizations?: Array<{ id: string; name: string; slug: string }>;
   initiatives?: Array<{ id: string; name: string; slug: string }>;
-  goals?: Array<{ id: string; title: string; slug: string }>;
+  goals?: Array<{ id: string; title: string; slug: string; name?: string }>;
+  tasks?: Array<{ id: string; title: string; goalId?: string; initiativeId?: string }>;
   categoryConfig?: any; // Dynamic category config from parent
 }
 
@@ -60,16 +61,17 @@ export default function AddNoteModal({
   onSave,
   existingNote,
   sections,
-  organizations = [],
   initiatives = [],
   goals = [],
+  tasks = [],
   categoryConfig = DEFAULT_CATEGORY_CONFIG
 }: AddNoteModalProps) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState<Note['category']>('general');
-  const [linkedType, setLinkedType] = useState<'none' | 'organization' | 'initiative' | 'goal'>('none');
+  const [linkedType, setLinkedType] = useState<'none' | 'initiative' | 'goal'>('none');
   const [linkedId, setLinkedId] = useState('');
+  const [taskId, setTaskId] = useState(''); // NEW
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
@@ -85,9 +87,10 @@ export default function AddNoteModal({
       setCategory(existingNote.category);
       setSelectedSections(existingNote.sectionIds);
       setTags(existingNote.tags);
+      setTaskId(existingNote.taskId || '');
       
       if (existingNote.linkedTo) {
-        setLinkedType(existingNote.linkedTo.type);
+        setLinkedType(existingNote.linkedTo.type as 'initiative' | 'goal');
         setLinkedId(existingNote.linkedTo.id);
       }
     } else {
@@ -97,6 +100,7 @@ export default function AddNoteModal({
       setCategory('general');
       setLinkedType('none');
       setLinkedId('');
+      setTaskId('');
       setSelectedSections([]);
       setTags([]);
     }
@@ -125,11 +129,7 @@ export default function AddNoteModal({
         let slug = '';
         let name = '';
 
-        if (linkedType === 'organization') {
-          linkedItem = organizations.find(o => o.id === linkedId);
-          slug = linkedItem?.slug || '';
-          name = linkedItem?.name || '';
-        } else if (linkedType === 'initiative') {
+        if (linkedType === 'initiative') {
           linkedItem = initiatives.find(i => i.id === linkedId);
           slug = linkedItem?.slug || '';
           name = linkedItem?.name || '';
@@ -153,6 +153,7 @@ export default function AddNoteModal({
         content: content.trim(),
         category,
         linkedTo,
+        ...(taskId && { taskId }), // Add taskId if selected
         sectionIds: selectedSections,
         tags,
         author: 'System' // TODO: Get from auth context
@@ -310,8 +311,115 @@ export default function AddNoteModal({
             )}
           </div>
 
-          {/* Link to Object */}
+          {/* Link to Goal/Initiative */}
           <div>
+            <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+              Link to Goal or Initiative
+            </label>
+            
+            {/* Radio buttons for Goal vs Initiative */}
+            <div className="flex gap-4 mb-3">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="noteLinkedType"
+                  value="none"
+                  checked={linkedType === 'none'}
+                  onChange={() => {
+                    setLinkedType('none');
+                    setLinkedId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-purple-600"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">None</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="noteLinkedType"
+                  value="goal"
+                  checked={linkedType === 'goal'}
+                  onChange={() => {
+                    setLinkedType('goal');
+                    setLinkedId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-purple-600"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Strategic Goal</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="noteLinkedType"
+                  value="initiative"
+                  checked={linkedType === 'initiative'}
+                  onChange={() => {
+                    setLinkedType('initiative');
+                    setLinkedId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-pink-600"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Initiative</span>
+              </label>
+            </div>
+
+            {/* Goal/Initiative Dropdown */}
+            {linkedType !== 'none' && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                    Select {linkedType === 'goal' ? 'Goal' : 'Initiative'}
+                  </label>
+                  <select
+                    value={linkedId}
+                    onChange={(e) => {
+                      setLinkedId(e.target.value);
+                      setTaskId(''); // Reset task when changing goal/initiative
+                    }}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  >
+                    <option value="">Select {linkedType}...</option>
+                    {linkedType === 'initiative' &&
+                      initiatives.map(init => (
+                        <option key={init.id} value={init.id}>{init.name}</option>
+                      ))}
+                    {linkedType === 'goal' &&
+                      goals.map(goal => (
+                        <option key={goal.id} value={goal.id}>{goal.title || goal.name}</option>
+                      ))}
+                  </select>
+                </div>
+
+                {/* Task Dropdown - filtered by selected goal/initiative */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+                    Link to Task (Optional)
+                  </label>
+                  <select
+                    value={taskId}
+                    onChange={(e) => setTaskId(e.target.value)}
+                    disabled={!linkedId}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <option value="">No specific task</option>
+                    {tasks
+                      .filter(task => 
+                        linkedType === 'goal' ? task.goalId === linkedId : task.initiativeId === linkedId
+                      )
+                      .map(task => (
+                        <option key={task.id} value={task.id}>{task.title}</option>
+                      ))}
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Link to Object - REMOVED, keeping for backwards compat */}
+          <div style={{ display: 'none' }}>
             <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
               Link to (Optional)
             </label>
@@ -325,7 +433,6 @@ export default function AddNoteModal({
                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               >
                 <option value="none">None</option>
-                <option value="organization">Organization</option>
                 <option value="initiative">Initiative</option>
                 <option value="goal">Goal</option>
               </select>
@@ -337,10 +444,6 @@ export default function AddNoteModal({
                   className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 >
                   <option value="">Select {linkedType}...</option>
-                  {linkedType === 'organization' &&
-                    organizations.map(org => (
-                      <option key={org.id} value={org.id}>{org.name}</option>
-                    ))}
                   {linkedType === 'initiative' &&
                     initiatives.map(init => (
                       <option key={init.id} value={init.id}>{init.name}</option>

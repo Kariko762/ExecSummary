@@ -662,13 +662,122 @@
           }
         ]
       },
-      "progress": 52,
+      "progress": 57,
       "color": "blue",
       "icon": "📊",
       "linkedAssets": 0,
       "createdDate": "2025-02-01",
-      "lastUpdated": "2025-12-08",
+      "lastUpdated": "2026-01-17",
       "targetDate": "2025-09-30"
+    },
+    {
+      "name": "Optimize Demo Efficiency and Automation",
+      "shortName": "Demo Prep Optimization",
+      "category": "process-optimization",
+      "owner": "VP Revenue Operations",
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2027-03-31",
+      "color": "#8B5CF6",
+      "icon": "🎯",
+      "progress": 15,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By Q1 2027, reduce the demo preparation-to-delivery ratio from 10:1 to 2:1 by implementing automated demo technologies like Coast, thereby increasing SE deal capacity and reducing FTE overhead.",
+        "specific": {
+          "objectives": [
+            "Implement and migrate repeatable demos to automated demo platforms (e.g., Coast).",
+            "Automate demo data generation to eliminate manual environment setup for standard use cases.",
+            "Transition legacy hosted software environments to a hybrid model, utilizing live environments only for high-complexity requirements."
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Reduction in preparation-to-demo ratio from 10:1 to 2:1.",
+            "Decrease in annual FTE hours spent on demo prep from 40,000 to 8,000.",
+            "Increase in the average number of concurrent deals managed per SE."
+          ]
+        },
+        "achievable": {
+          "resources": "Budget allocation for demo automation tools (Coast/similar) and internal SE task force for data templating.",
+          "ownership": "VP of Revenue Operations in partnership with SE Leadership and Sales Growth Offices"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Sales Productivity",
+            "Sales Cycle Delays",
+            "Deal Conversion",
+            "Customer Sat"
+          ],
+          "rationale": [
+            "Scaling revenue through operational efficiency.",
+            "Shortening the sales cycle via quicker qualification and demo readiness.",
+            "Reducing CAC by optimizing SE resource utilization."
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Tool Selection & Pilot",
+              "deliverable": "Validation of Coast or similar tool for 20% of repeatable use cases.",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Mass Migration",
+              "deliverable": "Transition of 70% of standard demos to automated platforms.",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Full Optimization",
+              "deliverable": "Complete integration of automated data generation and 2:1 prep ratio achievement.",
+              "dueDate": "2027-03-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Time to Demo Preparation",
+            "baseline": "10",
+            "target": "2",
+            "current": "10",
+            "unit": "hours"
+          },
+          {
+            "name": "Concurrent Deals per SE",
+            "baseline": "Baseline X",
+            "target": "Target Y",
+            "current": "Baseline X",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Total Annual Prep Hours",
+            "baseline": "40000",
+            "target": "8000",
+            "current": "40000",
+            "unit": "hours"
+          },
+          {
+            "name": "Sales Cycle Length",
+            "baseline": "Current Days",
+            "target": "Reduced Days",
+            "current": "Current Days",
+            "unit": "days"
+          }
+        ]
+      },
+      "id": "optimize-demo-efficiency-and-automation",
+      "createdDate": "2026-01-17",
+      "lastUpdated": "2026-01-17",
+      "coOwners": [
+        "DemoServicesGroup"
+      ]
     }
   ],
   "categories": [

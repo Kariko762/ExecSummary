@@ -14,16 +14,19 @@ interface CMSHeaderProps {
   onOpenDataSources?: () => void;
   onOpenComments?: () => void;
   onOpenGoals?: () => void;
+  onOpenInitiatives?: () => void;
   onOpenNotes?: () => void;
+  onOpenTasks?: () => void;
   onOpenPlatformOverview?: () => void;
 }
 
-export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenDataSources, onOpenComments, onOpenGoals, onOpenNotes, onOpenPlatformOverview }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenDataSources, onOpenComments, onOpenGoals, onOpenInitiatives, onOpenNotes, onOpenTasks, onOpenPlatformOverview }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
   const [engineSubmenuOpen, setEngineSubmenuOpen] = useState(false);
+  const [strategySubmenuOpen, setStrategySubmenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [customLogo, setCustomLogo] = useState<string | null>(null);
@@ -32,7 +35,9 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
   const menuRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const engineMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const strategyMenuButtonRef = useRef<HTMLButtonElement>(null);
   const [engineSubmenuOpenUpward, setEngineSubmenuOpenUpward] = useState(false);
+  const [strategySubmenuOpenUpward, setStrategySubmenuOpenUpward] = useState(false);
 
   // Load custom logo and auth settings from system settings
   useEffect(() => {
@@ -84,6 +89,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsNavDropdownOpen(false);
         setEngineSubmenuOpen(false);
+        setStrategySubmenuOpen(false);
       }
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsUserMenuOpen(false);
@@ -117,6 +123,20 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
     }
   };
 
+  const handleStrategySubmenuOpen = () => {
+    setStrategySubmenuOpen(true);
+    
+    if (strategyMenuButtonRef.current) {
+      const buttonRect = strategyMenuButtonRef.current.getBoundingClientRect();
+      const submenuHeight = 400; // Approximate submenu height
+      const viewportHeight = window.innerHeight;
+      const spaceBelow = viewportHeight - buttonRect.bottom;
+      
+      // If not enough space below (less than submenu height), open upward
+      setStrategySubmenuOpenUpward(spaceBelow < submenuHeight);
+    }
+  };
+
   // Handle ESC key to close navigation menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -124,6 +144,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
         if (isNavDropdownOpen) {
           setIsNavDropdownOpen(false);
           setEngineSubmenuOpen(false);
+          setStrategySubmenuOpen(false);
         }
         if (isUserMenuOpen) {
           setIsUserMenuOpen(false);
@@ -206,7 +227,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
 
                       {/* Menu Items */}
                       <div className="space-y-1">
-                        {/* Executive Summary Dashboard */}
+                        {/* Executive Dashboard */}
                         <a
                           href="http://localhost:5174"
                           target="_blank"
@@ -218,12 +239,12 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                             <FileText className="w-5 h-5" />
                           </div>
                           <div className="flex-1">
-                            <div className="font-roobert-semibold text-sm">Executive Summary Dashboard</div>
+                            <div className="font-roobert-semibold text-sm">Executive Dashboard</div>
                             <div className="text-xs text-gray-600 dark:text-gray-400">Performance dashboards & updates</div>
                           </div>
                         </a>
 
-                        {/* Strategic Initiatives */}
+                        {/* HR */}
                         <a
                           href="http://localhost:5174/strategic-initiatives"
                           target="_blank"
@@ -232,11 +253,11 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                           onClick={() => setIsNavDropdownOpen(false)}
                         >
                           <div className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
-                            <Lightbulb className="w-5 h-5" />
+                            <User className="w-5 h-5" />
                           </div>
                           <div className="flex-1">
-                            <div className="font-roobert-semibold text-sm">Strategic Initiatives</div>
-                            <div className="text-xs text-gray-600 dark:text-gray-400">Executive project summaries</div>
+                            <div className="font-roobert-semibold text-sm">HR</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Human resources portal</div>
                           </div>
                         </a>
 
@@ -252,6 +273,134 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                             <div className="font-roobert-semibold text-sm">CMS Admin</div>
                             <div className="text-xs text-fis-eggplant/70 dark:text-purple-400/70">Content management system</div>
                           </div>
+                        </div>
+
+                        {/* STRATEGY SUBMENU */}
+                        <div className="relative">
+                          <button
+                            ref={strategyMenuButtonRef}
+                            onMouseEnter={handleStrategySubmenuOpen}
+                            onMouseLeave={() => setStrategySubmenuOpen(false)}
+                            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-purple-500/10 dark:hover:bg-purple-500/20 text-gray-900 dark:text-white text-left"
+                          >
+                            <div className="p-2 rounded-lg bg-purple-500/10 dark:bg-purple-500/20">
+                              <Target className="w-5 h-5 text-purple-500" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-roobert-semibold text-sm">Strategy</div>
+                              <div className="text-xs text-gray-600 dark:text-gray-400">Goals, tasks & initiatives</div>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-gray-400" />
+                          </button>
+                          
+                          {/* Submenu - Slides out to the right */}
+                          <AnimatePresence>
+                            {strategySubmenuOpen && (
+                              <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                transition={{ duration: 0.15 }}
+                                onMouseEnter={handleStrategySubmenuOpen}
+                                onMouseLeave={() => setStrategySubmenuOpen(false)}
+                                className={`absolute left-full ml-2 w-72 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[53] ${
+                                  strategySubmenuOpenUpward ? 'bottom-0' : 'top-0'
+                                }`}
+                              >
+                                <div className="p-2">
+                                  {/* Timeline Notes */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setStrategySubmenuOpen(false);
+                                      onOpenNotes?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-yellow-500/10 dark:hover:bg-yellow-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-yellow-500/10 dark:bg-yellow-500/20">
+                                      <StickyNote className="w-4 h-4 text-yellow-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Timeline Notes</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Weekly reports & updates</div>
+                                    </div>
+                                  </button>
+
+                                  {/* All Tasks */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setStrategySubmenuOpen(false);
+                                      onOpenTasks?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-blue-500/10 dark:hover:bg-blue-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-blue-500/10 dark:bg-blue-500/20">
+                                      <Check className="w-4 h-4 text-blue-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">All Tasks</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Action items & tracking</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Initiatives */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setStrategySubmenuOpen(false);
+                                      onOpenInitiatives?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-pink-500/10 dark:hover:bg-pink-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-pink-500/10 dark:bg-pink-500/20">
+                                      <span className="text-lg">🚀</span>
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Initiatives</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Strategic projects</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Goals */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setStrategySubmenuOpen(false);
+                                      onOpenGoals?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-green-500/10 dark:hover:bg-green-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-green-500/10 dark:bg-green-500/20">
+                                      <Target className="w-4 h-4 text-green-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Goals</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Strategic objectives</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Template Builder */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setStrategySubmenuOpen(false);
+                                      onOpenTemplateBuilder?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-fis-eggplant/10 dark:hover:bg-fis-eggplant/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-fis-eggplant/10 dark:bg-fis-eggplant/20">
+                                      <Grid className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Template Builder</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Drag & drop designer</div>
+                                    </div>
+                                  </button>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
 
                         {/* System Settings */}
@@ -271,24 +420,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                           </div>
                         </button>
 
-                        {/* Data Engine */}
-                        <button
-                          onClick={() => {
-                            onOpenDataSources?.();
-                            setIsNavDropdownOpen(false);
-                          }}
-                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:bg-green-50 dark:hover:bg-green-900/20 text-gray-900 dark:text-white text-left"
-                        >
-                          <div className="p-2 rounded-lg bg-green-500/10">
-                            <Database className="w-5 h-5 text-green-500" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="font-roobert-semibold text-sm">Data Engine</div>
-                            <div className="text-xs text-gray-600 dark:text-gray-400">Performance data sources</div>
-                          </div>
-                        </button>
-
-                        {/* Platform Overview */}
+                        {/* ENGINE & TEMPLATES - WITH SUBMENU */}
                         <button
                           onClick={() => {
                             onOpenPlatformOverview?.();
@@ -318,7 +450,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                             </div>
                             <div className="flex-1">
                               <div className="font-roobert-semibold text-sm">Engine & Templates</div>
-                              <div className="text-xs text-gray-600 dark:text-gray-400">Render engine & builders</div>
+                              <div className="text-xs text-gray-600 dark:text-gray-400">Render engine & tools</div>
                             </div>
                             <ChevronRight className="w-4 h-4 text-gray-400" />
                           </button>
@@ -353,63 +485,25 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     </div>
                                     <div className="flex-1">
                                       <div className="font-roobert-semibold text-sm">Asset Reference</div>
-                                      <div className="text-xs text-gray-600 dark:text-gray-400">22 assets with live previews & note labels</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Platform assets with live previews, notes and code</div>
                                     </div>
                                   </button>
 
-                                  {/* Template Builder */}
-                                  <button
-                                    onClick={() => {
-                                      console.log('Template Builder clicked!');
-                                      setIsNavDropdownOpen(false);
-                                      setEngineSubmenuOpen(false);
-                                      onOpenTemplateBuilder?.();
-                                    }}
-                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-fis-eggplant/10 dark:hover:bg-fis-eggplant/20 text-gray-900 dark:text-white text-left"
-                                  >
-                                    <div className="p-1.5 rounded-lg bg-fis-eggplant/10 dark:bg-fis-eggplant/20">
-                                      <Grid className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
-                                    </div>
-                                    <div className="flex-1">
-                                      <div className="font-roobert-semibold text-sm">Template Builder</div>
-                                      <div className="text-xs text-gray-600 dark:text-gray-400">Drag & drop template designer</div>
-                                    </div>
-                                  </button>
-
-                                  {/* Goals */}
-                                  <button
-                                    onClick={() => {
-                                      console.log('Goals clicked!');
-                                      setIsNavDropdownOpen(false);
-                                      setEngineSubmenuOpen(false);
-                                      onOpenGoals?.();
-                                    }}
-                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-green-500/10 dark:hover:bg-green-500/20 text-gray-900 dark:text-white text-left"
-                                  >
-                                    <div className="p-1.5 rounded-lg bg-green-500/10 dark:bg-green-500/20">
-                                      <Target className="w-4 h-4 text-green-500" />
-                                    </div>
-                                    <div className="flex-1">
-                                      <div className="font-roobert-semibold text-sm">Strategic Goals</div>
-                                      <div className="text-xs text-gray-600 dark:text-gray-400">Manage SMART goals & KPIs</div>
-                                    </div>
-                                  </button>
-
-                                  {/* Notes */}
+                                  {/* Platform Showcase */}
                                   <button
                                     onClick={() => {
                                       setIsNavDropdownOpen(false);
                                       setEngineSubmenuOpen(false);
-                                      onOpenNotes?.();
+                                      onOpenPlatformOverview?.();
                                     }}
-                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-yellow-500/10 dark:hover:bg-yellow-500/20 text-gray-900 dark:text-white text-left"
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-gradient-to-r hover:from-fis-eggplant/10 hover:to-fis-navy/10 dark:hover:from-fis-eggplant/20 dark:hover:to-fis-navy/20 text-gray-900 dark:text-white text-left"
                                   >
-                                    <div className="p-1.5 rounded-lg bg-yellow-500/10 dark:bg-yellow-500/20">
-                                      <StickyNote className="w-4 h-4 text-yellow-500" />
+                                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-fis-eggplant/10 to-fis-navy/10 dark:from-fis-eggplant/20 dark:to-fis-navy/20">
+                                      <BookText className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
                                     </div>
                                     <div className="flex-1">
-                                      <div className="font-roobert-semibold text-sm">Notes System</div>
-                                      <div className="text-xs text-gray-600 dark:text-gray-400">Create weekly reports & updates</div>
+                                      <div className="font-roobert-semibold text-sm">Platform Showcase</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Visual capabilities overview</div>
                                     </div>
                                   </button>
 

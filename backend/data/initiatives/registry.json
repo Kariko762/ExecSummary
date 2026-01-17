@@ -3,12 +3,487 @@
     {
       "id": "digital-first-demo-services",
       "name": "Digital First Demo Services",
+      "shortName": "Demo Automation",
       "slug": "digital-first-demo-services",
-      "description": "",
+      "category": "innovation",
+      "owner": "Sarah Chen",
+      "coOwners": [
+        "Michael Torres",
+        "Demo Operations Team"
+      ],
+      "sponsor": "SVP, Revenue Operations",
+      "status": "in-progress",
+      "priority": "medium",
+      "progress": 65,
+      "projectStage": "mvp",
+      "linkedGoals": [
+        "demo-availability-sla"
+      ],
+      "smartGoal": {
+        "statement": "Transform demo operations through AI-powered automation, reducing preparation time by 85% and enabling 3x capacity increase without proportional headcount growth.",
+        "specific": {
+          "objectives": [
+            "Deploy AI-powered demo data generator",
+            "Automate demo environment provisioning",
+            "Create intelligent demo orchestration platform",
+            "Implement self-service demo requests"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Demo prep time: 300min → 45min (85% reduction)",
+            "Monthly demo capacity: 150 → 450+ demos",
+            "Automation rate: 95% for standard scenarios",
+            "Cost savings: $2.8M annually"
+          ]
+        },
+        "achievable": {
+          "resources": "Cross-functional team of 7 engineers and designers, $250K budget allocated",
+          "teamSize": "5 FTEs + 2 contractors"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Revenue Growth",
+            "Operational Excellence",
+            "Customer Experience"
+          ],
+          "strategicThemes": [
+            "Digital Transformation",
+            "AI/ML Innovation"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "MVP Development",
+              "deliverable": "Core automation workflows operational",
+              "dueDate": "2025-03-31",
+              "status": "completed"
+            },
+            {
+              "phase": "Pilot Rollout",
+              "deliverable": "Capital Markets team fully automated",
+              "dueDate": "2025-06-30",
+              "status": "in-progress"
+            },
+            {
+              "phase": "Full Deployment",
+              "deliverable": "All product lines automated",
+              "dueDate": "2025-09-30",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Automation workflows deployed",
+            "baseline": "0",
+            "target": "12",
+            "current": "7",
+            "unit": "workflows"
+          },
+          {
+            "name": "Demo engineers trained on platform",
+            "baseline": "0%",
+            "target": "100%",
+            "current": "68%",
+            "unit": "%"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Average demo prep time",
+            "baseline": "300",
+            "target": "45",
+            "current": "125",
+            "unit": "minutes"
+          },
+          {
+            "name": "Monthly demo capacity",
+            "baseline": "150",
+            "target": "450",
+            "current": "285",
+            "unit": "demos"
+          }
+        ]
+      },
+      "businessCase": {
+        "problem": "Manual demo preparation consumes 600-900 hours monthly, creating capacity constraints and limiting revenue generation.",
+        "opportunity": "Automation enables 3x demo capacity supporting $50M+ additional pipeline generation annually.",
+        "solution": "AI-powered platform automating environment provisioning, data seeding, and demo orchestration.",
+        "expectedBenefits": [
+          "$2.8M annual cost savings from efficiency gains",
+          "450% ROI within 18 months",
+          "40% higher win rates through improved demo quality",
+          "95% faster time-to-demo delivery"
+        ],
+        "roi": "450% ROI in 18 months",
+        "paybackPeriod": "12 months"
+      },
+      "budget": {
+        "total": 250000,
+        "allocated": 250000,
+        "spent": 162500,
+        "currency": "USD",
+        "breakdown": [
+          {
+            "category": "Engineering/Development",
+            "allocated": 140000,
+            "spent": 95000
+          },
+          {
+            "category": "Infrastructure & Tools",
+            "allocated": 45000,
+            "spent": 32500
+          },
+          {
+            "category": "Training & Change Management",
+            "allocated": 25000,
+            "spent": 18000
+          },
+          {
+            "category": "External Vendors/Consultants",
+            "allocated": 30000,
+            "spent": 12000
+          },
+          {
+            "category": "Contingency Reserve",
+            "allocated": 10000,
+            "spent": 5000
+          }
+        ],
+        "fundingSource": "Revenue Operations Budget (80%) + Innovation Fund (20%)",
+        "costAvoidance": "$2.8M annually in labor savings"
+      },
+      "funding": {
+        "requestedAmount": 250000,
+        "approvedAmount": 250000,
+        "approvalDate": "2025-10-15",
+        "approvedBy": "CFO & COO",
+        "phaseGates": [
+          {
+            "phase": "Phase 1: MVP",
+            "amount": 85000,
+            "releaseCondition": "Business case approval",
+            "status": "released"
+          },
+          {
+            "phase": "Phase 2: Pilot",
+            "amount": 100000,
+            "releaseCondition": "MVP success metrics met (>80% automation rate)",
+            "status": "released"
+          },
+          {
+            "phase": "Phase 3: Scale",
+            "amount": 65000,
+            "releaseCondition": "Pilot ROI validation (>350% ROI)",
+            "status": "pending"
+          }
+        ]
+      },
+      "dependencies": {
+        "internal": [
+          {
+            "on": "Data Platform Team",
+            "description": "API access to customer data lakes for demo data generation",
+            "criticality": "high",
+            "status": "completed",
+            "dueDate": "2025-12-31"
+          },
+          {
+            "on": "DevOps Team",
+            "description": "Kubernetes cluster provisioning and GitOps workflows",
+            "criticality": "high",
+            "status": "in-progress",
+            "dueDate": "2026-01-31"
+          },
+          {
+            "on": "Security Team",
+            "description": "Security review and compliance approval for automated provisioning",
+            "criticality": "medium",
+            "status": "completed",
+            "dueDate": "2025-12-15"
+          },
+          {
+            "on": "Product Marketing",
+            "description": "Demo scenario definitions and narrative frameworks",
+            "criticality": "medium",
+            "status": "in-progress",
+            "dueDate": "2026-02-15"
+          }
+        ],
+        "external": [
+          {
+            "on": "AI Model Provider (OpenAI)",
+            "description": "GPT-4 API access for intelligent demo data generation",
+            "criticality": "high",
+            "status": "active",
+            "contractEnd": "2026-12-31"
+          },
+          {
+            "on": "Cloud Infrastructure (AWS)",
+            "description": "EKS cluster capacity and S3 storage for demo environments",
+            "criticality": "high",
+            "status": "active",
+            "contractEnd": "2027-06-30"
+          },
+          {
+            "on": "Demo Automation Consultant",
+            "description": "Best practices guidance for demo orchestration patterns",
+            "criticality": "low",
+            "status": "completed",
+            "endDate": "2025-11-30"
+          }
+        ],
+        "blocking": [
+          {
+            "initiative": "Customer Data Platform v2",
+            "description": "Requires stable CDP APIs for production demo data synthesis",
+            "criticality": "high",
+            "expectedResolution": "2026-02-28"
+          }
+        ]
+      },
+      "resources": {
+        "team": [
+          {
+            "role": "Engineering Lead",
+            "name": "Alex Rodriguez",
+            "allocation": "100%",
+            "commitment": "2025-11-01 to 2026-09-30"
+          },
+          {
+            "role": "AI/ML Engineer",
+            "name": "Priya Sharma",
+            "allocation": "80%",
+            "commitment": "2025-12-01 to 2026-06-30"
+          },
+          {
+            "role": "DevOps Engineer",
+            "allocation": "60%",
+            "commitment": "2025-11-01 to 2026-09-30",
+            "note": "Shared with Platform Team"
+          },
+          {
+            "role": "Full Stack Developer",
+            "count": 2,
+            "allocation": "100%",
+            "commitment": "2025-11-01 to 2026-09-30"
+          },
+          {
+            "role": "UX Designer",
+            "allocation": "40%",
+            "commitment": "2025-11-01 to 2026-03-31"
+          },
+          {
+            "role": "Product Manager",
+            "name": "Jordan Lee",
+            "allocation": "50%",
+            "commitment": "2025-11-01 to 2026-09-30"
+          }
+        ],
+        "contractors": [
+          {
+            "role": "AI Consultant",
+            "firm": "TechConsult Partners",
+            "allocation": "20 days total",
+            "period": "2025-11-15 to 2025-12-31",
+            "cost": "$18,000"
+          },
+          {
+            "role": "Change Management Specialist",
+            "allocation": "30 days total",
+            "period": "2026-04-01 to 2026-06-30",
+            "cost": "$12,000"
+          }
+        ],
+        "tools": [
+          "GitHub Enterprise",
+          "AWS EKS",
+          "OpenAI GPT-4 API",
+          "Terraform Cloud",
+          "Datadog Monitoring",
+          "Jira/Confluence"
+        ]
+      },
+      "successCriteria": {
+        "technical": [
+          "95%+ automation rate for standard demo scenarios",
+          "Demo environment provisioning < 5 minutes",
+          "99.5% platform uptime during business hours",
+          "Zero security incidents in production"
+        ],
+        "business": [
+          "85% reduction in demo prep time (300min → 45min)",
+          "3x increase in monthly demo capacity (150 → 450)",
+          "450% ROI achieved by month 18",
+          "$2.8M annual cost savings realized"
+        ],
+        "adoption": [
+          "100% of demo engineers trained and certified",
+          "90%+ user satisfaction score",
+          "80%+ of demos automated by end of Phase 3",
+          "75%+ of SE teams using platform daily"
+        ],
+        "minimumViableSuccess": "Achieve 60% automation rate with 50% time reduction in pilot phase"
+      },
+      "governance": {
+        "steeringCommittee": [
+          {
+            "name": "Sarah Chen",
+            "role": "Executive Sponsor",
+            "responsibility": "Final decisions, budget approval, escalation resolution"
+          },
+          {
+            "name": "Michael Torres",
+            "role": "Business Owner",
+            "responsibility": "Requirements prioritization, business value validation"
+          },
+          {
+            "name": "David Kumar",
+            "role": "Finance Representative",
+            "responsibility": "ROI tracking, budget oversight"
+          }
+        ],
+        "raci": {
+          "decisionAuthority": "Steering Committee (majority vote)",
+          "responsible": "Alex Rodriguez (Engineering Lead)",
+          "accountable": "Sarah Chen (SVP, Revenue Operations)",
+          "consulted": ["Demo Services Teams", "Security Team", "DevOps Team"],
+          "informed": ["Sales Leadership", "Product Marketing", "Customer Success"]
+        },
+        "cadence": {
+          "steeringMeetings": "Monthly",
+          "statusReports": "Weekly to stakeholders",
+          "phaseGateReviews": "End of each phase (3 total)"
+        },
+        "escalationPath": [
+          "Level 1: Engineering Lead (technical issues, <$10K decisions)",
+          "Level 2: Business Owner (scope changes, resource conflicts)",
+          "Level 3: Executive Sponsor (strategic pivots, budget overruns >10%)",
+          "Level 4: COO (cross-initiative conflicts, major delays)"
+        ]
+      },
+      "risks": {
+        "technical": [
+          {
+            "risk": "AI model hallucination producing invalid demo data",
+            "probability": "medium",
+            "impact": "high",
+            "mitigation": "Validation layer with rule-based checks + human review queue",
+            "owner": "Priya Sharma",
+            "status": "mitigated"
+          },
+          {
+            "risk": "Legacy system integration failures",
+            "probability": "medium",
+            "impact": "high",
+            "mitigation": "Phased API development + fallback to manual workflows",
+            "owner": "Alex Rodriguez",
+            "status": "monitoring"
+          },
+          {
+            "risk": "Cloud infrastructure cost overruns",
+            "probability": "low",
+            "impact": "medium",
+            "mitigation": "Auto-scaling policies + cost alerts + monthly reviews",
+            "owner": "DevOps Engineer",
+            "status": "controlled"
+          }
+        ],
+        "business": [
+          {
+            "risk": "Resistance from demo engineers fearing job loss",
+            "probability": "medium",
+            "impact": "high",
+            "mitigation": "Upskilling program + shift to higher-value consultative work",
+            "owner": "Michael Torres",
+            "status": "mitigating"
+          },
+          {
+            "risk": "ROI not realized due to low adoption rates",
+            "probability": "low",
+            "impact": "high",
+            "mitigation": "Change management plan + incentives for early adopters",
+            "owner": "Jordan Lee",
+            "status": "mitigating"
+          },
+          {
+            "risk": "Competing priorities delaying Phase 3 rollout",
+            "probability": "medium",
+            "impact": "medium",
+            "mitigation": "Executive sponsorship + clear roadmap communication",
+            "owner": "Sarah Chen",
+            "status": "monitoring"
+          }
+        ],
+        "external": [
+          {
+            "risk": "OpenAI API pricing changes impacting budget",
+            "probability": "medium",
+            "impact": "medium",
+            "mitigation": "Negotiate volume discount + evaluate alternative providers",
+            "owner": "Alex Rodriguez",
+            "status": "monitoring"
+          },
+          {
+            "risk": "Security/compliance requirements delaying deployment",
+            "probability": "low",
+            "impact": "high",
+            "mitigation": "Early security review + compliance-by-design approach",
+            "owner": "Security Team",
+            "status": "mitigated"
+          }
+        ]
+      },
+      "topRisks": [
+        {
+          "risk": "Integration complexity with legacy systems",
+          "level": "medium",
+          "mitigation": "Phased API development with dedicated integration team"
+        },
+        {
+          "risk": "Initial resistance from demo engineers",
+          "level": "low",
+          "mitigation": "Comprehensive training program and change management support"
+        },
+        {
+          "risk": "Budget constraints requiring phased rollout",
+          "level": "medium",
+          "mitigation": "Prioritize high-value product lines first, demonstrate ROI early"
+        }
+      ],
+      "stakeholders": [
+        {
+          "name": "Sarah Chen",
+          "role": "SVP, Revenue Operations",
+          "supportLevel": "champion"
+        },
+        {
+          "name": "Michael Torres",
+          "role": "VP, Demo Services Group",
+          "supportLevel": "champion"
+        },
+        {
+          "name": "David Kumar",
+          "role": "CFO",
+          "supportLevel": "neutral"
+        }
+      ],
       "createdDate": "2025-11-15",
-      "contentCount": 1,
-      "publishedCount": 0,
-      "draftCount": 1
+      "lastUpdated": "2026-01-15",
+      "startDate": "2025-11-01",
+      "endDate": "2025-09-30",
+      "linkedAssets": 1,
+      "tags": [
+        "AI/ML",
+        "Sales Enablement",
+        "Automation"
+      ],
+      "color": "#EC4899",
+      "icon": "🚀"
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, TrendingUp, Building2, Target } from 'lucide-react';
+import { Clock, TrendingUp, FileText } from 'lucide-react';
 
 export function StickyNav() {
   const [isVisible, setIsVisible] = useState(false);
@@ -15,7 +15,7 @@ export function StickyNav() {
     // Set up intersection observer for active section tracking
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -35% 0px', // Top 20%, keep middle 45% as detection zone, bottom 35%
+      rootMargin: '-20% 0px -60% 0px', // Top 20%, bottom 60% - triggers earlier for sections near page bottom
       threshold: 0
     };
 
@@ -34,7 +34,7 @@ export function StickyNav() {
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
     // Observe all sections that exist in the DOM
-    const sections = ['timeline', 'performance', 'organizations', 'initiatives'];
+    const sections = ['timeline', 'performance', 'additional-content'];
     sections.forEach(id => {
       const element = document.getElementById(id);
       if (element) {
@@ -63,8 +63,7 @@ export function StickyNav() {
   const navItems = [
     { id: 'timeline', label: 'Summary Timeline', icon: Clock },
     { id: 'performance', label: 'Performance', icon: TrendingUp },
-    { id: 'organizations', label: 'Organizations', icon: Building2 },
-    { id: 'initiatives', label: 'Initiatives', icon: Target }
+    { id: 'additional-content', label: 'Additional Content', icon: FileText }
   ];
 
   return (

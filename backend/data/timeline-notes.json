@@ -1,6 +1,54 @@
 {
   "notes": [
     {
+      "id": "note-demoprep-001",
+      "title": "Demo Ops Weekly Sync - Runbook Adoption",
+      "content": "Discussed runbook adoption challenges with the SE team. Current adoption at 47% - up from 35% last month. Main blockers are lack of awareness and training. Planning lunch & learn sessions for Q1. SEs reporting significant time savings when using standardized runbooks.",
+      "date": "2026-01-10",
+      "category": "goal-progression",
+      "tags": [
+        "demo-prep",
+        "runbooks",
+        "process-automation"
+      ],
+      "linkedGoals": ["demo-prep-efficiency"],
+      "createdAt": "2026-01-10T14:30:00.000Z",
+      "updatedAt": "2026-01-10T14:30:00.000Z",
+      "tag": "tag-demo-ops"
+    },
+    {
+      "id": "note-demoprep-002",
+      "title": "SE Feedback Session - Data Generator Tool",
+      "content": "Sales Engineers report 40% time savings with new automated data generator prototype. Key feedback: need more product-specific datasets, better error handling, and integration with demo scheduling system. Overall sentiment very positive - team eager for full rollout.",
+      "date": "2026-01-05",
+      "category": "sales-enablement",
+      "tags": [
+        "feedback",
+        "efficiency",
+        "demo-prep"
+      ],
+      "linkedGoals": ["demo-prep-efficiency"],
+      "createdAt": "2026-01-05T10:15:00.000Z",
+      "updatedAt": "2026-01-05T10:15:00.000Z",
+      "tag": "tag-se-feedback"
+    },
+    {
+      "id": "note-demoprep-003",
+      "title": "Demo Environment Issues - January",
+      "content": "Had 12 last-minute environment issues this month vs target of 2/month. Root causes: outdated credentials (5 cases), data refresh failures (4 cases), network config (3 cases). Validation scripts should address 80% of these when deployed. Urgent priority to complete automation.",
+      "date": "2026-01-12",
+      "category": "critical-blocker",
+      "tags": [
+        "demo-prep",
+        "infrastructure",
+        "process-automation"
+      ],
+      "linkedGoals": ["demo-prep-efficiency"],
+      "createdAt": "2026-01-12T16:45:00.000Z",
+      "updatedAt": "2026-01-12T16:45:00.000Z",
+      "tag": "tag-demo-ops"
+    },
+    {
       "id": "note-1765819155265",
       "title": "Embedded Finance : Coast Renewal",
       "content": "James (Coast) and Melissa.K (FIS) meeting dicussing the January 2026 Renewal of the EF Workspace in Coast . 56K and its \"approved\"",
