@@ -799,8 +799,8 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
 
                   {/* Dependencies */}
                   {(initiative as any).dependencies && (
-                    <div className="space-y-4">
-                      <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white">Dependencies</h3>
+                    <>
+                      <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white mb-3">Dependencies</h3>
                       
                       {(initiative as any).dependencies.internal && (initiative as any).dependencies.internal.length > 0 && (
                           <div>
@@ -870,7 +870,6 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                         )}
                       </>
                     )}
-                  </div>
                 </div>
               )}
 

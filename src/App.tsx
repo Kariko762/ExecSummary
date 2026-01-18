@@ -17,6 +17,7 @@ import { KnowledgeBaseDashboard } from './components/KnowledgeBaseDashboard';
 import { SchemaTest } from './components/SchemaTest';
 import { DesignSystemTest } from './pages/DesignSystemTest';
 import GoalsHome from './pages/GoalsHome';
+import InitiativesHome from './pages/InitiativesHome';
 import TechnologiesHome from './pages/TechnologiesHome';
 import PlatformOverview from './components/PlatformOverview';
 import CardStyleGallery from './components/CardStyleGallery';
@@ -812,6 +813,11 @@ function App() {
                   {/* Goals Home Route */}
                   <Route path="/goals" element={
                     <GoalsHome onSelectGoal={setSelectedGoal} />
+                  } />
+
+                  {/* Initiatives Home Route */}
+                  <Route path="/initiatives" element={
+                    <InitiativesHome />
                   } />
 
                   {/* Technologies Home Route */}

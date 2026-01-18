@@ -254,19 +254,19 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
 
                         {/* Initiatives */}
                         <Link
-                          to="/strategic-initiatives"
+                          to="/initiatives"
                           onClick={() => {
                             setIsNavDropdownOpen(false);
                             setIsTechnologiesOpen(false);
                           }}
                           className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                            location.pathname === '/strategic-initiatives' 
+                            location.pathname === '/initiatives' 
                               ? 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300' 
                               : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
                           }`}
                         >
                           <div className={`p-2 rounded-lg ${
-                            location.pathname === '/strategic-initiatives' 
+                            location.pathname === '/initiatives' 
                               ? 'bg-pink-200 dark:bg-pink-800/40' 
                               : 'bg-gray-200 dark:bg-gray-700'
                           }`}>
