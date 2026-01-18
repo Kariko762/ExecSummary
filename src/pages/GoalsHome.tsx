@@ -98,22 +98,22 @@ export default function GoalsHome({ onSelectGoal }: GoalsHomeProps) {
           </svg>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-              <Target className="w-8 h-8 text-white" />
+        <div className="relative max-w-7xl mx-auto px-4 2xl:px-6 py-4 2xl:py-8">
+          <div className="flex items-center gap-3 2xl:gap-4 mb-2 2xl:mb-4">
+            <div className="p-2 2xl:p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+              <Target className="w-6 h-6 2xl:w-8 2xl:h-8 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-roobert-semibold text-white">
+              <h1 className="text-xl 2xl:text-3xl font-roobert-semibold text-white">
                 Strategic Goals
               </h1>
-              <p className="text-white/70 mt-1">
+              <p className="text-white/70 text-xs 2xl:text-sm hidden 2xl:block">
                 Browse and explore all strategic goals and initiatives
               </p>
             </div>
           </div>
           
-          <div className="flex items-center gap-6 text-sm text-white/60">
+          <div className="hidden 2xl:flex items-center gap-4 2xl:gap-6 text-xs 2xl:text-sm text-white/60">
             <div className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />
               <span>{goals.length} Total Goals</span>
@@ -171,19 +171,6 @@ export default function GoalsHome({ onSelectGoal }: GoalsHomeProps) {
                   
                   {/* Content */}
                   <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 rounded-xl group-hover:scale-110 transition-transform">
-                        {goal.icon ? <span className="text-2xl">{goal.icon}</span> : <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />}
-                      </div>
-                      <motion.div
-                        animate={{ rotate: 0 }}
-                        whileHover={{ rotate: 45 }}
-                        transition={{ type: "spring", stiffness: 200 }}
-                      >
-                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
-                      </motion.div>
-                    </div>
-
                     <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                       {goal.name}
                     </h3>

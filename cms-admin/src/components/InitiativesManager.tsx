@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Edit2, Trash2, Save, Rocket, TrendingUp, Target, AlertTriangle, DollarSign, Users, Link, Shield, CheckCircle, Clock, Package, ChevronRight, Download, Settings } from 'lucide-react';
+import { X, Plus, Edit2, Trash2, Save, Rocket, TrendingUp, Target, AlertTriangle, DollarSign, Users, Link, Shield, CheckCircle, Clock, Package, ChevronRight, Download, Settings, Sparkles } from 'lucide-react';
 import InitiativeEditorModal from './InitiativeEditorModal';
 import ViewInitiativeModal from './ViewInitiativeModal';
+import AIInitiativeBuilderWizard from './AIInitiativeBuilderWizard';
 
 interface Initiative {
   id: string;
@@ -69,6 +70,7 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
   const [selectedInitiative, setSelectedInitiative] = useState<any | null>(null);
   const [linkedGoals, setLinkedGoals] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'budget' | 'dependencies' | 'resources' | 'risks' | 'governance'>('overview');
+  const [showAIBuilder, setShowAIBuilder] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -240,6 +242,12 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
     }
   };
 
+  const handleAIInitiativeCreate = (initiativeData: any) => {
+    // Set the AI-generated initiative as the editing initiative and open editor
+    setEditingInitiative(initiativeData);
+    setShowEditor(true);
+  };
+
   const handleExportAllInitiatives = async () => {
     try {
       const dataStr = JSON.stringify(initiatives, null, 2);
@@ -332,46 +340,55 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
             />
 
             {/* Header Content */}
-            <div className="relative px-6 py-8">
-              <div className="flex items-center justify-between mb-4">
+            <div className="relative px-4 2xl:px-6 py-4 2xl:py-8">
+              <div className="flex items-center justify-between mb-2 2xl:mb-4">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="flex items-center gap-3"
+                  className="flex items-center gap-2 2xl:gap-3"
                 >
-                  <div className="p-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                    <Rocket className="w-6 h-6" />
+                  <div className="p-1.5 2xl:p-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                    <Rocket className="w-5 h-5 2xl:w-6 2xl:h-6" />
                   </div>
                   <div>
-                    <h1 className="text-2xl md:text-3xl font-roobert-bold mb-0.5">
+                    <h1 className="text-xl 2xl:text-2xl md:2xl:text-3xl font-roobert-bold mb-0 2xl:mb-0.5">
                       Strategic Initiatives
                     </h1>
-                    <p className="text-white/80 text-sm font-roobert-light">
+                    <p className="text-white/80 text-xs 2xl:text-sm font-roobert-light hidden 2xl:block">
                       Key projects driving organizational transformation
                     </p>
                   </div>
                 </motion.div>
                 <div className="flex items-center gap-2">
                   <button
+                    onClick={() => setShowAIBuilder(true)}
+                    className="px-2 2xl:px-3 py-1 2xl:py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-xs 2xl:text-sm font-roobert-medium transition-all flex items-center gap-1 2xl:gap-1.5"
+                    title="AI Initiative Builder"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 2xl:w-4 2xl:h-4" />
+                    <span className="hidden lg:inline">AI Builder</span>
+                    <span className="lg:hidden">AI</span>
+                  </button>
+                  <button
                     onClick={handleExportAllInitiatives}
-                    className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
+                    className="p-1.5 2xl:p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
                     title="Export All Initiatives"
                   >
-                    <Download className="w-4 h-4 text-white" />
+                    <Download className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-white" />
                   </button>
                   <button
                     onClick={handleCreateInitiative}
-                    className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
+                    className="p-1.5 2xl:p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
                     title="New Initiative"
                   >
-                    <Plus className="w-4 h-4 text-white" />
+                    <Plus className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-white" />
                   </button>
                   <button
                     onClick={onClose}
-                    className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
+                    className="p-1.5 2xl:p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
                   >
-                    <X className="w-5 h-5 text-white" />
+                    <X className="w-4 h-4 2xl:w-5 2xl:h-5 text-white" />
                   </button>
                 </div>
               </div>
@@ -380,21 +397,21 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-3"
+                className="hidden 2xl:grid grid-cols-1 md:grid-cols-3 gap-2 2xl:gap-3"
               >
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                  <div className="text-xl font-roobert-bold">{initiatives.length}</div>
-                  <div className="text-white/80 text-[11px] font-roobert-medium">Total Initiatives</div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 2xl:p-3 border border-white/20">
+                  <div className="text-lg 2xl:text-xl font-roobert-bold">{initiatives.length}</div>
+                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium">Total Initiatives</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                  <div className="text-xl font-roobert-bold">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 2xl:p-3 border border-white/20">
+                  <div className="text-lg 2xl:text-lg 2xl:text-xl font-roobert-bold">
                     {initiatives.filter(i => i.status === 'in-progress').length}
                   </div>
-                  <div className="text-white/80 text-[11px] font-roobert-medium">In Progress</div>
+                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium">In Progress</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
-                  <div className="text-white/80 text-[11px] font-roobert-medium mb-2">Status Overview</div>
-                  <div className="h-6 bg-white/10 rounded-full overflow-hidden flex mb-2">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 2xl:p-3 border border-white/20">
+                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium mb-1 2xl:mb-2">Status Overview</div>
+                  <div className="h-5 2xl:h-6 bg-white/10 rounded-full overflow-hidden flex mb-1 2xl:mb-2">
                     {initiatives.filter(i => i.status === 'completed' || i.status === 'complete').length > 0 && (
                       <div 
                         className="bg-green-500 hover:bg-green-600 transition-colors" 
@@ -509,12 +526,6 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
 
                     {/* Content */}
                     <div className="relative z-10">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="p-3 bg-gradient-to-br from-blue-100 to-pink-100 dark:from-blue-900/40 dark:to-pink-900/40 rounded-xl group-hover:scale-110 transition-transform">
-                          {initiative.icon ? <span className="text-2xl">{initiative.icon}</span> : <Rocket className="w-6 h-6 text-fis-navy dark:text-blue-400" />}
-                        </div>
-                      </div>
-
                       <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-2 group-hover:text-fis-navy dark:group-hover:text-fis-raspberry transition-colors">
                         {initiative.name}
                       </h3>
@@ -633,6 +644,14 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
               onClose={handleCloseViewModal}
             />
           )}
+
+          {/* AI Initiative Builder Wizard */}
+          <AIInitiativeBuilderWizard
+            isOpen={showAIBuilder}
+            onClose={() => setShowAIBuilder(false)}
+            onCreateInitiative={handleAIInitiativeCreate}
+            showNotification={showNotification}
+          />
         </motion.div>
       </motion.div>
     </AnimatePresence>

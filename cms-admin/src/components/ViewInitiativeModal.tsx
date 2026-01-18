@@ -206,81 +206,81 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                 className="absolute bottom-10 right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-3xl"
               />
 
-              <div className="relative p-6 border-b border-white/20">
+              <div className="relative p-4 2xl:p-6 border-b border-white/20">
                 <div className="flex items-start justify-between">
-                <div className="flex items-start gap-4 flex-1">
-                  <div className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
-                    <Rocket className="w-6 h-6" />
+                <div className="flex items-start gap-3 2xl:gap-4 flex-1">
+                  <div className="p-2 2xl:p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                    <Rocket className="w-5 h-5 2xl:w-6 2xl:h-6" />
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h2 className="text-2xl font-roobert-bold">{initiative.name}</h2>
+                    <div className="flex items-center gap-2 2xl:gap-3 mb-1 2xl:mb-2">
+                      <h2 className="text-lg 2xl:text-2xl font-roobert-bold">{initiative.name}</h2>
                       {initiative.shortName && (
-                        <span className="px-3 py-1 rounded-full text-xs font-roobert-semibold bg-white/20 backdrop-blur-sm border border-white/30">
+                        <span className="px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-full text-xs font-roobert-semibold bg-white/20 backdrop-blur-sm border border-white/30">
                           {initiative.shortName}
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 flex-wrap text-white/90">
-                      <span className={`px-2 py-1 rounded text-xs font-roobert-medium ${statusColors[initiative.status]?.bg || 'bg-gray-100'} ${statusColors[initiative.status]?.text || 'text-gray-700'}`}>
+                    <div className="flex items-center gap-2 2xl:gap-4 flex-wrap text-white/90">
+                      <span className={`px-2 py-0.5 2xl:py-1 rounded text-xs font-roobert-medium ${statusColors[initiative.status]?.bg || 'bg-gray-100'} ${statusColors[initiative.status]?.text || 'text-gray-700'}`}>
                         {initiative.status.replace('-', ' ').toUpperCase()}
                       </span>
-                      <span className={`px-2 py-1 rounded text-xs font-roobert-medium ${priorityColors[initiative.priority]?.bg || 'bg-gray-100'} ${priorityColors[initiative.priority]?.text || 'text-gray-700'}`}>
+                      <span className={`px-2 py-0.5 2xl:py-1 rounded text-xs font-roobert-medium ${priorityColors[initiative.priority]?.bg || 'bg-gray-100'} ${priorityColors[initiative.priority]?.text || 'text-gray-700'}`}>
                         {initiative.priority.toUpperCase()} PRIORITY
                       </span>
                       {initiative.projectStage && (
-                        <span className="px-2 py-1 rounded text-xs font-roobert-medium bg-white/10 text-white">
+                        <span className="px-2 py-0.5 2xl:py-1 rounded text-xs font-roobert-medium bg-white/10 text-white">
                           {initiative.projectStage.toUpperCase()}
                         </span>
                       )}
-                      <span className="text-sm flex items-center gap-1">
-                        <Users className="w-4 h-4" />
+                      <span className="text-xs 2xl:text-sm flex items-center gap-1">
+                        <Users className="w-3.5 h-3.5 2xl:w-4 2xl:h-4" />
                         {initiative.owner}
                       </span>
                       {initiative.targetDate && (
-                        <span className="text-sm flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
+                        <span className="text-xs 2xl:text-sm flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 2xl:w-4 2xl:h-4" />
                           Target: {new Date(initiative.targetDate).toLocaleDateString()}
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
-                <div className="ml-4 flex items-center gap-2">
+                <div className="ml-3 2xl:ml-4 flex items-center gap-2">
                   <button
                     onClick={handleExportImage}
                     disabled={isExporting}
-                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-50"
+                    className="p-1.5 2xl:p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-50"
                     title="Export as Image"
                   >
                     {isExporting ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="w-4 h-4 2xl:w-5 2xl:h-5 animate-spin" />
                     ) : (
-                      <Download className="w-5 h-5" />
+                      <Download className="w-4 h-4 2xl:w-5 2xl:h-5" />
                     )}
                   </button>
                   <button
                     onClick={() => setIsFullscreen(!isFullscreen)}
-                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                    className="p-1.5 2xl:p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
                     title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
                   >
-                    {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+                    {isFullscreen ? <Minimize2 className="w-4 h-4 2xl:w-5 2xl:h-5" /> : <Maximize2 className="w-4 h-4 2xl:w-5 2xl:h-5" />}
                   </button>
                   <button
                     onClick={onClose}
-                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                    className="p-1.5 2xl:p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
                     title="Close"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 2xl:w-5 2xl:h-5" />
                   </button>
                 </div>
               </div>
 
               {/* Tabs */}
-              <div className="flex gap-2 mt-6 border-b border-white/20 overflow-x-auto">
+              <div className="flex gap-1 2xl:gap-2 mt-3 2xl:mt-6 border-b border-white/20 overflow-x-auto">
                 <button
                   onClick={() => setActiveTab('overview')}
-                  className={`px-4 py-2 font-roobert-medium text-sm transition-all relative whitespace-nowrap ${
+                  className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative whitespace-nowrap ${
                     activeTab === 'overview' 
                       ? 'text-white' 
                       : 'text-white/60 hover:text-white/80'
@@ -298,7 +298,7 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                 {initiative.smartGoal?.timeBound?.timeline && initiative.smartGoal.timeBound.timeline.length > 0 && (
                   <button
                     onClick={() => setActiveTab('milestones')}
-                    className={`px-4 py-2 font-roobert-medium text-sm transition-all relative whitespace-nowrap ${
+                    className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative whitespace-nowrap ${
                       activeTab === 'milestones' 
                         ? 'text-white' 
                         : 'text-white/60 hover:text-white/80'
@@ -316,7 +316,7 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                 {initiative.dependencies && (initiative.dependencies.internal?.length > 0 || initiative.dependencies.external?.length > 0) && (
                   <button
                     onClick={() => setActiveTab('dependencies')}
-                    className={`px-4 py-2 font-roobert-medium text-sm transition-all relative whitespace-nowrap ${
+                    className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative whitespace-nowrap ${
                       activeTab === 'dependencies' 
                         ? 'text-white' 
                         : 'text-white/60 hover:text-white/80'
@@ -335,7 +335,7 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                 {initiative.indicators && (initiative.indicators.leading?.length > 0 || initiative.indicators.lagging?.length > 0) && (
                   <button
                     onClick={() => setActiveTab('performance')}
-                    className={`px-4 py-2 font-roobert-medium text-sm transition-all relative whitespace-nowrap ${
+                    className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative whitespace-nowrap ${
                       activeTab === 'performance' 
                         ? 'text-white' 
                         : 'text-white/60 hover:text-white/80'
@@ -353,7 +353,7 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                 )}
                 <button
                   onClick={() => setActiveTab('resources')}
-                  className={`px-4 py-2 font-roobert-medium text-sm transition-all relative whitespace-nowrap ${
+                  className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative whitespace-nowrap ${
                     activeTab === 'resources' 
                       ? 'text-white' 
                       : 'text-white/60 hover:text-white/80'
@@ -371,7 +371,7 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                 {(initiative.risks || initiative.topRisks || initiative.successCriteria) && (
                   <button
                     onClick={() => setActiveTab('risks')}
-                    className={`px-4 py-2 font-roobert-medium text-sm transition-all relative whitespace-nowrap ${
+                    className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative whitespace-nowrap ${
                       activeTab === 'risks' 
                         ? 'text-white' 
                         : 'text-white/60 hover:text-white/80'
@@ -389,7 +389,7 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                 )}
                 <button
                   onClick={() => setActiveTab('tasks')}
-                  className={`px-4 py-2 font-roobert-medium text-sm transition-all relative whitespace-nowrap ${
+                  className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative whitespace-nowrap ${
                     activeTab === 'tasks' 
                       ? 'text-white' 
                       : 'text-white/60 hover:text-white/80'
@@ -407,7 +407,7 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                 {linkedGoals && linkedGoals.length > 0 && (
                   <button
                     onClick={() => setActiveTab('goals')}
-                    className={`px-4 py-2 font-roobert-medium text-sm transition-all relative whitespace-nowrap ${
+                    className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative whitespace-nowrap ${
                       activeTab === 'goals' 
                         ? 'text-white' 
                         : 'text-white/60 hover:text-white/80'

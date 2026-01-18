@@ -442,13 +442,6 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
 
                       {/* Content - Matches Frontend Exactly */}
                       <div className="relative z-10">
-                        {/* Icon */}
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="p-3 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/40 dark:to-pink-900/40 rounded-xl group-hover:scale-110 transition-transform">
-                            {goal.icon ? <span className="text-2xl">{goal.icon}</span> : <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />}
-                          </div>
-                        </div>
-
                         {/* Title */}
                         <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                           {goal.name}
