@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, Save, Info, DollarSign, Link as LinkIcon, Users, AlertTriangle, Shield, Target, Clock, Package, Plus, Trash2, AlertCircle, TrendingUp, ExternalLink, StickyNote } from 'lucide-react';
+import { X, Save, Info, DollarSign, Link as LinkIcon, Users, AlertTriangle, Shield, Target, Clock, Package, Plus, Trash2, AlertCircle, TrendingUp, ExternalLink, StickyNote, Flag } from 'lucide-react';
 import { TaskConnectorRenderer } from '../renderers/assetRenderTasks';
 
 interface InitiativeEditorProps {
@@ -13,16 +13,17 @@ interface InitiativeEditorProps {
 
 export default function InitiativeEditorModal({ initiative, goals, onSave, onClose, isNew }: InitiativeEditorProps) {
   const [editData, setEditData] = useState(initiative);
-  const [activeTab, setActiveTab] = useState<'overview' | 'budget' | 'dependencies' | 'resources' | 'risks' | 'governance' | 'tasksNotes'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'smart' | 'milestones' | 'performance' | 'resources' | 'risks' | 'tasks' | 'goals'>('overview');
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Info },
-    { id: 'budget', label: 'Budget & Funding', icon: DollarSign },
+    { id: 'milestones', label: 'Milestones', icon: Clock },
     { id: 'dependencies', label: 'Dependencies', icon: LinkIcon },
+    { id: 'performance', label: 'Performance', icon: TrendingUp },
     { id: 'resources', label: 'Resources', icon: Users },
-    { id: 'risks', label: 'Risks', icon: AlertTriangle },
-    { id: 'tasksNotes', label: 'Tasks & Notes', icon: StickyNote },
-    { id: 'governance', label: 'Governance', icon: Shield },
+    { id: 'risks', label: 'Risks & Success', icon: AlertTriangle },
+    { id: 'tasks', label: 'Tasks', icon: StickyNote },
+    { id: 'goals', label: 'Goals', icon: Target },
   ];
 
   const handleSave = () => {
@@ -35,20 +36,35 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col"
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] overflow-hidden flex flex-col"
       >
         {/* Header */}
-        <div className="bg-pink-50 dark:bg-pink-900/20 border-b border-pink-200 dark:border-pink-800 p-4 flex items-center justify-between">
-          <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <Package className="w-5 h-5 text-pink-600" />
-            {isNew ? 'Create New Initiative' : 'Edit Initiative'}
-          </h3>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+        <div className="bg-gradient-to-r from-fis-navy to-fis-raspberry border-b border-white/20 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-roobert-bold text-white flex items-center gap-2">
+                <Package className="w-5 h-5" />
+                {isNew ? 'Create New Initiative' : 'Edit Initiative'}
+              </h3>
+              <p className="text-white/80 text-xs mt-0.5">Strategic project driving organizational transformation</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleSave}
+                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                title="Save Initiative"
+              >
+                <Save className="w-5 h-5 text-white" />
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+                title="Close"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -75,15 +91,18 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
         </div>
 
         {/* Tab Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-4">
           {activeTab === 'overview' && (
             <OverviewTab editData={editData} setEditData={setEditData} goals={goals} />
           )}
-          {activeTab === 'budget' && (
-            <BudgetTab editData={editData} setEditData={setEditData} />
+          {activeTab === 'milestones' && (
+            <MilestonesTab editData={editData} setEditData={setEditData} />
           )}
           {activeTab === 'dependencies' && (
             <DependenciesTab editData={editData} setEditData={setEditData} />
+          )}
+          {activeTab === 'performance' && (
+            <PerformanceTab editData={editData} setEditData={setEditData} />
           )}
           {activeTab === 'resources' && (
             <ResourcesTab editData={editData} setEditData={setEditData} />
@@ -91,34 +110,12 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
           {activeTab === 'risks' && (
             <RisksTab editData={editData} setEditData={setEditData} />
           )}
-          {activeTab === 'tasksNotes' && (
-            <TasksNotesTab editData={editData} setEditData={setEditData} />
+          {activeTab === 'tasks' && (
+            <TasksTab editData={editData} setEditData={setEditData} />
           )}
-          {activeTab === 'governance' && (
-            <GovernanceTab editData={editData} setEditData={setEditData} />
+          {activeTab === 'goals' && (
+            <GoalsTab editData={editData} setEditData={setEditData} goals={goals} />
           )}
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {activeTab === 'overview' ? 'Required fields: Name, Owner, Status' : `Configure ${tabs.find(t => t.id === activeTab)?.label}`}
-          </p>
-          <div className="flex gap-2">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-roobert-medium transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-roobert-medium flex items-center gap-2 transition-colors"
-            >
-              <Save className="w-4 h-4" />
-              Save Initiative
-            </button>
-          </div>
         </div>
       </motion.div>
     </div>
@@ -129,91 +126,51 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
 
 function OverviewTab({ editData, setEditData, goals }: any) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Basic Info */}
       <div>
-        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
-          <Info className="w-4 h-4" />
+        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+          <Info className="w-3.5 h-3.5" />
           Basic Information
         </h4>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
               Initiative Name *
             </label>
             <input
               type="text"
               value={editData.name || ''}
               onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               placeholder="Digital First Demo Services"
             />
           </div>
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
               Short Name
             </label>
             <input
               type="text"
               value={editData.shortName || ''}
               onChange={(e) => setEditData({ ...editData, shortName: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               placeholder="Demo Automation"
             />
           </div>
         </div>
       </div>
 
-      {/* Ownership */}
-      <div>
-        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">Ownership</h4>
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Owner *</label>
-            <input
-              type="text"
-              value={editData.owner || ''}
-              onChange={(e) => setEditData({ ...editData, owner: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
-              placeholder="Sarah Chen"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Sponsor</label>
-            <input
-              type="text"
-              value={editData.sponsor || ''}
-              onChange={(e) => setEditData({ ...editData, sponsor: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
-              placeholder="SVP, Revenue Operations"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-            <select
-              value={editData.category || 'innovation'}
-              onChange={(e) => setEditData({ ...editData, category: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
-            >
-              <option value="revenue">Revenue</option>
-              <option value="customer">Customer</option>
-              <option value="cost">Cost</option>
-              <option value="innovation">Innovation</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       {/* Status & Progress */}
       <div>
-        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">Status & Timeline</h4>
-        <div className="grid grid-cols-4 gap-4">
+        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Status & Timeline</h4>
+        <div className="grid grid-cols-4 gap-3">
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Status *</label>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Status *</label>
             <select
               value={editData.status || 'planning'}
               onChange={(e) => setEditData({ ...editData, status: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
             >
               <option value="planning">Planning</option>
               <option value="in-progress">In Progress</option>
@@ -223,11 +180,11 @@ function OverviewTab({ editData, setEditData, goals }: any) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
             <select
               value={editData.priority || 'medium'}
               onChange={(e) => setEditData({ ...editData, priority: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
             >
               <option value="low">Low</option>
               <option value="medium">Medium</option>
@@ -236,22 +193,22 @@ function OverviewTab({ editData, setEditData, goals }: any) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Progress (%)</label>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Progress (%)</label>
             <input
               type="number"
               value={editData.progress || 0}
               onChange={(e) => setEditData({ ...editData, progress: Number(e.target.value) })}
               min="0"
               max="100"
-              className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
             />
           </div>
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Stage</label>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Stage</label>
             <select
               value={editData.projectStage || 'planning'}
               onChange={(e) => setEditData({ ...editData, projectStage: e.target.value })}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
             >
               <option value="discovery">Discovery</option>
               <option value="planning">Planning</option>
@@ -266,7 +223,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
 
       {/* Linked Goals */}
       <div>
-        <label className="block text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+        <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
           <Target className="w-4 h-4" />
           Strategic Goals Supported
         </label>
@@ -306,7 +263,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
             }
             e.target.value = '';
           }}
-          className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+          className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
         >
           <option value="">+ Add Strategic Goal</option>
           {goals
@@ -319,9 +276,9 @@ function OverviewTab({ editData, setEditData, goals }: any) {
         </select>
       </div>
 
-      {/* Executive Summary */}
+      {/* Initiative Statement */}
       <div>
-        <label className="block text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-1">Executive Summary</label>
+        <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-1">Initiative Statement</label>
         <textarea
           value={editData.smartGoal?.statement || ''}
           onChange={(e) => setEditData({
@@ -329,17 +286,17 @@ function OverviewTab({ editData, setEditData, goals }: any) {
             smartGoal: { ...(editData.smartGoal || {}), statement: e.target.value }
           })}
           rows={3}
-          className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
-          placeholder="1-2 sentence executive summary of what this initiative aims to achieve..."
+          className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+          placeholder="1-2 sentence statement of what this initiative aims to achieve..."
         />
       </div>
 
       {/* Business Case */}
       <div>
-        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">Business Case</h4>
+        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Business Case</h4>
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Problem</label>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Problem</label>
             <textarea
               value={editData.businessCase?.problem || ''}
               onChange={(e) => setEditData({
@@ -347,12 +304,25 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                 businessCase: { ...(editData.businessCase || {}), problem: e.target.value }
               })}
               rows={2}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               placeholder="What problem does this solve?"
             />
           </div>
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Solution</label>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Opportunity</label>
+            <textarea
+              value={editData.businessCase?.opportunity || ''}
+              onChange={(e) => setEditData({
+                ...editData,
+                businessCase: { ...(editData.businessCase || {}), opportunity: e.target.value }
+              })}
+              rows={2}
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              placeholder="What opportunity does this create?"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Solution</label>
             <textarea
               value={editData.businessCase?.solution || ''}
               onChange={(e) => setEditData({
@@ -360,13 +330,13 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                 businessCase: { ...(editData.businessCase || {}), solution: e.target.value }
               })}
               rows={2}
-              className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
               placeholder="How will we solve it?"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Expected ROI</label>
+              <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Expected ROI</label>
               <input
                 type="text"
                 value={editData.businessCase?.roi || ''}
@@ -374,12 +344,12 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                   ...editData,
                   businessCase: { ...(editData.businessCase || {}), roi: e.target.value }
                 })}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
                 placeholder="450% in 18 months"
               />
             </div>
             <div>
-              <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Payback Period</label>
+              <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Payback Period</label>
               <input
                 type="text"
                 value={editData.businessCase?.paybackPeriod || ''}
@@ -387,28 +357,707 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                   ...editData,
                   businessCase: { ...(editData.businessCase || {}), paybackPeriod: e.target.value }
                 })}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
                 placeholder="12 months"
               />
             </div>
           </div>
+          <div>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Expected Benefits</label>
+            <div className="space-y-2">
+              {(editData.businessCase?.expectedBenefits || []).map((benefit: string, idx: number) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={benefit}
+                    onChange={(e) => {
+                      const updated = [...(editData.businessCase?.expectedBenefits || [])];
+                      updated[idx] = e.target.value;
+                      setEditData({
+                        ...editData,
+                        businessCase: { ...(editData.businessCase || {}), expectedBenefits: updated }
+                      });
+                    }}
+                    className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm"
+                    placeholder="Benefit description"
+                  />
+                  <button
+                    onClick={() => {
+                      const updated = [...(editData.businessCase?.expectedBenefits || [])];
+                      updated.splice(idx, 1);
+                      setEditData({
+                        ...editData,
+                        businessCase: { ...(editData.businessCase || {}), expectedBenefits: updated }
+                      });
+                    }}
+                    className="p-1.5 text-white bg-red-600 hover:bg-red-700 rounded"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => {
+                  setEditData({
+                    ...editData,
+                    businessCase: {
+                      ...(editData.businessCase || {}),
+                      expectedBenefits: [...(editData.businessCase?.expectedBenefits || []), '']
+                    }
+                  });
+                }}
+                className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg flex items-center gap-1"
+              >
+                <Plus className="w-3 h-3" />
+                Add Benefit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Ownership */}
+      <div>
+        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Ownership</h4>
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Owner *</label>
+            <input
+              type="text"
+              value={editData.owner || ''}
+              onChange={(e) => setEditData({ ...editData, owner: e.target.value })}
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              placeholder="Sarah Chen"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Sponsor</label>
+            <input
+              type="text"
+              value={editData.sponsor || ''}
+              onChange={(e) => setEditData({ ...editData, sponsor: e.target.value })}
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              placeholder="SVP, Revenue Operations"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+            <select
+              value={editData.category || 'innovation'}
+              onChange={(e) => setEditData({ ...editData, category: e.target.value })}
+              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+            >
+              <option value="revenue">Revenue</option>
+              <option value="customer">Customer</option>
+              <option value="cost">Cost</option>
+              <option value="innovation">Innovation</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Co-Owners */}
+      <div>
+        <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Co-Owners</label>
+        <div className="space-y-2">
+          {(editData.coOwners || []).map((coOwner: string, idx: number) => (
+            <div key={idx} className="flex items-center gap-2">
+              <input
+                type="text"
+                value={coOwner}
+                onChange={(e) => {
+                  const updated = [...(editData.coOwners || [])];
+                  updated[idx] = e.target.value;
+                  setEditData({ ...editData, coOwners: updated });
+                }}
+                className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm"
+                placeholder="Co-owner name"
+              />
+              <button
+                onClick={() => {
+                  const updated = [...(editData.coOwners || [])];
+                  updated.splice(idx, 1);
+                  setEditData({ ...editData, coOwners: updated });
+                }}
+                className="p-1.5 text-white bg-red-600 hover:bg-red-700 rounded"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={() => {
+              setEditData({
+                ...editData,
+                coOwners: [...(editData.coOwners || []), '']
+              });
+            }}
+            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3" />
+            Add Co-Owner
+          </button>
+        </div>
+      </div>
+
+      {/* Key Stakeholders */}
+      <div>
+        <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Key Stakeholders</label>
+        <div className="space-y-3">
+          {(editData.stakeholders || []).map((stakeholder: any, idx: number) => (
+            <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-3 gap-2 mb-2">
+                <input
+                  type="text"
+                  value={stakeholder.name || ''}
+                  onChange={(e) => {
+                    const updated = [...(editData.stakeholders || [])];
+                    updated[idx] = { ...updated[idx], name: e.target.value };
+                    setEditData({ ...editData, stakeholders: updated });
+                  }}
+                  className="px-2.5 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white text-sm"
+                  placeholder="Name"
+                />
+                <input
+                  type="text"
+                  value={stakeholder.role || ''}
+                  onChange={(e) => {
+                    const updated = [...(editData.stakeholders || [])];
+                    updated[idx] = { ...updated[idx], role: e.target.value };
+                    setEditData({ ...editData, stakeholders: updated });
+                  }}
+                  className="px-2.5 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white text-sm"
+                  placeholder="Role"
+                />
+                <select
+                  value={stakeholder.supportLevel || 'neutral'}
+                  onChange={(e) => {
+                    const updated = [...(editData.stakeholders || [])];
+                    updated[idx] = { ...updated[idx], supportLevel: e.target.value };
+                    setEditData({ ...editData, stakeholders: updated });
+                  }}
+                  className="px-2.5 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white text-sm"
+                >
+                  <option value="champion">Champion</option>
+                  <option value="supporter">Supporter</option>
+                  <option value="neutral">Neutral</option>
+                  <option value="skeptic">Skeptic</option>
+                </select>
+              </div>
+              <button
+                onClick={() => {
+                  const updated = [...(editData.stakeholders || [])];
+                  updated.splice(idx, 1);
+                  setEditData({ ...editData, stakeholders: updated });
+                }}
+                className="text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-xs flex items-center gap-1"
+              >
+                <X className="w-3 h-3" />
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={() => {
+              setEditData({
+                ...editData,
+                stakeholders: [...(editData.stakeholders || []), { name: '', role: '', supportLevel: 'neutral' }]
+              });
+            }}
+            className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3" />
+            Add Stakeholder
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-function BudgetTab({ editData, setEditData }: any) {
+function MilestonesTab({ editData, setEditData }: any) {
+  // ========== MILESTONES FUNCTIONS ==========
+  const addMilestone = () => {
+    const newMilestone = {
+      phase: '',
+      deliverable: '',
+      dueDate: '',
+      status: 'not-started'
+    };
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        timeBound: {
+          ...(editData.smartGoal?.timeBound || {}),
+          timeline: [...(editData.smartGoal?.timeBound?.timeline || []), newMilestone]
+        }
+      }
+    });
+  };
+
+  const removeMilestone = (index: number) => {
+    const updated = [...(editData.smartGoal?.timeBound?.timeline || [])];
+    updated.splice(index, 1);
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        timeBound: {
+          ...(editData.smartGoal?.timeBound || {}),
+          timeline: updated
+        }
+      }
+    });
+  };
+
+  const updateMilestone = (index: number, field: string, value: any) => {
+    const updated = [...(editData.smartGoal?.timeBound?.timeline || [])];
+    updated[index] = { ...updated[index], [field]: value };
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        timeBound: {
+          ...(editData.smartGoal?.timeBound || {}),
+          timeline: updated
+        }
+      }
+    });
+  };
+
+  // ========== SMART GOALS FUNCTIONS ==========
+  const addSpecificObjective = () => {
+    const objectives = editData.smartGoal?.specific?.objectives || [];
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        specific: {
+          ...(editData.smartGoal?.specific || {}),
+          objectives: [...objectives, '']
+        }
+      }
+    });
+  };
+
+  const removeSpecificObjective = (index: number) => {
+    const objectives = [...(editData.smartGoal?.specific?.objectives || [])];
+    objectives.splice(index, 1);
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        specific: { ...(editData.smartGoal?.specific || {}), objectives }
+      }
+    });
+  };
+
+  const updateSpecificObjective = (index: number, value: string) => {
+    const objectives = [...(editData.smartGoal?.specific?.objectives || [])];
+    objectives[index] = value;
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        specific: { ...(editData.smartGoal?.specific || {}), objectives }
+      }
+    });
+  };
+
+  const addMeasurableMetric = () => {
+    const metrics = editData.smartGoal?.measurable?.metrics || [];
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        measurable: {
+          ...(editData.smartGoal?.measurable || {}),
+          metrics: [...metrics, '']
+        }
+      }
+    });
+  };
+
+  const removeMeasurableMetric = (index: number) => {
+    const metrics = [...(editData.smartGoal?.measurable?.metrics || [])];
+    metrics.splice(index, 1);
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        measurable: { ...(editData.smartGoal?.measurable || {}), metrics }
+      }
+    });
+  };
+
+  const updateMeasurableMetric = (index: number, value: string) => {
+    const metrics = [...(editData.smartGoal?.measurable?.metrics || [])];
+    metrics[index] = value;
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        measurable: { ...(editData.smartGoal?.measurable || {}), metrics }
+      }
+    });
+  };
+
+  const addCroAlignment = () => {
+    const croAlignment = editData.smartGoal?.relevant?.croAlignment || [];
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        relevant: {
+          ...(editData.smartGoal?.relevant || {}),
+          croAlignment: [...croAlignment, '']
+        }
+      }
+    });
+  };
+
+  const removeCroAlignment = (index: number) => {
+    const croAlignment = [...(editData.smartGoal?.relevant?.croAlignment || [])];
+    croAlignment.splice(index, 1);
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        relevant: { ...(editData.smartGoal?.relevant || {}), croAlignment }
+      }
+    });
+  };
+
+  const updateCroAlignment = (index: number, value: string) => {
+    const croAlignment = [...(editData.smartGoal?.relevant?.croAlignment || [])];
+    croAlignment[index] = value;
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        relevant: { ...(editData.smartGoal?.relevant || {}), croAlignment }
+      }
+    });
+  };
+
+  const addStrategicTheme = () => {
+    const strategicThemes = editData.smartGoal?.relevant?.strategicThemes || [];
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        relevant: {
+          ...(editData.smartGoal?.relevant || {}),
+          strategicThemes: [...strategicThemes, '']
+        }
+      }
+    });
+  };
+
+  const removeStrategicTheme = (index: number) => {
+    const strategicThemes = [...(editData.smartGoal?.relevant?.strategicThemes || [])];
+    strategicThemes.splice(index, 1);
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        relevant: { ...(editData.smartGoal?.relevant || {}), strategicThemes }
+      }
+    });
+  };
+
+  const updateStrategicTheme = (index: number, value: string) => {
+    const strategicThemes = [...(editData.smartGoal?.relevant?.strategicThemes || [])];
+    strategicThemes[index] = value;
+    setEditData({
+      ...editData,
+      smartGoal: {
+        ...(editData.smartGoal || {}),
+        relevant: { ...(editData.smartGoal?.relevant || {}), strategicThemes }
+      }
+    });
+  };
+
   return (
-    <div className="space-y-6">
-      <p className="text-sm text-gray-600 dark:text-gray-400 italic">
-        Configure budget breakdown, funding sources, and phase gates for financial tracking.
-      </p>
-      
-      <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-        <p className="text-sm text-yellow-800 dark:text-yellow-200">
-          <strong>Note:</strong> Detailed budget and funding configuration coming soon. For now, use the basic budget fields in the Overview tab.
-        </p>
+    <div className="space-y-4">
+      {/* ========== PROJECT MILESTONES ========== */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+            <Flag className="w-4 h-4" />
+            Project Milestones
+          </h4>
+          <button
+            onClick={addMilestone}
+            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3" />
+            Add Milestone
+          </button>
+        </div>
+        
+        <div className="space-y-3">
+          {(editData.smartGoal?.timeBound?.timeline || []).map((milestone: any, index: number) => (
+            <div key={index} className={`p-4 rounded-lg border-2 ${
+              milestone.status === 'completed' ? 'bg-green-50 dark:bg-green-950/20 border-green-500 dark:border-green-700' :
+              milestone.status === 'in-progress' ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-500 dark:border-blue-700' :
+              'bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600'
+            }`}>
+              <div className="grid grid-cols-6 gap-3 mb-3">
+                <div className="col-span-2">
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Phase Name</label>
+                  <input
+                    type="text"
+                    value={milestone.phase || ''}
+                    onChange={(e) => updateMilestone(index, 'phase', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="MVP Development"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Deliverable</label>
+                  <input
+                    type="text"
+                    value={milestone.deliverable || ''}
+                    onChange={(e) => updateMilestone(index, 'deliverable', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="Core automation workflows operational"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Due Date</label>
+                  <input
+                    type="date"
+                    value={milestone.dueDate || ''}
+                    onChange={(e) => updateMilestone(index, 'dueDate', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Status</label>
+                  <select
+                    value={milestone.status || 'not-started'}
+                    onChange={(e) => updateMilestone(index, 'status', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  >
+                    <option value="not-started">Not Started</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  onClick={() => removeMilestone(index)}
+                  className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded flex items-center gap-1"
+                >
+                  <X className="w-3 h-3" />
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+          
+          {(!editData.smartGoal?.timeBound?.timeline || editData.smartGoal.timeBound.timeline.length === 0) && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 italic py-4 text-center">
+              No milestones yet. Click "Add Milestone" to create project milestones.
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* ========== OBJECTIVES (SMART GOALS) ========== */}
+      <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mt-6">
+        <h3 className="text-sm font-roobert-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+          <Target className="w-4 h-4" />
+          Objectives
+        </h3>
+
+        {/* Top Row: Specific & Measurable */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          {/* Specific Objectives */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">Specific Objectives</h4>
+              <button
+                onClick={addSpecificObjective}
+                className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded flex items-center gap-1"
+              >
+                <Plus className="w-3 h-3" />
+                Add
+              </button>
+            </div>
+            <div className="space-y-2">
+              {(editData.smartGoal?.specific?.objectives || []).map((obj: string, idx: number) => (
+                <div key={idx} className="flex gap-2">
+                  <input
+                    type="text"
+                    value={obj}
+                    onChange={(e) => updateSpecificObjective(idx, e.target.value)}
+                    className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                    placeholder="What specifically will we accomplish?"
+                  />
+                  <button
+                    onClick={() => removeSpecificObjective(idx)}
+                    className="px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              {(!editData.smartGoal?.specific?.objectives || editData.smartGoal.specific.objectives.length === 0) && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 italic py-2 text-center">
+                  No objectives yet. Click "Add" to define specific goals.
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Measurable Metrics */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">Measurable Metrics</h4>
+              <button
+                onClick={addMeasurableMetric}
+                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded flex items-center gap-1"
+              >
+                <Plus className="w-3 h-3" />
+                Add
+              </button>
+            </div>
+            <div className="space-y-2">
+              {(editData.smartGoal?.measurable?.metrics || []).map((metric: string, idx: number) => (
+                <div key={idx} className="flex gap-2">
+                  <input
+                    type="text"
+                    value={metric}
+                    onChange={(e) => updateMeasurableMetric(idx, e.target.value)}
+                    className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                    placeholder="How will we measure success?"
+                  />
+                  <button
+                    onClick={() => removeMeasurableMetric(idx)}
+                    className="px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              {(!editData.smartGoal?.measurable?.metrics || editData.smartGoal.measurable.metrics.length === 0) && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 italic py-2 text-center">
+                  No metrics yet. Click "Add" to define measurable outcomes.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Row: Achievable & Relevant */}
+        <div className="grid grid-cols-2 gap-4">
+          {/* Achievable */}
+          <div>
+            <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Achievable Resources</h4>
+            <div className="space-y-2">
+              <div>
+                <label className="block text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-1">Available Resources</label>
+                <textarea
+                  value={editData.smartGoal?.achievable?.resources || ''}
+                  onChange={(e) => setEditData({
+                    ...editData,
+                    smartGoal: {
+                      ...(editData.smartGoal || {}),
+                      achievable: { ...(editData.smartGoal?.achievable || {}), resources: e.target.value }
+                    }
+                  })}
+                  rows={2}
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                  placeholder="What resources are available to achieve this?"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-1">Team Size</label>
+                <input
+                  type="text"
+                  value={editData.smartGoal?.achievable?.teamSize || ''}
+                  onChange={(e) => setEditData({
+                    ...editData,
+                    smartGoal: {
+                      ...(editData.smartGoal || {}),
+                      achievable: { ...(editData.smartGoal?.achievable || {}), teamSize: e.target.value }
+                    }
+                  })}
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                  placeholder="5 FTE"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Relevant - Strategic Alignment */}
+          <div>
+            <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Strategic Alignment</h4>
+            <div className="space-y-3">
+              {/* CRO Impact Areas */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400">CRO Impact Areas</label>
+                  <button
+                    onClick={addCroAlignment}
+                    className="px-1.5 py-0.5 bg-fis-navy hover:bg-fis-navy/80 text-white text-xs rounded"
+                  >
+                    <Plus className="w-3 h-3" />
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(editData.smartGoal?.relevant?.croAlignment || []).map((area: string, idx: number) => (
+                    <div key={idx} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-fis-navy/10 text-fis-navy dark:bg-blue-900/30 dark:text-blue-300 text-xs">
+                      <input
+                        type="text"
+                        value={area}
+                        onChange={(e) => updateCroAlignment(idx, e.target.value)}
+                        className="bg-transparent border-none outline-none w-24 text-xs"
+                        placeholder="Impact area"
+                      />
+                      <button onClick={() => removeCroAlignment(idx)}>
+                        <X className="w-2.5 h-2.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Strategic Themes */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400">Strategic Themes</label>
+                  <button
+                    onClick={addStrategicTheme}
+                    className="px-1.5 py-0.5 bg-fis-raspberry hover:bg-fis-raspberry/80 text-white text-xs rounded"
+                  >
+                    <Plus className="w-3 h-3" />
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(editData.smartGoal?.relevant?.strategicThemes || []).map((theme: string, idx: number) => (
+                    <div key={idx} className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-fis-raspberry/10 text-fis-raspberry dark:bg-pink-900/30 dark:text-pink-300 text-xs">
+                      <input
+                        type="text"
+                        value={theme}
+                        onChange={(e) => updateStrategicTheme(idx, e.target.value)}
+                        className="bg-transparent border-none outline-none w-24 text-xs"
+                        placeholder="Theme"
+                      />
+                      <button onClick={() => removeStrategicTheme(idx)}>
+                        <X className="w-2.5 h-2.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -520,11 +1169,11 @@ function DependenciesTab({ editData, setEditData }: any) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Internal Dependencies */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
             <Users className="w-4 h-4" />
             Internal Dependencies
           </h4>
@@ -537,17 +1186,17 @@ function DependenciesTab({ editData, setEditData }: any) {
           </button>
         </div>
         
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
           {editData.dependencies?.internal?.map((dep: any, index: number) => (
             <div key={index} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-              <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="grid grid-cols-2 gap-3 mb-2">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Depends On (Team/System)</label>
                   <input
                     type="text"
                     value={dep.on || ''}
                     onChange={(e) => updateInternalDependency(index, 'on', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                     placeholder="Data Platform Team"
                   />
                 </div>
@@ -557,17 +1206,17 @@ function DependenciesTab({ editData, setEditData }: any) {
                     type="date"
                     value={dep.dueDate || ''}
                     onChange={(e) => updateInternalDependency(index, 'dueDate', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Description</label>
                 <textarea
                   value={dep.description || ''}
                   onChange={(e) => updateInternalDependency(index, 'description', e.target.value)}
                   rows={2}
-                  className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   placeholder="API access to customer data lakes"
                 />
               </div>
@@ -577,7 +1226,7 @@ function DependenciesTab({ editData, setEditData }: any) {
                   <select
                     value={dep.criticality || 'medium'}
                     onChange={(e) => updateInternalDependency(index, 'criticality', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -589,7 +1238,7 @@ function DependenciesTab({ editData, setEditData }: any) {
                   <select
                     value={dep.status || 'pending'}
                     onChange={(e) => updateInternalDependency(index, 'status', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   >
                     <option value="pending">Pending</option>
                     <option value="in-progress">In Progress</option>
@@ -600,9 +1249,9 @@ function DependenciesTab({ editData, setEditData }: any) {
                 <div className="flex items-end">
                   <button
                     onClick={() => removeInternalDependency(index)}
-                    className="w-full px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 text-sm rounded flex items-center justify-center gap-1 transition-colors"
+                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded flex items-center justify-center gap-1 transition-colors"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <X className="w-3 h-3" />
                     Remove
                   </button>
                 </div>
@@ -620,8 +1269,8 @@ function DependenciesTab({ editData, setEditData }: any) {
 
       {/* External Dependencies */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
             <LinkIcon className="w-4 h-4" />
             External Dependencies
           </h4>
@@ -634,17 +1283,17 @@ function DependenciesTab({ editData, setEditData }: any) {
           </button>
         </div>
         
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
           {editData.dependencies?.external?.map((dep: any, index: number) => (
             <div key={index} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-              <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="grid grid-cols-2 gap-3 mb-2">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Vendor/Partner</label>
                   <input
                     type="text"
                     value={dep.on || ''}
                     onChange={(e) => updateExternalDependency(index, 'on', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                     placeholder="OpenAI"
                   />
                 </div>
@@ -654,17 +1303,17 @@ function DependenciesTab({ editData, setEditData }: any) {
                     type="date"
                     value={dep.contractEnd || ''}
                     onChange={(e) => updateExternalDependency(index, 'contractEnd', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Description</label>
                 <textarea
                   value={dep.description || ''}
                   onChange={(e) => updateExternalDependency(index, 'description', e.target.value)}
                   rows={2}
-                  className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   placeholder="GPT-4 API access for intelligent demo data generation"
                 />
               </div>
@@ -674,7 +1323,7 @@ function DependenciesTab({ editData, setEditData }: any) {
                   <select
                     value={dep.criticality || 'medium'}
                     onChange={(e) => updateExternalDependency(index, 'criticality', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -686,7 +1335,7 @@ function DependenciesTab({ editData, setEditData }: any) {
                   <select
                     value={dep.status || 'active'}
                     onChange={(e) => updateExternalDependency(index, 'status', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   >
                     <option value="active">Active</option>
                     <option value="pending">Pending</option>
@@ -697,9 +1346,9 @@ function DependenciesTab({ editData, setEditData }: any) {
                 <div className="flex items-end">
                   <button
                     onClick={() => removeExternalDependency(index)}
-                    className="w-full px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 text-sm rounded flex items-center justify-center gap-1 transition-colors"
+                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded flex items-center justify-center gap-1 transition-colors"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <X className="w-3 h-3" />
                     Remove
                   </button>
                 </div>
@@ -717,8 +1366,8 @@ function DependenciesTab({ editData, setEditData }: any) {
 
       {/* Blocking Dependencies */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" />
             Blocking Dependencies (Other Initiatives)
           </h4>
@@ -731,17 +1380,17 @@ function DependenciesTab({ editData, setEditData }: any) {
           </button>
         </div>
         
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
           {editData.dependencies?.blocking?.map((dep: any, index: number) => (
             <div key={index} className="p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200 dark:border-red-800">
-              <div className="grid grid-cols-2 gap-3 mb-3">
+              <div className="grid grid-cols-2 gap-3 mb-2">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Initiative/Project Name</label>
                   <input
                     type="text"
                     value={dep.initiative || ''}
                     onChange={(e) => updateBlockingDependency(index, 'initiative', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                     placeholder="Customer Data Platform v2"
                   />
                 </div>
@@ -751,17 +1400,17 @@ function DependenciesTab({ editData, setEditData }: any) {
                     type="date"
                     value={dep.expectedResolution || ''}
                     onChange={(e) => updateBlockingDependency(index, 'expectedResolution', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
-              <div className="mb-3">
+              <div className="mb-2">
                 <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Why This Blocks Progress</label>
                 <textarea
                   value={dep.description || ''}
                   onChange={(e) => updateBlockingDependency(index, 'description', e.target.value)}
                   rows={2}
-                  className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   placeholder="Requires stable CDP APIs for production demo data synthesis"
                 />
               </div>
@@ -771,7 +1420,7 @@ function DependenciesTab({ editData, setEditData }: any) {
                   <select
                     value={dep.criticality || 'high'}
                     onChange={(e) => updateBlockingDependency(index, 'criticality', e.target.value)}
-                    className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
                   >
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
@@ -781,9 +1430,9 @@ function DependenciesTab({ editData, setEditData }: any) {
                 <div className="flex items-end">
                   <button
                     onClick={() => removeBlockingDependency(index)}
-                    className="w-full px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 text-sm rounded flex items-center justify-center gap-1 transition-colors"
+                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded flex items-center justify-center gap-1 transition-colors"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <X className="w-3 h-3" />
                     Remove
                   </button>
                 </div>
@@ -802,536 +1451,227 @@ function DependenciesTab({ editData, setEditData }: any) {
   );
 }
 
-function ResourcesTab({ editData, setEditData }: any) {
-  const [people, setPeople] = useState<any[]>([]);
-
-  // Fetch people from backend
-  React.useEffect(() => {
-    const fetchPeople = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/people');
-        if (response.ok) {
-          const data = await response.json();
-          // Extract people array from API response { success: true, people: [...] }
-          const peopleArray = data.people || data;
-          setPeople(Array.isArray(peopleArray) ? peopleArray : []);
-        }
-      } catch (error) {
-        console.error('Failed to fetch people:', error);
-        setPeople([]);
-      }
-    };
-    fetchPeople();
-  }, []);
-
-  const resourceCategories = [
-    {
-      key: 'internal',
-      label: 'Internal Resources',
-      color: 'blue',
-      icon: Users,
-      description: 'Full-time employees and internal team members'
-    },
-    {
-      key: 'external',
-      label: 'External Resources',
-      color: 'purple',
-      icon: Package,
-      description: 'Contractors, consultants, and vendors'
-    },
-    {
-      key: 'other',
-      label: 'Other Resources',
-      color: 'green',
-      icon: Clock,
-      description: 'Tools, platforms, and infrastructure'
-    }
-  ];
-
-  const addResource = (category: string) => {
-    const newResource = {
-      name: '',
-      role: '',
-      type: category === 'other' ? 'tool' : 'person',
-      allocation: '',
-      period: '',
-      cost: '',
-      note: ''
-    };
+function PerformanceTab({ editData, setEditData }: any) {
+  const addLeadingIndicator = () => {
     setEditData({
       ...editData,
-      resources: {
-        ...(editData.resources || {}),
-        [category]: [...(editData.resources?.[category] || []), newResource]
+      indicators: {
+        ...(editData.indicators || {}),
+        leading: [...(editData.indicators?.leading || []), { name: '', baseline: '', current: '', target: '', unit: '' }]
       }
     });
   };
 
-  const removeResource = (category: string, index: number) => {
-    const updated = [...(editData.resources?.[category] || [])];
+  const removeLeadingIndicator = (index: number) => {
+    const updated = [...(editData.indicators?.leading || [])];
     updated.splice(index, 1);
     setEditData({
       ...editData,
-      resources: { ...(editData.resources || {}), [category]: updated }
+      indicators: { ...(editData.indicators || {}), leading: updated }
     });
   };
 
-  const updateResource = (category: string, index: number, field: string, value: any) => {
-    const updated = [...(editData.resources?.[category] || [])];
+  const updateLeadingIndicator = (index: number, field: string, value: any) => {
+    const updated = [...(editData.indicators?.leading || [])];
     updated[index] = { ...updated[index], [field]: value };
     setEditData({
       ...editData,
-      resources: { ...(editData.resources || {}), [category]: updated }
+      indicators: { ...(editData.indicators || {}), leading: updated }
     });
   };
 
-  const selectPersonForResource = (category: string, index: number, personId: string) => {
-    const person = people.find((p: any) => p.id === personId);
-    if (person) {
-      updateResource(category, index, 'name', `${person.firstName} ${person.lastName}`);
-      updateResource(category, index, 'role', person.role);
-    }
+  const addLaggingIndicator = () => {
+    setEditData({
+      ...editData,
+      indicators: {
+        ...(editData.indicators || {}),
+        lagging: [...(editData.indicators?.lagging || []), { name: '', baseline: '', current: '', target: '', unit: '' }]
+      }
+    });
+  };
+
+  const removeLaggingIndicator = (index: number) => {
+    const updated = [...(editData.indicators?.lagging || [])];
+    updated.splice(index, 1);
+    setEditData({
+      ...editData,
+      indicators: { ...(editData.indicators || {}), lagging: updated }
+    });
+  };
+
+  const updateLaggingIndicator = (index: number, field: string, value: any) => {
+    const updated = [...(editData.indicators?.lagging || [])];
+    updated[index] = { ...updated[index], [field]: value };
+    setEditData({
+      ...editData,
+      indicators: { ...(editData.indicators || {}), lagging: updated }
+    });
   };
 
   return (
-    <div className="space-y-6">
-      {resourceCategories.map((category) => {
-        const Icon = category.icon;
-        const resources = editData.resources?.[category.key] || [];
-        const isOtherCategory = category.key === 'other';
-        
-        return (
-          <div key={category.key}>
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                  <Icon className="w-4 h-4" />
-                  {category.label}
-                </h4>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{category.description}</p>
+    <div className="space-y-4">
+      {/* Leading Indicators */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Leading Indicators
+          </h4>
+          <button
+            onClick={addLeadingIndicator}
+            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3" />
+            Add Leading
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {(editData.indicators?.leading || []).map((indicator: any, index: number) => (
+            <div key={index} className="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="mb-3">
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Indicator Name</label>
+                <input
+                  type="text"
+                  value={indicator.name || ''}
+                  onChange={(e) => updateLeadingIndicator(index, 'name', e.target.value)}
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  placeholder="e.g., Demo Request Volume"
+                />
               </div>
-              <button
-                onClick={() => addResource(category.key)}
-                className={`px-3 py-1 bg-${category.color}-600 hover:bg-${category.color}-700 text-white text-sm rounded-lg flex items-center gap-1 transition-colors`}
-                style={{
-                  backgroundColor: category.color === 'blue' ? '#2563eb' : category.color === 'purple' ? '#9333ea' : '#16a34a',
-                }}
-              >
-                <Plus className="w-3 h-3" />
-                Add {isOtherCategory ? 'Resource' : 'Person'}
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              {resources.map((resource: any, index: number) => (
-                <div key={index} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                  {!isOtherCategory && category.key === 'internal' && (
-                    <div className="grid grid-cols-2 gap-3 mb-3">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-                          Select from People
-                        </label>
-                        <select
-                          onChange={(e) => {
-                            if (e.target.value) {
-                              selectPersonForResource(category.key, index, e.target.value);
-                            }
-                          }}
-                          className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                        >
-                          <option value="">Select person...</option>
-                          {people.map((person) => (
-                            <option key={person.id} value={person.id}>
-                              {person.firstName} {person.lastName} - {person.role}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Or Enter Name</label>
-                        <input
-                          type="text"
-                          value={resource.name || ''}
-                          onChange={(e) => updateResource(category.key, index, 'name', e.target.value)}
-                          className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                          placeholder="John Doe"
-                        />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {!isOtherCategory && category.key !== 'internal' && (
-                    <div className="mb-3">
-                      <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Name</label>
-                      <input
-                        type="text"
-                        value={resource.name || ''}
-                        onChange={(e) => updateResource(category.key, index, 'name', e.target.value)}
-                        className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                        placeholder="Consultant Name or Firm"
-                      />
-                    </div>
-                  )}
-
-                  {isOtherCategory ? (
-                    <div className="grid grid-cols-6 gap-3">
-                      <div className="col-span-5">
-                        <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Tool/Platform Name</label>
-                        <input
-                          type="text"
-                          value={resource.name || ''}
-                          onChange={(e) => updateResource(category.key, index, 'name', e.target.value)}
-                          className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                          placeholder="GitHub Enterprise, AWS, etc."
-                        />
-                      </div>
-                      <div className="flex items-end">
-                        <button
-                          onClick={() => removeResource(category.key, index)}
-                          className="w-full px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 text-sm rounded flex items-center justify-center gap-1 transition-colors"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="grid grid-cols-3 gap-3 mb-3">
-                        <div>
-                          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Role</label>
-                          <input
-                            type="text"
-                            value={resource.role || ''}
-                            onChange={(e) => updateResource(category.key, index, 'role', e.target.value)}
-                            className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                            placeholder="Engineering Lead"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Allocation</label>
-                          <input
-                            type="text"
-                            value={resource.allocation || ''}
-                            onChange={(e) => updateResource(category.key, index, 'allocation', e.target.value)}
-                            className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                            placeholder="100% or 20 days"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Period</label>
-                          <input
-                            type="text"
-                            value={resource.period || ''}
-                            onChange={(e) => updateResource(category.key, index, 'period', e.target.value)}
-                            className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                            placeholder="Q1 2026"
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-6 gap-3">
-                        {category.key === 'external' && (
-                          <div className="col-span-2">
-                            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Cost</label>
-                            <input
-                              type="text"
-                              value={resource.cost || ''}
-                              onChange={(e) => updateResource(category.key, index, 'cost', e.target.value)}
-                              className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                              placeholder="$18,000"
-                            />
-                          </div>
-                        )}
-                        <div className={category.key === 'external' ? 'col-span-3' : 'col-span-5'}>
-                          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Notes</label>
-                          <input
-                            type="text"
-                            value={resource.note || ''}
-                            onChange={(e) => updateResource(category.key, index, 'note', e.target.value)}
-                            className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                            placeholder="Additional details"
-                          />
-                        </div>
-                        <div className="flex items-end">
-                          <button
-                            onClick={() => removeResource(category.key, index)}
-                            className="w-full px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 text-sm rounded flex items-center justify-center gap-1 transition-colors"
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
+              <div className="grid grid-cols-5 gap-2">
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Baseline</label>
+                  <input
+                    type="text"
+                    value={indicator.baseline || ''}
+                    onChange={(e) => updateLeadingIndicator(index, 'baseline', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="0"
+                  />
                 </div>
-              ))}
-
-              {resources.length === 0 && (
-                <p className="text-sm text-gray-500 dark:text-gray-400 italic py-4 text-center">
-                  No {category.label.toLowerCase()} added yet. Click "Add {isOtherCategory ? 'Resource' : 'Person'}" to track resources.
-                </p>
-              )}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function RisksTab({ editData, setEditData }: any) {
-  // Risk category configurations
-  const riskCategories = [
-    {
-      key: 'technical',
-      label: 'Technical Risks',
-      color: 'blue',
-      icon: AlertCircle,
-      description: 'Technology, architecture, and implementation risks'
-    },
-    {
-      key: 'business',
-      label: 'Business Risks',
-      color: 'purple',
-      icon: TrendingUp,
-      description: 'Market, financial, and operational risks'
-    },
-    {
-      key: 'external',
-      label: 'External Risks',
-      color: 'orange',
-      icon: ExternalLink,
-      description: 'Regulatory, vendor, and third-party risks'
-    }
-  ];
-
-  const addRisk = (category: string) => {
-    const newRisk = {
-      risk: '',
-      probability: 'medium',
-      impact: 'medium',
-      mitigation: '',
-      owner: '',
-      status: 'open'
-    };
-    setEditData({
-      ...editData,
-      risks: {
-        ...(editData.risks || {}),
-        [category]: [...(editData.risks?.[category] || []), newRisk]
-      }
-    });
-  };
-
-  const removeRisk = (category: string, index: number) => {
-    const updated = [...(editData.risks?.[category] || [])];
-    updated.splice(index, 1);
-    setEditData({
-      ...editData,
-      risks: { ...(editData.risks || {}), [category]: updated }
-    });
-  };
-
-  const updateRisk = (category: string, index: number, field: string, value: any) => {
-    const updated = [...(editData.risks?.[category] || [])];
-    updated[index] = { ...updated[index], [field]: value };
-    setEditData({
-      ...editData,
-      risks: { ...(editData.risks || {}), [category]: updated }
-    });
-  };
-
-  const getRiskColor = (probability: string, impact: string) => {
-    const score = (
-      (probability === 'high' ? 3 : probability === 'medium' ? 2 : 1) *
-      (impact === 'high' ? 3 : impact === 'medium' ? 2 : 1)
-    );
-    if (score >= 6) return 'text-red-600 dark:text-red-400';
-    if (score >= 3) return 'text-yellow-600 dark:text-yellow-400';
-    return 'text-green-600 dark:text-green-400';
-  };
-
-  const getRiskBgColor = (probability: string, impact: string) => {
-    const score = (
-      (probability === 'high' ? 3 : probability === 'medium' ? 2 : 1) *
-      (impact === 'high' ? 3 : impact === 'medium' ? 2 : 1)
-    );
-    if (score >= 6) return 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800';
-    if (score >= 3) return 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800';
-    return 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800';
-  };
-
-  return (
-    <div className="space-y-6">
-      {riskCategories.map((category) => {
-        const Icon = category.icon;
-        const risks = editData.risks?.[category.key] || [];
-        
-        return (
-          <div key={category.key}>
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                  <Icon className="w-4 h-4" />
-                  {category.label}
-                </h4>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{category.description}</p>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Current</label>
+                  <input
+                    type="text"
+                    value={indicator.current || ''}
+                    onChange={(e) => updateLeadingIndicator(index, 'current', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Target</label>
+                  <input
+                    type="text"
+                    value={indicator.target || ''}
+                    onChange={(e) => updateLeadingIndicator(index, 'target', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Unit</label>
+                  <input
+                    type="text"
+                    value={indicator.unit || ''}
+                    onChange={(e) => updateLeadingIndicator(index, 'unit', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="/mo"
+                  />
+                </div>
+                <div className="flex items-end">
+                  <button
+                    onClick={() => removeLeadingIndicator(index)}
+                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
+                  >
+                    <X className="w-3 h-3 mx-auto" />
+                  </button>
+                </div>
               </div>
-              <button
-                onClick={() => addRisk(category.key)}
-                className={`px-3 py-1 bg-${category.color}-600 hover:bg-${category.color}-700 text-white text-sm rounded-lg flex items-center gap-1 transition-colors`}
-                style={{
-                  backgroundColor: category.color === 'blue' ? '#2563eb' : category.color === 'purple' ? '#9333ea' : '#ea580c',
-                }}
-              >
-                <Plus className="w-3 h-3" />
-                Add Risk
-              </button>
             </div>
+          ))}
+        </div>
+      </div>
 
-            <div className="space-y-3">
-              {risks.map((risk: any, index: number) => {
-                const riskColor = getRiskColor(risk.probability, risk.impact);
-                const riskBg = getRiskBgColor(risk.probability, risk.impact);
-                
-                return (
-                  <div key={index} className={`p-4 rounded-lg border ${riskBg}`}>
-                    <div className="grid grid-cols-1 gap-3 mb-3">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                          Risk Description <span className={riskColor}>●</span>
-                        </label>
-                        <textarea
-                          value={risk.risk || ''}
-                          onChange={(e) => updateRisk(category.key, index, 'risk', e.target.value)}
-                          className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                          rows={2}
-                          placeholder="Describe the risk..."
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-4 gap-3 mb-3">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Probability</label>
-                        <select
-                          value={risk.probability || 'medium'}
-                          onChange={(e) => updateRisk(category.key, index, 'probability', e.target.value)}
-                          className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                        >
-                          <option value="low">Low</option>
-                          <option value="medium">Medium</option>
-                          <option value="high">High</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Impact</label>
-                        <select
-                          value={risk.impact || 'medium'}
-                          onChange={(e) => updateRisk(category.key, index, 'impact', e.target.value)}
-                          className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                        >
-                          <option value="low">Low</option>
-                          <option value="medium">Medium</option>
-                          <option value="high">High</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-                        <select
-                          value={risk.status || 'open'}
-                          onChange={(e) => updateRisk(category.key, index, 'status', e.target.value)}
-                          className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                        >
-                          <option value="open">Open</option>
-                          <option value="monitoring">Monitoring</option>
-                          <option value="mitigated">Mitigated</option>
-                          <option value="closed">Closed</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Owner</label>
-                        <input
-                          type="text"
-                          value={risk.owner || ''}
-                          onChange={(e) => updateRisk(category.key, index, 'owner', e.target.value)}
-                          className="w-full px-2 py-1.5 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                          placeholder="CTO"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-6 gap-3">
-                      <div className="col-span-5">
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Mitigation Strategy</label>
-                        <textarea
-                          value={risk.mitigation || ''}
-                          onChange={(e) => updateRisk(category.key, index, 'mitigation', e.target.value)}
-                          className="w-full px-3 py-2 text-sm bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                          rows={2}
-                          placeholder="How will this risk be mitigated?"
-                        />
-                      </div>
-                      <div className="flex items-end">
-                        <button
-                          onClick={() => removeRisk(category.key, index)}
-                          className="w-full px-2 py-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-700 dark:text-red-300 text-sm rounded flex items-center justify-center gap-1 transition-colors"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-
-              {risks.length === 0 && (
-                <p className="text-sm text-gray-500 dark:text-gray-400 italic py-4 text-center">
-                  No {category.label.toLowerCase()} identified yet. Click "Add Risk" to track potential issues.
-                </p>
-              )}
+      {/* Lagging Indicators */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Lagging Indicators
+          </h4>
+          <button
+            onClick={addLaggingIndicator}
+            className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3" />
+            Add Lagging
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {(editData.indicators?.lagging || []).map((indicator: any, index: number) => (
+            <div key={index} className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
+              <div className="mb-3">
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Indicator Name</label>
+                <input
+                  type="text"
+                  value={indicator.name || ''}
+                  onChange={(e) => updateLaggingIndicator(index, 'name', e.target.value)}
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  placeholder="e.g., Revenue from New Demos"
+                />
+              </div>
+              <div className="grid grid-cols-5 gap-2">
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Baseline</label>
+                  <input
+                    type="text"
+                    value={indicator.baseline || ''}
+                    onChange={(e) => updateLaggingIndicator(index, 'baseline', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Current</label>
+                  <input
+                    type="text"
+                    value={indicator.current || ''}
+                    onChange={(e) => updateLaggingIndicator(index, 'current', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Target</label>
+                  <input
+                    type="text"
+                    value={indicator.target || ''}
+                    onChange={(e) => updateLaggingIndicator(index, 'target', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="0"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Unit</label>
+                  <input
+                    type="text"
+                    value={indicator.unit || ''}
+                    onChange={(e) => updateLaggingIndicator(index, 'unit', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="M"
+                  />
+                </div>
+                <div className="flex items-end">
+                  <button
+                    onClick={() => removeLaggingIndicator(index)}
+                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
+                  >
+                    <X className="w-3 h-3 mx-auto" />
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        );
-      })}
-
-      {/* Risk Matrix Summary */}
-      <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-        <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-3">Risk Heat Map</h4>
-        <div className="grid grid-cols-4 gap-2 text-xs">
-          <div className="text-center font-medium text-gray-600 dark:text-gray-400"></div>
-          <div className="text-center font-medium text-gray-600 dark:text-gray-400">Low Impact</div>
-          <div className="text-center font-medium text-gray-600 dark:text-gray-400">Med Impact</div>
-          <div className="text-center font-medium text-gray-600 dark:text-gray-400">High Impact</div>
-          
-          {['High Prob', 'Med Prob', 'Low Prob'].map((label, rowIndex) => (
-            <React.Fragment key={label}>
-              <div className="text-right font-medium text-gray-600 dark:text-gray-400 pr-2">{label}</div>
-              {[1, 2, 3].map((colIndex) => {
-                const allRisks = [
-                  ...(editData.risks?.technical || []),
-                  ...(editData.risks?.business || []),
-                  ...(editData.risks?.external || [])
-                ];
-                const probMap: any = { 0: 'high', 1: 'medium', 2: 'low' };
-                const impactMap: any = { 1: 'low', 2: 'medium', 3: 'high' };
-                const count = allRisks.filter(
-                  (r: any) => r.probability === probMap[rowIndex] && r.impact === impactMap[colIndex]
-                ).length;
-                
-                const cellColor = 
-                  (rowIndex === 0 && colIndex === 3) || (rowIndex === 0 && colIndex === 2) || (rowIndex === 1 && colIndex === 3)
-                    ? 'bg-red-200 dark:bg-red-900/40'
-                    : (rowIndex === 0 && colIndex === 1) || (rowIndex === 1 && colIndex === 2) || (rowIndex === 2 && colIndex === 3)
-                    ? 'bg-yellow-200 dark:bg-yellow-900/40'
-                    : 'bg-green-200 dark:bg-green-900/40';
-                
-                return (
-                  <div key={colIndex} className={`p-2 ${cellColor} rounded text-center font-medium`}>
-                    {count > 0 ? count : '-'}
-                  </div>
-                );
-              })}
-            </React.Fragment>
           ))}
         </div>
       </div>
@@ -1339,7 +1679,442 @@ function RisksTab({ editData, setEditData }: any) {
   );
 }
 
-function TasksNotesTab({ editData, setEditData }: any) {
+function ResourcesTab({ editData, setEditData }: any) {
+  // Team Members
+  const addTeamMember = () => {
+    setEditData({
+      ...editData,
+      resources: {
+        ...(editData.resources || {}),
+        team: [...(editData.resources?.team || []), { name: '', role: '', allocation: '', commitment: '', note: '' }]
+      }
+    });
+  };
+
+  const removeTeamMember = (index: number) => {
+    const updated = [...(editData.resources?.team || [])];
+    updated.splice(index, 1);
+    setEditData({
+      ...editData,
+      resources: { ...(editData.resources || {}), team: updated }
+    });
+  };
+
+  const updateTeamMember = (index: number, field: string, value: any) => {
+    const updated = [...(editData.resources?.team || [])];
+    updated[index] = { ...updated[index], [field]: value };
+    setEditData({
+      ...editData,
+      resources: { ...(editData.resources || {}), team: updated }
+    });
+  };
+
+  // Tools
+  const addTool = () => {
+    const tools = editData.resources?.tools || [];
+    setEditData({
+      ...editData,
+      resources: {
+        ...(editData.resources || {}),
+        tools: [...tools, '']
+      }
+    });
+  };
+
+  const removeTool = (index: number) => {
+    const updated = [...(editData.resources?.tools || [])];
+    updated.splice(index, 1);
+    setEditData({
+      ...editData,
+      resources: { ...(editData.resources || {}), tools: updated }
+    });
+  };
+
+  const updateTool = (index: number, value: string) => {
+    const updated = [...(editData.resources?.tools || [])];
+    updated[index] = value;
+    setEditData({
+      ...editData,
+      resources: { ...(editData.resources || {}), tools: updated }
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Team Members */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+            <Users className="w-4 h-4" />
+            Team Members
+          </h4>
+          <button
+            onClick={addTeamMember}
+            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3" />
+            Add Member
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {(editData.resources?.team || []).map((member: any, index: number) => (
+            <div key={index} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Name</label>
+                  <input
+                    type="text"
+                    value={member.name || ''}
+                    onChange={(e) => updateTeamMember(index, 'name', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="Jane Smith"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Role</label>
+                  <input
+                    type="text"
+                    value={member.role || ''}
+                    onChange={(e) => updateTeamMember(index, 'role', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="Product Manager"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-12 gap-3 mb-2">
+                <div className="col-span-4">
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Allocation</label>
+                  <input
+                    type="text"
+                    value={member.allocation || ''}
+                    onChange={(e) => updateTeamMember(index, 'allocation', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="75%"
+                  />
+                </div>
+                <div className="col-span-7">
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Commitment</label>
+                  <input
+                    type="text"
+                    value={member.commitment || ''}
+                    onChange={(e) => updateTeamMember(index, 'commitment', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="Full-time"
+                  />
+                </div>
+                <div className="col-span-1 flex items-end">
+                  <button
+                    onClick={() => removeTeamMember(index)}
+                    className="w-full aspect-square p-2 bg-red-600 hover:bg-red-700 text-white rounded flex items-center justify-center"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Note (Optional)</label>
+                <input
+                  type="text"
+                  value={member.note || ''}
+                  onChange={(e) => updateTeamMember(index, 'note', e.target.value)}
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  placeholder="Additional notes"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tools & Platforms */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+            <Package className="w-4 h-4" />
+            Tools & Platforms
+          </h4>
+          <button
+            onClick={addTool}
+            className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3" />
+            Add Tool
+          </button>
+        </div>
+        <div className="space-y-2">
+          {(editData.resources?.tools || []).map((tool: string, index: number) => (
+            <div key={index} className="flex items-center gap-2">
+              <input
+                type="text"
+                value={tool}
+                onChange={(e) => updateTool(index, e.target.value)}
+                className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm"
+                placeholder="Tool name (e.g., Salesforce, GitHub)"
+              />
+              <button
+                onClick={() => removeTool(index)}
+                className="p-1.5 text-white bg-red-600 hover:bg-red-700 rounded"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RisksTab({ editData, setEditData }: any) {
+  // Top Risks
+  const addTopRisk = () => {
+    setEditData({
+      ...editData,
+      topRisks: [...(editData.topRisks || []), { risk: '', level: 'medium', mitigation: '' }]
+    });
+  };
+
+  const removeTopRisk = (index: number) => {
+    const updated = [...(editData.topRisks || [])];
+    updated.splice(index, 1);
+    setEditData({ ...editData, topRisks: updated });
+  };
+
+  const updateTopRisk = (index: number, field: string, value: any) => {
+    const updated = [...(editData.topRisks || [])];
+    updated[index] = { ...updated[index], [field]: value };
+    setEditData({ ...editData, topRisks: updated });
+  };
+
+  // Success Criteria
+  const addSuccessCriteria = (category: 'technical' | 'business' | 'adoption') => {
+    const current = editData.successCriteria || {};
+    setEditData({
+      ...editData,
+      successCriteria: {
+        ...current,
+        [category]: [...(current[category] || []), '']
+      }
+    });
+  };
+
+  const removeSuccessCriteria = (category: string, index: number) => {
+    const updated = [...(editData.successCriteria?.[category] || [])];
+    updated.splice(index, 1);
+    setEditData({
+      ...editData,
+      successCriteria: { ...(editData.successCriteria || {}), [category]: updated }
+    });
+  };
+
+  const updateSuccessCriteria = (category: string, index: number, value: string) => {
+    const updated = [...(editData.successCriteria?.[category] || [])];
+    updated[index] = value;
+    setEditData({
+      ...editData,
+      successCriteria: { ...(editData.successCriteria || {}), [category]: updated }
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Top Risks */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            Top Risks
+          </h4>
+          <button
+            onClick={addTopRisk}
+            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg flex items-center gap-1"
+          >
+            <Plus className="w-3 h-3" />
+            Add Risk
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {(editData.topRisks || []).map((risk: any, index: number) => (
+            <div key={index} className={`p-4 rounded-lg border ${
+              risk.level === 'high' ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800' :
+              risk.level === 'medium' ? 'bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800' :
+              'bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800'
+            }`}>
+              <div className="grid grid-cols-12 gap-3 mb-3">
+                <div className="col-span-8">
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Risk Description</label>
+                  <input
+                    type="text"
+                    value={risk.risk || ''}
+                    onChange={(e) => updateTopRisk(index, 'risk', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="Describe the risk..."
+                  />
+                </div>
+                <div className="col-span-3">
+                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Level</label>
+                  <select
+                    value={risk.level || 'medium'}
+                    onChange={(e) => updateTopRisk(index, 'level', e.target.value)}
+                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                <div className="col-span-1 flex items-end">
+                  <button
+                    onClick={() => removeTopRisk(index)}
+                    className="w-full aspect-square p-2 bg-red-600 hover:bg-red-700 text-white rounded flex items-center justify-center"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Mitigation Strategy</label>
+                <textarea
+                  value={risk.mitigation || ''}
+                  onChange={(e) => updateTopRisk(index, 'mitigation', e.target.value)}
+                  rows={2}
+                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  placeholder="How will this risk be mitigated?"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Success Criteria */}
+      <div>
+        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+          <Target className="w-4 h-4" />
+          Success Criteria
+        </h4>
+        
+        <div className="grid grid-cols-3 gap-3">
+          {/* Technical Success */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-medium text-blue-600 dark:text-blue-400">Technical Success</label>
+              <button
+                onClick={() => addSuccessCriteria('technical')}
+                className="px-2 py-0.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded flex items-center gap-1"
+              >
+                <Plus className="w-2.5 h-2.5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {(editData.successCriteria?.technical || []).map((criteria: string, idx: number) => (
+                <div key={idx} className="flex items-start gap-1">
+                  <input
+                    type="text"
+                    value={criteria}
+                    onChange={(e) => updateSuccessCriteria('technical', idx, e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="Criteria..."
+                  />
+                  <button
+                    onClick={() => removeSuccessCriteria('technical', idx)}
+                    className="p-1 text-white bg-red-600 hover:bg-red-700 rounded"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Business Success */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-medium text-green-600 dark:text-green-400">Business Success</label>
+              <button
+                onClick={() => addSuccessCriteria('business')}
+                className="px-2 py-0.5 bg-green-600 hover:bg-green-700 text-white text-xs rounded flex items-center gap-1"
+              >
+                <Plus className="w-2.5 h-2.5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {(editData.successCriteria?.business || []).map((criteria: string, idx: number) => (
+                <div key={idx} className="flex items-start gap-1">
+                  <input
+                    type="text"
+                    value={criteria}
+                    onChange={(e) => updateSuccessCriteria('business', idx, e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="Criteria..."
+                  />
+                  <button
+                    onClick={() => removeSuccessCriteria('business', idx)}
+                    className="p-1 text-white bg-red-600 hover:bg-red-700 rounded"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Adoption Success */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-medium text-purple-600 dark:text-purple-400">Adoption Success</label>
+              <button
+                onClick={() => addSuccessCriteria('adoption')}
+                className="px-2 py-0.5 bg-purple-600 hover:bg-purple-700 text-white text-xs rounded flex items-center gap-1"
+              >
+                <Plus className="w-2.5 h-2.5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {(editData.successCriteria?.adoption || []).map((criteria: string, idx: number) => (
+                <div key={idx} className="flex items-start gap-1">
+                  <input
+                    type="text"
+                    value={criteria}
+                    onChange={(e) => updateSuccessCriteria('adoption', idx, e.target.value)}
+                    className="flex-1 px-2 py-1 text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    placeholder="Criteria..."
+                  />
+                  <button
+                    onClick={() => removeSuccessCriteria('adoption', idx)}
+                    className="p-1 text-white bg-red-600 hover:bg-red-700 rounded"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Minimum Viable Success */}
+        <div className="mt-3">
+          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Minimum Viable Success</label>
+          <textarea
+            value={editData.successCriteria?.minimumViableSuccess || ''}
+            onChange={(e) => setEditData({
+              ...editData,
+              successCriteria: {
+                ...(editData.successCriteria || {}),
+                minimumViableSuccess: e.target.value
+              }
+            })}
+            rows={2}
+            className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+            placeholder="What is the minimum we need to achieve for this initiative to be considered successful?"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TasksTab({ editData, setEditData }: any) {
   const [notes, setNotes] = useState('');
 
   React.useEffect(() => {
@@ -1355,7 +2130,7 @@ function TasksNotesTab({ editData, setEditData }: any) {
     <div className="grid grid-cols-2 gap-6 h-full">
       {/* Left Column: Tasks */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-2">
           <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Initiative Tasks</h4>
         </div>
@@ -1382,7 +2157,7 @@ function TasksNotesTab({ editData, setEditData }: any) {
 
       {/* Right Column: Notes */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-2">
           <StickyNote className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
           <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Initiative Notes</h4>
         </div>
@@ -1411,18 +2186,119 @@ function TasksNotesTab({ editData, setEditData }: any) {
   );
 }
 
-function GovernanceTab({ editData, setEditData }: any) {
+function GoalsTab({ editData, setEditData, goals }: any) {
+  const linkedGoalIds = editData.linkedGoals || [];
+
+  const toggleGoal = (goalId: string) => {
+    const currentGoals = editData.linkedGoals || [];
+    if (currentGoals.includes(goalId)) {
+      setEditData({
+        ...editData,
+        linkedGoals: currentGoals.filter((id: string) => id !== goalId)
+      });
+    } else {
+      setEditData({
+        ...editData,
+        linkedGoals: [...currentGoals, goalId]
+      });
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      <p className="text-sm text-gray-600 dark:text-gray-400 italic">
-        Configure steering committee, RACI matrix, meeting cadence, and escalation paths.
-      </p>
+    <div className="space-y-4">
+      <div className="flex items-center gap-2 mb-2">
+        <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+        <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Link Strategic Goals</h4>
+      </div>
       
-      <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-        <p className="text-sm text-yellow-800 dark:text-yellow-200">
-          <strong>Note:</strong> Governance framework coming soon. This will include steering committee, RACI, cadence, and escalation procedures.
+      <div className="p-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+        <p className="text-xs text-purple-800 dark:text-purple-200">
+          <Info className="w-3.5 h-3.5 inline mr-1" />
+          Select which strategic goals this initiative contributes to. You can link multiple goals.
         </p>
       </div>
+
+      {goals && goals.length > 0 ? (
+        <div className="space-y-2">
+          {goals.map((goal: any) => {
+            const isLinked = linkedGoalIds.includes(goal.id);
+            
+            return (
+              <div
+                key={goal.id}
+                onClick={() => toggleGoal(goal.id)}
+                className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                  isLinked
+                    ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-500 dark:border-purple-400'
+                    : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 mt-0.5">
+                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                      isLinked
+                        ? 'bg-purple-600 border-purple-600'
+                        : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600'
+                    }`}>
+                      {isLinked && (
+                        <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-medium rounded">
+                        Goal #{goal.id}
+                      </span>
+                      <span className={`px-2 py-0.5 text-xs font-medium rounded ${
+                        goal.status === 'on-track' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
+                        goal.status === 'at-risk' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' :
+                        'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                      }`}>
+                        {goal.status === 'on-track' ? '✓ On Track' : goal.status === 'at-risk' ? '⚠ At Risk' : '⚠ Off Track'}
+                      </span>
+                    </div>
+                    <h5 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-1">{goal.name}</h5>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{goal.description}</p>
+                    {goal.targetDate && (
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                        Target: {new Date(goal.targetDate).toLocaleDateString()}
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div className="text-right flex-shrink-0">
+                    <div className="text-2xl font-roobert-bold text-purple-600 dark:text-purple-400">{goal.progress || 0}%</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">Progress</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          <Target className="w-12 h-12 mx-auto mb-2 opacity-30" />
+          <p className="text-sm">No strategic goals available.</p>
+          <p className="text-xs mt-1">Create goals first to link them to this initiative.</p>
+        </div>
+      )}
+
+      {linkedGoalIds.length > 0 && (
+        <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <p className="text-xs text-green-800 dark:text-green-200">
+            <strong>{linkedGoalIds.length}</strong> {linkedGoalIds.length === 1 ? 'goal' : 'goals'} linked to this initiative
+          </p>
+        </div>
+      )}
     </div>
   );
 }
+
+
+
+
+
