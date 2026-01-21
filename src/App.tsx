@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
 import { Header } from './components/Header';
@@ -19,6 +19,8 @@ import { DesignSystemTest } from './pages/DesignSystemTest';
 import GoalsHome from './pages/GoalsHome';
 import InitiativesHome from './pages/InitiativesHome';
 import TechnologiesHome from './pages/TechnologiesHome';
+import TechnologyStackOverview from './pages/TechnologyStackOverview';
+import PlatformArchitectureOverview from './pages/PlatformArchitectureOverview';
 import PlatformOverview from './components/PlatformOverview';
 import CardStyleGallery from './components/CardStyleGallery';
 import LoginPage from './components/LoginPage';
@@ -26,6 +28,30 @@ import { timelineItems, isExecutiveSummary, loadTimelineData } from './data/time
 import { TimelineItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Building2, Target, AlertCircle, ChevronRight, CheckCircle2, ChevronLeft, FileText, Cpu } from 'lucide-react';
+
+// Wrapper component to conditionally show StickyNav
+function AppContent() {
+  const location = useLocation();
+  
+  // Routes that should not show the sticky nav
+  const noStickyNavRoutes = [
+    '/technology-stack-overview',
+    '/platform-architecture-overview',
+    '/goals',
+    '/initiatives',
+    '/technologies',
+    '/strategic-initiatives',
+    '/knowledge-base',
+    '/platform-overview',
+    '/card-styles',
+    '/schema-test',
+    '/design-test'
+  ];
+  
+  const shouldShowStickyNav = !noStickyNavRoutes.includes(location.pathname);
+  
+  return shouldShowStickyNav ? <StickyNav /> : null;
+}
 
 function App() {
   const [selectedSummary, setSelectedSummary] = useState<TimelineItem | null>(null);
@@ -270,7 +296,7 @@ function App() {
               onLogout={handleLogout}
               onSelectContent={setSelectedSummary}
             />
-            <StickyNav />
+            <AppContent />
             
             {/* Global Modals - Render outside Routes */}
             <AnimatePresence mode="wait">
@@ -823,6 +849,16 @@ function App() {
                   {/* Technologies Home Route */}
                   <Route path="/technologies" element={
                     <TechnologiesHome onSelectContent={setSelectedSummary} />
+                  } />
+                  
+                  {/* Technology Stack Overview Route */}
+                  <Route path="/technology-stack-overview" element={
+                    <TechnologyStackOverview />
+                  } />
+                  
+                  {/* Platform Architecture Overview Route */}
+                  <Route path="/platform-architecture-overview" element={
+                    <PlatformArchitectureOverview />
                   } />
                 </Routes>
               </div>

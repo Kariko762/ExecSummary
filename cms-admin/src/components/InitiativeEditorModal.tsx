@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, Save, Info, DollarSign, Link as LinkIcon, Users, AlertTriangle, Shield, Target, Clock, Package, Plus, Trash2, AlertCircle, TrendingUp, ExternalLink, StickyNote, Flag } from 'lucide-react';
+import { X, Save, Info, DollarSign, Link as LinkIcon, Users, AlertTriangle, Shield, Target, Clock, Package, Plus, Trash2, AlertCircle, TrendingUp, ExternalLink, StickyNote, Flag, Calendar } from 'lucide-react';
 import { TaskConnectorRenderer } from '../renderers/assetRenderTasks';
+import GanttEditor from './GanttEditor';
+import GanttVisualizer from './GanttVisualizer';
 
 interface InitiativeEditorProps {
   initiative: any;
@@ -14,6 +16,7 @@ interface InitiativeEditorProps {
 export default function InitiativeEditorModal({ initiative, goals, onSave, onClose, isNew }: InitiativeEditorProps) {
   const [editData, setEditData] = useState(initiative);
   const [activeTab, setActiveTab] = useState<'overview' | 'smart' | 'milestones' | 'performance' | 'resources' | 'risks' | 'tasks' | 'goals'>('overview');
+  const [showGanttEditor, setShowGanttEditor] = useState(false);
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Info },
@@ -29,6 +32,13 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
   const handleSave = () => {
     onSave(editData);
     onClose();
+  };
+
+  const handleGanttSave = (ganttData: any) => {
+    setEditData({
+      ...editData,
+      ganttData: ganttData
+    });
   };
 
   return (
@@ -96,7 +106,7 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
             <OverviewTab editData={editData} setEditData={setEditData} goals={goals} />
           )}
           {activeTab === 'milestones' && (
-            <MilestonesTab editData={editData} setEditData={setEditData} />
+            <MilestonesTab editData={editData} setEditData={setEditData} onOpenGanttEditor={() => setShowGanttEditor(true)} />
           )}
           {activeTab === 'dependencies' && (
             <DependenciesTab editData={editData} setEditData={setEditData} />
@@ -118,6 +128,16 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
           )}
         </div>
       </motion.div>
+
+      {/* Gantt Editor Modal */}
+      {showGanttEditor && (
+        <GanttEditor
+          isOpen={showGanttEditor}
+          onClose={() => setShowGanttEditor(false)}
+          initiativeData={editData}
+          onSave={handleGanttSave}
+        />
+      )}
     </div>
   );
 }
@@ -575,7 +595,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
   );
 }
 
-function MilestonesTab({ editData, setEditData }: any) {
+function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
   // ========== MILESTONES FUNCTIONS ==========
   const addMilestone = () => {
     const newMilestone = {
@@ -781,6 +801,43 @@ function MilestonesTab({ editData, setEditData }: any) {
 
   return (
     <div className="space-y-4">
+      {/* ========== GANTT CHART BUTTON ========== */}
+      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border-2 border-purple-300 dark:border-purple-700 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="text-sm font-roobert-bold text-purple-900 dark:text-purple-100 flex items-center gap-2 mb-1">
+              <Calendar className="w-5 h-5" />
+              Advanced Gantt Chart Editor
+            </h4>
+            <p className="text-xs text-purple-700 dark:text-purple-300">
+              Open external Gantt editor to build detailed project plans with templates, dependencies, and hierarchical tasks
+            </p>
+          </div>
+          <button
+            onClick={onOpenGanttEditor}
+            className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-roobert-semibold flex items-center gap-2 transition-colors shadow-lg"
+          >
+            <Calendar className="w-5 h-5" />
+            Edit Gantt
+          </button>
+        </div>
+      </div>
+
+      {/* ========== GANTT VISUALIZATION ========== */}
+      {(() => {
+        console.log('🔍 Gantt Check:', {
+          hasGanttData: !!editData.ganttData,
+          hasTasks: !!editData.ganttData?.tasks,
+          taskCount: editData.ganttData?.tasks?.length,
+          ganttData: editData.ganttData
+        });
+        return editData.ganttData && editData.ganttData.tasks && editData.ganttData.tasks.length > 0;
+      })() && (
+        <div className="my-4">
+          <GanttVisualizer ganttData={editData.ganttData} />
+        </div>
+      )}
+
       {/* ========== PROJECT MILESTONES ========== */}
       <div>
         <div className="flex items-center justify-between mb-2">

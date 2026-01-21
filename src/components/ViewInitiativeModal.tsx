@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Rocket, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, Maximize2, Minimize2, Target } from 'lucide-react';
 import { domToPng } from 'modern-screenshot';
 import { TaskConnectorRenderer } from '../renderers/assetRenderTasks';
+import GanttVisualizer from './GanttVisualizer';
+import ViewGoalModal from './ViewGoalModal';
 
 interface Initiative {
   id: string;
@@ -50,7 +52,9 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
   const modalContentRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'smart' | 'milestones' | 'performance' | 'resources' | 'risks' | 'tasks' | 'goals'>('overview');
+  const [modalWidth, setModalWidth] = useState<75 | 95>(75); // 75% or 95% width
+  const [activeTab, setActiveTab] = useState<'overview' | 'smart' | 'milestones' | 'gantt' | 'performance' | 'resources' | 'risks' | 'tasks' | 'goals'>('overview');
+  const [selectedGoal, setSelectedGoal] = useState<any>(null);
   
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -157,7 +161,9 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
             className={`bg-white dark:bg-gray-900 shadow-2xl overflow-hidden flex flex-col ${
               isFullscreen 
                 ? 'w-full h-full rounded-xl' 
-                : 'rounded-xl max-w-6xl w-full h-[90vh]'
+                : modalWidth === 95
+                  ? 'rounded-xl w-[95vw] h-[90vh]'
+                  : 'rounded-xl w-[75vw] h-[90vh]'
             }`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -260,9 +266,18 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                     )}
                   </button>
                   <button
-                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    onClick={() => {
+                      if (isFullscreen) {
+                        setIsFullscreen(false);
+                        setModalWidth(75);
+                      } else if (modalWidth === 75) {
+                        setModalWidth(95);
+                      } else {
+                        setIsFullscreen(true);
+                      }
+                    }}
                     className="p-1.5 2xl:p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-                    title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                    title={isFullscreen ? "Exit Fullscreen (75%)" : modalWidth === 75 ? "Wider View (95%)" : "Fullscreen"}
                   >
                     {isFullscreen ? <Minimize2 className="w-4 h-4 2xl:w-5 2xl:h-5" /> : <Maximize2 className="w-4 h-4 2xl:w-5 2xl:h-5" />}
                   </button>
@@ -312,6 +327,25 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                     />
                   )}
                 </button>
+                {(initiative as any).ganttData && (initiative as any).ganttData.tasks && (initiative as any).ganttData.tasks.length > 0 && (
+                  <button
+                    onClick={() => setActiveTab('gantt')}
+                    className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative ${
+                      activeTab === 'gantt' 
+                        ? 'text-white' 
+                        : 'text-white/60 hover:text-white/80'
+                    }`}
+                  >
+                    Gantt
+                    {activeTab === 'gantt' && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                  </button>
+                )}
                 <button
                   onClick={() => setActiveTab('performance')}
                   className={`px-3 2xl:px-4 py-1.5 2xl:py-2 font-roobert-medium text-xs 2xl:text-sm transition-all relative ${
@@ -407,134 +441,130 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
             <div className="flex-1 overflow-y-auto p-6">
               {activeTab === 'overview' && (
                 <div className="space-y-4">
-                  {/* Progress */}
-                  {initiative.progress !== undefined && (
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white">Progress</h3>
-                        <span className="text-xl font-roobert-bold text-gray-900 dark:text-white">{initiative.progress}%</span>
-                      </div>
-                      <div className="h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-fis-navy to-fis-raspberry transition-all"
-                          style={{ width: `${initiative.progress}%` }}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Statement */}
+                  {/* Statement - Hero Section */}
                   {initiative.smartGoal?.statement && (
-                    <div className="bg-gradient-to-br from-blue-50 to-pink-50 dark:from-blue-950/20 dark:to-pink-950/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-                      <h3 className="text-xs font-roobert-semibold text-fis-navy dark:text-blue-300 mb-1.5">Initiative Statement</h3>
-                      <p className="text-sm text-gray-900 dark:text-white font-roobert-light leading-relaxed">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                      <h3 className="text-sm font-roobert-semibold text-blue-600 dark:text-blue-400 mb-2 uppercase tracking-wide">Initiative Statement</h3>
+                      <p className="text-sm text-gray-900 dark:text-white font-roobert-regular leading-relaxed">
                         {initiative.smartGoal.statement}
                       </p>
                     </div>
                   )}
 
-                  {/* Business Case */}
-                  {(initiative as any).businessCase && (
-                    <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-                      <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white mb-2">Business Case</h3>
-                      
-                      {(initiative as any).businessCase.problem && (
-                        <div className="mb-2.5">
-                          <h4 className="text-[10px] font-roobert-semibold text-red-600 dark:text-red-400 mb-1 uppercase">Problem</h4>
-                          <p className="text-xs text-gray-700 dark:text-gray-300">{(initiative as any).businessCase.problem}</p>
-                        </div>
-                      )}
-                      
-                      {(initiative as any).businessCase.opportunity && (
-                        <div className="mb-2.5">
-                          <h4 className="text-[10px] font-roobert-semibold text-blue-600 dark:text-blue-400 mb-1 uppercase">Opportunity</h4>
-                          <p className="text-xs text-gray-700 dark:text-gray-300">{(initiative as any).businessCase.opportunity}</p>
-                        </div>
-                      )}
-                      
-                      {(initiative as any).businessCase.solution && (
-                        <div className="mb-2.5">
-                          <h4 className="text-[10px] font-roobert-semibold text-green-600 dark:text-green-400 mb-1 uppercase">Solution</h4>
-                          <p className="text-xs text-gray-700 dark:text-gray-300">{(initiative as any).businessCase.solution}</p>
-                        </div>
-                      )}
-
-                      {((initiative as any).businessCase.roi || (initiative as any).businessCase.paybackPeriod) && (
-                        <div className="grid grid-cols-2 gap-3 mt-2.5 pt-2.5 border-t border-gray-200 dark:border-gray-700">
-                          {(initiative as any).businessCase.roi && (
-                            <div>
-                              <p className="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5">ROI</p>
-                              <p className="text-base font-roobert-bold text-fis-navy dark:text-blue-300">{(initiative as any).businessCase.roi}</p>
-                            </div>
-                          )}
-                          {(initiative as any).businessCase.paybackPeriod && (
-                            <div>
-                              <p className="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5">Payback Period</p>
-                              <p className="text-base font-roobert-bold text-fis-navy dark:text-blue-300">{(initiative as any).businessCase.paybackPeriod}</p>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {(initiative as any).businessCase.expectedBenefits && (initiative as any).businessCase.expectedBenefits.length > 0 && (
-                        <div className="mt-2.5">
-                          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-1.5">Expected Benefits</h4>
-                          <ul className="space-y-1">
-                            {(initiative as any).businessCase.expectedBenefits.map((benefit: string, idx: number) => (
-                              <li key={idx} className="flex items-start gap-1.5 text-xs text-gray-600 dark:text-gray-400">
-                                <CheckCircle2 className="w-3 h-3 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                                {benefit}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Team & Sponsor */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {initiative.owner && (
-                      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-2.5 border border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400 mb-1.5">
-                          <Users className="w-3 h-3" />
-                          <h4 className="text-[10px] font-roobert-semibold uppercase">Owner</h4>
-                        </div>
-                        <p className="text-sm text-gray-900 dark:text-white font-roobert-medium">{initiative.owner}</p>
-                        {initiative.coOwners && initiative.coOwners.length > 0 && (
-                          <div className="mt-1.5">
-                            <p className="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5">Co-Owners:</p>
-                            <p className="text-xs text-gray-700 dark:text-gray-300">{initiative.coOwners.join(', ')}</p>
+                  {/* Business Case - 3 Column Grid */}
+                  {initiative.businessCase && (
+                    <div>
+                      <h3 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3">Business Case</h3>
+                      <div className="grid grid-cols-3 gap-3 mb-3">
+                        {initiative.businessCase.problem && (
+                          <div className="bg-red-50 dark:bg-red-950/20 rounded-lg p-3 border border-red-200 dark:border-red-900">
+                            <h4 className="text-xs font-roobert-semibold text-red-700 dark:text-red-400 mb-2 uppercase">Problem</h4>
+                            <p className="text-sm text-gray-800 dark:text-gray-200 leading-snug">{initiative.businessCase.problem}</p>
+                          </div>
+                        )}
+                        
+                        {initiative.businessCase.opportunity && (
+                          <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-3 border border-blue-200 dark:border-blue-900">
+                            <h4 className="text-xs font-roobert-semibold text-blue-700 dark:text-blue-400 mb-2 uppercase">Opportunity</h4>
+                            <p className="text-sm text-gray-800 dark:text-gray-200 leading-snug">{initiative.businessCase.opportunity}</p>
+                          </div>
+                        )}
+                        
+                        {initiative.businessCase.solution && (
+                          <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-3 border border-green-200 dark:border-green-900">
+                            <h4 className="text-xs font-roobert-semibold text-green-700 dark:text-green-400 mb-2 uppercase">Solution</h4>
+                            <p className="text-sm text-gray-800 dark:text-gray-200 leading-snug">{initiative.businessCase.solution}</p>
                           </div>
                         )}
                       </div>
-                    )}
-                    {initiative.sponsor && (
-                      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-2.5 border border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400 mb-1.5">
-                          <Users className="w-3 h-3" />
-                          <h4 className="text-[10px] font-roobert-semibold uppercase">Sponsor</h4>
-                        </div>
-                        <p className="text-sm text-gray-900 dark:text-white font-roobert-medium">{initiative.sponsor}</p>
+
+                      {/* ROI & Benefits Row */}
+                      <div className="grid grid-cols-2 gap-3">
+                        {/* ROI & Payback */}
+                        {(initiative.businessCase.roi || initiative.businessCase.paybackPeriod) && (
+                          <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg p-3 border border-purple-200 dark:border-purple-800">
+                            <h4 className="text-xs font-roobert-semibold text-purple-700 dark:text-purple-400 mb-3 uppercase">Financial Impact</h4>
+                            <div className="grid grid-cols-2 gap-3">
+                              {initiative.businessCase.roi && (
+                                <div>
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">ROI</p>
+                                  <p className="text-sm font-roobert-bold text-gray-900 dark:text-white">{initiative.businessCase.roi}</p>
+                                </div>
+                              )}
+                              {initiative.businessCase.paybackPeriod && (
+                                <div>
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Payback Period</p>
+                                  <p className="text-sm font-roobert-bold text-gray-900 dark:text-white">{initiative.businessCase.paybackPeriod}</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Expected Benefits */}
+                        {initiative.businessCase.expectedBenefits && initiative.businessCase.expectedBenefits.length > 0 && (
+                          <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-3 border border-green-200 dark:border-green-900">
+                            <h4 className="text-xs font-roobert-semibold text-green-700 dark:text-green-400 mb-2 uppercase">Expected Benefits</h4>
+                            <ul className="space-y-1.5">
+                              {initiative.businessCase.expectedBenefits.map((benefit: string, idx: number) => (
+                                <li key={idx} className="flex items-start gap-2 text-sm text-gray-800 dark:text-gray-200">
+                                  <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                                  <span>{benefit}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
+                  )}
+
+                  {/* Team Section */}
+                  <div>
+                    <h3 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3">Team & Leadership</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      {initiative.owner && (
+                        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-950/20 dark:to-blue-950/20 rounded-lg p-3 border border-indigo-200 dark:border-indigo-800">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                            <h4 className="text-xs font-roobert-semibold text-indigo-700 dark:text-indigo-400 uppercase">Owner</h4>
+                          </div>
+                          <p className="text-sm text-gray-900 dark:text-white font-roobert-semibold mb-1">{initiative.owner}</p>
+                          {initiative.coOwners && initiative.coOwners.length > 0 && (
+                            <div className="mt-2 pt-2 border-t border-indigo-200 dark:border-indigo-800">
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Co-Owners</p>
+                              <p className="text-sm text-gray-800 dark:text-gray-200">{initiative.coOwners.join(', ')}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {initiative.sponsor && (
+                        <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Users className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                            <h4 className="text-xs font-roobert-semibold text-amber-700 dark:text-amber-400 uppercase">Sponsor</h4>
+                          </div>
+                          <p className="text-sm text-gray-900 dark:text-white font-roobert-semibold">{initiative.sponsor}</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Stakeholders */}
-                  {(initiative as any).stakeholders && (initiative as any).stakeholders.length > 0 && (
-                    <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-2.5 border border-gray-200 dark:border-gray-700">
-                      <h4 className="text-xs font-roobert-semibold text-gray-900 dark:text-white mb-2">Key Stakeholders</h4>
-                      <div className="space-y-1.5">
-                        {(initiative as any).stakeholders.map((stakeholder: any, idx: number) => (
-                          <div key={idx} className="flex items-center justify-between py-1.5 border-b border-gray-200 dark:border-gray-700 last:border-0">
-                            <div>
-                              <p className="text-sm font-roobert-medium text-gray-900 dark:text-white">{stakeholder.name}</p>
-                              <p className="text-[10px] text-gray-600 dark:text-gray-400">{stakeholder.role}</p>
+                  {initiative.stakeholders && initiative.stakeholders.length > 0 && (
+                    <div>
+                      <h3 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-3">Key Stakeholders</h3>
+                      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        {initiative.stakeholders.map((stakeholder: any, idx: number) => (
+                          <div key={idx} className="flex items-center justify-between p-3 border-b border-gray-200 dark:border-gray-700 last:border-0 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <div className="flex-1">
+                              <p className="text-sm font-roobert-semibold text-gray-900 dark:text-white">{stakeholder.name}</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{stakeholder.role}</p>
                             </div>
-                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-roobert-medium ${
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-roobert-medium ${
                               stakeholder.supportLevel === 'champion' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
                               stakeholder.supportLevel === 'supporter' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
-                              stakeholder.supportLevel === 'neutral' ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300' :
+                              stakeholder.supportLevel === 'neutral' ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300' :
                               'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300'
                             }`}>
                               {stakeholder.supportLevel}
@@ -544,10 +574,34 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                       </div>
                     </div>
                   )}
+
+                  {/* Progress Bar at Bottom */}
+                  {initiative.progress !== undefined && (
+                    <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-800/30 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-sm font-roobert-semibold text-gray-900 dark:text-white">Overall Progress</h3>
+                        <span className="text-xl font-roobert-bold text-fis-navy dark:text-blue-400">{initiative.progress}%</span>
+                      </div>
+                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 transition-all"
+                          style={{ width: `${initiative.progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
 
+
+              {activeTab === 'gantt' && (
+                <div className="space-y-4">
+                  {(initiative as any).ganttData && (
+                    <GanttVisualizer ganttData={(initiative as any).ganttData} />
+                  )}
+                </div>
+              )}
 
               {activeTab === 'milestones' && (
                 <div className="space-y-4">
@@ -990,7 +1044,11 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                   <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white mb-2">Linked Strategic Goals</h3>
                   <div className="grid gap-2.5">
                     {linkedGoals.map((goal, idx) => (
-                      <div key={idx} className="flex items-start gap-3 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg p-2.5 border border-purple-200 dark:border-purple-800">
+                      <div 
+                        key={idx} 
+                        onClick={() => setSelectedGoal(goal)}
+                        className="flex items-start gap-3 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg p-2.5 border border-purple-200 dark:border-purple-800 cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-all duration-200 hover:border-purple-400 dark:hover:border-purple-600"
+                      >
                         <div className="p-1.5 bg-purple-100 dark:bg-purple-900/40 rounded-lg">
                           <Target className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                         </div>
@@ -1038,6 +1096,14 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
           </motion.div>
         </div>
       </motion.div>
+      
+      {/* Goal Detail Modal */}
+      {selectedGoal && (
+        <ViewGoalModal
+          goal={selectedGoal}
+          onClose={() => setSelectedGoal(null)}
+        />
+      )}
     </AnimatePresence>
   );
 };

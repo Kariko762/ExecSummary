@@ -90,8 +90,10 @@ const getTenants = async (req, res) => {
     
     // Update stats for all tenants
     for (const tenant of tenants) {
-      const stats = await updateTenantStats(type, tenant.slug);
-      Object.assign(tenant, stats);
+      if (tenant && tenant.slug) {
+        const stats = await updateTenantStats(type, tenant.slug);
+        Object.assign(tenant, stats);
+      }
     }
     
     res.json({ success: true, tenants });
