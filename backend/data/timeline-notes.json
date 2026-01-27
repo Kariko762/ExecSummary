@@ -11,7 +11,10 @@
         "runbooks",
         "process-automation"
       ],
-      "linkedGoals": ["demo-prep-efficiency"],
+      "linkedGoals": [
+        "demo-prep-efficiency"
+      ],
+      "noteType": [],
       "createdAt": "2026-01-10T14:30:00.000Z",
       "updatedAt": "2026-01-10T14:30:00.000Z",
       "tag": "tag-demo-ops"
@@ -27,7 +30,10 @@
         "efficiency",
         "demo-prep"
       ],
-      "linkedGoals": ["demo-prep-efficiency"],
+      "linkedGoals": [
+        "demo-prep-efficiency"
+      ],
+      "noteType": [],
       "createdAt": "2026-01-05T10:15:00.000Z",
       "updatedAt": "2026-01-05T10:15:00.000Z",
       "tag": "tag-se-feedback"
@@ -43,7 +49,10 @@
         "infrastructure",
         "process-automation"
       ],
-      "linkedGoals": ["demo-prep-efficiency"],
+      "linkedGoals": [
+        "demo-prep-efficiency"
+      ],
+      "noteType": [],
       "createdAt": "2026-01-12T16:45:00.000Z",
       "updatedAt": "2026-01-12T16:45:00.000Z",
       "tag": "tag-demo-ops"
@@ -58,6 +67,7 @@
         "expansion-ops",
         "high-value-deals"
       ],
+      "noteType": [],
       "createdAt": "2025-12-15T17:19:15.265Z",
       "updatedAt": "2025-12-16T23:45:34.960Z",
       "tag": "tag-1765871299139-hexs02v4s"
@@ -72,6 +82,7 @@
         "process-automation",
         "product-intelligence"
       ],
+      "noteType": [],
       "createdAt": "2025-12-15T18:46:29.614Z",
       "updatedAt": "2025-12-16T23:48:43.622Z",
       "tag": "tag-1765928918627-vslgkphi8"
@@ -86,6 +97,7 @@
         "revenue-at-risk",
         "capacity-planning"
       ],
+      "noteType": [],
       "createdAt": "2025-12-15T21:15:01.550Z",
       "updatedAt": "2025-12-16T23:47:38.207Z",
       "tag": "tag-1765871299139-hexs02v4s"
@@ -101,6 +113,7 @@
         "sales-enablement"
       ],
       "tag": "tag-1765927041901-3er6laubc",
+      "noteType": [],
       "createdAt": "2025-12-16T23:17:29.907Z",
       "updatedAt": "2025-12-16T23:49:05.902Z"
     },
@@ -115,6 +128,7 @@
         "platform-integration"
       ],
       "tag": "tag-1765928973168-l6anydq8v",
+      "noteType": [],
       "createdAt": "2025-12-16T23:20:07.490Z",
       "updatedAt": "2025-12-24T06:58:17.898Z"
     },
@@ -125,6 +139,7 @@
       "date": "2026-01-10",
       "category": "big-win",
       "tags": [],
+      "noteType": [],
       "createdAt": "2026-01-10T07:59:45.596Z",
       "updatedAt": "2026-01-10T09:30:50.052Z",
       "tag": "tag-1768037435678-ca97fd4na"
@@ -136,6 +151,7 @@
       "date": "2026-01-10",
       "category": "new-project",
       "tags": [],
+      "noteType": [],
       "createdAt": "2026-01-10T08:39:16.322Z",
       "updatedAt": "2026-01-10T09:30:41.619Z",
       "tag": "tag-1768037435678-ca97fd4na"
@@ -147,6 +163,7 @@
       "date": "2026-01-10",
       "category": "documentation",
       "tags": [],
+      "noteType": [],
       "createdAt": "2026-01-10T08:42:25.578Z",
       "updatedAt": "2026-01-10T09:30:58.641Z",
       "tag": "tag-1768037435678-ca97fd4na"
@@ -158,6 +175,7 @@
       "date": "2026-01-10",
       "category": "new-project",
       "tags": [],
+      "noteType": [],
       "createdAt": "2026-01-10T09:16:29.102Z",
       "updatedAt": "2026-01-10T09:31:06.208Z",
       "tag": "tag-1765927041901-3er6laubc"
@@ -169,9 +187,106 @@
       "date": "2026-01-10",
       "category": "new-project",
       "tags": [],
+      "noteType": [],
       "createdAt": "2026-01-10T09:26:36.712Z",
       "updatedAt": "2026-01-10T09:31:12.563Z",
       "tag": "tag-1765927041901-3er6laubc"
+    },
+    {
+      "id": "note-1769405167626",
+      "title": "Azure OpenAI Endpoint Deployment",
+      "content": "Working with the Credit Assessment pre-sales team, who have a strategic deal with MUFG for $6m+,  to deploy a new OpenAI EndPoint in Azure FISDev.\n\nAI Governance has been completed by the business and a build ticket created by the Demo Services Group to kick-off deployment.\n\nRISK : Authentication method of the product (Subscription Based) is not the approve FIS method (Token based)\n\nNEXT STEP : Meeting with business and technical teams to kick-off ask. 27/28th Jan.",
+      "date": "2026-01-26",
+      "category": "deal-support",
+      "tags": [],
+      "noteType": [],
+      "createdAt": "2026-01-26T05:26:07.626Z",
+      "updatedAt": "2026-01-26T05:27:10.123Z",
+      "tag": "tag-1768037435678-ca97fd4na"
+    },
+    {
+      "id": "note-1769405954574",
+      "title": "Demo Asset Visibility",
+      "content": "The request for better visibility on all demo assets and issues and \"state of play\".\n\nArranging meetings with all of Andrew Murry's management team to walk through demo products verify current Demo Services data points.\n\n- Pre-Sales / SGO Consultant to Product assignment\n- Current Demo Challenges and State",
+      "date": "2026-01-26",
+      "category": "general",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765927041901-3er6laubc",
+      "createdAt": "2026-01-26T05:39:14.574Z",
+      "updatedAt": "2026-01-26T21:47:25.699Z"
+    },
+    {
+      "id": "note-1769406128491",
+      "title": "International Issuing Hub",
+      "content": "Due to the TSYS acquisition, we have agreed to de-prioritize the E6 Demo Integration with Coast for IIH and look at the TSYS Demo capabilities and product compatibility with the IIH platform.\n\nReprioritizing Bank Int. demo strategy to meet this change.",
+      "date": "2026-01-26",
+      "category": "general",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765927041901-3er6laubc",
+      "createdAt": "2026-01-26T05:42:08.491Z",
+      "updatedAt": "2026-01-26T05:42:08.491Z"
+    },
+    {
+      "id": "note-1769406225795",
+      "title": "CBK Draft Demo",
+      "content": "Coast has shared an initial functionality demo for the CBK portion of the International Issuing Hub project.",
+      "date": "2026-01-26",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1769406221960-lg5cs3rle",
+      "createdAt": "2026-01-26T05:43:45.795Z",
+      "updatedAt": "2026-01-26T05:43:45.795Z"
+    },
+    {
+      "id": "note-1769406654710",
+      "title": "Weekly Open Sessiosn",
+      "content": "As discussed with the Sales Growth Office leadership, we have agreed to setup 4 Open Sessions each week to enable greater communication with the leaderships management structure. these are non-mandatory sessions that will be an open door for anyone to join to discuss demo issues.\n\nKEY POINT : Define rules for what is open for discussion.. prioritization of needs, urgent assistance, escalation, not \"I need a VM\".",
+      "date": "2026-01-26",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765927041901-3er6laubc",
+      "createdAt": "2026-01-26T05:50:54.710Z",
+      "updatedAt": "2026-01-26T05:50:54.710Z"
+    },
+    {
+      "id": "note-1769406724513",
+      "title": "Executive Summary platform",
+      "content": "Executive Summary platform is a high priority need to enable better visibility across all of the Demo Services data, giving the transparency needed.\n\nThis is a day or two away from being finished and deployed to Demo Services infrastructure, ready for testing and network integration.",
+      "date": "2026-01-26",
+      "category": "goal-progression",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-01-26T05:52:04.513Z",
+      "updatedAt": "2026-01-26T18:10:03.145Z"
+    },
+    {
+      "id": "note-1769407019870",
+      "title": "2026 Goals and Initiatives",
+      "content": "Initial draft of 2026 goals and initiatives has been completed and currently in refinement.\n\nThese will be shared with RevOps leadership for additional tweaking before being published. \n\nNext Step : Once the goals have been confirmed, the initiatives / projects, along with milestones and timelines, will be refined and equally published and assigned to the Demo Services.",
+      "date": "2026-01-26",
+      "category": "goal-progression",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-01-26T05:56:59.870Z",
+      "updatedAt": "2026-01-26T05:56:59.870Z"
+    },
+    {
+      "id": "note-1769464015831",
+      "title": "TSYS - Demo Sync",
+      "content": "Meeting with Derek Tanis @ TSYS (VP Sales Ops) talk about Demo Strategy\n\nThey have 3 useable demo assets \nTS2 : Consumer Issuing (NA/UK/IRE)\nCenter Suite : Corporate Expense Manager\nPrime : International Issuing",
+      "date": "2026-01-26",
+      "category": "documentation",
+      "tags": [],
+      "linkType": "goal",
+      "goalId": "increase-demo-presentation-capacity",
+      "createdAt": "2026-01-26T21:46:55.831Z",
+      "updatedAt": "2026-01-26T21:46:55.831Z"
     }
   ]
 }

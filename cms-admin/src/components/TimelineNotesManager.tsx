@@ -28,9 +28,39 @@ interface TimelineNote {
   category: 'environment-health' | 'data-operations' | 'platform-integration' | 'high-value-deals' | 'poc-trial-support' | 'sales-enablement' | 'expansion-ops' | 'process-automation' | 'capacity-planning' | 'documentation' | 'revenue-at-risk' | 'critical-blocker' | 'strategic-milestone' | 'product-intelligence' | 'key-highlight' | 'goal-progression' | 'big-win' | 'deal-support' | 'new-project' | 'general'; // Old categories for backward compatibility
   tags: string[];
   tag?: string; // Single tag ID for initiative/context tracking
+  noteType?: string[]; // Multi-select note types (status/urgency + CRO impact)
+  linkType?: 'goal' | 'initiative' | 'task' | 'general'; // What this note links to
+  goalId?: string; // Strategic Goal ID
+  initiativeId?: string; // Initiative/Project ID
+  taskId?: string; // Task ID
   createdAt: string;
   updatedAt: string;
 }
+
+// Note Type Constants
+const NOTE_TYPE_STATUS = {
+  BLOCKER: { id: 'blocker', label: 'Blocker' },
+  RISK: { id: 'risk', label: 'Risk' },
+  PRIORITY: { id: 'priority', label: 'Priority' },
+  HIGHLIGHT: { id: 'highlight', label: 'Highlight' },
+  METRIC_UPDATE: { id: 'metric-update', label: 'Metric Update' },
+  DEADLINE_DRIVEN: { id: 'deadline-driven', label: 'Deadline Driven' }
+};
+
+const NOTE_TYPE_CRO = {
+  SALES_PRODUCTIVITY: { id: 'sales-productivity', label: 'Sales Productivity' },
+  DEAL_CONVERSION: { id: 'deal-conversion', label: 'Deal Conversion' },
+  SALES_CYCLE_DELAYS: { id: 'sales-cycle-delays', label: 'Sales Cycle Delays' },
+  PIPELINE_RISK: { id: 'pipeline-risk', label: 'Pipeline Risk' },
+  FORECAST_CONFIDENCE: { id: 'forecast-confidence', label: 'Forecast Confidence' },
+  CUSTOMER_SAT: { id: 'customer-sat', label: 'Customer Sat' }
+};
+
+const ALL_NOTE_TYPES = [...Object.values(NOTE_TYPE_STATUS), ...Object.values(NOTE_TYPE_CRO)];
+
+const NOTE_TYPE_DISPLAY_MAP = Object.fromEntries(
+  ALL_NOTE_TYPES.map(type => [type.id, type])
+);
 
 interface TaskStep {
   id: string;
@@ -100,10 +130,13 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
   const [tasks, setTasks] = useState<Task[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [noteTags, setNoteTags] = useState<any[]>([]);
+  const [goals, setGoals] = useState<Array<{ id: string; name: string; shortName: string; color: string }>>([]);
+  const [initiatives, setInitiatives] = useState<Array<{ id: string; name: string; slug: string }>>([]);
   const [categoryConfig, setCategoryConfig] = useState<any>(DEFAULT_CATEGORY_CONFIG);
   const [loading, setLoading] = useState(true);
   const [daysBack, setDaysBack] = useState(14); // Start with 2 weeks
   const [showAddModal, setShowAddModal] = useState(autoOpenAddModal || false);
+  const [prePopulatedNoteData, setPrePopulatedNoteData] = useState<{ taskId?: string; initiativeId?: string; linkType?: string } | null>(null);
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
   const [showAiSummary, setShowAiSummary] = useState(false);
   const [editingNote, setEditingNote] = useState<TimelineNote | null>(null);
@@ -180,11 +213,56 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
     }
   };
 
+  // Fetch goals from API
+  const fetchGoals = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/goals');
+      const data = await response.json();
+      setGoals(data.goals || []);
+    } catch (error) {
+      console.error('Failed to fetch goals:', error);
+    }
+  };
+
+  // Fetch initiatives from API
+  const fetchInitiatives = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/initiatives');
+      const data = await response.json();
+      if (data.success) {
+        setInitiatives(data.initiatives || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch initiatives:', error);
+    }
+  };
+
   useEffect(() => {
     fetchNoteTags();
     fetchNotes();
     fetchTasks();
     fetchTags();
+    fetchGoals();
+    fetchInitiatives();
+  }, []);
+
+  // Listen for custom event to open New Note modal from Gantt
+  useEffect(() => {
+    const handleOpenNoteModal = (event: any) => {
+      const { taskId, initiativeId, linkType } = event.detail || {};
+      
+      // Store the pre-populated data
+      setPrePopulatedNoteData({ taskId, initiativeId, linkType });
+      
+      // Open the modal
+      setShowAddModal(true);
+    };
+
+    window.addEventListener('openNewNoteModal', handleOpenNoteModal);
+    
+    return () => {
+      window.removeEventListener('openNewNoteModal', handleOpenNoteModal);
+    };
   }, []);
 
   // Generate date range (from today back X days)
@@ -295,6 +373,12 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
         setNotes([...notes, data.note]);
         showNotification('success', 'Note added successfully');
         setShowAddModal(false);
+        setPrePopulatedNoteData(null); // Clear pre-populated data
+        
+        // Notify Gantt to refresh notes if the note is linked to a task
+        if (note.taskId) {
+          window.dispatchEvent(new CustomEvent('noteAdded', { detail: { taskId: note.taskId } }));
+        }
       }
     } catch (error) {
       console.error('Failed to add note:', error);
@@ -807,8 +891,15 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
           defaultDate={today}
           availableTags={tags}
           categoryConfig={categoryConfig}
+          availableGoals={goals}
+          availableInitiatives={initiatives}
+          availableTasks={tasks}
+          initialData={prePopulatedNoteData}
           onSave={handleAddNote}
-          onClose={() => setShowAddModal(false)}
+          onClose={() => {
+            setShowAddModal(false);
+            setPrePopulatedNoteData(null); // Clear pre-populated data
+          }}
         />
       )}
 
@@ -818,6 +909,9 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
           note={editingNote}
           availableTags={tags}
           categoryConfig={categoryConfig}
+          availableGoals={goals}
+          availableInitiatives={initiatives}
+          availableTasks={tasks}
           onSave={handleUpdateNote}
           onClose={() => setEditingNote(null)}
         />
@@ -868,6 +962,7 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
           onClose={() => setShowAiSummary(false)}
           showNotification={showNotification}
           notes={notes}
+          tasks={tasks}
         />
       )}
 
@@ -987,6 +1082,15 @@ function NoteCard({
             🏷️ {noteTag.name}
           </span>
         )}
+        {/* Note Types */}
+        {note.noteType && note.noteType.length > 0 && note.noteType.map((typeId) => {
+          const noteTypeInfo = NOTE_TYPE_DISPLAY_MAP[typeId];
+          return noteTypeInfo ? (
+            <span key={typeId} className="px-2 py-0.5 rounded-full bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 text-[10px] font-roobert-semibold">
+              {noteTypeInfo.label}
+            </span>
+          ) : null;
+        })}
       </div>
     </div>
   );
@@ -997,12 +1101,20 @@ function AddNoteModal({
   defaultDate, 
   availableTags,
   categoryConfig,
+  availableGoals,
+  availableInitiatives,
+  availableTasks,
+  initialData,
   onSave, 
   onClose 
 }: { 
   defaultDate: string;
   availableTags: Tag[];
   categoryConfig: any;
+  availableGoals: Array<{ id: string; name: string; shortName: string; color: string }>;
+  availableInitiatives: Array<{ id: string; name: string; slug: string }>;
+  availableTasks: Task[];
+  initialData?: { taskId?: string; initiativeId?: string; linkType?: string } | null;
   onSave: (note: Omit<TimelineNote, 'id' | 'createdAt' | 'updatedAt'>) => void; 
   onClose: () => void;
 }) {
@@ -1012,9 +1124,25 @@ function AddNoteModal({
   const [category, setCategory] = useState<TimelineNote['category']>('documentation');
   const [tags, setTags] = useState<string[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>('');
+  const [selectedNoteTypes, setSelectedNoteTypes] = useState<string[]>([]);
+  const [linkType, setLinkType] = useState<'goal' | 'initiative' | 'task' | 'general'>(
+    (initialData?.linkType as any) || 'general'
+  );
+  const [goalId, setGoalId] = useState<string>('');
+  const [initiativeId, setInitiativeId] = useState<string>(initialData?.initiativeId || '');
+  const [taskId, setTaskId] = useState<string>(initialData?.taskId || '');
   const [showTagPanel, setShowTagPanel] = useState(false);
+  const [showTypePanel, setShowTypePanel] = useState(false);
   const [newTagName, setNewTagName] = useState('');
   const [newTagColor, setNewTagColor] = useState('#8B5CF6');
+
+  const toggleNoteType = (typeId: string) => {
+    setSelectedNoteTypes(prev =>
+      prev.includes(typeId)
+        ? prev.filter(id => id !== typeId)
+        : [...prev, typeId]
+    );
+  };
 
   const handleSubmit = () => {
     if (!title.trim()) return;
@@ -1025,7 +1153,12 @@ function AddNoteModal({
       date,
       category,
       tags,
-      tag: selectedTag || undefined
+      tag: selectedTag || undefined,
+      noteType: selectedNoteTypes.length > 0 ? selectedNoteTypes : undefined,
+      linkType: linkType !== 'general' ? linkType : undefined,
+      goalId: linkType === 'goal' ? goalId : undefined,
+      initiativeId: linkType === 'initiative' ? initiativeId : undefined,
+      taskId: (linkType === 'task' || (linkType === 'initiative' && taskId)) ? taskId : undefined
     });
   };
 
@@ -1057,30 +1190,34 @@ function AddNoteModal({
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl p-6 relative overflow-visible">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-roobert-bold text-gray-900 dark:text-white">
             Add New Note
           </h3>
-          {selectedTag && (() => {
-            const tag = availableTags.find(t => t.id === selectedTag);
-            return tag ? (
-              <span className="text-xs px-2 py-1 rounded-full text-white font-roobert-medium" style={{ backgroundColor: tag.color }}>
-                {tag.name}
-              </span>
-            ) : null;
-          })()}
-        </div>
 
-        {/* Tag Slide-Out Tab */}
-        <motion.button
-          onClick={() => setShowTagPanel(!showTagPanel)}
-          className="absolute right-0 top-6 bg-fis-eggplant dark:bg-fis-raspberry text-white px-2 py-3 rounded-l-lg shadow-lg flex items-center gap-1 hover:opacity-90 transition-all z-10"
-          style={{ transformOrigin: 'right' }}
-        >
-          <span className="text-xs font-roobert-semibold rotate-90 whitespace-nowrap">
-            Tag
-          </span>
-        </motion.button>
+          {/* TAG and TYPE buttons - top right */}
+          <div className="flex items-center gap-2">
+            <motion.button
+              onClick={() => {
+                setShowTagPanel(!showTagPanel);
+                setShowTypePanel(false);
+              }}
+              className="bg-fis-eggplant dark:bg-fis-raspberry text-white px-3 py-2 rounded-lg shadow-lg hover:opacity-90 transition-all text-xs font-roobert-semibold"
+            >
+              Tag
+            </motion.button>
+
+            <motion.button
+              onClick={() => {
+                setShowTypePanel(!showTypePanel);
+                setShowTagPanel(false);
+              }}
+              className="bg-fis-raspberry dark:bg-fis-eggplant text-white px-3 py-2 rounded-lg shadow-lg hover:opacity-90 transition-all text-xs font-roobert-semibold"
+            >
+              Type {selectedNoteTypes.length > 0 && `(${selectedNoteTypes.length})`}
+            </motion.button>
+          </div>
+        </div>
 
         {/* Tag Panel Slide-Out */}
         <AnimatePresence>
@@ -1209,6 +1346,91 @@ function AddNoteModal({
           )}
         </AnimatePresence>
 
+        {/* TYPE Panel Slide-Out */}
+        <AnimatePresence>
+          {showTypePanel && (
+            <motion.div
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="absolute right-0 top-0 h-full w-96 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 shadow-2xl rounded-r-xl p-4 overflow-y-auto z-20"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
+                  Select Note Types
+                </h4>
+                <button
+                  onClick={() => setShowTypePanel(false)}
+                  className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* STATUS / URGENCY Section */}
+              <div className="mb-6">
+                <div className="text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                  Status / Urgency
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {Object.values(NOTE_TYPE_STATUS).map((type) => (
+                    <button
+                      key={type.id}
+                      onClick={() => toggleNoteType(type.id)}
+                      className={`
+                        px-2 py-2 rounded-lg border-2 transition-all duration-200
+                        flex items-center justify-center min-w-[90px]
+                        ${selectedNoteTypes.includes(type.id)
+                          ? 'bg-fis-eggplant dark:bg-fis-raspberry border-fis-eggplant dark:border-fis-raspberry text-white shadow-lg scale-105'
+                          : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-raspberry dark:hover:border-fis-eggplant hover:scale-102'
+                        }
+                      `}
+                    >
+                      <span className="text-xs font-roobert-medium text-center leading-tight">{type.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* CRO IMPACT Section */}
+              <div className="mb-6">
+                <div className="text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                  CRO Impact
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {Object.values(NOTE_TYPE_CRO).map((type) => (
+                    <button
+                      key={type.id}
+                      onClick={() => toggleNoteType(type.id)}
+                      className={`
+                        px-2 py-2 rounded-lg border-2 transition-all duration-200
+                        flex items-center justify-center min-w-[90px]
+                        ${selectedNoteTypes.includes(type.id)
+                          ? 'bg-fis-eggplant dark:bg-fis-raspberry border-fis-eggplant dark:border-fis-raspberry text-white shadow-lg scale-105'
+                          : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-raspberry dark:hover:border-fis-eggplant hover:scale-102'
+                        }
+                      `}
+                    >
+                      <span className="text-xs font-roobert-medium text-center leading-tight">{type.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Clear All Button */}
+              {selectedNoteTypes.length > 0 && (
+                <button
+                  onClick={() => setSelectedNoteTypes([])}
+                  className="w-full py-2 px-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-roobert-medium"
+                >
+                  Clear All ({selectedNoteTypes.length})
+                </button>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="space-y-4">
           {/* Date */}
           <div>
@@ -1221,24 +1443,6 @@ function AddNoteModal({
               onChange={(e) => setDate(e.target.value)}
               className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
             />
-          </div>
-
-          {/* Category */}
-          <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
-              Category
-            </label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as TimelineNote['category'])}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
-            >
-              {Object.entries(categoryConfig).map(([key, config]) => (
-                <option key={key} value={key}>
-                  {config.label}
-                </option>
-              ))}
-            </select>
           </div>
 
           {/* Title */}
@@ -1269,23 +1473,157 @@ function AddNoteModal({
               className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white resize-none"
             />
           </div>
+
+          {/* Link Note To */}
+          <div className="space-y-3">
+            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+              Link Note To
+            </label>
+            
+            {/* Link Type Toggle */}
+            <div className="flex gap-4 mb-3">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="linkType"
+                  value="goal"
+                  checked={linkType === 'goal'}
+                  onChange={() => {
+                    setLinkType('goal');
+                    setInitiativeId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-purple-600"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Strategic Goal</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="linkType"
+                  value="initiative"
+                  checked={linkType === 'initiative'}
+                  onChange={() => {
+                    setLinkType('initiative');
+                    setGoalId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-pink-600"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Initiative (Project)</span>
+              </label>
+            </div>
+
+            {/* Conditional Dropdowns */}
+            {linkType === 'goal' && (
+              <select
+                value={goalId}
+                onChange={(e) => setGoalId(e.target.value)}
+                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              >
+                <option value="">Select a strategic goal...</option>
+                {availableGoals.map(goal => (
+                  <option key={goal.id} value={goal.id}>{goal.name}</option>
+                ))}
+              </select>
+            )}
+
+            {linkType === 'initiative' && (
+              <>
+                <select
+                  value={initiativeId}
+                  onChange={(e) => {
+                    setInitiativeId(e.target.value);
+                    setTaskId(''); // Reset task when initiative changes
+                  }}
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                >
+                  <option value="">Select an initiative...</option>
+                  {availableInitiatives.map(initiative => (
+                    <option key={initiative.id} value={initiative.id}>{initiative.name}</option>
+                  ))}
+                </select>
+                
+                {initiativeId && (
+                  <select
+                    value={taskId}
+                    onChange={(e) => setTaskId(e.target.value)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white mt-2"
+                  >
+                    <option value="">Select a task (optional)...</option>
+                    {availableTasks
+                      .filter(task => task.initiativeId === initiativeId)
+                      .map(task => (
+                        <option key={task.id} value={task.id}>{task.shortName || task.title}</option>
+                      ))}
+                  </select>
+                )}
+              </>
+            )}
+
+            {linkType === 'task' && (
+              <select
+                value={taskId}
+                onChange={(e) => setTaskId(e.target.value)}
+                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              >
+                <option value="">Select a task...</option>
+                {availableTasks.map(task => (
+                  <option key={task.id} value={task.id}>{task.title}</option>
+                ))}
+              </select>
+            )}
+          </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center justify-end gap-3 mt-6">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-roobert-medium"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={!title.trim()}
-            className="px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
-          >
-            Add Note
-          </button>
+        {/* Bottom Section: Metadata/Tags on left, Actions on right */}
+        <div className="flex items-end justify-between gap-4 mt-6">
+          {/* Left: Selected Tags/Types and Metadata */}
+          <div className="flex-1 space-y-3">
+            {/* Selected Tag and Types */}
+            {(selectedTag || selectedNoteTypes.length > 0) && (
+              <div className="flex flex-wrap gap-2">
+                {selectedTag && (() => {
+                  const tag = availableTags.find(t => t.id === selectedTag);
+                  return tag ? (
+                    <span className="px-2 py-1 rounded-full text-white text-xs font-roobert-medium" style={{ backgroundColor: tag.color }}>
+                      {tag.name}
+                    </span>
+                  ) : null;
+                })()}
+                {selectedNoteTypes.map((typeId) => {
+                  const noteTypeInfo = NOTE_TYPE_DISPLAY_MAP[typeId];
+                  return noteTypeInfo ? (
+                    <span key={typeId} className="px-2 py-1 rounded-full bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 text-xs font-roobert-semibold">
+                      {noteTypeInfo.label}
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            )}
+            
+            {/* Metadata */}
+            <div className="flex gap-4 text-xs text-gray-500 dark:text-gray-400">
+              <div>Creating new note...</div>
+            </div>
+          </div>
+
+          {/* Right: Action Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-roobert-medium"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit}
+              disabled={!title.trim()}
+              className="px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
+            >
+              Add Note
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1297,12 +1635,18 @@ function EditNoteModal({
   note,
   availableTags,
   categoryConfig,
+  availableGoals,
+  availableInitiatives,
+  availableTasks,
   onSave, 
   onClose 
 }: { 
   note: TimelineNote;
   availableTags: Tag[];
   categoryConfig: any;
+  availableGoals: Array<{ id: string; name: string; shortName: string; color: string }>;
+  availableInitiatives: Array<{ id: string; name: string; slug: string }>;
+  availableTasks: Task[];
   onSave: (note: TimelineNote) => void; 
   onClose: () => void;
 }) {
@@ -1311,9 +1655,23 @@ function EditNoteModal({
   const [date, setDate] = useState(note.date);
   const [category, setCategory] = useState(note.category);
   const [selectedTag, setSelectedTag] = useState<string>(note.tag || '');
+  const [selectedNoteTypes, setSelectedNoteTypes] = useState<string[]>(note.noteType || []);
+  const [linkType, setLinkType] = useState<'goal' | 'initiative' | 'task' | 'general'>(note.linkType || 'general');
+  const [goalId, setGoalId] = useState<string>(note.goalId || '');
+  const [initiativeId, setInitiativeId] = useState<string>(note.initiativeId || '');
+  const [taskId, setTaskId] = useState<string>(note.taskId || '');
   const [showTagPanel, setShowTagPanel] = useState(false);
+  const [showTypePanel, setShowTypePanel] = useState(false);
   const [newTagName, setNewTagName] = useState('');
   const [newTagColor, setNewTagColor] = useState('#8B5CF6');
+
+  const toggleNoteType = (typeId: string) => {
+    setSelectedNoteTypes(prev => 
+      prev.includes(typeId) 
+        ? prev.filter(id => id !== typeId)
+        : [...prev, typeId]
+    );
+  };
 
   const handleSubmit = () => {
     if (!title.trim()) return;
@@ -1324,7 +1682,12 @@ function EditNoteModal({
       content: content.trim(),
       date,
       category,
-      tag: selectedTag || undefined
+      tag: selectedTag || undefined,
+      noteType: selectedNoteTypes.length > 0 ? selectedNoteTypes : undefined,
+      linkType: linkType !== 'general' ? linkType : undefined,
+      goalId: linkType === 'goal' ? goalId : undefined,
+      initiativeId: linkType === 'initiative' ? initiativeId : undefined,
+      taskId: (linkType === 'task' || (linkType === 'initiative' && taskId)) ? taskId : undefined
     });
   };
 
@@ -1356,30 +1719,34 @@ function EditNoteModal({
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl p-6 relative overflow-visible">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-roobert-bold text-gray-900 dark:text-white">
             Edit Note
           </h3>
-          {selectedTag && (() => {
-            const tag = availableTags.find(t => t.id === selectedTag);
-            return tag ? (
-              <span className="text-xs px-2 py-1 rounded-full text-white font-roobert-medium" style={{ backgroundColor: tag.color }}>
-                {tag.name}
-              </span>
-            ) : null;
-          })()}
-        </div>
 
-        {/* Tag Slide-Out Tab */}
-        <motion.button
-          onClick={() => setShowTagPanel(!showTagPanel)}
-          className="absolute right-0 top-6 bg-fis-eggplant dark:bg-fis-raspberry text-white px-2 py-3 rounded-l-lg shadow-lg flex items-center gap-1 hover:opacity-90 transition-all z-10"
-          style={{ transformOrigin: 'right' }}
-        >
-          <span className="text-xs font-roobert-semibold rotate-90 whitespace-nowrap">
-            Tag
-          </span>
-        </motion.button>
+          {/* TAG and TYPE buttons - top right */}
+          <div className="flex items-center gap-2">
+            <motion.button
+              onClick={() => {
+                setShowTagPanel(!showTagPanel);
+                setShowTypePanel(false);
+              }}
+              className="bg-fis-eggplant dark:bg-fis-raspberry text-white px-3 py-2 rounded-lg shadow-lg hover:opacity-90 transition-all text-xs font-roobert-semibold"
+            >
+              Tag
+            </motion.button>
+
+            <motion.button
+              onClick={() => {
+                setShowTypePanel(!showTypePanel);
+                setShowTagPanel(false);
+              }}
+              className="bg-fis-raspberry dark:bg-fis-eggplant text-white px-3 py-2 rounded-lg shadow-lg hover:opacity-90 transition-all text-xs font-roobert-semibold"
+            >
+              Type {selectedNoteTypes.length > 0 && `(${selectedNoteTypes.length})`}
+            </motion.button>
+          </div>
+        </div>
 
         {/* Tag Panel Slide-Out */}
         <AnimatePresence>
@@ -1508,6 +1875,91 @@ function EditNoteModal({
           )}
         </AnimatePresence>
 
+        {/* TYPE Panel Slide-Out */}
+        <AnimatePresence>
+          {showTypePanel && (
+            <motion.div
+              initial={{ x: '100%', opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="absolute right-0 top-0 h-full w-96 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 shadow-2xl rounded-r-xl p-4 overflow-y-auto z-20"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
+                  Select Note Types
+                </h4>
+                <button
+                  onClick={() => setShowTypePanel(false)}
+                  className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* STATUS / URGENCY Section */}
+              <div className="mb-6">
+                <div className="text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                  Status / Urgency
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {Object.values(NOTE_TYPE_STATUS).map((type) => (
+                    <button
+                      key={type.id}
+                      onClick={() => toggleNoteType(type.id)}
+                      className={`
+                        px-2 py-2 rounded-lg border-2 transition-all duration-200
+                        flex items-center justify-center min-w-[90px]
+                        ${selectedNoteTypes.includes(type.id)
+                          ? 'bg-fis-eggplant dark:bg-fis-raspberry border-fis-eggplant dark:border-fis-raspberry text-white shadow-lg scale-105'
+                          : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-raspberry dark:hover:border-fis-eggplant hover:scale-102'
+                        }
+                      `}
+                    >
+                      <span className="text-xs font-roobert-medium text-center leading-tight">{type.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* CRO IMPACT Section */}
+              <div className="mb-6">
+                <div className="text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                  CRO Impact
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {Object.values(NOTE_TYPE_CRO).map((type) => (
+                    <button
+                      key={type.id}
+                      onClick={() => toggleNoteType(type.id)}
+                      className={`
+                        px-2 py-2 rounded-lg border-2 transition-all duration-200
+                        flex items-center justify-center min-w-[90px]
+                        ${selectedNoteTypes.includes(type.id)
+                          ? 'bg-fis-eggplant dark:bg-fis-raspberry border-fis-eggplant dark:border-fis-raspberry text-white shadow-lg scale-105'
+                          : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-raspberry dark:hover:border-fis-eggplant hover:scale-102'
+                        }
+                      `}
+                    >
+                      <span className="text-xs font-roobert-medium text-center leading-tight">{type.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Clear All Button */}
+              {selectedNoteTypes.length > 0 && (
+                <button
+                  onClick={() => setSelectedNoteTypes([])}
+                  className="w-full py-2 px-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-roobert-medium"
+                >
+                  Clear All ({selectedNoteTypes.length})
+                </button>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="space-y-4">
           {/* Date */}
           <div>
@@ -1520,24 +1972,6 @@ function EditNoteModal({
               onChange={(e) => setDate(e.target.value)}
               className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
             />
-          </div>
-
-          {/* Category */}
-          <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
-              Category
-            </label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as TimelineNote['category'])}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
-            >
-              {Object.entries(categoryConfig).map(([key, config]) => (
-                <option key={key} value={key}>
-                  {config.label}
-                </option>
-              ))}
-            </select>
           </div>
 
           {/* Title */}
@@ -1567,23 +2001,158 @@ function EditNoteModal({
               className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white resize-none"
             />
           </div>
+
+          {/* Link Note To */}
+          <div className="space-y-3">
+            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+              Link Note To
+            </label>
+            
+            {/* Link Type Toggle */}
+            <div className="flex gap-4 mb-3">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="linkTypeEdit"
+                  value="goal"
+                  checked={linkType === 'goal'}
+                  onChange={() => {
+                    setLinkType('goal');
+                    setInitiativeId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-purple-600"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Strategic Goal</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="linkTypeEdit"
+                  value="initiative"
+                  checked={linkType === 'initiative'}
+                  onChange={() => {
+                    setLinkType('initiative');
+                    setGoalId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-pink-600"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">Initiative (Project)</span>
+              </label>
+            </div>
+
+            {/* Conditional Dropdowns */}
+            {linkType === 'goal' && (
+              <select
+                value={goalId}
+                onChange={(e) => setGoalId(e.target.value)}
+                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              >
+                <option value="">Select a strategic goal...</option>
+                {availableGoals.map(goal => (
+                  <option key={goal.id} value={goal.id}>{goal.name}</option>
+                ))}
+              </select>
+            )}
+
+            {linkType === 'initiative' && (
+              <>
+                <select
+                  value={initiativeId}
+                  onChange={(e) => {
+                    setInitiativeId(e.target.value);
+                    setTaskId(''); // Reset task when initiative changes
+                  }}
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                >
+                  <option value="">Select an initiative...</option>
+                  {availableInitiatives.map(initiative => (
+                    <option key={initiative.id} value={initiative.id}>{initiative.name}</option>
+                  ))}
+                </select>
+                
+                {initiativeId && (
+                  <select
+                    value={taskId}
+                    onChange={(e) => setTaskId(e.target.value)}
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white mt-2"
+                  >
+                    <option value="">Select a task (optional)...</option>
+                    {availableTasks
+                      .filter(task => task.initiativeId === initiativeId)
+                      .map(task => (
+                        <option key={task.id} value={task.id}>{task.shortName || task.title}</option>
+                      ))}
+                  </select>
+                )}
+              </>
+            )}
+
+            {linkType === 'task' && (
+              <select
+                value={taskId}
+                onChange={(e) => setTaskId(e.target.value)}
+                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              >
+                <option value="">Select a task...</option>
+                {availableTasks.map(task => (
+                  <option key={task.id} value={task.id}>{task.title}</option>
+                ))}
+              </select>
+            )}
+          </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center justify-end gap-3 mt-6">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-roobert-medium"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={!title.trim()}
-            className="px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
-          >
-            Save Changes
-          </button>
+        {/* Bottom Section: Metadata/Tags on left, Actions on right */}
+        <div className="flex items-end justify-between gap-4 mt-6">
+          {/* Left: Selected Tag/Types and Metadata */}
+          <div className="flex-1 space-y-3">
+            {/* Selected Tag and Types */}
+            {(selectedTag || selectedNoteTypes.length > 0) && (
+              <div className="flex flex-wrap gap-2">
+                {selectedTag && (() => {
+                  const tag = availableTags.find(t => t.id === selectedTag);
+                  return tag ? (
+                    <span className="px-2 py-1 rounded-full text-white text-xs font-roobert-medium" style={{ backgroundColor: tag.color }}>
+                      {tag.name}
+                    </span>
+                  ) : null;
+                })()}
+                {selectedNoteTypes.map((typeId) => {
+                  const noteTypeInfo = NOTE_TYPE_DISPLAY_MAP[typeId];
+                  return noteTypeInfo ? (
+                    <span key={typeId} className="px-2 py-1 rounded-full bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 text-xs font-roobert-semibold">
+                      {noteTypeInfo.label}
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            )}
+            
+            {/* Metadata */}
+            <div className="flex gap-4 text-xs text-gray-500 dark:text-gray-400">
+              <div>Created: {new Date(note.createdAt).toLocaleString()}</div>
+              <div>Modified: {new Date(note.updatedAt).toLocaleString()}</div>
+            </div>
+          </div>
+
+          {/* Right: Action Buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-roobert-medium"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit}
+              disabled={!title.trim()}
+              className="px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
+            >
+              Save Changes
+            </button>
+          </div>
         </div>
       </div>
     </div>

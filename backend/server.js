@@ -97,8 +97,16 @@ const TIMELINE_NOTES_FILE = path.join(__dirname, 'data', 'timeline-notes.json');
 
 app.get('/api/timeline-notes', async (req, res) => {
   try {
-    const notes = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
-    res.json({ success: true, notes: notes.notes || [] });
+    const { taskId } = req.query;
+    const data = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    let notes = data.notes || [];
+    
+    // Filter by taskId if provided
+    if (taskId) {
+      notes = notes.filter(note => note.taskId && note.taskId === taskId);
+    }
+    
+    res.json({ success: true, notes });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
