@@ -30,7 +30,7 @@ export const ExecutiveSummaryCPSAR: React.FC<ExecutiveSummaryCPSARProps> = ({
   onChange
 }) => {
 
-  const updateField = (field: keyof ExecutiveSynthesisData, value: any) => {
+  const updateField = (field: keyof ExecutiveSummaryCPSARData, value: any) => {
     if (onChange) {
       onChange({ ...data, [field]: value });
     }

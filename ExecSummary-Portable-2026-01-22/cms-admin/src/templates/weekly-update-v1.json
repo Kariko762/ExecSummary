@@ -1,0 +1,224 @@
+{
+  "id": "template-new",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-12-05",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_highlights_0_type": "textarea",
+  "_highlights_0_layoutZone": "full",
+  "_highlights_0_rowIndex": 0,
+  "highlights_0": "This is a longer text block that spans multiple lines and can contain detailed information.",
+  "_highlights_1_type": "metricCard",
+  "_highlights_1_layoutZone": "full",
+  "_highlights_1_rowIndex": 1,
+  "_highlights_1_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "_highlights_1_alignment": "center",
+  "highlights_1": [
+    {
+      "title": "Revenue",
+      "value": "$1,230,000",
+      "style": "highlight",
+      "icon": "dollar",
+      "iconColor": "green"
+    },
+    {
+      "title": "Customers",
+      "value": "263",
+      "style": "standard",
+      "icon": "users",
+      "iconColor": "navy"
+    },
+    {
+      "title": "Growth",
+      "value": "+48%",
+      "style": "bold",
+      "icon": "trending",
+      "iconColor": "green"
+    },
+    {
+      "title": "NPS Score",
+      "value": "0",
+      "style": "total",
+      "icon": "award",
+      "iconColor": "eggplant"
+    }
+  ],
+  "_highlights_2_type": "highlightsList",
+  "_highlights_2_layoutZone": "full",
+  "_highlights_2_rowIndex": 2,
+  "highlights_2": [
+    "Banking NA Titled Microsite - First Draft Published and endorsed by Michael Driscoll",
+    "GTM Team Support - Office of the CTO Template Completed, moving to Figma conversion",
+    "SNOW Migration - Built comprehensive reports, dashboard launch by Nov 14"
+  ],
+  "_highlights_3_type": "hr",
+  "_highlights_3_layoutZone": "full",
+  "_highlights_3_rowIndex": 3,
+  "highlights_3": "",
+  "_highlights_sectionLayoutType": "full",
+  "_enabled_highlights": true,
+  "_completed_highlights": false,
+  "_demo_services_0_type": "statusBoard",
+  "_demo_services_0_layoutZone": "full",
+  "_demo_services_0_rowIndex": 0,
+  "_demo_services_0_alignment": "center",
+  "demo_services_0": {
+    "columns": [
+      {
+        "title": "On Track",
+        "items": [
+          "Demo environment performance improvements ongoing",
+          "New deployment process in testing"
+        ]
+      },
+      {
+        "title": "At Risk",
+        "items": [
+          "Titled Performance & Import Failures - unreliable search/browse",
+          "Timeline: End of November 2024"
+        ]
+      },
+      {
+        "title": "Blocked",
+        "items": [
+          "Shift Payment Audit Trail - excessive work flagged"
+        ]
+      },
+      {
+        "title": "Completed",
+        "items": [
+          "Team shift recording and approval process implemented",
+          "Demo Team payment issues resolved"
+        ]
+      }
+    ]
+  },
+  "_demo_services_1_type": "hr",
+  "_demo_services_1_layoutZone": "full",
+  "_demo_services_1_rowIndex": 1,
+  "demo_services_1": "",
+  "_demo_services_sectionLayoutType": "full",
+  "_enabled_demo_services": true,
+  "_completed_demo_services": false,
+  "_strategic_initiatives_type": "checklistItems",
+  "_strategic_initiatives_layoutZone": "full",
+  "_strategic_initiatives_rowIndex": 0,
+  "strategic_initiatives": [
+    "Comprehensive stakeholder interviews with 6 key clients",
+    "Collected competitive analysis of leading financial service portals",
+    "Detailed preliminary requirements document"
+  ],
+  "_strategic_initiatives_sectionLayoutType": "full",
+  "_enabled_strategic_initiatives": true,
+  "_completed_strategic_initiatives": false,
+  "_risks_blockers_type": "riskCard",
+  "_risks_blockers_layoutZone": "full",
+  "_risks_blockers_rowIndex": 0,
+  "_risks_blockers_fields": {
+    "severity": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Severity (low/medium/high)"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Risk Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Description"
+    },
+    "mitigation": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Mitigation Plan"
+    }
+  },
+  "risks_blockers": [
+    {
+      "severity": "low",
+      "title": "Vendor Documentation Update Required",
+      "description": "API documentation needs minor updates for new endpoints",
+      "mitigation": "Technical writing team scheduled to complete updates by end of sprint"
+    },
+    {
+      "severity": "medium",
+      "title": "International Issuing Hub delayed due to Money 20/20 and EG-Coast availability",
+      "description": "Timeline delays expected due to conference schedule conflicts",
+      "mitigation": "ER expected to approve asset transfer this week, Coast dropped Matthews LIBs to expedite"
+    },
+    {
+      "severity": "high",
+      "title": "Critical Security Vulnerability in Payment Gateway",
+      "description": "Zero-day exploit discovered in third-party payment processing library",
+      "mitigation": "Emergency patch deployment scheduled for tonight, all transactions temporarily routed through backup system"
+    }
+  ],
+  "_risks_blockers_sectionLayoutType": "full",
+  "_enabled_risks_blockers": true,
+  "_completed_risks_blockers": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "Weekly-Update-v1",
+  "_template_description": "",
+  "_template_created": "2025-12-05T23:14:03.302Z",
+  "_template_updated": "2025-12-05T23:14:03.302Z"
+}

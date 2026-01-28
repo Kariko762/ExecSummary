@@ -6,13 +6,14 @@
  */
 
 import React from 'react';
-import { RadialBarChart, RadialBar, PieChart, Pie, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
+import { RadialBarChart, RadialBar, PieChart, Pie, BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
 import { Plus, X } from 'lucide-react';
 
 export interface ChartPatternProps {
   data: any;
   onChange?: (value: any) => void;
   mode: 'edit' | 'display';
+  contentTag?: string; // Content context (e.g., 'performance')
 }
 
 // ==========================================
@@ -227,13 +228,7 @@ export const RadialProgressPattern: React.FC<ChartPatternProps> = ({ data, onCha
           endAngle={-270}
         >
           <RadialBar
-            background={(props: any) => {
-              // Only show gray background for actual data rings, not the Scale ring
-              if (props.payload?.name === 'Scale') {
-                return { fill: '#ffffff' };
-              }
-              return { fill: '#e5e7eb' };
-            }}
+            background={{ fill: '#e5e7eb' }}
             dataKey="value"
             cornerRadius={10}
           />
@@ -370,7 +365,7 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
             cx="50%"
             cy="50%"
             labelLine={false}
-            label={({ name, percent }: any) => `${(percent * 100).toFixed(0)}%`}
+            label={({ percent }: any) => `${(percent * 100).toFixed(0)}%`}
             outerRadius={70}
             dataKey="value"
           >
@@ -400,7 +395,7 @@ export const PieChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
 // BAR CHART PATTERN
 // ==========================================
 
-export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, mode }) => {
+export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, mode, contentTag }) => {
   const items = Array.isArray(data) ? data : [];
   
   // Detect if this is multi-series (stacked) data
@@ -484,6 +479,7 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
   if (isMultiSeries) {
     // Stacked bar chart
     const seriesKeys = Object.keys(items[0]).filter(key => key !== 'name');
+    const isPerformance = contentTag === 'performance';
     
     // Custom tooltip for stacked bars
     const CustomBarTooltip = ({ active, payload, label }: any) => {
@@ -515,6 +511,55 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
         </div>
       );
     };
+    
+    if (isPerformance) {
+      return (
+        <div 
+          className="bar-chart performance-glass"
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '16px',
+            padding: '20px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+          }}
+        >
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={items}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
+              <XAxis 
+                dataKey="name" 
+                stroke="rgba(255, 255, 255, 0.6)"
+                tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }}
+              />
+              <YAxis 
+                stroke="rgba(255, 255, 255, 0.6)"
+                tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }}
+              />
+              <Tooltip 
+                content={<CustomBarTooltip />}
+                contentStyle={{
+                  background: 'rgba(0, 0, 0, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  color: 'white'
+                }}
+              />
+              {seriesKeys.map((key, index) => (
+                <Bar 
+                  key={key}
+                  dataKey={key} 
+                  stackId="a"
+                  fill={SERIES_COLORS[index % SERIES_COLORS.length]}
+                  radius={index === seriesKeys.length - 1 ? [8, 8, 0, 0] : [0, 0, 0, 0]}
+                />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      );
+    }
     
     return (
       <div className="bar-chart">
@@ -585,8 +630,9 @@ export const BarChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, m
 // LINE CHART PATTERN
 // ==========================================
 
-export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, mode }) => {
+export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, mode, contentTag }) => {
   const items = Array.isArray(data) ? data : [];
+  const isPerformance = contentTag === 'performance';
   
   if (mode === 'edit') {
     const addPoint = () => {
@@ -654,6 +700,107 @@ export const LineChartPattern: React.FC<ChartPatternProps> = ({ data, onChange, 
     ? Object.keys(items[0]).filter(key => key !== 'name')
     : ['value'];
   
+  // Performance glassmorphism rendering
+  if (isPerformance) {
+    const isSingleLine = seriesKeys.length === 1;
+    const accentGreen = getCSSColor('--accent-green');
+    
+    return (
+      <div 
+        className="line-chart performance-glass"
+        style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: '16px',
+          padding: '20px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+        }}
+      >
+        <ResponsiveContainer width="100%" height={300}>
+          {isSingleLine ? (
+            <AreaChart data={items}>
+              <defs>
+                <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={accentGreen} stopOpacity={0.6} />
+                  <stop offset="50%" stopColor={accentGreen} stopOpacity={0.3} />
+                  <stop offset="100%" stopColor={accentGreen} stopOpacity={0.05} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
+              <XAxis 
+                dataKey="name" 
+                stroke="rgba(255, 255, 255, 0.6)"
+                tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }}
+              />
+              <YAxis 
+                stroke="rgba(255, 255, 255, 0.6)"
+                tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }}
+              />
+              <Tooltip 
+                contentStyle={{
+                  background: 'rgba(0, 0, 0, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  color: 'white'
+                }}
+              />
+              <Legend 
+                wrapperStyle={{ color: 'rgba(255, 255, 255, 0.9)' }}
+              />
+              <Area
+                type="monotone"
+                dataKey={seriesKeys[0]}
+                stroke={accentGreen}
+                strokeWidth={3}
+                fill="url(#areaGradient)"
+                dot={{ fill: accentGreen, r: 4 }}
+                activeDot={{ r: 6, fill: accentGreen }}
+              />
+            </AreaChart>
+          ) : (
+            <LineChart data={items}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
+              <XAxis 
+                dataKey="name" 
+                stroke="rgba(255, 255, 255, 0.6)"
+                tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }}
+              />
+              <YAxis 
+                stroke="rgba(255, 255, 255, 0.6)"
+                tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }}
+              />
+              <Tooltip 
+                contentStyle={{
+                  background: 'rgba(0, 0, 0, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '8px',
+                  color: 'white'
+                }}
+              />
+              <Legend 
+                wrapperStyle={{ color: 'rgba(255, 255, 255, 0.9)' }}
+              />
+              {seriesKeys.map((key, index) => (
+                <Line 
+                  key={key}
+                  type="monotone" 
+                  dataKey={key} 
+                  stroke={SERIES_COLORS[index % SERIES_COLORS.length]}
+                  strokeWidth={2}
+                  name={key.charAt(0).toUpperCase() + key.slice(1)}
+                  dot={{ r: 3 }}
+                  activeDot={{ r: 5 }}
+                />
+              ))}
+            </LineChart>
+          )}
+        </ResponsiveContainer>
+      </div>
+    );
+  }
+  
+  // Standard rendering
   return (
     <div className="line-chart">
       <ResponsiveContainer width="100%" height={300}>

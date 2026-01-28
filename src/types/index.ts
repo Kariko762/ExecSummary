@@ -1,4 +1,5 @@
 export interface ExecutiveSummary {
+  _layout?: 'default' | 'tabbed';
   id: string;
   quarter: string;
   year: number;
@@ -87,6 +88,7 @@ export interface ExecutiveSummary {
 }
 
 export interface ExecutiveIQ {
+  _layout?: 'default' | 'tabbed';
   id: string;
   quarter: string;
   year: number;
@@ -144,6 +146,22 @@ export interface Initiative {
   progress: number;
   owner: string;
   impact: 'high' | 'medium' | 'low';
+  businessCase?: {
+    problem?: string;
+    opportunity?: string;
+    solution?: string;
+    roi?: string;
+    paybackPeriod?: string;
+    expectedBenefits?: string[];
+  };
+  stakeholders?: Array<{ name: string; role: string }>;
+  smartGoal?: {
+    timeBound?: {
+      milestones?: Array<{ milestone: string; date: string; status: string }>;
+      timeline?: Array<{ phase: string; startDate: string; endDate: string }>;
+    };
+  };
+  id?: string;
 }
 
 export interface Risk {

@@ -1,61 +1,53 @@
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { AssetRenderEngine } from '../renderers/assetRenderEngine';
 
-export const Dashboard: React.FC = () => {
-  const [performanceData, setPerformanceData] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const currentPerformance = performanceData[currentIndex];
-  const hasPerformanceData = performanceData.length > 0 && currentPerformance;
+type PerformanceTab = 'kai' | 'demostudio' | 'coast' | 'tiled';
 
-  // Load performance data from backend
+const TAB_CONFIG = {
+  kai: { label: 'Key Activity Insights', file: 'performance_kai' },
+  demostudio: { label: 'Demo Studio', file: 'performance_demostudio' },
+  coast: { label: 'Coast', file: 'week-vendor-performance-q1-2026-01-23' },
+  tiled: { label: 'Tiled', file: 'performance_tiled' }
+};
+
+export const Dashboard: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<PerformanceTab>('kai');
+  const [performanceData, setPerformanceData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const hasPerformanceData = performanceData !== null;
+
+  // Load performance data from backend based on active tab
   useEffect(() => {
     const loadPerformanceData = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch('http://localhost:3001/api/content?tag=performance');
+        const filename = TAB_CONFIG[activeTab].file;
+        const response = await fetch(`http://localhost:3001/api/content/${filename}`);
         const responseData = await response.json();
         const data = responseData.success ? responseData.content : responseData;
         
-        // Filter for published template-based performance (not legacy demoStudio format)
-        const publishedTemplateData = data.filter((item: any) => 
-          item.status === 'published' && !item.demoStudio
-        );
-        
-        // Sort by date (newest first)
-        const sortedData = publishedTemplateData.sort((a: any, b: any) => 
-          new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-        
-        setPerformanceData(sortedData);
+        setPerformanceData(data);
       } catch (error) {
         console.error('Failed to load performance data:', error);
+        setPerformanceData(null);
       } finally {
         setIsLoading(false);
       }
     };
 
     loadPerformanceData();
-  }, []);
-
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev < performanceData.length - 1 ? prev + 1 : prev));
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
-  };
+  }, [activeTab]);
 
   // Parse sections from current performance data (same logic as ContentModal)
   const parseSections = () => {
-    if (!currentPerformance) return [];
+    if (!performanceData) return [];
 
     const sections: any[] = [];
     const processedPrefixes = new Set<string>();
 
     // Get all keys that start with underscore (metadata keys)
-    const metadataKeys = Object.keys(currentPerformance).filter(key => key.startsWith('_'));
+    const metadataKeys = Object.keys(performanceData).filter(key => key.startsWith('_'));
     
     // Extract base names (section prefixes)
     metadataKeys.forEach(key => {
@@ -68,11 +60,11 @@ export const Dashboard: React.FC = () => {
 
           // Check if enabled
           const enabledKey = `_enabled_${baseName}`;
-          const isEnabled = currentPerformance[enabledKey] !== false;
+          const isEnabled = performanceData[enabledKey] !== false;
           if (!isEnabled) return;
 
           // Get all field keys for this base name (e.g., sectionName_0, sectionName_1)
-          const fieldKeys = Object.keys(currentPerformance).filter(k => {
+          const fieldKeys = Object.keys(performanceData).filter(k => {
             const pattern = new RegExp(`^${baseName}_\\d+$`);
             return pattern.test(k) || k === baseName;
           }).filter(k => !k.startsWith('_'));
@@ -91,24 +83,24 @@ export const Dashboard: React.FC = () => {
             sections.push({
               key: baseName,
               label: formatLabel(baseName),
-              data: currentPerformance[baseName],
-              type: currentPerformance[typeKey],
-              fields: currentPerformance[fieldsKey],
-              chartConfig: currentPerformance[chartConfigKey],
-              displayTitle: currentPerformance[`_${baseName}_displayTitle`] !== false
+              data: performanceData[baseName],
+              type: performanceData[typeKey],
+              fields: performanceData[fieldsKey],
+              chartConfig: performanceData[chartConfigKey],
+              displayTitle: performanceData[`_${baseName}_displayTitle`] !== false
             });
           } else {
             // Multiple fields - multi-field section
             const multiFieldData = fieldKeys.sort().map(fieldKey => ({
               key: fieldKey,
-              type: currentPerformance[`_${fieldKey}_type`],
-              data: currentPerformance[fieldKey],
-              fields: currentPerformance[`_${fieldKey}_fields`],
-              chartConfig: currentPerformance[`_${fieldKey}_chartConfig`],
-              layoutZone: currentPerformance[`_${fieldKey}_layoutZone`] || 'full',
-              assetTitle: currentPerformance[`_${fieldKey}_assetTitle`] || '',
-              displayAssetTitle: currentPerformance[`_${fieldKey}_displayAssetTitle`] !== false,
-              alignment: currentPerformance[`_${fieldKey}_alignment`] || 'left'
+              type: performanceData[`_${fieldKey}_type`],
+              data: performanceData[fieldKey],
+              fields: performanceData[`_${fieldKey}_fields`],
+              chartConfig: performanceData[`_${fieldKey}_chartConfig`],
+              layoutZone: performanceData[`_${fieldKey}_layoutZone`] || 'full',
+              assetTitle: performanceData[`_${fieldKey}_assetTitle`] || '',
+              displayAssetTitle: performanceData[`_${fieldKey}_displayAssetTitle`] !== false,
+              alignment: performanceData[`_${fieldKey}_alignment`] || 'left'
             }));
             
             sections.push({
@@ -118,7 +110,7 @@ export const Dashboard: React.FC = () => {
               type: 'multiField',
               isMultiField: true,
               multiFieldData,
-              displayTitle: currentPerformance[`_${baseName}_displayTitle`] !== false
+              displayTitle: performanceData[`_${baseName}_displayTitle`] !== false
             });
           }
         }
@@ -132,71 +124,85 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-3 pb-0">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-0"
-      >
-        <div className="inline-flex items-center gap-3 mb-1">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ background: 'var(--brand-secondary)' }}>
-            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
-            Performance Dashboard
-          </h2>
+      {/* Glassmorphism Container with Gradient Background */}
+      <div className="relative overflow-hidden rounded-2xl">
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-fis-navy via-blue-900 to-fis-raspberry opacity-95" />
+        
+        {/* Animated Pattern Overlay */}
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="perf-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                <circle cx="20" cy="20" r="1" fill="white" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#perf-grid)" />
+          </svg>
         </div>
-      </motion.div>
 
-      {/* Performance Navigator */}
-      {hasPerformanceData && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex items-center justify-center gap-4"
-        >
-          <button
-            onClick={goToPrevious}
-            disabled={currentIndex === performanceData.length - 1}
-            className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-            title="View older performance data"
-          >
-            <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-          </button>
-          
-          <div className="flex flex-col items-center">
-            <div className="text-lg font-roobert-semibold text-gray-900 dark:text-white px-6">
-              {currentPerformance.displayName || new Date(currentPerformance.date).toLocaleDateString('en-US', { 
-                month: 'long', 
-                day: 'numeric', 
-                year: 'numeric' 
-              })}
-            </div>
-            <div className="text-xs font-roobert-regular text-gray-500 dark:text-gray-400">
-              {currentIndex + 1} of {performanceData.length} reports
-            </div>
-          </div>
-          
-          <button
-            onClick={goToNext}
-            disabled={currentIndex === 0}
-            className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-            title="View newer performance data"
-          >
-            <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-          </button>
-        </motion.div>
-      )}
+        {/* Floating Glassmorphism Shapes */}
+        <motion.div 
+          animate={{ y: [0, -15, 0], rotate: [0, 3, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"
+        />
+        <motion.div 
+          animate={{ y: [0, 15, 0], rotate: [0, -3, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-10 right-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl"
+        />
 
-      {/* Content Sections - Dynamically rendered using AssetRenderEngine */}
-      {hasPerformanceData && sections.length > 0 && (
-        <div className="flex flex-col gap-5 pb-0">
+        {/* Content */}
+        <div className="relative z-10 p-6">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-6"
+          >
+            <div className="inline-flex items-center gap-3 mb-1">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg backdrop-blur-sm bg-white/10 border border-white/20">
+                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-roobert-heavy text-white">
+                Performance Dashboard
+              </h2>
+            </div>
+          </motion.div>
+
+          {/* Performance Tabs */}
+          {!isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center justify-center gap-3 flex-wrap mb-8"
+            >
+              {(Object.keys(TAB_CONFIG) as PerformanceTab[]).map((tabKey) => (
+                <button
+                  key={tabKey}
+                  onClick={() => setActiveTab(tabKey)}
+                  className={`px-8 py-3 rounded-xl font-roobert-semibold text-sm transition-all duration-300 ${
+                    activeTab === tabKey
+                      ? 'bg-white text-fis-navy shadow-lg shadow-white/20 scale-105'
+                      : 'bg-white/10 text-white/90 border border-white/20 backdrop-blur-sm hover:bg-white/20 hover:border-white/40 hover:scale-105'
+                  }`}
+                >
+                  {TAB_CONFIG[tabKey].label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+
+          {/* Content Sections - Inside the glassmorphism container */}
+          {hasPerformanceData && sections.length > 0 && (
+            <div className="flex flex-col gap-5 pb-4">
           {sections.map((section) => (
             <section key={section.key}>
               {section.displayTitle !== false && (
-                <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-lg font-roobert-semibold text-white/90 mb-2">
                   {section.label}
                 </h3>
               )}
@@ -274,13 +280,14 @@ export const Dashboard: React.FC = () => {
                             return (
                               <div key={field.key} className={`flex flex-col ${alignmentClass} ${isRightInTwoCol ? 'mt-28' : ''}`}>
                                 {field.displayAssetTitle && field.assetTitle && (
-                                  <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300 mb-1">
+                                  <h4 className="text-sm font-roobert-semibold text-white/80 mb-1">
                                     {field.assetTitle}
                                   </h4>
                                 )}
                                 <AssetRenderEngine
                                   type={field.type}
                                   data={field.data}
+                                  contentTag={performanceData?._contentTag}
                                 />
                               </div>
                             );
@@ -295,6 +302,7 @@ export const Dashboard: React.FC = () => {
                 <AssetRenderEngine
                   type={section.type}
                   data={section.data}
+                  contentTag={performanceData?._contentTag}
                 />
               )}
             </section>
@@ -304,10 +312,12 @@ export const Dashboard: React.FC = () => {
 
       {/* No sections message */}
       {hasPerformanceData && sections.length === 0 && (
-        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+        <div className="text-center py-12 text-white/70">
           No content sections configured for this performance report.
         </div>
       )}
+        </div>
+      </div>
     </div>
   );
 };

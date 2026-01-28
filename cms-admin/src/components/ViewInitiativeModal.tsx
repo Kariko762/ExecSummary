@@ -858,9 +858,9 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                     <div>
                       <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white mb-3">Tools & Platforms</h3>
                       <div className="flex flex-wrap gap-2">
-                        {initiative.resources.tools.map((tool: string, idx: number) => (
+                        {initiative.resources.tools.map((tool: any, idx: number) => (
                           <span key={idx} className="px-2.5 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-roobert-medium border border-gray-200 dark:border-gray-700">
-                            {tool}
+                            {typeof tool === 'string' ? tool : tool.name}
                           </span>
                         ))}
                       </div>
@@ -950,6 +950,56 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
 
               {activeTab === 'risks' && (
                 <div className="space-y-4">
+                  {/* Risks Array Format (from AI-PROMPT-INITIATIVE-CREATOR.md) */}
+                  {initiative.risks && Array.isArray(initiative.risks) && initiative.risks.length > 0 && (
+                    <div>
+                      <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white mb-3">Risks</h3>
+                      <div className="space-y-2.5">
+                        {initiative.risks.map((risk: any, idx: number) => (
+                          <div key={idx} className={`rounded-lg p-3 border ${
+                            risk.severity === 'high' ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800' :
+                            risk.severity === 'medium' ? 'bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800' :
+                            'bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800'
+                          }`}>
+                            <div className="flex items-start justify-between mb-1.5">
+                              <h4 className="text-sm font-roobert-semibold text-gray-900 dark:text-white">{risk.description}</h4>
+                              <div className="flex gap-1.5">
+                                <span className={`px-1.5 py-0.5 rounded text-[10px] font-roobert-medium ${
+                                  risk.probability === 'high' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
+                                  risk.probability === 'medium' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' :
+                                  'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
+                                }`}>
+                                  {risk.probability}
+                                </span>
+                                <span className={`px-1.5 py-0.5 rounded text-[10px] font-roobert-medium ${
+                                  risk.severity === 'high' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
+                                  risk.severity === 'medium' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' :
+                                  'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300'
+                                }`}>
+                                  {risk.severity}
+                                </span>
+                                <span className={`px-1.5 py-0.5 rounded text-[10px] font-roobert-medium ${
+                                  risk.status === 'open' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
+                                  risk.status === 'monitoring' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
+                                  risk.status === 'mitigated' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
+                                  'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                }`}>
+                                  {risk.status}
+                                </span>
+                              </div>
+                            </div>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1.5"><strong>Impact:</strong> {risk.impact}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mb-1.5"><strong>Mitigation:</strong> {risk.mitigation}</p>
+                            <div className="flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-500">
+                              <span><strong>Owner:</strong> {risk.owner}</span>
+                              <span><strong>ID:</strong> {risk.id}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Top Risks Summary */}
                   {initiative.topRisks && initiative.topRisks.length > 0 && (
                     <div>
@@ -978,8 +1028,37 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                     </div>
                   )}
 
-                  {/* Success Criteria - 3 Column Grid */}
-                  {initiative.successCriteria && (
+                  {/* Success Criteria - Array Format (from AI-PROMPT-INITIATIVE-CREATOR.md) */}
+                  {initiative.successCriteria && Array.isArray(initiative.successCriteria) && initiative.successCriteria.length > 0 && (
+                    <div className="space-y-3">
+                      <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white">Success Criteria</h3>
+                      <div className="space-y-2.5">
+                        {initiative.successCriteria.map((criteria: any, idx: number) => (
+                          <div key={idx} className="bg-green-50 dark:bg-green-950/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
+                            <h4 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-1.5">{criteria.metric}</h4>
+                            <div className="grid grid-cols-3 gap-2 text-xs">
+                              <div>
+                                <span className="text-gray-500 dark:text-gray-400">Baseline:</span>
+                                <span className="ml-1 font-roobert-medium text-gray-700 dark:text-gray-300">{criteria.baseline}</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-500 dark:text-gray-400">Target:</span>
+                                <span className="ml-1 font-roobert-medium text-green-600 dark:text-green-400">{criteria.target}</span>
+                              </div>
+                              <div>
+                                <span className="text-gray-500 dark:text-gray-400">Frequency:</span>
+                                <span className="ml-1 font-roobert-medium text-gray-700 dark:text-gray-300">{criteria.frequency}</span>
+                              </div>
+                            </div>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">{criteria.measurement}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Success Criteria - 3 Column Grid (legacy nested format) */}
+                  {initiative.successCriteria && !Array.isArray(initiative.successCriteria) && (
                     <div className="space-y-3">
                       <h3 className="text-base font-roobert-semibold text-gray-900 dark:text-white">Success Criteria</h3>
                       

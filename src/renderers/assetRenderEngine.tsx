@@ -85,6 +85,7 @@ export interface AssetRenderEngineProps {
   mode?: 'edit' | 'display';
   className?: string;
   displayMode?: 'spaced' | 'connected' | 'hero'; // For hero layouts
+  contentTag?: string; // Content tag for context-specific rendering (e.g., 'performance')
   onTaskClick?: (task: any) => void; // Callback for task connector clicks
 }
 
@@ -99,12 +100,13 @@ export const AssetRenderEngine: React.FC<AssetRenderEngineProps> = ({
   mode = 'display',
   className = '',
   displayMode = 'spaced',
+  contentTag,
   onTaskClick
 }) => {
   
   // Route to correct pattern component
   const renderPattern = () => {
-    const props = { data, onChange, mode };
+    const props = { data, onChange, mode, contentTag };
     
     switch (type) {
       // TEXT ASSETS

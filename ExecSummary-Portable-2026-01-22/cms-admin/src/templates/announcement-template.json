@@ -1,0 +1,227 @@
+{
+  "id": "template-new",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-16",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_title_0_type": "text",
+  "_title_0_layoutZone": "full",
+  "_title_0_rowIndex": 0,
+  "_title_0_alignment": "center",
+  "title_0": "Sample text content",
+  "_title_1_type": "text",
+  "_title_1_layoutZone": "full",
+  "_title_1_rowIndex": 1,
+  "_title_1_alignment": "center",
+  "title_1": "Sample text content",
+  "_title_2_type": "hr",
+  "_title_2_layoutZone": "full",
+  "_title_2_rowIndex": 2,
+  "title_2": "",
+  "_title_sectionLayoutType": "full",
+  "_enabled_title": true,
+  "_completed_title": false,
+  "_details_type": "textarea",
+  "_details_layoutZone": "full",
+  "_details_rowIndex": 0,
+  "_details_alignment": "center",
+  "details": "This is a longer text block that spans multiple lines and can contain detailed information.",
+  "_details_sectionLayoutType": "full",
+  "_enabled_details": true,
+  "_completed_details": false,
+  "_optional_0_type": "hr",
+  "_optional_0_layoutZone": "full",
+  "_optional_0_rowIndex": 0,
+  "optional_0": "",
+  "_optional_1_type": "checklistItems",
+  "_optional_1_layoutZone": "full",
+  "_optional_1_rowIndex": 1,
+  "_optional_1_alignment": "center",
+  "optional_1": [
+    "Check List"
+  ],
+  "_optional_2_type": "progressBarList",
+  "_optional_2_layoutZone": "full",
+  "_optional_2_rowIndex": 2,
+  "_optional_2_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Initiative Title"
+    },
+    "subtitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Team/Owner"
+    },
+    "percentage": {
+      "type": "number",
+      "renderAs": "number",
+      "label": "Completion %"
+    },
+    "status": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Status (On Track/At Risk/Blocked)"
+    }
+  },
+  "_optional_2_alignment": "center",
+  "optional_2": [
+    {
+      "title": "Item",
+      "subtitle": "Owner",
+      "percentage": "25",
+      "status": "On Track"
+    }
+  ],
+  "_optional_3_type": "metricCard",
+  "_optional_3_layoutZone": "full",
+  "_optional_3_rowIndex": 3,
+  "_optional_3_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "_optional_3_alignment": "center",
+  "optional_3": [
+    {
+      "title": "Metric",
+      "value": "0",
+      "style": "standard",
+      "icon": "activity",
+      "iconColor": "eggplant"
+    }
+  ],
+  "_optional_4_type": "timeline",
+  "_optional_4_layoutZone": "full",
+  "_optional_4_rowIndex": 4,
+  "_optional_4_fields": {
+    "date": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Date"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Milestone Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Details"
+    },
+    "completed": {
+      "type": "boolean",
+      "renderAs": "checkbox",
+      "label": "Completed"
+    }
+  },
+  "optional_4": [
+    {
+      "date": "Dec 2025",
+      "title": "Year-End Review",
+      "description": "Performance analysis, metrics review, and next year planning",
+      "completed": false
+    }
+  ],
+  "_optional_5_type": "riskCard",
+  "_optional_5_layoutZone": "full",
+  "_optional_5_rowIndex": 5,
+  "_optional_5_fields": {
+    "severity": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Severity (low/medium/high)"
+    },
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Risk Title"
+    },
+    "description": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Description"
+    },
+    "mitigation": {
+      "type": "string",
+      "renderAs": "textarea",
+      "label": "Mitigation Plan"
+    }
+  },
+  "optional_5": [
+    {
+      "severity": "high",
+      "title": "Risk Title",
+      "description": "Description",
+      "mitigation": "Mitigation"
+    }
+  ],
+  "_optional_6_type": "quote",
+  "_optional_6_layoutZone": "full",
+  "_optional_6_rowIndex": 6,
+  "_optional_6_alignment": "center",
+  "optional_6": "Quote",
+  "_optional_sectionLayoutType": "full",
+  "_enabled_optional": true,
+  "_completed_optional": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "announcement_template",
+  "_template_description": "",
+  "_template_created": "2025-11-16T08:12:18.264Z",
+  "_template_updated": "2025-11-16T08:12:18.264Z"
+}

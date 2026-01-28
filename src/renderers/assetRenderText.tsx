@@ -12,6 +12,7 @@ export interface TextPatternProps {
   data: any;
   onChange?: (value: any) => void;
   mode: 'edit' | 'display';
+  contentTag?: string;
 }
 
 // ==========================================
@@ -90,7 +91,9 @@ export const RichTextPattern: React.FC<TextPatternProps> = ({ data, onChange, mo
 // QUOTE PATTERN
 // ==========================================
 
-export const QuotePattern: React.FC<TextPatternProps> = ({ data, onChange, mode }) => {
+export const QuotePattern: React.FC<TextPatternProps> = ({ data, onChange, mode, contentTag }) => {
+  const isPerformance = contentTag === 'performance';
+  
   if (mode === 'edit') {
     return (
       <textarea
@@ -99,6 +102,42 @@ export const QuotePattern: React.FC<TextPatternProps> = ({ data, onChange, mode 
         placeholder="Enter quote text..."
         rows={3}
       />
+    );
+  }
+  
+  if (isPerformance) {
+    const getCSSColor = (varName: string): string => {
+      return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+    };
+    
+    const accentGreen = getCSSColor('--accent-green');
+    
+    return (
+      <div 
+        className="quote-wrapper performance-glass"
+        style={{
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: '16px',
+          padding: '20px 24px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+          borderLeft: `4px solid ${accentGreen}`
+        }}
+      >
+        <blockquote 
+          className="quote-display" 
+          style={{ 
+            color: 'white',
+            fontSize: '16px',
+            lineHeight: '1.6',
+            fontStyle: 'italic',
+            margin: 0
+          }}
+        >
+          {renderWithExpressions(data)}
+        </blockquote>
+      </div>
     );
   }
   

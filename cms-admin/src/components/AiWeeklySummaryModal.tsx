@@ -14,16 +14,18 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, ChevronRight, ChevronLeft, Calendar, CheckCircle, Copy,
-  Sparkles, FileText, AlertCircle, Loader
+  Sparkles, FileText, AlertCircle, Loader, ListTodo
 } from 'lucide-react';
 
 interface TimelineNote {
   id: string;
   title: string;
   content: string;
-  date: string;
   category: 'environment-health' | 'data-operations' | 'platform-integration' | 'high-value-deals' | 'poc-trial-support' | 'sales-enablement' | 'expansion-ops' | 'process-automation' | 'capacity-planning' | 'documentation' | 'revenue-at-risk' | 'critical-blocker' | 'strategic-milestone' | 'product-intelligence' | 'key-highlight' | 'goal-progression' | 'big-win' | 'deal-support' | 'new-project' | 'general';
-  tags: string[];
+  tags: string[] | string;
+  sectionIds: string[] | string;
+  linkedTo: any;
+  author: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -33,16 +35,34 @@ interface WeekRange {
   startDate: string;
   endDate: string;
   noteCount: number;
+  taskCount: number;
+}
+
+interface Task {
+  id: string;
+  title: string;
+  owner: string;
+  businessUnit: string;
+  product: string;
+  startDate: string;
+  targetDate: string;
+  percentage: number;
+  status: 'On Track' | 'At Risk' | 'Blocked' | 'Complete';
+  priority: 'High' | 'Medium' | 'Low';
+  description: string;
+  milestones: string;
+  linkType?: 'goal' | 'initiative' | 'general';
 }
 
 interface AiWeeklySummaryModalProps {
   onClose: () => void;
   showNotification: (type: 'success' | 'error' | 'info', message: string) => void;
   notes: TimelineNote[];
+  tasks: Task[];
 }
 
 type SummaryType = 'cpsar' | 'bluf' | 'sbar' | 'pyramid';
-type Step = 'week-select' | 'note-select' | 'type-select' | 'ai-prompt' | 'json-input' | 'creating';
+type Step = 'week-select' | 'content-select' | 'type-select' | 'ai-prompt' | 'json-input' | 'creating';
 
 const SUMMARY_TYPES = [
   {
@@ -103,11 +123,13 @@ const CATEGORY_CONFIG = {
 export default function AiWeeklySummaryModal({
   onClose,
   showNotification,
-  notes
+  notes,
+  tasks
 }: AiWeeklySummaryModalProps) {
   const [step, setStep] = useState<Step>('week-select');
   const [selectedWeek, setSelectedWeek] = useState<WeekRange | null>(null);
   const [selectedNoteIds, setSelectedNoteIds] = useState<Set<string>>(new Set());
+  const [selectedTaskIds, setSelectedTaskIds] = useState<Set<string>>(new Set());
   const [summaryType, setSummaryType] = useState<SummaryType | null>(null);
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiResponse, setAiResponse] = useState('');
@@ -116,29 +138,18 @@ export default function AiWeeklySummaryModal({
   const [copied, setCopied] = useState(false);
   const [creating, setCreating] = useState(false);
   
-  // Load AI template configuration from settings
-  const [aiTemplates, setAiTemplates] = useState<any>({});
-  const [availableSummaryTypes, setAvailableSummaryTypes] = useState<typeof SUMMARY_TYPES>([]);
-
-  useEffect(() => {
-    const settings = localStorage.getItem('system-settings');
-    if (settings) {
-      const parsed = JSON.parse(settings);
-      const templates = parsed.aiTemplates || {};
-      setAiTemplates(templates);
-      
-      // Filter summary types to only show configured ones
-      const available = SUMMARY_TYPES.filter(type => templates[type.id]);
-      setAvailableSummaryTypes(available);
-    }
-  }, []);
+  // HARDCODED: Always use all summary types with Leadership Summary template
+  const availableSummaryTypes = SUMMARY_TYPES;
 
   // Generate week ranges from notes
   const getWeekRanges = (): WeekRange[] => {
     const weekMap = new Map<string, TimelineNote[]>();
     
+    // Safety check: ensure notes is an array
+    if (!Array.isArray(notes)) return [];
+    
     notes.forEach(note => {
-      const date = new Date(note.date);
+      const date = new Date(note.createdAt || note.updatedAt);
       const dayOfWeek = date.getDay();
       const monday = new Date(date);
       monday.setDate(date.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
@@ -161,11 +172,21 @@ export default function AiWeeklySummaryModal({
       const sunday = new Date(monday);
       sunday.setDate(monday.getDate() + 6);
       
+      // Count tasks that overlap with this week
+      const weekStartStr = monday.toISOString().split('T')[0];
+      const weekEndStr = sunday.toISOString().split('T')[0];
+      const taskCount = Array.isArray(tasks) ? tasks.filter(task => {
+        const taskStart = task.startDate;
+        const taskEnd = task.endDate;
+        return taskStart <= weekEndStr && taskEnd >= weekStartStr;
+      }).length : 0;
+      
       weeks.push({
         label: `Week of ${monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${sunday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
         startDate: monday.toISOString().split('T')[0],
         endDate: sunday.toISOString().split('T')[0],
-        noteCount: weekNotes.length
+        noteCount: weekNotes.length,
+        taskCount
       });
     });
 
@@ -174,27 +195,60 @@ export default function AiWeeklySummaryModal({
 
   // Get notes for selected week
   const getWeekNotes = (): TimelineNote[] => {
-    if (!selectedWeek) return [];
-    return notes.filter(note => 
-      note.date >= selectedWeek.startDate && note.date <= selectedWeek.endDate
-    ).sort((a, b) => b.date.localeCompare(a.date));
+    if (!selectedWeek || !Array.isArray(notes)) return [];
+    return notes.filter(note => {
+      const noteDate = (note.createdAt || note.updatedAt).split('T')[0];
+      return noteDate >= selectedWeek.startDate && noteDate <= selectedWeek.endDate;
+    }
+    ).sort((a, b) => (b.createdAt || b.updatedAt).localeCompare(a.createdAt || a.updatedAt));
   };
 
-  // Initialize selected notes when week changes
+  // Get tasks for selected week (active during the week)
+  const getWeekTasks = (): Task[] => {
+    if (!selectedWeek || !Array.isArray(tasks)) return [];
+    return tasks.filter(task => {
+      const taskStart = task.startDate;
+      const taskEnd = task.targetDate;
+      // Include if task overlaps with selected week
+      return taskStart <= selectedWeek.endDate && taskEnd >= selectedWeek.startDate;
+    }).sort((a, b) => {
+      // Sort by priority then status
+      const priorityOrder = { 'High': 0, 'Medium': 1, 'Low': 2 };
+      return priorityOrder[a.priority] - priorityOrder[b.priority];
+    });
+  };
+
+  // Initialize selected notes and tasks when week changes
   useEffect(() => {
-    if (selectedWeek && step === 'note-select') {
+    if (selectedWeek && step === 'content-select') {
       const weekNotes = getWeekNotes();
+      const weekTasks = getWeekTasks();
       setSelectedNoteIds(new Set(weekNotes.map(n => n.id)));
+      setSelectedTaskIds(new Set(weekTasks.map(t => t.id)));
     }
   }, [selectedWeek, step]);
 
   // Generate AI prompt
   const generateAiPrompt = (): string => {
     const selectedNotes = getWeekNotes().filter(n => selectedNoteIds.has(n.id));
+    const selectedTasks = getWeekTasks().filter(t => selectedTaskIds.has(t.id));
     
+    // Enhanced notes text with category and tags for AI context
     const notesText = selectedNotes.map((note, idx) => {
-      return `${idx + 1}. [${new Date(note.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}] ${CATEGORY_CONFIG[note.category].label}: ${note.title}
+      const tagsDisplay = note.tags && note.tags.length > 0 ? ` | Tags: ${note.tags.join(', ')}` : '';
+      return `${idx + 1}. [${new Date(note.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}] ${CATEGORY_CONFIG[note.category].label}${tagsDisplay}
+   Title: ${note.title}
    ${note.content}`;
+    }).join('\n\n');
+
+    // Enhanced tasks text with detailed status
+    const tasksText = selectedTasks.map((task, idx) => {
+      const typeLabel = task.linkType === 'goal' ? 'Goal' : task.linkType === 'initiative' ? 'Initiative' : 'Task';
+      const statusEmoji = task.status === 'Complete' ? '✅' : task.status === 'On Track' ? '🟢' : task.status === 'At Risk' ? '🟡' : '🔴';
+      return `${idx + 1}. ${statusEmoji} [${task.status}] ${typeLabel}: ${task.title}
+   Owner: ${task.owner} | Progress: ${task.percentage}% | Priority: ${task.priority}
+   ${task.description}
+   ${task.milestones ? `Milestones: ${task.milestones}` : ''}`;
     }).join('\n\n');
 
     const typeInstructions = {
@@ -213,12 +267,48 @@ export default function AiWeeklySummaryModal({
       bluf: {
         name: 'BLUF (Bottom Line Up Front)',
         format: `{
-  "bottomLine": "THE answer/decision needed (1-2 sentences)",
-  "background": "Context that led to this (2-3 sentences)",
-  "assessment": "Analysis of situation (2-3 sentences)",
-  "recommendation": "Specific actions (2-3 sentences)",
-  "asks": [
-    {"type": "budget|decision|resource|approval|escalation", "item": "Specific ask", "urgency": "high|medium|low", "owner": "Name", "deadline": "Date"}
+  "metadata": {
+    "weekStart": "YYYY-MM-DD",
+    "weekEnd": "YYYY-MM-DD",
+    "generatedBy": "AI Assistant",
+    "title": "Weekly Leadership Summary"
+  },
+  "bluf": {
+    "bottomLine": ["Key point 1 (bullet)", "Key point 2 (bullet)", "Key point 3 (bullet)"],
+    "background": "Context that led to this week's situation (2-3 sentences as paragraph)",
+    "assessment": "Analysis of current situation (2-3 sentences as paragraph)",
+    "recommendations": ["Recommendation 1 (bullet)", "Recommendation 2 (bullet)", "Recommendation 3 (bullet)"],
+    "asks": [
+      {"item": "Specific ask", "urgency": "High|Medium|Low", "owner": "Team/Person"},
+      {"item": "Another ask", "urgency": "High|Medium|Low", "owner": "Team/Person"}
+    ]
+  },
+  "prioritization": [
+    {
+      "title": "Demo/Project that needs prioritization",
+      "description": "Why this needs attention (1-2 sentences)",
+      "impact": "Business impact (e.g., High - impacts revenue pipeline)",
+      "status": "In Progress|Blocked|Not Started",
+      "priority": "High|Medium|Low",
+      "linkedGoal": "Goal name from system",
+      "linkedInitiative": "Initiative name from system",
+      "milestones": ["Milestone 1", "Milestone 2"],
+      "deliverables": ["Deliverable 1", "Deliverable 2"],
+      "owner": "Owner Name",
+      "dueDate": "YYYY-MM-DD"
+    }
+  ],
+  "risks": [
+    {
+      "title": "Risk title",
+      "description": "What the risk is (1-2 sentences)",
+      "severity": "High|Medium|Low",
+      "probability": "High|Medium|Low",
+      "impact": "Business impact description",
+      "owner": "Owner Name",
+      "mitigation": "What's being done about it",
+      "category": "Revenue|Technical|Resource|Timeline"
+    }
   ]
 }`
       },
@@ -250,18 +340,45 @@ export default function AiWeeklySummaryModal({
 
     const typeInfo = typeInstructions[summaryType!];
 
-    return `You are an executive communication expert. I need you to analyze ${selectedNotes.length} notes from ${selectedWeek?.label} and create a concise ${typeInfo.name} executive summary.
+    return `You are an executive communication expert. I need you to analyze this week's activity (${selectedWeek?.label}) and create a concise ${typeInfo.name} executive summary.
 
-**NOTES FROM THIS WEEK:**
+**NOTES FROM THIS WEEK (${selectedNotes.length} items):**
 
 ${notesText}
 
+**TASKS & INITIATIVES IN PROGRESS (${selectedTasks.length} items):**
+
+${tasksText}
+
 **YOUR TASK:**
-1. Analyze the notes above and identify the key themes, accomplishments, challenges, and action items
-2. Create a concise executive summary using the ${typeInfo.name} framework
-3. Be specific - include concrete numbers, dates, and names where available
-4. Keep each section brief (2-3 sentences max)
-5. Focus on what executives need to know and decide
+1. Analyze all the data above (notes and tasks/initiatives)
+2. **Use NOTE CATEGORIES and TAGS to intelligently route content:**
+   - Notes tagged "Key Highlight" or "Big Win" → highlights array
+   - Notes tagged "Critical Blocker" or "Revenue at Risk" → risks array with high severity
+   - Notes with category "Goal Progression" or "Strategic Milestone" → activities or highlights
+   - Notes with category "Deal Support" or "High-Value Deals" → priorityUpdates or activities
+   - Notes with category "Documentation" → generally lower priority activities
+3. **Extract METRICS from tasks:**
+   - Count tasks by status: Complete, On Track, At Risk, Blocked
+   - Calculate completion percentage and progress trends
+   - Identify key metric changes from task progress
+4. **Categorize TASKS into priority updates:**
+   - Tasks with status "Complete" (100%) → completedWork array
+   - Tasks with status "On Track" or "In Progress" → priorityUpdates.inProgress
+   - Tasks with status "Blocked" or "At Risk" → priorityUpdates.blocked
+5. **Extract NEXT WEEK priorities:**
+   - Look for "NEXT STEP" or "Next Week" mentions in notes
+   - Identify tasks starting next week or with upcoming deadlines
+   - Surface high-priority incomplete items
+6. **Identify RISKS:**
+   - Notes with "RISK" explicitly mentioned
+   - Notes tagged "Critical Blocker" or "Revenue at Risk"
+   - Tasks that are "Blocked" or "At Risk" with <50% progress
+   - Authentication issues, vendor dependencies, resource gaps
+7. Be specific - include concrete numbers, dates, names, and task progress percentages
+8. Keep each section brief but comprehensive
+9. Focus on what executives need to know and decide
+10. Highlight week-over-week progress where applicable
 
 **CRITICAL - OUTPUT FORMAT:**
 Return ONLY valid JSON in this exact structure (no markdown, no code blocks, just raw JSON):
@@ -271,8 +388,11 @@ ${typeInfo.format}
 IMPORTANT:
 - Return ONLY the JSON object, no explanations before or after
 - Ensure all text is concise and executive-appropriate
+- Use note categories/tags to intelligently route content to the right section
+- Populate ALL fields in the JSON structure
 - type must be one of: budget, decision, resource, approval, escalation
-- urgency must be one of: low, medium, high`;
+- urgency must be one of: low, medium, high
+- severity must be one of: low, medium, high, critical`;
   };
 
   // Parse AI response
@@ -337,12 +457,8 @@ IMPORTANT:
   const handleCreateSummary = async () => {
     if (!parsedData || !selectedWeek || !summaryType) return;
     
-    // Get template ID from settings
-    const templateId = aiTemplates[summaryType];
-    if (!templateId) {
-      showNotification('error', 'Template not configured for this summary type');
-      return;
-    }
+    // HARDCODED: Use demo-weekly-bluf template for weekly summaries
+    const templateId = 'demo-weekly-bluf';
     
     setCreating(true);
     setStep('creating');
@@ -357,6 +473,7 @@ IMPORTANT:
           summaryType,
           summaryData: parsedData,
           noteIds: Array.from(selectedNoteIds),
+          taskIds: Array.from(selectedTaskIds),
           templateId
         })
       });
@@ -382,8 +499,8 @@ IMPORTANT:
   // Navigation handlers
   const handleNext = () => {
     if (step === 'week-select' && selectedWeek) {
-      setStep('note-select');
-    } else if (step === 'note-select' && selectedNoteIds.size > 0) {
+      setStep('content-select');
+    } else if (step === 'content-select' && (selectedNoteIds.size > 0 || selectedTaskIds.size > 0)) {
       setStep('type-select');
     } else if (step === 'type-select' && summaryType) {
       const prompt = generateAiPrompt();
@@ -397,15 +514,15 @@ IMPORTANT:
   };
 
   const handleBack = () => {
-    if (step === 'note-select') setStep('week-select');
-    else if (step === 'type-select') setStep('note-select');
+    if (step === 'content-select') setStep('week-select');
+    else if (step === 'type-select') setStep('content-select');
     else if (step === 'ai-prompt') setStep('type-select');
     else if (step === 'json-input') setStep('ai-prompt');
   };
 
   const weeks = getWeekRanges();
   const weekNotes = getWeekNotes();
-  const selectedCount = selectedNoteIds.size;
+  const selectedCount = selectedNoteIds.size + selectedTaskIds.size;
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -427,7 +544,7 @@ IMPORTANT:
                 </h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {step === 'week-select' && 'Step 1: Select a week'}
-                  {step === 'note-select' && 'Step 2: Select relevant notes'}
+                  {step === 'content-select' && 'Step 2: Select notes & tasks'}
                   {step === 'type-select' && 'Step 3: Choose summary type'}
                   {step === 'ai-prompt' && 'Step 4: Copy AI prompt'}
                   {step === 'json-input' && 'Step 5: Paste AI response'}
@@ -473,8 +590,10 @@ IMPORTANT:
                           <div className="font-roobert-bold text-gray-900 dark:text-white">
                             {week.label}
                           </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {week.noteCount} {week.noteCount === 1 ? 'note' : 'notes'}
+                          <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-3">
+                            <span>{week.noteCount} {week.noteCount === 1 ? 'note' : 'notes'}</span>
+                            <span>•</span>
+                            <span>{week.taskCount} {week.taskCount === 1 ? 'task' : 'tasks'}</span>
                           </div>
                         </div>
                       </div>
@@ -487,81 +606,216 @@ IMPORTANT:
               </motion.div>
             )}
 
-            {/* Step 2: Note Selection */}
-            {step === 'note-select' && (
+            {/* Step 2: Content Selection (Notes + Tasks) */}
+            {step === 'content-select' && (
               <motion.div
-                key="note-select"
+                key="content-select"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="space-y-3"
+                className="space-y-4"
               >
-                <div className="flex items-center justify-between mb-4">
+                {/* Selection Summary */}
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Select notes to include in your summary ({selectedCount} selected)
+                    {selectedNoteIds.size} {selectedNoteIds.size === 1 ? 'note' : 'notes'}, {selectedTaskIds.size} {selectedTaskIds.size === 1 ? 'task' : 'tasks'} selected
                   </p>
-                  <button
-                    onClick={() => {
-                      if (selectedCount === weekNotes.length) {
-                        setSelectedNoteIds(new Set());
-                      } else {
-                        setSelectedNoteIds(new Set(weekNotes.map(n => n.id)));
-                      }
-                    }}
-                    className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
-                  >
-                    {selectedCount === weekNotes.length ? 'Deselect All' : 'Select All'}
-                  </button>
                 </div>
 
-                {weekNotes.map((note) => {
-                  const isSelected = selectedNoteIds.has(note.id);
-                  return (
+                {/* Notes Section */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white flex items-center gap-2">
+                      <FileText className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                      Notes ({weekNotes.length})
+                    </h3>
                     <button
-                      key={note.id}
                       onClick={() => {
-                        const newSet = new Set(selectedNoteIds);
-                        if (isSelected) {
-                          newSet.delete(note.id);
+                        if (selectedNoteIds.size === weekNotes.length) {
+                          setSelectedNoteIds(new Set());
                         } else {
-                          newSet.add(note.id);
+                          setSelectedNoteIds(new Set(weekNotes.map(n => n.id)));
                         }
-                        setSelectedNoteIds(newSet);
                       }}
-                      className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
-                        isSelected
-                          ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
-                      }`}
+                      className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
                     >
-                      <div className="flex items-start gap-3">
-                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                          isSelected
-                            ? 'bg-purple-600 border-purple-600'
-                            : 'border-gray-300 dark:border-gray-600'
-                        }`}>
-                          {isSelected && <CheckCircle className="w-4 h-4 text-white" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-roobert-bold text-gray-900 dark:text-white">
-                              {note.title}
-                            </span>
-                            <span className={`px-2 py-0.5 rounded-full text-xs ${CATEGORY_CONFIG[note.category].bg} ${CATEGORY_CONFIG[note.category].color}`}>
-                              {CATEGORY_CONFIG[note.category].label}
-                            </span>
-                          </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                            {note.content}
-                          </div>
-                          <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                            {new Date(note.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-                          </div>
-                        </div>
-                      </div>
+                      {selectedNoteIds.size === weekNotes.length ? 'Deselect All' : 'Select All'}
                     </button>
-                  );
-                })}
+                  </div>
+
+                  {weekNotes.length === 0 ? (
+                    <div className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm">
+                      No notes found for this week
+                    </div>
+                  ) : (
+                    weekNotes.map((note) => {
+                      const isSelected = selectedNoteIds.has(note.id);
+                      return (
+                        <button
+                          key={note.id}
+                          onClick={() => {
+                            const newSet = new Set(selectedNoteIds);
+                            if (isSelected) {
+                              newSet.delete(note.id);
+                            } else {
+                              newSet.add(note.id);
+                            }
+                            setSelectedNoteIds(newSet);
+                          }}
+                          className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                            isSelected
+                              ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
+                              : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                              isSelected
+                                ? 'bg-purple-600 border-purple-600'
+                                : 'border-gray-300 dark:border-gray-600'
+                            }`}>
+                              {isSelected && <CheckCircle className="w-4 h-4 text-white" />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-roobert-bold text-gray-900 dark:text-white">
+                                  {note.title}
+                                </span>
+                                <span className={`px-2 py-0.5 rounded-full text-xs ${CATEGORY_CONFIG[note.category].bg} ${CATEGORY_CONFIG[note.category].color}`}>
+                                  {CATEGORY_CONFIG[note.category].label}
+                                </span>
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                                {note.content}
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                {new Date(note.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+
+                {/* Tasks Section */}
+                <div className="space-y-3 mt-6">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white flex items-center gap-2">
+                      <ListTodo className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                      Tasks & Initiatives ({getWeekTasks().length})
+                    </h3>
+                    <button
+                      onClick={() => {
+                        const weekTasks = getWeekTasks();
+                        if (selectedTaskIds.size === weekTasks.length) {
+                          setSelectedTaskIds(new Set());
+                        } else {
+                          setSelectedTaskIds(new Set(weekTasks.map(t => t.id)));
+                        }
+                      }}
+                      className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                    >
+                      {selectedTaskIds.size === getWeekTasks().length ? 'Deselect All' : 'Select All'}
+                    </button>
+                  </div>
+
+                  {getWeekTasks().length === 0 ? (
+                    <div className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm">
+                      No tasks found for this week
+                    </div>
+                  ) : (
+                    getWeekTasks().map((task) => {
+                      const isSelected = selectedTaskIds.has(task.id);
+                      const statusColors = {
+                        'not-started': 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300',
+                        'in-progress': 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300',
+                        'completed': 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300',
+                        'blocked': 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
+                      };
+                      const priorityColors = {
+                        'High': 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300',
+                        'Medium': 'bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300',
+                        'Low': 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
+                      };
+                      const linkTypeLabels = {
+                        'goal': 'Goal',
+                        'initiative': 'Initiative',
+                        'general': 'Task'
+                      };
+                      
+                      return (
+                        <button
+                          key={task.id}
+                          onClick={() => {
+                            const newSet = new Set(selectedTaskIds);
+                            if (isSelected) {
+                              newSet.delete(task.id);
+                            } else {
+                              newSet.add(task.id);
+                            }
+                            setSelectedTaskIds(newSet);
+                          }}
+                          className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                            isSelected
+                              ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
+                              : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                              isSelected
+                                ? 'bg-purple-600 border-purple-600'
+                                : 'border-gray-300 dark:border-gray-600'
+                            }`}>
+                              {isSelected && <CheckCircle className="w-4 h-4 text-white" />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                <span className="font-roobert-bold text-gray-900 dark:text-white">
+                                  {task.title}
+                                </span>
+                                <span className={`px-2 py-0.5 rounded-full text-xs ${statusColors[task.status]}`}>
+                                  {task.status}
+                                </span>
+                                {task.linkType && (
+                                  <span className="px-2 py-0.5 rounded-full text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300">
+                                    {linkTypeLabels[task.linkType]}
+                                  </span>
+                                )}
+                                {task.priority && (
+                                  <span className={`px-2 py-0.5 rounded-full text-xs ${priorityColors[task.priority]}`}>
+                                    {task.priority}
+                                  </span>
+                                )}
+                              </div>
+                              {task.description && (
+                                <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
+                                  {task.description}
+                                </div>
+                              )}
+                              <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-500">
+                                {task.owner && (
+                                  <span>Owner: {task.owner}</span>
+                                )}
+                                <span className="flex items-center gap-1">
+                                  Progress: {task.percentage}%
+                                  <div className="w-16 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                    <div 
+                                      className="h-full bg-purple-600 dark:bg-purple-400 rounded-full"
+                                      style={{ width: `${task.percentage}%` }}
+                                    />
+                                  </div>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
               </motion.div>
             )}
 
@@ -773,7 +1027,7 @@ IMPORTANT:
               onClick={handleNext}
               disabled={
                 (step === 'week-select' && !selectedWeek) ||
-                (step === 'note-select' && selectedCount === 0) ||
+                (step === 'content-select' && selectedCount === 0) ||
                 (step === 'type-select' && !summaryType) ||
                 (step === 'json-input' && !parsedData)
               }

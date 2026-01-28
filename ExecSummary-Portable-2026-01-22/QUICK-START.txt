@@ -1,0 +1,54 @@
+﻿QUICK START GUIDE
+=================
+
+1. EXTRACT THIS FOLDER
+   - Unzip to C:\ExecSummary or any location
+   - Do NOT run from inside ZIP file
+
+2. START THE SERVER
+   - Double-click START-PRODUCTION.bat
+   OR
+   - Right-click START-PRODUCTION.ps1 â†’ Run with PowerShell
+
+3. WAIT FOR STARTUP
+   - Backend window will show "Server running on port 3001"
+   - Wait ~5-10 seconds
+
+4. OPEN BROWSER
+   - Navigate to http://localhost:3001
+   - For CMS: http://localhost:3001/cms
+
+5. TO STOP
+   - Press Ctrl+C in the Backend Server window
+   - OR close the window
+
+FEATURES AT A GLANCE
+====================
+
+âœ“ Budget Management ($ Actual + $ Forecast)
+âœ“ Forecast Planning with Year-on-Year charts
+âœ“ Strategic Goals & Initiatives
+âœ“ Task Management
+âœ“ Full CMS for content editing
+âœ“ Export capabilities (PNG, JSON)
+âœ“ Fully offline - no internet required!
+
+TROUBLESHOOTING
+===============
+
+Problem: Server won't start
+Solution: Check port 3001 is not in use
+          Run: netstat -ano | findstr :3001
+
+Problem: Page won't load
+Solution: Make sure backend is running
+          Check http://localhost:3001/api/health
+
+Problem: Changes not saving
+Solution: Check backend/data folder permissions
+          Make sure not running as read-only
+
+Need Help?
+----------
+See README.md for full documentation
+

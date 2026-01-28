@@ -1,0 +1,193 @@
+{
+  "id": "week-demo-services-weekly-update-december-12th-2025-13-pyramid",
+  "quarter": "Dec 13",
+  "year": 2025,
+  "date": "2025-12-13",
+  "title": "Demo Services Weekly - Update December 12th (Pyramid)",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_summary_0_type": "executiveSummaryPyramid",
+  "_summary_0_layoutZone": "full",
+  "_summary_0_rowIndex": 0,
+  "summary_0": {
+    "mainArgument": "Secure commitment for [[bold]]CRITICAL RISK Coast 2026 MSA renewal ($265k)[[/bold]], obtain legal review approval for [[bold]]E6 Demo Access Control Agreement[[/bold]], and finalize the Capital Markets [[bold]]Demo Tools strategy for 2026[[/bold]] to push modern demo standards at scale.",
+    "keyPoints": [
+      "Coast 2026 MSA expires January 2026 - failure to renew eliminates LoB subsidized license access",
+      "E6 legal review of the Demo Access Control Agreement causing Int. Banking demo adoption and scaling",
+      "2026 Demo Strategy undefined - impacts Tiled, Figma, Coast, Synthesia deployment and efficiency"
+    ],
+    "supportingDetails": "Recent RIF eliminated platform team, creating budget ownership gap for Coast 2026 MSA renewal ($265k). Without MSA renewal, LoBs immediately lose subsidized licenses and product demo capability. E6 requires formal Demo Access Control Agreement with governance and reporting processes before allowing asset adoption. This blocks Sales/Pre-Sales training and prospect demos across Banking Ecosphere. 2026 operating model for all demo tools must be approved to support Capital Markets deployment roadmap and enable license scaling, demo efficiency, and interactive self-driven experiences.",
+    "nextSteps": "Immediately prioritize and complete the [[bold]]Coast 2026 Budget Review with Robert & Mario[[/bold]] to secure the MSA renewal commitment; facilitate the [[bold]]E6 Legal Review with Christian Battelley[[/bold]] which will unblock demo issues for Andrew Murry; and schedule the final review for the [[bold]]Demo Spend + Strategy modelling[[/bold]].",
+    "asks": [
+      {
+        "type": "budget",
+        "item": "Coast 2026 MSA and 2026 renewals funding support",
+        "urgency": "high",
+        "owner": "CFO",
+        "deadline": ""
+      },
+      {
+        "type": "approval",
+        "item": "2026 Capital Markets Demo Tools Strategy Approval",
+        "urgency": "medium",
+        "owner": "Jason Hanscomb",
+        "deadline": "EoY"
+      }
+    ]
+  },
+  "_summary_1_type": "hr",
+  "_summary_1_layoutZone": "full",
+  "_summary_1_rowIndex": 1,
+  "summary_1": "",
+  "_summary_sectionLayoutType": "full",
+  "_enabled_summary": true,
+  "_completed_summary": false,
+  "_data_summary_0_type": "highlightsList",
+  "_data_summary_0_layoutZone": "left-30",
+  "_data_summary_0_rowIndex": 0,
+  "_data_summary_0_displayAssetTitle": true,
+  "data_summary_0": [
+    "Demo Preparation : 325 hrs ( {{percent:4.6}} )",
+    "Demo Support : 2 hrs ( {{percent:-87}} )",
+    "Demo Presentations : 175 hrs ( {{percent:2}} )",
+    "[[bold]]Total Unique Demos : 116 [[/bold]] "
+  ],
+  "_data_summary_1_type": "quote",
+  "_data_summary_1_layoutZone": "right-70",
+  "_data_summary_1_rowIndex": 0,
+  "data_summary_1": "\"Overall activity shows Demo Preparation hours significantly outweigh actual Demos, indicating heavy upfront effort. While Preparation peaked mid-year and is now declining, [[bold]]Support hours have dropped sharply since June to negligible levels, suggesting centralized support is having a positive impact[[/bold]].\"[[highlight]] (sources : Demo Studio API, Key Activity Insights)[[/highlight]]",
+  "_data_summary_sectionLayoutType": "full",
+  "_enabled_data_summary": true,
+  "_completed_data_summary": false,
+  "_data_summary_label": "Demo Time Analysis",
+  "_data_summary_displayTitle": true,
+  "_demo_trends_0_type": "lineChart",
+  "_demo_trends_0_layoutZone": "left-70",
+  "_demo_trends_0_rowIndex": 0,
+  "_demo_trends_0_displayAssetTitle": false,
+  "demo_trends_0": [
+    {
+      "name": "Jan",
+      "Demo Preparation": 2843.89,
+      "Demo Support": 208.5,
+      "Demos": 716.99
+    },
+    {
+      "name": "Feb",
+      "Demo Preparation": 1918.84,
+      "Demo Support": 122.34,
+      "Demos": 921.26
+    },
+    {
+      "name": "Mar",
+      "Demo Preparation": 3085.75,
+      "Demo Support": 134.66,
+      "Demos": 1203.91
+    },
+    {
+      "name": "Apr",
+      "Demo Preparation": 3152.5,
+      "Demo Support": 212.43,
+      "Demos": 970.93
+    },
+    {
+      "name": "May",
+      "Demo Preparation": 2758.79,
+      "Demo Support": 147,
+      "Demos": 1221.67
+    },
+    {
+      "name": "Jun",
+      "Demo Preparation": 2502.06,
+      "Demo Support": 69,
+      "Demos": 1493.84
+    },
+    {
+      "name": "Jul",
+      "Demo Preparation": 2232.67,
+      "Demo Support": 153.25,
+      "Demos": 1037.75
+    },
+    {
+      "name": "Aug",
+      "Demo Preparation": 1725.25,
+      "Demo Support": 86.92,
+      "Demos": 1054.83
+    },
+    {
+      "name": "Sep",
+      "Demo Preparation": 2586.58,
+      "Demo Support": 119.17,
+      "Demos": 1220.83
+    },
+    {
+      "name": "Oct",
+      "Demo Preparation": 2086,
+      "Demo Support": 88.92,
+      "Demos": 1181.83
+    },
+    {
+      "name": "Nov",
+      "Demo Preparation": 1652.58,
+      "Demo Support": 94.08,
+      "Demos": 894.42
+    },
+    {
+      "name": "Dec",
+      "Demo Preparation": 323.92,
+      "Demo Support": 1.33,
+      "Demos": 177.08
+    }
+  ],
+  "_demo_trends_1_type": "pieChart",
+  "_demo_trends_1_layoutZone": "right-30",
+  "_demo_trends_1_rowIndex": 0,
+  "_demo_trends_1_assetTitle": "Time Allocation (2025)",
+  "_demo_trends_1_displayAssetTitle": false,
+  "demo_trends_1": [
+    {
+      "name": "Demo Preparation",
+      "value": 66.5
+    },
+    {
+      "name": "Demos",
+      "value": 30
+    },
+    {
+      "name": "Demo Support",
+      "value": 3.5
+    }
+  ],
+  "_demo_trends_sectionLayoutType": "left-70",
+  "_enabled_demo_trends": true,
+  "_completed_demo_trends": false,
+  "_demo_trends_label": "Demo Activity Trends (2025)",
+  "_demo_trends_displayTitle": false,
+  "_teams_focus_0_type": "highlightsList",
+  "_teams_focus_0_layoutZone": "left-50",
+  "_teams_focus_0_rowIndex": 0,
+  "_teams_focus_0_assetTitle": "Dec-8th : Dec-12th",
+  "_teams_focus_0_alignment": "left",
+  "teams_focus_0": [
+    "Network Connectivity: Managing configuration tickets to on-board new demo functionality into FIS's CDN (Akamai).",
+    "System Integration: Re-establishing FIS-to-FIS (System-to-System) connectivity for impacted demo platform.",
+    "Infrastructure Health: Maintaining security and stability through scheduled patch management activities.",
+    "Demo Enablement: Completing team familiarization and training on the Tiled platform."
+  ],
+  "_teams_focus_sectionLayoutType": "left-50",
+  "_enabled_teams_focus": true,
+  "_completed_teams_focus": false,
+  "_teams_focus_label": "",
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "DEMO-WEEKLY-PYRAMID",
+  "_template_description": "",
+  "_template_created": "2025-12-13T22:46:58.271Z",
+  "_template_updated": "2025-12-13T22:46:58.271Z",
+  "_layout": "one-pager",
+  "_contentTag": "weekly-summary",
+  "_type": "weekly-summary",
+  "_data_summary_0_assetTitle": "(Dec-1st : Dec-5th)",
+  "_data_summary_1_displayAssetTitle": false,
+  "_summary_displayTitle": false
+}

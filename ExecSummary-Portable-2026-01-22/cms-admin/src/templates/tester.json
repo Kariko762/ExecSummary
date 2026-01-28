@@ -1,0 +1,30 @@
+{
+  "id": "template-new",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-12-14",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_tester_0_type": "highlightsList",
+  "_tester_0_layoutZone": "left-30",
+  "_tester_0_rowIndex": 0,
+  "tester_0": [
+    "Banking NA Titled Microsite - First Draft Published and endorsed by Michael Driscoll",
+    "GTM Team Support - Office of the CTO Template Completed, moving to Figma conversion",
+    "SNOW Migration - Built comprehensive reports, dashboard launch by Nov 14"
+  ],
+  "_tester_1_type": "quote",
+  "_tester_1_layoutZone": "right-70",
+  "_tester_1_rowIndex": 0,
+  "tester_1": "Strong momentum across Demo Services Group with key wins in Banking Microsite and SNOW migration.",
+  "_tester_sectionLayoutType": "left-30",
+  "_enabled_tester": true,
+  "_completed_tester": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "tester",
+  "_template_description": "",
+  "_template_created": "2025-12-14T06:42:23.750Z",
+  "_template_updated": "2025-12-14T06:42:23.750Z"
+}

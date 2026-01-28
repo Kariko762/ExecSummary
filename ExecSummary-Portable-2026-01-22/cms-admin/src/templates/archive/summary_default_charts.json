@@ -1,0 +1,407 @@
+{
+  "id": "template-summary-v2-charts",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-01-01",
+  "title": "Your Organization Name - Weekly Executive Update",
+  
+  "highlights": [
+    "Example: Key achievement or milestone accomplished this week",
+    "Example: Important project completion or major progress update"
+  ],
+  "_highlights_type": "listNoTitle",
+  "_enabled_highlights": true,
+  "_completed_highlights": false,
+  
+  "keyMetrics": [
+    {
+      "label": "Revenue",
+      "value": "0",
+      "unit": "$"
+    },
+    {
+      "label": "Growth",
+      "value": "0",
+      "unit": "%"
+    }
+  ],
+  "_keyMetrics_type": "nestedCards",
+  "_keyMetrics_fields": {
+    "label": {
+      "type": "text",
+      "label": "Metric Name"
+    },
+    "value": {
+      "type": "text",
+      "label": "Value"
+    },
+    "unit": {
+      "type": "text",
+      "label": "Unit"
+    }
+  },
+  "_enabled_keyMetrics": true,
+  "_completed_keyMetrics": false,
+  
+  "budgetAllocation": [
+    {
+      "name": "Engineering",
+      "value": 450000
+    },
+    {
+      "name": "Marketing",
+      "value": 250000
+    },
+    {
+      "name": "Sales",
+      "value": 180000
+    },
+    {
+      "name": "Operations",
+      "value": 120000
+    }
+  ],
+  "_budgetAllocation_type": "pieChart",
+  "_budgetAllocation_fields": {
+    "name": {
+      "label": "Department",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Budget ($)",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_budgetAllocation_chartConfig": {
+    "dataKey": "value",
+    "nameKey": "name",
+    "colors": ["#6B1B5E", "#B21A53", "#3B82F6", "#10B981", "#F59E0B", "#EF4444"],
+    "showLegend": true,
+    "showTooltip": true,
+    "innerRadius": 0,
+    "outerRadius": 80
+  },
+  "_enabled_budgetAllocation": true,
+  "_completed_budgetAllocation": false,
+  
+  "quarterlyRevenue": [
+    {
+      "name": "Q1",
+      "value": 2.5
+    },
+    {
+      "name": "Q2",
+      "value": 3.2
+    },
+    {
+      "name": "Q3",
+      "value": 3.8
+    },
+    {
+      "name": "Q4",
+      "value": 4.5
+    }
+  ],
+  "_quarterlyRevenue_type": "barChart",
+  "_quarterlyRevenue_fields": {
+    "name": {
+      "label": "Quarter",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Revenue ($M)",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_quarterlyRevenue_chartConfig": {
+    "xAxisKey": "name",
+    "bars": [
+      {
+        "dataKey": "value",
+        "fill": "#6B1B5E",
+        "name": "Revenue"
+      }
+    ],
+    "orientation": "vertical",
+    "showGrid": true,
+    "showLegend": true,
+    "stacked": false
+  },
+  "_enabled_quarterlyRevenue": true,
+  "_completed_quarterlyRevenue": false,
+  
+  "userGrowth": [
+    {
+      "name": "Jan",
+      "value": 1200
+    },
+    {
+      "name": "Feb",
+      "value": 1800
+    },
+    {
+      "name": "Mar",
+      "value": 2400
+    },
+    {
+      "name": "Apr",
+      "value": 3100
+    },
+    {
+      "name": "May",
+      "value": 3800
+    },
+    {
+      "name": "Jun",
+      "value": 4500
+    }
+  ],
+  "_userGrowth_type": "lineChart",
+  "_userGrowth_fields": {
+    "name": {
+      "label": "Month",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Active Users",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_userGrowth_chartConfig": {
+    "xAxisKey": "name",
+    "lines": [
+      {
+        "dataKey": "value",
+        "stroke": "#6B1B5E",
+        "name": "Active Users"
+      }
+    ],
+    "showGrid": true,
+    "showLegend": true,
+    "showDots": true,
+    "curved": true
+  },
+  "_enabled_userGrowth": true,
+  "_completed_userGrowth": false,
+  
+  "projectCompletion": [
+    {
+      "name": "Infrastructure",
+      "value": 85
+    },
+    {
+      "name": "Frontend",
+      "value": 92
+    },
+    {
+      "name": "Backend",
+      "value": 78
+    }
+  ],
+  "_projectCompletion_type": "radialChart",
+  "_projectCompletion_fields": {
+    "name": {
+      "label": "Project",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Progress (%)",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_projectCompletion_chartConfig": {
+    "dataKey": "value",
+    "maxValue": 100,
+    "colors": ["#6B1B5E", "#B21A53", "#3B82F6"],
+    "showPercentage": true,
+    "thickness": 20
+  },
+  "_enabled_projectCompletion": true,
+  "_completed_projectCompletion": false,
+  
+  "topAssets": [
+    {
+      "name": "Example Product Name",
+      "count": 0,
+      "category": "Product Category"
+    }
+  ],
+  "_topAssets_type": "nestedCards",
+  "_topAssets_fields": {
+    "name": {
+      "type": "text",
+      "label": "Asset Name"
+    },
+    "count": {
+      "type": "number",
+      "label": "Usage Count"
+    },
+    "category": {
+      "type": "text",
+      "label": "Category"
+    }
+  },
+  "_enabled_topAssets": true,
+  "_completed_topAssets": false,
+  
+  "weeklyFocus": [
+    "Example: Priority task or project for the upcoming week",
+    "Example: Critical meeting or presentation to prepare for"
+  ],
+  "_weeklyFocus_type": "listNoTitle",
+  "_enabled_weeklyFocus": true,
+  "_completed_weeklyFocus": false,
+  
+  "departments": [
+    {
+      "name": "Example Department 1",
+      "performance": 0,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Example: Key accomplishment or deliverable completed this period"
+      ]
+    }
+  ],
+  "_departments_type": "nestedCards",
+  "_departments_fields": {
+    "name": {
+      "type": "text",
+      "label": "Department Name"
+    },
+    "performance": {
+      "type": "number",
+      "label": "Performance Score"
+    },
+    "budget": {
+      "type": "number",
+      "label": "Budget"
+    },
+    "headcount": {
+      "type": "number",
+      "label": "Headcount"
+    },
+    "achievements": {
+      "type": "list",
+      "label": "Achievements"
+    }
+  },
+  "_enabled_departments": true,
+  "_completed_departments": false,
+  
+  "initiatives": [
+    {
+      "name": "Example Strategic Initiative 1",
+      "status": "on-track",
+      "progress": 0,
+      "owner": "Department/Team Name",
+      "impact": "high"
+    }
+  ],
+  "_initiatives_type": "nestedCards",
+  "_initiatives_fields": {
+    "name": {
+      "type": "text",
+      "label": "Initiative Name"
+    },
+    "status": {
+      "type": "text",
+      "label": "Status"
+    },
+    "progress": {
+      "type": "number",
+      "label": "Progress %"
+    },
+    "owner": {
+      "type": "text",
+      "label": "Owner"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact Level"
+    }
+  },
+  "_enabled_initiatives": true,
+  "_completed_initiatives": false,
+  
+  "risks": [
+    {
+      "description": "Example: Describe the potential risk and its context",
+      "severity": "medium",
+      "mitigation": "Example: Explain the strategy or actions to mitigate this risk"
+    }
+  ],
+  "_risks_type": "nestedCards",
+  "_risks_fields": {
+    "description": {
+      "type": "textarea",
+      "label": "Risk Description"
+    },
+    "severity": {
+      "type": "text",
+      "label": "Severity"
+    },
+    "mitigation": {
+      "type": "textarea",
+      "label": "Mitigation Strategy"
+    }
+  },
+  "_enabled_risks": true,
+  "_completed_risks": false,
+  
+  "issuesAndBlockers": [
+    {
+      "title": "Example Issue Title",
+      "description": "Brief description of the issue or blocker",
+      "impact": "medium",
+      "action": "Describe the action being taken",
+      "status": "in-progress"
+    }
+  ],
+  "_issuesAndBlockers_type": "nestedCards",
+  "_issuesAndBlockers_fields": {
+    "title": {
+      "type": "text",
+      "label": "Issue Title"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact"
+    },
+    "action": {
+      "type": "textarea",
+      "label": "Action Plan"
+    },
+    "status": {
+      "type": "text",
+      "label": "Status"
+    }
+  },
+  "_enabled_issuesAndBlockers": true,
+  "_completed_issuesAndBlockers": false,
+  
+  "outlook": "Example: Provide a brief 2-3 sentence overview of the week ahead.",
+  "_outlook_type": "textarea",
+  "_enabled_outlook": true,
+  "_completed_outlook": false,
+  
+  "status": "draft",
+  "protectionEnabled": false,
+  
+  "_template_name": "Executive Summary Template V2 with Charts",
+  "_template_description": "Comprehensive executive summary template with chart visualizations for budget, revenue, growth, and project completion",
+  "_template_created": "2025-11-08T08:00:00.000Z",
+  "_template_updated": "2025-11-08T08:00:00.000Z"
+}

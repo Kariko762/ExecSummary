@@ -1,0 +1,235 @@
+================================================================================
+                      LEADERSHIP SUMMARY - WEEK OF JAN 26 - FEB 1, 2026
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. BOTTOM LINE UP FRONT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Kicked off $6M+ MUFG Demo AI Endpoint Build (Credit Assessment)
+
+• Successful CBK Coast demo review with LoB
+
+• Request to deprioritize E6 demo asset access due to TSYS acquisition
+
+• Demo Asset and Visibility (Banking NA) High Priority
+
+• Coast MSA Renewal still Pending with Finance (Robert Rossetti)
+
+• Executive Summary Platform final testing in progress ready for launch
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. BACKGROUND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• MUFG Credit Assessment strategic deal requiring Azure OpenAI endpoint 
+  deployment
+
+• Demo Asset and Visibility initiative driven by need for status view across 
+  Banking NA demo systems, expanding to Capital Markets and Banking
+
+• TSYS acquisition driving International Issuing Hub strategy realignment, 
+  deprioritizing E6 integration
+
+• Executive Summary platform completing final testing phase before production 
+  deployment
+
+• 2026 goals and initiatives drafted, awaiting RevOps review and publication
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. ASSESSMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. STRATEGIC PROGRESS:
+   • Executive Summary platform within final testing phase before launch
+
+2. CROSS-TEAM COLLABORATION:
+   • Open Sessions approved with Sales Growth Office leadership for improved 
+     communication
+   • TSYS demo alignment clarified available assets (TS2, Center Suite, Prime)
+
+3. CRITICAL RISKS:
+   • Azure OpenAI authentication misalignment for MUFG deployment (subscription 
+     vs token-based)
+   • Coast MSA renewal pending with Finance, impacting automation roadmap and 
+     $6M+ deal
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. RECOMMENDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Push forward with Demo Asset Data Collation and meetings with Pre-Sales 
+  Managers
+
+• Urgent engagement with Network Security Architecture Team on Azure AI 
+  authentication policies for MUFG
+
+• Push Finance to respond on Coast Renewal
+
+• Get Executive Summary Platform deployed by End of Week
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. ASKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[HIGH PRIORITY] Azure OpenAI Authentication Decision
+    Description: Approve exception or remediation path for Azure OpenAI 
+                 authentication (subscription vs token-based) for MUFG deployment
+    Owner: AI Governance / Security
+    Due: Jan 28, 2026
+
+[HIGH PRIORITY] Coast MSA Renewal Approval
+    Description: Approve and execute Coast MSA renewal to avoid disruption to 
+                 demo automation factory
+    Owner: Procurement / Legal
+    Due: Feb 1, 2026
+
+[MEDIUM PRIORITY] International Issuing Hub Strategy Confirmation
+    Description: Confirm revised International Issuing Hub demo strategy 
+                 post-TSYS acquisition (de-prioritize E6, align to TSYS assets)
+    Owner: RevOps Leadership
+    Due: Feb 5, 2026
+
+[MEDIUM PRIORITY] Platform Standards Resource Assignment
+    Description: Assign dedicated stakeholders to support platform standards and 
+                 asset registry schema definition
+    Owner: Pre-Sales Leadership
+    Due: Feb 5, 2026
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PRIORITIZATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIORITY 1: Demo Asset Visibility [HIGH PRIORITY]
+────────────────────────────────────────────────────────────────────────────
+    Description: Comprehensive status view of all demo assets needed across 
+                 Banking NA, Capital Markets, and Banking teams. Critical for 
+                 resource planning and demo delivery.
+    
+    Impact: Lack of visibility leads to duplicated efforts, missed 
+            opportunities, and inability to scale demo capabilities effectively.
+    
+    Milestones:
+        • Schedule meetings with Pre-Sales Managers
+        • Conduct asset data collation sessions
+        • Deploy asset visibility dashboard
+    
+    Owner: Pre-Sales Leadership
+    Business Unit: Banking NA / CM
+    Due: Feb 7, 2026
+
+
+PRIORITY 2: Coast MSA Renewal [HIGH PRIORITY]
+────────────────────────────────────────────────────────────────────────────
+    Description: 2026 MSA renewal critical for continued access to Tiled 
+                 Platform and all Banking demo capabilities. Requires Finance 
+                 approval and expedited processing to avoid service disruption.
+    
+    Impact: Without renewal, complete loss of Banking product demonstration 
+            capabilities. Unable to support sales pipeline activities.
+    
+    Milestones:
+        • Finance review and approval
+        • Follow-up meetings scheduled
+        • Contract signed and executed
+    
+    Owner: Robert Rossetti
+    Business Unit: Capital Markets
+    Due: Jan 31, 2026
+
+
+PRIORITY 3: MUFG AI Endpoint [MEDIUM PRIORITY]
+────────────────────────────────────────────────────────────────────────────
+    Description: $6M+ MUFG Credit Assessment Azure OpenAI endpoint deployment 
+                 blocked by authentication policy conflicts. Urgent engagement 
+                 needed with Network Security Architecture team.
+    
+    Impact: Delays $6M+ deal and prevents demonstration of AI-powered credit 
+            assessment capabilities to key prospect.
+    
+    Milestones:
+        • Network Security Architecture engagement
+        • Azure authentication policy resolution
+        • Endpoint deployment completed
+    
+    Owner: Technical Architecture
+    Business Unit: Banking
+    Due: Feb 5, 2026
+
+
+PRIORITY 4: Setup and Communicate Weekly Open Sessions [MEDIUM PRIORITY]
+────────────────────────────────────────────────────────────────────────────
+    Description: Establish regular weekly open sessions for team collaboration, 
+                 knowledge sharing, and alignment on demo strategies and 
+                 initiatives across all business units.
+    
+    Impact: Improves cross-team collaboration and ensures consistent messaging 
+            and demo best practices across all teams.
+    
+    Milestones:
+        • Schedule weekly session times
+        • Communicate to all team members
+        • Launch first session
+    
+    Owner: Demo Services Leadership
+    Business Unit: All Teams
+    Due: Feb 3, 2026
+
+
+PRIORITY 5: Executive Summary Platform Deployment [LOW PRIORITY]
+────────────────────────────────────────────────────────────────────────────
+    Description: Complete final testing phase and deploy Executive Summary 
+                 platform by end of week to enable leadership visibility and 
+                 streamlined reporting workflows.
+    
+    Impact: Provides leadership with real-time visibility into demo initiatives, 
+            accelerating decision-making and resource allocation.
+    
+    Milestones:
+        • Final testing completed
+        • Production deployment
+        • Leadership walkthrough sessions
+    
+    Owner: Platform Team
+    Business Unit: Leadership
+    Due: Jan 31, 2026
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RISKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RISK 1: Coast MSA Renewal [HIGH IMPACT | MEDIUM PROBABILITY | OPEN]
+────────────────────────────────────────────────────────────────────────────
+    Description: 2026 MSA renewal pending Finance approval. Without renewal, 
+                 all Banking demo capabilities are at risk of immediate shutdown.
+    
+    Impact: Complete loss of Banking product demo platform access
+    
+    Mitigation: Urgent Finance meetings and escalation to CFO if needed
+    
+    Owner: Robert Rossetti / Finance
+
+
+RISK 2: AI Endpoint Authentication [MEDIUM IMPACT | MEDIUM PROBABILITY | OPEN]
+────────────────────────────────────────────────────────────────────────────
+    Description: Azure OpenAI authentication policies blocking MUFG Credit 
+                 Assessment endpoint deployment. Network Security Architecture 
+                 team engagement required.
+    
+    Impact: Delays $6M+ MUFG deal and AI demo capabilities
+    
+    Mitigation: Urgent engagement with Network Security Architecture team to 
+                resolve policy conflicts
+    
+    Owner: Technical Architecture Team
+
+
+================================================================================
+                                  END OF SUMMARY
+================================================================================

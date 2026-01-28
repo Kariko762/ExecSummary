@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { 
   X, Target, Zap, Settings, Layout, Presentation,
-  BarChart3, PieChart, MousePointerClick, Shield,
+  BarChart3, MousePointerClick, Shield,
   FileText, Users, TrendingUp, CheckCircle, Clock, Sparkles, Download
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -25,7 +25,9 @@ export default function PlatformOverview({ onClose }: PlatformOverviewProps) {
       }
     `;
     document.head.appendChild(style);
-    return () => document.head.removeChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
   }, []);
 
   useEffect(() => {

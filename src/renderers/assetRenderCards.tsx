@@ -13,15 +13,17 @@ export interface CardPatternProps {
   data: any;
   onChange?: (value: any) => void;
   mode: 'edit' | 'display';
-  displayMode?: 'spaced' | 'connected'; // For hero layouts
+  displayMode?: 'spaced' | 'connected' | 'hero'; // For hero layouts
+  contentTag?: string; // Content context (e.g., 'performance')
 }
 
 // ==========================================
 // METRIC CARD PATTERN
 // ==========================================
 
-export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mode, displayMode = 'spaced' }) => {
+export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mode, displayMode = 'spaced', contentTag }) => {
   const items = Array.isArray(data) ? data : [];
+  const isPerformance = contentTag === 'performance';
   
   if (mode === 'edit') {
     const addCard = () => {
@@ -189,6 +191,82 @@ export const MetricCardPattern: React.FC<CardPatternProps> = ({ data, onChange, 
   // Apply displayMode class to grid
   const gridClass = displayMode === 'connected' ? 'metric-grid connected' : 'metric-grid';
   
+  // Performance-specific glassmorphism rendering
+  if (isPerformance) {
+    return (
+      <div className={gridClass}>
+        {items.map((item, index) => {
+          const iconColor = getColorVar(item.iconColor || 'eggplant');
+          
+          return (
+            <div 
+              key={index} 
+              className="metric-card performance-glass"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '16px',
+                padding: '24px',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                e.currentTarget.style.border = '1px solid rgba(255, 255, 255, 0.25)';
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                e.currentTarget.style.border = '1px solid rgba(255, 255, 255, 0.15)';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+              }}
+            >
+              <div 
+                className="icon" 
+                style={{ 
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  marginBottom: '8px',
+                  fontSize: '20px'
+                }}
+              >
+                {getIconComponent(item.icon || 'award')}
+              </div>
+              <div 
+                className="label" 
+                style={{ 
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  marginBottom: '4px',
+                  fontFamily: 'Roobert'
+                }}
+              >
+                {item.title}
+              </div>
+              <div 
+                className="value" 
+                style={{ 
+                  color: 'rgba(255, 255, 255, 0.95)',
+                  fontSize: '28px',
+                  fontWeight: 700,
+                  fontFamily: 'Roobert'
+                }}
+              >
+                {item.value}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+  
+  // Standard rendering for non-performance contexts
   return (
     <div className={gridClass}>
       {items.map((item, index) => {
@@ -400,8 +478,8 @@ export const RiskCardPattern: React.FC<CardPatternProps> = ({ data, onChange, mo
       {risks.map((risk, index) => {
         const riskType = risk?.type || 'medium-severity';
         const [level, category] = riskType.split('-'); // e.g., "high-impact" -> ["high", "impact"]
-        const isImpact = category === 'impact';
-        const isSeverity = category === 'severity';
+        const _isImpact = category === 'impact';
+        const _isSeverity = category === 'severity';
         
         // Icon selection based on level and category
         const Icon = level === 'high' ? AlertCircle : 

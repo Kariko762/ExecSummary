@@ -1,0 +1,205 @@
+{
+  "id": "demo-localization-programme",
+  "name": "Demo Localization Programme",
+  "shortName": "Demo Localization",
+  "slug": "demo-localization-programme",
+  "category": "customer-success",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "Regional Sales",
+    "Product Marketing",
+    "Localization Team"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "high",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, localize priority demo assets into 6 strategic languages to increase regional demo adoption from 20% to 75% and improve win rates in localized regions to 26%.",
+    "specific": {
+      "objectives": [
+        "Define priority languages",
+        "Localize core demo assets",
+        "Enable multilingual demo delivery"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Languages supported: 1 \u2192 6",
+        "Localized demo assets: 0 \u2192 60",
+        "Regional demo adoption: 20% \u2192 75%"
+      ]
+    },
+    "achievable": {
+      "resources": "Localization vendors, regional SMEs",
+      "teamSize": "2 FTEs + vendors"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Customer Experience",
+        "Revenue Growth"
+      ],
+      "strategicThemes": [
+        "Customer Centricity",
+        "Digital Transformation"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Localization Wave 1",
+          "deliverable": "First 3 languages live",
+          "dueDate": "2026-10-31",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Assets localized",
+        "baseline": "0",
+        "target": "60",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Regional demo adoption",
+        "baseline": "20",
+        "target": "75",
+        "current": "20",
+        "unit": "%"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "English-only demos limit regional growth.",
+    "opportunity": "Localized demos improve adoption and win rates.",
+    "solution": "Strategic localization of demos.",
+    "expectedBenefits": [
+      "Regional revenue growth",
+      "Higher customer engagement"
+    ],
+    "roi": "300% ROI in 18 months",
+    "paybackPeriod": "9 months"
+  },
+  "budget": {
+    "total": 220000,
+    "allocated": 220000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 100000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 30000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "International Growth Budget",
+    "costAvoidance": "$250K in regional inefficiency"
+  },
+  "funding": {
+    "requestedAmount": 220000,
+    "approvedAmount": 220000,
+    "approvalDate": "2026-06-01",
+    "approvedBy": "CRO",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 120000,
+        "releaseCondition": "Languages approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-translation-quality",
+      "description": "Poor translation quality",
+      "impact": "Reduced demo effectiveness",
+      "probability": "medium",
+      "severity": "medium",
+      "mitigation": "Regional SME review",
+      "owner": "Localization Team",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-localization",
+      "name": "Localization Wave 1 Live",
+      "description": "First languages live",
+      "dueDate": "2026-10-31",
+      "status": "not-started",
+      "deliverables": [
+        "Localized assets"
+      ],
+      "acceptanceCriteria": [
+        "Regional signoff"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Regional Sales",
+      "role": "Regional Owners",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Validation",
+      "communicationFrequency": "Monthly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Regional demo adoption",
+      "baseline": "20%",
+      "target": "75%",
+      "measurement": "% adoption",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-07-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-07-01T09:00:00Z",
+  "updatedAt": "2026-01-26T20:30:00Z",
+  "tags": [
+    "localization",
+    "international"
+  ],
+  "notes": "Strategic localization for global growth."
+}

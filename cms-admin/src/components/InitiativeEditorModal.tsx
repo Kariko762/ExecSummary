@@ -46,10 +46,54 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-6xl h-[90vh] overflow-hidden flex flex-col"
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-[75vw] h-[90vh] overflow-hidden flex flex-col"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-fis-navy to-fis-raspberry border-b border-white/20 px-6 py-4">
+        <div className="relative bg-gradient-to-br from-fis-navy via-blue-900 to-fis-raspberry text-white overflow-hidden">
+          {/* Animated Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="initiative-editor-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <circle cx="20" cy="20" r="1" fill="currentColor" />
+                </pattern>
+                <pattern id="initiative-editor-lines" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                  <path d="M0 40 L80 40 M40 0 L40 80" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.3" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#initiative-editor-grid)" />
+              <rect width="100%" height="100%" fill="url(#initiative-editor-lines)" />
+            </svg>
+          </div>
+
+          {/* Floating Shapes */}
+          <motion.div 
+            animate={{ 
+              y: [0, -20, 0],
+              rotate: [0, 5, 0]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute top-10 left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"
+          />
+          <motion.div 
+            animate={{ 
+              y: [0, 20, 0],
+              rotate: [0, -5, 0]
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 1
+            }}
+            className="absolute bottom-10 right-10 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl"
+          />
+
+          <div className="relative px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xl font-roobert-bold text-white flex items-center gap-2">
@@ -74,6 +118,7 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
                 <X className="w-5 h-5 text-white" />
               </button>
             </div>
+          </div>
           </div>
         </div>
 

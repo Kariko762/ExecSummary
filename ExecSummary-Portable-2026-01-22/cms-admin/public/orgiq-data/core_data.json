@@ -1,0 +1,3554 @@
+{
+  "organizationStructure": [
+    {
+      "id": "root",
+      "parentId": null,
+      "name": "COMPANY",
+      "title": "Company",
+      "department": "Corporate",
+      "productRole": "Root"
+    },
+    {
+      "id": "BANKING SOLUTIONS",
+      "parentId": "root",
+      "name": "BANKING SOLUTIONS",
+      "title": "Division",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Division",
+      "productLevel": "L3"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "BANKING SOLUTIONS ADMIN",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN",
+      "name": "BANKING SOLUTIONS ADMIN",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN",
+      "name": "BANKING SOLUTIONS ADMIN",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN",
+      "name": "BANKING SOLUTIONS ADMIN",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN",
+      "name": "BANKING SOLUTIONS ADMIN",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN",
+      "name": "BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "name": "BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "name": "BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS -> BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "name": "BANKING SOLUTIONS ADMIN ADJUSTMENTS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS LEVERAGED SERVICES",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN",
+      "name": "BANKING SOLUTIONS LEVERAGED SERVICES",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS LEVERAGED SERVICES",
+      "name": "BANKING SOLUTIONS LEVERAGED SERVICES",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES",
+      "name": "BANKING SOLUTIONS LEVERAGED SERVICES",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES",
+      "parentId": "BANKING SOLUTIONS -> BANKING SOLUTIONS ADMIN -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES -> BANKING SOLUTIONS LEVERAGED SERVICES",
+      "name": "BANKING SOLUTIONS LEVERAGED SERVICES",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "CARDS AND MONEY MOVEMENT",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT",
+      "name": "ISSUING",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CARD PRODUCTION",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING",
+      "name": "CARD PRODUCTION",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CARD PRODUCTION -> CARD PRODUCTION",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CARD PRODUCTION",
+      "name": "CARD PRODUCTION",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CARD PRODUCTION -> CARD PRODUCTION -> CARD PRODUCTION",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CARD PRODUCTION -> CARD PRODUCTION",
+      "name": "CARD PRODUCTION",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CREDIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING",
+      "name": "CREDIT PROCESSING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CREDIT PROCESSING -> CREDIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CREDIT PROCESSING",
+      "name": "CREDIT PROCESSING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CREDIT PROCESSING -> CREDIT PROCESSING -> CREDIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> CREDIT PROCESSING -> CREDIT PROCESSING",
+      "name": "CREDIT PROCESSING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING",
+      "name": "DEBIT PROCESSING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> BROWN DEER DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING",
+      "name": "BROWN DEER DEBIT PROCESSING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> BROWN DEER DEBIT PROCESSING -> BROWN DEER DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> BROWN DEER DEBIT PROCESSING",
+      "name": "BROWN DEER DEBIT PROCESSING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> NEW BERLIN DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING",
+      "name": "NEW BERLIN DEBIT PROCESSING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> NEW BERLIN DEBIT PROCESSING -> NEW BERLIN DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> NEW BERLIN DEBIT PROCESSING",
+      "name": "NEW BERLIN DEBIT PROCESSING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> NORCROSS DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING",
+      "name": "NORCROSS DEBIT PROCESSING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> NORCROSS DEBIT PROCESSING -> NORCROSS DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> NORCROSS DEBIT PROCESSING",
+      "name": "NORCROSS DEBIT PROCESSING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> PAYMENTS SOFTWARE AND SAAS",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING",
+      "name": "PAYMENTS SOFTWARE AND SAAS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> PAYMENTS SOFTWARE AND SAAS -> PAYMENTS SOFTWARE AND SAAS",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> PAYMENTS SOFTWARE AND SAAS",
+      "name": "PAYMENTS SOFTWARE AND SAAS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> PTS DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING",
+      "name": "PTS DEBIT PROCESSING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> PTS DEBIT PROCESSING -> PTS DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> PTS DEBIT PROCESSING",
+      "name": "PTS DEBIT PROCESSING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> ST PETE DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING",
+      "name": "ST PETE DEBIT PROCESSING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> ST PETE DEBIT PROCESSING -> ST PETE DEBIT PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> DEBIT PROCESSING -> ST PETE DEBIT PROCESSING",
+      "name": "ST PETE DEBIT PROCESSING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING",
+      "name": "VALUE ADDED SERVICES",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> CARD FRAUD",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES",
+      "name": "CARD FRAUD",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> CARD FRAUD -> CARD FRAUD",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> CARD FRAUD",
+      "name": "CARD FRAUD",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> CARD FRAUD -> DEPOSIT FRAUD AND COMPLIANCE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> CARD FRAUD",
+      "name": "DEPOSIT FRAUD AND COMPLIANCE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> CHARGEBACKS",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES",
+      "name": "CHARGEBACKS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> CHARGEBACKS -> CREDIT CHARGEBACKS",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> CHARGEBACKS",
+      "name": "CREDIT CHARGEBACKS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> PAYMENTS EDGE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES",
+      "name": "PAYMENTS EDGE",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> PAYMENTS EDGE -> PAYMENTS EDGE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> PAYMENTS EDGE",
+      "name": "PAYMENTS EDGE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> VALUE ADDED SERVICES - DIGITAL",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES",
+      "name": "VALUE ADDED SERVICES - DIGITAL",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> VALUE ADDED SERVICES - DIGITAL -> EZ",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> VALUE ADDED SERVICES - DIGITAL",
+      "name": "EZ",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> VALUE ADDED SERVICES OTS AND CBK",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES",
+      "name": "VALUE ADDED SERVICES OTS AND CBK",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> VALUE ADDED SERVICES OTS AND CBK -> VALUE ADDED SERVICES OTS AND CBK",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> ISSUING -> VALUE ADDED SERVICES -> VALUE ADDED SERVICES OTS AND CBK",
+      "name": "VALUE ADDED SERVICES OTS AND CBK",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT",
+      "name": "MONEY MOVEMENT AND EMBEDDED FINANCE",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> EMBEDDED FINANCE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE",
+      "name": "EMBEDDED FINANCE",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> EMBEDDED FINANCE -> EMBEDDED FINANCE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> EMBEDDED FINANCE",
+      "name": "EMBEDDED FINANCE",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> EMBEDDED FINANCE -> EMBEDDED FINANCE -> EMBEDDED FINANCE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> EMBEDDED FINANCE -> EMBEDDED FINANCE",
+      "name": "EMBEDDED FINANCE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE",
+      "name": "MONEY MOVEMENT AND RETAIL SOLUTIONS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> BUSINESS-TO-BUSINESS - ADMIN",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS",
+      "name": "BUSINESS-TO-BUSINESS - ADMIN",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> BUSINESS-TO-BUSINESS - ADMIN -> BUSINESS-TO-BUSINESS - ADMIN",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> BUSINESS-TO-BUSINESS - ADMIN",
+      "name": "BUSINESS-TO-BUSINESS - ADMIN",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS COMMERCIAL",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS",
+      "name": "ENTERPRISE PAYMENTS COMMERCIAL",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS COMMERCIAL -> ENTERPRISE PAYMENTS COMMERCIAL",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS COMMERCIAL",
+      "name": "ENTERPRISE PAYMENTS COMMERCIAL",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS HOSTED",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS",
+      "name": "ENTERPRISE PAYMENTS HOSTED",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS HOSTED -> ACH",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS HOSTED",
+      "name": "ACH",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS HOSTED -> COMMERCIAL TREASURY",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS HOSTED",
+      "name": "COMMERCIAL TREASURY",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS HOSTED -> REAL TIME PAYMENTS B2B",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> ENTERPRISE PAYMENTS HOSTED",
+      "name": "REAL TIME PAYMENTS B2B",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> RETAIL SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS",
+      "name": "RETAIL SOLUTIONS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> RETAIL SOLUTIONS -> BILL PAY",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> MONEY MOVEMENT AND EMBEDDED FINANCE -> MONEY MOVEMENT AND RETAIL SOLUTIONS -> RETAIL SOLUTIONS",
+      "name": "BILL PAY",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT",
+      "name": "PAYMENTS NETWORK",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> LOYALTY",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK",
+      "name": "LOYALTY",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> LOYALTY -> LOYALTY",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> LOYALTY",
+      "name": "LOYALTY",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> LOYALTY -> LOYALTY -> LOYALTY",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> LOYALTY -> LOYALTY",
+      "name": "LOYALTY",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK",
+      "name": "NETWORK SERVICES",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES -> NYCE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES",
+      "name": "NYCE",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES -> NYCE -> NYCE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES -> NYCE",
+      "name": "NYCE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES -> TSI AFFN",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES",
+      "name": "TSI AFFN",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES -> TSI AFFN -> TSI AFFN",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> NETWORK SERVICES -> TSI AFFN",
+      "name": "TSI AFFN",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK",
+      "name": "PREPAID",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID -> PREPAID NORTH",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID",
+      "name": "PREPAID NORTH",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID -> PREPAID NORTH -> PREPAID NORTH",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID -> PREPAID NORTH",
+      "name": "PREPAID NORTH",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID -> PREPAID SUNRISE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID",
+      "name": "PREPAID SUNRISE",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID -> PREPAID SUNRISE -> PREPAID SUNRISE",
+      "parentId": "BANKING SOLUTIONS -> CARDS AND MONEY MOVEMENT -> PAYMENTS NETWORK -> PREPAID -> PREPAID SUNRISE",
+      "name": "PREPAID SUNRISE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "COMMERCIAL SERVICES AND BPAAS",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS",
+      "name": "BOTS",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS",
+      "name": "BACK OFFICE SERVICES",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> APP SERVICES",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES",
+      "name": "APP SERVICES",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> APP SERVICES -> APP SERVICES",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> APP SERVICES",
+      "name": "APP SERVICES",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> BANKING BACK OFFICE",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES",
+      "name": "BANKING BACK OFFICE",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> BANKING BACK OFFICE -> BANKING BPM",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> BANKING BACK OFFICE",
+      "name": "BANKING BPM",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> BANKING BACK OFFICE -> COLLECTIONS",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> BANKING BACK OFFICE",
+      "name": "COLLECTIONS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> PAYMENT PBPM",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES",
+      "name": "PAYMENT PBPM",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> PAYMENT PBPM -> PAYMENTS BPM FI",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> PAYMENT PBPM",
+      "name": "PAYMENTS BPM FI",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> PAYMENT PBPM -> PAYMENTS BPM NFI",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> PAYMENT PBPM",
+      "name": "PAYMENTS BPM NFI",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> WORKFORCE TECH SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES",
+      "name": "WORKFORCE TECH SOLUTIONS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> WORKFORCE TECH SOLUTIONS -> BANKING BPM - VRU",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> WORKFORCE TECH SOLUTIONS",
+      "name": "BANKING BPM - VRU",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> WORKFORCE TECH SOLUTIONS -> WORKFORCE TECH SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> BACK OFFICE SERVICES -> WORKFORCE TECH SOLUTIONS",
+      "name": "WORKFORCE TECH SOLUTIONS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> MANAGED SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS",
+      "name": "MANAGED SOLUTIONS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> MANAGED SOLUTIONS -> MANAGED SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> MANAGED SOLUTIONS",
+      "name": "MANAGED SOLUTIONS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> MANAGED SOLUTIONS -> MANAGED SOLUTIONS -> MANAGED SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> BOTS -> MANAGED SOLUTIONS -> MANAGED SOLUTIONS",
+      "name": "MANAGED SOLUTIONS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS",
+      "name": "IMAGE AND REMITTANCE PROCESSING",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> FIS CONTENT MANAGEMENT",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING",
+      "name": "FIS CONTENT MANAGEMENT",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> FIS CONTENT MANAGEMENT -> FIS CONTENT MANAGEMENT",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> FIS CONTENT MANAGEMENT",
+      "name": "FIS CONTENT MANAGEMENT",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> FIS CONTENT MANAGEMENT -> FIS CONTENT MANAGEMENT -> FIS CONTENT MANAGEMENT",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> FIS CONTENT MANAGEMENT -> FIS CONTENT MANAGEMENT",
+      "name": "FIS CONTENT MANAGEMENT",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING",
+      "name": "ITEM PROCESSING - OUTSOURCING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING -> ITEM PROCESSING - OUTSOURCING",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING",
+      "name": "ITEM PROCESSING - OUTSOURCING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING -> ITEM PROCESSING - OUTSOURCING -> ITEM PROCESSING - OUTSOURCING",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING -> ITEM PROCESSING - OUTSOURCING",
+      "name": "ITEM PROCESSING - OUTSOURCING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING -> ITEM PROCESSING - SOFTWARE",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING",
+      "name": "ITEM PROCESSING - SOFTWARE",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING -> ITEM PROCESSING - SOFTWARE -> ITEM PROCESSING - SOFTWARE",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> ITEM PROCESSING - OUTSOURCING -> ITEM PROCESSING - SOFTWARE",
+      "name": "ITEM PROCESSING - SOFTWARE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING",
+      "name": "LOCKBOX PROCESSING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING -> REMITTANCE PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING",
+      "name": "REMITTANCE PROCESSING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING -> REMITTANCE PROCESSING -> REMITTANCE PROCESSING",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING -> REMITTANCE PROCESSING",
+      "name": "REMITTANCE PROCESSING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING -> VICOR",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING",
+      "name": "VICOR",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING -> VICOR -> VICOR",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> IMAGE AND REMITTANCE PROCESSING -> LOCKBOX PROCESSING -> VICOR",
+      "name": "VICOR",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> OUTPUT SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS",
+      "name": "OUTPUT SOLUTIONS",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> OUTPUT SOLUTIONS -> PRINT AND MAIL",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> OUTPUT SOLUTIONS",
+      "name": "PRINT AND MAIL",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> OUTPUT SOLUTIONS -> PRINT AND MAIL -> PRINT AND MAIL",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> OUTPUT SOLUTIONS -> PRINT AND MAIL",
+      "name": "PRINT AND MAIL",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> OUTPUT SOLUTIONS -> PRINT AND MAIL -> PRINT AND MAIL -> PRINT AND MAIL",
+      "parentId": "BANKING SOLUTIONS -> COMMERCIAL SERVICES AND BPAAS -> OUTPUT SOLUTIONS -> PRINT AND MAIL -> PRINT AND MAIL",
+      "name": "PRINT AND MAIL",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "CORE BANKING SOLUTIONS",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS",
+      "name": "COMMUNITY CORES",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES",
+      "name": "COMMUNITY CORES",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY HERITAGE",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES",
+      "name": "COMMUNITY HERITAGE",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY HERITAGE -> BANCPAC",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY HERITAGE",
+      "name": "BANCPAC",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY HERITAGE -> BANKWAY",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY HERITAGE",
+      "name": "BANKWAY",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY HERITAGE -> MERCURY",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY HERITAGE",
+      "name": "MERCURY",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY STRATEGIC",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES",
+      "name": "COMMUNITY STRATEGIC",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY STRATEGIC -> HORIZON",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY STRATEGIC",
+      "name": "HORIZON",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY STRATEGIC -> SHARED SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> COMMUNITY CORES -> COMMUNITY CORES -> COMMUNITY STRATEGIC",
+      "name": "SHARED SOLUTIONS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CORE BANKING SOLUTIONS ADMIN",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS",
+      "name": "CORE BANKING SOLUTIONS ADMIN",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CORE BANKING SOLUTIONS ADMIN -> CORE BANKING SOLUTIONS ADMIN",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CORE BANKING SOLUTIONS ADMIN",
+      "name": "CORE BANKING SOLUTIONS ADMIN",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CORE BANKING SOLUTIONS ADMIN -> CORE BANKING SOLUTIONS ADMIN -> REGIONAL AND COMMUNITY BANKING EXEC ADMIN",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CORE BANKING SOLUTIONS ADMIN -> CORE BANKING SOLUTIONS ADMIN",
+      "name": "REGIONAL AND COMMUNITY BANKING EXEC ADMIN",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CORE BANKING SOLUTIONS ADMIN -> CORE BANKING SOLUTIONS ADMIN -> REGIONAL AND COMMUNITY BANKING EXEC ADMIN -> REGIONAL AND COMMUNITY BANKING EXEC ADMIN",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CORE BANKING SOLUTIONS ADMIN -> CORE BANKING SOLUTIONS ADMIN -> REGIONAL AND COMMUNITY BANKING EXEC ADMIN",
+      "name": "REGIONAL AND COMMUNITY BANKING EXEC ADMIN",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CREDIT UNION CORES",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS",
+      "name": "CREDIT UNION CORES",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CREDIT UNION CORES -> CREDIT UNION CORES",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CREDIT UNION CORES",
+      "name": "CREDIT UNION CORES",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CREDIT UNION CORES -> CREDIT UNION CORES -> CREDIT UNION CORES",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CREDIT UNION CORES -> CREDIT UNION CORES",
+      "name": "CREDIT UNION CORES",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CREDIT UNION CORES -> CREDIT UNION CORES -> CREDIT UNION CORES -> AFFINITYEDGE",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> CREDIT UNION CORES -> CREDIT UNION CORES -> CREDIT UNION CORES",
+      "name": "AFFINITYEDGE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS",
+      "name": "GLOBAL CORE SOLUTIONS",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS",
+      "name": "LFI BANKING SOLUTIONS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - LATAM",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS",
+      "name": "LFI - LATAM",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - LATAM -> LFI - LATAM OTHER",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - LATAM",
+      "name": "LFI - LATAM OTHER",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - OTHER - NORTH AMERICA",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS",
+      "name": "LFI - OTHER - NORTH AMERICA",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - OTHER - NORTH AMERICA -> TOUCHPOINT - NA",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - OTHER - NORTH AMERICA",
+      "name": "TOUCHPOINT - NA",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - PROFILE - NORTH AMERICA",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS",
+      "name": "LFI - PROFILE - NORTH AMERICA",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - PROFILE - NORTH AMERICA -> PROFILE - NA",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - PROFILE - NORTH AMERICA",
+      "name": "PROFILE - NA",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - SYSTEMATICS - NORTH AMERICA",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS",
+      "name": "LFI - SYSTEMATICS - NORTH AMERICA",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - SYSTEMATICS - NORTH AMERICA -> SYSTEMATICS - NA",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> LFI BANKING SOLUTIONS -> LFI - SYSTEMATICS - NORTH AMERICA",
+      "name": "SYSTEMATICS - NA",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> MODERN BANKING PLATFORM",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS",
+      "name": "MODERN BANKING PLATFORM",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> MODERN BANKING PLATFORM -> MBP DOMESTIC",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> MODERN BANKING PLATFORM",
+      "name": "MBP DOMESTIC",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> MODERN BANKING PLATFORM -> MBP DOMESTIC -> MBP CODE CONNECT",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> MODERN BANKING PLATFORM -> MBP DOMESTIC",
+      "name": "MBP CODE CONNECT",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> MODERN BANKING PLATFORM -> MBP DOMESTIC -> MBP CORE",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> GLOBAL CORE SOLUTIONS -> MODERN BANKING PLATFORM -> MBP DOMESTIC",
+      "name": "MBP CORE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> REGIONAL CORES",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS",
+      "name": "REGIONAL CORES",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> REGIONAL CORES -> IBS",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> REGIONAL CORES",
+      "name": "IBS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> REGIONAL CORES -> IBS -> IBS",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> REGIONAL CORES -> IBS",
+      "name": "IBS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> REGIONAL CORES -> IBS -> IBS -> IBS",
+      "parentId": "BANKING SOLUTIONS -> CORE BANKING SOLUTIONS -> REGIONAL CORES -> IBS -> IBS",
+      "name": "IBS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "DIGITAL BUSINESS BANKING",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING",
+      "name": "DIGITAL ONE BUSINESS BANKING",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING",
+      "name": "DIGITAL ONE BUSINESS BANKING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING",
+      "name": "DIGITAL ONE BUSINESS BANKING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL BUSINESS EBANKING HUB",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING -> DIGITAL ONE BUSINESS BANKING",
+      "name": "DIGITAL BUSINESS EBANKING HUB",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "DIGITAL RETAIL AND OPEN BANKING",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL ADMIN PRODUCT UX DEV",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING",
+      "name": "DIGITAL ADMIN PRODUCT UX DEV",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL ADMIN PRODUCT UX DEV -> DIGITAL ADMIN PRODUCT UX DEV",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL ADMIN PRODUCT UX DEV",
+      "name": "DIGITAL ADMIN PRODUCT UX DEV",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL ADMIN PRODUCT UX DEV -> DIGITAL ADMIN PRODUCT UX DEV -> DIGITAL ADMIN",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL ADMIN PRODUCT UX DEV -> DIGITAL ADMIN PRODUCT UX DEV",
+      "name": "DIGITAL ADMIN",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL ADMIN PRODUCT UX DEV -> DIGITAL ADMIN PRODUCT UX DEV -> DIGITAL ADMIN -> DIGITAL ADMIN",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL ADMIN PRODUCT UX DEV -> DIGITAL ADMIN PRODUCT UX DEV -> DIGITAL ADMIN",
+      "name": "DIGITAL ADMIN",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL OPEN BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING",
+      "name": "DIGITAL OPEN BANKING",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL OPEN BANKING",
+      "name": "DIGITAL OPEN BANKING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING",
+      "name": "DIGITAL OPEN BANKING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING -> DIGITAL OPEN BANKING",
+      "name": "DIGITAL OPEN BANKING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING",
+      "name": "DIGITAL RETAIL CONSUMER BANKING",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING",
+      "name": "DIGITAL RETAIL CONSUMER BANKING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING",
+      "name": "DIGITAL RETAIL CONSUMER BANKING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL CONSUMER EBANKING FLEX",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING",
+      "name": "DIGITAL CONSUMER EBANKING FLEX",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL CONSUMER MOBILE",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING",
+      "name": "DIGITAL CONSUMER MOBILE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL CONSUMER WEB SERVICES",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING -> DIGITAL RETAIL CONSUMER BANKING",
+      "name": "DIGITAL CONSUMER WEB SERVICES",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL LFI BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING",
+      "name": "DIGITAL RETAIL LFI BANKING",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL RETAIL LFI BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL LFI BANKING",
+      "name": "DIGITAL RETAIL LFI BANKING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL RETAIL LFI BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL RETAIL LFI BANKING",
+      "name": "DIGITAL RETAIL LFI BANKING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL LFI BANKING",
+      "parentId": "BANKING SOLUTIONS -> DIGITAL RETAIL AND OPEN BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL RETAIL LFI BANKING -> DIGITAL RETAIL LFI BANKING",
+      "name": "DIGITAL LFI BANKING",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "FINTEL",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL -> DATA SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> FINTEL",
+      "name": "DATA SOLUTIONS",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL -> DATA SOLUTIONS -> DATA SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> FINTEL -> DATA SOLUTIONS",
+      "name": "DATA SOLUTIONS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL -> DATA SOLUTIONS -> DATA SOLUTIONS -> DATA SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> FINTEL -> DATA SOLUTIONS -> DATA SOLUTIONS",
+      "name": "DATA SOLUTIONS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL -> DATA SOLUTIONS -> DATA SOLUTIONS -> DATA SOLUTIONS -> DATA SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> FINTEL -> DATA SOLUTIONS -> DATA SOLUTIONS -> DATA SOLUTIONS",
+      "name": "DATA SOLUTIONS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL -> DECISION SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> FINTEL",
+      "name": "DECISION SOLUTIONS",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL -> DECISION SOLUTIONS -> DECISION SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> FINTEL -> DECISION SOLUTIONS",
+      "name": "DECISION SOLUTIONS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL -> DECISION SOLUTIONS -> DECISION SOLUTIONS -> DECISION SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> FINTEL -> DECISION SOLUTIONS -> DECISION SOLUTIONS",
+      "name": "DECISION SOLUTIONS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> FINTEL -> DECISION SOLUTIONS -> DECISION SOLUTIONS -> DECISION SOLUTIONS -> DECISION SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> FINTEL -> DECISION SOLUTIONS -> DECISION SOLUTIONS -> DECISION SOLUTIONS",
+      "name": "DECISION SOLUTIONS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "PLATFORMS",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE",
+      "parentId": "BANKING SOLUTIONS -> PLATFORMS",
+      "name": "AUTOMATED FINANCE",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE",
+      "name": "COMMERCIAL SOLUTIONS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> PAYABLES SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS",
+      "name": "PAYABLES SOLUTIONS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> PAYABLES SOLUTIONS -> INTEGRATED PAYABLES",
+      "parentId": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> PAYABLES SOLUTIONS",
+      "name": "INTEGRATED PAYABLES",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> RECEIVABLES",
+      "parentId": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS",
+      "name": "RECEIVABLES",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> RECEIVABLES -> RECEIVABLES",
+      "parentId": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> RECEIVABLES",
+      "name": "RECEIVABLES",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> TRANSMISSION AND BILLING SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS",
+      "name": "TRANSMISSION AND BILLING SOLUTIONS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> TRANSMISSION AND BILLING SOLUTIONS -> EXTENDED ACCOUNT ANALYSIS",
+      "parentId": "BANKING SOLUTIONS -> PLATFORMS -> AUTOMATED FINANCE -> COMMERCIAL SOLUTIONS -> TRANSMISSION AND BILLING SOLUTIONS",
+      "name": "EXTENDED ACCOUNT ANALYSIS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "RETAIL LENDING AND PARTNERSHIPS",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS",
+      "name": "RETAIL LENDING AND PARTNERSHIPS",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> PARTNERSHIPS",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS",
+      "name": "PARTNERSHIPS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> PARTNERSHIPS -> PARTNERSHIPS",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> PARTNERSHIPS",
+      "name": "PARTNERSHIPS",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> PARTNERSHIPS -> PARTNERSHIPS -> MBP PARTNERSHIPS",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> PARTNERSHIPS -> PARTNERSHIPS",
+      "name": "MBP PARTNERSHIPS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS",
+      "name": "RETAIL LOAN ORIGINATION",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION",
+      "name": "LFI - NORTH AMERICAN LENDING",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING -> NAL 3RD PARTY SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING",
+      "name": "NAL 3RD PARTY SOLUTIONS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING -> NAL CREDITWORX",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING",
+      "name": "NAL CREDITWORX",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING -> NAL FLO",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING",
+      "name": "NAL FLO",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING -> NAL INTERNET DIRECT",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING",
+      "name": "NAL INTERNET DIRECT",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING -> NAL ORIGENATE",
+      "parentId": "BANKING SOLUTIONS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LENDING AND PARTNERSHIPS -> RETAIL LOAN ORIGINATION -> LFI - NORTH AMERICAN LENDING",
+      "name": "NAL ORIGENATE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL",
+      "parentId": "BANKING SOLUTIONS",
+      "name": "WEALTH RETIREMENT AND INTERNATIONAL",
+      "title": "Business Unit",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL",
+      "name": "INTERNATIONAL BANKING",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING -> INTERNATIONAL BANKING",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING",
+      "name": "INTERNATIONAL BANKING",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING -> INTERNATIONAL BANKING -> BANKING - APAC AND EMEA",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING -> INTERNATIONAL BANKING",
+      "name": "BANKING - APAC AND EMEA",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING -> INTERNATIONAL BANKING -> BANKING - APAC AND EMEA -> BANKING - INTL",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING -> INTERNATIONAL BANKING -> BANKING - APAC AND EMEA",
+      "name": "BANKING - INTL",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING -> INTERNATIONAL BANKING -> BANKING - APAC AND EMEA -> KORDOBA - INTL",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL BANKING -> INTERNATIONAL BANKING -> BANKING - APAC AND EMEA",
+      "name": "KORDOBA - INTL",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL",
+      "name": "INTERNATIONAL PAYMENTS",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS",
+      "name": "INTERNATIONAL PAYMENTS",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - APAC AND EMEA",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS",
+      "name": "PAYMENTS - APAC AND EMEA",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - APAC AND EMEA -> CARD SOLUTIONS - INTL",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - APAC AND EMEA",
+      "name": "CARD SOLUTIONS - INTL",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - APAC AND EMEA -> OTHER PAYMENTS - INTL",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - APAC AND EMEA",
+      "name": "OTHER PAYMENTS - INTL",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - APAC AND EMEA -> RETAIL PAYMENTS - INTL",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - APAC AND EMEA",
+      "name": "RETAIL PAYMENTS - INTL",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - LATIN AMERICA",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS",
+      "name": "PAYMENTS - LATIN AMERICA",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - LATIN AMERICA -> CARD SOLUTIONS - LATAM",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - LATIN AMERICA",
+      "name": "CARD SOLUTIONS - LATAM",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - LATIN AMERICA -> RETAIL PAYMENTS - LATAM",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> INTERNATIONAL PAYMENTS -> INTERNATIONAL PAYMENTS -> PAYMENTS - LATIN AMERICA",
+      "name": "RETAIL PAYMENTS - LATAM",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL",
+      "name": "RETIREMENT",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT -> RETIREMENT",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT",
+      "name": "RETIREMENT",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT -> RETIREMENT -> RETIREMENT TECH",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT -> RETIREMENT",
+      "name": "RETIREMENT TECH",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT -> RETIREMENT -> RETIREMENT TECH -> OMNI TECH",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT -> RETIREMENT -> RETIREMENT TECH",
+      "name": "OMNI TECH",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT -> RETIREMENT -> RETIREMENT TECH -> RELIUS TECH",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> RETIREMENT -> RETIREMENT -> RETIREMENT TECH",
+      "name": "RELIUS TECH",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL",
+      "name": "WEALTH",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> PLATFORM SECURITIES",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH",
+      "name": "PLATFORM SECURITIES",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> PLATFORM SECURITIES -> PLATFORM SECURITIES",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> PLATFORM SECURITIES",
+      "name": "PLATFORM SECURITIES",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> PLATFORM SECURITIES -> PLATFORM SECURITIES -> PLATFORM SECURITIES",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> PLATFORM SECURITIES -> PLATFORM SECURITIES",
+      "name": "PLATFORM SECURITIES",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH",
+      "name": "WEALTH",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> RELIANCE TRUST",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH",
+      "name": "RELIANCE TRUST",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> RELIANCE TRUST -> RELIANCE TRUST - RETIREMENT SOLUTIONS",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> RELIANCE TRUST",
+      "name": "RELIANCE TRUST - RETIREMENT SOLUTIONS",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> WEALTH TECHNOLOGY",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH",
+      "name": "WEALTH TECHNOLOGY",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> WEALTH TECHNOLOGY -> TRUST",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> WEALTH TECHNOLOGY",
+      "name": "TRUST",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> WEALTH TECHNOLOGY -> WEALTH TRUST",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> WEALTH TECHNOLOGY",
+      "name": "WEALTH TRUST",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> WEALTH TECHNOLOGY -> WEALTHWARE",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH -> WEALTH -> WEALTH TECHNOLOGY",
+      "name": "WEALTHWARE",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL",
+      "name": "WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "title": "Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "name": "WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "title": "Sub-Department",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "name": "WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "title": "Product Group",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "parentId": "BANKING SOLUTIONS -> WEALTH RETIREMENT AND INTERNATIONAL -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN -> WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "name": "WEALTH RETIREMENT AND INTERNATIONAL ADMIN",
+      "title": "Product Category",
+      "department": "BANKING SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS",
+      "parentId": "root",
+      "name": "CAPITAL MARKETS",
+      "title": "Division",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Division",
+      "productLevel": "L3"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS",
+      "parentId": "CAPITAL MARKETS",
+      "name": "CM FINTECH SOLUTIONS",
+      "title": "Business Unit",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS",
+      "name": "CAPITAL MARKETS ADMIN",
+      "title": "Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN",
+      "name": "CAPITAL MARKETS ADMIN",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN",
+      "name": "CAPITAL MARKETS ADMIN",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN - OPS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN",
+      "name": "CAPITAL MARKETS ADMIN - OPS",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN - OTHER",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN -> CAPITAL MARKETS ADMIN",
+      "name": "CAPITAL MARKETS ADMIN - OTHER",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS",
+      "name": "CAPITAL MARKETS VALUE PORTFOLIO",
+      "title": "Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE IODS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO",
+      "name": "CM VALUE IODS",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE IODS -> CM VALUE IODS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE IODS",
+      "name": "CM VALUE IODS",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE IODS -> CM VALUE IODS -> INVESTIER",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE IODS -> CM VALUE IODS",
+      "name": "INVESTIER",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE IODS -> CM VALUE IODS -> SECURITIES TRANSFER STG",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE IODS -> CM VALUE IODS",
+      "name": "SECURITIES TRANSFER STG",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO",
+      "name": "CM VALUE TP",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE PFT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP",
+      "name": "CM VALUE PFT",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE PFT -> INTRADER",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE PFT",
+      "name": "INTRADER",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE PFT -> RIMS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE PFT",
+      "name": "RIMS",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP",
+      "name": "CM VALUE TCD",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD -> LEGACY FRONT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD",
+      "name": "LEGACY FRONT",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD -> MARKETMAP - ENERGY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD",
+      "name": "MARKETMAP - ENERGY",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD -> MARKETMAP SELECT FEED",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD",
+      "name": "MARKETMAP SELECT FEED",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD -> MARKETMAP- ANALYTIC PLATFORM",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD",
+      "name": "MARKETMAP- ANALYTIC PLATFORM",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD -> SGN SECURITIES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TP -> CM VALUE TCD",
+      "name": "SGN SECURITIES",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO",
+      "name": "CM VALUE TR",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE RISK",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR",
+      "name": "CM VALUE RISK",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE RISK -> APT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE RISK",
+      "name": "APT",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE RISK -> ENERGY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE RISK",
+      "name": "ENERGY",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE RISK -> KIODEX",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE RISK",
+      "name": "KIODEX",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR",
+      "name": "CM VALUE TREASURY",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY -> CORE ADMIN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY",
+      "name": "CORE ADMIN",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY -> INVESTMENTS AND STATUTORY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY",
+      "name": "INVESTMENTS AND STATUTORY",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY -> MAINTENANCE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY",
+      "name": "MAINTENANCE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY -> MESSAGING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY",
+      "name": "MESSAGING",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY -> WORKFLOW",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> CAPITAL MARKETS VALUE PORTFOLIO -> CM VALUE TR -> CM VALUE TREASURY",
+      "name": "WORKFLOW",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS",
+      "name": "LENDING",
+      "title": "Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING",
+      "name": "LENDING",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> ACBS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING",
+      "name": "ACBS",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> ACBS -> ACBS COMMERCIAL LENDING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> ACBS",
+      "name": "ACBS COMMERCIAL LENDING",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> ACBS -> ACBS SYNDTRAK",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> ACBS",
+      "name": "ACBS SYNDTRAK",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AMBIT ASSET FINANCE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING",
+      "name": "AMBIT ASSET FINANCE",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AMBIT ASSET FINANCE -> AMBIT ASSET FINANCE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AMBIT ASSET FINANCE",
+      "name": "AMBIT ASSET FINANCE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AMBIT LENDING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING",
+      "name": "AMBIT LENDING",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AMBIT LENDING -> AMBIT LENDING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AMBIT LENDING",
+      "name": "AMBIT LENDING",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AUTOFINANCE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING",
+      "name": "AUTOFINANCE",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AUTOFINANCE -> AUTOFINANCE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AUTOFINANCE",
+      "name": "AUTOFINANCE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AUTOFINANCE -> DEFAULT MANAGER",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> LENDING -> LENDING -> AUTOFINANCE",
+      "name": "DEFAULT MANAGER",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS",
+      "name": "TRADING AND ASSET SERVICES",
+      "title": "Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES",
+      "name": "BACK OFFICE",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> INVESTMENT OPERATIONS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE",
+      "name": "INVESTMENT OPERATIONS",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> INVESTMENT OPERATIONS -> INFINITY PROCESS PLATFORM",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> INVESTMENT OPERATIONS",
+      "name": "INFINITY PROCESS PLATFORM",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> INVESTMENT OPERATIONS -> INVESTMENT OPERATIONS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> INVESTMENT OPERATIONS",
+      "name": "INVESTMENT OPERATIONS",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> PRIVATE EQUITY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE",
+      "name": "PRIVATE EQUITY",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> PRIVATE EQUITY -> INVESTRAN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> PRIVATE EQUITY",
+      "name": "INVESTRAN",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> SECURITIES PROCESSING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE",
+      "name": "SECURITIES PROCESSING",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> SECURITIES PROCESSING -> PHASE 3",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> SECURITIES PROCESSING",
+      "name": "PHASE 3",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> SECURITIES PROCESSING -> TORSTONE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> SECURITIES PROCESSING",
+      "name": "TORSTONE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> TAX INFORMATION REPORTING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE",
+      "name": "TAX INFORMATION REPORTING",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> TAX INFORMATION REPORTING -> WALL ST CONCEPTS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> BACK OFFICE -> TAX INFORMATION REPORTING",
+      "name": "WALL ST CONCEPTS",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES",
+      "name": "DATA",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> DATA SERVICES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA",
+      "name": "DATA SERVICES",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> DATA SERVICES -> ASTEC",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> DATA SERVICES",
+      "name": "ASTEC",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> DATA SERVICES -> PRICING AND DATA SERVICES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> DATA SERVICES",
+      "name": "PRICING AND DATA SERVICES",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> DATA SERVICES -> XSP",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> DATA SERVICES",
+      "name": "XSP",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> ENTERPRISE DATA AND PLATFORM MANAGEMENT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA",
+      "name": "ENTERPRISE DATA AND PLATFORM MANAGEMENT",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> ENTERPRISE DATA AND PLATFORM MANAGEMENT -> ENTERPRISE DATA AND PLATFORM MANAGEMENT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> ENTERPRISE DATA AND PLATFORM MANAGEMENT",
+      "name": "ENTERPRISE DATA AND PLATFORM MANAGEMENT",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> RECONCILIATION",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA",
+      "name": "RECONCILIATION",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> RECONCILIATION -> BASE VENTURE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> RECONCILIATION",
+      "name": "BASE VENTURE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> RECONCILIATION -> DATA RECONCILIATION",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> DATA -> RECONCILIATION",
+      "name": "DATA RECONCILIATION",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES",
+      "name": "FRONT OFFICE",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> ELECTRONIC TRADING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE",
+      "name": "ELECTRONIC TRADING",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> ELECTRONIC TRADING -> VALDI SOFTWARE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> ELECTRONIC TRADING",
+      "name": "VALDI SOFTWARE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE",
+      "name": "FRONT ARENA",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA -> ADAPTIV 360 AND OPS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA",
+      "name": "ADAPTIV 360 AND OPS",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA -> FASTVAL",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA",
+      "name": "FASTVAL",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA -> FRONT ARENA",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA",
+      "name": "FRONT ARENA",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA -> MONIS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> FRONT ARENA",
+      "name": "MONIS",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> PROTEGENT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE",
+      "name": "PROTEGENT",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> PROTEGENT -> PROTEGENT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> PROTEGENT",
+      "name": "PROTEGENT",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE",
+      "name": "SECURITIES FINANCE AND COLLATERAL",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL -> COLLATERAL",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL",
+      "name": "COLLATERAL",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL -> SECURITIES FINANCE MATCHING PLATFORM",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL",
+      "name": "SECURITIES FINANCE MATCHING PLATFORM",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL -> SSF SERVICES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL",
+      "name": "SSF SERVICES",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL -> SSF SOFTWARE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> FRONT OFFICE -> SECURITIES FINANCE AND COLLATERAL",
+      "name": "SSF SOFTWARE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES",
+      "name": "INVESTOR SERVICES AND TRANSFER AGENCY",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY -> INVESTOR SERVICES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY",
+      "name": "INVESTOR SERVICES",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY -> INVESTOR SERVICES -> INVESTOR SERVICES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY -> INVESTOR SERVICES",
+      "name": "INVESTOR SERVICES",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY -> TRANSFER AGENCY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY",
+      "name": "TRANSFER AGENCY",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY -> TRANSFER AGENCY -> TRANSFER AGENCIES BPO",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY -> TRANSFER AGENCY",
+      "name": "TRANSFER AGENCIES BPO",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY -> TRANSFER AGENCY -> TRANSFER AGENCY ITO",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> INVESTOR SERVICES AND TRANSFER AGENCY -> TRANSFER AGENCY",
+      "name": "TRANSFER AGENCY ITO",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES",
+      "name": "TAS MIDDLE OFFICE",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE",
+      "name": "CLEARED DERIVATIVES",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES -> DERIVATIVES UTILITY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES",
+      "name": "DERIVATIVES UTILITY",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES -> FIS CD BACK OFFICE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES",
+      "name": "FIS CD BACK OFFICE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES -> FIS CD MIDDLE OFFICE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES",
+      "name": "FIS CD MIDDLE OFFICE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES -> FIS CD MODULE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> CLEARED DERIVATIVES",
+      "name": "FIS CD MODULE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE",
+      "name": "VIRTUS",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS -> COLLATERAL ADMIN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS",
+      "name": "COLLATERAL ADMIN",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS -> FUND SERVICES",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS",
+      "name": "FUND SERVICES",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS -> GLOBAL DATA",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS",
+      "name": "GLOBAL DATA",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS -> VIRTUS MIDDLE OFFICE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TAS MIDDLE OFFICE -> VIRTUS",
+      "name": "VIRTUS MIDDLE OFFICE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TRADE AND ASSET SERVICES ADMIN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES",
+      "name": "TRADE AND ASSET SERVICES ADMIN",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TRADE AND ASSET SERVICES ADMIN -> TAS EXEC ADMIN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TRADE AND ASSET SERVICES ADMIN",
+      "name": "TAS EXEC ADMIN",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TRADE AND ASSET SERVICES ADMIN -> TAS EXEC ADMIN -> TAS EXEC ADMIN",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TRADING AND ASSET SERVICES -> TRADE AND ASSET SERVICES ADMIN -> TAS EXEC ADMIN",
+      "name": "TAS EXEC ADMIN",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS",
+      "name": "TREASURY AND RISK",
+      "title": "Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK",
+      "name": "RISK",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> ADAPTIV",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK",
+      "name": "ADAPTIV",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> ADAPTIV -> ADAPTIV",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> ADAPTIV",
+      "name": "ADAPTIV",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> AMBIT RISK AND PERFORMANCE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK",
+      "name": "AMBIT RISK AND PERFORMANCE",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> AMBIT RISK AND PERFORMANCE -> AMBIT RISK AND PERFORMANCE",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> AMBIT RISK AND PERFORMANCE",
+      "name": "AMBIT RISK AND PERFORMANCE",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> RISK MANAGEMENT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK",
+      "name": "RISK MANAGEMENT",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> RISK MANAGEMENT -> ENTERPRISE ACCOUNTING SYSTEM",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> RISK MANAGEMENT",
+      "name": "ENTERPRISE ACCOUNTING SYSTEM",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> RISK MANAGEMENT -> RISK MANAGEMENT",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> RISK -> RISK MANAGEMENT",
+      "name": "RISK MANAGEMENT",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK",
+      "name": "TREASURY",
+      "title": "Sub-Department",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY",
+      "name": "ENTERPRISE TREASURY AND MESSAGING",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING -> AMBIT QUANTUM",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING",
+      "name": "AMBIT QUANTUM",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING -> ENTERPRISE TREASURY OTHER",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING",
+      "name": "ENTERPRISE TREASURY OTHER",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING -> MANAGED BANK CONNECTIVITY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING",
+      "name": "MANAGED BANK CONNECTIVITY",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING -> QUANTUM",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> ENTERPRISE TREASURY AND MESSAGING",
+      "name": "QUANTUM",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> PAYMENTS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY",
+      "name": "PAYMENTS",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> PAYMENTS -> PAYMENTS",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> PAYMENTS",
+      "name": "PAYMENTS",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> SAAS TREASURY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY",
+      "name": "SAAS TREASURY",
+      "title": "Product Group",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> SAAS TREASURY -> INTEGRITY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> SAAS TREASURY",
+      "name": "INTEGRITY",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> SAAS TREASURY -> LEGACY TREASURY",
+      "parentId": "CAPITAL MARKETS -> CM FINTECH SOLUTIONS -> TREASURY AND RISK -> TREASURY -> SAAS TREASURY",
+      "name": "LEGACY TREASURY",
+      "title": "Product Category",
+      "department": "CAPITAL MARKETS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CORPORATE AND OTHER",
+      "parentId": "root",
+      "name": "CORPORATE AND OTHER",
+      "title": "Division",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Division",
+      "productLevel": "L3"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE",
+      "parentId": "CORPORATE AND OTHER",
+      "name": "CORPORATE",
+      "title": "Business Unit",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS",
+      "parentId": "CORPORATE AND OTHER",
+      "name": "CORPORATE - OTHER BUSINESS",
+      "title": "Business Unit",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS",
+      "name": "CORPORATE - OTHER BUSINESS",
+      "title": "Department",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> CGO INITIATIVES",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS",
+      "name": "CGO INITIATIVES",
+      "title": "Sub-Department",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> CGO INITIATIVES -> STRATEGIC INITIATIVES",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> CGO INITIATIVES",
+      "name": "STRATEGIC INITIATIVES",
+      "title": "Product Group",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> CGO INITIATIVES -> STRATEGIC INITIATIVES -> REALNET CENTRAL",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> CGO INITIATIVES -> STRATEGIC INITIATIVES",
+      "name": "REALNET CENTRAL",
+      "title": "Product Category",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS",
+      "name": "COMMERCIAL - OTHER BUSINESS",
+      "title": "Sub-Department",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS -> ATM - INTL",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS",
+      "name": "ATM - INTL",
+      "title": "Product Group",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS -> ATM - INTL -> ATM - INTL",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS -> ATM - INTL",
+      "name": "ATM - INTL",
+      "title": "Product Category",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS -> COMMERCIAL ACCOUNTS",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS",
+      "name": "COMMERCIAL ACCOUNTS",
+      "title": "Product Group",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS -> COMMERCIAL ACCOUNTS -> COMMERCIAL ACCOUNTS",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> COMMERCIAL - OTHER BUSINESS -> COMMERCIAL ACCOUNTS",
+      "name": "COMMERCIAL ACCOUNTS",
+      "title": "Product Category",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS",
+      "name": "FINTECH - OTHER BUSINESS",
+      "title": "Sub-Department",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> BROKERAGE",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS",
+      "name": "BROKERAGE",
+      "title": "Product Group",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> BROKERAGE -> FOX RIVER",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> BROKERAGE",
+      "name": "FOX RIVER",
+      "title": "Product Category",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> ELECTRONIC TRADE",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS",
+      "name": "ELECTRONIC TRADE",
+      "title": "Product Group",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> ELECTRONIC TRADE -> TCC",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> ELECTRONIC TRADE",
+      "name": "TCC",
+      "title": "Product Category",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> MARKET MAP AND TERMINAL",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS",
+      "name": "MARKET MAP AND TERMINAL",
+      "title": "Product Group",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> MARKET MAP AND TERMINAL -> MARKET MAP AND TERMINAL",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE - OTHER BUSINESS -> CORPORATE - OTHER BUSINESS -> FINTECH - OTHER BUSINESS -> MARKET MAP AND TERMINAL",
+      "name": "MARKET MAP AND TERMINAL",
+      "title": "Product Category",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE -> CORPORATE",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE",
+      "name": "CORPORATE",
+      "title": "Department",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE -> CORPORATE -> CORPORATE",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE -> CORPORATE",
+      "name": "CORPORATE",
+      "title": "Sub-Department",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE -> CORPORATE -> CORPORATE -> CORPORATE",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE -> CORPORATE -> CORPORATE",
+      "name": "CORPORATE",
+      "title": "Product Group",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "CORPORATE AND OTHER -> CORPORATE -> CORPORATE -> CORPORATE -> CORPORATE -> CORPORATE",
+      "parentId": "CORPORATE AND OTHER -> CORPORATE -> CORPORATE -> CORPORATE -> CORPORATE",
+      "name": "CORPORATE",
+      "title": "Product Category",
+      "department": "CORPORATE AND OTHER",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "MERCHANT SOLUTIONS",
+      "parentId": "root",
+      "name": "MERCHANT SOLUTIONS",
+      "title": "Division",
+      "department": "MERCHANT SOLUTIONS",
+      "productRole": "Division",
+      "productLevel": "L3"
+    },
+    {
+      "id": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN",
+      "parentId": "MERCHANT SOLUTIONS",
+      "name": "MERCHANT SOLUTIONS ADMIN",
+      "title": "Business Unit",
+      "department": "MERCHANT SOLUTIONS",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN",
+      "parentId": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN",
+      "name": "MERCHANT SOLUTIONS ADMIN",
+      "title": "Department",
+      "department": "MERCHANT SOLUTIONS",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN",
+      "parentId": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN",
+      "name": "MERCHANT SOLUTIONS ADMIN",
+      "title": "Sub-Department",
+      "department": "MERCHANT SOLUTIONS",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN",
+      "parentId": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN",
+      "name": "MERCHANT SOLUTIONS ADMIN",
+      "title": "Product Group",
+      "department": "MERCHANT SOLUTIONS",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN",
+      "parentId": "MERCHANT SOLUTIONS -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN -> MERCHANT SOLUTIONS ADMIN",
+      "name": "MERCHANT SOLUTIONS ADMIN",
+      "title": "Product Category",
+      "department": "MERCHANT SOLUTIONS",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    },
+    {
+      "id": "NULL",
+      "parentId": "root",
+      "name": "NULL",
+      "title": "Division",
+      "department": "NULL",
+      "productRole": "Division",
+      "productLevel": "L3"
+    },
+    {
+      "id": "NULL -> NULL",
+      "parentId": "NULL",
+      "name": "NULL",
+      "title": "Business Unit",
+      "department": "NULL",
+      "productRole": "Business Unit",
+      "productLevel": "L4"
+    },
+    {
+      "id": "NULL -> NULL -> NULL",
+      "parentId": "NULL -> NULL",
+      "name": "NULL",
+      "title": "Department",
+      "department": "NULL",
+      "productRole": "Department",
+      "productLevel": "L5"
+    },
+    {
+      "id": "NULL -> NULL -> NULL -> NULL",
+      "parentId": "NULL -> NULL -> NULL",
+      "name": "NULL",
+      "title": "Sub-Department",
+      "department": "NULL",
+      "productRole": "Sub-Department",
+      "productLevel": "L6"
+    },
+    {
+      "id": "NULL -> NULL -> NULL -> NULL -> NULL",
+      "parentId": "NULL -> NULL -> NULL -> NULL",
+      "name": "NULL",
+      "title": "Product Group",
+      "department": "NULL",
+      "productRole": "Product Group",
+      "productLevel": "L7"
+    },
+    {
+      "id": "NULL -> NULL -> NULL -> NULL -> NULL -> NULL",
+      "parentId": "NULL -> NULL -> NULL -> NULL -> NULL",
+      "name": "NULL",
+      "title": "Product Category",
+      "department": "NULL",
+      "productRole": "Product Category",
+      "productLevel": "L8"
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2025-12-04T00:00:00Z",
+    "nodeCount": 394,
+    "source": "CSV Product Hierarchy"
+  }
+}

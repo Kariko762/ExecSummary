@@ -13,7 +13,7 @@ interface GaugeRendererProps {
   isEditMode?: boolean;
 }
 
-export const GaugeRenderer: React.FC<GaugeRendererProps> = ({ data, isEditMode = false }) => {
+export const GaugeRenderer: React.FC<GaugeRendererProps> = ({ data }) => {
   const value = data.value || 0;
   const label = data.label || 'Metric';
   const suffix = data.suffix || '%';

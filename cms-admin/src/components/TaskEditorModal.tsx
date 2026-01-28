@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   X, Calendar, DollarSign, Users, AlertCircle, Target,
-  ExternalLink, FileText, Package, Building2, ListChecks, Edit3, Tag, Check
+  ExternalLink, FileText, Package, Building2, ListChecks, Edit3, Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -523,8 +523,15 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                       <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
                         <span className="flex items-center gap-2"><Building2 className="w-4 h-4" />Business Unit</span>
                       </label>
-                      <input type="text" value={formData.businessUnit} onChange={(e) => updateField('businessUnit', e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
+                      <select value={formData.businessUnit} onChange={(e) => updateField('businessUnit', e.target.value)}
+                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode}>
+                        <option value="">Select Business Unit...</option>
+                        <option value="FIS">FIS</option>
+                        <option value="Banking (Int)">Banking (Int)</option>
+                        <option value="Banking (NA)">Banking (NA)</option>
+                        <option value="Capital Markets">Capital Markets</option>
+                        <option value="Other">Other</option>
+                      </select>
                     </div>
                   )}
                   {fields.product && (
@@ -610,7 +617,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                 
                 {editMode ? (
                   <>
-                    {/* Toggle between Goal and Initiative */}
+                    {/* Toggle between Goal, Initiative, and General */}
                     <div className="flex gap-4 mb-3">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -637,6 +644,19 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                           className="w-4 h-4 text-pink-600"
                         />
                         <span className="text-sm text-gray-700 dark:text-gray-300">Initiative (Project)</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="linkType"
+                          value="general"
+                          checked={formData.linkType === 'general'}
+                          onChange={() => {
+                            setFormData({ ...formData, linkType: 'general', goalId: '', initiativeId: '' });
+                          }}
+                          className="w-4 h-4 text-blue-600"
+                        />
+                        <span className="text-sm text-gray-700 dark:text-gray-300">General Task</span>
                       </label>
                     </div>
 

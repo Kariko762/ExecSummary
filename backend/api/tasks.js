@@ -9,6 +9,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { logTaskCreated, logTaskUpdated, logTaskDeleted } from '../utils/change-control-logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -268,6 +269,9 @@ const createTask = async (req, res) => {
     tasksData.tasks.push(newTask);
     await writeTasks(tasksData);
     
+    // Log task creation
+    await logTaskCreated(newTask);
+    
     res.status(201).json({
       success: true,
       task: newTask
@@ -294,6 +298,8 @@ const updateTask = async (req, res) => {
       return res.status(404).json({ success: false, error: 'Task not found' });
     }
     
+    const oldTask = { ...tasksData.tasks[taskIndex] };
+    
     // Update task
     const updatedTask = {
       ...tasksData.tasks[taskIndex],
@@ -305,6 +311,9 @@ const updateTask = async (req, res) => {
     
     tasksData.tasks[taskIndex] = updatedTask;
     await writeTasks(tasksData);
+    
+    // Log task update
+    await logTaskUpdated(id, updates, oldTask);
     
     res.json({
       success: true,
@@ -334,6 +343,9 @@ const deleteTask = async (req, res) => {
     const deletedTask = tasksData.tasks[taskIndex];
     tasksData.tasks.splice(taskIndex, 1);
     await writeTasks(tasksData);
+    
+    // Log task deletion
+    await logTaskDeleted(deletedTask);
     
     res.json({
       success: true,

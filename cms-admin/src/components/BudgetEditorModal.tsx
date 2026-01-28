@@ -19,7 +19,9 @@ import {
   FolderTree,
   List,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { BudgetBreakdown } from '../renderers/assetRenderBudget';
 
@@ -72,6 +74,7 @@ export const BudgetEditorModal: React.FC<BudgetEditorModalProps> = ({ data, onCh
   const [activeTab, setActiveTab] = useState<'settings' | 'categories' | 'preview'>('settings');
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [expandedLineItems, setExpandedLineItems] = useState<Set<string>>(new Set());
+  const [modalWidth, setModalWidth] = useState<75 | 95 | 100>(75);
 
   // Category Management
   const addCategory = () => {
@@ -196,19 +199,47 @@ export const BudgetEditorModal: React.FC<BudgetEditorModalProps> = ({ data, onCh
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-7xl max-h-[90vh] flex flex-col">
+      <div className={`bg-white dark:bg-gray-900 rounded-2xl shadow-2xl ${modalWidth === 75 ? 'w-[75vw]' : modalWidth === 95 ? 'w-[95vw]' : 'w-full'} h-[calc(100vh-2rem)] flex flex-col`}>
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <div>
             <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white">Budget Editor</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{data.title || 'Untitled Budget'}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5 text-gray-500" />
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Save Button */}
+            <button
+              onClick={onClose}
+              className="px-4 py-2 bg-fis-eggplant hover:bg-fis-raspberry text-white rounded-lg transition-colors font-roobert-medium flex items-center gap-2"
+            >
+              <Save className="w-4 h-4" />
+              Save
+            </button>
+            {/* Width Toggle */}
+            <button
+              onClick={() => {
+                if (modalWidth === 75) setModalWidth(95);
+                else if (modalWidth === 95) setModalWidth(100);
+                else setModalWidth(75);
+              }}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              title={`Current: ${modalWidth}% - Click to resize`}
+            >
+              {modalWidth === 100 ? (
+                <Minimize2 className="w-5 h-5 text-gray-500" />
+              ) : (
+                <Maximize2 className="w-5 h-5 text-gray-500" />
+              )}
+            </button>
+            {/* Close Button */}
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              title="Close"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -617,28 +648,6 @@ export const BudgetEditorModal: React.FC<BudgetEditorModalProps> = ({ data, onCh
               <BudgetBreakdown data={data} />
             </div>
           )}
-        </div>
-
-        {/* Footer */}
-        <div className="flex justify-between items-center p-6 border-t border-gray-200 dark:border-gray-700">
-          <div className="text-sm text-gray-500 dark:text-gray-400">
-            {data.categories.length} categories • {data.categories.reduce((sum, cat) => sum + cat.lineItems.length, 0)} line items
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={onClose}
-              className="px-6 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg transition-colors font-roobert-medium"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={onClose}
-              className="px-6 py-2 bg-fis-eggplant hover:bg-fis-raspberry text-white rounded-lg transition-colors font-roobert-medium flex items-center gap-2"
-            >
-              <Save className="w-4 h-4" />
-              Save Changes
-            </button>
-          </div>
         </div>
       </div>
     </div>

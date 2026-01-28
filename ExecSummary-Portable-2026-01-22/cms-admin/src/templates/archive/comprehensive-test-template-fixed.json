@@ -1,0 +1,635 @@
+{
+  "id": "test-comprehensive",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-09",
+  "title": "Comprehensive Test - All Assets & Layouts",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_richTextTest_type": "richText",
+  "_richTextTest_itemSchema": {
+    "type": "string",
+    "renderAs": "richText",
+    "label": "Rich Text Editor",
+    "placeholder": "Enter formatted text here..."
+  },
+  "richTextTest": "## Q1 2025 Highlights\n\nWe achieved **record-breaking growth** this quarter:\n\n- Revenue up 35% YoY\n- Customer base expanded to 1,250+\n- Launched 3 major features\n\n> \"Best quarter in company history\" - CEO",
+  "_enabled_richTextTest": true,
+  "_completed_richTextTest": false,
+  "_barChartTest_type": "barChart",
+  "_barChartTest_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "name": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Label",
+        "required": true
+      },
+      "value": {
+        "type": "number",
+        "renderAs": "number",
+        "label": "Value",
+        "required": true
+      }
+    }
+  },
+  "_barChartTest_chartConfig": {
+    "xAxisKey": "name",
+    "bars": [
+      {
+        "dataKey": "value",
+        "fill": "#6B1B5E",
+        "name": "Value"
+      }
+    ],
+    "orientation": "vertical",
+    "showGrid": true,
+    "showLegend": true,
+    "stacked": false
+  },
+  "barChartTest": [
+    {
+      "name": "Jan",
+      "value": 65
+    },
+    {
+      "name": "Feb",
+      "value": 78
+    },
+    {
+      "name": "Mar",
+      "value": 90
+    }
+  ],
+  "_enabled_barChartTest": true,
+  "_completed_barChartTest": false,
+  "_pieChartTest_type": "pieChart",
+  "_pieChartTest_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "name": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Label",
+        "required": true
+      },
+      "value": {
+        "type": "number",
+        "renderAs": "number",
+        "label": "Value",
+        "required": true
+      }
+    }
+  },
+  "_pieChartTest_chartConfig": {
+    "dataKey": "value",
+    "nameKey": "name",
+    "colors": [
+      "#431C5B",
+      "#1D1F48",
+      "#B21A53",
+      "#3bcd3e",
+      "#3B82F6",
+      "#F59E0B"
+    ],
+    "showLegend": true,
+    "showTooltip": true,
+    "innerRadius": 0,
+    "outerRadius": 80
+  },
+  "pieChartTest": [
+    {
+      "name": "Enterprise",
+      "value": 45
+    },
+    {
+      "name": "Mid-Market",
+      "value": 30
+    },
+    {
+      "name": "SMB",
+      "value": 25
+    }
+  ],
+  "_enabled_pieChartTest": true,
+  "_completed_pieChartTest": false,
+  "_metricCards_0_type": "metricCards",
+  "_metricCards_0_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Title"
+      },
+      "value": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Value"
+      }
+    }
+  },
+  "metricCards_0": [
+    {
+      "title": "Revenue",
+      "value": "$2.4M"
+    },
+    {
+      "title": "Customers",
+      "value": "1,234"
+    }
+  ],
+  "_metricCards_1_type": "metricCards",
+  "_metricCards_1_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Title"
+      },
+      "value": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Value"
+      }
+    }
+  },
+  "metricCards_1": [
+    {
+      "title": "Growth",
+      "value": "+35%"
+    },
+    {
+      "title": "Retention",
+      "value": "94%"
+    }
+  ],
+  "_enabled_metricCards": true,
+  "_completed_metricCards": false,
+  "_nestedCards_type": "nestedCards",
+  "_nestedCards_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Title"
+      },
+      "value": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Value"
+      }
+    }
+  },
+  "nestedCards": [
+    {
+      "title": "Project Alpha",
+      "value": "On Track"
+    },
+    {
+      "title": "Project Beta",
+      "value": "At Risk"
+    }
+  ],
+  "_enabled_nestedCards": true,
+  "_completed_nestedCards": false,
+  "_listTest_0_type": "list",
+  "_listTest_0_itemSchema": {
+    "type": "string",
+    "renderAs": "text"
+  },
+  "listTest_0": [
+    "First item in left column",
+    "Second item in left column",
+    "Third item in left column"
+  ],
+  "_listTest_1_type": "text",
+  "_listTest_1_itemSchema": {
+    "type": "string",
+    "renderAs": "text",
+    "label": "Status Display"
+  },
+  "listTest_1": "87% Complete",
+  "_enabled_listTest": true,
+  "_completed_listTest": false,
+  "_textTest_0_type": "text",
+  "_textTest_0_itemSchema": {
+    "type": "string",
+    "renderAs": "text",
+    "label": "Label"
+  },
+  "textTest_0": "Key Point:",
+  "_textTest_1_type": "textarea",
+  "_textTest_1_itemSchema": {
+    "type": "string",
+    "renderAs": "textarea",
+    "label": "Description",
+    "placeholder": "Enter detailed description..."
+  },
+  "textTest_1": "This is a detailed description that takes up more space on the right side.",
+  "_enabled_textTest": true,
+  "_completed_textTest": false,
+  "_threeColumn_0_type": "metricCards",
+  "_threeColumn_0_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Title"
+      },
+      "value": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Value"
+      }
+    }
+  },
+  "threeColumn_0": [
+    {
+      "title": "Metric A",
+      "value": "100"
+    }
+  ],
+  "_threeColumn_1_type": "metricCards",
+  "_threeColumn_1_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Title"
+      },
+      "value": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Value"
+      }
+    }
+  },
+  "threeColumn_1": [
+    {
+      "title": "Metric B",
+      "value": "200"
+    }
+  ],
+  "_threeColumn_2_type": "metricCards",
+  "_threeColumn_2_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Title"
+      },
+      "value": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Value"
+      }
+    }
+  },
+  "threeColumn_2": [
+    {
+      "title": "Metric C",
+      "value": "300"
+    }
+  ],
+  "_enabled_threeColumn": true,
+  "_completed_threeColumn": false,
+  "_textInput_type": "text",
+  "_textInput_itemSchema": {
+    "type": "string",
+    "renderAs": "text",
+    "label": "Text Input",
+    "placeholder": "Enter text..."
+  },
+  "textInput": "Sample text",
+  "_enabled_textInput": true,
+  "_completed_textInput": false,
+  "_numberInput_type": "number",
+  "_numberInput_itemSchema": {
+    "type": "number",
+    "renderAs": "number",
+    "label": "Number Input"
+  },
+  "numberInput": 42,
+  "_enabled_numberInput": true,
+  "_completed_numberInput": false,
+  "_dateInput_type": "text",
+  "_dateInput_itemSchema": {
+    "type": "date",
+    "renderAs": "text",
+    "label": "Date Input"
+  },
+  "dateInput": "2025-11-09",
+  "_enabled_dateInput": true,
+  "_completed_dateInput": false,
+  "_textareaInput_type": "textarea",
+  "_textareaInput_itemSchema": {
+    "type": "string",
+    "renderAs": "textarea",
+    "label": "Textarea Input",
+    "placeholder": "Enter multi-line text..."
+  },
+  "textareaInput": "Multi-line text example\nSecond line\nThird line",
+  "_enabled_textareaInput": true,
+  "_completed_textareaInput": false,
+  "_lineChartTest_type": "lineChart",
+  "_lineChartTest_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "name": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Label",
+        "required": true
+      },
+      "value": {
+        "type": "number",
+        "renderAs": "number",
+        "label": "Value",
+        "required": true
+      }
+    }
+  },
+  "_lineChartTest_chartConfig": {
+    "xAxisKey": "name",
+    "lines": [
+      {
+        "dataKey": "value",
+        "stroke": "#6B1B5E",
+        "name": "Value"
+      }
+    ],
+    "showGrid": true,
+    "showLegend": true,
+    "showDots": true,
+    "curved": true
+  },
+  "lineChartTest": [
+    {
+      "name": "Jan",
+      "value": 65
+    },
+    {
+      "name": "Feb",
+      "value": 78
+    },
+    {
+      "name": "Mar",
+      "value": 90
+    },
+    {
+      "name": "Apr",
+      "value": 81
+    }
+  ],
+  "_enabled_lineChartTest": true,
+  "_completed_lineChartTest": false,
+  "_radialChartTest_type": "radialChart",
+  "_radialChartTest_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "name": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Label",
+        "required": true
+      },
+      "value": {
+        "type": "number",
+        "renderAs": "number",
+        "label": "Value",
+        "required": true
+      }
+    }
+  },
+  "_radialChartTest_chartConfig": {
+    "dataKey": "value",
+    "maxValue": 100,
+    "colors": [
+      "#431C5B",
+      "#1D1F48",
+      "#B21A53",
+      "#3bcd3e",
+      "#3B82F6",
+      "#F59E0B"
+    ],
+    "showPercentage": true,
+    "thickness": 20
+  },
+  "radialChartTest": [
+    {
+      "name": "Completion",
+      "value": 87
+    }
+  ],
+  "_enabled_radialChartTest": true,
+  "_completed_radialChartTest": false,
+  "_listNoTitle_type": "listNoTitle",
+  "_listNoTitle_itemSchema": {
+    "type": "string",
+    "renderAs": "text"
+  },
+  "listNoTitle": [
+    "Completed Phase 1 ahead of schedule",
+    "Reduced operational costs by 30%",
+    "Hired 5 new team members"
+  ],
+  "_enabled_listNoTitle": true,
+  "_completed_listNoTitle": false,
+  "_objectTest_type": "object",
+  "_objectTest_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "label": "Object Data",
+    "fields": {
+      "team": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Team"
+      },
+      "lead": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Lead"
+      },
+      "members": {
+        "type": "number",
+        "renderAs": "number",
+        "label": "Members"
+      }
+    }
+  },
+  "objectTest": {
+    "team": "RevOps",
+    "lead": "Sarah Johnson",
+    "members": 12
+  },
+  "_enabled_objectTest": true,
+  "_completed_objectTest": false,
+  "_keyValueTest_type": "objectForm",
+  "_keyValueTest_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "label": "Key-Value Pair",
+    "fields": {
+      "key": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Key"
+      },
+      "value": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Value"
+      }
+    }
+  },
+  "keyValueTest": {
+    "key": "Status",
+    "value": "On Track"
+  },
+  "_enabled_keyValueTest": true,
+  "_completed_keyValueTest": false,
+  "_expressionTest_type": "expression",
+  "_expressionTest_itemSchema": {
+    "type": "string",
+    "renderAs": "text",
+    "label": "Expression"
+  },
+  "expressionTest": "{{ revenue.current }} / {{ revenue.target }} = {{ (revenue.current / revenue.target * 100).toFixed(1) }}%",
+  "_enabled_expressionTest": true,
+  "_completed_expressionTest": false,
+  "_codeBlockTest_type": "codeBlock",
+  "_codeBlockTest_itemSchema": {
+    "type": "string",
+    "renderAs": "codeBlock",
+    "label": "Code Block"
+  },
+  "codeBlockTest": "const calculateGrowth = (current, previous) => {\n  return ((current - previous) / previous * 100).toFixed(2);\n};\n\nconsole.log(calculateGrowth(2400000, 1800000)); // 33.33%",
+  "_enabled_codeBlockTest": true,
+  "_completed_codeBlockTest": false,
+  "_quoteTest_type": "quote",
+  "_quoteTest_itemSchema": {
+    "type": "string",
+    "renderAs": "quote",
+    "label": "Quote"
+  },
+  "quoteTest": "Our team executed flawlessly this quarter. The dedication and innovation demonstrated by everyone has positioned us perfectly for continued success.",
+  "_enabled_quoteTest": true,
+  "_completed_quoteTest": false,
+  "_hrTest_type": "hr",
+  "hrTest": "",
+  "_enabled_hrTest": true,
+  "_completed_hrTest": false,
+  "_statusBoardTest_type": "statusBoard",
+  "_statusBoardTest_itemSchema": {
+    "type": "object",
+    "renderAs": "objectForm",
+    "fields": {
+      "title": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Title",
+        "required": true,
+        "displayAs": "title"
+      },
+      "description": {
+        "type": "string",
+        "renderAs": "textarea",
+        "label": "Description",
+        "displayAs": "subtitle"
+      },
+      "priority": {
+        "type": "string",
+        "renderAs": "select",
+        "label": "Priority",
+        "options": [
+          "low",
+          "medium",
+          "high",
+          "critical"
+        ],
+        "displayAs": "badge",
+        "badgeColors": {
+          "critical": "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-red-200 dark:border-red-800",
+          "high": "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border-orange-200 dark:border-orange-800",
+          "medium": "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800",
+          "low": "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800"
+        }
+      },
+      "action": {
+        "type": "string",
+        "renderAs": "textarea",
+        "label": "Action",
+        "displayAs": "label-value"
+      },
+      "timeline": {
+        "type": "string",
+        "renderAs": "text",
+        "label": "Timeline",
+        "displayAs": "detail"
+      },
+      "status": {
+        "type": "string",
+        "renderAs": "select",
+        "label": "Status",
+        "options": [
+          "open",
+          "in-progress",
+          "resolved"
+        ],
+        "required": true
+      }
+    }
+  },
+  "statusBoardTest": [
+    {
+      "title": "System Performance Issue",
+      "description": "Application response time degraded during peak hours",
+      "priority": "high",
+      "action": "Implementing caching layer and database optimization",
+      "timeline": "End of Q4 2025",
+      "status": "in-progress"
+    },
+    {
+      "title": "Documentation Update",
+      "description": "API documentation needs to be updated with new endpoints",
+      "priority": "medium",
+      "action": "Technical writer assigned, working on updates",
+      "timeline": "Mid-December 2025",
+      "status": "in-progress"
+    },
+    {
+      "title": "Security Audit Complete",
+      "description": "Third-party security audit completed with no critical findings",
+      "priority": "low",
+      "action": "Minor recommendations implemented",
+      "timeline": "Completed Nov 2025",
+      "status": "resolved"
+    }
+  ],
+  "_enabled_statusBoardTest": true,
+  "_completed_statusBoardTest": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "Comprehensive Test Template - Fixed",
+  "_template_description": "Complete test template with every asset type and layout pattern - corrected to match Template Builder format",
+  "_template_created": "2025-11-10T06:30:00.000Z",
+  "_template_updated": "2025-11-10T06:30:00.000Z"
+}

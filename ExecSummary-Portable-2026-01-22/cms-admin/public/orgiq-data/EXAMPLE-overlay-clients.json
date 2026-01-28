@@ -1,0 +1,86 @@
+{
+  "overlayId": "client-count-2025",
+  "overlayName": "Client Count 2025",
+  "description": "Number of active clients per product",
+  "dataType": "client-metrics",
+  "createdDate": "2025-12-03T10:30:00Z",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  
+  "visualizationConfig": {
+    "title": "Clients",
+    "icon": "Users",
+    "primaryColor": "purple",
+    "hotspotEnabled": true,
+    "hotspotMetric": "activeClients",
+    "hotspotLabel": "Active Clients",
+    "hotspotRanges": [
+      { "min": 0, "max": 20, "color": "#e0e7ff", "label": "0-20" },
+      { "min": 21, "max": 50, "color": "#c7d2fe", "label": "21-50" },
+      { "min": 51, "max": 100, "color": "#a5b4fc", "label": "51-100" },
+      { "min": 101, "max": 999999, "color": "#818cf8", "label": "100+" }
+    ],
+    "aggregateMetrics": [
+      {
+        "id": "totalClients",
+        "label": "Total Clients",
+        "calculation": "sum",
+        "field": "activeClients",
+        "format": "number"
+      },
+      {
+        "id": "avgClientValue",
+        "label": "Avg Client Value",
+        "calculation": "average",
+        "field": "avgClientRevenue",
+        "format": "currency"
+      }
+    ]
+  },
+  
+  "nodeMetrics": [
+    {
+      "nodeId": "root",
+      "activeClients": 342,
+      "avgClientRevenue": 367000,
+      "churnRate": 5
+    },
+    {
+      "nodeId": "banking",
+      "activeClients": 180,
+      "avgClientRevenue": 251000,
+      "churnRate": 4
+    },
+    {
+      "nodeId": "capital-markets",
+      "activeClients": 162,
+      "avgClientRevenue": 496000,
+      "churnRate": 6
+    },
+    {
+      "nodeId": "risk",
+      "activeClients": 52,
+      "avgClientRevenue": 548000,
+      "churnRate": 3
+    },
+    {
+      "nodeId": "lending",
+      "activeClients": 45,
+      "avgClientRevenue": 420000,
+      "churnRate": 7
+    },
+    {
+      "nodeId": "wealth-retirement",
+      "activeClients": 65,
+      "avgClientRevenue": 506000,
+      "churnRate": 8
+    },
+    {
+      "nodeId": "ctrm",
+      "activeClients": 18,
+      "avgClientRevenue": 455000,
+      "churnRate": 2,
+      "newClientsThisQuarter": 3,
+      "pipelineDeals": 7
+    }
+  ]
+}

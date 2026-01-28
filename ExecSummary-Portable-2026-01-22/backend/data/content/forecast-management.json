@@ -1,0 +1,156 @@
+{
+  "id": "forecast-management",
+  "quarter": "",
+  "year": 2026,
+  "date": "2026-01-22",
+  "title": "Forecast Management",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "Forecast Management",
+  "_template_description": "",
+  "_template_created": "2026-01-22T00:00:00.000Z",
+  "_template_updated": "2026-01-22T00:00:00.000Z",
+  "_layout": "one-pager",
+  "_contentTag": "financial-summary",
+  "_type": "executive-iq",
+  "sections": [
+    {
+      "type": "forecast",
+      "renderType": "forecastBreakdown",
+      "layoutZone": "full",
+      "rowIndex": 0,
+      "data": {
+        "title": "Demo Services 2026 Transformation",
+        "currency": "USD",
+        "period": "FY 2026",
+        "initiatives": [
+          {
+            "id": "cloud-migration",
+            "name": "Demo Operations : Services Transformation",
+            "termYears": 1,
+            "costCenters": [
+              {
+                "id": "capex",
+                "type": "capex",
+                "name": "Capex",
+                "removable": false,
+                "lineItems": []
+              },
+              {
+                "id": "opex",
+                "type": "opex",
+                "name": "Opex",
+                "removable": false,
+                "lineItems": [
+                  {
+                    "id": "item-1765579821820",
+                    "name": "Figma (Full License)",
+                    "qty": 25,
+                    "unitCost": 1100,
+                    "amount": 27500,
+                    "description": "Provide Figma licenses for Tiled power users to enable template automation and scalability.",
+                    "summary": "To deliver high-quality, standardized microapps in Tiled, we propose granting Figma licenses to a select group of specialists. These users will design central templates, customize them for strategic deals and clients, and publish them into Tiled for end-user refinement, ensuring agility and consistency across all interactive content.",
+                    "justification": "Figma integration is critical for introducing template automation, enforcing design standards, and accelerating development timelines. This approach reduces time-to-market, supports scale, and ensures our interactive content meets brand and quality expectations while enabling Pre-Sales and Sales teams to quickly tailor demos for client engagements.",
+                    "owner": "TBC",
+                    "lastUpdated": "2025-12-13T00:06:36.103Z",
+                    "summaryVisible": true,
+                    "justificationVisible": true
+                  },
+                  {
+                    "id": "item-1765580114622",
+                    "name": "PowToon (UAL)",
+                    "qty": 30,
+                    "unitCost": 1000,
+                    "amount": 30000,
+                    "description": "Expand Powtoon licenses for Capital Markets",
+                    "summary": "Powtoon is used by Capital Markets to create engaging, marketing-style videos that complement AI avatar content and support sales cycles. We propose expanding existing licenses to meet growing demand for dynamic, visually compelling content tailored to client opportunities.",
+                    "justification": "Increasing Powtoon licenses ensures Capital Markets can continue producing high-impact, creative video assets that differentiate our offerings and enhance client engagement. This investment supports strategic deals, accelerates content delivery, and strengthens our ability to deliver innovative, multimedia sales experiences.",
+                    "owner": "TBC",
+                    "lastUpdated": "2025-12-13T00:06:32.688Z",
+                    "summaryVisible": true,
+                    "justificationVisible": true
+                  },
+                  {
+                    "id": "item-1765580276463",
+                    "name": "Tiled.co (UAL)",
+                    "qty": 280,
+                    "unitCost": 200,
+                    "amount": 56000,
+                    "description": "Expand Tiled licenses and deliver SKO training for interactive microapps.",
+                    "summary": "Tiled enables the creation of interactive microapps hosted on Seismic, transforming static content into engaging, client-facing experiences and guided sales tools for Pre-Sales. With 80 licenses already in use and strong adoption across Pre-Sales, Sales Enablement, and GTM teams, we propose expanding licenses to empower Pre-Sales during SKO, where Tiled will provide on-site training sessions.",
+                    "justification": "This investment supports our strategy to revolutionize content delivery and enhance client engagement. By scaling Tiled adoption and providing SKO training, we equip teams to create dynamic, interactive sales content that drives differentiation, accelerates deal cycles, and strengthens alignment across GTM initiatives.",
+                    "owner": "TBC",
+                    "lastUpdated": "2025-12-12T23:33:10.863Z"
+                  },
+                  {
+                    "id": "item-1765580423580",
+                    "name": "Coast (MSA)",
+                    "qty": 1,
+                    "unitCost": 267300,
+                    "amount": 267300,
+                    "description": "Renew Master Service Agreement (MSA) with Coast.",
+                    "summary": "The Coast MSA provides subsidized license costs for multiple business units and enables critical demo capabilities. Coast also delivers event support for SKO and Emerald at their own expense, creating significant value for the organization.",
+                    "justification": "Without renewal, several lines of business will lose demo functionality, impacting sales readiness and client engagement. Current Coast license spend is approximately $350K and projected to exceed $600K in 2026. The MSA underpins this investment, ensuring cost efficiency, continuity of service, and strategic support for major corporate events.",
+                    "owner": "RevOps",
+                    "lastUpdated": "2025-12-13T00:06:37.886Z"
+                  },
+                  {
+                    "id": "item-1765580472195",
+                    "name": "Coast (CM Demos)",
+                    "qty": 20,
+                    "unitCost": 10000,
+                    "amount": 200000,
+                    "description": "Additional budget for Coast engagement dedicated to Capital Markets.",
+                    "summary": "Capital Markets has received complimentary Coast services to support strategic deals on products that currently do not exist in our demo portfolio. We are requesting dedicated funding to expand this engagement, leveraging Coast's expertise to accelerate development of new demo experiences and extend these capabilities across more Capital Markets products.",
+                    "justification": "This investment capitalizes on a unique opportunity: Coast is already providing high-value services at no cost, demonstrating strong partnership and strategic alignment. By funding this expansion, we enable Capital Markets to deliver differentiated demos for emerging products, drive innovation in client engagements, and scale the new demo experience across additional FIS solutions, ultimately strengthening competitive positioning and revenue growth.",
+                    "owner": "RevOps",
+                    "lastUpdated": "2025-12-13T00:06:39.718Z"
+                  },
+                  {
+                    "id": "item-1765580522496",
+                    "name": "Synthesia",
+                    "qty": 100,
+                    "unitCost": 2160,
+                    "amount": 216000,
+                    "description": "Expand Synthesia.io licenses from 30 to 130, to be used by all business lines.",
+                    "summary": "To enhance sales enablement and accelerate deal-specific content creation, we propose increasing Synthesia licenses by 100 (from 30 to 130). This expansion supports the growing demand for AI-generated avatar videos and interactive demos tailored to client opportunities. This will also enable the other business lines to take advantage of the technology as part of their sales cycles.",
+                    "justification": "Synthesia is a proven tool for creating personalized, scalable video content that shortens sales cycles and improves client engagement. Expanding licenses ensures Capital Markets and the wider business lines can meet rising demand for customized demos, maintain competitive differentiation, and deliver consistent, high-quality messaging across strategic deals.",
+                    "owner": "TBC",
+                    "lastUpdated": "2025-12-12T23:29:07.677Z"
+                  },
+                  {
+                    "id": "item-1765582755649",
+                    "name": "Onshore Hire",
+                    "qty": 1,
+                    "unitCost": 100000,
+                    "amount": 100000,
+                    "description": "Hire an On-Shore Demo Enablement Lead (Native English Speaker).",
+                    "summary": "To accelerate adoption of Demo Services and emerging Demo Technologies, the Demo Services Group requires a dedicated on-shore resource to orchestrate engagement across Sales, Pre-Sales, Lines of Business, Product, Go-To-Market, and Brand teams. This role will own the creation of standardized templates, interactive designs, and best-practice frameworks that enable consistent, high-quality demo experiences across the organization.",
+                    "justification": "This position is critical to maximize ROI on our technology investments and ensure rapid time-to-market for demo initiatives. By centralizing enablement and content creation, we guarantee alignment with brand standards, improved stakeholder collaboration, and a measurable reduction in cycle time from concept to go-live, ultimately driving greater impact in client engagements and revenue growth.",
+                    "owner": "RevOps",
+                    "lastUpdated": "2025-12-12T23:40:37.295Z"
+                  },
+                  {
+                    "id": "item-1765582756100",
+                    "name": "Promotions",
+                    "qty": 4,
+                    "unitCost": 2500,
+                    "amount": 10000,
+                    "description": "Promote two existing team members into Demo Operations leadership (Team Lead and Technical Lead) roles and migrate two existing team members to Demo Enablement (Demo Content Creation)\n",
+                    "summary": "To strengthen our demo delivery model, we will promote two existing team members into Demo Operations leadership positions (Team Lead and Technical Lead) and transition two resources into Demo Enablement for content creation. This ensures operational stability while building a dedicated enablement capability.",
+                    "justification": "These changes leverage internal expertise to maintain 24/7 operational coverage and accelerate enablement readiness. By promoting proven talent and reallocating resources, we minimize risk, preserve knowledge, and support the adoption of new demo technologies for greater impact.",
+                    "owner": "RevOps",
+                    "lastUpdated": "2025-12-12T23:40:49.601Z"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "notes": "A RevOps lead strategic initiatives totaling $906.8K to transform demo capabilities and sales enablement.\n\nDemo Enablement & Talent ($130K): Includes on-shore hire and internal promotions to establish a dedicated enablement team.\nTechnology Partnerships ($467.3K): Coast MSA renewal and Capital Markets expansion to sustain and scale demo services across FIS products.\n\nContent Innovation ($309.5K): License expansions for Tiled, Synthesia, Powtoon, and Figma to deliver interactive microapps, AI-driven videos, and creative marketing assets.\n\nOverall focus: accelerate adoption of new demo technologies, standardize content delivery, and enhance client engagement at scale."
+      }
+    }
+  ]
+}

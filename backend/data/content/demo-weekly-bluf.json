@@ -1,0 +1,93 @@
+{
+  "_contentTag": "leadership-summary",
+  "_contentName": "Weekly Leadership Summary Template",
+  "_description": "AI-Generated Weekly Leadership Summary",
+  "id": "demo-weekly-bluf",
+  "title": "Weekly Leadership Summary",
+  "week": "",
+  "year": 2026,
+  "author": "Leadership Team",
+  "status": "draft",
+  "publishDate": "",
+  "lastUpdated": "",
+  "_enabled_bluf": true,
+  "_bluf_type": "richText",
+  "_bluf_displayTitle": true,
+  "bluf": "<h2>Bottom Line Up Front</h2><p>Key takeaway for the week...</p>",
+  "_enabled_keyHighlights": true,
+  "_keyHighlights_type": "highlightsList",
+  "_keyHighlights_displayTitle": true,
+  "keyHighlights": [
+    "Major achievement or milestone",
+    "Critical decision or outcome",
+    "Strategic priority update"
+  ],
+  "_enabled_weeklyMetrics": true,
+  "_weeklyMetrics_type": "metricCard",
+  "_weeklyMetrics_displayTitle": true,
+  "weeklyMetrics": {
+    "title": "Week at a Glance",
+    "metric": "Activities",
+    "value": "0",
+    "change": "+0%",
+    "status": "neutral"
+  },
+  "_enabled_priorityUpdates": true,
+  "_priorityUpdates_type": "statusBoard",
+  "_priorityUpdates_displayTitle": true,
+  "priorityUpdates": {
+    "columns": [
+      {
+        "title": "Completed",
+        "color": "green",
+        "items": []
+      },
+      {
+        "title": "In Progress",
+        "color": "blue",
+        "items": []
+      },
+      {
+        "title": "Blocked",
+        "color": "red",
+        "items": []
+      }
+    ]
+  },
+  "_enabled_notesActivities": true,
+  "_notesActivities_type": "bulletList",
+  "_notesActivities_displayTitle": true,
+  "notesActivities": [
+    "Activity item 1",
+    "Activity item 2"
+  ],
+  "_enabled_tasksCompleted": true,
+  "_tasksCompleted_type": "checklistItems",
+  "_tasksCompleted_displayTitle": true,
+  "tasksCompleted": [
+    { "label": "Task 1", "checked": true },
+    { "label": "Task 2", "checked": true }
+  ],
+  "_enabled_nextWeek": true,
+  "_nextWeek_type": "highlightsList",
+  "_nextWeek_displayTitle": true,
+  "nextWeek": [
+    "Upcoming priority 1",
+    "Upcoming priority 2"
+  ],
+  "_enabled_risks": true,
+  "_risks_type": "riskCard",
+  "_risks_displayTitle": true,
+  "risks": {
+    "title": "Active Risks",
+    "items": []
+  },
+  "createdDate": "",
+  "metadata": {
+    "weekStart": "",
+    "weekEnd": "",
+    "generatedBy": "AI Weekly Builder",
+    "notesIncluded": 0,
+    "tasksIncluded": 0
+  }
+}

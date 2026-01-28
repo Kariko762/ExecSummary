@@ -12,7 +12,7 @@
  */
 
 import React, { useState, useRef } from 'react';
-import { ChevronDown, ChevronRight, CheckCircle, AlertTriangle, AlertCircle, Calendar, User } from 'lucide-react';
+import { ChevronDown, ChevronRight, CheckCircle, AlertTriangle, AlertCircle } from 'lucide-react';
 import { TaskDetailModal } from '../components/TaskDetailModal';
 import type { GanttData, GanttTask } from '../types/ganttTypes';
 

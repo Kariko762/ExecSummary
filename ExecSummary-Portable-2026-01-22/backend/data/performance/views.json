@@ -1,0 +1,200 @@
+{
+  "views": [
+    {
+      "id": "activityInsights.thisMonth.preparation",
+      "name": "This Month - Preparation Hours",
+      "description": "Current month demo preparation hours (Prep + Prep Activities)",
+      "source": "activity-insights",
+      "type": "aggregation",
+      "query": {
+        "filter": "current_month",
+        "operation": "sum",
+        "field": "hours",
+        "categories": ["Demo / Presentation Preparation", "Demo Preparation Activities"]
+      }
+    },
+    {
+      "id": "activityInsights.thisMonth.support",
+      "name": "This Month - Support Hours",
+      "description": "Current month demo support hours (Enhancement + Environment)",
+      "source": "activity-insights",
+      "type": "aggregation",
+      "query": {
+        "filter": "current_month",
+        "operation": "sum",
+        "field": "hours",
+        "categories": ["Demo Enhancement (Inc. Script / Data / Collateral)", "Demo Environment Support"]
+      }
+    },
+    {
+      "id": "activityInsights.thisMonth.demo",
+      "name": "This Month - Demo Delivery Hours",
+      "description": "Current month demo delivery hours (Virtual + Onsite)",
+      "source": "activity-insights",
+      "type": "aggregation",
+      "query": {
+        "filter": "current_month",
+        "operation": "sum",
+        "field": "hours",
+        "categories": ["Demo Presentation � Virtual / Hybrid", "Demo Presentation � Onsite"]
+      }
+    },
+    {
+      "id": "activityInsights.thisMonth.total",
+      "name": "This Month - Total Hours",
+      "description": "Current month total activity hours",
+      "source": "activity-insights",
+      "type": "aggregation",
+      "query": {
+        "filter": "current_month",
+        "operation": "sum",
+        "field": "hours"
+      }
+    },
+    {
+      "id": "activityInsights.thisMonth.prepTrend",
+      "name": "This Month - Preparation Trend",
+      "description": "Month-over-month change % for preparation hours",
+      "source": "activity-insights",
+      "type": "trend",
+      "query": {
+        "filter": "current_month_vs_previous",
+        "field": "hours",
+        "categories": ["Demo / Presentation Preparation", "Demo Preparation Activities"]
+      }
+    },
+    {
+      "id": "activityInsights.thisMonth.supportTrend",
+      "name": "This Month - Support Trend",
+      "description": "Month-over-month change % for support hours",
+      "source": "activity-insights",
+      "type": "trend",
+      "query": {
+        "filter": "current_month_vs_previous",
+        "field": "hours",
+        "categories": ["Demo Enhancement (Inc. Script / Data / Collateral)", "Demo Environment Support"]
+      }
+    },
+    {
+      "id": "activityInsights.thisMonth.demoTrend",
+      "name": "This Month - Demo Trend",
+      "description": "Month-over-month change % for demo delivery hours",
+      "source": "activity-insights",
+      "type": "trend",
+      "query": {
+        "filter": "current_month_vs_previous",
+        "field": "hours",
+        "categories": ["Demo Presentation � Virtual / Hybrid", "Demo Presentation � Onsite"]
+      }
+    },
+    {
+      "id": "activityInsights.thisMonth.totalTrend",
+      "name": "This Month - Total Trend",
+      "description": "Month-over-month change % for total hours",
+      "source": "activity-insights",
+      "type": "trend",
+      "query": {
+        "filter": "current_month_vs_previous",
+        "field": "hours"
+      }
+    },
+    {
+      "id": "activityInsights.thisQuarter.preparation",
+      "name": "This Quarter - Preparation Hours",
+      "description": "Current quarter demo preparation hours",
+      "source": "activity-insights",
+      "type": "aggregation",
+      "query": {
+        "filter": "current_quarter",
+        "operation": "sum",
+        "field": "hours",
+        "categories": ["Demo / Presentation Preparation", "Demo Preparation Activities"]
+      }
+    },
+    {
+      "id": "activityInsights.thisQuarter.support",
+      "name": "This Quarter - Support Hours",
+      "description": "Current quarter demo support hours",
+      "source": "activity-insights",
+      "type": "aggregation",
+      "query": {
+        "filter": "current_quarter",
+        "operation": "sum",
+        "field": "hours",
+        "categories": ["Demo Enhancement (Inc. Script / Data / Collateral)", "Demo Environment Support"]
+      }
+    },
+    {
+      "id": "activityInsights.thisQuarter.demo",
+      "name": "This Quarter - Demo Delivery Hours",
+      "description": "Current quarter demo delivery hours",
+      "source": "activity-insights",
+      "type": "aggregation",
+      "query": {
+        "filter": "current_quarter",
+        "operation": "sum",
+        "field": "hours",
+        "categories": ["Demo Presentation � Virtual / Hybrid", "Demo Presentation � Onsite"]
+      }
+    },
+    {
+      "id": "activityInsights.thisQuarter.total",
+      "name": "This Quarter - Total Hours",
+      "description": "Current quarter total activity hours",
+      "source": "activity-insights",
+      "type": "aggregation",
+      "query": {
+        "filter": "current_quarter",
+        "operation": "sum",
+        "field": "hours"
+      }
+    },
+    {
+      "id": "activityInsights.thisQuarter.prepTrend",
+      "name": "This Quarter - Preparation Trend",
+      "description": "Quarter-over-quarter change % for preparation hours",
+      "source": "activity-insights",
+      "type": "trend",
+      "query": {
+        "filter": "current_quarter_vs_previous",
+        "field": "hours",
+        "categories": ["Demo / Presentation Preparation", "Demo Preparation Activities"]
+      }
+    },
+    {
+      "id": "activityInsights.thisQuarter.supportTrend",
+      "name": "This Quarter - Support Trend",
+      "description": "Quarter-over-quarter change % for support hours",
+      "source": "activity-insights",
+      "type": "trend",
+      "query": {
+        "filter": "current_quarter_vs_previous",
+        "field": "hours",
+        "categories": ["Demo Enhancement (Inc. Script / Data / Collateral)", "Demo Environment Support"]
+      }
+    },
+    {
+      "id": "activityInsights.thisQuarter.demoTrend",
+      "name": "This Quarter - Demo Trend",
+      "description": "Quarter-over-quarter change % for demo delivery hours",
+      "source": "activity-insights",
+      "type": "trend",
+      "query": {
+        "filter": "current_quarter_vs_previous",
+        "field": "hours",
+        "categories": ["Demo Presentation � Virtual / Hybrid", "Demo Presentation � Onsite"]
+      }
+    },
+    {
+      "id": "activityInsights.thisQuarter.totalTrend",
+      "name": "This Quarter - Total Trend",
+      "description": "Quarter-over-quarter change % for total hours",
+      "source": "activity-insights",
+      "type": "trend",
+      "query": {
+        "filter": "current_quarter_vs_previous",
+        "field": "hours"
+      }
+    }
+  ]
+}

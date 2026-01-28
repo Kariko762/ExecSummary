@@ -1,0 +1,205 @@
+{
+  "id": "demo-data-automation-refresh",
+  "name": "Demo Data Automation & Refresh",
+  "shortName": "Demo Data Automation",
+  "slug": "demo-data-automation-refresh",
+  "category": "process-optimization",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "Data Engineering",
+    "Sales Engineering Leadership"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "high",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, implement automated demo data refresh to ensure 95% of demos use up-to-date certified data and reduce manual data prep effort by 60%.",
+    "specific": {
+      "objectives": [
+        "Automate demo data refresh jobs",
+        "Standardize demo datasets",
+        "Integrate validation and certification checks"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Automated refresh coverage: 0% \u2192 95%",
+        "Manual data prep hours: Baseline \u2192 -60%",
+        "Stale data incidents: Baseline \u2192 -70%"
+      ]
+    },
+    "achievable": {
+      "resources": "Data engineers, automation tooling",
+      "teamSize": "2 FTEs"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Operational Excellence",
+        "Risk Management"
+      ],
+      "strategicThemes": [
+        "Process Automation",
+        "Data-Driven Decisions"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Automation MVP",
+          "deliverable": "Automated refresh for priority demos",
+          "dueDate": "2026-12-31",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Datasets automated",
+        "baseline": "0",
+        "target": "50",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Automated refresh coverage",
+        "baseline": "0",
+        "target": "95",
+        "current": "0",
+        "unit": "%"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "Manual demo data refresh causes errors and delays.",
+    "opportunity": "Automation improves accuracy and reduces prep effort.",
+    "solution": "Automated refresh and validation pipelines.",
+    "expectedBenefits": [
+      "60% reduction in data prep",
+      "Improved demo accuracy"
+    ],
+    "roi": "220% ROI in 12 months",
+    "paybackPeriod": "6 months"
+  },
+  "budget": {
+    "total": 220000,
+    "allocated": 220000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 130000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 50000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 20000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 10000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 10000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "RevOps Transformation",
+    "costAvoidance": "$350K annually"
+  },
+  "funding": {
+    "requestedAmount": 220000,
+    "approvedAmount": 220000,
+    "approvalDate": "2026-04-01",
+    "approvedBy": "VP Revenue Operations",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 100000,
+        "releaseCondition": "Automation design approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-data-complexity",
+      "description": "Complex data sources",
+      "impact": "Delays",
+      "probability": "medium",
+      "severity": "medium",
+      "mitigation": "Phased dataset onboarding",
+      "owner": "Data Engineering",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-data-auto",
+      "name": "Automated Refresh Live",
+      "description": "Refresh automation live",
+      "dueDate": "2026-12-31",
+      "status": "not-started",
+      "deliverables": [
+        "Automation jobs"
+      ],
+      "acceptanceCriteria": [
+        "Priority demos auto-refresh"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Data Engineering",
+      "role": "Delivery Partner",
+      "interest": "high",
+      "influence": "medium",
+      "engagement": "Build and validate",
+      "communicationFrequency": "Bi-weekly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Refresh automation",
+      "baseline": "0%",
+      "target": "95%",
+      "measurement": "% demos auto-refreshed",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-07-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-07-01T09:00:00Z",
+  "updatedAt": "2026-01-26T19:00:00Z",
+  "tags": [
+    "data",
+    "automation",
+    "refresh"
+  ],
+  "notes": "Ensures demos always use current certified data."
+}

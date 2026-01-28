@@ -1,20 +1,18 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { RendererProps } from '../types/schema';
-import { getClasses } from '../design-system/getClasses';
 
 /**
  * MarkdownRenderer - Renders markdown content with Design System styling
  * Uses ReactMarkdown with custom component overrides
  */
 export const MarkdownRenderer: React.FC<RendererProps> = ({ value, mode }) => {
-  const classes = getClasses();
   
   // Handle empty or invalid content
   if (!value || typeof value !== 'string') {
     if (mode === 'edit') {
       return (
-        <div className={classes.inputContainer}>
+        <div className="p-4 border border-gray-300 dark:border-gray-600 rounded">
           <p className="text-gray-400 dark:text-gray-500 text-sm italic">
             No markdown content
           </p>
@@ -30,29 +28,29 @@ export const MarkdownRenderer: React.FC<RendererProps> = ({ value, mode }) => {
         components={{
           // Headings with Design System classes
           h1: ({ node, ...props }) => (
-            <h1 className={`${classes.h1} mt-8 mb-4`} {...props} />
+            <h1 className="text-3xl font-roobert-bold text-gray-900 dark:text-white mt-8 mb-4" {...props} />
           ),
           h2: ({ node, ...props }) => (
-            <h2 className={`${classes.h2} mt-6 mb-3`} {...props} />
+            <h2 className="text-2xl font-roobert-semibold text-gray-800 dark:text-gray-100 mt-6 mb-3" {...props} />
           ),
           h3: ({ node, ...props }) => (
-            <h3 className={`${classes.h3} mt-5 mb-2`} {...props} />
+            <h3 className="text-xl font-roobert-medium text-gray-800 dark:text-gray-100 mt-5 mb-2" {...props} />
           ),
           h4: ({ node, ...props }) => (
-            <h4 className={`${classes.h4} mt-4 mb-2`} {...props} />
+            <h4 className="text-lg font-roobert-medium text-gray-700 dark:text-gray-200 mt-4 mb-2" {...props} />
           ),
           
           // Paragraphs
-          p: ({ node, ...props }) => (
-            <p className={`${classes.body} leading-relaxed mb-4`} {...props} />
+          p: ({ node, ...props}) => (
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4" {...props} />
           ),
           
           // Lists
           ul: ({ node, ...props }) => (
-            <ul className={`${classes.list} list-disc list-inside space-y-2 mb-4`} {...props} />
+            <ul className="list-disc list-inside space-y-2 mb-4" {...props} />
           ),
           ol: ({ node, ...props }) => (
-            <ol className={`${classes.list} list-decimal list-inside space-y-2 mb-4`} {...props} />
+            <ol className="list-decimal list-inside space-y-2 mb-4" {...props} />
           ),
           li: ({ node, ...props }) => (
             <li className="ml-4" {...props} />
@@ -61,7 +59,7 @@ export const MarkdownRenderer: React.FC<RendererProps> = ({ value, mode }) => {
           // Links
           a: ({ node, ...props }) => (
             <a 
-              className={`${classes.link} hover:underline font-roobert-medium`}
+              className="text-blue-600 dark:text-blue-400 hover:underline font-roobert-medium"
               {...props} 
             />
           ),
@@ -70,7 +68,7 @@ export const MarkdownRenderer: React.FC<RendererProps> = ({ value, mode }) => {
           code: ({ node, inline, ...props }: any) => 
             inline ? (
               <code 
-                className={`${classes.code} px-2 py-1 rounded text-sm`}
+                className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono"
                 {...props} 
               />
             ) : (
@@ -86,7 +84,7 @@ export const MarkdownRenderer: React.FC<RendererProps> = ({ value, mode }) => {
           // Blockquotes
           blockquote: ({ node, ...props }) => (
             <blockquote 
-              className={`${classes.quote} border-l-4 pl-4 italic my-4`}
+              className="border-l-4 border-fis-eggplant dark:border-fis-raspberry pl-4 italic my-4"
               {...props} 
             />
           ),

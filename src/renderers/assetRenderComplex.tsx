@@ -5,7 +5,7 @@
  * Edit modes are handled in CMS version only.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Calendar } from 'lucide-react';
 import { renderWithExpressions } from '../utils/expressionParser';
 
@@ -29,7 +29,7 @@ export const StatusBoardPattern: React.FC<ComplexPatternProps> = ({ data }) => {
   
   return (
     <div className="status-board">
-      {columns.map((column, colIndex) => (
+      {columns.map((column: any, colIndex: number) => (
         <div key={colIndex} className={`status-column column-${colIndex}`}>
           <h4>{column.title}</h4>
           <div className="status-items">

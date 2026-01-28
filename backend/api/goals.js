@@ -2,12 +2,14 @@ import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { logGoalCreated, logGoalUpdated, logGoalDeleted } from '../utils/change-control-logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 const GOALS_FILE = path.join(__dirname, '../data/goals/goals.json');
+const INITIATIVES_DIR = path.join(__dirname, '../data/initiatives');
 
 // Helper function to read goals
 async function readGoals() {
@@ -17,6 +19,59 @@ async function readGoals() {
   } catch (error) {
     console.error('Error reading goals:', error);
     return { goals: [], categories: [] };
+  }
+}
+
+// Helper function to count linked initiatives for a goal
+async function countLinkedInitiatives(goalId) {
+  try {
+    const files = await fs.readdir(INITIATIVES_DIR);
+    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== 'registry.json');
+    
+    let count = 0;
+    for (const file of jsonFiles) {
+      const filePath = path.join(INITIATIVES_DIR, file);
+      const content = await fs.readFile(filePath, 'utf8');
+      const initiative = JSON.parse(content);
+      
+      if (initiative.linkedGoals && Array.isArray(initiative.linkedGoals) && 
+          initiative.linkedGoals.includes(goalId)) {
+        count++;
+      }
+    }
+    return count;
+  } catch (error) {
+    console.error('Error counting linked initiatives:', error);
+    return 0;
+  }
+}
+
+// Helper function to count linked tasks for a goal (from Gantt tasks)
+async function countLinkedTasks(goalId) {
+  try {
+    // Read all initiative files to count tasks linked to this goal
+    const files = await fs.readdir(INITIATIVES_DIR);
+    const jsonFiles = files.filter(f => f.endsWith('.json') && f !== 'registry.json');
+    
+    let taskCount = 0;
+    for (const file of jsonFiles) {
+      const filePath = path.join(INITIATIVES_DIR, file);
+      const content = await fs.readFile(filePath, 'utf8');
+      const initiative = JSON.parse(content);
+      
+      // Check if initiative is linked to this goal
+      if (initiative.linkedGoals && Array.isArray(initiative.linkedGoals) && 
+          initiative.linkedGoals.includes(goalId)) {
+        // Count tasks from this initiative (milestones represent tasks)
+        if (initiative.milestones && Array.isArray(initiative.milestones)) {
+          taskCount += initiative.milestones.length;
+        }
+      }
+    }
+    return taskCount;
+  } catch (error) {
+    console.error('Error counting linked tasks:', error);
+    return 0;
   }
 }
 
@@ -35,7 +90,21 @@ async function writeGoals(data) {
 router.get('/', async (req, res) => {
   try {
     const data = await readGoals();
-    res.json(data);
+    
+    // Enrich each goal with linked initiatives and tasks counts
+    const enrichedGoals = await Promise.all(
+      data.goals.map(async (goal) => {
+        const linkedInitiatives = await countLinkedInitiatives(goal.id);
+        const linkedTasks = await countLinkedTasks(goal.id);
+        return {
+          ...goal,
+          linkedInitiatives,
+          linkedTasks
+        };
+      })
+    );
+    
+    res.json({ ...data, goals: enrichedGoals });
   } catch (error) {
     console.error('Error fetching goals:', error);
     res.status(500).json({ error: 'Failed to fetch goals' });
@@ -65,7 +134,7 @@ router.post('/', async (req, res) => {
     const data = await readGoals();
     const newGoal = {
       ...req.body,
-      id: req.body.id || req.body.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      id: req.body.id || req.body.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       linkedAssets: 0,
       createdDate: new Date().toISOString().split('T')[0],
       lastUpdated: new Date().toISOString().split('T')[0]
@@ -80,6 +149,8 @@ router.post('/', async (req, res) => {
     const success = await writeGoals(data);
     
     if (success) {
+      // Log goal creation
+      await logGoalCreated(newGoal);
       res.status(201).json(newGoal);
     } else {
       res.status(500).json({ error: 'Failed to create goal' });
@@ -100,6 +171,8 @@ router.put('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Goal not found' });
     }
     
+    const oldGoal = { ...data.goals[index] };
+    
     data.goals[index] = {
       ...data.goals[index],
       ...req.body,
@@ -110,6 +183,8 @@ router.put('/:id', async (req, res) => {
     const success = await writeGoals(data);
     
     if (success) {
+      // Log goal update
+      await logGoalUpdated(req.params.id, req.body, oldGoal);
       res.json(data.goals[index]);
     } else {
       res.status(500).json({ error: 'Failed to update goal' });
@@ -130,10 +205,13 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Goal not found' });
     }
     
+    const deletedGoal = data.goals[index];
     data.goals.splice(index, 1);
     const success = await writeGoals(data);
     
     if (success) {
+      // Log goal deletion
+      await logGoalDeleted(deletedGoal);
       res.json({ success: true, message: 'Goal deleted' });
     } else {
       res.status(500).json({ error: 'Failed to delete goal' });

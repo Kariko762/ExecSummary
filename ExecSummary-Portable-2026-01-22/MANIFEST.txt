@@ -1,0 +1,87 @@
+﻿Executive Summary - Production Package Manifest
+================================================
+
+Package Name: ExecSummary-Portable-2026-01-22
+Created: 2026-01-22-2241
+Platform: Windows
+Node Version: v22.19.0
+
+CONTENTS
+--------
+
+Frontend/
+  - Full React source code
+  - All node_modules installed
+  - Vite development server configuration
+  - All assets and public files
+
+CMS-Admin/
+  - Full React source code
+  - All node_modules installed
+  - Template Builder, Asset Library
+  - All renderers and components
+
+Backend/
+  - Node.js server (server.js)
+  - Express REST API
+  - All production dependencies installed
+  - Data files (JSON)
+  - Upload storage
+
+Startup Scripts/
+  - START-PRODUCTION.bat (Windows)
+  - START-PRODUCTION.ps1 (PowerShell)
+
+Documentation/
+  - README.md (Quick start guide)
+  - MANIFEST.txt (This file)
+
+RECENT UPDATES (Jan 22, 2026)
+------------------------------
+
+âœ… Budget Management
+   - Right-anchored modals (50vw width)
+   - Green gradient headers with money patterns
+   - Line item detail modal
+   - budget-management.json data file
+
+âœ… Forecast Management  
+   - Year breakdown modal
+   - Year-on-Year chart modal
+   - forecast-management.json data file
+   - Multi-year cost center tracking
+
+âœ… Modal Standardization
+   - All modals: right-anchored, full height
+   - Consistent green gradient headers
+   - Icon-only buttons
+   - Three-state width controls
+
+TOTAL SIZE
+----------
+
+Approximate: 450-550 MB
+(Includes all dependencies and node_modules)
+
+REQUIREMENTS
+------------
+
+âœ“ Node.js 18.x or higher
+âœ“ 4GB RAM minimum
+âœ“ 500MB free disk space
+âœ“ Windows 10/11
+âœ“ Modern web browser
+
+NO INSTALLATION NEEDED
+----------------------
+
+All dependencies are pre-installed!
+Just run START-PRODUCTION.bat to begin.
+
+SUPPORT
+-------
+
+Check README.md for troubleshooting and usage instructions.
+
+---
+End of Manifest

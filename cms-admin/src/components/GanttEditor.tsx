@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save, Plus, Trash2, ChevronRight, ChevronDown, Calendar, Clock, User, AlertTriangle, CheckCircle, PlayCircle, PauseCircle, Sparkles, FileText, Edit } from 'lucide-react';
+import { X, Save, Plus, Trash2, ChevronRight, ChevronDown, Calendar, Clock, User, AlertTriangle, CheckCircle, PlayCircle, PauseCircle, Sparkles, FileText, Edit, Settings } from 'lucide-react';
 import type { GanttTask, GanttData, GanttTemplate, GanttTemplateInput } from '../types/initiativeGantt';
 import { GANTT_TEMPLATES } from '../data/ganttTemplates';
+import GanttTemplateManager from './GanttTemplateManager';
 
 interface GanttEditorProps {
   isOpen: boolean;
@@ -22,6 +23,11 @@ export default function GanttEditor({ isOpen, onClose, initiativeData, onSave }:
   const [collapsedTasks, setCollapsedTasks] = useState<Set<string>>(new Set());
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
   const [editingTask, setEditingTask] = useState<GanttTask | null>(null);
+  const [showTemplateManager, setShowTemplateManager] = useState(false);
+  const [availableTemplates, setAvailableTemplates] = useState<GanttTemplate[]>(() => {
+    const saved = localStorage.getItem('ganttTemplates');
+    return saved ? JSON.parse(saved) : GANTT_TEMPLATES;
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -461,25 +467,41 @@ export default function GanttEditor({ isOpen, onClose, initiativeData, onSave }:
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-7xl max-h-[90vh] flex flex-col"
+        className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-[75vw] h-[calc(100vh-2rem)] flex flex-col"
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="relative bg-gradient-to-br from-fis-navy via-blue-900 to-fis-raspberry text-white overflow-hidden">
+          {/* Dot Pattern Background */}
+          <div className="absolute inset-0 opacity-10">
+            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="gantt-editor-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <circle cx="20" cy="20" r="1" fill="currentColor" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#gantt-editor-grid)" />
+            </svg>
+          </div>
+
+          <div className="relative p-6">
+          <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-roobert-semibold text-gray-900 dark:text-white flex items-center gap-2">
-              <Calendar className="w-6 h-6 text-purple-600" />
+            <h2 className="text-2xl font-roobert-semibold text-white flex items-center gap-2">
+              <Calendar className="w-6 h-6 text-white" />
               Gantt Chart Editor
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-white/80 mt-1">
               {initiativeData?.name || 'Initiative Gantt Chart'}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
           >
-            <X className="w-6 h-6 text-gray-500" />
+            <X className="w-6 h-6 text-white" />
           </button>
+          </div>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -556,16 +578,27 @@ export default function GanttEditor({ isOpen, onClose, initiativeData, onSave }:
 
           {activeTab === 'templates' && (
             <div>
-              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
-                Select a Project Template
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Templates add new parent phases with child tasks to your Gantt chart. You can add multiple templates to create parallel workstreams.
-              </p>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-1">
+                    Select a Project Template
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Templates add new parent phases with child tasks to your Gantt chart. You can add multiple templates to create parallel workstreams.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowTemplateManager(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-fis-eggplant to-fis-navy text-white rounded-lg hover:shadow-lg transition-all duration-200"
+                >
+                  <Settings className="w-4 h-4" />
+                  <span className="font-roobert-semibold">Manage Templates</span>
+                </button>
+              </div>
 
               {/* Template Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                {GANTT_TEMPLATES.map(template => (
+                {availableTemplates.map(template => (
                   <button
                     key={template.id}
                     onClick={() => handleTemplateSelect(template)}
@@ -763,24 +796,38 @@ export default function GanttEditor({ isOpen, onClose, initiativeData, onSave }:
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-[75vw] h-[calc(100vh-2rem)] overflow-hidden flex flex-col"
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6">
+              <div className="relative bg-gradient-to-br from-fis-navy via-blue-900 to-fis-raspberry text-white overflow-hidden">
+                {/* Dot Pattern Background */}
+                <div className="absolute inset-0 opacity-10">
+                  <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <pattern id="task-edit-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <circle cx="20" cy="20" r="1" fill="currentColor" />
+                      </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#task-edit-grid)" />
+                  </svg>
+                </div>
+
+                <div className="relative p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Edit className="w-6 h-6" />
                     <div>
                       <h3 className="text-lg font-roobert-bold">Edit Task Details</h3>
-                      <p className="text-sm text-purple-100">{editingTask.name}</p>
+                      <p className="text-sm text-white/80">{editingTask.name}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => setEditingTask(null)}
-                    className="text-white/80 hover:text-white"
+                    className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5 text-white" />
                   </button>
+                </div>
                 </div>
               </div>
 
@@ -980,6 +1027,30 @@ export default function GanttEditor({ isOpen, onClose, initiativeData, onSave }:
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Template Manager Modal */}
+      {showTemplateManager && (
+        <GanttTemplateManager
+          onClose={() => {
+            setShowTemplateManager(false);
+            // Reload templates from localStorage
+            const saved = localStorage.getItem('ganttTemplates');
+            setAvailableTemplates(saved ? JSON.parse(saved) : GANTT_TEMPLATES);
+          }}
+          onTemplateCreated={(template) => {
+            setAvailableTemplates(prev => [...prev, template]);
+          }}
+          onTemplateUpdated={(template) => {
+            setAvailableTemplates(prev => prev.map(t => t.id === template.id ? template : t));
+          }}
+          onTemplateDeleted={(templateId) => {
+            setAvailableTemplates(prev => prev.filter(t => t.id !== templateId));
+            if (selectedTemplate?.id === templateId) {
+              setSelectedTemplate(null);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

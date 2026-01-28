@@ -1,9 +1,9 @@
 {
-  "id": "week-asdfg-2025-12-12",
+  "id": "forecast-management",
   "quarter": "Dec 12",
   "year": 2025,
   "date": "2025-12-12",
-  "title": "2026 Technology Planning 1",
+  "title": "Forecast Management",
   "_enabled_standard_header": true,
   "_completed_standard_header": false,
   "_funding_0_rowIndex": 0,
@@ -18,7 +18,7 @@
   "_template_created": "2025-12-12T21:10:47.684Z",
   "_template_updated": "2025-12-12T21:10:47.684Z",
   "_layout": "one-pager",
-  "_contentTag": "executive-iq",
+  "_contentTag": "financial-summary",
   "_type": "executive-iq",
   "funding_0": {
     "title": "Demo Services 2026 Transformation",

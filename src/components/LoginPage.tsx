@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import { Shield, Lock, User, Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 interface LoginPageProps {

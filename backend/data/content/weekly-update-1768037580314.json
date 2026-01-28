@@ -1,6 +1,6 @@
 {
   "id": "weekly-update-1768037580314",
-  "quarter": "Q1 2026",
+  "quarter": "Weekly Summary [Jan 5 - Jan 11]",
   "year": 2025,
   "date": "2026-01-10",
   "title": "Weekly Summary - Week of Jan 5 - Jan 11",
@@ -203,7 +203,7 @@
   "_template_updated": "2025-12-15T20:45:00.000Z",
   "_layout": "one-pager",
   "_contentTag": "weekly-summary",
-  "_type": "weekly-update",
+  "_type": "weekly-summary",
   "_data_summary_0_assetTitle": "December Period",
   "_summary_displayTitle": false,
   "tags": [

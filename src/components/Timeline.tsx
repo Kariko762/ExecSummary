@@ -51,6 +51,7 @@ export const Timeline: React.FC<TimelineProps> = ({
     { value: 'executive-summary', label: 'Executive Summary' },
     { value: 'executive-iq', label: 'Executive-IQ' },
     { value: 'weekly-summary', label: 'Weekly Summary' },
+    { value: 'leadership-summary', label: 'Leadership Summary' },
   ];
 
   // Filter summaries based on selected tag

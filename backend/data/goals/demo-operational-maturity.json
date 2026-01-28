@@ -1,0 +1,171 @@
+{
+  "id": "demo-operational-maturity",
+  "name": "Demo Operational Maturity",
+  "shortName": "Operational Maturity",
+  "category": "process-optimization",
+  "owner": "Demo Services",
+  "coOwners": [],
+  "status": "not-started",
+  "priority": "high",
+  "targetDate": "2027-12-31",
+  "color": "#8B5CF6",
+  "icon": "",
+  "progress": 0,
+  "linkedAssets": 0,
+  "smartGoal": {
+    "statement": "By 2027-12-31, evolve and mature the existing Demo Services operating model to improve clarity, efficiency, visibility, and consistency in support, decisioning, and engagement across all products, platforms, and regions.",
+    "specific": {
+      "objectives": [
+        "Design clear visual flow diagrams for support decisioning",
+        "Refresh team ownership maps and contact lists",
+        "Reinforce mandatory ticketing for all demo engagements",
+        "Surface operational flows and ownership in the platform"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Support flow coverage: 60% → 100%",
+        "Decision flow diagrams: 0 → 100% coverage",
+        "Demo engagements with tickets: 70% → 100%",
+        "Support contacts mapping accuracy: 75% → 100%",
+        "Time to route issues: Baseline → -40%",
+        "Repeat issues due to misrouting: Baseline → -50%"
+      ]
+    },
+    "achievable": {
+      "resources": "Process design expertise, platform engineering, knowledge management tools",
+      "ownership": "Demo Ops owns process design, IT supports platform integration, Leadership enforces adoption"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Sales Productivity",
+        "Operational Excellence",
+        "Pipeline Risk Reduction",
+        "Forecast Confidence"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Flow & Decision Model Enhancement",
+          "deliverable": "Visual flow diagrams and standard paths for support decisioning",
+          "dueDate": "2027-03-31",
+          "status": "not-started"
+        },
+        {
+          "phase": "Knowledge & Ownership Modernisation",
+          "deliverable": "Updated ownership maps and contact lists aligned to org structure",
+          "dueDate": "2027-06-30",
+          "status": "not-started"
+        },
+        {
+          "phase": "Engagement & Ticketing Discipline",
+          "deliverable": "Mandatory ticketing embedded in operational workflows",
+          "dueDate": "2027-09-30",
+          "status": "not-started"
+        },
+        {
+          "phase": "Visibility & Operational Intelligence",
+          "deliverable": "Operational flows and support models visible in Executive Summary Platform",
+          "dueDate": "2027-12-31",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Support flow coverage documented",
+        "baseline": "60",
+        "target": "100",
+        "current": "60",
+        "unit": "%"
+      },
+      {
+        "name": "Decision flow diagrams published",
+        "baseline": "0",
+        "target": "100",
+        "current": "0",
+        "unit": "% coverage"
+      },
+      {
+        "name": "Demo engagements with tickets raised",
+        "baseline": "70",
+        "target": "100",
+        "current": "70",
+        "unit": "%"
+      },
+      {
+        "name": "Support contacts accuracy",
+        "baseline": "75",
+        "target": "100",
+        "current": "75",
+        "unit": "%"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "First-touch resolution rate",
+        "baseline": "0",
+        "target": "15",
+        "current": "0",
+        "unit": "% increase"
+      },
+      {
+        "name": "Time to route to correct team",
+        "baseline": "0",
+        "target": "-40",
+        "current": "0",
+        "unit": "% reduction"
+      },
+      {
+        "name": "Repeat issues due to misrouting",
+        "baseline": "0",
+        "target": "-50",
+        "current": "0",
+        "unit": "% reduction"
+      },
+      {
+        "name": "Escalations for ownership clarity",
+        "baseline": "0",
+        "target": "-60",
+        "current": "0",
+        "unit": "% reduction"
+      }
+    ]
+  },
+  "successMeasurement": {
+    "operationalEffectiveness": [
+      "First-touch resolution rate (increase)",
+      "Mean time to correct team assignment (decrease)",
+      "Escalation frequency due to misrouting (decrease)",
+      "Rework caused by incorrect ownership (decrease)"
+    ],
+    "processAdoption": [
+      "% of demo engagements with tickets logged",
+      "% of support requests following defined decision flows",
+      "Audit compliance on ticket + documentation usage"
+    ],
+    "visibilityAndAccuracy": [
+      "Quarterly ownership/contact audits passed",
+      "Knowledge base freshness score (last updated within SLA)",
+      "Platform visibility completeness (flows, ownership, escalation paths)"
+    ],
+    "leadershipConfidence": [
+      "Reduction in leadership escalations for 'who owns this?'",
+      "Stakeholder satisfaction with support clarity (quarterly pulse)"
+    ]
+  },
+  "strategicInitiatives": [
+    "Support Flow & Decision Diagrams",
+    "Operational Knowledge Base Modernisation",
+    "Demo Engagement Tracking Discipline",
+    "Support Contact & Ownership Registry",
+    "Operational Visibility Layer (Executive Summary Platform)"
+  ],
+  "strategicValue": "This goal ensures Demo Services operates as a scaled, enterprise-grade function, enabling faster execution, lower operational friction, reduced dependency on tribal knowledge, improved predictability and reliability, stronger support for automation and digital-first demos, and leadership confidence in operational control.",
+  "whyThisMatters": "Demo Services already operates with established processes, documentation, and operational frameworks. However, as demo becomes more strategic, automated, and revenue-critical, the operating model must mature to support scale, speed, and complexity. This goal focuses on refinement, standardisation, and visibility, not reinvention.",
+  "createdDate": "2026-01-28",
+  "lastUpdated": "2026-01-28"
+}

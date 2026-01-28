@@ -1,7 +1,7 @@
 import React from 'react';
 import type { RendererProps, FieldSchema } from '../types/schema';
 import { Plus, Trash2 } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { getClasses, ChartColors } from '../design-system';
 
 export const LineChartRenderer: React.FC<RendererProps> = ({
@@ -26,6 +26,9 @@ export const LineChartRenderer: React.FC<RendererProps> = ({
     curved = true
   } = chartConfig;
 
+  // Check if single line for gradient fill
+  const isSingleLine = lines.length === 1;
+
   if (mode === 'display') {
     if (items.length === 0) {
       return (
@@ -37,6 +40,46 @@ export const LineChartRenderer: React.FC<RendererProps> = ({
       );
     }
 
+    // Use AreaChart for single line with gradient fill
+    if (isSingleLine) {
+      const lineConfig = lines[0];
+      const gradientId = `gradient-${lineConfig.dataKey}`;
+      
+      return (
+        <div style={{ width: '100%', height: '320px', minHeight: '320px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={items}
+              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+            >
+              <defs>
+                <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={lineConfig.stroke} stopOpacity={0.4} />
+                  <stop offset="50%" stopColor={lineConfig.stroke} stopOpacity={0.2} />
+                  <stop offset="100%" stopColor={lineConfig.stroke} stopOpacity={0.05} />
+                </linearGradient>
+              </defs>
+              {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
+              <XAxis dataKey={xAxisKey} stroke={ChartColors.ui.axis} />
+              <YAxis stroke={ChartColors.ui.axis} />
+              <Area
+                type={curved ? 'monotone' : 'linear'}
+                dataKey={lineConfig.dataKey}
+                stroke={lineConfig.stroke}
+                strokeWidth={3}
+                fill={`url(#${gradientId})`}
+                dot={showDots}
+                activeDot={{ r: 6 }}
+              />
+              <Tooltip />
+              {showLegend && <Legend />}
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      );
+    }
+
+    // Use LineChart for multi-line (no gradient fill)
     return (
       <div style={{ width: '100%', height: '320px', minHeight: '320px' }}>
         <ResponsiveContainer width="100%" height="100%">
@@ -106,26 +149,52 @@ export const LineChartRenderer: React.FC<RendererProps> = ({
       {items.length > 0 && (
         <div className="w-full h-48 bg-gray-50 dark:bg-gray-800/30 rounded-xl p-4">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={items}
-              margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
-            >
-              {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
-              <XAxis dataKey={xAxisKey} stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
-              <YAxis stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
-              {lines.map((lineConfig, index) => (
-                <Line
-                  key={index}
+            {isSingleLine ? (
+              <AreaChart
+                data={items}
+                margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+              >
+                <defs>
+                  <linearGradient id="preview-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={lines[0].stroke} stopOpacity={0.4} />
+                    <stop offset="100%" stopColor={lines[0].stroke} stopOpacity={0.05} />
+                  </linearGradient>
+                </defs>
+                {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
+                <XAxis dataKey={xAxisKey} stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
+                <YAxis stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
+                <Area
                   type={curved ? 'monotone' : 'linear'}
-                  dataKey={lineConfig.dataKey}
-                  stroke={lineConfig.stroke}
-                  name={lineConfig.name}
+                  dataKey={lines[0].dataKey}
+                  stroke={lines[0].stroke}
                   strokeWidth={2}
+                  fill="url(#preview-gradient)"
                   dot={showDots}
                 />
-              ))}
-              <Tooltip />
-            </LineChart>
+                <Tooltip />
+              </AreaChart>
+            ) : (
+              <LineChart
+                data={items}
+                margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+              >
+                {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={ChartColors.ui.grid} />}
+                <XAxis dataKey={xAxisKey} stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
+                <YAxis stroke={ChartColors.ui.axis} tick={{ fontSize: 10 }} />
+                {lines.map((lineConfig, index) => (
+                  <Line
+                    key={index}
+                    type={curved ? 'monotone' : 'linear'}
+                    dataKey={lineConfig.dataKey}
+                    stroke={lineConfig.stroke}
+                    name={lineConfig.name}
+                    strokeWidth={2}
+                    dot={showDots}
+                  />
+                ))}
+                <Tooltip />
+              </LineChart>
+            )}
           </ResponsiveContainer>
         </div>
       )}

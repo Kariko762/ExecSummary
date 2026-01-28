@@ -16,6 +16,7 @@ interface TaskFilters {
   owner?: string[];
   tags?: string[];
   goalId?: string;
+  initiativeId?: string;
   dateRange?: {
     start?: string;
     end?: string;

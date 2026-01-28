@@ -1,0 +1,92 @@
+{
+  "id": "template-new",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-11-14",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_metrics_type": "metricCard",
+  "_metrics_layoutZone": "full",
+  "_metrics_rowIndex": 0,
+  "_metrics_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "metrics": [
+    {
+      "title": "Revenue",
+      "value": "$1,230,000",
+      "style": "standard",
+      "icon": "activity",
+      "iconColor": "raspberry"
+    },
+    {
+      "title": "Customers",
+      "value": "263",
+      "style": "bold",
+      "icon": "heart",
+      "iconColor": "green"
+    }
+  ],
+  "_metrics_sectionLayoutType": "full",
+  "_enabled_metrics": true,
+  "_completed_metrics": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "MetricCards",
+  "_template_description": "",
+  "_template_created": "2025-11-14T19:20:54.262Z",
+  "_template_updated": "2025-11-14T19:20:54.262Z"
+}

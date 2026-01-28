@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Zap, ChevronRight, StickyNote, Plus, Folder, FolderOpen, Tag,
-  TrendingUp, Copy, FileText, Lightbulb, Rocket, Calendar, Building2, ClipboardList
+  TrendingUp, Copy, FileText, Lightbulb, Rocket, Calendar, Building2, ClipboardList, Sparkles
 } from 'lucide-react';
 
 interface ContentTag {
@@ -28,6 +28,8 @@ interface QuickActionsMenuProps {
   onTimelineNotes?: () => void;
   onNewTask?: () => void;
   onAllTasks?: () => void;
+  onWeeklyLeadership?: () => void;
+  onPerformanceView?: () => void;
 }
 
 export default function QuickActionsMenu({
@@ -37,7 +39,9 @@ export default function QuickActionsMenu({
   onNewContent,
   onTimelineNotes,
   onNewTask,
-  onAllTasks
+  onAllTasks,
+  onWeeklyLeadership,
+  onPerformanceView
 }: QuickActionsMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [quickCloneTags, setQuickCloneTags] = useState<ContentTag[]>([]);
@@ -236,6 +240,61 @@ export default function QuickActionsMenu({
                           </div>
                           <div className="text-xs text-gray-600 dark:text-gray-400">
                             View and manage all tasks
+                          </div>
+                        </div>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Reports Section */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3 px-2">
+                    <FileText className="w-4 h-4 text-purple-500" />
+                    <h3 className="text-sm font-roobert-bold text-gray-900 dark:text-white uppercase tracking-wider">
+                      Reports
+                    </h3>
+                  </div>
+                  <div className="space-y-2">
+                    {onWeeklyLeadership && (
+                      <button
+                        onClick={() => {
+                          onWeeklyLeadership();
+                          setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-all text-left group"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                            Weekly Leadership
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">
+                            Generate AI summary
+                          </div>
+                        </div>
+                      </button>
+                    )}
+
+                    {onPerformanceView && (
+                      <button
+                        onClick={() => {
+                          onPerformanceView();
+                          setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 transition-all text-left group"
+                      >
+                        <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+                            Performance
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">
+                            View performance dashboard
                           </div>
                         </div>
                       </button>

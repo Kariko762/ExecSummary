@@ -1,0 +1,206 @@
+{
+  "id": "standard-demo-narratives-persona-flows",
+  "name": "Standard Demo Narratives & Persona Flows",
+  "shortName": "Demo Narratives & Personas",
+  "slug": "standard-demo-narratives-persona-flows",
+  "category": "quality-improvement",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "Product Marketing",
+    "Sales Enablement"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "high",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, standardize persona-based demo narratives and flows to increase win rates on standard demos from 22% to 30% and improve demo consistency.",
+    "specific": {
+      "objectives": [
+        "Define persona frameworks",
+        "Build standard demo flows",
+        "Create narrative playbooks"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Persona frameworks: 0 \u2192 6",
+        "Standard demo flows: 0% \u2192 80%",
+        "Win rate on standard demos: 22% \u2192 30%"
+      ]
+    },
+    "achievable": {
+      "resources": "Story designers, product marketing SMEs",
+      "teamSize": "2 FTEs"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Sales Productivity",
+        "Customer Experience"
+      ],
+      "strategicThemes": [
+        "Customer Centricity",
+        "Operational Excellence"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Narrative Framework Live",
+          "deliverable": "Persona narratives and flows published",
+          "dueDate": "2026-09-30",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Persona frameworks built",
+        "baseline": "0",
+        "target": "6",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Win rate on standard demos",
+        "baseline": "22",
+        "target": "30",
+        "current": "22",
+        "unit": "%"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "Inconsistent storytelling reduces demo effectiveness.",
+    "opportunity": "Standard narratives improve conversion.",
+    "solution": "Persona-based demo storytelling framework.",
+    "expectedBenefits": [
+      "Higher conversion",
+      "Consistent messaging"
+    ],
+    "roi": "200% ROI in 12 months",
+    "paybackPeriod": "6 months"
+  },
+  "budget": {
+    "total": 160000,
+    "allocated": 160000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 40000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 40000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 20000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "Sales Enablement Budget",
+    "costAvoidance": "$180K in rework"
+  },
+  "funding": {
+    "requestedAmount": 160000,
+    "approvedAmount": 160000,
+    "approvalDate": "2026-05-15",
+    "approvedBy": "VP Sales Enablement",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 80000,
+        "releaseCondition": "Narrative framework approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-alignment",
+      "description": "Disagreement on narratives",
+      "impact": "Delays",
+      "probability": "medium",
+      "severity": "medium",
+      "mitigation": "Exec arbitration",
+      "owner": "Product Marketing",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-narratives",
+      "name": "Narratives Live",
+      "description": "Persona narratives live",
+      "dueDate": "2026-09-30",
+      "status": "not-started",
+      "deliverables": [
+        "Narratives",
+        "Flows"
+      ],
+      "acceptanceCriteria": [
+        "Sales signoff"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Product Marketing",
+      "role": "Narrative Owner",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Content approval",
+      "communicationFrequency": "Monthly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Standard demo win rate",
+      "baseline": "22%",
+      "target": "30%",
+      "measurement": "Win rate",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-06-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-06-01T09:00:00Z",
+  "updatedAt": "2026-01-26T20:30:00Z",
+  "tags": [
+    "storytelling",
+    "personas",
+    "quality"
+  ],
+  "notes": "Standardized demo storytelling framework."
+}

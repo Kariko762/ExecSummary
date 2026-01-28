@@ -14,6 +14,7 @@ import tasksRoutes from './api/tasks.js';
 import businessUnitsRoutes from './api/businessUnits.js';
 import peopleRoutes from './api/people.js';
 import technologiesMenuRoutes from './api/technologiesMenu.js';
+import { logTaskCreated, logTaskUpdated, logNoteCreated, logNoteDeleted } from './utils/change-control-logger.js';
 import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats, updateTenantStats } from './api/tenants.js';
 import {
   getNotes, getNote, createNote, updateNote, deleteNote, getNoteCountsByTask,
@@ -123,6 +124,10 @@ app.post('/api/timeline-notes', async (req, res) => {
     };
     data.notes.push(newNote);
     await writeJSONFile(TIMELINE_NOTES_FILE, data);
+    
+    // Log note creation
+    await logNoteCreated(newNote);
+    
     res.json({ success: true, note: newNote });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -152,10 +157,143 @@ app.put('/api/timeline-notes/:id', async (req, res) => {
 app.delete('/api/timeline-notes/:id', async (req, res) => {
   try {
     const data = await readJSONFile(TIMELINE_NOTES_FILE).catch(() => ({ notes: [] }));
+    const deletedNote = data.notes.find(n => n.id === req.params.id);
     data.notes = data.notes.filter(n => n.id !== req.params.id);
     await writeJSONFile(TIMELINE_NOTES_FILE, data);
+    
+    // Log note deletion
+    if (deletedNote) {
+      await logNoteDeleted(deletedNote);
+    }
+    
     res.json({ success: true });
   } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ============================================
+// CHANGE CONTROL / AUDIT LOG API
+// ============================================
+const CHANGE_LOG_FILE = path.join(__dirname, 'data', 'change-control-log.json');
+
+// Initialize change log file
+async function ensureChangeLog() {
+  try {
+    await fs.access(CHANGE_LOG_FILE);
+  } catch {
+    await fs.writeFile(CHANGE_LOG_FILE, JSON.stringify({ events: [] }, null, 2));
+  }
+}
+
+// Log a change event
+app.post('/api/change-control', async (req, res) => {
+  try {
+    await ensureChangeLog();
+    const { eventType, entityType, entityId, metadata } = req.body;
+    
+    const log = JSON.parse(await fs.readFile(CHANGE_LOG_FILE, 'utf8'));
+    
+    const event = {
+      id: `event-${Date.now()}`,
+      timestamp: new Date().toISOString(),
+      eventType,
+      entityType,
+      entityId,
+      user: req.body.user || 'current-user',
+      metadata: metadata || {}
+    };
+    
+    log.events.push(event);
+    await fs.writeFile(CHANGE_LOG_FILE, JSON.stringify(log, null, 2));
+    
+    res.json({ success: true, event });
+  } catch (error) {
+    console.error('Error logging change:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Query change log
+app.get('/api/change-control', async (req, res) => {
+  try {
+    await ensureChangeLog();
+    const { eventType, entityType, since, limit } = req.query;
+    
+    const log = JSON.parse(await fs.readFile(CHANGE_LOG_FILE, 'utf8'));
+    let events = log.events;
+    
+    // Filter by event type
+    if (eventType) {
+      events = events.filter(e => e.eventType === eventType);
+    }
+    
+    // Filter by entity type
+    if (entityType) {
+      events = events.filter(e => e.entityType === entityType);
+    }
+    
+    // Filter by date
+    if (since) {
+      const sinceDate = new Date(since);
+      events = events.filter(e => new Date(e.timestamp) >= sinceDate);
+    }
+    
+    // Sort by timestamp descending (newest first)
+    events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    // Limit results
+    if (limit) {
+      events = events.slice(0, parseInt(limit));
+    }
+    
+    res.json({ success: true, events, total: events.length });
+  } catch (error) {
+    console.error('Error querying change log:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get last report date before a given week
+app.get('/api/change-control/last-report-date', async (req, res) => {
+  try {
+    await ensureChangeLog();
+    const { weekStart } = req.query;
+    
+    if (!weekStart) {
+      return res.status(400).json({ success: false, error: 'weekStart parameter required' });
+    }
+    
+    const log = JSON.parse(await fs.readFile(CHANGE_LOG_FILE, 'utf8'));
+    const weekStartDate = new Date(weekStart);
+    
+    // Find most recent report-generated event before this week
+    const reportEvents = log.events
+      .filter(e => e.eventType === 'report-generated' && e.entityType === 'leadership-summary')
+      .filter(e => new Date(e.timestamp) < weekStartDate)
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    
+    if (reportEvents.length > 0) {
+      const lastReport = reportEvents[0];
+      res.json({ 
+        success: true, 
+        lastReportDate: lastReport.timestamp,
+        lastReportId: lastReport.entityId,
+        metadata: lastReport.metadata 
+      });
+    } else {
+      // No previous report - use a default date (e.g., 30 days ago)
+      const defaultDate = new Date(weekStartDate);
+      defaultDate.setDate(defaultDate.getDate() - 30);
+      res.json({ 
+        success: true, 
+        lastReportDate: defaultDate.toISOString(),
+        isDefault: true,
+        message: 'No previous report found, using 30 days ago'
+      });
+    }
+  } catch (error) {
+    console.error('Error getting last report date:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
@@ -163,88 +301,200 @@ app.delete('/api/timeline-notes/:id', async (req, res) => {
 // AI Weekly Summary - Create from Timeline Notes
 app.post('/api/weekly-summary/create', async (req, res) => {
   try {
-    const { weekLabel, summaryType, summaryData, noteIds, templateId } = req.body;
+    const { weekLabel, summaryType, summaryData } = req.body;
     
-    if (!weekLabel || !summaryType || !summaryData || !templateId) {
+    if (!weekLabel || !summaryType || !summaryData) {
       return res.status(400).json({ 
         success: false, 
-        error: 'Missing required fields: weekLabel, summaryType, summaryData, templateId' 
+        error: 'Missing required fields: weekLabel, summaryType, summaryData' 
       });
     }
 
-    // Map summary type to renderer name
-    const summaryTypeMap = {
-      'cpsar': 'executiveSummaryCPSAR',
-      'bluf': 'executiveSummaryBLUF',
-      'sbar': 'executiveSummarySBAR',
-      'pyramid': 'executiveSummaryPyramid'
-    };
-    const targetRenderer = summaryTypeMap[summaryType];
-
-    // Read the specified template by ID
-    const CONTENT_DIR = path.join(__dirname, 'data', 'content');
-    const templatePath = path.join(CONTENT_DIR, `${templateId}.json`);
-    
-    let template;
-    try {
-      template = await readJSONFile(templatePath);
-    } catch (error) {
-      return res.status(404).json({ 
+    // Only support BLUF type for TSX generation
+    if (summaryType !== 'bluf') {
+      return res.status(400).json({ 
         success: false, 
-        error: `Template not found: ${templateId}` 
+        error: 'Only BLUF summary type is supported for TSX generation' 
       });
     }
 
-    // Clone the template
-    const newContent = JSON.parse(JSON.stringify(template));
-    
-    // Update metadata
-    const now = new Date();
-    const dateOnly = now.toISOString().split('T')[0]; // Just YYYY-MM-DD
-    newContent.id = `weekly-update-${Date.now()}`;
-    newContent.title = `Weekly Update - ${weekLabel}`;
-    newContent.date = dateOnly;
-    newContent.createdAt = now.toISOString();
-    newContent.updatedAt = now.toISOString();
+    const timestamp = Date.now();
+    const filename = `leadership-summary-${timestamp}.tsx`;
+    const CONTENT_DIR = path.join(__dirname, 'data', 'content');
+    const filepath = path.join(CONTENT_DIR, filename);
 
-    // Find the executive summary field and inject the AI data
-    // Template structure uses fields like summary_0 with _summary_0_type metadata
-    let injected = false;
-    
-    // Look for summary_0, summary_1, etc. that match the summary renderer type
-    for (let i = 0; i < 10; i++) {
-      const fieldName = `summary_${i}`;
-      const typeField = `_summary_${i}_type`;
-      
-      if (newContent[typeField] === targetRenderer) {
-        // Inject the AI-generated summary data
-        newContent[fieldName] = summaryData;
-        
-        // Add metadata about AI generation
-        newContent[`_${fieldName}_aiGenerated`] = true;
-        newContent[`_${fieldName}_sourceNoteIds`] = noteIds || [];
-        newContent[`_${fieldName}_generatedAt`] = now.toISOString();
-        injected = true;
-        break;
-      }
-    }
-    
-    if (!injected) {
-      console.warn(`No section found with type ${targetRenderer} in template ${templateId}`);
+    // Add metadata if not present
+    if (!summaryData.metadata) {
+      summaryData.metadata = {
+        weekStart: '',
+        weekEnd: '',
+        generatedBy: 'AI Assistant',
+        title: `Weekly Leadership Summary - ${weekLabel}`
+      };
     }
 
-    // Save the new content file
-    const newFilePath = path.join(CONTENT_DIR, `${newContent.id}.json`);
-    await writeJSONFile(newFilePath, newContent);
+    // Generate TSX file content with embedded data
+    const tsxContent = `import { motion } from 'framer-motion';
+import { Target, AlertTriangle } from 'lucide-react';
 
+// GENERATED DATA - Edit the LEADERSHIP_DATA const below to update content
+const LEADERSHIP_DATA = ${JSON.stringify(summaryData, null, 2)};
+
+export default function LeadershipSummary() {
+  return (
+    <div className="space-y-8">
+      <DesktopBLUFSection data={LEADERSHIP_DATA.bluf} />
+      <DesktopPrioritizationSection data={LEADERSHIP_DATA.prioritization} />
+      <DesktopRisksSection data={LEADERSHIP_DATA.risks} />
+    </div>
+  );
+}
+
+function DesktopBLUFSection({ data }) {
+  return (
+    <div className="space-y-3">
+      <div className="px-4 py-2.5 rounded-lg" style={{ background: 'linear-gradient(135deg, var(--brand-primary), var(--brand-secondary))' }}>
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded">
+            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+              <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <h3 className="text-base font-roobert-bold text-white">Executive Summary (BLUF)</h3>
+        </div>
+      </div>
+      <div className="space-y-3">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border-l-4" style={{ borderLeftColor: 'var(--accent-red)' }}>
+          <div className="flex gap-3">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center font-roobert-bold text-white" style={{ background: 'var(--accent-red)' }}>1</div>
+            <div className="flex-1">
+              <h4 className="text-sm font-roobert-bold uppercase tracking-wide mb-2" style={{ color: 'var(--accent-red)' }}>Bottom Line Up Front</h4>
+              <ul className="space-y-1.5 text-sm text-gray-700 dark:text-gray-300 font-roobert-light">
+                {data.bottomLine.map((item, idx) => <li key={idx} className="flex items-start gap-2"><span className="text-fis-eggplant dark:text-fis-raspberry mt-0.5">•</span><span>{item}</span></li>)}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border-l-4" style={{ borderLeftColor: 'var(--accent-blue)' }}>
+          <div className="flex gap-3">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center font-roobert-bold text-white" style={{ background: 'var(--accent-blue)' }}>2</div>
+            <div className="flex-1">
+              <h4 className="text-sm font-roobert-bold uppercase tracking-wide mb-2" style={{ color: 'var(--accent-blue)' }}>Background</h4>
+              <p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light leading-relaxed">{data.background}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border-l-4" style={{ borderLeftColor: 'var(--accent-purple)' }}>
+          <div className="flex gap-3">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center font-roobert-bold text-white" style={{ background: 'var(--accent-purple)' }}>3</div>
+            <div className="flex-1">
+              <h4 className="text-sm font-roobert-bold uppercase tracking-wide mb-2" style={{ color: 'var(--accent-purple)' }}>Assessment</h4>
+              <p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light leading-relaxed">{data.assessment}</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border-l-4" style={{ borderLeftColor: 'var(--accent-green)' }}>
+          <div className="flex gap-3">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center font-roobert-bold text-white" style={{ background: 'var(--accent-green)' }}>4</div>
+            <div className="flex-1">
+              <h4 className="text-sm font-roobert-bold uppercase tracking-wide mb-2" style={{ color: 'var(--accent-green)' }}>Recommendations</h4>
+              <ul className="space-y-1.5 text-sm text-gray-700 dark:text-gray-300 font-roobert-light">
+                {data.recommendations.map((item, idx) => <li key={idx} className="flex items-start gap-2"><span className="text-green-600 dark:text-green-400 mt-0.5">✓</span><span>{item}</span></li>)}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm border-l-4" style={{ borderLeftColor: 'var(--accent-orange)' }}>
+          <div className="flex gap-3">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center font-roobert-bold text-white" style={{ background: 'var(--accent-orange)' }}>5</div>
+            <div className="flex-1">
+              <h4 className="text-sm font-roobert-bold uppercase tracking-wide mb-2" style={{ color: 'var(--accent-orange)' }}>Asks</h4>
+              <div className="space-y-2">
+                {data.asks.map((ask, idx) => <div key={idx} className="flex items-start gap-2"><span className="px-2 py-0.5 text-[10px] font-roobert-bold rounded uppercase text-white shrink-0" style={{ background: ask.urgency === 'High' ? 'var(--accent-red)' : ask.urgency === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-blue)' }}>{ask.urgency}</span><span className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light">{ask.item} <span className="text-gray-500 dark:text-gray-400">({ask.owner})</span></span></div>)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DesktopPrioritizationSection({ data }) {
+  return (
+    <div className="space-y-3">
+      <div className="px-4 py-2.5 rounded-lg" style={{ background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-blue))' }}>
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded"><Target className="w-4 h-4 text-white" /></div>
+          <h3 className="text-base font-roobert-bold text-white">Prioritization</h3>
+        </div>
+      </div>
+      <div className="space-y-3">
+        {data.map((item, idx) => <div key={idx} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border-l-4" style={{ borderLeftColor: item.priority === 'High' ? 'var(--accent-red)' : item.priority === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-blue)' }}><div className="flex items-start justify-between mb-3"><h4 className="text-base font-roobert-bold text-gray-900 dark:text-white">{item.title}</h4><span className="px-2 py-0.5 text-[10px] font-roobert-bold rounded uppercase text-white" style={{ background: item.priority === 'High' ? 'var(--accent-red)' : item.priority === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-blue)' }}>{item.priority}</span></div><p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light mb-3">{item.description}</p><div className="grid grid-cols-2 gap-3 mb-3"><div><div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Impact</div><div className="text-sm text-gray-900 dark:text-white font-roobert-light">{item.impact}</div></div><div><div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Status</div><div className="text-sm text-gray-900 dark:text-white font-roobert-light">{item.status}</div></div><div><div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Linked Goal</div><div className="text-sm text-fis-eggplant dark:text-fis-raspberry font-roobert-medium">{item.linkedGoal}</div></div><div><div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Linked Initiative</div><div className="text-sm text-fis-eggplant dark:text-fis-raspberry font-roobert-medium">{item.linkedInitiative}</div></div></div><div className="grid grid-cols-2 gap-3"><div><div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Milestones</div><ul className="space-y-0.5">{item.milestones.map((milestone, midx) => <li key={midx} className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light flex items-center gap-1.5"><span className="text-green-600 dark:text-green-400">✓</span>{milestone}</li>)}</ul></div><div><div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Deliverables</div><ul className="space-y-0.5">{item.deliverables.map((deliverable, didx) => <li key={didx} className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light flex items-center gap-1.5"><span className="text-fis-eggplant dark:text-fis-raspberry">•</span>{deliverable}</li>)}</ul></div></div><div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between text-xs"><div className="text-gray-600 dark:text-gray-400 font-roobert-light">Owner: <span className="text-gray-900 dark:text-white font-roobert-medium">{item.owner}</span></div><div className="text-gray-600 dark:text-gray-400 font-roobert-light">Due: <span className="text-gray-900 dark:text-white font-roobert-medium">{item.dueDate}</span></div></div></div>)}
+      </div>
+    </div>
+  );
+}
+
+function DesktopRisksSection({ data }) {
+  return (
+    <div className="space-y-3">
+      <div className="px-4 py-2.5 rounded-lg" style={{ background: 'linear-gradient(135deg, var(--accent-red), var(--accent-orange))' }}>
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 bg-white/20 backdrop-blur-sm rounded"><AlertTriangle className="w-4 h-4 text-white" /></div>
+          <h3 className="text-base font-roobert-bold text-white">Risks</h3>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {data.map((risk, idx) => <div key={idx} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border-l-4" style={{ borderLeftColor: risk.severity === 'High' ? 'var(--accent-red)' : risk.severity === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-yellow)', backgroundColor: risk.severity === 'High' ? 'rgba(239, 68, 68, 0.03)' : 'transparent' }}><div className="flex items-start justify-between mb-3"><div className="flex items-center gap-2"><span className="px-2 py-0.5 text-[10px] font-roobert-bold rounded uppercase text-white" style={{ background: risk.severity === 'High' ? 'var(--accent-red)' : risk.severity === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-yellow)' }}>{risk.severity}</span><span className="px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 text-[10px] font-roobert-bold rounded uppercase">{risk.probability} Probability</span></div></div><h4 className="text-base font-roobert-bold text-gray-900 dark:text-white mb-2">{risk.title}</h4><p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light mb-3">{risk.description}</p><div className="space-y-2 mb-3"><div className="flex items-start gap-2"><span className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium min-w-[60px]">Impact:</span><span className="text-xs text-gray-900 dark:text-white font-roobert-light">{risk.impact}</span></div><div className="flex items-start gap-2"><span className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium min-w-[60px]">Owner:</span><span className="text-xs text-gray-900 dark:text-white font-roobert-light">{risk.owner}</span></div><div className="flex items-start gap-2"><span className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium min-w-[60px]">Category:</span><span className="text-xs text-gray-900 dark:text-white font-roobert-light">{risk.category}</span></div></div><div className="pt-3 border-t border-gray-200 dark:border-gray-700"><div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Mitigation Plan</div><p className="text-xs text-gray-700 dark:text-gray-300 font-roobert-light">{risk.mitigation}</p></div></div>)}
+      </div>
+    </div>
+  );
+}
+`;
+
+    // Write TSX file
+    await fs.promises.writeFile(filepath, tsxContent, 'utf8');
+
+    console.log(`✅ Created Leadership Summary TSX: ${filename}`);
+    
+    // Log to change control
+    try {
+      await ensureChangeLog();
+      const log = JSON.parse(await fs.readFile(CHANGE_LOG_FILE, 'utf8'));
+      log.events.push({
+        id: `event-${timestamp}`,
+        timestamp: new Date().toISOString(),
+        eventType: 'report-generated',
+        entityType: 'leadership-summary',
+        entityId: `leadership-summary-${timestamp}`,
+        user: 'current-user',
+        metadata: {
+          weekLabel,
+          weekStart: summaryData.metadata?.weekStart || '',
+          weekEnd: summaryData.metadata?.weekEnd || '',
+          summaryType,
+          filename
+        }
+      });
+      await fs.promises.writeFile(CHANGE_LOG_FILE, JSON.stringify(log, null, 2));
+      console.log(`📋 Logged report generation to change control`);
+    } catch (logError) {
+      console.error('⚠️ Failed to log to change control:', logError);
+      // Don't fail the request if logging fails
+    }
+    
     res.json({ 
       success: true, 
-      contentId: newContent.id,
-      message: `Weekly Update created successfully: ${newContent.title}`
+      filename,
+      filepath,
+      id: `leadership-summary-${timestamp}`,
+      message: 'Leadership Summary TSX file created successfully'
     });
 
   } catch (error) {
-    console.error('Failed to create weekly summary:', error);
+    console.error('❌ Error creating leadership summary:', error);
     res.status(500).json({ 
       success: false, 
       error: error.message 

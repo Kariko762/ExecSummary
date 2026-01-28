@@ -7,6 +7,7 @@ export type RenderType =
   | 'list'              // Array with add/remove (like highlights)
   | 'listNoTitle'       // List without section header
   | 'keyValueList'      // Dynamic key-value pairs with custom labels
+  | 'metricCard'        // Single metric card
   | 'metricCards'       // Grid of metric cards
   | 'nestedCards'       // Array of objects as cards (departments)
   | 'object'            // Object with labeled fields (alias for objectForm)
@@ -31,6 +32,10 @@ export type RenderType =
   | 'statusBoard'       // Table layout
   | 'orgChart'          // Organizational chart with hierarchy
   | 'executiveSynthesis' // Executive synthesis (Context/Problem/Solution/Recommendation/Asks)
+  | 'budgetBreakdown'   // Budget breakdown renderer
+  | 'forecastBreakdown' // Forecast breakdown renderer
+  | 'ganttChart'        // Gantt chart renderer
+  | 'select'            // Dropdown select
   | 'vendorAsset';      // Vendor strategic identity with problems/capabilities/wins
 
 export type ValidationRule = {
@@ -89,7 +94,7 @@ export interface HRConfig {
 }
 
 export interface FieldSchema {
-  renderAs: RenderType;
+  renderAs?: RenderType;
   label?: string;
   type?: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'date';
   weight?: number;
@@ -121,6 +126,12 @@ export interface FieldSchema {
   
   // For horizontal rules
   hrConfig?: HRConfig;
+  
+  // For table layout
+  badgeColors?: Record<string, string>;
+  displayAs?: string;
+  options?: string[];
+  icon?: string;
   
   // For conditional rendering
   showIf?: (data: any) => boolean;

@@ -1,0 +1,1353 @@
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Eye, Code, Shield, Loader2, CheckCircle2, AlertCircle, AlertTriangle, Download, FileImage, FileText, Maximize2, Minimize2 } from 'lucide-react';
+import { AssetRenderEngine } from '../renderers/assetRenderEngine';
+import { useEffect, useState, useRef } from 'react';
+import { validateSection } from '../schemas/validationSchema';
+import { domToPng } from 'modern-screenshot';
+import jsPDF from 'jspdf';
+import ViewGoalModal from './ViewGoalModal';
+
+interface ContentModalProps {
+  content: any; // The content object (Organization, ExecutiveIQ, Initiative, etc.)
+  onClose: () => void;
+}
+
+type PreviewTab = 'visual' | 'json' | 'validation';
+
+interface ValidationCheck {
+  field: string;
+  message: string;
+  severity: 'error' | 'warning' | 'info' | 'success';
+  section?: string; // Optional: which section this check belongs to
+}
+
+export const ContentModal: React.FC<ContentModalProps> = ({ content, onClose }) => {
+  const [activePreviewTab, setActivePreviewTab] = useState<PreviewTab>('visual');
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationChecks, setValidationChecks] = useState<ValidationCheck[]>([]);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showStickyNav, setShowStickyNav] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('');
+  const [availableGoals, setAvailableGoals] = useState<any[]>([]);
+  const [selectedGoal, setSelectedGoal] = useState<any | null>(null);
+  const [showGoalModal, setShowGoalModal] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const exportWrapperRef = useRef<HTMLDivElement>(null); // New ref for the entire exportable area
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const stickyNavRef = useRef<HTMLDivElement>(null);
+
+  // Detect if this is a draft
+  const isDraft = content?.status === 'draft';
+  console.log('🔍 ContentModal isDraft check:', { status: content?.status, isDraft, hasExportButton: isDraft });
+
+  // Fetch available goals
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/goals');
+        const data = await response.json();
+        console.log('📊 ContentModal Goals API Response:', data);
+        if (data.success && data.goals) {
+          console.log('✅ ContentModal setting available goals:', data.goals.length, 'goals');
+          setAvailableGoals(data.goals);
+        }
+      } catch (error) {
+        console.error('Failed to fetch goals:', error);
+      }
+    };
+    fetchGoals();
+  }, []);
+
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showExportMenu]);
+
+  // Sticky nav scroll detection
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    // Always show sticky nav (no scroll trigger needed since header is fixed)
+    setShowStickyNav(true);
+
+    // Set up intersection observer for active section tracking
+    const observerOptions = {
+      root: scrollContainer,
+      rootMargin: '-120px 0px -50%',
+      threshold: 0.1
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      const visibleEntries = entries.filter(entry => entry.isIntersecting);
+      
+      if (visibleEntries.length > 0) {
+        visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        const sectionId = visibleEntries[0].target.id;
+        if (sectionId) {
+          setActiveSection(sectionId);
+        }
+      }
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Observe all section elements
+    const sectionElements = scrollContainer.querySelectorAll('section[id]');
+    sectionElements.forEach(el => observer.observe(el));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [activePreviewTab, content]);
+
+  // Export functions
+  const exportAsImage = async () => {
+    console.log('🚀 EXPORT CLICKED - exportAsImage called!');
+    const targetRef = scrollContainerRef.current;
+    if (!targetRef) {
+      console.log('❌ No targetRef found!');
+      return;
+    }
+    
+    console.log('✅ targetRef exists, proceeding...');
+    setIsExporting(true);
+    setShowExportMenu(false);
+    
+    try {
+      // Hide the export button and close button temporarily
+      const exportBtn = document.querySelector('.export-button');
+      const closeBtn = document.querySelector('.close-button');
+      const draftBar = document.querySelector('.draft-bar');
+      
+      if (exportBtn) (exportBtn as HTMLElement).style.display = 'none';
+      if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
+      if (draftBar) (draftBar as HTMLElement).style.display = 'none';
+      
+      // Get the scrollable content div AND the modal container with max-h-[90vh]
+      const contentDiv = targetRef;
+      const modalContainer = contentDiv.closest('[class*="max-h-[90vh]"]') as HTMLElement;
+      
+      console.log('🔍 Export Debug:', {
+        contentDiv,
+        modalContainer,
+        modalContainerClasses: modalContainer?.className,
+        hasMaxHeight: modalContainer?.className?.includes('max-h-[90vh]')
+      });
+      
+      // Store original className of modal container (has max-h-[90vh])
+      const originalModalClassName = modalContainer?.className || '';
+      
+      // Temporarily remove scroll and set to full height on content div
+      const originalOverflow = contentDiv.style.overflow;
+      const originalMaxHeight = contentDiv.style.maxHeight;
+      const originalHeight = contentDiv.style.height;
+      
+      contentDiv.style.overflow = 'visible';
+      contentDiv.style.maxHeight = 'none';
+      contentDiv.style.height = 'auto';
+      
+      // Remove max-h-[90vh] from modal container className to allow full height
+      if (modalContainer) {
+        console.log('✅ Removing max-h-[90vh] from modal container');
+        modalContainer.className = originalModalClassName.replace('max-h-[90vh]', 'max-h-none');
+        console.log('📏 New className:', modalContainer.className);
+      } else {
+        console.warn('⚠️ Modal container with max-h-[90vh] not found!');
+      }
+      
+      // Wait for layout to settle
+      await new Promise(resolve => setTimeout(resolve, 200));
+      
+      // Use modern-screenshot which supports oklch colors and captures full content
+      const dataUrl = await domToPng(contentDiv, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        width: contentDiv.scrollWidth,
+        height: contentDiv.scrollHeight,
+      });
+      
+      // Restore original styles and className
+      contentDiv.style.overflow = originalOverflow;
+      contentDiv.style.maxHeight = originalMaxHeight;
+      contentDiv.style.height = originalHeight;
+      
+      if (modalContainer) {
+        modalContainer.className = originalModalClassName;
+      }
+      
+      // Restore buttons
+      if (exportBtn) (exportBtn as HTMLElement).style.display = '';
+      if (closeBtn) (closeBtn as HTMLElement).style.display = '';
+      if (draftBar) (draftBar as HTMLElement).style.display = '';
+      
+      const link = document.createElement('a');
+      const title = content.title || content.name || 'content';
+      const fileName = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.png`;
+      
+      link.download = fileName;
+      link.href = dataUrl;
+      link.click();
+    } catch (error: any) {
+      console.error('Error exporting as image:', error);
+      alert('Failed to export as image. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const exportAsPDF = async () => {
+    const targetRef = scrollContainerRef.current;
+    if (!targetRef) return;
+    
+    setIsExporting(true);
+    setShowExportMenu(false);
+    
+    try {
+      // Hide buttons temporarily
+      const exportBtn = document.querySelector('.export-button');
+      const closeBtn = document.querySelector('.close-button');
+      const draftBar = document.querySelector('.draft-bar');
+      
+      if (exportBtn) (exportBtn as HTMLElement).style.display = 'none';
+      if (closeBtn) (closeBtn as HTMLElement).style.display = 'none';
+      if (draftBar) (draftBar as HTMLElement).style.display = 'none';
+      
+      // Get the scrollable content div
+      const contentDiv = targetRef;
+      
+      // Temporarily remove scroll and set to full height
+      const originalOverflow = contentDiv.style.overflow;
+      const originalMaxHeight = contentDiv.style.maxHeight;
+      const originalHeight = contentDiv.style.height;
+      
+      contentDiv.style.overflow = 'visible';
+      contentDiv.style.maxHeight = 'none';
+      contentDiv.style.height = 'auto';
+      
+      // Use modern-screenshot to capture full content
+      const dataUrl = await domToPng(contentDiv, {
+        scale: 2,
+        backgroundColor: '#ffffff',
+        width: contentDiv.scrollWidth,
+        height: contentDiv.scrollHeight,
+      });
+      
+      // Restore original styles
+      contentDiv.style.overflow = originalOverflow;
+      contentDiv.style.maxHeight = originalMaxHeight;
+      contentDiv.style.height = originalHeight;
+      
+      // Restore buttons
+      if (exportBtn) (exportBtn as HTMLElement).style.display = '';
+      if (closeBtn) (closeBtn as HTMLElement).style.display = '';
+      if (draftBar) (draftBar as HTMLElement).style.display = '';
+      
+      // Convert to image and get dimensions
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise((resolve) => { img.onload = resolve; });
+      
+      const pdf = new jsPDF({
+        orientation: img.width > img.height ? 'landscape' : 'portrait',
+        unit: 'px',
+        format: [img.width, img.height]
+      });
+      
+      pdf.addImage(dataUrl, 'PNG', 0, 0, img.width, img.height);
+      
+      const title = content.title || content.name || 'content';
+      const fileName = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${new Date().toISOString().split('T')[0]}.pdf`;
+      
+      pdf.save(fileName);
+    } catch (error: any) {
+      console.error('Error exporting as PDF:', error);
+      alert('Failed to export as PDF. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // Validation function - uses schema-based validation
+  const runValidation = () => {
+    console.log('🔍 Running schema-based validation...', { content });
+    setIsValidating(true);
+    const checks: ValidationCheck[] = [];
+
+    // Step 1: Global checks
+    checks.push({ 
+      field: 'Global: ID', 
+      message: content.id ? `✓ ID found: ${content.id}` : '✗ Missing ID', 
+      severity: content.id ? 'success' : 'error' 
+    });
+    checks.push({ 
+      field: 'Global: Title/Name', 
+      message: (content.title || content.name) ? `✓ Title: ${content.title || content.name}` : '✗ Missing title/name', 
+      severity: (content.title || content.name) ? 'success' : 'error' 
+    });
+
+    // Step 2: Split JSON into sections
+    const sections = Object.keys(content).filter(key => 
+      !key.startsWith('_') && 
+      !['id', 'title', 'name', 'date', 'lastUpdated', 'updatedAt', 'tags', 'category', 'quarter', 'year', 'status'].includes(key)
+    );
+
+    console.log('📋 Sections found:', sections);
+
+    // Step 3: For each section, identify _type and run validation
+    sections.forEach((sectionKey) => {
+      const typeKey = `_${sectionKey}_type`;
+      const enabledKey = `_enabled_${sectionKey}`;
+      const sectionType = content[typeKey];
+      const sectionData = content[sectionKey];
+      const isEnabled = content[enabledKey] !== false;
+
+      const sectionLabel = formatLabel(sectionKey);
+
+      // Check 1: _type metadata exists
+      if (!sectionType) {
+        checks.push({
+          field: `${sectionLabel}: Metadata _type`,
+          message: '✗ Missing _type metadata',
+          severity: 'error',
+          section: sectionKey
+        });
+        return; // Skip further validation for this section
+      }
+
+      checks.push({
+        field: `${sectionLabel}: Metadata _type`,
+        message: `✓ Found: "${sectionType}"`,
+        severity: 'success',
+        section: sectionKey
+      });
+
+      // Check 2: _enabled metadata
+      checks.push({
+        field: `${sectionLabel}: Metadata _enabled`,
+        message: `✓ Found: ${isEnabled}`,
+        severity: 'success',
+        section: sectionKey
+      });
+
+      // Step 4: Locate validation schema for this type and run validation
+      console.log(`🔍 Validating section "${sectionKey}" with type "${sectionType}"`);
+      const validationResults = validateSection(sectionKey, sectionData, sectionType, content);
+
+      // Step 5: Add validation results to checks
+      validationResults.forEach(result => {
+        checks.push({
+          field: `${sectionLabel}: ${result.field}`,
+          message: result.message,
+          severity: result.severity,
+          section: sectionKey
+        });
+      });
+    });
+
+    console.log('✅ Validation complete:', { checks });
+    setTimeout(() => {
+      setValidationChecks(checks);
+      setIsValidating(false);
+    }, 300);
+  };
+
+  // Run validation when switching to validation tab
+  useEffect(() => {
+    console.log('📍 Effect triggered:', { activePreviewTab, isDraft });
+    if (activePreviewTab === 'validation') {
+      runValidation();
+    }
+  }, [activePreviewTab, content]);
+
+  // Close export menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (showExportMenu && !target.closest('.export-button')) {
+        setShowExportMenu(false);
+      }
+    };
+
+    if (showExportMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showExportMenu]);
+
+  // Scroll to section function
+  const scrollToSection = (sectionKey: string) => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    const element = scrollContainer.querySelector(`#section-${sectionKey}`);
+    if (element) {
+      // Get actual sticky nav height
+      const navHeight = stickyNavRef.current?.offsetHeight || 0;
+      const yOffset = -navHeight - 124; // Extra 124px for spacing (adjusted by ~100px)
+      const y = (element as HTMLElement).offsetTop + yOffset;
+      scrollContainer.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
+  if (!content) return null;
+
+  // Extract display metadata
+  const title = content.title || content.name || 'Untitled';
+  const date = content.date || content.lastUpdated || content.updatedAt;
+  
+  // Get all sections by finding keys that have corresponding _type metadata
+  const sections: Array<{ key: string; label: string; data: any; type: string; fields?: any; itemSchema?: any; chartConfig?: any; subtitle?: string; isMultiField?: boolean; multiFieldData?: any[]; displayTitle?: boolean }> = [];
+  
+  // First pass: Identify all data keys with _type metadata
+  const allDataKeys = Object.keys(content).filter((key) => {
+    if (key.startsWith('_') || ['id', 'title', 'name', 'date', 'lastUpdated', 'updatedAt', 'tags', 'category', 'quarter', 'year', 'status', 'protectionEnabled'].includes(key)) {
+      return false;
+    }
+    const typeKey = `_${key}_type`;
+    const enabledKey = `_enabled_${key}`;
+    return content[typeKey] && content[enabledKey] !== false;
+  });
+  
+  // Group indexed fields (section2_0, section2_1) under their parent section (section2)
+  // Only treat as indexed if the suffix is a small number (0-9), not a random ID like 1762678245566
+  const sectionGroups = new Map<string, string[]>();
+  const indexedFieldPattern = /^(.+)_(\d+)$/;
+  
+  allDataKeys.forEach(key => {
+    const match = key.match(indexedFieldPattern);
+    if (match) {
+      const [, baseName, indexStr] = match;
+      const index = parseInt(indexStr, 10);
+      
+      // Only treat as indexed field if index is small (0-9)
+      // Large numbers (like 1762678245566) are random IDs, not indices
+      if (index < 10) {
+        if (!sectionGroups.has(baseName)) {
+          sectionGroups.set(baseName, []);
+        }
+        sectionGroups.get(baseName)!.push(key);
+      } else {
+        // Large index number = random ID, not an indexed field
+        sectionGroups.set(key, [key]);
+      }
+    } else {
+      // Non-indexed field - add as single-item group
+      sectionGroups.set(key, [key]);
+    }
+  });
+  
+  // Build sections from groups
+  sectionGroups.forEach((fieldKeys, baseName) => {
+    // Check if parent section is enabled (for multi-field sections)
+    const parentEnabledKey = `_enabled_${baseName}`;
+    const isParentEnabled = content[parentEnabledKey] !== false;
+    
+    // Skip entire section if parent is disabled
+    if (!isParentEnabled) {
+      return;
+    }
+    
+    if (fieldKeys.length === 1) {
+      // Single field - original logic
+      const key = fieldKeys[0];
+      const typeKey = `_${key}_type`;
+      const fieldsKey = `_${key}_fields`;
+      const chartConfigKey = `_${key}_chartConfig`;
+      const rawData = content[key];
+      let actualData = rawData;
+      let subtitle: string | undefined;
+      
+      // Handle special object structures that contain arrays
+      // BUT: Skip extraction for budgetBreakdown which needs the full object
+      const sectionType = content[typeKey];
+      if (rawData && typeof rawData === 'object' && !Array.isArray(rawData) && sectionType !== 'budgetBreakdown') {
+        if (rawData.categories && Array.isArray(rawData.categories)) {
+          actualData = rawData.categories;
+          subtitle = rawData.subtitle;
+        }
+      }
+      
+      sections.push({
+        key,
+        label: content[`_${key}_label`] || formatLabel(key),
+        data: actualData,
+        type: content[typeKey],
+        fields: content[fieldsKey], // Legacy support
+        itemSchema: content[`_${key}_itemSchema`], // New format
+        chartConfig: content[chartConfigKey],
+        subtitle,
+        displayTitle: content[`_${key}_displayTitle`] !== false, // Default to true
+        goalTag: content[`_${key}_goalTag`]
+      });
+    } else {
+      // Multiple fields - create multi-field section
+      const multiFieldData = fieldKeys.sort().map(fieldKey => ({
+        key: fieldKey,
+        type: content[`_${fieldKey}_type`],
+        data: content[fieldKey],
+        fields: content[`_${fieldKey}_fields`],
+        itemSchema: content[`_${fieldKey}_itemSchema`],
+        chartConfig: content[`_${fieldKey}_chartConfig`],
+        layoutZone: content[`_${fieldKey}_layoutZone`] || 'full',
+        assetTitle: content[`_${fieldKey}_assetTitle`] || '',
+        displayAssetTitle: content[`_${fieldKey}_displayAssetTitle`] !== false,
+        alignment: content[`_${fieldKey}_alignment`] || 'left',
+        goalTag: content[`_${fieldKey}_goalTag`]
+      }));
+      
+      sections.push({
+        key: baseName,
+        label: content[`_${baseName}_label`] || formatLabel(baseName),
+        data: null, // Not used for multi-field
+        type: 'multiField', // Special type
+        isMultiField: true,
+        multiFieldData,
+        displayTitle: content[`_${baseName}_displayTitle`] !== false // Default to true
+      });
+    }
+  });
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className={isFullscreen 
+          ? "fixed inset-0 bg-black z-50"
+          : "fixed top-0 left-0 right-0 bottom-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4"}
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          className={isFullscreen
+            ? "fixed inset-0 bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden"
+            : "bg-white/60 dark:bg-gray-900/60 backdrop-blur-2xl rounded-3xl max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-white/20 dark:border-white/10 flex flex-col"}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Draft Preview Control Bar - Only shown in draft mode */}
+          {isDraft && (
+            <div className="draft-bar no-print flex-shrink-0 sticky top-0 z-20 shadow-2xl rounded-t-3xl" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
+              <div className="flex items-center justify-between px-6 py-3">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <h3 className="text-sm font-roobert-bold text-white">Preview Mode - DRAFT</h3>
+                    <p className="text-xs text-white/80">{title}</p>
+                  </div>
+                </div>
+
+                {/* Tabs and Export */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setActivePreviewTab('visual')}
+                    className={`px-4 py-2 rounded-lg ${
+                      activePreviewTab === 'visual'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-white/10 hover:bg-white/20 text-white'
+                    } text-sm font-roobert-medium flex items-center gap-2 transition-all`}
+                  >
+                    <Eye className="w-4 h-4" />
+                    Visual
+                  </button>
+                  <button
+                    onClick={() => setActivePreviewTab('json')}
+                    className={`px-4 py-2 rounded-lg ${
+                      activePreviewTab === 'json'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-white/10 hover:bg-white/20 text-white'
+                    } text-sm font-roobert-medium flex items-center gap-2 transition-all`}
+                  >
+                    <Code className="w-4 h-4" />
+                    JSON
+                  </button>
+                  <button
+                    onClick={() => setActivePreviewTab('validation')}
+                    className={`px-4 py-2 rounded-lg ${
+                      activePreviewTab === 'validation'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-white/10 hover:bg-white/20 text-white'
+                    } text-sm font-roobert-medium flex items-center gap-2 transition-all`}
+                  >
+                    {isValidating ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Shield className="w-4 h-4" />
+                    )}
+                    Validate
+                  </button>
+
+                  {/* Budget Expand/Collapse Buttons - Only show if content has budgetBreakdown */}
+                  {(() => {
+                    const hasBudget = Object.keys(content).some(key => {
+                      const typeKey = `_${key}_type`;
+                      const hasType = content[typeKey] === 'budgetBreakdown';
+                      if (hasType) {
+                        console.log('🔍 Found budgetBreakdown:', key, typeKey, content[typeKey]);
+                      }
+                      return hasType;
+                    });
+                    
+                    console.log('🔍 ContentModal - Has budget breakdown:', hasBudget);
+                    console.log('🔍 ContentModal - Content keys:', Object.keys(content).filter(k => k.includes('_type')));
+                    
+                    if (!hasBudget) return null;
+                    
+                    return (
+                      <>
+                        <button
+                          onClick={() => window.dispatchEvent(new CustomEvent('budget:expandAll'))}
+                          className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                          title="Expand All Budget Categories"
+                        >
+                          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => window.dispatchEvent(new CustomEvent('budget:collapseAll'))}
+                          className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                          title="Collapse All Budget Categories"
+                        >
+                          <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 11l7-7 7 7M5 19l7-7 7 7" />
+                          </svg>
+                        </button>
+                      </>
+                    );
+                  })()}
+
+                  {/* Export Button with Dropdown */}
+                  <div className="relative export-button">
+                    <button
+                      onClick={() => {
+                        console.log('📂 ContentModal - Export menu toggle clicked! Current state:', showExportMenu);
+                        setShowExportMenu(!showExportMenu);
+                      }}
+                      disabled={isExporting}
+                      className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-roobert-medium flex items-center gap-2 transition-all disabled:opacity-50"
+                    >
+                      {isExporting ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Download className="w-4 h-4" />
+                      )}
+                      Export
+                    </button>
+                    
+                    {showExportMenu && (
+                      <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
+                        <button
+                          onClick={(e) => {
+                            console.log('🖼️ ContentModal - Export as Image button clicked!');
+                            e.stopPropagation();
+                            exportAsImage();
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
+                        >
+                          <FileImage className="w-4 h-4 text-blue-500" />
+                          Export as Image
+                        </button>
+                        <button
+                          onClick={exportAsPDF}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
+                        >
+                          <FileText className="w-4 h-4 text-red-500" />
+                          Export as PDF
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Fullscreen Toggle Button */}
+                  <button
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                    title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                  >
+                    {isFullscreen ? <Minimize2 className="w-6 h-6 text-white" /> : <Maximize2 className="w-6 h-6 text-white" />}
+                  </button>
+
+                  <button
+                    onClick={onClose}
+                    className="close-button p-2 rounded-lg hover:bg-white/20 transition-colors ml-2"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Non-Draft Header - Simple header with Export and Close buttons */}
+          {!isDraft && (
+            <div className="no-print flex-shrink-0 sticky top-0 z-20 shadow-2xl rounded-t-3xl" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
+              <div className="flex items-center justify-between px-6 py-3">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <h3 className="text-sm font-roobert-bold text-white">{title}</h3>
+                    <p className="text-xs text-white/80">Content Preview</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {/* Export Button with Dropdown */}
+                  <div className="relative export-button">
+                    <button
+                      onClick={() => {
+                        console.log('📂 ContentModal NON-DRAFT - Export menu toggle clicked! Current state:', showExportMenu);
+                        setShowExportMenu(!showExportMenu);
+                      }}
+                      disabled={isExporting}
+                      className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-roobert-medium flex items-center gap-2 transition-all disabled:opacity-50"
+                    >
+                      {isExporting ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Download className="w-4 h-4" />
+                      )}
+                      Export
+                    </button>
+                    
+                    {showExportMenu && (
+                      <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
+                        <button
+                          onClick={(e) => {
+                            console.log('🖼️ ContentModal NON-DRAFT - Export as Image button clicked!');
+                            e.stopPropagation();
+                            exportAsImage();
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
+                        >
+                          <FileImage className="w-4 h-4 text-blue-500" />
+                          Export as Image
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            console.log('📄 ContentModal NON-DRAFT - Export as PDF button clicked!');
+                            e.stopPropagation();
+                            exportAsPDF();
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
+                        >
+                          <FileText className="w-4 h-4 text-red-500" />
+                          Export as PDF
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Fullscreen Toggle Button */}
+                  <button
+                    onClick={() => setIsFullscreen(!isFullscreen)}
+                    className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+                    title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                  >
+                    {isFullscreen ? <Minimize2 className="w-6 h-6 text-white" /> : <Maximize2 className="w-6 h-6 text-white" />}
+                  </button>
+
+                  <button
+                    onClick={onClose}
+                    className="close-button p-2 rounded-lg hover:bg-white/20 transition-colors ml-2"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Show Validation view if in draft mode and validation tab is active */}
+          {isDraft && activePreviewTab === 'validation' ? (
+            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-brand-tertiary dark:to-brand-primary">
+              <div className="max-w-7xl mx-auto">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
+                    JSON Validation Report
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {isValidating ? 'Running comprehensive validation checks...' : `${validationChecks.length} checks completed`}
+                  </p>
+                </div>
+
+                {/* Validation Results */}
+                <div className="space-y-6">
+                  {(() => {
+                    // Get global checks first
+                    const globalChecks = validationChecks.filter(c => !c.section);
+                    // Get unique sections
+                    const sections = [...new Set(validationChecks.filter(c => c.section).map(c => c.section))];
+                    
+                    return (
+                      <>
+                        {/* Global Checks */}
+                        {globalChecks.length > 0 && (
+                          <div className="glass-strong rounded-xl p-6 border-2 border-white/20">
+                            <h5 className="font-roobert-bold text-lg text-gray-900 dark:text-white mb-4">
+                              Global Metadata
+                            </h5>
+                            
+                            {/* Two column grid */}
+                            <div className="grid grid-cols-2 gap-6">
+                              {/* Left: Checks */}
+                              <div className="space-y-2">
+                                {globalChecks.map((check, i) => (
+                                  <div key={i} className="flex items-start gap-2 text-sm">
+                                    {check.severity === 'success' && <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />}
+                                    {check.severity === 'error' && <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />}
+                                    {check.severity === 'warning' && <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />}
+                                    {check.severity === 'info' && <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />}
+                                    <div className="flex-1">
+                                      <div className="font-roobert-medium text-gray-900 dark:text-white">
+                                        {check.field}
+                                      </div>
+                                      <div className="text-gray-600 dark:text-gray-400 mt-0.5">
+                                        {check.message}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* Right: JSON */}
+                              <div>
+                                <div className="bg-gray-900 dark:bg-black rounded-lg p-3 max-h-[200px] overflow-auto">
+                                  <pre className="text-xs font-mono text-green-400">
+{JSON.stringify({
+  id: content.id,
+  title: content.title,
+  name: content.name,
+  date: content.date,
+  status: content.status
+}, null, 2)}
+                                  </pre>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Section Checks */}
+                        {sections.map((section) => {
+                          const sectionChecks = validationChecks.filter(c => c.section === section);
+                          const hasErrors = sectionChecks.some(c => c.severity === 'error');
+                          const hasWarnings = sectionChecks.some(c => c.severity === 'warning');
+                          const allSuccess = sectionChecks.every(c => c.severity === 'success');
+
+                          // Get relevant JSON for this section
+                          const sectionJson = {
+                            [section as string]: content[section as string],
+                            [`_${section}_type`]: content[`_${section}_type`],
+                            [`_enabled_${section}`]: content[`_enabled_${section}`],
+                            [`_${section}_fields`]: content[`_${section}_fields`],
+                            [`_${section}_chartConfig`]: content[`_${section}_chartConfig`]
+                          };
+                          // Remove undefined values
+                          Object.keys(sectionJson).forEach(key => {
+                            if (sectionJson[key] === undefined) delete sectionJson[key];
+                          });
+
+                          return (
+                            <div 
+                              key={section} 
+                              className={`glass-strong rounded-xl p-6 border-2 ${
+                                hasErrors ? 'border-red-500/30' : 
+                                hasWarnings ? 'border-yellow-500/30' : 
+                                allSuccess ? 'border-green-500/30' : 
+                                'border-white/20'
+                              }`}
+                            >
+                              <h5 className="font-roobert-bold text-lg text-gray-900 dark:text-white mb-4">
+                                {formatLabel(section as string)}
+                              </h5>
+                              
+                              {/* Two column grid */}
+                              <div className="grid grid-cols-2 gap-6">
+                                {/* Left: Checks */}
+                                <div className="space-y-2">
+                                  {sectionChecks.map((check, i) => (
+                                    <div key={i} className="flex items-start gap-2 text-sm">
+                                      {check.severity === 'success' && <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />}
+                                      {check.severity === 'error' && <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />}
+                                      {check.severity === 'warning' && <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />}
+                                      {check.severity === 'info' && <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />}
+                                      <div className="flex-1">
+                                        <div className="font-roobert-medium text-gray-900 dark:text-white">
+                                          {check.field.replace(`${formatLabel(section as string)}: `, '')}
+                                        </div>
+                                        <div className="text-gray-600 dark:text-gray-400 mt-0.5">
+                                          {check.message}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {/* Right: JSON for this section */}
+                                <div>
+                                  <div className="bg-gray-900 dark:bg-black rounded-lg p-3 max-h-[400px] overflow-auto">
+                                    <pre className="text-xs font-mono text-green-400">
+                                      {JSON.stringify(sectionJson, null, 2)}
+                                    </pre>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+            </div>
+          ) : isDraft && activePreviewTab === 'json' ? (
+            /* JSON view for draft mode */
+            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-brand-tertiary dark:to-brand-primary">
+              <div className="max-w-4xl mx-auto">
+                <div className="mb-6">
+                  <h3 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white mb-2">
+                    JSON Data
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Raw JSON structure of the content
+                  </p>
+                </div>
+
+                <div className="glass-strong rounded-xl p-4 border-2 border-white/20">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-sm font-roobert-bold text-gray-900 dark:text-white">
+                      JSON Structure
+                    </h4>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(JSON.stringify(content, null, 2));
+                      }}
+                      className="px-3 py-1.5 rounded-lg text-xs font-roobert-medium transition-all"
+                      style={{ 
+                        backgroundColor: 'rgba(67, 28, 91, 0.1)',
+                        color: 'var(--brand-primary)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.1)';
+                      }}
+                    >
+                      Copy JSON
+                    </button>
+                  </div>
+                  <pre className="text-xs font-mono bg-gray-900 dark:bg-black text-green-400 p-4 rounded-lg overflow-x-auto max-h-[60vh] overflow-y-auto">
+                    {JSON.stringify(content, null, 2)}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Normal visual view (works for both draft and published) */
+            <div ref={exportWrapperRef} className="flex flex-col flex-1 overflow-hidden">
+              {/* Header - Only shown if NOT in draft mode */}
+              {!isDraft && (
+                <div className={`sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between z-10 rounded-t-3xl flex-shrink-0 ${isFullscreen ? 'p-3' : 'p-6'}`}>
+                  <div>
+                    <h2 className={`font-roobert-heavy text-gray-900 dark:text-white ${isFullscreen ? 'text-xl mb-0' : 'text-3xl mb-1'}`}>
+                      {title}
+                    </h2>
+                    {date && !isFullscreen && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {new Date(date).toLocaleDateString('en-US', { 
+                          month: 'long', 
+                          day: 'numeric', 
+                          year: 'numeric' 
+                        })}
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    {/* Budget/Forecast Expand/Collapse Buttons - Show if content has budgetBreakdown or forecastBreakdown */}
+                    {(() => {
+                      const hasBudget = Object.keys(content).some(key => {
+                        const typeKey = `_${key}_type`;
+                        return content[typeKey] === 'budgetBreakdown';
+                      });
+                      
+                      const hasForecast = Object.keys(content).some(key => {
+                        const typeKey = `_${key}_type`;
+                        return content[typeKey] === 'forecastBreakdown';
+                      });
+                      
+                      if (!hasBudget && !hasForecast) return null;
+                      
+                      const eventPrefix = hasBudget ? 'budget' : 'forecast';
+                      const label = hasBudget ? 'Budget' : 'Forecast';
+                      
+                      return (
+                        <>
+                          <button
+                            onClick={() => window.dispatchEvent(new CustomEvent(`${eventPrefix}:expandAll`))}
+                            className="w-10 h-10 rounded-xl bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                            title={`Expand All ${label} Categories`}
+                          >
+                            <svg className="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => window.dispatchEvent(new CustomEvent(`${eventPrefix}:collapseAll`))}
+                            className="w-10 h-10 rounded-xl bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                            title={`Collapse All ${label} Categories`}
+                          >
+                            <svg className="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 11l7-7 7 7M5 19l7-7 7 7" />
+                            </svg>
+                          </button>
+                        </>
+                      );
+                    })()}
+
+                    {/* Export Button with Dropdown */}
+                    <div className="relative export-button">
+                      <button
+                        onClick={() => setShowExportMenu(!showExportMenu)}
+                        disabled={isExporting}
+                        className="w-10 h-10 rounded-xl text-white transition-all disabled:opacity-50 flex items-center justify-center"
+                        style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}
+                        onMouseEnter={(e) => {
+                          if (!e.currentTarget.disabled) {
+                            e.currentTarget.style.background = 'linear-gradient(to right, rgba(67, 28, 91, 0.9), rgba(178, 26, 83, 0.9))';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!e.currentTarget.disabled) {
+                            e.currentTarget.style.background = 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))';
+                          }
+                        }}
+                        title="Export"
+                      >
+                        {isExporting ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Download className="w-4 h-4" />
+                        )}
+                      </button>
+                      
+                      {showExportMenu && (
+                        <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-[1000] min-w-[180px]">
+                          <button
+                            onClick={exportAsImage}
+                            className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
+                          >
+                            <FileImage className="w-4 h-4 text-blue-500" />
+                            Export as Image
+                          </button>
+                          <button
+                            onClick={exportAsPDF}
+                            className="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-sm text-gray-900 dark:text-white transition-colors"
+                          >
+                            <FileText className="w-4 h-4 text-red-500" />
+                            Export as PDF
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Fullscreen Toggle Button */}
+                    <button
+                      onClick={() => setIsFullscreen(!isFullscreen)}
+                      className="w-10 h-10 rounded-xl bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                      title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                    >
+                      {isFullscreen ? <Minimize2 className="w-5 h-5 text-gray-600 dark:text-gray-400" /> : <Maximize2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />}
+                    </button>
+
+                    <button
+                      onClick={onClose}
+                      className="close-button w-10 h-10 rounded-xl bg-gray-200/50 dark:bg-gray-800/50 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                    >
+                      <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Content Sections */}
+              <div ref={scrollContainerRef} className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
+                {/* Sticky Navigation */}
+                <AnimatePresence>
+                  {showStickyNav && !isDraft && sections.filter(s => s.type !== 'hr').length > 1 && (
+                    <motion.div
+                      ref={stickyNavRef}
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2, ease: 'easeInOut' }}
+                      className={`sticky top-0 z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 ${isFullscreen ? 'px-3 py-1.5' : 'px-6 py-3'}`}
+                    >
+                      <nav className="flex items-center gap-2 overflow-x-auto pb-1">
+                        {sections.filter(section => section.type !== 'hr').map((section) => (
+                          <button
+                            key={section.key}
+                            onClick={() => scrollToSection(section.key)}
+                            className={`
+                              flex-shrink-0 rounded-lg font-roobert-medium transition-all duration-200
+                              ${isFullscreen ? 'px-2 py-1 text-[9px]' : 'px-3 py-1.5 text-[10px]'}
+                              ${activeSection === `section-${section.key}`
+                                ? 'bg-gradient-to-r from-brand-secondary to-brand-tertiary text-white shadow-md'
+                                : 'text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
+                              }
+                            `}
+                          >
+                            {section.label}
+                          </button>
+                        ))}
+                      </nav>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className={isFullscreen ? 'p-4 space-y-4' : 'p-6 space-y-8'}>
+                {sections.map((section) => {
+                  const sectionGoal = section.goalTag ? availableGoals.find(g => g.id === section.goalTag) : null;
+                  console.log(`🎯 ContentModal Section "${section.label}":`, {
+                    key: section.key,
+                    goalTag: section.goalTag,
+                    foundGoal: sectionGoal?.shortName || 'none',
+                    availableGoalsCount: availableGoals.length
+                  });
+                  
+                  return (
+                  <section key={section.key} id={`section-${section.key}`}>
+                    {section.displayTitle !== false && (
+                      <div className="flex items-center gap-3 mb-4">
+                        <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white">
+                          {section.label}
+                        </h3>
+                        {sectionGoal && (
+                          <button
+                            onClick={() => {
+                              setSelectedGoal(sectionGoal);
+                              setShowGoalModal(true);
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-roobert-medium hover:underline transition-all cursor-pointer"
+                            style={{
+                              backgroundColor: 'rgba(67, 28, 91, 0.1)',
+                              color: 'var(--brand-primary)',
+                              border: '1px solid rgba(67, 28, 91, 0.2)'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.2)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.1)';
+                            }}
+                            title={`Click to view goal: ${sectionGoal.name}`}
+                          >
+                            <span className="text-sm">{sectionGoal.icon || '🎯'}</span>
+                            {sectionGoal.shortName}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    {section.subtitle && section.displayTitle !== false && (
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        {section.subtitle}
+                      </p>
+                    )}
+                    
+                    {/* Multi-field section: Render in grid with layout zones */}
+                    {section.isMultiField && section.multiFieldData ? (
+                      <div className="flex flex-col gap-6 w-full">
+                        {/* Group fields by row based on layoutZone */}
+                        {(() => {
+                          const rows: any[][] = [];
+                          let currentRow: any[] = [];
+                          let currentRowType: string | null = null;
+
+                          section.multiFieldData.forEach((field: any) => {
+                            const zone = field.layoutZone || 'full';
+                            
+                            // Determine row type based on zone
+                            let rowType = 'full';
+                            if (zone.includes('left-70') || zone.includes('right-30')) {
+                              rowType = '70-30';
+                            } else if (zone.includes('left-30') || zone.includes('right-70')) {
+                              rowType = '30-70';
+                            } else if (zone.includes('left-50') || zone.includes('right-50')) {
+                              rowType = '50-50';
+                            } else if (zone.includes('left-33') || zone.includes('middle-33') || zone.includes('right-33')) {
+                              rowType = '33-33-33';
+                            }
+
+                            // Start new row if:
+                            // 1. Row type changes
+                            // 2. Full width item
+                            // 3. 70-30 or 30-70 row has 2 items
+                            // 4. 50-50 row has 2 items
+                            // 5. 33-33-33 row has 3 items
+                            if (
+                              (currentRowType && currentRowType !== rowType) ||
+                              rowType === 'full' ||
+                              (currentRowType === '70-30' && currentRow.length >= 2) ||
+                              (currentRowType === '30-70' && currentRow.length >= 2) ||
+                              (currentRowType === '50-50' && currentRow.length >= 2) ||
+                              (currentRowType === '33-33-33' && currentRow.length >= 3)
+                            ) {
+                              if (currentRow.length > 0) {
+                                rows.push([...currentRow]);
+                              }
+                              currentRow = [];
+                              currentRowType = null;
+                            }
+
+                            currentRow.push(field);
+                            currentRowType = rowType;
+
+                            // Full width items complete their own row
+                            if (rowType === 'full') {
+                              rows.push([...currentRow]);
+                              currentRow = [];
+                              currentRowType = null;
+                            }
+                          });
+
+                          // Add remaining row
+                          if (currentRow.length > 0) {
+                            rows.push(currentRow);
+                          }
+
+                          return rows.map((row, rowIndex) => {
+                            const firstZone = row[0]?.layoutZone || 'full';
+                            let gridCols = 'grid-cols-1';
+                            
+                            if (firstZone.includes('left-33') || firstZone.includes('middle-33') || firstZone.includes('right-33')) {
+                              gridCols = 'grid-cols-3';
+                            } else if (firstZone.includes('left-50') || firstZone.includes('right-50')) {
+                              gridCols = 'grid-cols-2';
+                            } else if (firstZone.includes('left-70') || firstZone.includes('right-30')) {
+                              gridCols = 'grid-cols-[2.33fr_1fr]';
+                            } else if (firstZone.includes('left-30') || firstZone.includes('right-70')) {
+                              gridCols = 'grid-cols-[1fr_2.33fr]';
+                            }
+
+                            return (
+                              <div key={rowIndex} className={`grid ${gridCols} gap-6 items-start w-full`}>
+                                {row.map((field: any, fieldIndex: number) => {
+                                  const alignment = field.alignment || 'left';
+                                  const alignmentClass = alignment === 'center' ? 'text-center' : alignment === 'right' ? 'text-right' : 'text-left';
+                                  const fieldGoal = field.goalTag ? availableGoals.find(g => g.id === field.goalTag) : null;
+                                  
+                                  return (
+                                    <div key={field.key} className={`flex flex-col ${alignmentClass}`}>
+                                      <div className="flex items-center gap-2 mb-3">
+                                        {field.displayAssetTitle && field.assetTitle && (
+                                          <h4 className="text-sm font-roobert-semibold text-gray-700 dark:text-gray-300">
+                                            {field.assetTitle}
+                                          </h4>
+                                        )}
+                                        {fieldGoal && (
+                                          <button
+                                            onClick={() => {
+                                              setSelectedGoal(fieldGoal);
+                                              setShowGoalModal(true);
+                                            }}
+                                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-roobert-medium hover:underline transition-all cursor-pointer"
+                                            style={{
+                                              backgroundColor: 'rgba(67, 28, 91, 0.1)',
+                                              color: 'var(--brand-primary)',
+                                              border: '1px solid rgba(67, 28, 91, 0.2)'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                              e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.2)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                              e.currentTarget.style.backgroundColor = 'rgba(67, 28, 91, 0.1)';
+                                            }}
+                                            title={`Click to view goal: ${fieldGoal.name}`}
+                                          >
+                                            <span className="text-[11px]">{fieldGoal.icon || '🎯'}</span>
+                                            {fieldGoal.shortName}
+                                          </button>
+                                        )}
+                                      </div>
+                                      <AssetRenderEngine
+                                        type={field.type}
+                                        data={field.data}
+                                      />
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          });
+                        })()}
+                      </div>
+                    ) : (
+                      /* Single field section: Render normally */
+                      <AssetRenderEngine
+                        type={section.type}
+                        data={section.data}
+                      />
+                    )}
+                  </section>
+                  );
+                })}
+                </div>
+                
+                {sections.length === 0 && (
+                  <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                    No content sections configured for this item.
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Goal Details Modal */}
+        {showGoalModal && selectedGoal && (
+          <ViewGoalModal
+            goal={selectedGoal}
+            onClose={() => setShowGoalModal(false)}
+          />
+        )}
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+// Helper function to convert camelCase/snake_case to Title Case
+function formatLabel(key: string): string {
+  // Remove trailing underscores and numbers (e.g., "_1_2_" or "_0")
+  let cleaned = key.replace(/_\d+_?$/g, '').replace(/_$/g, '');
+  
+  // Replace underscores with spaces
+  cleaned = cleaned.replace(/_/g, ' ');
+  
+  // Split on capital letters for camelCase
+  const words = cleaned.split(/(?=[A-Z])/).join(' ').split(' ');
+  
+  // Capitalize each word
+  return words
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
+// OLD formatLabel function below (keeping for reference)
+function formatLabelOld(key: string): string {
+  return key
+    // Insert space before capital letters
+    .replace(/([A-Z])/g, ' $1')
+    // Capitalize first letter
+    .replace(/^./, (str) => str.toUpperCase())
+    // Trim any extra spaces
+    .trim();
+}

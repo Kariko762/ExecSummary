@@ -1,0 +1,195 @@
+{
+  "id": "week-vendor-performance-q1-2026-01-23",
+  "quarter": "Jan 23",
+  "year": 2026,
+  "date": "2026-01-23",
+  "title": "Vendor Performance Q1",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_keyMetrics_type": "metricCard",
+  "_keyMetrics_layoutZone": "full",
+  "_keyMetrics_rowIndex": 0,
+  "_keyMetrics_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "keyMetrics": [
+    {
+      "title": "Won Revenue",
+      "value": "$1,230,000",
+      "style": "highlight",
+      "icon": "dollar",
+      "iconColor": "green"
+    },
+    {
+      "title": "New Demo Assets",
+      "value": "5",
+      "style": "total",
+      "icon": "activity",
+      "iconColor": "navy"
+    },
+    {
+      "title": "Budget Spent",
+      "value": "35%",
+      "style": "bold",
+      "icon": "trending",
+      "iconColor": "green"
+    }
+  ],
+  "_keyMetrics_sectionLayoutType": "full",
+  "_enabled_keyMetrics": true,
+  "_completed_keyMetrics": false,
+  "_trends_0_type": "lineChart",
+  "_trends_0_layoutZone": "left-70",
+  "_trends_0_rowIndex": 0,
+  "_trends_0_fields": {
+    "name": {
+      "label": "Label",
+      "renderAs": "text",
+      "required": true
+    },
+    "value": {
+      "label": "Value",
+      "renderAs": "number",
+      "required": true
+    }
+  },
+  "_trends_0_chartConfig": {
+    "xAxisKey": "name",
+    "yAxisKey": "value",
+    "curveType": "monotone",
+    "showGrid": true,
+    "showLegend": true,
+    "strokeWidth": 3
+  },
+  "trends_0": [
+    {
+      "name": "Jan",
+      "Series3": 60
+    },
+    {
+      "name": "Mar",
+      "Series3": 75
+    },
+    {
+      "name": "Apr",
+      "Series3": 80
+    },
+    {
+      "name": "May",
+      "Series3": 85
+    },
+    {
+      "name": "Jun",
+      "Series3": 90
+    }
+  ],
+  "_trends_1_type": "bulletList",
+  "_trends_1_layoutZone": "right-30",
+  "_trends_1_rowIndex": 0,
+  "trends_1": [
+    "Digital One - {{percent:25}}",
+    "Second item with more detail",
+    "Third item for completion"
+  ],
+  "_trends_sectionLayoutType": "left-70",
+  "_enabled_trends": true,
+  "_completed_trends": false,
+  "_adoption_0_type": "stackedBarChart",
+  "_adoption_0_layoutZone": "left-70",
+  "_adoption_0_rowIndex": 0,
+  "adoption_0": [
+    {
+      "name": "Banking",
+      "Support": 150,
+      "Prep": 200,
+      "Demo": 300
+    },
+    {
+      "name": "Capital Markets",
+      "Support": 120,
+      "Prep": 180,
+      "Demo": 250
+    }
+  ],
+  "_adoption_1_type": "bulletList",
+  "_adoption_1_layoutZone": "right-30",
+  "_adoption_1_rowIndex": 0,
+  "adoption_1": [
+    "First item in the list",
+    "Second item with more detail",
+    "Third item for completion"
+  ],
+  "_adoption_sectionLayoutType": "left-70",
+  "_enabled_adoption": true,
+  "_completed_adoption": false,
+  "_executiveInsight_type": "quote",
+  "_executiveInsight_layoutZone": "full",
+  "_executiveInsight_rowIndex": 0,
+  "executiveInsight": "Strong momentum across Demo Services Group with key wins in Banking Microsite and SNOW migration.",
+  "_executiveInsight_sectionLayoutType": "full",
+  "_enabled_executiveInsight": true,
+  "_completed_executiveInsight": false,
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "performance-vendor-2026-Q1",
+  "_template_description": "",
+  "_template_created": "2026-01-23T17:15:49.930Z",
+  "_template_updated": "2026-01-23T17:15:49.930Z",
+  "_layout": "one-pager",
+  "_contentTag": "performance",
+  "_trends_1_assetTitle": "Top Performing Assets",
+  "_type": "performance",
+  "_adoption_1_assetTitle": "Bottom Performing Assets"
+}

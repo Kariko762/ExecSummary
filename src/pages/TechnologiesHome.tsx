@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Cpu, ExternalLink, ChevronRight, Layers, Zap, TrendingUp, Award } from 'lucide-react';
+import { Cpu, ExternalLink, ChevronRight, Layers, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface TechnologyMenuItem {

@@ -1,64 +1,76 @@
 {
   "goals": [
     {
-      "id": "demo-prep-efficiency",
-      "name": "Improve Demo Preparation Efficiency",
-      "shortName": "Demo Prep",
-      "category": "efficiency",
-      "owner": "Demo Operations Manager",
+      "id": "automate-demo-prep",
+      "name": "Transform Demo Preparation Through Automation & Standardisation",
+      "shortName": "Automate Demo Prep",
+      "category": "process-optimization",
+      "owner": "Demo Services",
       "coOwners": [
         "Sales Engineering",
-        "RevOps"
+        "IT Operations",
+        "Product"
       ],
-      "status": "in-progress",
-      "priority": "high",
+      "status": "not-started",
+      "priority": "medium",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
       "smartGoal": {
-        "statement": "By Q3 2025, reduce demo preparation time from 18 hours to 7 hours per demo by implementing automated data generation tools and standardized runbooks, enabling SEs to increase demo capacity by 60%.",
+        "statement": "By 2026-12-31, reduce total demo preparation hours by automating environment provisioning and standardising demo assets, resulting in faster readiness and reduced manual effort.",
         "specific": {
           "objectives": [
-            "Implement AI-powered demo data generator",
-            "Create standardized runbook library (20+ scenarios)",
-            "Deploy pre-demo environment validation scripts",
-            "Establish demo prep checklist automation"
+            "Deploy automated demo environment provisioning",
+            "Standardise core demo blueprints by product and use case",
+            "Centralise ownership of demo environments",
+            "Reduce rep-managed demo systems"
           ]
         },
         "measurable": {
           "metrics": [
-            "Prep time: 18h → 7h (baseline to target)",
-            "Runbook adoption rate: 0% → 85%",
-            "Last-minute prep issues: 12/month → 2/month",
-            "SE capacity increase: +60% demos/quarter"
+            "Demo prep hours: 21915 → 14000",
+            "Automated environment coverage: 10% → 75%",
+            "Standard demo blueprint adoption: 0% → 80%",
+            "Rep-supported demo hours: 1613 → 400"
           ]
         },
         "achievable": {
-          "resources": "Demo Ops team (3 FTEs), Engineering support for API integrations, Budget for automation tools ($50K)",
-          "ownership": "Demo Operations Manager with RevOps and Sales Engineering support"
+          "resources": "Automation tooling, platform engineering, demo platform budget",
+          "ownership": "Demo Ops owns automation, IT owns infrastructure, Product defines standards"
         },
         "relevant": {
           "croAlignment": [
+            "Sales Productivity",
             "Sales Cycle Delays",
-            "Deal Conversion",
-            "Sales Productivity"
+            "Pipeline Risk"
           ]
         },
         "timeBound": {
           "timeline": [
             {
-              "phase": "Phase 1 (Q1)",
-              "deliverable": "Launch standardized templates & runbooks",
-              "dueDate": "2025-03-31",
-              "status": "complete"
+              "phase": "Assessment & Design",
+              "deliverable": "Target demo automation architecture and standards",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
             },
             {
-              "phase": "Phase 2 (Q2)",
-              "deliverable": "Automate pre-demo checks + implement reset workflows",
-              "dueDate": "2025-06-30",
-              "status": "in-progress"
+              "phase": "Platform Build",
+              "deliverable": "Automated provisioning MVP",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
             },
             {
-              "phase": "Phase 3 (Q3)",
-              "deliverable": "Measure improvement and refine operational model",
-              "dueDate": "2025-09-30",
+              "phase": "Rollout & Adoption",
+              "deliverable": "Standard demos live for priority products",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimisation",
+              "deliverable": "Prep hour reduction fully realised",
+              "dueDate": "2026-12-31",
               "status": "not-started"
             }
           ]
@@ -67,266 +79,127 @@
       "indicators": {
         "leading": [
           {
-            "name": "Number of runbooks adopted across products",
-            "baseline": "2",
-            "target": "15",
-            "current": "8",
-            "unit": "runbooks"
+            "name": "Automated environments deployed",
+            "baseline": "0",
+            "target": "50",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "% of demos using standard datasets",
-            "baseline": "15%",
-            "target": "85%",
-            "current": "47%",
-            "unit": "%"
+            "name": "Standard demo templates created",
+            "baseline": "0",
+            "target": "30",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "Frequency of last-minute access/environment issues",
-            "baseline": "23 per month",
-            "target": "3 per month",
-            "current": "12 per month",
-            "unit": "incidents/month"
-          },
-          {
-            "name": "Average SME prep hours logged per demo",
-            "baseline": "18 hours",
-            "target": "7 hours",
-            "current": "12 hours",
-            "unit": "hours"
+            "name": "Users onboarded to platform",
+            "baseline": "0",
+            "target": "200",
+            "current": "0",
+            "unit": "count"
           }
         ],
         "lagging": [
           {
-            "name": "Demo-to-next-stage rate",
-            "baseline": "53%",
-            "target": "75%",
-            "current": "64%",
-            "unit": "%"
+            "name": "Total demo prep hours",
+            "baseline": "21915",
+            "target": "14000",
+            "current": "21915",
+            "unit": "hours"
           },
           {
-            "name": "Reduction in demo reschedules",
-            "baseline": "47% rescheduled",
-            "target": "10% rescheduled",
-            "current": "28% rescheduled",
-            "unit": "%"
+            "name": "Rep-supported demo hours",
+            "baseline": "1613",
+            "target": "400",
+            "current": "1613",
+            "unit": "hours"
           },
           {
-            "name": "Time from demo request → demo delivery",
-            "baseline": "8.5 days",
-            "target": "3 days",
-            "current": "5.2 days",
-            "unit": "days"
-          },
-          {
-            "name": "Sales cycle velocity improvements in demo-heavy stages",
-            "baseline": "45 days avg",
-            "target": "28 days avg",
-            "current": "38 days avg",
+            "name": "Average time to provision demo",
+            "baseline": "5",
+            "target": "1",
+            "current": "5",
             "unit": "days"
           }
         ]
       },
-      "progress": 58,
-      "color": "blue",
-      "icon": "⚡",
-      "linkedAssets": 0,
-      "createdDate": "2024-10-01",
-      "lastUpdated": "2025-12-07",
-      "targetDate": "2025-09-30"
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-28",
+      "linkedInitiatives": 0,
+      "linkedTasks": 0
     },
     {
-      "id": "demo-availability-sla",
-      "name": "Achieve 99.5% Demo Availability SLA",
-      "shortName": "Demo SLA",
-      "category": "quality",
-      "owner": "Infrastructure Manager",
+      "id": "increase-demo-presentation-capacity",
+      "name": "Increase Revenue-Facing Demo Capacity & Presentation Time",
+      "shortName": "Increase Presentation Time",
+      "category": "sales-operations",
+      "owner": "Demo Services",
       "coOwners": [
-        "Demo Operations",
-        "DevOps"
+        "Sales",
+        "Sales Engineering",
+        "Revenue Operations"
       ],
-      "status": "in-progress",
+      "status": "not-started",
       "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
       "smartGoal": {
-        "statement": "By Q2 2025, achieve and maintain 99.5% uptime for all demo environments through proactive monitoring, automated health checks, and predictive alerting to eliminate client-facing demo failures.",
+        "statement": "By 2026-12-31, increase customer-facing demo presentation hours by reallocating time saved from prep automation, resulting in higher sales capacity and deal coverage.",
         "specific": {
           "objectives": [
-            "Deploy 24/7 monitoring platform across all demo environments",
-            "Implement automated pre-demo health validation workflows",
-            "Establish predictive analytics for failure prevention",
-            "Create emergency response playbooks for critical incidents"
+            "Reallocate prep time savings to presentation capacity",
+            "Improve prep-to-present ratio",
+            "Increase supported deal coverage",
+            "Expand demo availability for peak sales periods"
           ]
         },
         "measurable": {
           "metrics": [
-            "Environment uptime: 94.2% → 99.5%",
-            "MTTD (Mean Time to Detect): 45min → 5min",
-            "Client-facing failures: 8/month → 0/month",
-            "Pre-demo validation coverage: 0% → 100%"
+            "Demo presentation hours: 13478 → 18000",
+            "Prep-to-present ratio: 1.6 → 0.9",
+            "Deals supported per quarter: 100 → 150",
+            "Demo availability SLA: 85% → 98%"
           ]
         },
         "achievable": {
-          "resources": "Investment of $150K in monitoring platform and automation tooling, Infrastructure team (2 FTEs)",
-          "ownership": "Infrastructure Manager with Demo Ops and DevOps support"
+          "resources": "Automation gains, scheduling tools, capacity planning",
+          "ownership": "Demo Ops manages capacity, Sales aligns demand"
         },
         "relevant": {
           "croAlignment": [
-            "Pipeline Risk",
-            "Customer Sat",
+            "Sales Productivity",
+            "Deal Conversion",
             "Sales Cycle Delays"
           ]
         },
         "timeBound": {
           "timeline": [
             {
-              "phase": "Phase 1 (Q4 2024)",
-              "deliverable": "Deploy monitoring platform and baseline metrics",
-              "dueDate": "2024-12-31",
-              "status": "complete"
+              "phase": "Baseline & Capacity Model",
+              "deliverable": "New capacity model approved",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
             },
             {
-              "phase": "Phase 2 (Q1 2025)",
-              "deliverable": "Implement automated health checks and alerting",
-              "dueDate": "2025-03-31",
-              "status": "complete"
+              "phase": "Reallocation",
+              "deliverable": "Prep savings redirected to demos",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
             },
             {
-              "phase": "Phase 3 (Q2 2025)",
-              "deliverable": "Achieve 99.5% SLA and establish continuous improvement",
-              "dueDate": "2025-06-30",
-              "status": "in-progress"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Environment health check coverage",
-            "baseline": "0%",
-            "target": "100%",
-            "current": "87%",
-            "unit": "%"
-          },
-          {
-            "name": "Alert-to-incident ratio (false positives)",
-            "baseline": "65%",
-            "target": "15%",
-            "current": "28%",
-            "unit": "%"
-          },
-          {
-            "name": "Pre-demo validation failures caught",
-            "baseline": "N/A",
-            "target": "95%",
-            "current": "91%",
-            "unit": "%"
-          },
-          {
-            "name": "MTTD (Mean Time to Detect)",
-            "baseline": "45 minutes",
-            "target": "5 minutes",
-            "current": "12 minutes",
-            "unit": "minutes"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "Demo environment uptime",
-            "baseline": "94.2%",
-            "target": "99.5%",
-            "current": "98.7%",
-            "unit": "%"
-          },
-          {
-            "name": "Client-facing demo failures",
-            "baseline": "8 per month",
-            "target": "0 per month",
-            "current": "1 per month",
-            "unit": "incidents/month"
-          },
-          {
-            "name": "MTTR (Mean Time to Resolve)",
-            "baseline": "4.2 hours",
-            "target": "45 minutes",
-            "current": "1.8 hours",
-            "unit": "hours"
-          },
-          {
-            "name": "Planned vs unplanned downtime ratio",
-            "baseline": "40% planned",
-            "target": "90% planned",
-            "current": "72% planned",
-            "unit": "%"
-          }
-        ]
-      },
-      "progress": 76,
-      "color": "green",
-      "icon": "✓",
-      "linkedAssets": 0,
-      "createdDate": "2024-09-15",
-      "lastUpdated": "2025-12-07",
-      "targetDate": "2025-06-30"
-    },
-    {
-      "id": "ai-demo-data-generation",
-      "name": "Deploy AI-Powered Demo Data Generation",
-      "shortName": "AI Demo Data",
-      "category": "innovation",
-      "owner": "Product Innovation Lead",
-      "coOwners": [
-        "Demo Operations",
-        "Data Science"
-      ],
-      "status": "in-progress",
-      "priority": "medium",
-      "smartGoal": {
-        "statement": "By Q3 2025, deploy AI-powered demo data generation tools that reduce manual data preparation time from 8 hours to 1 hour while ensuring realistic, compliance-ready datasets for 80% of standard demo scenarios.",
-        "specific": {
-          "objectives": [
-            "Develop AI models for banking/capital markets demo data",
-            "Create compliance validation layer for generated data",
-            "Build user-friendly interface for data generation requests",
-            "Establish quality assurance framework for AI-generated data"
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "Data prep time: 8h → 1h per dataset",
-            "SE data quality scores: 6/10 → 9/10",
-            "Demo scenario coverage: 0% → 80%",
-            "Compliance validation: target 98%"
-          ]
-        },
-        "achievable": {
-          "resources": "Investment of $200K in AI platform and data science resources",
-          "ownership": "Product Innovation leads development, Demo Ops provides requirements and validation"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Sales Productivity",
-            "Deal Conversion",
-            "Customer Sat"
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "Phase 1 (Q1 2025)",
-              "deliverable": "POC with 3 banking use cases",
-              "dueDate": "2025-03-31",
-              "status": "complete"
+              "phase": "Scaling",
+              "deliverable": "Expanded demo coverage live",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
             },
             {
-              "phase": "Phase 2 (Q2 2025)",
-              "deliverable": "Beta rollout with 10 demo scenarios + compliance validation",
-              "dueDate": "2025-06-30",
-              "status": "in-progress"
-            },
-            {
-              "phase": "Phase 3 (Q3 2025)",
-              "deliverable": "Full production deployment + SE training",
-              "dueDate": "2025-09-30",
+              "phase": "Optimisation",
+              "deliverable": "Target presentation hours achieved",
+              "dueDate": "2026-12-31",
               "status": "not-started"
             }
           ]
@@ -335,132 +208,293 @@
       "indicators": {
         "leading": [
           {
-            "name": "Demo scenarios supported by AI",
+            "name": "Prep hours reallocated",
             "baseline": "0",
-            "target": "25",
-            "current": "8",
-            "unit": "scenarios"
+            "target": "6000",
+            "current": "0",
+            "unit": "hours"
           },
           {
-            "name": "SE training completion rate",
-            "baseline": "0%",
-            "target": "90%",
-            "current": "35%",
-            "unit": "%"
+            "name": "Demo capacity slots created",
+            "baseline": "0",
+            "target": "200",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "Data quality score (1-10)",
-            "baseline": "N/A",
-            "target": "8.5",
-            "current": "7.8",
-            "unit": "score"
-          },
-          {
-            "name": "Compliance validation pass rate",
-            "baseline": "N/A",
-            "target": "98%",
-            "current": "94%",
+            "name": "Scheduling utilisation",
+            "baseline": "70",
+            "target": "90",
+            "current": "70",
             "unit": "%"
           }
         ],
         "lagging": [
           {
-            "name": "Average data prep time",
-            "baseline": "8 hours",
-            "target": "1 hour",
-            "current": "4.5 hours",
+            "name": "Presentation hours",
+            "baseline": "13478",
+            "target": "18000",
+            "current": "13478",
             "unit": "hours"
           },
           {
-            "name": "SE adoption rate (% using AI tool)",
-            "baseline": "0%",
-            "target": "80%",
-            "current": "42%",
+            "name": "Deals supported",
+            "baseline": "400",
+            "target": "600",
+            "current": "400",
+            "unit": "count"
+          },
+          {
+            "name": "Win rate on demo-led deals",
+            "baseline": "22",
+            "target": "28",
+            "current": "22",
             "unit": "%"
-          },
-          {
-            "name": "Data-related demo delays",
-            "baseline": "15 per month",
-            "target": "2 per month",
-            "current": "7 per month",
-            "unit": "incidents/month"
-          },
-          {
-            "name": "SE satisfaction with data quality",
-            "baseline": "6.2/10",
-            "target": "8.5/10",
-            "current": "7.4/10",
-            "unit": "rating"
           }
         ]
       },
-      "progress": 45,
-      "color": "pink",
-      "icon": "🚀",
-      "linkedAssets": 0,
-      "createdDate": "2024-09-01",
-      "lastUpdated": "2025-12-07",
-      "targetDate": "2025-09-30"
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
     },
     {
-      "id": "customer-onboarding-acceleration",
-      "name": "Accelerate Customer Onboarding Experience",
-      "shortName": "Fast Onboarding",
-      "category": "customer",
-      "owner": "Customer Success Manager",
+      "id": "demo-lead-generation",
+      "name": "Establish Demo as a Scalable Revenue & Lead Generation Channel",
+      "shortName": "Demo Lead Gen",
+      "category": "revenue-growth",
+      "owner": "Demo Services",
       "coOwners": [
-        "Implementation Team",
-        "Product Training"
+        "Marketing",
+        "Sales",
+        "Product Marketing",
+        "Sales Enablement"
       ],
-      "status": "in-progress",
+      "status": "not-started",
       "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
       "smartGoal": {
-        "statement": "By Q4 2025, reduce customer onboarding time from 45 days to 21 days by implementing streamlined workflows and automated training modules, improving time-to-value by 53%.",
+        "statement": "By 2026-12-31, launch self-service demo experiences and Tiled.io-powered microsites to generate qualified leads and enable personalised sales engagement, resulting in increased top-of-funnel pipeline and higher seller productivity.",
         "specific": {
           "objectives": [
-            "Deploy automated onboarding portal with self-service modules",
-            "Create standardized implementation playbooks for common use cases",
-            "Implement AI-powered Q&A chatbot for common questions",
-            "Establish customer success health scoring"
+            "Deploy Tiled.io as standard demo microsite platform",
+            "Deploy self-service demo experiences",
+            "Create reusable microsite templates by product and persona",
+            "Integrate demo with marketing lead capture and CRM",
+            "Enable personalised demo journeys for strategic accounts"
           ]
         },
         "measurable": {
           "metrics": [
-            "Onboarding time: 45 days → 21 days",
-            "Self-service completion: 0% → 65%",
-            "Support tickets during onboarding: 28/customer → 8/customer",
-            "Customer satisfaction scores: 7.2/10 → 9.1/10"
+            "Self-service demos launched: 0 → 10",
+            "Microsites live: 0 → 50",
+            "Leads generated from demos: 0 → 1200",
+            "Microsite-driven demo requests: 0 → 1500",
+            "Demo-to-opportunity conversion: 0% → 15%",
+            "Seller adoption rate: 0% → 75%",
+            "Pipeline influenced by demos: £0 → £15M"
           ]
         },
         "achievable": {
-          "resources": "Customer Success team (4 FTEs), Platform development budget ($80K), Training content production",
-          "ownership": "Customer Success Manager with Implementation and Product Training support"
+          "resources": "Tiled.io licenses, self-service demo platform, marketing integration, enablement content, integration engineering",
+          "ownership": "Demo owns platform and templates, Marketing owns lead flow, Sales owns follow-up, Sales Enablement drives adoption"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Pipeline Risk",
+            "Deal Conversion",
+            "Forecast Confidence",
+            "Sales Productivity"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Platform Setup",
+              "deliverable": "Tiled.io configured and self-service platform chosen",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Template Build & Pilot",
+              "deliverable": "Core microsite templates and initial self-service demos live",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Seller Rollout & Scale",
+              "deliverable": "Sales teams enabled, persona-based journeys deployed",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimise",
+              "deliverable": "Account-level personalisation and lead/pipeline targets achieved",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Self-service demos published",
+            "baseline": "0",
+            "target": "10",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Microsite templates created",
+            "baseline": "0",
+            "target": "25",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Microsites published",
+            "baseline": "0",
+            "target": "50",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Sellers trained on microsites",
+            "baseline": "0",
+            "target": "300",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Demo session starts",
+            "baseline": "0",
+            "target": "5000",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Leads generated",
+            "baseline": "0",
+            "target": "1200",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Microsite-driven demo requests",
+            "baseline": "0",
+            "target": "1500",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Opportunities sourced",
+            "baseline": "0",
+            "target": "180",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Seller adoption rate",
+            "baseline": "0",
+            "target": "75",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Demo engagement rate",
+            "baseline": "0",
+            "target": "40",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Pipeline influenced",
+            "baseline": "0",
+            "target": "15000000",
+            "current": "0",
+            "unit": "count"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-intelligence-nps",
+      "name": "Deliver Executive-Level Transparency, Demo Intelligence & Experience Quality (NPS)",
+      "shortName": "Demo Intelligence & NPS",
+      "category": "customer-success",
+      "owner": "Demo Services",
+      "coOwners": [
+        "Revenue Operations",
+        "Sales Leadership",
+        "Customer Experience"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, implement an executive demo intelligence platform with NPS and feedback tracking, resulting in improved demo quality, accountability, and revenue alignment.",
+        "specific": {
+          "objectives": [
+            "Launch executive demo operations dashboard",
+            "Implement demo NPS collection",
+            "Capture qualitative demo feedback",
+            "Establish monthly exec reporting cadence"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Dashboard coverage: 0% → 100%",
+            "Demo NPS baseline established: No → Yes",
+            "Demo NPS score: TBD → +15 improvement",
+            "Monthly exec reports: 0 → 12"
+          ]
+        },
+        "achievable": {
+          "resources": "BI tooling, survey platform, RevOps analytics support",
+          "ownership": "RevOps owns dashboard, Demo owns NPS and feedback"
         },
         "relevant": {
           "croAlignment": [
             "Customer Sat",
-            "Pipeline Risk",
+            "Forecast Confidence",
             "Deal Conversion"
           ]
         },
         "timeBound": {
           "timeline": [
             {
-              "phase": "Phase 1 (Q2)",
-              "deliverable": "Launch self-service portal and automated modules",
-              "dueDate": "2025-06-30",
-              "status": "in-progress"
-            },
-            {
-              "phase": "Phase 2 (Q3)",
-              "deliverable": "Deploy AI chatbot and implementation playbooks",
-              "dueDate": "2025-09-30",
+              "phase": "Data Design",
+              "deliverable": "Executive metrics framework",
+              "dueDate": "2026-03-31",
               "status": "not-started"
             },
             {
-              "phase": "Phase 3 (Q4)",
-              "deliverable": "Achieve 21-day average onboarding time",
-              "dueDate": "2025-12-31",
+              "phase": "Dashboard MVP",
+              "deliverable": "Live executive dashboard",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "NPS Rollout",
+              "deliverable": "NPS live for all demos",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimisation",
+              "deliverable": "Closed-loop improvement process",
+              "dueDate": "2026-12-31",
               "status": "not-started"
             }
           ]
@@ -469,106 +503,98 @@
       "indicators": {
         "leading": [
           {
-            "name": "Portal adoption rate (% of new customers)",
-            "baseline": "0%",
-            "target": "85%",
-            "current": "42%",
-            "unit": "%"
+            "name": "Dashboards live",
+            "baseline": "0",
+            "target": "1",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "Self-service module completion rate",
-            "baseline": "N/A",
-            "target": "65%",
-            "current": "38%",
-            "unit": "%"
+            "name": "NPS surveys sent",
+            "baseline": "0",
+            "target": "3000",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "Support tickets per onboarding customer",
-            "baseline": "28",
-            "target": "8",
-            "current": "18",
-            "unit": "tickets"
-          },
-          {
-            "name": "Average time in each onboarding phase",
-            "baseline": "15 days/phase",
-            "target": "7 days/phase",
-            "current": "11 days/phase",
-            "unit": "days"
+            "name": "Feedback responses",
+            "baseline": "0",
+            "target": "1200",
+            "current": "0",
+            "unit": "count"
           }
         ],
         "lagging": [
           {
-            "name": "Total onboarding time (contract → production)",
-            "baseline": "45 days",
-            "target": "21 days",
-            "current": "33 days",
-            "unit": "days"
+            "name": "Demo NPS score",
+            "baseline": "0",
+            "target": "15",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "Customer satisfaction during onboarding",
-            "baseline": "7.2/10",
-            "target": "9.1/10",
-            "current": "8.1/10",
-            "unit": "score"
+            "name": "Exec report adoption",
+            "baseline": "0",
+            "target": "12",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "Time to first value realization",
-            "baseline": "52 days",
-            "target": "28 days",
-            "current": "38 days",
-            "unit": "days"
-          },
-          {
-            "name": "Early-stage churn rate (within 90 days)",
-            "baseline": "12%",
-            "target": "3%",
-            "current": "7%",
-            "unit": "%"
+            "name": "Demo quality issues resolved",
+            "baseline": "0",
+            "target": "50",
+            "current": "0",
+            "unit": "count"
           }
         ]
       },
-      "progress": 44,
-      "color": "purple",
-      "icon": "🚀",
-      "linkedAssets": 0,
-      "createdDate": "2025-01-15",
-      "lastUpdated": "2025-12-08",
-      "targetDate": "2025-12-31"
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
     },
     {
-      "id": "revenue-forecasting-accuracy",
-      "name": "Improve Revenue Forecasting Accuracy",
-      "shortName": "Forecast Precision",
-      "category": "efficiency",
-      "owner": "Revenue Operations Director",
+      "id": "integrated-demo-ecosystem",
+      "name": "Build an Integrated Demo Data & Technology Ecosystem with ROI Attribution",
+      "shortName": "Integrated Demo Ecosystem",
+      "category": "innovation",
+      "owner": "Revenue Operations",
       "coOwners": [
-        "Sales Leadership",
+        "Demo Services",
+        "IT",
+        "Data & Analytics",
         "Finance"
       ],
-      "status": "in-progress",
-      "priority": "medium",
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
       "smartGoal": {
-        "statement": "By Q3 2025, achieve 95% forecasting accuracy for quarterly revenue predictions by implementing AI-powered analytics and standardized pipeline hygiene practices, reducing forecast variance from ±18% to ±5%.",
+        "statement": "By 2026-12-31, integrate demo platforms with CRM and financial systems to enable end-to-end demo-to-revenue tracking and ROI reporting, resulting in clear accountability and investment justification.",
         "specific": {
           "objectives": [
-            "Deploy predictive analytics platform for pipeline analysis",
-            "Implement mandatory weekly pipeline reviews with deal scoring",
-            "Create standardized deal stage exit criteria",
-            "Establish automated data quality checks and alerts"
+            "Integrate demo platform with CRM",
+            "Define standard demo influence and attribution model",
+            "Enable demo-to-opportunity attribution",
+            "Implement demo ROI and cost-to-serve reporting",
+            "Centralise demo analytics",
+            "Publish quarterly demo revenue impact reports"
           ]
         },
         "measurable": {
           "metrics": [
-            "Forecast accuracy: 82% → 95%",
-            "Forecast variance: ±18% → ±5%",
-            "Pipeline data quality score: 68% → 92%",
-            "Deal stage advancement predictability: 71% → 89%"
+            "CRM integration coverage: 0% → 100%",
+            "Opportunities with demo attribution: 20% → 90%",
+            "Deals with tracked demo influence: 15% → 85%",
+            "Demo ROI visibility: 0% → 100%",
+            "Cost-per-demo tracked: No → Yes",
+            "Manual reporting effort: 40 hrs/month → 5 hrs/month"
           ]
         },
         "achievable": {
-          "resources": "RevOps team (3 FTEs), Analytics platform investment ($120K), Sales enablement for training",
-          "ownership": "Revenue Operations Director with Sales Leadership and Finance collaboration"
+          "resources": "CRM integration, BI tooling, RevOps analytics support, data platform, financial tracking tools",
+          "ownership": "RevOps owns attribution model and data model, IT builds integrations, Demo owns activity tracking, Finance validates ROI"
         },
         "relevant": {
           "croAlignment": [
@@ -580,264 +606,26 @@
         "timeBound": {
           "timeline": [
             {
-              "phase": "Phase 1 (Q1)",
-              "deliverable": "Deploy analytics platform and baseline metrics",
-              "dueDate": "2025-03-31",
-              "status": "complete"
-            },
-            {
-              "phase": "Phase 2 (Q2)",
-              "deliverable": "Implement pipeline hygiene practices and deal scoring",
-              "dueDate": "2025-06-30",
-              "status": "in-progress"
-            },
-            {
-              "phase": "Phase 3 (Q3)",
-              "deliverable": "Achieve 95% forecast accuracy target",
-              "dueDate": "2025-09-30",
-              "status": "not-started"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Weekly pipeline review completion rate",
-            "baseline": "62%",
-            "target": "98%",
-            "current": "81%",
-            "unit": "%"
-          },
-          {
-            "name": "Deal data quality score (completeness)",
-            "baseline": "68%",
-            "target": "92%",
-            "current": "79%",
-            "unit": "%"
-          },
-          {
-            "name": "Pipeline velocity (days per stage)",
-            "baseline": "32 days",
-            "target": "24 days",
-            "current": "28 days",
-            "unit": "days"
-          },
-          {
-            "name": "AI model confidence score",
-            "baseline": "N/A",
-            "target": "88%",
-            "current": "74%",
-            "unit": "%"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "Quarterly forecast accuracy",
-            "baseline": "82%",
-            "target": "95%",
-            "current": "87%",
-            "unit": "%"
-          },
-          {
-            "name": "Forecast variance (actual vs predicted)",
-            "baseline": "±18%",
-            "target": "±5%",
-            "current": "±11%",
-            "unit": "%"
-          },
-          {
-            "name": "Deal slippage rate (moved quarters)",
-            "baseline": "23%",
-            "target": "8%",
-            "current": "15%",
-            "unit": "%"
-          },
-          {
-            "name": "Win rate accuracy by stage",
-            "baseline": "71%",
-            "target": "89%",
-            "current": "79%",
-            "unit": "%"
-          }
-        ]
-      },
-      "progress": 57,
-      "color": "blue",
-      "icon": "📊",
-      "linkedAssets": 0,
-      "createdDate": "2025-02-01",
-      "lastUpdated": "2026-01-17",
-      "targetDate": "2025-09-30"
-    },
-    {
-      "name": "Optimize Demo Efficiency and Automation",
-      "shortName": "Demo Prep Optimization",
-      "category": "process-optimization",
-      "owner": "VP Revenue Operations",
-      "status": "not-started",
-      "priority": "high",
-      "targetDate": "2027-03-31",
-      "color": "#8B5CF6",
-      "icon": "🎯",
-      "progress": 15,
-      "linkedAssets": 0,
-      "smartGoal": {
-        "statement": "By Q1 2027, reduce the demo preparation-to-delivery ratio from 10:1 to 2:1 by implementing automated demo technologies like Coast, thereby increasing SE deal capacity and reducing FTE overhead.",
-        "specific": {
-          "objectives": [
-            "Implement and migrate repeatable demos to automated demo platforms (e.g., Coast).",
-            "Automate demo data generation to eliminate manual environment setup for standard use cases.",
-            "Transition legacy hosted software environments to a hybrid model, utilizing live environments only for high-complexity requirements."
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "Reduction in preparation-to-demo ratio from 10:1 to 2:1.",
-            "Decrease in annual FTE hours spent on demo prep from 40,000 to 8,000.",
-            "Increase in the average number of concurrent deals managed per SE."
-          ]
-        },
-        "achievable": {
-          "resources": "Budget allocation for demo automation tools (Coast/similar) and internal SE task force for data templating.",
-          "ownership": "VP of Revenue Operations in partnership with SE Leadership and Sales Growth Offices"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Sales Productivity",
-            "Sales Cycle Delays",
-            "Deal Conversion",
-            "Customer Sat"
-          ],
-          "rationale": [
-            "Scaling revenue through operational efficiency.",
-            "Shortening the sales cycle via quicker qualification and demo readiness.",
-            "Reducing CAC by optimizing SE resource utilization."
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "Tool Selection & Pilot",
-              "deliverable": "Validation of Coast or similar tool for 20% of repeatable use cases.",
+              "phase": "Attribution Design",
+              "deliverable": "Standard demo attribution framework and integration architecture",
               "dueDate": "2026-03-31",
               "status": "not-started"
             },
             {
-              "phase": "Mass Migration",
-              "deliverable": "Transition of 70% of standard demos to automated platforms.",
-              "dueDate": "2026-09-30",
-              "status": "not-started"
-            },
-            {
-              "phase": "Full Optimization",
-              "deliverable": "Complete integration of automated data generation and 2:1 prep ratio achievement.",
-              "dueDate": "2027-03-31",
-              "status": "not-started"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Time to Demo Preparation",
-            "baseline": "10",
-            "target": "2",
-            "current": "10",
-            "unit": "hours"
-          },
-          {
-            "name": "Concurrent Deals per SE",
-            "baseline": "Baseline X",
-            "target": "Target Y",
-            "current": "Baseline X",
-            "unit": "count"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "Total Annual Prep Hours",
-            "baseline": "40000",
-            "target": "8000",
-            "current": "40000",
-            "unit": "hours"
-          },
-          {
-            "name": "Sales Cycle Length",
-            "baseline": "Current Days",
-            "target": "Reduced Days",
-            "current": "Current Days",
-            "unit": "days"
-          }
-        ]
-      },
-      "id": "optimize-demo-efficiency-and-automation",
-      "createdDate": "2026-01-17",
-      "lastUpdated": "2026-01-17",
-      "coOwners": [
-        "DemoServicesGroup"
-      ]
-    },
-    {
-      "id": "transition-60-of-demo-volume-to-coast-zero-prep-blueprints",
-      "name": "Transition 60% of Demo Volume to Coast Zero-Prep Blueprints",
-      "shortName": "Coast Blueprint Migration",
-      "category": "sales-operations",
-      "owner": "Head of Technology Service",
-      "coOwners": [
-        "Sales Engineering",
-        "Revenue Operations"
-      ],
-      "status": "in-progress",
-      "priority": "high",
-      "smartGoal": {
-        "statement": "Reduce annual manual demo preparation by 15,000 hours by migrating the top five product lines into Coast virtualized blueprints by December 2026.",
-        "specific": {
-          "objectives": [
-            "Identify top 5 high-volume product demo workflows for migration",
-            "Develop API-driven data injection templates within Coast",
-            "Decommission legacy standalone environments for Tier 1 products"
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "50% reduction in average prep time per demo",
-            "60% of total demo volume delivered via Coast"
-          ]
-        },
-        "achievable": {
-          "resources": "Coast Virtualization Platform, 2025 prep-hour baseline data, Internal DevOps capacity",
-          "ownership": "Technology Service Team lead responsible for architecture; SE team for UAT"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Sales Productivity",
-            "Sales Cycle Delays"
-          ],
-          "rationale": [
-            "Legacy environments create a massive operational tax on SE capacity",
-            "Manual data scrubbing introduces high risk of demo failure",
-            "Standardization allows for 100% persona-based personalization at scale"
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "Coast Architecture Setup",
-              "deliverable": "Baseline Coast Environment Config",
-              "dueDate": "2026-03-31",
-              "status": "in-progress"
-            },
-            {
-              "phase": "Top 2 Product Migration",
-              "deliverable": "Live Coast Blueprints for Banking & Capital Markets",
+              "phase": "CRM Integration",
+              "deliverable": "Demo activity linked to opportunities, CRM and demo platform connected",
               "dueDate": "2026-06-30",
               "status": "not-started"
             },
             {
-              "phase": "Full Migration & Decommission",
-              "deliverable": "Remaining 3 products live; Legacy servers offline",
+              "phase": "ROI Reporting",
+              "deliverable": "Demo-to-revenue attribution live, Demo ROI dashboards built",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Executive Adoption",
+              "deliverable": "Full ecosystem reporting, Quarterly exec ROI reporting cadence",
               "dueDate": "2026-12-31",
               "status": "not-started"
             }
@@ -847,883 +635,159 @@
       "indicators": {
         "leading": [
           {
-            "name": "Blueprint Adoption Rate",
+            "name": "Integrations built",
             "baseline": "0",
-            "target": "60",
-            "current": "5",
-            "unit": "%"
-          },
-          {
-            "name": "Average Prep Time per Session",
-            "baseline": "60",
-            "target": "15",
-            "current": "60",
-            "unit": "minutes"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "Annual Hours Reclaimed",
-            "baseline": "0",
-            "target": "15000",
+            "target": "5",
             "current": "0",
-            "unit": "hours"
+            "unit": "count"
           },
           {
-            "name": "Cost of Demo Environment Overhead",
-            "baseline": "100",
-            "target": "40",
-            "current": "100",
-            "unit": "%"
-          }
-        ]
-      },
-      "progress": 0,
-      "color": "#8B5CF6",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-12-31"
-    },
-    {
-      "id": "achieve-95-operational-visibility-through-servicenow-rigor",
-      "name": "Achieve 95% Operational Visibility through ServiceNow Rigor",
-      "shortName": "SNOW Data Rigor",
-      "category": "process-optimization",
-      "owner": "Head of Technology Service",
-      "coOwners": [
-        "IT Operations",
-        "Data Analytics"
-      ],
-      "status": "not-started",
-      "priority": "high",
-      "smartGoal": {
-        "statement": "Capture 95% of all demo service and infrastructure tasks in ServiceNow to automate executive reporting and justify resource allocation by Q3 2026.",
-        "specific": {
-          "objectives": [
-            "Establish ''No Ticket, No Work'' policy for all tech service requests",
-            "Integrate SNOW task categories with Executive Summary Website",
-            "Build automated SNOW dashboards for team capacity tracking"
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "95% ticket-to-work correlation rate",
-            "40% reduction in untracked ''Shadow Support'' hours"
-          ]
-        },
-        "achievable": {
-          "resources": "ServiceNow instance, automated logging SOPs, executive mandate",
-          "ownership": "Internal Ops Support team to adhere to logging protocols"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Pipeline Risk",
-            "Forecast Confidence"
-          ],
-          "rationale": [
-            "50% of current labor is invisible, leading to resource bottlenecks",
-            "Transparent data is required for budget justification for 2027",
-            "Standardized logging improves support routing and resolution speed"
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "SNOW Schema Definition",
-              "deliverable": "New ''Demo Service'' categories live in SNOW",
-              "dueDate": "2026-02-15",
-              "status": "not-started"
-            },
-            {
-              "phase": "Team Training & Rollout",
-              "deliverable": "Training sessions on logging rigor complete",
-              "dueDate": "2026-03-01",
-              "status": "not-started"
-            },
-            {
-              "phase": "Audit & Compliance Check",
-              "deliverable": "First full visibility report for Q2",
-              "dueDate": "2026-07-15",
-              "status": "not-started"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Tickets per Team Member",
-            "baseline": "2",
+            "name": "Attribution rules configured",
+            "baseline": "0",
             "target": "10",
-            "current": "2",
+            "current": "0",
             "unit": "count"
           },
           {
-            "name": "Average Ticket Logging Delay",
-            "baseline": "48",
-            "target": "4",
-            "current": "48",
-            "unit": "hours"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "Data Accuracy Index",
-            "baseline": "50",
-            "target": "95",
-            "current": "50",
-            "unit": "%"
-          },
-          {
-            "name": "Executive Dashboard Sync Rate",
-            "baseline": "0",
-            "target": "100",
-            "current": "0",
-            "unit": "%"
-          }
-        ]
-      },
-      "progress": 0,
-      "color": "#8B5CF6",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-09-30"
-    },
-    {
-      "id": "upskill-support-team-to-product-smes-across-3-core-pillars",
-      "name": "Upskill Support Team to Product SMEs across 3 Core Pillars",
-      "shortName": "Support SME Upskilling",
-      "category": "customer-success",
-      "owner": "Head of Technology Service",
-      "coOwners": [
-        "Product Management",
-        "Learning & Development"
-      ],
-      "status": "not-started",
-      "priority": "medium",
-      "smartGoal": {
-        "statement": "Attain Tier 1 product certification for the entire support team in Capital Markets, Banking, and International Banking to reduce external escalations by 40% by year-end.",
-        "specific": {
-          "objectives": [
-            "Define certification criteria for ''Demo-Ready'' support status",
-            "Execute 40 hours of product-specific training per staff member",
-            "Establish equitable support parity across all three business units"
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "40% reduction in ticket escalation rate",
-            "100% staff certification rate across 3 pillars"
-          ]
-        },
-        "achievable": {
-          "resources": "Internal product sandbox, Product Managers, Training budget",
-          "ownership": "Ops Support Team for learning; Product teams for content"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Customer Sat",
-            "Sales Cycle Delays"
-          ],
-          "rationale": [
-            "Internal SMEs resolve issues faster than routed external tickets",
-            "Specialization ensures balanced support for all business lines",
-            "Reduces the 3,000+ support hours spent on manual ''traffic directing''"
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "Curriculum Design",
-              "deliverable": "Pillar-specific training modules",
-              "dueDate": "2026-02-28",
-              "status": "not-started"
-            },
-            {
-              "phase": "Pillar 1 & 2 Certification",
-              "deliverable": "Banking and Capital Markets exams complete",
-              "dueDate": "2026-08-30",
-              "status": "not-started"
-            },
-            {
-              "phase": "Pillar 3 & Final Review",
-              "deliverable": "International Banking cert and full-team SME status",
-              "dueDate": "2026-11-30",
-              "status": "not-started"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Training Hours Completed",
-            "baseline": "0",
-            "target": "40",
-            "current": "0",
-            "unit": "hours"
-          },
-          {
-            "name": "First-Touch Resolution Rate",
-            "baseline": "15",
-            "target": "60",
-            "current": "15",
-            "unit": "%"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "External Escalation Reduction",
-            "baseline": "0",
-            "target": "40",
-            "current": "0",
-            "unit": "%"
-          },
-          {
-            "name": "SME Support Satisfaction",
-            "baseline": "65",
-            "target": "90",
-            "current": "65",
-            "unit": "%"
-          }
-        ]
-      },
-      "progress": 0,
-      "color": "#8B5CF6",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-12-15"
-    },
-    {
-      "id": "maintain-real-time-executive-summary-performance-transparency",
-      "name": "Maintain Real-Time Executive Summary & Performance Transparency",
-      "shortName": "Exec Visibility Portal",
-      "category": "revenue-growth",
-      "owner": "Head of Technology Service",
-      "coOwners": [
-        "Revenue Operations",
-        "Executive Leadership"
-      ],
-      "status": "in-progress",
-      "priority": "high",
-      "smartGoal": {
-        "statement": "Automate the Executive Summary Website to provide real-time ROI, hour-reclamation data, and operational health metrics to leadership by Q2 2026.",
-        "specific": {
-          "objectives": [
-            "Automate data ingestion from SNOW and Coast into the Performance Page",
-            "Launch weekly automated executive summary distribution",
-            "Build predictive capacity models based on 2025/26 prep hour data"
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "100% portal uptime during business reviews",
-            "9.0/10 Stakeholder Satisfaction score"
-          ]
-        },
-        "achievable": {
-          "resources": "Internal Performance Portal, Data APIs, SNOW reporting engine",
-          "ownership": "Technology Service Lead for content; RevOps for data validation"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Sales Productivity",
-            "Forecast Confidence"
-          ],
-          "rationale": [
-            "Provides immediate proof of value for demo technology spend",
-            "Aligns tech service goals with CRO revenue targets",
-            "Identifies future bottlenecks before they impact sales pipeline"
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "API Integration",
-              "deliverable": "Live data feed from SNOW to Portal",
-              "dueDate": "2026-03-15",
-              "status": "in-progress"
-            },
-            {
-              "phase": "UI/UX Enhancements",
-              "deliverable": "ROI Dashboard & Prep-Hour Calculator live",
-              "dueDate": "2026-05-01",
-              "status": "not-started"
-            },
-            {
-              "phase": "Automation Launch",
-              "deliverable": "Weekly Summary emails active",
-              "dueDate": "2026-06-01",
-              "status": "not-started"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Weekly Portal Views by Leadership",
-            "baseline": "2",
-            "target": "10",
-            "current": "3",
-            "unit": "count"
-          },
-          {
-            "name": "Dashboard Update Frequency",
-            "baseline": "7",
-            "target": "1",
-            "current": "7",
-            "unit": "days"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "Executive NPS (Internal)",
-            "baseline": "5",
-            "target": "9",
-            "current": "5",
-            "unit": "count"
-          },
-          {
-            "name": "Strategic Alignment Score",
-            "baseline": "60",
-            "target": "100",
-            "current": "60",
-            "unit": "%"
-          }
-        ]
-      },
-      "progress": 0,
-      "color": "#8B5CF6",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-06-30"
-    },
-    {
-      "id": "improve-demo-to-close-conversion-rate",
-      "name": "Improve Demo-to-Close Conversion Rate",
-      "shortName": "Demo Conversion",
-      "category": "revenue-growth",
-      "owner": "Head of Technology Service",
-      "coOwners": [
-        "Sales Leadership",
-        "Revenue Operations",
-        "Sales Engineering"
-      ],
-      "status": "not-started",
-      "priority": "high",
-      "smartGoal": {
-        "statement": "Increase qualified demo-to-closed-won conversion rate from 18% to 35% by Q4 2026 through personalized Coast blueprints, post-demo automation, and sales-engineering alignment, driving $4.2M in incremental revenue.",
-        "specific": {
-          "objectives": [
-            "Deploy persona-based Coast demo blueprints for top 10 use cases",
-            "Implement automated post-demo engagement workflows within 2 hours",
-            "Establish demo-to-sales handoff SLA with CRM integration",
-            "Create demo effectiveness scorecard tracking conversion by product line",
-            "Launch quarterly demo retrospectives with Sales to identify conversion barriers"
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "Demo-to-close conversion rate: 18%  35%",
-            "Demo-influenced revenue: $8.5M  $15M annually",
-            "Average deal size from demo leads: +22%",
-            "Time from demo to decision: 28 days  18 days"
-          ]
-        },
-        "achievable": {
-          "resources": "Coast platform, Marketing Automation tools, CRM integration budget ($35K), Sales Engineering team, Post-demo content library",
-          "ownership": "Technology Service Lead for demo delivery; Sales Ops for conversion tracking; Marketing for post-demo nurture"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Deal Conversion",
-            "Sales Productivity",
-            "Sales Cycle Delays"
-          ],
-          "rationale": [
-            "Current 18% conversion indicates demo quality/follow-up gaps costing $6M+ in lost revenue",
-            "Personalized demos show 2.3x higher conversion in pilot tests",
-            "Automated follow-up eliminates 48-hour lag where prospects go cold",
-            "Direct impact on CRO revenue targets and quota attainment"
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "Baseline & Persona Mapping",
-              "deliverable": "Top 10 demo personas identified; current conversion by persona",
-              "dueDate": "2026-02-28",
-              "status": "not-started"
-            },
-            {
-              "phase": "Coast Blueprint Development",
-              "deliverable": "Persona-specific demo blueprints live for 5 products",
-              "dueDate": "2026-05-31",
-              "status": "not-started"
-            },
-            {
-              "phase": "Post-Demo Automation Launch",
-              "deliverable": "Automated follow-up workflows integrated with CRM",
-              "dueDate": "2026-07-31",
-              "status": "not-started"
-            },
-            {
-              "phase": "Optimization & Scale",
-              "deliverable": "Achieve 35% conversion rate across all product lines",
-              "dueDate": "2026-10-31",
-              "status": "not-started"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Persona-based demos delivered",
-            "baseline": "0",
-            "target": "80",
-            "current": "0",
-            "unit": "%"
-          },
-          {
-            "name": "Post-demo follow-up within 2 hours",
-            "baseline": "15",
-            "target": "95",
-            "current": "15",
-            "unit": "%"
-          },
-          {
-            "name": "Demo-to-opportunity conversion",
-            "baseline": "42",
-            "target": "70",
-            "current": "42",
-            "unit": "%"
-          },
-          {
-            "name": "Prospect engagement with follow-up content",
-            "baseline": "28",
-            "target": "75",
-            "current": "28",
-            "unit": "%"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "Demo-to-Close Rate",
-            "baseline": "18",
-            "target": "35",
-            "current": "18",
-            "unit": "%"
-          },
-          {
-            "name": "Demo-Influenced Annual Revenue",
-            "baseline": "8.5",
-            "target": "15",
-            "current": "8.5",
-            "unit": "$M"
-          },
-          {
-            "name": "Average Deal Size from Demos",
-            "baseline": "142",
-            "target": "173",
-            "current": "142",
-            "unit": "$K"
-          },
-          {
-            "name": "Demo-to-Decision Timeline",
-            "baseline": "28",
-            "target": "18",
-            "current": "28",
-            "unit": "days"
-          }
-        ]
-      },
-      "progress": 0,
-      "color": "#10B981",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-10-31"
-    },
-    {
-      "id": "build-demo-excellence-library-community-of-practice",
-      "name": "Build Demo Excellence Library & Community of Practice",
-      "shortName": "Demo Library",
-      "category": "process-optimization",
-      "owner": "Demo Operations Manager",
-      "coOwners": [
-        "Sales Engineering",
-        "Learning & Development",
-        "Knowledge Management"
-      ],
-      "status": "not-started",
-      "priority": "medium",
-      "smartGoal": {
-        "statement": "Create and maintain a searchable library of 50+ demo scenarios, scripts, objection handlers, and recorded demos by Q3 2026 to reduce new SE ramp time from 90 days to 30 days and standardize demo excellence across the organization.",
-        "specific": {
-          "objectives": [
-            "Record and catalog 50+ top-performing demos with searchable metadata (persona, product, industry)",
-            "Build demo script repository integrated with Salesforce opportunity data",
-            "Launch SE Community of Practice with monthly demo retrospectives",
-            "Create objection handling playbook for top 20 competitive scenarios",
-            "Develop new SE onboarding curriculum using library assets"
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "Demo library size: 0  50+ assets",
-            "SE library engagement: 75% weekly active users",
-            "New SE ramp time: 90 days  30 days",
-            "Demo script adoption rate: 0%  85%"
-          ]
-        },
-        "achievable": {
-          "resources": "Video recording/hosting platform ($15K annually), Knowledge management system, 20% SE time for content creation, Instructional designer (0.5 FTE)",
-          "ownership": "Demo Ops Manager for curation and governance; SEs for content creation; L&D for onboarding curriculum"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Sales Productivity",
-            "Deal Conversion",
-            "Sales Cycle Delays"
-          ],
-          "rationale": [
-            "Institutional knowledge is siloed in top 5 SEslibrary democratizes expertise",
-            "New SE productivity gap costs $180K per hire in lost demo capacity during ramp",
-            "Standardized best practices reduce demo variability and improve win rates",
-            "Scales demo excellence without linear headcount growth"
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "Platform Selection & Governance",
-              "deliverable": "Knowledge platform deployed; content standards defined",
-              "dueDate": "2026-03-15",
-              "status": "not-started"
-            },
-            {
-              "phase": "Content Creation Sprint",
-              "deliverable": "25 recorded demos and scripts uploaded; tagging complete",
-              "dueDate": "2026-06-30",
-              "status": "not-started"
-            },
-            {
-              "phase": "Community Launch",
-              "deliverable": "SE Community of Practice active; first retrospective held",
-              "dueDate": "2026-08-31",
-              "status": "not-started"
-            },
-            {
-              "phase": "Library Maturity & Onboarding",
-              "deliverable": "50+ assets live; new SE curriculum launched",
-              "dueDate": "2026-09-30",
-              "status": "not-started"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Demos recorded and cataloged",
-            "baseline": "0",
-            "target": "50",
-            "current": "0",
-            "unit": "assets"
-          },
-          {
-            "name": "SE weekly active users in library",
-            "baseline": "0",
-            "target": "75",
-            "current": "0",
-            "unit": "%"
-          },
-          {
-            "name": "Community of Practice participation",
-            "baseline": "0",
-            "target": "80",
-            "current": "0",
-            "unit": "%"
-          },
-          {
-            "name": "Content contribution rate",
-            "baseline": "0",
-            "target": "3",
-            "current": "0",
-            "unit": "assets/month"
-          }
-        ],
-        "lagging": [
-          {
-            "name": "New SE Ramp Time",
-            "baseline": "90",
-            "target": "30",
-            "current": "90",
-            "unit": "days"
-          },
-          {
-            "name": "Demo Script Adoption Rate",
-            "baseline": "0",
-            "target": "85",
-            "current": "0",
-            "unit": "%"
-          },
-          {
-            "name": "New SE First-Demo Success Rate",
-            "baseline": "45",
-            "target": "85",
-            "current": "45",
-            "unit": "%"
-          },
-          {
-            "name": "SE Knowledge Retention Score",
-            "baseline": "62",
-            "target": "90",
-            "current": "62",
-            "unit": "%"
-          }
-        ]
-      },
-      "progress": 0,
-      "color": "#3B82F6",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-09-30"
-    },
-    {
-      "id": "automate-post-demo-engagement-pipeline",
-      "name": "Automate Post-Demo Engagement Pipeline",
-      "shortName": "Post-Demo Automation",
-      "category": "sales-operations",
-      "owner": "Revenue Operations",
-      "coOwners": [
-        "Sales Engineering",
-        "Marketing Operations",
-        "Sales Leadership"
-      ],
-      "status": "not-started",
-      "priority": "high",
-      "smartGoal": {
-        "statement": "Deploy automated post-demo workflows delivering personalized follow-up content within 2 hours of demo completion, increasing post-demo engagement from 40% to 85% and reducing demo-to-next-step time from 6.5 days to 2 days by Q2 2026.",
-        "specific": {
-          "objectives": [
-            "Build automated demo summary emails with personalized next-step recommendations",
-            "Deploy persona-based collateral delivery system (case studies, ROI calculators, trial access)",
-            "Integrate calendar automation for follow-up meeting scheduling",
-            "Implement automated trial environment provisioning for qualified prospects",
-            "Create demo engagement scoring model to prioritize hot leads"
-          ]
-        },
-        "measurable": {
-          "metrics": [
-            "Post-demo engagement rate: 40%  85%",
-            "Time to post-demo follow-up: 24 hours  2 hours",
-            "Demo-to-next-step time: 6.5 days  2 days",
-            "Trial activation rate from demos: 12%  45%"
-          ]
-        },
-        "achievable": {
-          "resources": "Marketing automation platform (existing), CRM workflow builder, Content management system, Trial provisioning API, Email templates and collateral library",
-          "ownership": "RevOps for workflow design and CRM integration; Marketing Ops for content delivery; SE team for demo data capture"
-        },
-        "relevant": {
-          "croAlignment": [
-            "Sales Cycle Delays",
-            "Deal Conversion",
-            "Sales Productivity"
-          ],
-          "rationale": [
-            "47% of demo leads go cold during the 24-48 hour follow-up lagautomation eliminates this gap",
-            "Personalized follow-up content increases engagement by 3.2x based on pilot data",
-            "Automated trial provisioning removes 4-day manual setup bottleneck",
-            "Frees 120 hours/month of SE time currently spent on manual follow-ups"
-          ]
-        },
-        "timeBound": {
-          "timeline": [
-            {
-              "phase": "Workflow Design & Content Mapping",
-              "deliverable": "Post-demo journey mapped; content library organized by persona",
-              "dueDate": "2026-02-28",
-              "status": "not-started"
-            },
-            {
-              "phase": "CRM Integration & Automation Build",
-              "deliverable": "Automated workflows live in Salesforce; email templates deployed",
-              "dueDate": "2026-04-15",
-              "status": "not-started"
-            },
-            {
-              "phase": "Trial Provisioning & Scoring",
-              "deliverable": "Automated trial access; engagement scoring model active",
-              "dueDate": "2026-05-31",
-              "status": "not-started"
-            },
-            {
-              "phase": "Optimization & Scale",
-              "deliverable": "85% engagement rate achieved; continuous improvement process",
-              "dueDate": "2026-06-30",
-              "status": "not-started"
-            }
-          ]
-        }
-      },
-      "indicators": {
-        "leading": [
-          {
-            "name": "Automated follow-ups sent within 2 hours",
-            "baseline": "0",
-            "target": "95",
-            "current": "0",
-            "unit": "%"
-          },
-          {
-            "name": "Personalized content delivery rate",
+            "name": "Opportunities with demo activity logged",
             "baseline": "20",
             "target": "90",
             "current": "20",
             "unit": "%"
           },
           {
-            "name": "Follow-up meeting booking rate",
-            "baseline": "32",
-            "target": "68",
-            "current": "32",
-            "unit": "%"
+            "name": "Data fields mapped",
+            "baseline": "0",
+            "target": "100",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "Trial requests submitted post-demo",
-            "baseline": "12",
-            "target": "45",
-            "current": "12",
-            "unit": "%"
+            "name": "Revenue reports built",
+            "baseline": "0",
+            "target": "5",
+            "current": "0",
+            "unit": "count"
           }
         ],
         "lagging": [
           {
-            "name": "Post-Demo Engagement Rate",
-            "baseline": "40",
-            "target": "85",
-            "current": "40",
+            "name": "Attribution coverage",
+            "baseline": "0",
+            "target": "90",
+            "current": "0",
             "unit": "%"
           },
           {
-            "name": "Demo-to-Next-Step Time",
-            "baseline": "6.5",
-            "target": "2",
-            "current": "6.5",
-            "unit": "days"
+            "name": "Deals with demo influence",
+            "baseline": "15",
+            "target": "85",
+            "current": "15",
+            "unit": "%"
           },
           {
-            "name": "Demo Lead Velocity (qualified/month)",
-            "baseline": "28",
-            "target": "52",
-            "current": "28",
-            "unit": "leads"
-          },
-          {
-            "name": "SE Hours Saved on Manual Follow-Up",
+            "name": "Demo ROI visibility",
             "baseline": "0",
-            "target": "120",
+            "target": "100",
             "current": "0",
-            "unit": "hours/month"
+            "unit": "%"
+          },
+          {
+            "name": "Manual reporting hours",
+            "baseline": "40",
+            "target": "5",
+            "current": "40",
+            "unit": "hours"
+          },
+          {
+            "name": "Demo-to-revenue visibility",
+            "baseline": "0",
+            "target": "100",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Exec adoption of ROI reports",
+            "baseline": "0",
+            "target": "12",
+            "current": "0",
+            "unit": "count"
           }
         ]
       },
-      "progress": 0,
-      "color": "#8B5CF6",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-06-30"
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
     },
     {
-      "id": "demonstrate-300-roi-on-demo-technology-investment",
-      "name": "Demonstrate 300% ROI on Demo Technology Investment",
-      "shortName": "Demo Tech ROI",
-      "category": "cost-reduction",
-      "owner": "Head of Technology Service",
+      "id": "demo-asset-governance",
+      "name": "Establish Demo Asset Governance & Data Verification",
+      "shortName": "Demo Asset Governance",
+      "category": "process-optimization",
+      "owner": "Demo Services",
       "coOwners": [
-        "Finance",
-        "Revenue Operations",
-        "Executive Leadership"
+        "IT",
+        "Product",
+        "Revenue Operations"
       ],
       "status": "not-started",
       "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
       "smartGoal": {
-        "statement": "Track and report $2.1M in measurable cost savings and revenue impact from demo automation initiatives against $700K total investment by Q4 2026, achieving 300% ROI to justify 2027 budget expansion and demonstrate strategic value to executive leadership.",
+        "statement": "By 2026-12-31, establish a governed, verified inventory of all demo assets and data, resulting in improved accuracy, reduced risk, and higher demo reliability.",
         "specific": {
           "objectives": [
-            "Implement comprehensive cost tracking for all demo technology investments (Coast, SNOW, automation tools)",
-            "Build ROI calculation model tracking 5 value streams: SE hours saved, infrastructure savings, revenue impact, cycle time reduction, error elimination",
-            "Deploy real-time ROI dashboard in Executive Summary Website",
-            "Conduct quarterly business reviews with CFO and CRO on demo technology value",
-            "Document cost avoidance from legacy system decommissioning"
+            "Create a central demo asset inventory and registry",
+            "Implement regular demo data verification and audits",
+            "Define ownership and lifecycle management for demo assets",
+            "Retire outdated or duplicate demo environments and assets"
           ]
         },
         "measurable": {
           "metrics": [
-            "Total investment: $700K (Coast $420K, Automation $180K, Training $100K)",
-            "Measured return: $2.1M (SE capacity $950K, Infrastructure savings $380K, Revenue impact $620K, Cycle acceleration $150K)",
-            "ROI: 300%",
-            "Payback period: 8 months"
+            "Demo assets inventoried: 0% → 100%",
+            "Verified demo data coverage: 0% → 95%",
+            "Outdated assets retired: 0 → 150",
+            "Demo data accuracy incidents: 20 → 3"
           ]
         },
         "achievable": {
-          "resources": "Financial tracking system, Time tracking integration with SNOW, Revenue attribution model in CRM, Executive reporting tools, Finance business partner (0.25 FTE)",
-          "ownership": "Technology Service Lead for value tracking; Finance for cost validation; RevOps for revenue attribution modeling"
+          "resources": "Asset management tooling, audit processes, product data owners",
+          "ownership": "Demo owns registry, Product owns data accuracy, IT supports tooling"
         },
         "relevant": {
           "croAlignment": [
-            "Sales Productivity",
+            "Pipeline Risk",
             "Forecast Confidence",
-            "Pipeline Risk"
-          ],
-          "rationale": [
-            "CFO requires proof of value for continued technology investmenttransparent ROI builds trust",
-            "Demonstrates Technology Service as profit center, not cost center",
-            "Quantified SE capacity gains justify headcount budget reallocation",
-            "Revenue attribution ties demo tech directly to CRO targets and quota attainment",
-            "Creates repeatable model for future technology investment decisions"
+            "Customer Sat"
           ]
         },
         "timeBound": {
           "timeline": [
             {
-              "phase": "ROI Model Design & Baseline",
-              "deliverable": "5-stream value model built; 2025 baseline costs documented",
-              "dueDate": "2026-02-15",
+              "phase": "Asset Discovery",
+              "deliverable": "Complete demo asset inventory",
+              "dueDate": "2026-03-31",
               "status": "not-started"
             },
             {
-              "phase": "Tracking Infrastructure Deployment",
-              "deliverable": "Automated cost/value tracking integrated with SNOW and CRM",
-              "dueDate": "2026-04-30",
+              "phase": "Governance Framework",
+              "deliverable": "Ownership and lifecycle model defined",
+              "dueDate": "2026-06-30",
               "status": "not-started"
             },
             {
-              "phase": "Q2 Business Review",
-              "deliverable": "First ROI report to CFO/CRO; projected 200% ROI at mid-year",
-              "dueDate": "2026-07-15",
+              "phase": "Verification Rollout",
+              "deliverable": "Automated verification and audits live",
+              "dueDate": "2026-09-30",
               "status": "not-started"
             },
             {
-              "phase": "Full-Year ROI Achievement",
-              "deliverable": "300% ROI validated; 2027 budget proposal approved",
+              "phase": "Optimisation",
+              "deliverable": "High-confidence demo asset baseline",
               "dueDate": "2026-12-31",
               "status": "not-started"
             }
@@ -1733,147 +797,125 @@
       "indicators": {
         "leading": [
           {
-            "name": "SE Hours Reclaimed Monthly",
+            "name": "Assets discovered and logged",
             "baseline": "0",
-            "target": "1250",
+            "target": "500",
             "current": "0",
-            "unit": "hours"
+            "unit": "count"
           },
           {
-            "name": "Infrastructure Cost per Demo",
-            "baseline": "48",
-            "target": "18",
-            "current": "48",
-            "unit": "$"
+            "name": "Assets with assigned owners",
+            "baseline": "0",
+            "target": "400",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "Demo-Influenced Pipeline Growth",
-            "baseline": "8.5",
-            "target": "15",
-            "current": "8.5",
-            "unit": "$M"
-          },
-          {
-            "name": "Average Demo Cycle Time",
-            "baseline": "28",
-            "target": "18",
-            "current": "28",
-            "unit": "days"
+            "name": "Verification audits completed",
+            "baseline": "0",
+            "target": "12",
+            "current": "0",
+            "unit": "count"
           }
         ],
         "lagging": [
           {
-            "name": "Total Cost of Demo Operations",
-            "baseline": "1200",
-            "target": "900",
-            "current": "1200",
-            "unit": "$K"
-          },
-          {
-            "name": "Measured ROI",
+            "name": "Verified asset coverage",
             "baseline": "0",
-            "target": "300",
+            "target": "95",
             "current": "0",
             "unit": "%"
           },
           {
-            "name": "Cumulative Value Delivered",
+            "name": "Outdated assets retired",
             "baseline": "0",
-            "target": "2100",
+            "target": "150",
             "current": "0",
-            "unit": "$K"
+            "unit": "count"
           },
           {
-            "name": "Executive Confidence Score",
-            "baseline": "6",
-            "target": "9",
-            "current": "6",
-            "unit": "score"
+            "name": "Demo data accuracy incidents",
+            "baseline": "20",
+            "target": "3",
+            "current": "20",
+            "unit": "count"
           }
         ]
       },
-      "progress": 0,
-      "color": "#F59E0B",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-12-31"
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
     },
     {
-      "id": "achieve-4-5-5-demo-nps-from-prospects",
-      "name": "Achieve 4.5/5 Demo NPS from Prospects",
-      "shortName": "Demo NPS",
-      "category": "customer-success",
-      "owner": "Sales Engineering",
+      "id": "demo-storytelling-excellence",
+      "name": "Standardise Demo Narrative, Storytelling & Value Messaging Excellence",
+      "shortName": "Demo Storytelling",
+      "category": "quality",
+      "owner": "Demo Services",
       "coOwners": [
-        "Demo Operations",
-        "Customer Experience",
-        "Sales Leadership"
+        "Product Marketing",
+        "Sales Enablement",
+        "Sales Engineering"
       ],
       "status": "not-started",
-      "priority": "medium",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
       "smartGoal": {
-        "statement": "Implement post-demo survey system achieving 80% response rate and 4.5/5 average rating by Q3 2026 to create data-driven demo improvement process, close feedback loops with detractors within 24 hours, and align demo quality with customer expectations.",
+        "statement": "By 2026-12-31, standardise persona-based demo narratives and value messaging to improve buyer relevance and deal conversion, resulting in higher-quality and more consistent demo experiences.",
         "specific": {
           "objectives": [
-            "Deploy automated post-demo NPS survey via email and in-app prompts",
-            "Build real-time feedback dashboard for SEs with individual and team scores",
-            "Establish close-the-loop process for detractors (scores 1-3) with 24-hour response SLA",
-            "Conduct monthly NPS trend analysis by product line, SE, and persona",
-            "Integrate demo feedback into SE performance reviews and coaching"
+            "Define persona-based demo story frameworks",
+            "Create outcome-driven demo flows",
+            "Embed value and ROI messaging into demos",
+            "Standardise demo narrative playbooks"
           ]
         },
         "measurable": {
           "metrics": [
-            "Survey response rate: 0%  80%",
-            "Demo NPS score: baseline unknown  4.5/5",
-            "Detractor response time: N/A  <24 hours",
-            "Feedback-to-improvement cycle time: N/A  2 weeks"
+            "Persona demo frameworks: 0 → 6",
+            "Standardised demo flows: 0% → 80%",
+            "Win rate on standard demos: 22% → 30%",
+            "Demo NPS (story quality): 0 → +20"
           ]
         },
         "achievable": {
-          "resources": "Survey platform (integrated with CRM), NPS dashboard tool, SE coaching time (2 hours/month per SE), Customer Success for detractor outreach",
-          "ownership": "Sales Engineering owns demo quality and feedback response; Demo Ops manages survey infrastructure; CX team supports detractor recovery"
+          "resources": "Product marketing content, enablement resources, demo design capacity",
+          "ownership": "Product Marketing owns messaging, Demo owns flows, Enablement drives rollout"
         },
         "relevant": {
           "croAlignment": [
-            "Customer Sat",
             "Deal Conversion",
-            "Sales Cycle Delays"
-          ],
-          "rationale": [
-            "Direct prospect voice identifies demo quality issues invisible to internal metrics",
-            "High demo satisfaction correlates with 2.8x higher close rates (industry benchmark)",
-            "Detractor recovery prevents lost deals and brand damage",
-            "Creates competitive advantage through continuous improvement culture",
-            "Feedback validates effectiveness of Coast migration and automation initiatives"
+            "Sales Productivity",
+            "Customer Sat"
           ]
         },
         "timeBound": {
           "timeline": [
             {
-              "phase": "Survey Design & Platform Setup",
-              "deliverable": "NPS survey deployed; baseline scores established",
+              "phase": "Narrative Design",
+              "deliverable": "Persona and value story frameworks",
               "dueDate": "2026-03-31",
               "status": "not-started"
             },
             {
-              "phase": "Feedback Loop Activation",
-              "deliverable": "Detractor response process live; SE dashboards deployed",
-              "dueDate": "2026-05-31",
+              "phase": "Flow Build",
+              "deliverable": "Standard demo flows created",
+              "dueDate": "2026-06-30",
               "status": "not-started"
             },
             {
-              "phase": "Improvement Initiatives Launch",
-              "deliverable": "Top 3 feedback themes addressed; NPS trending upward",
-              "dueDate": "2026-07-31",
-              "status": "not-started"
-            },
-            {
-              "phase": "Target Achievement & Integration",
-              "deliverable": "4.5/5 NPS achieved; feedback integrated into SE reviews",
+              "phase": "Enablement Rollout",
+              "deliverable": "Playbooks and training delivered",
               "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimisation",
+              "deliverable": "Story-driven demo quality targets met",
+              "dueDate": "2026-12-31",
               "status": "not-started"
             }
           ]
@@ -1882,72 +924,320 @@
       "indicators": {
         "leading": [
           {
-            "name": "Survey Response Rate",
+            "name": "Persona stories created",
+            "baseline": "0",
+            "target": "6",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Standard demo flows published",
+            "baseline": "0",
+            "target": "40",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Sellers trained on narratives",
+            "baseline": "0",
+            "target": "300",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Standard flow adoption",
             "baseline": "0",
             "target": "80",
             "current": "0",
             "unit": "%"
           },
           {
-            "name": "Demos with Feedback Collected",
-            "baseline": "0",
-            "target": "95",
-            "current": "0",
+            "name": "Win rate on demo-led deals",
+            "baseline": "22",
+            "target": "30",
+            "current": "22",
             "unit": "%"
           },
           {
-            "name": "Detractor Response Time",
+            "name": "Demo NPS (story quality)",
             "baseline": "0",
-            "target": "18",
+            "target": "20",
             "current": "0",
-            "unit": "hours"
+            "unit": "count"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-localization",
+      "name": "Enable Strategic Demo Localization & Multi-Lingual Assets",
+      "shortName": "Demo Localization",
+      "category": "customer-success",
+      "owner": "Demo Services",
+      "coOwners": [
+        "Product Marketing",
+        "Regional Sales",
+        "Localization"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, localize priority demo assets and narratives into strategic languages to support regional growth, resulting in improved buyer engagement and global deal conversion.",
+        "specific": {
+          "objectives": [
+            "Identify priority regions and languages",
+            "Localize core demo narratives and assets",
+            "Implement multilingual demo data and UI support",
+            "Enable regional ownership of localized demos"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Languages supported: 1 → 6",
+            "Localized demo assets: 0 → 60",
+            "Regional demo adoption: 20% → 75%",
+            "Win rate in localized regions: 18% → 26%"
+          ]
+        },
+        "achievable": {
+          "resources": "Localization vendors, regional SMEs, demo platform support",
+          "ownership": "Demo owns assets, Product Marketing owns translation, Regions own validation"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Deal Conversion",
+            "Pipeline Risk",
+            "Customer Sat"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Priority Definition",
+              "deliverable": "Target regions and languages approved",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Core Asset Localization",
+              "deliverable": "Top demos localized",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Platform Enablement",
+              "deliverable": "Multilingual demo support live",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Regional Scale",
+              "deliverable": "Localized demos operational globally",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Languages approved",
+            "baseline": "0",
+            "target": "6",
+            "current": "0",
+            "unit": "count"
           },
           {
-            "name": "SE Engagement with Feedback Dashboard",
+            "name": "Assets submitted for localization",
+            "baseline": "0",
+            "target": "80",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Regional reviewers assigned",
+            "baseline": "0",
+            "target": "20",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Localized assets live",
+            "baseline": "0",
+            "target": "60",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Regional demo adoption",
+            "baseline": "20",
+            "target": "75",
+            "current": "20",
+            "unit": "%"
+          },
+          {
+            "name": "Win rate in localized regions",
+            "baseline": "18",
+            "target": "26",
+            "current": "18",
+            "unit": "%"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-operational-maturity",
+      "name": "Demo Operational Maturity",
+      "shortName": "Operational Maturity",
+      "category": "process-optimization",
+      "owner": "Demo Services",
+      "coOwners": [],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2027-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2027-12-31, evolve and mature the existing Demo Services operating model to improve clarity, efficiency, visibility, and consistency in support, decisioning, and engagement across all products, platforms, and regions.",
+        "specific": {
+          "objectives": [
+            "Design clear visual flow diagrams for support decisioning",
+            "Refresh team ownership maps and contact lists",
+            "Reinforce mandatory ticketing for all demo engagements",
+            "Surface operational flows and ownership in the platform"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Support flow coverage: 60% → 100%",
+            "Decision flow diagrams: 0 → 100% coverage",
+            "Demo engagements with tickets: 70% → 100%",
+            "Support contacts mapping accuracy: 75% → 100%",
+            "Time to route issues: Baseline → -40%",
+            "Repeat issues due to misrouting: Baseline → -50%"
+          ]
+        },
+        "achievable": {
+          "resources": "Process design expertise, platform engineering, knowledge management tools",
+          "ownership": "Demo Ops owns process design, IT supports platform integration, Leadership enforces adoption"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Sales Productivity",
+            "Operational Excellence",
+            "Pipeline Risk Reduction",
+            "Forecast Confidence"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Flow & Decision Model Enhancement",
+              "deliverable": "Visual flow diagrams and standard paths for support decisioning",
+              "dueDate": "2027-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Knowledge & Ownership Modernisation",
+              "deliverable": "Updated ownership maps and contact lists aligned to org structure",
+              "dueDate": "2027-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Engagement & Ticketing Discipline",
+              "deliverable": "Mandatory ticketing embedded in operational workflows",
+              "dueDate": "2027-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Visibility & Operational Intelligence",
+              "deliverable": "Operational flows and support models visible in Executive Summary Platform",
+              "dueDate": "2027-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Support flow coverage documented",
+            "baseline": "60",
+            "target": "100",
+            "current": "60",
+            "unit": "%"
+          },
+          {
+            "name": "Decision flow diagrams published",
             "baseline": "0",
             "target": "100",
             "current": "0",
+            "unit": "% coverage"
+          },
+          {
+            "name": "Demo engagements with tickets raised",
+            "baseline": "70",
+            "target": "100",
+            "current": "70",
+            "unit": "%"
+          },
+          {
+            "name": "Support contacts accuracy",
+            "baseline": "75",
+            "target": "100",
+            "current": "75",
             "unit": "%"
           }
         ],
         "lagging": [
           {
-            "name": "Demo NPS Score",
+            "name": "First-touch resolution rate",
             "baseline": "0",
-            "target": "4.5",
+            "target": "15",
             "current": "0",
-            "unit": "score"
+            "unit": "% increase"
           },
           {
-            "name": "Demo-to-Close Correlation",
+            "name": "Time to route to correct team",
             "baseline": "0",
-            "target": "0.85",
+            "target": "-40",
             "current": "0",
-            "unit": "r"
+            "unit": "% reduction"
           },
           {
-            "name": "Detractor Recovery Rate",
+            "name": "Repeat issues due to misrouting",
             "baseline": "0",
-            "target": "60",
+            "target": "-50",
             "current": "0",
-            "unit": "%"
+            "unit": "% reduction"
           },
           {
-            "name": "Month-over-Month NPS Improvement",
+            "name": "Escalations for ownership clarity",
             "baseline": "0",
-            "target": "5",
+            "target": "-60",
             "current": "0",
-            "unit": "%"
+            "unit": "% reduction"
           }
         ]
       },
-      "progress": 0,
-      "color": "#EC4899",
-      "icon": "",
-      "linkedAssets": 0,
-      "createdDate": "2026-01-20",
-      "lastUpdated": "2026-01-20",
-      "targetDate": "2026-09-30"
+      "createdDate": "2026-01-28",
+      "lastUpdated": "2026-01-28"
     }
   ],
   "categories": [
@@ -1973,7 +1263,14 @@
       "icon": "❤️"
     },
     {
-      "id": "cost",
+      "id": "customer-success",
+      "name": "Customer Success",
+      "description": "Drive customer adoption, retention, and expansion",
+      "color": "purple",
+      "icon": "🎯"
+    },
+    {
+      "id": "cost-reduction",
       "name": "Cost Reduction",
       "description": "Reduce expenses, optimize spending, improve ROI",
       "color": "orange",
@@ -1985,6 +1282,27 @@
       "description": "Drive new capabilities, explore emerging technologies, scale operations",
       "color": "pink",
       "icon": "🚀"
+    },
+    {
+      "id": "process-optimization",
+      "name": "Process Optimization",
+      "description": "Enhance workflows, standardize procedures, eliminate bottlenecks",
+      "color": "indigo",
+      "icon": "⚙️"
+    },
+    {
+      "id": "sales-operations",
+      "name": "Sales Operations",
+      "description": "Enable sales team effectiveness, tools, and efficiency",
+      "color": "cyan",
+      "icon": "📈"
+    },
+    {
+      "id": "revenue-growth",
+      "name": "Revenue Growth",
+      "description": "Increase revenue, improve conversion, expand market share",
+      "color": "emerald",
+      "icon": "💵"
     }
   ],
   "croImpactAreas": [

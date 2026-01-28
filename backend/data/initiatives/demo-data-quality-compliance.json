@@ -1,0 +1,205 @@
+{
+  "id": "demo-data-quality-compliance",
+  "name": "Demo Data Quality & Compliance",
+  "shortName": "Demo Data Compliance",
+  "slug": "demo-data-quality-compliance",
+  "category": "quality-improvement",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "Information Security",
+    "Data Governance"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "high",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, enforce demo data quality and compliance standards to achieve 95% certified demo datasets and reduce data-related demo incidents by 60%.",
+    "specific": {
+      "objectives": [
+        "Define compliance standards",
+        "Certify demo datasets",
+        "Implement compliance audits"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Certified datasets: 0% \u2192 95%",
+        "Data-related incidents: Baseline \u2192 -60%",
+        "Non-compliant datasets: Baseline \u2192 0"
+      ]
+    },
+    "achievable": {
+      "resources": "Compliance SMEs, demo data owners",
+      "teamSize": "2 FTEs"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Risk Management",
+        "Operational Excellence"
+      ],
+      "strategicThemes": [
+        "Operational Excellence",
+        "Data-Driven Decisions"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Compliance Framework Live",
+          "deliverable": "Standards and audits live",
+          "dueDate": "2026-05-31",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Datasets reviewed",
+        "baseline": "0",
+        "target": "200",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Certified datasets",
+        "baseline": "0",
+        "target": "95",
+        "current": "0",
+        "unit": "%"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "Compliance risk from demo data.",
+    "opportunity": "Reduced regulatory and customer risk.",
+    "solution": "Certified demo data standards.",
+    "expectedBenefits": [
+      "Lower compliance risk",
+      "Higher demo trust"
+    ],
+    "roi": "200% ROI in 12 months",
+    "paybackPeriod": "6 months"
+  },
+  "budget": {
+    "total": 120000,
+    "allocated": 120000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 20000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 10000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "Risk & Compliance Budget",
+    "costAvoidance": "$150K in compliance exposure"
+  },
+  "funding": {
+    "requestedAmount": 120000,
+    "approvedAmount": 120000,
+    "approvalDate": "2026-03-15",
+    "approvedBy": "CRO & CISO",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 60000,
+        "releaseCondition": "Standards approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-legal",
+      "description": "Delays in legal approval",
+      "impact": "Rollout delays",
+      "probability": "medium",
+      "severity": "medium",
+      "mitigation": "Early legal engagement",
+      "owner": "Information Security",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-compliance",
+      "name": "Compliance Framework Live",
+      "description": "Compliance live",
+      "dueDate": "2026-05-31",
+      "status": "not-started",
+      "deliverables": [
+        "Standards",
+        "Audit process"
+      ],
+      "acceptanceCriteria": [
+        "InfoSec signoff"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Information Security",
+      "role": "Compliance Owner",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Approval and audits",
+      "communicationFrequency": "Monthly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Certified datasets",
+      "baseline": "0%",
+      "target": "95%",
+      "measurement": "% certified",
+      "frequency": "Monthly"
+    }
+  ],
+  "startDate": "2026-02-15",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-02-15T09:00:00Z",
+  "updatedAt": "2026-01-26T20:00:00Z",
+  "tags": [
+    "compliance",
+    "data-quality"
+  ],
+  "notes": "Mandatory compliance for regulated demos."
+}

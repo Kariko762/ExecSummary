@@ -1,5 +1,5 @@
 import React from 'react';
-import { Briefcase, AlertTriangle, Lightbulb, Target, Hand } from 'lucide-react';
+import { Briefcase, Lightbulb, Target, Hand } from 'lucide-react';
 import { renderWithExpressions } from '../utils/expressionParser';
 
 interface Ask {

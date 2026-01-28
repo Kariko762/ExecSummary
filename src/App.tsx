@@ -3,16 +3,12 @@ import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-ro
 import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
 import { Header } from './components/Header';
-import { SummaryCard } from './components/SummaryCard';
-import { renderWithExpressions } from './utils/expressionParser';
 import { Dashboard } from './components/Dashboard';
 import { ContentModal } from './components/ContentModal';
 import { ContentModalFixedMenu } from './components/ContentModalFixedMenu';
 import ViewGoalModal from './components/ViewGoalModal';
 import { Timeline } from './components/Timeline';
 import { StickyNav } from './components/StickyNav';
-import { OrganizationDashboard } from './components/OrganizationDashboard';
-import { StrategicInitiativesDashboard } from './components/StrategicInitiativesDashboard';
 import { KnowledgeBaseDashboard } from './components/KnowledgeBaseDashboard';
 import { SchemaTest } from './components/SchemaTest';
 import { DesignSystemTest } from './pages/DesignSystemTest';
@@ -21,6 +17,9 @@ import InitiativesHome from './pages/InitiativesHome';
 import TechnologiesHome from './pages/TechnologiesHome';
 import TechnologyStackOverview from './pages/TechnologyStackOverview';
 import PlatformArchitectureOverview from './pages/PlatformArchitectureOverview';
+import BudgetPage from './pages/BudgetPage';
+import LeadershipSummary from './pages/LeadershipSummary';
+import InitiativesGantt from './pages/InitiativesGantt';
 import PlatformOverview from './components/PlatformOverview';
 import CardStyleGallery from './components/CardStyleGallery';
 import LoginPage from './components/LoginPage';
@@ -38,14 +37,16 @@ function AppContent() {
     '/technology-stack-overview',
     '/platform-architecture-overview',
     '/goals',
+    '/budget',
     '/initiatives',
     '/technologies',
-    '/strategic-initiatives',
     '/knowledge-base',
     '/platform-overview',
     '/card-styles',
     '/schema-test',
-    '/design-test'
+    '/design-test',
+    '/leadership-summary',
+    '/initiatives-gantt'
   ];
   
   const shouldShowStickyNav = !noStickyNavRoutes.includes(location.pathname);
@@ -246,7 +247,7 @@ function App() {
     setIsAuthenticated(false);
   };
 
-  const filteredSummaries = timelineItems.filter(summary => {
+  const _filteredSummaries = timelineItems.filter(summary => {
     if (!summary || !summary.title) return false;
     
     // Tag filter
@@ -431,8 +432,8 @@ function App() {
                                 </motion.div>
                               </Link>
 
-                              {/* Strategic Initiatives Tile */}
-                              <Link to="/strategic-initiatives" className="h-full">
+                              {/* Initiatives Tile */}
+                              <Link to="/initiatives" className="h-full">
                                 <motion.div
                                   initial={{ opacity: 0, y: 20 }}
                                   animate={{ opacity: 1, y: 0 }}
@@ -683,7 +684,7 @@ function App() {
                                   const blockers = content?.risks?.filter((r: any) => r.severity === 'high').length || 0;
                                   
                                   // Extract goals from content
-                                  const goals = content?.goals || (content?.sections?.find((s: any) => s.key === 'goals')?.multiFieldData) || [];
+                                  const _goals = content?.goals || (content?.sections?.find((s: any) => s.key === 'goals')?.multiFieldData) || [];
                                   
                                   return (
                                     <motion.div
@@ -806,11 +807,6 @@ function App() {
                         </>
                   } />
 
-                  {/* Initiatives and Goals Route */}
-                  <Route path="/strategic-initiatives" element={
-                    <StrategicInitiativesDashboard />
-                  } />
-
                   {/* Knowledge Base Route */}
                   <Route path="/knowledge-base" element={
                     <KnowledgeBaseDashboard />
@@ -841,6 +837,11 @@ function App() {
                     <GoalsHome onSelectGoal={setSelectedGoal} />
                   } />
 
+                  {/* Budget Route */}
+                  <Route path="/budget" element={
+                    <BudgetPage />
+                  } />
+
                   {/* Initiatives Home Route */}
                   <Route path="/initiatives" element={
                     <InitiativesHome />
@@ -859,6 +860,16 @@ function App() {
                   {/* Platform Architecture Overview Route */}
                   <Route path="/platform-architecture-overview" element={
                     <PlatformArchitectureOverview />
+                  } />
+                  
+                  {/* Leadership Summary Route */}
+                  <Route path="/leadership-summary" element={
+                    <LeadershipSummary />
+                  } />
+                  
+                  {/* Initiatives Gantt Route */}
+                  <Route path="/initiatives-gantt" element={
+                    <InitiativesGantt />
                   } />
                 </Routes>
               </div>
@@ -883,6 +894,16 @@ function App() {
                         Quick Links
                       </h4>
                       <ul className="space-y-2 text-sm font-roobert-light">
+                        <li>
+                          <Link to="/platform-architecture-overview" className="hover:underline" style={{ color: 'var(--text-secondary)' }}>
+                            Platform Architecture
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/technology-stack-overview" className="hover:underline" style={{ color: 'var(--text-secondary)' }}>
+                            Technology Stack
+                          </Link>
+                        </li>
                         <li>
                           <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:underline" style={{ color: 'var(--text-secondary)' }}>
                             Back to Top

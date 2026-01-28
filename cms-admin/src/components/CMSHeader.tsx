@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target, BookText, StickyNote } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target, BookText, StickyNote, DollarSign, ScrollText } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
 import APIDashboardModal from './APIDashboardModal';
+import ChangeControlLogsModal from './ChangeControlLogsModal';
 
 interface CMSHeaderProps {
   onOpenAssetReference?: () => void;
@@ -15,15 +16,18 @@ interface CMSHeaderProps {
   onOpenComments?: () => void;
   onOpenGoals?: () => void;
   onOpenInitiatives?: () => void;
+  onOpenInitiativesGantt?: () => void;
+  onOpenBudget?: () => void;
   onOpenNotes?: () => void;
   onOpenTasks?: () => void;
   onOpenPlatformOverview?: () => void;
 }
 
-export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenDataSources, onOpenComments, onOpenGoals, onOpenInitiatives, onOpenNotes, onOpenTasks, onOpenPlatformOverview }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenDataSources, onOpenComments, onOpenGoals, onOpenInitiatives, onOpenInitiativesGantt, onOpenBudget, onOpenNotes, onOpenTasks, onOpenPlatformOverview }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
+  const [showChangeControlLogs, setShowChangeControlLogs] = useState(false);
   const [isNavDropdownOpen, setIsNavDropdownOpen] = useState(false);
   const [engineSubmenuOpen, setEngineSubmenuOpen] = useState(false);
   const [strategySubmenuOpen, setStrategySubmenuOpen] = useState(false);
@@ -165,6 +169,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
   };
 
   return (
+    <>
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -354,11 +359,31 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-pink-500/10 dark:hover:bg-pink-500/20 text-gray-900 dark:text-white text-left"
                                   >
                                     <div className="p-1.5 rounded-lg bg-pink-500/10 dark:bg-pink-500/20">
-                                      <span className="text-lg">🚀</span>
+                                      <Lightbulb className="w-4 h-4 text-pink-500" />
                                     </div>
                                     <div className="flex-1">
                                       <div className="font-roobert-semibold text-sm">Initiatives</div>
                                       <div className="text-xs text-gray-600 dark:text-gray-400">Strategic projects</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Initiatives Gantt */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setStrategySubmenuOpen(false);
+                                      onOpenInitiativesGantt?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-purple-500/10 dark:hover:bg-purple-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-purple-500/10 dark:bg-purple-500/20">
+                                      <svg className="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                                      </svg>
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Initiatives Gantt</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Q1 2026 timeline view</div>
                                     </div>
                                   </button>
 
@@ -377,6 +402,24 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     <div className="flex-1">
                                       <div className="font-roobert-semibold text-sm">Goals</div>
                                       <div className="text-xs text-gray-600 dark:text-gray-400">Strategic objectives</div>
+                                    </div>
+                                  </button>
+
+                                  {/* Budget */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setStrategySubmenuOpen(false);
+                                      onOpenBudget?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-emerald-500/10 dark:hover:bg-emerald-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20">
+                                      <DollarSign className="w-4 h-4 text-emerald-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Budget</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Forecast & Actual</div>
                                     </div>
                                   </button>
 
@@ -608,6 +651,18 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
           </form>
           {/* Actions */}
           <div className="flex items-center space-x-3">
+            {/* Change Control Logs */}
+            <motion.button
+              onClick={() => setShowChangeControlLogs(true)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-fis-eggplant/60 bg-fis-eggplant/25 hover:bg-fis-eggplant/40 transition-all"
+              title="View change control logs"
+            >
+              <ScrollText className="w-4 h-4 text-fis-eggplant dark:text-fis-raspberry" />
+              <span className="text-sm font-roobert-medium text-fis-eggplant dark:text-fis-raspberry">Logs</span>
+            </motion.button>
+
             {/* API Status */}
             <motion.button
               onClick={() => setShowAPIDashboard(true)}
@@ -718,12 +773,19 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
           </div>
         </div>
       </div>
-      
-      {/* API Dashboard Modal */}
-      <APIDashboardModal 
-        isOpen={showAPIDashboard} 
-        onClose={() => setShowAPIDashboard(false)} 
-      />
     </motion.header>
+      
+    {/* API Dashboard Modal */}
+    <APIDashboardModal 
+      isOpen={showAPIDashboard} 
+      onClose={() => setShowAPIDashboard(false)} 
+    />
+
+    {/* Change Control Logs Modal */}
+    <ChangeControlLogsModal 
+      isOpen={showChangeControlLogs} 
+      onClose={() => setShowChangeControlLogs(false)} 
+    />
+    </>
   );
 };

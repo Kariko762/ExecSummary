@@ -1,0 +1,52 @@
+{
+  "tags": [
+    {
+      "id": "key-highlight",
+      "name": "Key Highlight",
+      "description": "Important highlights and notable updates",
+      "color": "yellow",
+      "icon": "Star",
+      "created": "2025-12-24T00:00:00.000Z"
+    },
+    {
+      "id": "goal-progression",
+      "name": "Goal Progression",
+      "description": "Progress updates on strategic goals",
+      "color": "blue",
+      "icon": "Target",
+      "created": "2025-12-24T00:00:00.000Z"
+    },
+    {
+      "id": "big-win",
+      "name": "Big Win",
+      "description": "Major achievements and successes",
+      "color": "green",
+      "icon": "Trophy",
+      "created": "2025-12-24T00:00:00.000Z"
+    },
+    {
+      "id": "deal-support",
+      "name": "Deal Support",
+      "description": "Deal-related updates and support activities",
+      "color": "purple",
+      "icon": "Briefcase",
+      "created": "2025-12-24T00:00:00.000Z"
+    },
+    {
+      "id": "new-project",
+      "name": "New Project",
+      "description": "New projects and initiatives",
+      "color": "indigo",
+      "icon": "Rocket",
+      "created": "2025-12-24T00:00:00.000Z"
+    },
+    {
+      "id": "general",
+      "name": "General",
+      "description": "General notes and updates",
+      "color": "gray",
+      "icon": "List",
+      "created": "2025-12-24T00:00:00.000Z"
+    }
+  ]
+}

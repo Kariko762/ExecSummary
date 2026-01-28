@@ -1,0 +1,789 @@
+{
+  "id": "template-new",
+  "quarter": "Month Day",
+  "year": 2026,
+  "date": "2026-01-05",
+  "title": "Your Organization Name - Weekly Executive Update",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_summary_type": "executiveSummaryBLUF",
+  "_summary_layoutZone": "full",
+  "_summary_rowIndex": 0,
+  "summary": {
+    "bottomLine": "Approve $2M emergency funding by Dec 15 to prevent 3 critical projects from 2-month delay",
+    "background": "Q4 tracking 12 strategic programs ($45M). Recent RIF eliminated platform team, creating budget ownership gap.",
+    "assessment": "3 projects at risk: 15% overrun, resource shortage, vendor procurement delays. Without action, Q1 delivery jeopardized.",
+    "recommendation": "Reallocate Q1 reserves, extend deadlines 30 days, approve 3 contractor positions",
+    "asks": [
+      {
+        "type": "budget",
+        "item": "Approve $2M emergency funding from Q1 reserves",
+        "urgency": "high",
+        "owner": "CFO",
+        "deadline": "Dec 15, 2025"
+      }
+    ]
+  },
+  "_summary_sectionLayoutType": "full",
+  "_enabled_summary": true,
+  "_completed_summary": false,
+  "_key_highlights_type": "highlightsList",
+  "_key_highlights_layoutZone": "full",
+  "_key_highlights_rowIndex": 0,
+  "key_highlights": [
+    "Banking NA Titled Microsite - First Draft Published and endorsed by Michael Driscoll",
+    "GTM Team Support - Office of the CTO Template Completed, moving to Figma conversion",
+    "SNOW Migration - Built comprehensive reports, dashboard launch by Nov 14"
+  ],
+  "_key_highlights_sectionLayoutType": "full",
+  "_enabled_key_highlights": true,
+  "_completed_key_highlights": false,
+  "_performance_metrics_type": "metricCard",
+  "_performance_metrics_layoutZone": "full",
+  "_performance_metrics_rowIndex": 0,
+  "_performance_metrics_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    },
+    "style": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Card Style",
+      "options": [
+        "standard",
+        "highlight",
+        "bold",
+        "total"
+      ]
+    },
+    "icon": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon",
+      "options": [
+        "award",
+        "dollar",
+        "users",
+        "trending",
+        "target",
+        "star",
+        "rocket",
+        "chart",
+        "activity",
+        "zap",
+        "heart",
+        "check"
+      ]
+    },
+    "iconColor": {
+      "type": "string",
+      "renderAs": "select",
+      "label": "Icon Color",
+      "options": [
+        "eggplant",
+        "raspberry",
+        "navy",
+        "green",
+        "stone",
+        "fog"
+      ]
+    }
+  },
+  "performance_metrics": [
+    {
+      "title": "Revenue",
+      "value": "$1,230,000",
+      "style": "highlight",
+      "icon": "dollar",
+      "iconColor": "green"
+    },
+    {
+      "title": "Customers",
+      "value": "263",
+      "style": "standard",
+      "icon": "users",
+      "iconColor": "navy"
+    },
+    {
+      "title": "Growth",
+      "value": "+48%",
+      "style": "bold",
+      "icon": "trending",
+      "iconColor": "green"
+    },
+    {
+      "title": "NPS Score",
+      "value": "0",
+      "style": "total",
+      "icon": "award",
+      "iconColor": "eggplant"
+    }
+  ],
+  "_performance_metrics_sectionLayoutType": "full",
+  "_enabled_performance_metrics": true,
+  "_completed_performance_metrics": false,
+  "_priority_initiatives_type": "nestedCards",
+  "_priority_initiatives_layoutZone": "full",
+  "_priority_initiatives_rowIndex": 0,
+  "_priority_initiatives_fields": {
+    "title": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Title"
+    },
+    "value": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Value"
+    }
+  },
+  "priority_initiatives": [
+    {
+      "title": "Team Lead",
+      "value": "Sarah Johnson"
+    },
+    {
+      "title": "Members",
+      "value": "12"
+    }
+  ],
+  "_priority_initiatives_sectionLayoutType": "full",
+  "_enabled_priority_initiatives": true,
+  "_completed_priority_initiatives": false,
+  "_status_board_type": "statusBoard",
+  "_status_board_layoutZone": "full",
+  "_status_board_rowIndex": 0,
+  "status_board": {
+    "columns": [
+      {
+        "title": "On Track",
+        "items": [
+          "Demo environment performance improvements ongoing",
+          "New deployment process in testing"
+        ]
+      },
+      {
+        "title": "At Risk",
+        "items": [
+          "Titled Performance & Import Failures - unreliable search/browse",
+          "Timeline: End of November 2024"
+        ]
+      },
+      {
+        "title": "Blocked",
+        "items": [
+          "Shift Payment Audit Trail - excessive work flagged"
+        ]
+      },
+      {
+        "title": "Completed",
+        "items": [
+          "Team shift recording and approval process implemented",
+          "Demo Team payment issues resolved"
+        ]
+      }
+    ]
+  },
+  "_status_board_sectionLayoutType": "full",
+  "_enabled_status_board": true,
+  "_completed_status_board": false,
+  "_action_items_type": "checklistItems",
+  "_action_items_layoutZone": "full",
+  "_action_items_rowIndex": 0,
+  "action_items": [
+    "Comprehensive stakeholder interviews with 6 key clients",
+    "Collected competitive analysis of leading financial service portals",
+    "Detailed preliminary requirements document"
+  ],
+  "_action_items_sectionLayoutType": "full",
+  "_enabled_action_items": true,
+  "_completed_action_items": false,
+  "_key_milestones_type": "ganttChart",
+  "_key_milestones_layoutZone": "full",
+  "_key_milestones_rowIndex": 0,
+  "key_milestones": {
+    "title": "Q1 2026 Strategic Initiatives",
+    "startDate": "2026-01-01",
+    "endDate": "2026-03-31",
+    "organizations": [
+      {
+        "id": "capital-markets",
+        "name": "Capital Markets",
+        "color": "var(--brand-primary)",
+        "collapsed": false,
+        "projects": [
+          {
+            "id": "titled-rollout",
+            "name": "Tiled Rollout",
+            "tasks": [
+              {
+                "id": "license-procurement",
+                "name": "License Procurement",
+                "startDate": "2026-01-05",
+                "endDate": "2026-01-20",
+                "progress": 85,
+                "status": "on-track",
+                "owner": "Sarah Chen",
+                "details": {
+                  "description": "Procure licenses for 500 users across 3 regions (NA, EMEA, APAC)",
+                  "milestones": [
+                    {
+                      "date": "2026-01-08",
+                      "title": "Vendor Selection Complete",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-01-15",
+                      "title": "Contract Signed",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-01-20",
+                      "title": "Licenses Activated",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": []
+                }
+              },
+              {
+                "id": "infrastructure-setup",
+                "name": "Infrastructure Setup",
+                "startDate": "2026-01-18",
+                "endDate": "2026-02-05",
+                "progress": 45,
+                "status": "on-track",
+                "owner": "Mike Rodriguez",
+                "details": {
+                  "description": "Configure servers, databases, and networking for production deployment",
+                  "milestones": [
+                    {
+                      "date": "2026-01-22",
+                      "title": "Server Provisioning",
+                      "completed": true
+                    },
+                    {
+                      "date": "2026-01-28",
+                      "title": "Database Migration",
+                      "completed": false
+                    },
+                    {
+                      "date": "2026-02-05",
+                      "title": "Load Testing Complete",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [
+                    "Waiting for security audit approval"
+                  ],
+                  "dependencies": [
+                    "license-procurement"
+                  ]
+                }
+              },
+              {
+                "id": "user-training",
+                "name": "User Training & Documentation",
+                "startDate": "2026-02-01",
+                "endDate": "2026-02-28",
+                "progress": 20,
+                "status": "at-risk",
+                "owner": "Jennifer Lee",
+                "details": {
+                  "description": "Create training materials and conduct user onboarding sessions",
+                  "milestones": [
+                    {
+                      "date": "2026-02-10",
+                      "title": "Training Materials Complete",
+                      "completed": false
+                    },
+                    {
+                      "date": "2026-02-20",
+                      "title": "Pilot Training Sessions",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [
+                    "Training team understaffed",
+                    "Waiting for final UI/UX sign-off"
+                  ],
+                  "dependencies": [
+                    "infrastructure-setup"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "banking-na",
+        "name": "Banking (NA)",
+        "color": "var(--accent-blue)",
+        "collapsed": true,
+        "projects": [
+          {
+            "id": "core-modernization",
+            "name": "Core Banking Modernization",
+            "tasks": [
+              {
+                "id": "api-migration",
+                "name": "API Migration",
+                "startDate": "2026-01-10",
+                "endDate": "2026-02-15",
+                "progress": 60,
+                "status": "on-track",
+                "owner": "Robert Kim",
+                "details": {
+                  "description": "Migrate legacy APIs to modern RESTful architecture",
+                  "milestones": [
+                    {
+                      "date": "2025-01-20",
+                      "title": "API Design Complete",
+                      "completed": true
+                    },
+                    {
+                      "date": "2025-02-01",
+                      "title": "Development Complete",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": []
+                }
+              },
+              {
+                "id": "data-migration",
+                "name": "Customer Data Migration",
+                "startDate": "2025-02-10",
+                "endDate": "2025-03-20",
+                "progress": 15,
+                "status": "blocked",
+                "owner": "Amanda Torres",
+                "details": {
+                  "description": "Migrate 2.5M customer records to new platform",
+                  "milestones": [
+                    {
+                      "date": "2025-02-15",
+                      "title": "Data Mapping Complete",
+                      "completed": false
+                    },
+                    {
+                      "date": "2025-03-01",
+                      "title": "Pilot Migration",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [
+                    "Data quality issues identified",
+                    "Compliance review pending"
+                  ],
+                  "dependencies": [
+                    "api-migration"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "banking-int",
+        "name": "Banking (INT)",
+        "color": "var(--accent-green)",
+        "collapsed": true,
+        "projects": [
+          {
+            "id": "multi-currency",
+            "name": "Multi-Currency Support",
+            "tasks": [
+              {
+                "id": "forex-integration",
+                "name": "Forex Rate Integration",
+                "startDate": "2025-01-15",
+                "endDate": "2025-02-28",
+                "progress": 90,
+                "status": "completed",
+                "owner": "David Park",
+                "details": {
+                  "description": "Integrate real-time forex rates from multiple providers",
+                  "milestones": [
+                    {
+                      "date": "2025-01-25",
+                      "title": "Provider Integration",
+                      "completed": true
+                    },
+                    {
+                      "date": "2025-02-10",
+                      "title": "Rate Caching System",
+                      "completed": true
+                    },
+                    {
+                      "date": "2025-02-25",
+                      "title": "Production Deployment",
+                      "completed": true
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": []
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "payments",
+        "name": "PAYMENTS",
+        "color": "var(--brand-secondary)",
+        "collapsed": true,
+        "projects": [
+          {
+            "id": "instant-payments",
+            "name": "Instant Payments Platform",
+            "tasks": [
+              {
+                "id": "real-time-processing",
+                "name": "Real-Time Processing Engine",
+                "startDate": "2025-01-08",
+                "endDate": "2025-03-15",
+                "progress": 55,
+                "status": "at-risk",
+                "owner": "Lisa Wong",
+                "details": {
+                  "description": "Build high-performance real-time payment processing system",
+                  "milestones": [
+                    {
+                      "date": "2025-01-30",
+                      "title": "Architecture Review",
+                      "completed": true
+                    },
+                    {
+                      "date": "2025-02-20",
+                      "title": "Beta Testing",
+                      "completed": false
+                    },
+                    {
+                      "date": "2025-03-10",
+                      "title": "Security Audit",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [
+                    "Performance bottleneck at 10k TPS"
+                  ],
+                  "dependencies": []
+                }
+              },
+              {
+                "id": "fraud-detection",
+                "name": "AI-Powered Fraud Detection",
+                "startDate": "2025-02-01",
+                "endDate": "2025-03-25",
+                "progress": 30,
+                "status": "on-track",
+                "owner": "Carlos Mendez",
+                "details": {
+                  "description": "Machine learning model for real-time fraud detection",
+                  "milestones": [
+                    {
+                      "date": "2025-02-15",
+                      "title": "Model Training",
+                      "completed": false
+                    },
+                    {
+                      "date": "2025-03-01",
+                      "title": "Integration Testing",
+                      "completed": false
+                    }
+                  ],
+                  "blockers": [],
+                  "dependencies": [
+                    "real-time-processing"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "_key_milestones_sectionLayoutType": "full",
+  "_enabled_key_milestones": true,
+  "_completed_key_milestones": false,
+  "_risks_opportunities_type": "twoColumnComparison",
+  "_risks_opportunities_layoutZone": "full",
+  "_risks_opportunities_rowIndex": 0,
+  "_risks_opportunities_fields": {
+    "topLeftTitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Top Left Title"
+    },
+    "topLeftContent": {
+      "type": "string",
+      "renderAs": "richText",
+      "label": "Top Left Content"
+    },
+    "topRightTitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Top Right Title"
+    },
+    "topRightContent": {
+      "type": "string",
+      "renderAs": "richText",
+      "label": "Top Right Content"
+    },
+    "bottomLeftTitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Bottom Left Title"
+    },
+    "bottomLeftContent": {
+      "type": "string",
+      "renderAs": "richText",
+      "label": "Bottom Left Content"
+    },
+    "bottomRightTitle": {
+      "type": "string",
+      "renderAs": "text",
+      "label": "Bottom Right Title"
+    },
+    "bottomRightContent": {
+      "type": "string",
+      "renderAs": "richText",
+      "label": "Bottom Right Content"
+    }
+  },
+  "risks_opportunities": {
+    "topLeftTitle": "The Issue",
+    "topLeftContent": "Current client portal is outdated (built in 2016), lacks mobile optimization, and generates 200+ support calls per month due to usability issues. Client feedback consistently cites the portal as a pain point in relationship reviews.",
+    "topRightTitle": "Business Impact",
+    "topRightContent": "Portal deficiencies contributed to loss of 2 major clients ($800K AUM) in 2024. Annual support costs attributed to portal issues exceed $150K. RFP win rate decreased 12% when portal demos are included.",
+    "bottomLeftTitle": "Market Context",
+    "bottomLeftContent": "Competitors have launched modern, mobile-first portals with enhanced features. Recent market research shows 78% of clients expect banking-grade digital experiences from all financial service providers.",
+    "bottomRightTitle": "Operational Context",
+    "bottomRightContent": "Current portal runs on legacy technology stack with limited internal expertise. IT team spends 40% of maintenance time on portal-related issues. No API layer exists for future integrations."
+  },
+  "_risks_opportunities_sectionLayoutType": "full",
+  "_enabled_risks_opportunities": true,
+  "_completed_risks_opportunities": false,
+  "_initiative_funding_type": "budgetBreakdown",
+  "_initiative_funding_layoutZone": "full",
+  "_initiative_funding_rowIndex": 0,
+  "initiative_funding": {
+    "title": "Q4 2025 Operating Budget",
+    "currency": "USD",
+    "period": "Q4 2025",
+    "totalBudget": 5250000,
+    "totalActual": 4875000,
+    "categories": [
+      {
+        "id": "personnel",
+        "name": "Personnel & Compensation",
+        "icon": "Users",
+        "budgeted": 3200000,
+        "actual": 3150000,
+        "variance": -50000,
+        "variancePercent": -1.6,
+        "status": "on-track",
+        "color": "emerald",
+        "lineItems": [
+          {
+            "id": "salaries",
+            "name": "Base Salaries",
+            "budgeted": 2400000,
+            "actual": 2380000,
+            "variance": -20000,
+            "summary": "Personnel costs running 0.8% under budget due to delayed hiring",
+            "explanation": "Savings from delayed Q3 hires rolling into Q4",
+            "justification": "Two senior positions remained open through Q3 reorganization",
+            "owner": "HR Director",
+            "lastUpdated": "2025-11-15"
+          },
+          {
+            "id": "benefits",
+            "name": "Benefits & Insurance",
+            "budgeted": 550000,
+            "actual": 545000,
+            "variance": -5000,
+            "summary": "Employee benefits tracking slightly under budget with improved coverage terms",
+            "explanation": "Lower health insurance premiums than projected",
+            "justification": "Negotiated favorable group rates with new provider",
+            "owner": "Benefits Manager",
+            "lastUpdated": "2025-11-10"
+          },
+          {
+            "id": "bonuses",
+            "name": "Performance Bonuses",
+            "budgeted": 250000,
+            "actual": 225000,
+            "variance": -25000,
+            "explanation": "Q3 performance metrics below target",
+            "justification": "Market conditions impacted sales targets by 12%",
+            "owner": "Compensation Lead",
+            "lastUpdated": "2025-11-20"
+          }
+        ]
+      },
+      {
+        "id": "technology",
+        "name": "Technology & Infrastructure",
+        "icon": "Server",
+        "budgeted": 1200000,
+        "actual": 1050000,
+        "variance": -150000,
+        "variancePercent": -12.5,
+        "status": "on-track",
+        "color": "blue",
+        "lineItems": [
+          {
+            "id": "cloud",
+            "name": "Cloud Services (AWS, Azure)",
+            "budgeted": 650000,
+            "actual": 580000,
+            "variance": -70000,
+            "explanation": "Optimization initiatives reduced compute costs",
+            "justification": "Infrastructure team implemented auto-scaling and reserved instances",
+            "owner": "Cloud Architect",
+            "lastUpdated": "2025-11-18"
+          },
+          {
+            "id": "licenses",
+            "name": "Software Licenses",
+            "budgeted": 350000,
+            "actual": 310000,
+            "variance": -40000,
+            "explanation": "Enterprise license renegotiation savings",
+            "justification": "Consolidated vendors and secured multi-year discount",
+            "owner": "IT Procurement",
+            "lastUpdated": "2025-11-05"
+          },
+          {
+            "id": "hardware",
+            "name": "Hardware & Equipment",
+            "budgeted": 200000,
+            "actual": 160000,
+            "variance": -40000,
+            "explanation": "Deferred laptop refresh to Q1 2026",
+            "justification": "Extended lifecycle by 6 months based on performance data",
+            "owner": "IT Director",
+            "lastUpdated": "2025-11-12"
+          }
+        ]
+      },
+      {
+        "id": "operations",
+        "name": "Operations & Facilities",
+        "icon": "Building2",
+        "budgeted": 550000,
+        "actual": 475000,
+        "variance": -75000,
+        "variancePercent": -13.6,
+        "status": "on-track",
+        "color": "violet",
+        "lineItems": [
+          {
+            "id": "rent",
+            "name": "Office Rent & Utilities",
+            "budgeted": 350000,
+            "actual": 325000,
+            "variance": -25000,
+            "explanation": "Reduced office footprint with hybrid work model",
+            "justification": "Sublease of 2 floors generating $25K/month revenue",
+            "owner": "Facilities Manager",
+            "lastUpdated": "2025-11-08"
+          },
+          {
+            "id": "supplies",
+            "name": "Office Supplies & Equipment",
+            "budgeted": 120000,
+            "actual": 90000,
+            "variance": -30000,
+            "explanation": "Lower in-office headcount reduced supply needs",
+            "justification": "Average 40% remote work across all departments",
+            "owner": "Office Manager",
+            "lastUpdated": "2025-11-14"
+          },
+          {
+            "id": "travel",
+            "name": "Business Travel",
+            "budgeted": 80000,
+            "actual": 60000,
+            "variance": -20000,
+            "explanation": "Virtual meetings replacing some in-person conferences",
+            "justification": "Travel policy update prioritizing essential trips only",
+            "owner": "Operations Director",
+            "lastUpdated": "2025-11-16"
+          }
+        ]
+      },
+      {
+        "id": "marketing",
+        "name": "Marketing & Customer Acquisition",
+        "icon": "TrendingUp",
+        "budgeted": 300000,
+        "actual": 325000,
+        "variance": 25000,
+        "variancePercent": 8.3,
+        "status": "at-risk",
+        "color": "amber",
+        "lineItems": [
+          {
+            "id": "digital",
+            "name": "Digital Advertising",
+            "budgeted": 180000,
+            "actual": 195000,
+            "variance": 15000,
+            "explanation": "Increased spend to capitalize on Q4 market opportunity",
+            "justification": "ROI tracking shows 3.2x return on incremental investment",
+            "owner": "Marketing Director",
+            "lastUpdated": "2025-11-22"
+          },
+          {
+            "id": "events",
+            "name": "Events & Sponsorships",
+            "budgeted": 80000,
+            "actual": 90000,
+            "variance": 10000,
+            "explanation": "Added last-minute industry conference sponsorship",
+            "justification": "Strategic opportunity to reach 2000+ qualified leads",
+            "owner": "Events Manager",
+            "lastUpdated": "2025-11-19"
+          },
+          {
+            "id": "content",
+            "name": "Content Production",
+            "budgeted": 40000,
+            "actual": 40000,
+            "variance": 0,
+            "explanation": "On budget - video production and design as planned",
+            "justification": "Quarterly content calendar executed per schedule",
+            "owner": "Content Lead",
+            "lastUpdated": "2025-11-17"
+          }
+        ]
+      }
+    ],
+    "notes": "Overall tracking 7.1% under budget. Marketing overage justified by ROI metrics. Technology savings from optimization initiatives."
+  },
+  "_initiative_funding_sectionLayoutType": "full",
+  "_enabled_initiative_funding": true,
+  "_completed_initiative_funding": false,
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "Weekly-MultiOrg-Template-v1",
+  "_template_description": "",
+  "_template_created": "2026-01-05T15:09:33.418Z",
+  "_template_updated": "2026-01-05T15:09:33.418Z"
+}

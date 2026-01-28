@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Edit2, Save, Target, TrendingUp, CheckCircle, AlertCircle, Users, HelpCircle, Settings, Download, Sparkles } from 'lucide-react';
+import { X, Plus, Edit2, Save, Target, TrendingUp, CheckCircle, AlertCircle, Users, HelpCircle, Settings, Download, Sparkles, Maximize2, Minimize2 } from 'lucide-react';
 import ViewGoalModal from './ViewGoalModal';
 import GoalsSettingsModal from './GoalsSettingsModal';
 import AIGoalBuilderWizard from './AIGoalBuilderWizard';
@@ -69,6 +69,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
   const [viewingGoal, setViewingGoal] = useState<Goal | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showAIBuilder, setShowAIBuilder] = useState(false);
+  const [modalWidth, setModalWidth] = useState<75 | 95 | 100>(75);
 
   // Fetch goals from API
   useEffect(() => {
@@ -268,6 +269,9 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
     ? goals 
     : goals.filter(g => g.category === selectedCategory);
 
+  // Get grid columns based on modal width
+  const gridCols = modalWidth === 100 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : modalWidth === 95 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+
   if (!isOpen) return null;
 
   return (
@@ -286,7 +290,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-7xl mx-4 h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          className={`relative ${modalWidth === 75 ? 'w-[75vw]' : modalWidth === 95 ? 'w-[95vw]' : 'w-full'} mx-4 h-[calc(100vh-2rem)] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -333,6 +337,21 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                 title="New Goal"
               >
                 <Plus className="w-4 h-4 text-white" />
+              </button>
+              <button
+                onClick={() => {
+                  if (modalWidth === 75) setModalWidth(95);
+                  else if (modalWidth === 95) setModalWidth(100);
+                  else setModalWidth(75);
+                }}
+                className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
+                title={`Current: ${modalWidth}% - Click to resize`}
+              >
+                {modalWidth === 100 ? (
+                  <Minimize2 className="w-4 h-4 text-white" />
+                ) : (
+                  <Maximize2 className="w-4 h-4 text-white" />
+                )}
               </button>
               <button
                 onClick={onClose}
@@ -391,7 +410,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className={`grid ${gridCols} gap-6`}>
                 {filteredGoals.map((goal, index) => {
                   const category = categories.find(c => c.id === goal.category);
                   return (

@@ -1,0 +1,88 @@
+{
+  "id": "vendor-powtoon-2026-01-06",
+  "title": "PowToon Animation Platform",
+  "_contentTag": "vendor",
+  "_layout": "one-pager",
+  "status": "published",
+  "date": "2026-01-06",
+  "vendorHero": {
+    "vendorName": "PowToon",
+    "vendorLogo": "",
+    "vendorTagline": "Enterprise animation and presentation platform",
+    "activeProjects": 5,
+    "totalBudget": "$89,000",
+    "healthStatus": "On Track"
+  },
+  "activeProjects": {
+    "_assetTitle_activeProjects": "Active Projects",
+    "_renderAs_activeProjects": "nestedCards",
+    "activeProjects": [
+      {
+        "title": "Sales Enablement Videos",
+        "content": "Animated product explainer series for sales team",
+        "metadata": "Status: Active | Users: 45 | Completion: 80%"
+      },
+      {
+        "title": "Internal Communications",
+        "content": "Monthly animated newsletter and announcements",
+        "metadata": "Status: Ongoing | Frequency: Monthly | Engagement: High"
+      },
+      {
+        "title": "Training Modules",
+        "content": "Interactive animated training content",
+        "metadata": "Status: In Progress | Modules: 8/12 | Progress: 67%"
+      },
+      {
+        "title": "Marketing Campaigns",
+        "content": "Social media animation content",
+        "metadata": "Status: Active | Campaign: Q1 2026 | Deliverables: 15"
+      },
+      {
+        "title": "Onboarding Animations",
+        "content": "New hire welcome and orientation videos",
+        "metadata": "Status: Completed | Impact: 95% satisfaction"
+      }
+    ]
+  },
+  "pipeline": {
+    "_assetTitle_pipeline": "Projects in Pipeline",
+    "_renderAs_pipeline": "bulletList",
+    "pipeline": [
+      "Q2 Product Launch Animations",
+      "Customer Testimonial Series",
+      "Employee Recognition Videos",
+      "Compliance Training Updates"
+    ]
+  },
+  "keyContacts": {
+    "_assetTitle_keyContacts": "Key Contacts",
+    "_renderAs_keyContacts": "keyValueList",
+    "keyContacts": {
+      "Account Executive": "David Park (david.park@powtoon.com)",
+      "Customer Success": "Rachel Green (rachel.green@powtoon.com)",
+      "Technical Support": "support@powtoon.com",
+      "Billing": "billing@powtoon.com"
+    }
+  },
+  "budgetOverview": {
+    "_assetTitle_budgetOverview": "Budget Overview",
+    "_renderAs_budgetOverview": "keyValueList",
+    "budgetOverview": {
+      "Annual License": "$89,000",
+      "YTD Spent": "$44,500",
+      "Remaining": "$44,500",
+      "Utilization": "50%",
+      "Renewal Date": "Dec 31, 2026"
+    }
+  },
+  "performanceMetrics": {
+    "_assetTitle_performanceMetrics": "Performance Metrics",
+    "_renderAs_performanceMetrics": "metricCard",
+    "performanceMetrics": {
+      "label": "Platform Adoption",
+      "value": "78%",
+      "trend": "up",
+      "subtitle": "Active users across organization"
+    }
+  }
+}

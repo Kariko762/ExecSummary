@@ -1,0 +1,83 @@
+{
+  "id": "vendor-tiled-2026-01-06",
+  "title": "Tiled Interactive Media",
+  "_contentTag": "vendor",
+  "_layout": "one-pager",
+  "status": "published",
+  "date": "2026-01-06",
+  "vendorHero": {
+    "vendorName": "Tiled",
+    "vendorLogo": "",
+    "vendorTagline": "Interactive microapp platform for engagement",
+    "activeProjects": 4,
+    "totalBudget": "$67,000",
+    "healthStatus": "On Track"
+  },
+  "activeProjects": {
+    "_assetTitle_activeProjects": "Active Projects",
+    "_renderAs_activeProjects": "nestedCards",
+    "activeProjects": [
+      {
+        "title": "Sales Presentations",
+        "content": "Interactive pitch decks with embedded analytics",
+        "metadata": "Status: Live | Active Users: 32 | Engagement: 89%"
+      },
+      {
+        "title": "Product Demos",
+        "content": "Self-guided interactive product walkthroughs",
+        "metadata": "Status: Active | Demos: 8 | Views: 1,245"
+      },
+      {
+        "title": "Client Proposals",
+        "content": "Branded interactive proposal templates",
+        "metadata": "Status: In Use | Templates: 12 | Win Rate: +15%"
+      },
+      {
+        "title": "Quarterly Reports",
+        "content": "Interactive executive dashboards and reports",
+        "metadata": "Status: Ongoing | Frequency: Quarterly | Engagement: High"
+      }
+    ]
+  },
+  "pipeline": {
+    "_assetTitle_pipeline": "Projects in Pipeline",
+    "_renderAs_pipeline": "bulletList",
+    "pipeline": [
+      "Expand to Marketing Department",
+      "Customer Success Playbook Microapps",
+      "Investor Relations Interactive Reports",
+      "Employee Handbook Interactive Guide"
+    ]
+  },
+  "keyContacts": {
+    "_assetTitle_keyContacts": "Key Contacts",
+    "_renderAs_keyContacts": "keyValueList",
+    "keyContacts": {
+      "Account Manager": "Sophie Martinez (sophie@tiled.co)",
+      "Solutions Engineer": "Tom Bradley (tom@tiled.co)",
+      "Support": "support@tiled.co",
+      "Training Lead": "Lisa Wong (lisa@tiled.co)"
+    }
+  },
+  "budgetOverview": {
+    "_assetTitle_budgetOverview": "Budget Overview",
+    "_renderAs_budgetOverview": "keyValueList",
+    "budgetOverview": {
+      "Annual Subscription": "$67,000",
+      "YTD Spent": "$33,500",
+      "Remaining": "$33,500",
+      "Utilization": "50%",
+      "Next Payment": "Jul 1, 2026"
+    }
+  },
+  "performanceMetrics": {
+    "_assetTitle_performanceMetrics": "Performance Metrics",
+    "_renderAs_performanceMetrics": "metricCard",
+    "performanceMetrics": {
+      "label": "Content Engagement Rate",
+      "value": "87%",
+      "trend": "up",
+      "subtitle": "Avg. time on interactive content: 4.2 min"
+    }
+  }
+}

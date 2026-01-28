@@ -191,50 +191,50 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data }) => {
 
   return (
     <div className="w-full" ref={budgetRef}>
-      {/* Header Section */}
-      <div className="bg-gradient-to-br from-fis-eggplant via-fis-raspberry to-fis-eggplant p-5 rounded-t-2xl">
+      {/* Header Section - Streamlined */}
+      <div className="bg-white dark:bg-gray-900 px-5 py-2 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             <div>
-              <h2 className="text-2xl font-roobert-bold text-white mb-1">{data.title}</h2>
-              <p className="text-white/80 text-sm flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
+              <h2 className="text-lg font-roobert-bold text-gray-900 dark:text-white">{data.title}</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
                 {data.period}
               </p>
             </div>
-            <div className="bg-white/20 backdrop-blur-md rounded-xl px-5 py-3 border border-white/30">
-              <div className="text-xs text-white/80 uppercase tracking-wide mb-1">Overall Status</div>
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-1.5 border border-gray-300 dark:border-gray-600">
+              <div className="text-[10px] text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-0.5">Overall Status</div>
               <div className="flex items-center gap-2">
                 {totalVariance < 0 ? (
                   <>
-                    <TrendingDown className="w-5 h-5 text-emerald-300" />
-                    <span className="text-xl font-roobert-bold text-white">{formatPercent(parseFloat(totalVariancePercent))}</span>
-                    <span className="text-sm text-emerald-300">Under Budget</span>
+                    <TrendingDown className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-sm font-roobert-bold text-gray-900 dark:text-white">{formatPercent(parseFloat(totalVariancePercent))}</span>
+                    <span className="text-xs text-emerald-600 dark:text-emerald-400">Under</span>
                   </>
                 ) : (
                   <>
-                    <TrendingUp className="w-5 h-5 text-amber-300" />
-                    <span className="text-xl font-roobert-bold text-white">{formatPercent(parseFloat(totalVariancePercent))}</span>
-                    <span className="text-sm text-amber-300">Over Budget</span>
+                    <TrendingUp className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                    <span className="text-sm font-roobert-bold text-gray-900 dark:text-white">{formatPercent(parseFloat(totalVariancePercent))}</span>
+                    <span className="text-xs text-amber-600 dark:text-amber-400">Over</span>
                   </>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Summary Cards */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/20">
-              <div className="text-xs text-white/70 uppercase tracking-wide mb-1">Total Budgeted</div>
-              <div className="text-xl font-roobert-bold text-white">{formatCurrency(data.totalBudget)}</div>
+          {/* Summary Cards - Compact */}
+          <div className="grid grid-cols-3 gap-2 mb-2">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5">Total Budgeted</div>
+              <div className="text-sm font-roobert-bold text-gray-900 dark:text-white">{formatCurrency(data.totalBudget)}</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/20">
-              <div className="text-xs text-white/70 uppercase tracking-wide mb-1">Actual Spend</div>
-              <div className="text-xl font-roobert-bold text-white">{formatCurrency(data.totalActual)}</div>
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5">Actual Spend</div>
+              <div className="text-sm font-roobert-bold text-gray-900 dark:text-white">{formatCurrency(data.totalActual)}</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/20">
-              <div className="text-xs text-white/70 uppercase tracking-wide mb-1">Variance</div>
-              <div className={`text-xl font-roobert-bold ${totalVariance < 0 ? 'text-emerald-300' : 'text-amber-300'}`}>
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5">Variance</div>
+              <div className={`text-sm font-roobert-bold ${totalVariance < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
                 {formatCurrency(Math.abs(totalVariance))}
               </div>
             </div>
@@ -369,11 +369,25 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data }) => {
 
       {/* Detail Modal */}
       {selectedLineItem && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end justify-end">
+          <div className="bg-white dark:bg-gray-800 shadow-2xl w-[50vw] h-full overflow-hidden">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-fis-eggplant to-fis-raspberry p-6 text-white">
-              <div className="flex items-start justify-between">
+            <div className="relative bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 p-6 text-white overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <pattern id="money-pattern-detail" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                      <text x="10" y="25" fontSize="20" fill="currentColor" opacity="0.3">$</text>
+                      <text x="45" y="25" fontSize="20" fill="currentColor" opacity="0.3">£</text>
+                      <text x="25" y="55" fontSize="20" fill="currentColor" opacity="0.3">€</text>
+                      <circle cx="60" cy="50" r="8" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/>
+                      <circle cx="15" cy="65" r="6" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/>
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#money-pattern-detail)"/>
+                </svg>
+              </div>
+              <div className="relative flex items-start justify-between">
                 <div>
                   <h3 className="text-2xl font-roobert-bold mb-1">{selectedLineItem.item.name}</h3>
                   <p className="text-white/80 text-sm">{selectedLineItem.category.name}</p>
@@ -398,7 +412,7 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data }) => {
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+            <div className="p-6 space-y-6 overflow-y-auto h-[calc(100vh-140px)]">
               {/* Financial Summary */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600">

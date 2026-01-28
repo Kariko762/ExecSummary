@@ -11,7 +11,7 @@ const AssetTestCard: React.FC<{
   title: string;
   assetId: string;
   children: React.ReactNode;
-}> = ({ title, assetId, children }) => {
+}> = ({ title, children }) => {
   const [key, setKey] = useState(0);
 
   const handleReload = () => {

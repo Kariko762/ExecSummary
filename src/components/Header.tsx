@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, ChevronRight, FileText, Lightbulb, Download, Settings, BookOpen, LogOut, Bell, Target, Cpu, CheckSquare, Rocket } from 'lucide-react';
+import { Moon, Sun, Presentation, Search, Menu, X, ChevronDown, ChevronRight, FileText, Lightbulb, Download, Settings, BookOpen, LogOut, Bell, Target, Cpu, CheckSquare, Rocket, DollarSign } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { usePresentation } from '../contexts/PresentationContext';
 import { useState, useEffect, useRef } from 'react';
@@ -301,6 +301,32 @@ export const Header: React.FC<HeaderProps> = ({ onSearch, isAuthenticated = fals
                           <div className="flex-1">
                             <div className="font-roobert-semibold text-sm">Goals</div>
                             <div className="text-xs text-gray-600 dark:text-gray-400">Strategic objectives and targets</div>
+                          </div>
+                        </Link>
+
+                        {/* Budget */}
+                        <Link
+                          to="/budget"
+                          onClick={() => {
+                            setIsNavDropdownOpen(false);
+                            setIsTechnologiesOpen(false);
+                          }}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                            location.pathname === '/budget' 
+                              ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' 
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            location.pathname === '/budget' 
+                              ? 'bg-emerald-200 dark:bg-emerald-800/40' 
+                              : 'bg-gray-200 dark:bg-gray-700'
+                          }`}>
+                            <DollarSign className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-roobert-semibold text-sm">Budget</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">Financial forecasts and actuals</div>
                           </div>
                         </Link>
 

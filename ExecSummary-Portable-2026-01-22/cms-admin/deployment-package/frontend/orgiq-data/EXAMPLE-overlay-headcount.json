@@ -1,0 +1,84 @@
+{
+  "overlayId": "headcount-q4-2025",
+  "overlayName": "Headcount Q4 2025",
+  "description": "Team size and people assigned to each product/business unit",
+  "dataType": "people-metrics",
+  "createdDate": "2025-12-03T10:30:00Z",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  
+  "visualizationConfig": {
+    "title": "Headcount",
+    "icon": "Users",
+    "primaryColor": "blue",
+    "hotspotEnabled": true,
+    "hotspotMetric": "teamSize",
+    "hotspotLabel": "Team Size",
+    "hotspotRanges": [
+      { "min": 0, "max": 10, "color": "#dbeafe", "label": "Small (0-10)" },
+      { "min": 11, "max": 30, "color": "#93c5fd", "label": "Medium (11-30)" },
+      { "min": 31, "max": 100, "color": "#60a5fa", "label": "Large (31-100)" },
+      { "min": 101, "max": 999999, "color": "#3b82f6", "label": "Enterprise (100+)" }
+    ],
+    "aggregateMetrics": [
+      {
+        "id": "totalHeadcount",
+        "label": "Total Headcount",
+        "calculation": "sum",
+        "field": "teamSize",
+        "format": "number"
+      },
+      {
+        "id": "avgTeamSize",
+        "label": "Avg Team Size",
+        "calculation": "average",
+        "field": "teamSize",
+        "format": "number"
+      }
+    ]
+  },
+  
+  "nodeMetrics": [
+    {
+      "nodeId": "root",
+      "teamSize": 250,
+      "contractors": 15,
+      "openPositions": 8
+    },
+    {
+      "nodeId": "banking",
+      "teamSize": 100,
+      "contractors": 5,
+      "openPositions": 3
+    },
+    {
+      "nodeId": "capital-markets",
+      "teamSize": 150,
+      "contractors": 10,
+      "openPositions": 5
+    },
+    {
+      "nodeId": "risk",
+      "teamSize": 45,
+      "contractors": 3,
+      "openPositions": 2
+    },
+    {
+      "nodeId": "lending",
+      "teamSize": 35,
+      "contractors": 2,
+      "openPositions": 1
+    },
+    {
+      "nodeId": "wealth-retirement",
+      "teamSize": 70,
+      "contractors": 5,
+      "openPositions": 2
+    },
+    {
+      "nodeId": "ctrm",
+      "teamSize": 12,
+      "contractors": 1,
+      "openPositions": 1
+    }
+  ]
+}

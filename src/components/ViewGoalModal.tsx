@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Target, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, Maximize2, Minimize2, ChevronDown, ChevronUp, Rocket, CheckSquare, FileText, ExternalLink } from 'lucide-react';
+import { X, Target, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, Maximize2, Minimize2, ChevronDown, ChevronUp, Rocket, CheckSquare, FileText } from 'lucide-react';
 import { domToPng } from 'modern-screenshot';
 
 interface Goal {
   id: string;
   name: string;
+  title?: string;
   shortName: string;
   category: string;
   owner: string;
@@ -46,7 +47,7 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
   
   const modalContentRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [modalWidth, setModalWidth] = useState<75 | 95 | 100>(75);
   
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -301,18 +302,14 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
         className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999]"
         onClick={onClose}
       >
-        <div className={isFullscreen ? "fixed inset-2.5" : "w-full h-full flex items-center justify-center p-4"}>
+        <div className="w-full h-full flex items-center justify-center p-4">
           <motion.div
             ref={modalContentRef}
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ type: 'spring', duration: 0.3 }}
-            className={`bg-white dark:bg-gray-900 shadow-2xl overflow-hidden flex flex-col ${
-              isFullscreen 
-                ? 'w-full h-full rounded-xl' 
-                : 'rounded-xl max-w-5xl w-full max-h-[90vh]'
-            }`}
+            className={`bg-white dark:bg-gray-900 shadow-2xl overflow-hidden flex flex-col rounded-xl ${modalWidth === 75 ? 'w-[75vw]' : modalWidth === 95 ? 'w-[95vw]' : 'w-full'} h-[calc(100vh-2rem)]`}
             onClick={(e) => e.stopPropagation()}
           >
           {/* Header */}
@@ -362,13 +359,17 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
                   )}
                 </button>
                 
-                {/* Fullscreen Toggle */}
+                {/* Width Toggle - Cycles 75% -> 95% -> 100% */}
                 <button
-                  onClick={() => setIsFullscreen(!isFullscreen)}
+                  onClick={() => {
+                    if (modalWidth === 75) setModalWidth(95);
+                    else if (modalWidth === 95) setModalWidth(100);
+                    else setModalWidth(75);
+                  }}
                   className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                  title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+                  title={`Current: ${modalWidth}% - Click to resize`}
                 >
-                  {isFullscreen ? (
+                  {modalWidth === 100 ? (
                     <Minimize2 className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                   ) : (
                     <Maximize2 className="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -930,8 +931,8 @@ const ViewGoalModal: React.FC<ViewGoalModalProps> = ({ goal, onClose }) => {
             </div>
           </div>
         </motion.div>
-      </div>
-    </motion.div>
+        </div>
+      </motion.div>
     </AnimatePresence>
   );
 };

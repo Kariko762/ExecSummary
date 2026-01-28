@@ -30,20 +30,16 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
     setIsRunning(true);
     
     const testEndpoints: APITest[] = [
-      // File System Tests
-      { name: 'Summaries Files', endpoint: '/summaries', method: 'GET', status: 'pending', section: 'files' },
-      { name: 'Executive IQ Files', endpoint: '/executive-iq', method: 'GET', status: 'pending', section: 'files' },
-      { name: 'Organizations Files', endpoint: '/organizations', method: 'GET', status: 'pending', section: 'files' },
-      { name: 'Performance Files', endpoint: '/performance', method: 'GET', status: 'pending', section: 'files' },
+      // Core System Tests
+      { name: 'Goals API', endpoint: '/goals', method: 'GET', status: 'pending', section: 'api' },
+      { name: 'Initiatives API', endpoint: '/initiatives', method: 'GET', status: 'pending', section: 'api' },
+      { name: 'Tasks API', endpoint: '/tasks', method: 'GET', status: 'pending', section: 'api' },
+      { name: 'Timeline Notes API', endpoint: '/timeline-notes', method: 'GET', status: 'pending', section: 'api' },
+      { name: 'Change Control API', endpoint: '/change-control', method: 'GET', status: 'pending', section: 'api' },
       
-      // API Health Tests
-      { name: 'Backend Health Check', endpoint: '/health', method: 'GET', status: 'pending', section: 'api' },
-      
-      // API Endpoint Tests
-      { name: 'GET Summaries', endpoint: '/summaries', method: 'GET', status: 'pending', section: 'api' },
-      { name: 'GET Executive IQ', endpoint: '/executive-iq', method: 'GET', status: 'pending', section: 'api' },
-      { name: 'GET Organizations', endpoint: '/organizations', method: 'GET', status: 'pending', section: 'api' },
-      { name: 'GET Performance', endpoint: '/performance', method: 'GET', status: 'pending', section: 'api' },
+      // Content & Templates
+      { name: 'Content API', endpoint: '/content', method: 'GET', status: 'pending', section: 'files' },
+      { name: 'Templates API', endpoint: '/templates', method: 'GET', status: 'pending', section: 'files' },
     ];
     
     setTests(testEndpoints);
@@ -94,25 +90,25 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
   }, [isOpen]);
 
   const renderTestCard = (test: APITest) => (
-    <div className="flex items-start gap-3">
+    <div className="flex items-start gap-2">
       {/* Icon */}
       <div className="flex-shrink-0 mt-0.5">
         {test.status === 'testing' ? (
-          <Loader2 className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin" />
+          <Loader2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 animate-spin" />
         ) : test.status === 'success' ? (
-          <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+          <CheckCircle className="w-3.5 h-3.5 text-green-600 dark:text-green-400" />
         ) : test.status === 'error' ? (
-          <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+          <XCircle className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
         ) : (
-          <div className="w-5 h-5 rounded-full bg-gray-300 dark:bg-gray-600" />
+          <div className="w-3.5 h-3.5 rounded-full bg-gray-300 dark:bg-gray-600" />
         )}
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between mb-0.5">
           <div className="flex-1 min-w-0">
-            <h3 className={`font-roobert-semibold text-base ${
+            <h3 className={`font-roobert-semibold text-[11px] ${
               test.status === 'testing'
                 ? 'text-blue-900 dark:text-blue-300'
                 : test.status === 'success'
@@ -123,14 +119,14 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
             }`}>
               {test.name}
             </h3>
-            <p className="text-xs text-gray-600 dark:text-gray-400 font-mono truncate">
+            <p className="text-[9px] text-gray-600 dark:text-gray-400 font-mono truncate">
               {test.method} {test.endpoint}
             </p>
           </div>
           
           {test.responseTime && (
             <div className="text-right flex-shrink-0 ml-2">
-              <span className={`text-xs font-roobert-medium ${
+              <span className={`text-[9px] font-roobert-medium ${
                 test.responseTime < 100 ? 'text-green-600' :
                 test.responseTime < 500 ? 'text-yellow-600' :
                 'text-red-600'
@@ -143,8 +139,8 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
 
         {/* Error Message */}
         {test.error && (
-          <div className="mt-2 p-2 rounded-lg bg-red-100 dark:bg-red-900/30">
-            <p className="text-xs text-red-700 dark:text-red-400 font-mono">
+          <div className="mt-1 p-1.5 rounded bg-red-100 dark:bg-red-900/30">
+            <p className="text-[9px] text-red-700 dark:text-red-400 font-mono">
               {test.error}
             </p>
           </div>
@@ -152,43 +148,33 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
 
         {/* Success Data Summary */}
         {test.status === 'success' && test.data && (
-          <div className="mt-2 space-y-1">
+          <div className="mt-1">
             {Array.isArray(test.data) ? (
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-1 text-[10px]">
                 <span className="text-gray-600 dark:text-gray-400">Response:</span>
                 <span className="font-roobert-semibold text-green-700 dark:text-green-400">
-                  {test.data.length} items retrieved
+                  {test.data.length} items
                 </span>
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center gap-1 text-[10px]">
                 <span className="text-gray-600 dark:text-gray-400">Status:</span>
                 <span className="font-roobert-semibold text-green-700 dark:text-green-400">
                   {test.data.status || test.data.message || 'OK'}
                 </span>
               </div>
             )}
-            
-            {/* Show sample data */}
-            <details className="mt-2">
-              <summary className="text-xs text-gray-500 dark:text-gray-400 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300">
-                View response data
-              </summary>
-              <pre className="mt-2 text-xs bg-gray-900 dark:bg-black text-green-400 p-3 rounded-lg overflow-x-auto max-h-40 overflow-y-auto">
-                {JSON.stringify(test.data, null, 2)}
-              </pre>
-            </details>
           </div>
         )}
       </div>
 
       {/* Endpoint Icon */}
       <div className="flex-shrink-0">
-        {test.endpoint.includes('summaries') && <FileText className="w-5 h-5 text-gray-400" />}
-        {test.endpoint.includes('executive-iq') && <Lightbulb className="w-5 h-5 text-gray-400" />}
-        {test.endpoint.includes('organizations') && <Building2 className="w-5 h-5 text-gray-400" />}
-        {test.endpoint.includes('performance') && <TrendingUp className="w-5 h-5 text-gray-400" />}
-        {test.endpoint.includes('health') && <Database className="w-5 h-5 text-gray-400" />}
+        {test.endpoint.includes('goal') && <FileText className="w-3 h-3 text-gray-400" />}
+        {test.endpoint.includes('initiative') && <Lightbulb className="w-3 h-3 text-gray-400" />}
+        {test.endpoint.includes('task') && <Building2 className="w-3 h-3 text-gray-400" />}
+        {test.endpoint.includes('note') && <TrendingUp className="w-3 h-3 text-gray-400" />}
+        {test.endpoint.includes('change-control') && <Database className="w-3 h-3 text-gray-400" />}
       </div>
     </div>
   );
@@ -243,14 +229,14 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
               <div className="flex items-center gap-2 mb-3 pb-2 border-b-2 border-fis-eggplant/20">
                 <FolderOpen className="w-5 h-5 text-fis-eggplant dark:text-fis-raspberry" />
                 <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
-                  File System Health
+                  Content & Templates
                 </h3>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Can we access and retrieve data files?
+                  File-based content storage
                 </span>
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {tests.filter(t => t.section === 'files').map((test, index) => (
                   <motion.div
                     key={`files-${index}`}
@@ -258,7 +244,7 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className={`rounded-lg p-3 border-2 transition-all ${
+                    className={`rounded-lg p-2 border transition-all ${
                       test.status === 'testing'
                         ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-400 dark:border-blue-600'
                         : test.status === 'success'
@@ -279,14 +265,14 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
               <div className="flex items-center gap-2 mb-3 pb-2 border-b-2 border-fis-eggplant/20">
                 <Server className="w-5 h-5 text-fis-eggplant dark:text-fis-raspberry" />
                 <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
-                  API Endpoints
+                  Core System APIs
                 </h3>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Is the backend portal responding correctly?
+                  Goals, initiatives, tasks, notes & change control
                 </span>
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {tests.filter(t => t.section === 'api').map((test, index) => (
                   <motion.div
                     key={`api-${index}`}
@@ -294,7 +280,7 @@ export default function APIDashboardModal({ isOpen, onClose }: APIDashboardModal
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: (tests.filter(t => t.section === 'files').length + index) * 0.05 }}
-                    className={`rounded-lg p-3 border-2 transition-all ${
+                    className={`rounded-lg p-2 border transition-all ${
                       test.status === 'testing'
                         ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-400 dark:border-blue-600'
                         : test.status === 'success'

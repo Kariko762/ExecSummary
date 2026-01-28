@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { domToPng } from 'modern-screenshot';
 import { 
   Maximize2, Minimize2, Download, Loader2, 
-  Target, Rocket, CheckSquare, FileText, BarChart3, 
+  Target, Rocket, CheckSquare, BarChart3, 
   Sparkles, Eye, TrendingUp, Users, Zap, Shield,
   Brain, Clock, Network, ArrowRight, ChevronDown
 } from 'lucide-react';
@@ -11,6 +11,7 @@ import {
 export default function PlatformArchitectureOverview() {
   const [activeTab, setActiveTab] = useState<'platform' | 'ai'>('platform');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [modalWidth, setModalWidth] = useState<75 | 95>(75); // 75vw or 95vw
   const [isExporting, setIsExporting] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -85,12 +86,12 @@ export default function PlatformArchitectureOverview() {
       icon: <CheckSquare className="w-6 h-6" />,
       color: 'from-green-500 to-teal-500',
       textColor: 'text-green-600 dark:text-green-400',
-      description: 'Granular work tracking with institutional knowledge capture for continuous improvement',
+      description: 'Granular work tracking with knowledge capture to reduce rep ramp time and preserve sales continuity',
       capabilities: [
         '**Ensure** full traceability from strategic goals through initiatives to individual deliverables',
         '**Optimize** resource deployment with dynamic filtering by priority, owner, and business unit',
         '**Monitor** execution velocity with real-time progress tracking and milestone alerts',
-        '**Preserve** institutional knowledge—decisions, context, and lessons learned—for team continuity'
+        '**Preserve** sales continuity—capture decisions, context, and winning strategies to accelerate new rep onboarding'
       ],
       aiFeatures: [
         '**Smart Task Breakdown** - AI suggests subtasks and dependencies from high-level description',
@@ -105,18 +106,18 @@ export default function PlatformArchitectureOverview() {
       icon: <BarChart3 className="w-6 h-6" />,
       color: 'from-orange-500 to-red-500',
       textColor: 'text-orange-600 dark:text-orange-400',
-      description: 'Board-ready insights synthesized from real-time platform data for strategic decision-making',
+      description: 'Board-ready insights with AI-generated BLUF (Bottom Line Up Front) for rapid strategic decision-making',
       capabilities: [
-        '**Synthesize** cross-functional metrics into actionable executive narratives with trend analysis',
+        '**Synthesize** cross-functional metrics into BLUF executive narratives with automated trend analysis',
         '**Identify** performance variances and emerging opportunities through quarter-over-quarter comparison',
         '**Communicate** strategic progress with presentation-ready visualizations and KPI dashboards',
         '**Enable** informed decision-making with PDF/PNG exports optimized for board and leadership reviews'
       ],
       aiFeatures: [
-        '**Executive Synthesis** - AI generates narrative summaries from platform data',
-        '**Highlight Extraction** - Identifies key wins and achievements automatically',
-        '**Risk Rollup** - Surfaces critical risks from initiative and task levels',
-        '**Insight Generation** - Provides data-driven recommendations for next quarter'
+        '**AI-Generated BLUF (Bottom Line Up Front)** - Automatically creates executive summary narratives from platform data',
+        '**Highlight Extraction** - Identifies key wins and achievements automatically for leadership visibility',
+        '**Risk Rollup** - Surfaces critical risks from initiative and task levels into executive view',
+        '**Insight Generation** - Provides data-driven recommendations for next quarter strategic priorities'
       ]
     }
   ];
@@ -127,9 +128,9 @@ export default function PlatformArchitectureOverview() {
       title: 'Competitive Intelligence & Transparency',
       description: 'Real-time performance visibility enables faster response to market dynamics and competitive threats',
       metrics: [
-        '**Accelerate** decision velocity with instant access to cross-functional performance data',
-        '**Eliminate** reporting delays—leadership sees live dashboards, not stale weekly reports',
-        '**Break** organizational silos to enable coordinated responses to market opportunities'
+        '**Accelerate decision velocity** with instant access to cross-functional performance data',
+        '**Eliminate reporting delays**—leadership sees live dashboards, not stale weekly reports',
+        '**Break organizational silos** to enable coordinated responses to market opportunities'
       ]
     },
     {
@@ -137,9 +138,9 @@ export default function PlatformArchitectureOverview() {
       title: 'AI-Driven Operational Efficiency',
       description: 'Harness emerging AI technologies to redirect leadership time from reporting to strategic action',
       metrics: [
-        '**Reclaim** 17+ hours weekly per executive through AI-generated summaries and insights',
-        '**Scale** organizational bandwidth—AI provides proactive risk alerts and recommendations',
-        '**Reduce** cost-to-serve for executive reporting while improving quality and timeliness'
+        '**Reclaim 17+ hours weekly** per executive through AI-generated summaries and insights',
+        '**Scale organizational bandwidth**—AI provides proactive risk alerts and recommendations',
+        '**Reduce cost-to-serve** for executive reporting while improving quality and timeliness'
       ]
     },
     {
@@ -147,9 +148,9 @@ export default function PlatformArchitectureOverview() {
       title: 'Predictive Business Intelligence',
       description: 'Surface revenue-impacting patterns and resource constraints before they affect pipeline performance',
       metrics: [
-        '**Forecast** initiative delivery risk using AI-driven predictive analytics',
-        '**Prevent** resource bottlenecks with early warning signals on capacity constraints',
-        '**Correlate** strategic investments to business outcomes—prove ROI on every dollar spent'
+        '**Forecast initiative delivery risk** using AI-driven predictive analytics',
+        '**Prevent resource bottlenecks** with early warning signals on capacity constraints',
+        '**Correlate strategic investments to business outcomes**—prove ROI on every dollar spent'
       ]
     },
     {
@@ -157,9 +158,9 @@ export default function PlatformArchitectureOverview() {
       title: 'Enterprise-Wide Strategic Alignment',
       description: 'Unified platform ensures Sales, PreSales, and Commercial teams operate from single source of truth',
       metrics: [
-        '**Eliminate** version control chaos—one platform, one truth, zero conflicting reports',
-        '**Enable** role-specific views—CRO sees revenue metrics, teams see execution tasks',
-        '**Drive** accountability with transparent ownership at every organizational level'
+        '**Eliminate version control chaos**—one platform, one truth, zero conflicting reports',
+        '**Enable role-specific views**—CRO sees revenue metrics, teams see execution tasks',
+        '**Drive accountability** with transparent ownership at every organizational level'
       ]
     }
   ];
@@ -209,7 +210,13 @@ export default function PlatformArchitectureOverview() {
     <div className="min-h-screen flex items-start justify-center bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant py-8">
       <div 
         ref={contentRef}
-        className={`${isFullscreen ? 'w-full' : 'w-[75vw]'} transition-all duration-300 bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden`}
+        className={`${
+          isFullscreen 
+            ? 'w-full rounded-none' 
+            : modalWidth === 95
+              ? 'w-[95vw] rounded-xl'
+              : 'w-[75vw] rounded-xl'
+        } transition-all duration-300 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden`}
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-fis-navy to-fis-eggplant dark:from-gray-950 dark:to-purple-950">
@@ -237,9 +244,18 @@ export default function PlatformArchitectureOverview() {
                   )}
                 </button>
                 <button
-                  onClick={() => setIsFullscreen(!isFullscreen)}
+                  onClick={() => {
+                    if (isFullscreen) {
+                      setIsFullscreen(false);
+                      setModalWidth(75);
+                    } else if (modalWidth === 75) {
+                      setModalWidth(95);
+                    } else {
+                      setIsFullscreen(true);
+                    }
+                  }}
                   className="p-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg hover:bg-white/20 transition-all duration-200"
-                  title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+                  title={isFullscreen ? 'Exit Fullscreen (75%)' : modalWidth === 75 ? 'Wider View (95%)' : 'Fullscreen'}
                 >
                   {isFullscreen ? (
                     <Minimize2 className="w-5 h-5 text-white" />
@@ -274,6 +290,8 @@ export default function PlatformArchitectureOverview() {
                 AI Integration & Benefits
               </button>
             </div>
+            {/* Horizontal line under tabs */}
+            <div className="w-full border-t border-white/20 -mt-[1px]"></div>
           </div>
         </div>
 
@@ -319,6 +337,28 @@ export default function PlatformArchitectureOverview() {
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Built to leverage emerging AI at every layer—reduce effort, accelerate insight
                     </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Platform Flow Visualization */}
+              <div className="mb-12">
+                <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white mb-6">
+                  Platform Flow Visualization
+                </h2>
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-8 border-2 border-gray-200 dark:border-gray-700 shadow-lg">
+                  <div className="flex flex-col items-center gap-6">
+                    <p className="text-center text-gray-600 dark:text-gray-400 font-roobert-light max-w-3xl">
+                      The platform architecture creates a continuous intelligence loop: Strategic Goals drive Initiatives, 
+                      which generate Tasks & Notes, all feeding the Executive AI Engine to produce board-ready Executive Summaries.
+                    </p>
+                    <div className="w-full max-w-4xl">
+                      <img 
+                        src="/platform-flow-with-legend.png" 
+                        alt="Platform Flow Diagram showing Goals, Initiatives, Tasks & Notes feeding into Executive AI Engine to produce Executive Summaries"
+                        className="w-full h-auto rounded-lg shadow-xl"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -595,7 +635,7 @@ export default function PlatformArchitectureOverview() {
                       Cross-Functional Transparency
                     </p>
                     <p className="text-xs text-gray-600 dark:text-gray-400">
-                      Sales, PreSales, and Commercial Office aligned on real-time performance data
+                      Instills confidence in Demo Services performance—Sales, PreSales, and Commercial Office unified on real-time data
                     </p>
                   </div>
                   <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-blue-200 dark:border-blue-700">

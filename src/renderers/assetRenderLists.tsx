@@ -13,6 +13,7 @@ export interface ListPatternProps {
   data: any;
   onChange?: (value: any) => void;
   mode: 'edit' | 'display';
+  contentTag?: string;
 }
 
 // ==========================================
@@ -82,8 +83,9 @@ export const HighlightsListPattern: React.FC<ListPatternProps> = ({ data, onChan
 // BULLET LIST PATTERN
 // ==========================================
 
-export const BulletListPattern: React.FC<ListPatternProps> = ({ data, onChange, mode }) => {
+export const BulletListPattern: React.FC<ListPatternProps> = ({ data, onChange, mode, contentTag }) => {
   const items = Array.isArray(data) ? data : [];
+  const isPerformance = contentTag === 'performance';
   
   if (mode === 'edit') {
     const addItem = () => {
@@ -121,6 +123,16 @@ export const BulletListPattern: React.FC<ListPatternProps> = ({ data, onChange, 
           <Plus size={16} /> Add Item
         </button>
       </div>
+    );
+  }
+  
+  if (isPerformance) {
+    return (
+      <ul className="bullet-list" style={{ paddingLeft: '30px', fontSize: '16px', color: 'white' }}>
+        {items.map((item, index) => (
+          <li key={index} style={{ marginBottom: '8px', color: 'white' }}>{renderWithExpressions(item)}</li>
+        ))}
+      </ul>
     );
   }
   

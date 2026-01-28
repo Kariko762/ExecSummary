@@ -1,0 +1,223 @@
+{
+  "id": "template-summary-v2-charts",
+  "quarter": "Month Day",
+  "year": 2025,
+  "date": "2025-01-01",
+  "title": "Your Organization Name - Weekly Executive Update",
+  
+  "highlights": [
+    "Example: Key achievement or milestone accomplished this week",
+    "Example: Important project completion or major progress update"
+  ],
+  "_highlights_type": "listNoTitle",
+  "_enabled_highlights": true,
+  "_completed_highlights": false,
+  
+  "keyMetrics": [
+    {
+      "label": "Revenue",
+      "value": "0",
+      "unit": "$"
+    },
+    {
+      "label": "Growth",
+      "value": "0",
+      "unit": "%"
+    }
+  ],
+  "_keyMetrics_type": "nestedCards",
+  "_keyMetrics_fields": {
+    "label": {
+      "type": "text",
+      "label": "Metric Name"
+    },
+    "value": {
+      "type": "text",
+      "label": "Value"
+    },
+    "unit": {
+      "type": "text",
+      "label": "Unit"
+    }
+  },
+  "_enabled_keyMetrics": true,
+  "_completed_keyMetrics": false,
+  
+  "topAssets": [
+    {
+      "name": "Example Product Name",
+      "count": 0,
+      "category": "Product Category"
+    }
+  ],
+  "_topAssets_type": "nestedCards",
+  "_topAssets_fields": {
+    "name": {
+      "type": "text",
+      "label": "Asset Name"
+    },
+    "count": {
+      "type": "number",
+      "label": "Usage Count"
+    },
+    "category": {
+      "type": "text",
+      "label": "Category"
+    }
+  },
+  "_enabled_topAssets": true,
+  "_completed_topAssets": false,
+  
+  "weeklyFocus": [
+    "Example: Priority task or project for the upcoming week",
+    "Example: Critical meeting or presentation to prepare for"
+  ],
+  "_weeklyFocus_type": "listNoTitle",
+  "_enabled_weeklyFocus": true,
+  "_completed_weeklyFocus": false,
+  
+  "departments": [
+    {
+      "name": "Example Department 1",
+      "performance": 0,
+      "budget": 0,
+      "headcount": 0,
+      "achievements": [
+        "Example: Key accomplishment or deliverable completed this period"
+      ]
+    }
+  ],
+  "_departments_type": "nestedCards",
+  "_departments_fields": {
+    "name": {
+      "type": "text",
+      "label": "Department Name"
+    },
+    "performance": {
+      "type": "number",
+      "label": "Performance Score"
+    },
+    "budget": {
+      "type": "number",
+      "label": "Budget"
+    },
+    "headcount": {
+      "type": "number",
+      "label": "Headcount"
+    },
+    "achievements": {
+      "type": "list",
+      "label": "Achievements"
+    }
+  },
+  "_enabled_departments": true,
+  "_completed_departments": false,
+  
+  "initiatives": [
+    {
+      "name": "Example Strategic Initiative 1",
+      "status": "on-track",
+      "progress": 0,
+      "owner": "Department/Team Name",
+      "impact": "high"
+    }
+  ],
+  "_initiatives_type": "nestedCards",
+  "_initiatives_fields": {
+    "name": {
+      "type": "text",
+      "label": "Initiative Name"
+    },
+    "status": {
+      "type": "text",
+      "label": "Status"
+    },
+    "progress": {
+      "type": "number",
+      "label": "Progress %"
+    },
+    "owner": {
+      "type": "text",
+      "label": "Owner"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact Level"
+    }
+  },
+  "_enabled_initiatives": true,
+  "_completed_initiatives": false,
+  
+  "risks": [
+    {
+      "description": "Example: Describe the potential risk and its context",
+      "severity": "medium",
+      "mitigation": "Example: Explain the strategy or actions to mitigate this risk"
+    }
+  ],
+  "_risks_type": "nestedCards",
+  "_risks_fields": {
+    "description": {
+      "type": "textarea",
+      "label": "Risk Description"
+    },
+    "severity": {
+      "type": "text",
+      "label": "Severity"
+    },
+    "mitigation": {
+      "type": "textarea",
+      "label": "Mitigation Strategy"
+    }
+  },
+  "_enabled_risks": true,
+  "_completed_risks": false,
+  
+  "issuesAndBlockers": [
+    {
+      "title": "Example Issue Title",
+      "description": "Brief description of the issue or blocker",
+      "impact": "medium",
+      "action": "Describe the action being taken",
+      "status": "in-progress"
+    }
+  ],
+  "_issuesAndBlockers_type": "nestedCards",
+  "_issuesAndBlockers_fields": {
+    "title": {
+      "type": "text",
+      "label": "Issue Title"
+    },
+    "description": {
+      "type": "textarea",
+      "label": "Description"
+    },
+    "impact": {
+      "type": "text",
+      "label": "Impact"
+    },
+    "action": {
+      "type": "textarea",
+      "label": "Action Plan"
+    },
+    "status": {
+      "type": "text",
+      "label": "Status"
+    }
+  },
+  "_enabled_issuesAndBlockers": true,
+  "_completed_issuesAndBlockers": false,
+  
+  "outlook": "Example: Provide a brief 2-3 sentence overview of the week ahead.",
+  "_outlook_type": "textarea",
+  "_enabled_outlook": true,
+  "_completed_outlook": false,
+  
+  "status": "draft",
+  "protectionEnabled": false,
+  
+  "_template_name": "Executive Summary Template V2 with Charts",
+  "_template_description": "Comprehensive executive summary template with chart visualizations for budget, revenue, growth, and project completion",
+  "_template_created": "2025-11-08T08:00:00.000Z",
+  "_template_updated": "2025-11-08T08:00:00.000Z"
+}

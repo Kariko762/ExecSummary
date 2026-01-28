@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Edit2, Trash2, Save, Rocket, TrendingUp, Target, AlertTriangle, DollarSign, Users, Link, Shield, CheckCircle, Clock, Package, ChevronRight, Download, Settings, Sparkles } from 'lucide-react';
+import { X, Plus, Edit2, Trash2, Save, Rocket, TrendingUp, Target, AlertTriangle, DollarSign, Users, Link, Shield, CheckCircle, Clock, Package, ChevronRight, Download, Settings, Sparkles, Maximize2, Minimize2 } from 'lucide-react';
 import InitiativeEditorModal from './InitiativeEditorModal';
 import ViewInitiativeModal from './ViewInitiativeModal';
 import AIInitiativeBuilderWizard from './AIInitiativeBuilderWizard';
@@ -71,6 +71,8 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
   const [linkedGoals, setLinkedGoals] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'budget' | 'dependencies' | 'resources' | 'risks' | 'governance'>('overview');
   const [showAIBuilder, setShowAIBuilder] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [modalWidth, setModalWidth] = useState<75 | 95>(75);
 
   useEffect(() => {
     if (isOpen) {
@@ -291,7 +293,13 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-7xl mx-4 h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          className={`relative bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
+            isFullscreen 
+              ? 'w-full h-full rounded-none' 
+              : modalWidth === 95
+                ? 'w-[95vw] h-[90vh] rounded-2xl mx-4'
+                : 'w-[75vw] h-[90vh] rounded-2xl mx-4'
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Navy/Raspberry Gradient Header - IDENTICAL TO FRONTEND */}
@@ -378,6 +386,22 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                     <Download className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-white" />
                   </button>
                   <button
+                    onClick={() => {
+                      if (isFullscreen) {
+                        setIsFullscreen(false);
+                        setModalWidth(75);
+                      } else if (modalWidth === 75) {
+                        setModalWidth(95);
+                      } else {
+                        setIsFullscreen(true);
+                      }
+                    }}
+                    className="p-1.5 2xl:p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
+                    title={isFullscreen ? 'Exit Fullscreen (75%)' : modalWidth === 75 ? 'Wider View (95%)' : 'Fullscreen'}
+                  >
+                    {isFullscreen ? <Minimize2 className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-white" /> : <Maximize2 className="w-3.5 h-3.5 2xl:w-4 2xl:h-4 text-white" />}
+                  </button>
+                  <button
                     onClick={handleCreateInitiative}
                     className="p-1.5 2xl:p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-all"
                     title="New Initiative"
@@ -397,61 +421,37 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="hidden 2xl:grid grid-cols-1 md:grid-cols-3 gap-2 2xl:gap-3"
+                className="hidden 2xl:grid grid-cols-1 md:grid-cols-5 gap-2 2xl:gap-3"
               >
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 2xl:p-3 border border-white/20">
-                  <div className="text-lg 2xl:text-xl font-roobert-bold">{initiatives.length}</div>
-                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium">Total Initiatives</div>
+                  <div className="text-lg 2xl:text-xl font-roobert-bold text-orange-300">
+                    {initiatives.filter(i => i.priority === 'high' || i.priority === 'critical').length}
+                  </div>
+                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium">High Priority</div>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 2xl:p-3 border border-white/20">
-                  <div className="text-lg 2xl:text-lg 2xl:text-xl font-roobert-bold">
+                  <div className="text-lg 2xl:text-xl font-roobert-bold text-red-300">
+                    {initiatives.filter(i => i.status === 'blocked').length}
+                  </div>
+                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium">Blocked</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 2xl:p-3 border border-white/20">
+                  <div className="text-lg 2xl:text-xl font-roobert-bold text-yellow-300">
+                    {initiatives.filter(i => i.status === 'at-risk' || i.status === 'on-hold').length}
+                  </div>
+                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium">Delayed</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 2xl:p-3 border border-white/20">
+                  <div className="text-lg 2xl:text-xl font-roobert-bold text-blue-300">
                     {initiatives.filter(i => i.status === 'in-progress').length}
                   </div>
                   <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium">In Progress</div>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 2xl:p-3 border border-white/20">
-                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium mb-1 2xl:mb-2">Status Overview</div>
-                  <div className="h-5 2xl:h-6 bg-white/10 rounded-full overflow-hidden flex mb-1 2xl:mb-2">
-                    {initiatives.filter(i => i.status === 'completed' || i.status === 'complete').length > 0 && (
-                      <div 
-                        className="bg-green-500 hover:bg-green-600 transition-colors" 
-                        style={{ width: `${(initiatives.filter(i => i.status === 'completed' || i.status === 'complete').length / initiatives.length) * 100}%` }}
-                        title={`Completed: ${initiatives.filter(i => i.status === 'completed' || i.status === 'complete').length}`}
-                      />
-                    )}
-                    {initiatives.filter(i => i.status === 'in-progress').length > 0 && (
-                      <div 
-                        className="bg-blue-500 hover:bg-blue-600 transition-colors" 
-                        style={{ width: `${(initiatives.filter(i => i.status === 'in-progress').length / initiatives.length) * 100}%` }}
-                        title={`In Progress: ${initiatives.filter(i => i.status === 'in-progress').length}`}
-                      />
-                    )}
-                    {initiatives.filter(i => i.status === 'at-risk').length > 0 && (
-                      <div 
-                        className="bg-orange-500 hover:bg-orange-600 transition-colors" 
-                        style={{ width: `${(initiatives.filter(i => i.status === 'at-risk').length / initiatives.length) * 100}%` }}
-                        title={`At Risk: ${initiatives.filter(i => i.status === 'at-risk').length}`}
-                      />
-                    )}
-                    {initiatives.filter(i => i.status === 'on-hold').length > 0 && (
-                      <div 
-                        className="bg-yellow-500 hover:bg-yellow-600 transition-colors" 
-                        style={{ width: `${(initiatives.filter(i => i.status === 'on-hold').length / initiatives.length) * 100}%` }}
-                        title={`On Hold: ${initiatives.filter(i => i.status === 'on-hold').length}`}
-                      />
-                    )}
-                    {initiatives.filter(i => i.status === 'planning' || i.status === 'not-started').length > 0 && (
-                      <div 
-                        className="bg-gray-500 hover:bg-gray-600 transition-colors" 
-                        style={{ width: `${(initiatives.filter(i => i.status === 'planning' || i.status === 'not-started').length / initiatives.length) * 100}%` }}
-                        title={`Planning: ${initiatives.filter(i => i.status === 'planning' || i.status === 'not-started').length}`}
-                      />
-                    )}
+                  <div className="text-lg 2xl:text-xl font-roobert-bold text-green-300">
+                    {initiatives.filter(i => i.status === 'completed' || i.status === 'complete').length}
                   </div>
-                  <div className="flex items-center justify-between text-[10px] text-white/70">
-                    <span>{initiatives.filter(i => i.status === 'completed' || i.status === 'complete').length} Done</span>
-                    <span>{initiatives.filter(i => i.status === 'at-risk').length} At Risk</span>
-                  </div>
+                  <div className="text-white/80 text-[10px] 2xl:text-[11px] font-roobert-medium">Complete</div>
                 </div>
               </motion.div>
             </div>
@@ -477,7 +477,9 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${
+                isFullscreen || modalWidth === 95 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
+              }`}>
                 {initiatives.map((initiative, index) => (
                   <motion.div
                     key={initiative.id}

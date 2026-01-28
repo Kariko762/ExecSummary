@@ -20,7 +20,7 @@ interface ExecutiveSynthesisData {
 }
 
 interface ExecutiveSynthesisRendererProps {
-  data: ExecutiveSynthesisData;
+  data?: ExecutiveSynthesisData;
   isEditMode?: boolean;
 }
 
@@ -28,6 +28,11 @@ export const ExecutiveSynthesisRenderer: React.FC<ExecutiveSynthesisRendererProp
   data,
   isEditMode = false 
 }) => {
+  // Handle undefined data
+  if (!data) {
+    return null;
+  }
+
   const getUrgencyColor = (urgency?: string) => {
     switch (urgency) {
       case 'high': return 'var(--accent-red, #ef4444)';

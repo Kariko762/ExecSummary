@@ -27,7 +27,10 @@ interface Initiative {
     measurable?: { metrics: string[] };
     achievable?: { resources: string; teamSize?: string };
     relevant?: { croAlignment: string[]; strategicThemes?: string[] };
-    timeBound?: { milestones: Array<{ milestone: string; date: string; status: string }> };
+    timeBound?: { 
+      milestones: Array<{ milestone: string; date: string; status: string }>;
+      timeline?: Array<{ phase: string; startDate: string; endDate: string }>;
+    };
   };
   
   budget?: {
@@ -35,6 +38,17 @@ interface Initiative {
     spent: string;
     projected: string;
   };
+  
+  businessCase?: {
+    problem?: string;
+    opportunity?: string;
+    solution?: string;
+    roi?: string;
+    paybackPeriod?: string;
+    expectedBenefits?: string[];
+  };
+  
+  stakeholders?: Array<{ name: string; role: string }>;
   
   linkedAssets?: number;
   createdDate: string;
@@ -1033,7 +1047,6 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
                           sortOrder: 'asc'
                         }
                       }}
-                      mode="display"
                     />
                   </div>
                 </div>

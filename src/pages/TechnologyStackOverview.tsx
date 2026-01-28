@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Cpu, Layers, TrendingUp, DollarSign, Users, Zap, CheckCircle2, XCircle, ArrowRight, Target, Shield, Clock, Globe, Maximize2, Minimize2, Download, Loader2, ExternalLink, FileText } from 'lucide-react';
+import { Cpu, Layers, TrendingUp, Users, CheckCircle2, XCircle, Target, Shield, Globe, Maximize2, Minimize2, Download, Loader2, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { domToPng } from 'modern-screenshot';
 
@@ -16,6 +16,7 @@ interface Tool {
 export default function TechnologyStackOverview() {
   const [activeTab, setActiveTab] = useState<TabType>('technical');
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [modalWidth, setModalWidth] = useState<75 | 95>(75); // 75vw or 95vw
   const [isExporting, setIsExporting] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -82,7 +83,7 @@ export default function TechnologyStackOverview() {
 
     try {
       const response = await fetch(`http://localhost:3001/api/content/${contentId}`);
-      const data = await response.json();
+      const _data = await response.json();
       
       // Open in new window/tab (or you could use a modal)
       window.open(`#/technologies`, '_blank');
@@ -249,7 +250,13 @@ export default function TechnologyStackOverview() {
 
   return (
     <div className="min-h-screen flex items-start justify-center bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant py-8">
-      <div ref={contentRef} className={`${isFullscreen ? 'w-full' : 'w-[75vw]'} transition-all duration-300 bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden`}>
+      <div ref={contentRef} className={`${
+        isFullscreen 
+          ? 'w-full rounded-none' 
+          : modalWidth === 95
+            ? 'w-[95vw] rounded-xl'
+            : 'w-[75vw] rounded-xl'
+      } transition-all duration-300 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden`}>
         {/* Header */}
         <div className="bg-gradient-to-r from-fis-navy to-fis-eggplant dark:from-gray-950 dark:to-purple-950">
           <div className="px-6 py-8">
@@ -281,9 +288,18 @@ export default function TechnologyStackOverview() {
                 )}
               </button>
               <button
-                onClick={() => setIsFullscreen(!isFullscreen)}
+                onClick={() => {
+                  if (isFullscreen) {
+                    setIsFullscreen(false);
+                    setModalWidth(75);
+                  } else if (modalWidth === 75) {
+                    setModalWidth(95);
+                  } else {
+                    setIsFullscreen(true);
+                  }
+                }}
                 className="p-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg border border-white/20 transition-colors"
-                title={isFullscreen ? 'Exit fullscreen' : 'Maximize'}
+                title={isFullscreen ? 'Exit Fullscreen (75%)' : modalWidth === 75 ? 'Wider View (95%)' : 'Fullscreen'}
               >
                 {isFullscreen ? (
                   <Minimize2 className="w-5 h-5 text-white" />

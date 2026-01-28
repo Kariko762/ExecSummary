@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion';
-import { TrendingUp, Building2, Target, ChevronRight, AlertCircle, CheckCircle2, X } from 'lucide-react';
+import { TrendingUp, ChevronRight, AlertCircle, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface CardStyleGalleryProps {

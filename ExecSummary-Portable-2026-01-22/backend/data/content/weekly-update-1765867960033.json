@@ -1,0 +1,165 @@
+{
+  "id": "weekly-update-1765867960033",
+  "quarter": "",
+  "year": 2025,
+  "date": "2025-12-16",
+  "title": "Weekly Update - Week of Dec 15 - Dec 21",
+  "_enabled_standard_header": true,
+  "_completed_standard_header": false,
+  "_summary_0_type": "executiveSummaryBLUF",
+  "_summary_0_layoutZone": "full",
+  "_summary_0_rowIndex": 0,
+  "summary_0": {
+    "bottomLine": "The Coast MSA/Embedded Finance renewal for January 2026 is underway with a confirmed $56K allocation for the EF Workspace, requiring immediate budget cross-verification across all business units.",
+    "background": "FIS and Coast leadership have initiated terms for the January 2026 renewal cycle. Simultaneously, technical enhancements are being integrated into the Executive Summary Platform to automate note-taking and timeline visualization via AI.",
+    "assessment": "While the $56K EF Workspace component is approved, there is a lack of visibility regarding the broader 2026 MSA budget readiness across various business lines. Identifying these fiscal gaps early is critical to prevent renewal delays.",
+    "recommendation": "Execute a cross-departmental budget audit to confirm 2026 approvals. Leverage the newly updated AI Note System to track these stakeholder discussions and report findings to Robert and Mario.",
+    "asks": [
+      {
+        "type": "budget",
+        "item": "Confirm 2026 renewal budget status (Approved vs. Pending) with all Business Heads",
+        "urgency": "high",
+        "owner": "Business Unit Leaders",
+        "deadline": "Dec 31, 2025"
+      },
+      {
+        "type": "decision",
+        "item": "Sync with Robert and Mario to address identified budget gaps or overages",
+        "urgency": "medium",
+        "owner": "Project Lead",
+        "deadline": "Jan 15, 2026"
+      }
+    ]
+  },
+  "_summary_1_type": "hr",
+  "_summary_1_layoutZone": "full",
+  "_summary_1_rowIndex": 1,
+  "summary_1": "",
+  "_summary_sectionLayoutType": "full",
+  "_enabled_summary": true,
+  "_completed_summary": false,
+  "_data_summary_0_type": "highlightsList",
+  "_data_summary_0_layoutZone": "left-30",
+  "_data_summary_0_rowIndex": 0,
+  "_data_summary_0_displayAssetTitle": true,
+  "data_summary_0": [
+    "Metric 1: XX hrs ({{percent:0}})",
+    "Metric 2: XX hrs ({{percent:0}})",
+    "Metric 3: XX hrs ({{percent:0}})",
+    "[[bold]]Total: XXX[[/bold]]"
+  ],
+  "_data_summary_1_type": "quote",
+  "_data_summary_1_layoutZone": "right-70",
+  "_data_summary_1_rowIndex": 0,
+  "data_summary_1": "\"Key insight or analysis summary goes here, providing context and interpretation of the data.\"[[highlight]] (sources: Data Source Name)[[/highlight]]",
+  "_data_summary_sectionLayoutType": "full",
+  "_enabled_data_summary": true,
+  "_completed_data_summary": false,
+  "_data_summary_label": "Weekly Metrics Summary",
+  "_data_summary_displayTitle": true,
+  "_demo_trends_0_type": "lineChart",
+  "_demo_trends_0_layoutZone": "left-70",
+  "_demo_trends_0_rowIndex": 0,
+  "_demo_trends_0_displayAssetTitle": false,
+  "demo_trends_0": [
+    {
+      "name": "Jan",
+      "Series1": 100,
+      "Series2": 80,
+      "Series3": 60
+    },
+    {
+      "name": "Feb",
+      "Series1": 120,
+      "Series2": 85,
+      "Series3": 70
+    },
+    {
+      "name": "Mar",
+      "Series1": 110,
+      "Series2": 90,
+      "Series3": 75
+    },
+    {
+      "name": "Apr",
+      "Series1": 130,
+      "Series2": 95,
+      "Series3": 80
+    },
+    {
+      "name": "May",
+      "Series1": 125,
+      "Series2": 100,
+      "Series3": 85
+    },
+    {
+      "name": "Jun",
+      "Series1": 140,
+      "Series2": 105,
+      "Series3": 90
+    }
+  ],
+  "_demo_trends_1_type": "pieChart",
+  "_demo_trends_1_layoutZone": "right-30",
+  "_demo_trends_1_rowIndex": 0,
+  "_demo_trends_1_assetTitle": "Distribution",
+  "_demo_trends_1_displayAssetTitle": false,
+  "demo_trends_1": [
+    {
+      "name": "Category A",
+      "value": 45
+    },
+    {
+      "name": "Category B",
+      "value": 35
+    },
+    {
+      "name": "Category C",
+      "value": 20
+    }
+  ],
+  "_demo_trends_sectionLayoutType": "left-70",
+  "_enabled_demo_trends": true,
+  "_completed_demo_trends": false,
+  "_demo_trends_label": "Trends Over Time",
+  "_demo_trends_displayTitle": false,
+  "_teams_focus_0_type": "highlightsList",
+  "_teams_focus_0_layoutZone": "left-50",
+  "_teams_focus_0_rowIndex": 0,
+  "_teams_focus_0_assetTitle": "This Week",
+  "_teams_focus_0_alignment": "left",
+  "teams_focus_0": [
+    "Focus Area 1: Description of key work or initiative",
+    "Focus Area 2: Description of key work or initiative",
+    "Focus Area 3: Description of key work or initiative",
+    "Focus Area 4: Description of key work or initiative"
+  ],
+  "_teams_focus_sectionLayoutType": "left-50",
+  "_enabled_teams_focus": true,
+  "_completed_teams_focus": false,
+  "_teams_focus_label": "",
+  "status": "draft",
+  "protectionEnabled": false,
+  "_template_name": "WEEKLY-UPDATE-BLUF",
+  "_template_description": "BLUF-style weekly update template with executive summary, metrics, trends, and team focus areas",
+  "_template_created": "2025-12-15T20:45:00.000Z",
+  "_template_updated": "2025-12-15T20:45:00.000Z",
+  "_layout": "one-pager",
+  "_contentTag": "weekly-update",
+  "_type": "weekly-summary",
+  "_data_summary_0_assetTitle": "Week Period",
+  "_summary_displayTitle": false,
+  "tags": [
+    "weekly-update",
+    "template"
+  ],
+  "createdAt": "2025-12-16T06:52:40.033Z",
+  "updatedAt": "2025-12-16T06:52:40.033Z",
+  "_summary_0_aiGenerated": true,
+  "_summary_0_sourceNoteIds": [
+    "note-1765819155265",
+    "note-1765824389614",
+    "note-1765833301550"
+  ],
+  "_summary_0_generatedAt": "2025-12-16T06:52:40.033Z"
+}

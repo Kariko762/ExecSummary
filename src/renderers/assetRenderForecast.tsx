@@ -766,51 +766,46 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
         </div>
       </div>
 
-      {/* Header Section */}
-      <div 
-        className="p-5 rounded-t-2xl"
-        style={{
-          background: 'linear-gradient(to bottom right, var(--brand-primary), var(--brand-secondary), var(--brand-primary))'
-        }}
-      >
+      {/* Header Section - Streamlined */}
+      <div className="bg-white dark:bg-gray-900 px-5 py-2 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             <div>
-              <h2 className="text-2xl font-roobert-bold text-white mb-1">{data.title}</h2>
-              <p className="text-white/80 text-sm flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
+              <h2 className="text-lg font-roobert-bold text-gray-900 dark:text-white">{data.title}</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
                 {data.period}
               </p>
             </div>
-            <div className="bg-white/20 backdrop-blur-md rounded-xl px-5 py-3 border border-white/30">
-              <div className="text-xs text-white/80 uppercase tracking-wide mb-1">Cost Split</div>
-              <div className="flex items-center gap-3">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-1.5 border border-gray-300 dark:border-gray-600">
+              <div className="text-[10px] text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-0.5">Cost Split</div>
+              <div className="flex items-center gap-2">
                 <div className="text-center">
-                  <div className="text-sm text-white/90">Capex</div>
-                  <div className="text-lg font-roobert-bold text-white">{capexPercent}%</div>
+                  <div className="text-[10px] text-gray-600 dark:text-gray-400">Capex</div>
+                  <div className="text-xs font-roobert-bold text-gray-900 dark:text-white">{capexPercent}%</div>
                 </div>
-                <div className="w-px h-8 bg-white/30"></div>
+                <div className="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
                 <div className="text-center">
-                  <div className="text-sm text-white/90">Opex</div>
-                  <div className="text-lg font-roobert-bold text-white">{opexPercent}%</div>
+                  <div className="text-[10px] text-gray-600 dark:text-gray-400">Opex</div>
+                  <div className="text-xs font-roobert-bold text-gray-900 dark:text-white">{opexPercent}%</div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Summary Cards */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/20">
-              <div className="text-xs text-white/70 uppercase tracking-wide mb-1">Total Forecast</div>
-              <div className="text-xl font-roobert-bold text-white">{formatCurrency(totals.grandTotal)}</div>
+          {/* Summary Cards - Compact */}
+          <div className="grid grid-cols-3 gap-2 mb-2">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5">Total Forecast</div>
+              <div className="text-sm font-roobert-bold text-gray-900 dark:text-white">{formatCurrency(totals.grandTotal)}</div>
             </div>
-            <div className="bg-white/15 backdrop-blur-md rounded-xl p-3 border border-white/25">
-              <div className="text-xs text-white/80 uppercase tracking-wide mb-1">Total Capex</div>
-              <div className="text-xl font-roobert-bold text-white">{formatCurrency(totals.totalCapex)}</div>
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5">Total Capex</div>
+              <div className="text-sm font-roobert-bold text-gray-900 dark:text-white">{formatCurrency(totals.totalCapex)}</div>
             </div>
-            <div className="bg-white/15 backdrop-blur-md rounded-xl p-3 border border-white/25">
-              <div className="text-xs text-white/80 uppercase tracking-wide mb-1">Total Opex</div>
-              <div className="text-xl font-roobert-bold text-white">{formatCurrency(totals.totalOpex)}</div>
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-0.5">Total Opex</div>
+              <div className="text-sm font-roobert-bold text-gray-900 dark:text-white">{formatCurrency(totals.totalOpex)}</div>
             </div>
           </div>
         </div>
@@ -999,11 +994,26 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
 
       {/* Line Item Detail Modal */}
       {selectedLineItem && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end justify-end">
+          <div className="bg-white dark:bg-gray-800 shadow-2xl w-[50vw] h-full overflow-hidden">
             {/* Modal Header */}
-            <div className="p-6 text-white" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
-              <div className="flex items-start justify-between">
+            <div className="relative bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 p-6 text-white overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <pattern id="money-pattern-lineitem" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                      <text x="10" y="30" fontSize="24" fill="currentColor" opacity="0.3">$</text>
+                      <text x="50" y="70" fontSize="20" fill="currentColor" opacity="0.2">£</text>
+                      <circle cx="65" cy="15" r="8" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                      <text x="61" y="19" fontSize="10" fill="currentColor" opacity="0.3">€</text>
+                      <circle cx="30" cy="60" r="2" fill="currentColor" opacity="0.2" />
+                      <circle cx="75" cy="45" r="1.5" fill="currentColor" opacity="0.2" />
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#money-pattern-lineitem)" />
+                </svg>
+              </div>
+              <div className="relative flex items-start justify-between">
                 <div>
                   <h3 className="text-2xl font-roobert-bold mb-1">{selectedLineItem.item.name}</h3>
                   <p className="text-white/80 text-sm">
@@ -1013,6 +1023,7 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
                 <button
                   onClick={() => setSelectedLineItem(null)}
                   className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  title="Close"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1020,7 +1031,7 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+            <div className="p-6 space-y-6 overflow-y-auto h-[calc(100vh-140px)]">
               {/* Multi-Year Contract Summary (Opex only) */}
               {selectedLineItem.costCenter.type === 'opex' && selectedLineItem.item.contractTerm && selectedLineItem.item.annualAmount && (
                 <div className="bg-gradient-to-r from-purple-50 to-fuchsia-50 dark:from-purple-900/20 dark:to-fuchsia-900/20 border-2 border-purple-300 dark:border-purple-700 rounded-xl p-5">
@@ -1183,16 +1194,31 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
 
       {/* Year-on-Year Chart Modal */}
       {showYoYChart && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div data-yoy-chart-modal className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[85vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end justify-end">
+          <div data-yoy-chart-modal className="bg-white dark:bg-gray-800 shadow-2xl w-[50vw] h-full overflow-hidden">
             {/* Modal Header - Compact */}
-            <div className="p-4 text-white" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
-              <div className="flex items-center justify-between">
+            <div className="relative bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 p-6 text-white overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <pattern id="money-pattern-yoy" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                      <text x="10" y="30" fontSize="24" fill="currentColor" opacity="0.3">$</text>
+                      <text x="50" y="70" fontSize="20" fill="currentColor" opacity="0.2">£</text>
+                      <circle cx="65" cy="15" r="8" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                      <text x="61" y="19" fontSize="10" fill="currentColor" opacity="0.3">€</text>
+                      <circle cx="30" cy="60" r="2" fill="currentColor" opacity="0.2" />
+                      <circle cx="75" cy="45" r="1.5" fill="currentColor" opacity="0.2" />
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#money-pattern-yoy)" />
+                </svg>
+              </div>
+              <div className="relative flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-roobert-bold">Year-on-Year Forecast</h3>
-                  <p className="text-white/70 text-xs">{data.title}</p>
+                  <h3 className="text-xl font-roobert-bold">Year-on-Year Forecast</h3>
+                  <p className="text-white/80 text-sm">{data.title}</p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   {/* View Mode Toggle */}
                   <select
                     value={yoyViewMode}
@@ -1218,16 +1244,17 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
                   </button>
                   <button
                     onClick={() => setShowYoYChart(false)}
-                    className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                    title="Close"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Modal Body - Compact */}
-            <div ref={yoyChartRef} className="p-4 overflow-y-auto max-h-[calc(85vh-80px)]">
+            {/* Body */}
+            <div ref={yoyChartRef} className="p-6 overflow-y-auto h-[calc(100vh-140px)]">
               {(() => {
                 const yoyData = calculateYoYData(yoyViewMode);
                 const maxAmount = Math.max(...yoyData.map(y => y.total));
@@ -1413,16 +1440,31 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
 
       {/* Year Detail Modal - Full Breakdown */}
       {selectedYearDetail && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div data-year-detail-modal className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end justify-end">
+          <div data-year-detail-modal className="bg-white dark:bg-gray-800 shadow-2xl w-[50vw] h-full overflow-hidden">
             {/* Header */}
-            <div className="p-4 text-white" style={{ background: 'linear-gradient(to right, var(--brand-primary), var(--brand-secondary))' }}>
-              <div className="flex items-center justify-between">
+            <div className="relative bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 p-6 text-white overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <pattern id="money-pattern-detail-forecast" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                      <text x="10" y="30" fontSize="24" fill="currentColor" opacity="0.3">$</text>
+                      <text x="50" y="70" fontSize="20" fill="currentColor" opacity="0.2">£</text>
+                      <circle cx="65" cy="15" r="8" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+                      <text x="61" y="19" fontSize="10" fill="currentColor" opacity="0.3">€</text>
+                      <circle cx="30" cy="60" r="2" fill="currentColor" opacity="0.2" />
+                      <circle cx="75" cy="45" r="1.5" fill="currentColor" opacity="0.2" />
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#money-pattern-detail-forecast)" />
+                </svg>
+              </div>
+              <div className="relative flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-roobert-bold">{selectedYearDetail.yearLabel} Detailed Breakdown</h3>
-                  <p className="text-white/70 text-xs">{data.title}</p>
+                  <h3 className="text-xl font-roobert-bold">{data.title}</h3>
+                  <p className="text-white/80 text-sm">{selectedYearDetail.yearLabel} Breakdown</p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <button
                     onClick={async () => {
                       const modalEl = document.querySelector('[data-year-detail-modal]');
@@ -1487,16 +1529,17 @@ export const ForecastBreakdown: React.FC<ForecastBreakdownProps> = ({
                   </button>
                   <button
                     onClick={() => setSelectedYearDetail(null)}
-                    className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+                    className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                    title="Close"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
             </div>
 
             {/* Body */}
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
+            <div className="p-6 overflow-y-auto h-[calc(100vh-140px)]">
               {/* Summary Cards */}
               <div className="grid grid-cols-3 gap-3 mb-6">
                 <div className="rounded-lg p-3" style={{ backgroundColor: 'rgba(67, 28, 91, 0.1)', border: '1px solid rgba(67, 28, 91, 0.3)' }}>

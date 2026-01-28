@@ -22,7 +22,7 @@ export const MetricCardsRenderer: React.FC<RendererProps> = ({
   const getIcon = (iconName: string | undefined, key: string) => {
     // If explicit icon name provided, use it
     if (iconName) {
-      const icons: Record<string, JSX.Element> = {
+      const icons: Record<string, React.ReactElement> = {
         award: <Award className="w-5 h-5" />,
         dollar: <DollarSign className="w-5 h-5" />,
         users: <Users className="w-5 h-5" />,
@@ -129,7 +129,7 @@ export const MetricCardsRenderer: React.FC<RendererProps> = ({
           >
             <div className="flex items-center justify-center mb-3">
               <div className="w-10 h-10 rounded-lg bg-fis-eggplant/10 dark:bg-fis-eggplant/20 flex items-center justify-center text-fis-eggplant dark:text-fis-raspberry">
-                {getIcon(key)}
+                {getIcon(fieldSchema.icon as string, key)}
               </div>
             </div>
             <p className={`${getClasses.textMuted()} mb-1 text-center`}>

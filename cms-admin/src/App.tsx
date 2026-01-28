@@ -6,6 +6,7 @@ import { PresentationProvider } from './contexts/PresentationContext';
 import { AuthProvider } from './contexts/AuthContext';
 import CMSHeader from './components/CMSHeader';
 import EditorModal from './components/EditorModalV2';
+import LeadershipEditor from './components/LeadershipEditor';
 import AssetLibrary from './components/AssetLibrary';
 import DesignSystemManager from './components/DesignSystemManager';
 import DesignSystemInjector from './components/DesignSystemInjector';
@@ -16,11 +17,14 @@ import ProtectedRoute from './components/ProtectedRoute';
 import CommentsPanel from './components/CommentsPanel';
 import GoalsManager from './components/GoalsManager';
 import InitiativesManager from './components/InitiativesManager';
+import InitiativesGantt from './pages/InitiativesGantt';
+import BudgetPage from './pages/BudgetPage';
 import PlatformOverview from './components/PlatformOverview';
 import TimelineNotesManager from './components/TimelineNotesManager';
 import QuickActionsMenu from './components/QuickActionsMenu';
 import { TaskEditorModal } from './components/TaskEditorModal';
 import { AllTasksModal } from './components/AllTasksModal';
+import AiWeeklySummaryModal from './components/AiWeeklySummaryModal';
 import OrgIQ from './pages/OrgIQ';
 import './App.css';
 
@@ -73,6 +77,7 @@ function App() {
   const [importType, setImportType] = useState<'content'>('content');
   const [notification, setNotification] = useState<{type: 'success' | 'error' | 'info' | 'warning', message: string} | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [showLeadershipEditor, setShowLeadershipEditor] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [showNewSummaryModal, setShowNewSummaryModal] = useState(false);
   const [newSummaryName, setNewSummaryName] = useState('');
@@ -88,12 +93,17 @@ function App() {
   const [showOrgIQ, setShowOrgIQ] = useState(false);
   const [showGoals, setShowGoals] = useState(false);
   const [showInitiatives, setShowInitiatives] = useState(false);
+  const [showInitiativesGantt, setShowInitiativesGantt] = useState(false);
+  const [showBudget, setShowBudget] = useState(false);
   const [showPlatformOverview, setShowPlatformOverview] = useState(false);
   const [showTimelineNotes, setShowTimelineNotes] = useState(false);
   const [autoOpenAddNote, setAutoOpenAddNote] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showAllTasksModal, setShowAllTasksModal] = useState(false);
+  const [showAiWeeklySummary, setShowAiWeeklySummary] = useState(false);
   const [editingTask, setEditingTask] = useState<any>();
+  const [timelineNotes, setTimelineNotes] = useState<any[]>([]);
+  const [allTasks, setAllTasks] = useState<any[]>([]);
   const [availableTemplates, setAvailableTemplates] = useState<any[]>([]);
   const [requireAuth, setRequireAuth] = useState(false);
   const [availableTags, setAvailableTags] = useState<any[]>([]);
@@ -122,6 +132,30 @@ function App() {
       setRequireAuth(parsed.authentication?.cmsAdmin?.requireLogin || false);
     }
   }, []);
+
+  // Fetch notes and tasks when AI Weekly Summary modal opens
+  useEffect(() => {
+    if (showAiWeeklySummary) {
+      fetchNotesAndTasks();
+    }
+  }, [showAiWeeklySummary]);
+
+  const fetchNotesAndTasks = async () => {
+    try {
+      const [notesRes, tasksRes] = await Promise.all([
+        fetch('http://localhost:3001/api/timeline-notes'),
+        fetch('http://localhost:3001/api/tasks')
+      ]);
+      const notesData = await notesRes.json();
+      const tasksData = await tasksRes.json();
+      // Extract arrays from API response structure
+      setTimelineNotes(notesData.notes || notesData || []);
+      setAllTasks(tasksData.tasks || tasksData || []);
+    } catch (error) {
+      console.error('Failed to fetch notes/tasks:', error);
+      showNotification('error', 'Failed to load notes and tasks');
+    }
+  };
 
   useEffect(() => {
     if (activeSection === 'all-content') {
@@ -458,12 +492,28 @@ function App() {
       return;
     }
     
+    // Check if item is leadership-summary - use custom editor
+    if (item._contentTag === 'leadership-summary') {
+      setSelectedItem(item);
+      setShowLeadershipEditor(true);
+      return;
+    }
+    
     setSelectedItem(item);
     setModalOpen(true);
   };
 
   const confirmEdit = () => {
     if (itemToEdit) {
+      // Check if item is leadership-summary - use custom editor
+      if (itemToEdit._contentTag === 'leadership-summary') {
+        setSelectedItem(itemToEdit);
+        setShowLeadershipEditor(true);
+        setShowEditWarningModal(false);
+        setItemToEdit(null);
+        return;
+      }
+      
       setSelectedItem(itemToEdit);
       setModalOpen(true);
       setShowEditWarningModal(false);
@@ -1382,6 +1432,8 @@ function App() {
                 onOpenComments={() => setShowComments(true)}
                 onOpenGoals={() => setShowGoals(true)}
                 onOpenInitiatives={() => setShowInitiatives(true)}
+                onOpenInitiativesGantt={() => setShowInitiativesGantt(true)}
+                onOpenBudget={() => setShowBudget(true)}
                 onOpenNotes={() => setShowTimelineNotes(true)}
                 onOpenTasks={() => setShowAllTasksModal(true)}
               />
@@ -1934,6 +1986,19 @@ function App() {
             showNotification={showNotification}
           />
 
+          {/* Leadership Editor (Custom for leadership-summary content) */}
+          {showLeadershipEditor && selectedItem && (
+            <LeadershipEditor
+              data={selectedItem}
+              onSave={async (data) => {
+                await handleSaveItem(data, false);
+                setShowLeadershipEditor(false);
+              }}
+              onClose={() => setShowLeadershipEditor(false)}
+              isNewContent={!selectedItem.id}
+            />
+          )}
+
           {/* Asset Library Modal */}
           <AssetLibrary
             isOpen={showAssetReference}
@@ -2017,6 +2082,20 @@ function App() {
             />
           )}
 
+          {/* Initiatives Gantt Chart */}
+          {showInitiativesGantt && (
+            <InitiativesGantt onClose={() => setShowInitiativesGantt(false)} />
+          )}
+
+          {/* Budget Page */}
+          {showBudget && (
+            <BudgetPage
+              isOpen={showBudget}
+              onClose={() => setShowBudget(false)}
+              showNotification={showNotification}
+            />
+          )}
+
           {/* Platform Overview */}
           {showPlatformOverview && (
             <PlatformOverview onClose={() => setShowPlatformOverview(false)} />
@@ -2070,6 +2149,7 @@ function App() {
               setEditingTask(undefined);
             }}
             onAllTasks={() => setShowAllTasksModal(true)}
+            onWeeklyLeadership={() => setShowAiWeeklySummary(true)}
           />
 
           {/* All Tasks Modal */}
@@ -2089,6 +2169,16 @@ function App() {
                 setShowAllTasksModal(false);
                 setShowTimelineNotes(true);
               }}
+            />
+          )}
+
+          {/* AI Weekly Summary Modal */}
+          {showAiWeeklySummary && (
+            <AiWeeklySummaryModal
+              onClose={() => setShowAiWeeklySummary(false)}
+              showNotification={showNotification}
+              notes={timelineNotes}
+              tasks={allTasks}
             />
           )}
 

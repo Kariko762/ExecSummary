@@ -1,0 +1,204 @@
+{
+  "id": "strategic-product-pilot-programme",
+  "name": "Strategic Product Pilot Programme",
+  "shortName": "Strategic Product Pilots",
+  "slug": "strategic-product-pilot-programme",
+  "category": "innovation",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "Pre-Sales Leadership",
+    "Product Management"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "high",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, execute strategic demo transformation pilots across Banking, International, and Capital Markets to prove full demo operating model and scale successful patterns.",
+    "specific": {
+      "objectives": [
+        "Select pilot products",
+        "Deliver end-to-end demo transformations",
+        "Document and scale successful patterns"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Pilot products delivered: 0 \u2192 3",
+        "Pilot-to-scale transitions: 0 \u2192 6",
+        "Prep hour reduction in pilots: Baseline \u2192 -40%"
+      ]
+    },
+    "achievable": {
+      "resources": "Cross-functional pilot teams",
+      "teamSize": "3 FTEs + federated teams"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Revenue Growth",
+        "Operational Excellence"
+      ],
+      "strategicThemes": [
+        "Digital Transformation",
+        "Technology Modernization"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Pilot Wave 1",
+          "deliverable": "First 3 pilots live",
+          "dueDate": "2026-12-31",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Pilot products selected",
+        "baseline": "0",
+        "target": "3",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Prep hour reduction in pilots",
+        "baseline": "0",
+        "target": "40",
+        "current": "0",
+        "unit": "%"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "Unproven demo transformation model.",
+    "opportunity": "Pilots de-risk full rollout.",
+    "solution": "Strategic pilots to validate model.",
+    "expectedBenefits": [
+      "Proven scalable model",
+      "Executive confidence"
+    ],
+    "roi": "250% ROI in 18 months",
+    "paybackPeriod": "9 months"
+  },
+  "budget": {
+    "total": 300000,
+    "allocated": 300000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 120000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 80000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 50000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 20000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "Strategic Transformation Budget",
+    "costAvoidance": "$400K from faster scale"
+  },
+  "funding": {
+    "requestedAmount": 300000,
+    "approvedAmount": 300000,
+    "approvalDate": "2026-06-15",
+    "approvedBy": "CRO",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 150000,
+        "releaseCondition": "Pilot products approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-pilot-failure",
+      "description": "Pilots fail to deliver expected benefits",
+      "impact": "Loss of confidence",
+      "probability": "medium",
+      "severity": "high",
+      "mitigation": "Strong exec sponsorship",
+      "owner": "Head of Demo Services",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-pilots",
+      "name": "Pilot Wave 1 Live",
+      "description": "First pilots live",
+      "dueDate": "2026-12-31",
+      "status": "not-started",
+      "deliverables": [
+        "Transformed demos"
+      ],
+      "acceptanceCriteria": [
+        "Exec review"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Pre-Sales Leadership",
+      "role": "Pilot Sponsors",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Pilot ownership",
+      "communicationFrequency": "Monthly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Pilot prep hour reduction",
+      "baseline": "0%",
+      "target": "40%",
+      "measurement": "Prep hours",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-08-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-08-01T09:00:00Z",
+  "updatedAt": "2026-01-26T20:30:00Z",
+  "tags": [
+    "pilots",
+    "transformation"
+  ],
+  "notes": "Proves and scales the full demo transformation model."
+}

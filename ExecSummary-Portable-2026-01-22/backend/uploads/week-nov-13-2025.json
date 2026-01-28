@@ -1,0 +1,45 @@
+{
+  "id": "week-nov-13-2025",
+  "quarter": "Nov 13",
+  "year": 2025,
+  "date": "2025-11-13",
+  "title": "Demo Services Group - Weekly Executive Update",
+  "_contentTag": "weekly-summary",
+  "status": "draft",
+  "protectionEnabled": true,
+  "_highlights_type": "list",
+  "_enabled_highlights": true,
+  "highlights": [
+    "Content Tag System Successfully Implemented",
+    "Compact Navigation Reduces Screen Space by 60%",
+    "Dynamic Tag Management Enables Flexible Content Organization",
+    "Backend API Integration Complete with Full CRUD Operations",
+    "EditorModalV2 Now Supports Tag Selection in Standard Header"
+  ],
+  "_keyMetrics_type": "nestedCards",
+  "_enabled_keyMetrics": true,
+  "keyMetrics": [
+    {
+      "label": "Tags Created",
+      "value": 6,
+      "type": "number"
+    },
+    {
+      "label": "Space Saved",
+      "value": 60,
+      "type": "percentage"
+    },
+    {
+      "label": "API Endpoints",
+      "value": 5,
+      "type": "number"
+    }
+  ],
+  "_outlook_type": "textarea",
+  "_enabled_outlook": true,
+  "outlook": "Major milestone achieved with the content tag system launch. The new compact navigation dramatically improves UX while the backend infrastructure provides a scalable foundation for future growth. Next phase will focus on unified content filtering and tag badge rendering in live views.",
+  "_completed_standard_header": true,
+  "_completed_highlights": true,
+  "_completed_keyMetrics": true,
+  "_completed_outlook": true
+}

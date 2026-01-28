@@ -232,13 +232,13 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
 
   return (
     <div className="w-full" ref={budgetRef}>
-      {/* Header Section */}
-      <div className="bg-gradient-to-br from-fis-eggplant via-fis-raspberry to-fis-eggplant p-5 rounded-t-2xl">
+      {/* Header Section - Streamlined */}
+      <div className="bg-white dark:bg-gray-900 px-5 py-2 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center justify-between mb-2">
             <div>
-              <h2 className="text-2xl font-roobert-bold text-white mb-1">{data.title}</h2>
-              <p className="text-white/80 text-sm flex items-center gap-2">
+              <h2 className="text-lg font-roobert-bold text-gray-900 dark:text-white">{data.title}</h2>
+              <p className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
                 {data.period}
               </p>
@@ -410,11 +410,25 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
 
       {/* Detail Modal */}
       {selectedLineItem && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end justify-end">
+          <div className="bg-white dark:bg-gray-800 shadow-2xl w-[50vw] h-full overflow-hidden">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-fis-eggplant to-fis-raspberry p-6 text-white">
-              <div className="flex items-start justify-between">
+            <div className="relative bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 p-6 text-white overflow-hidden">
+              <div className="absolute inset-0 opacity-10">
+                <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <pattern id="money-pattern-detail" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                      <text x="10" y="25" fontSize="20" fill="currentColor" opacity="0.3">$</text>
+                      <text x="45" y="25" fontSize="20" fill="currentColor" opacity="0.3">£</text>
+                      <text x="25" y="55" fontSize="20" fill="currentColor" opacity="0.3">€</text>
+                      <circle cx="60" cy="50" r="8" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/>
+                      <circle cx="15" cy="65" r="6" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"/>
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#money-pattern-detail)"/>
+                </svg>
+              </div>
+              <div className="relative flex items-start justify-between">
                 <div>
                   <h3 className="text-2xl font-roobert-bold mb-1">{selectedLineItem.item.name}</h3>
                   <p className="text-white/80 text-sm">{selectedLineItem.category.name}</p>
@@ -439,7 +453,7 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ data, mode = '
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+            <div className="p-6 space-y-6 overflow-y-auto h-[calc(100vh-140px)]">
               {/* Financial Summary */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600">

@@ -1,0 +1,477 @@
+{
+  "events": [
+    {
+      "id": "event-1769625368570-wpbvrox9l",
+      "timestamp": "2026-01-28T18:36:08.570Z",
+      "eventType": "initiative-updated",
+      "entityType": "initiative",
+      "entityId": "demo-capacity-scheduling-optimisation",
+      "user": "current-user",
+      "metadata": {
+        "oldStatus": "planning",
+        "newStatus": "planning",
+        "changes": [
+          "id",
+          "name",
+          "shortName",
+          "status",
+          "priority",
+          "category",
+          "owner",
+          "sponsor",
+          "progress",
+          "startDate",
+          "endDate",
+          "linkedGoals",
+          "smartGoal",
+          "budget",
+          "businessCase"
+        ]
+      }
+    },
+    {
+      "id": "event-1769625387307-6s07rdr6j",
+      "timestamp": "2026-01-28T18:36:27.307Z",
+      "eventType": "goal-updated",
+      "entityType": "goal",
+      "entityId": "automate-demo-prep",
+      "user": "current-user",
+      "metadata": {
+        "oldStatus": "not-started",
+        "newStatus": "not-started",
+        "changes": [
+          "id",
+          "name",
+          "shortName",
+          "category",
+          "owner",
+          "coOwners",
+          "status",
+          "priority",
+          "targetDate",
+          "color",
+          "icon",
+          "progress",
+          "linkedAssets",
+          "smartGoal",
+          "indicators",
+          "createdDate",
+          "lastUpdated",
+          "linkedInitiatives",
+          "linkedTasks"
+        ]
+      }
+    },
+    {
+      "id": "event-1769625478049-s4mz0jeu5",
+      "timestamp": "2026-01-28T18:37:58.049Z",
+      "eventType": "note-created",
+      "entityType": "note",
+      "entityId": "note-1769625478047",
+      "user": "current-user",
+      "metadata": {
+        "title": "testing TimelineNotes",
+        "category": "documentation",
+        "tags": [],
+        "date": "2026-01-28"
+      }
+    },
+    {
+      "id": "event-1769625498315-spz6mukee",
+      "timestamp": "2026-01-28T18:38:18.315Z",
+      "eventType": "task-status-changed",
+      "entityType": "task",
+      "entityId": "task-1769461058581-9z2xm14lwh",
+      "user": "current-user",
+      "metadata": {
+        "title": "Coast automation design + platform integrations",
+        "oldStatus": "active",
+        "newStatus": "scheduled",
+        "priority": "High",
+        "changes": [
+          "id",
+          "name",
+          "shortName",
+          "owner",
+          "businessUnit",
+          "status",
+          "progress",
+          "startWeek",
+          "duration",
+          "color",
+          "category",
+          "linkType",
+          "startDate",
+          "targetDate",
+          "description",
+          "milestones",
+          "risks",
+          "dependencies",
+          "percentage"
+        ]
+      }
+    },
+    {
+      "id": "event-1769629438633-1qrpg6fjk",
+      "timestamp": "2026-01-28T19:43:58.633Z",
+      "eventType": "task-created",
+      "entityType": "task",
+      "entityId": "task-1769629438628-ure98f3lb",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Task - Fully Linked",
+        "status": "in-progress",
+        "priority": "high"
+      }
+    },
+    {
+      "id": "event-1769629438925-djlbo4jg1",
+      "timestamp": "2026-01-28T19:43:58.925Z",
+      "eventType": "note-created",
+      "entityType": "note",
+      "entityId": "note-1769629438923",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Note - Change Control",
+        "category": "update",
+        "tags": [
+          "test",
+          "change-control",
+          "automation"
+        ],
+        "date": "2026-01-28T19:43:58.923Z"
+      }
+    },
+    {
+      "id": "event-1769629439696-gsfwy962b",
+      "timestamp": "2026-01-28T19:43:59.696Z",
+      "eventType": "task-status-changed",
+      "entityType": "task",
+      "entityId": "task-1769629438628-ure98f3lb",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Task - Fully Linked",
+        "changes": {
+          "status": {
+            "old": "in-progress",
+            "new": "completed"
+          },
+          "priority": {
+            "old": "high",
+            "new": "critical"
+          },
+          "description": {
+            "old": "Testing task logging with full linkage",
+            "new": "Updated description - testing diff tracking"
+          }
+        }
+      }
+    },
+    {
+      "id": "event-1769629442007-8girczlv8",
+      "timestamp": "2026-01-28T19:44:02.007Z",
+      "eventType": "task-deleted",
+      "entityType": "task",
+      "entityId": "task-1769629438628-ure98f3lb",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Task - Fully Linked",
+        "status": "completed",
+        "priority": "critical",
+        "deletedData": {
+          "id": "task-1769629438628-ure98f3lb",
+          "title": "Test Task - Fully Linked",
+          "owner": "",
+          "team": "",
+          "businessUnit": "",
+          "product": "",
+          "startDate": "2026-01-28",
+          "targetDate": "",
+          "percentage": 0,
+          "status": "completed",
+          "budget": "",
+          "priority": "critical",
+          "description": "Updated description - testing diff tracking",
+          "milestones": "",
+          "risks": "",
+          "dependencies": "",
+          "steps": [],
+          "createdAt": "2026-01-28T19:43:58.628Z",
+          "updatedAt": "2026-01-28T19:43:59.693Z"
+        }
+      }
+    },
+    {
+      "id": "event-1769629444000-2yjn7q0lf",
+      "timestamp": "2026-01-28T19:44:04.000Z",
+      "eventType": "note-deleted",
+      "entityType": "note",
+      "entityId": "note-1769629438923",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Note - Change Control",
+        "category": "update",
+        "tags": [
+          "test",
+          "change-control",
+          "automation"
+        ],
+        "deletedData": {
+          "id": "note-1769629438923",
+          "date": "2026-01-28",
+          "title": "Test Note - Change Control",
+          "category": "update",
+          "content": "Testing note creation and deletion logging",
+          "tags": [
+            "test",
+            "change-control",
+            "automation"
+          ],
+          "createdAt": "2026-01-28T19:43:58.923Z",
+          "updatedAt": "2026-01-28T19:43:58.923Z"
+        }
+      }
+    },
+    {
+      "id": "event-1769630764331-f8gfy8mc4",
+      "timestamp": "2026-01-28T20:06:04.331Z",
+      "eventType": "goal-created",
+      "entityType": "goal",
+      "entityId": "test-goal-change-control-system",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Goal - Change Control System",
+        "status": "in-progress",
+        "category": "strategic"
+      }
+    },
+    {
+      "id": "event-1769630764497-4ianxjgfm",
+      "timestamp": "2026-01-28T20:06:04.497Z",
+      "eventType": "initiative-created",
+      "entityType": "initiative",
+      "entityId": "test-initiative-linked-to-goal",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Initiative - Linked to Goal",
+        "status": "active",
+        "linkedGoal": "test-goal-change-control-system"
+      }
+    },
+    {
+      "id": "event-1769630764649-zwiwpyzkk",
+      "timestamp": "2026-01-28T20:06:04.649Z",
+      "eventType": "task-created",
+      "entityType": "task",
+      "entityId": "task-1769630764644-vhe9msd4q",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Task - Fully Linked",
+        "status": "in-progress",
+        "priority": "high"
+      }
+    },
+    {
+      "id": "event-1769630764793-p9sylo2hg",
+      "timestamp": "2026-01-28T20:06:04.793Z",
+      "eventType": "note-created",
+      "entityType": "note",
+      "entityId": "note-1769630764791",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Note - Change Control",
+        "category": "update",
+        "tags": [
+          "test",
+          "change-control",
+          "automation"
+        ],
+        "date": "2026-01-28T20:06:04.791Z"
+      }
+    },
+    {
+      "id": "event-1769630765443-nhvktrtl1",
+      "timestamp": "2026-01-28T20:06:05.443Z",
+      "eventType": "task-status-changed",
+      "entityType": "task",
+      "entityId": "task-1769630764644-vhe9msd4q",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Task - Fully Linked",
+        "changes": {
+          "status": {
+            "old": "in-progress",
+            "new": "completed"
+          },
+          "priority": {
+            "old": "high",
+            "new": "critical"
+          },
+          "description": {
+            "old": "Testing task logging with full linkage",
+            "new": "Updated description - testing diff tracking"
+          }
+        }
+      }
+    },
+    {
+      "id": "event-1769630766071-i8yim185k",
+      "timestamp": "2026-01-28T20:06:06.071Z",
+      "eventType": "initiative-status-changed",
+      "entityType": "initiative",
+      "entityId": "test-initiative-linked-to-goal",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Initiative - Linked to Goal",
+        "changes": {
+          "description": {
+            "old": "Testing initiative logging",
+            "new": "Updated - testing initiative diff tracking"
+          },
+          "status": {
+            "old": "active",
+            "new": "completed"
+          }
+        }
+      }
+    },
+    {
+      "id": "event-1769630766705-kfk0bqt97",
+      "timestamp": "2026-01-28T20:06:06.705Z",
+      "eventType": "goal-status-changed",
+      "entityType": "goal",
+      "entityId": "test-goal-change-control-system",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Goal - Change Control System",
+        "changes": {
+          "description": {
+            "old": "Testing CRUD logging for change control",
+            "new": "Updated - testing goal diff tracking with multiple fields"
+          },
+          "priority": {
+            "old": "high",
+            "new": "critical"
+          },
+          "status": {
+            "old": "in-progress",
+            "new": "completed"
+          }
+        }
+      }
+    },
+    {
+      "id": "event-1769630767351-bvhaii79x",
+      "timestamp": "2026-01-28T20:06:07.351Z",
+      "eventType": "task-deleted",
+      "entityType": "task",
+      "entityId": "task-1769630764644-vhe9msd4q",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Task - Fully Linked",
+        "status": "completed",
+        "priority": "critical",
+        "deletedData": {
+          "id": "task-1769630764644-vhe9msd4q",
+          "title": "Test Task - Fully Linked",
+          "owner": "",
+          "team": "",
+          "businessUnit": "",
+          "product": "",
+          "startDate": "2026-01-28",
+          "targetDate": "",
+          "percentage": 0,
+          "status": "completed",
+          "budget": "",
+          "priority": "critical",
+          "description": "Updated description - testing diff tracking",
+          "milestones": "",
+          "risks": "",
+          "dependencies": "",
+          "steps": [],
+          "createdAt": "2026-01-28T20:06:04.644Z",
+          "updatedAt": "2026-01-28T20:06:05.440Z"
+        }
+      }
+    },
+    {
+      "id": "event-1769630767946-16aslacvq",
+      "timestamp": "2026-01-28T20:06:07.946Z",
+      "eventType": "initiative-deleted",
+      "entityType": "initiative",
+      "entityId": "test-initiative-linked-to-goal",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Initiative - Linked to Goal",
+        "status": "completed",
+        "deletedData": {
+          "description": "Updated - testing initiative diff tracking",
+          "startDate": "2026-01-28",
+          "priority": "high",
+          "linkedGoal": "test-goal-change-control-system",
+          "title": "Test Initiative - Linked to Goal",
+          "status": "completed",
+          "id": "test-initiative-linked-to-goal",
+          "createdAt": "2026-01-28T20:06:04.491Z",
+          "updatedAt": "2026-01-28T20:06:06.069Z"
+        }
+      }
+    },
+    {
+      "id": "event-1769630768519-bf313qc6r",
+      "timestamp": "2026-01-28T20:06:08.519Z",
+      "eventType": "goal-deleted",
+      "entityType": "goal",
+      "entityId": "test-goal-change-control-system",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Goal - Change Control System",
+        "status": "completed",
+        "deletedData": {
+          "targetDate": "2026-02-28",
+          "description": "Updated - testing goal diff tracking with multiple fields",
+          "startDate": "2026-01-28",
+          "priority": "critical",
+          "category": "strategic",
+          "title": "Test Goal - Change Control System",
+          "status": "completed",
+          "id": "test-goal-change-control-system",
+          "linkedAssets": 0,
+          "createdDate": "2026-01-28",
+          "lastUpdated": "2026-01-28"
+        }
+      }
+    },
+    {
+      "id": "event-1769630769122-ibsk7k53v",
+      "timestamp": "2026-01-28T20:06:09.122Z",
+      "eventType": "note-deleted",
+      "entityType": "note",
+      "entityId": "note-1769630764791",
+      "user": "current-user",
+      "metadata": {
+        "title": "Test Note - Change Control",
+        "category": "update",
+        "tags": [
+          "test",
+          "change-control",
+          "automation"
+        ],
+        "deletedData": {
+          "id": "note-1769630764791",
+          "date": "2026-01-28",
+          "title": "Test Note - Change Control",
+          "category": "update",
+          "content": "Testing note creation and deletion logging",
+          "tags": [
+            "test",
+            "change-control",
+            "automation"
+          ],
+          "createdAt": "2026-01-28T20:06:04.791Z",
+          "updatedAt": "2026-01-28T20:06:04.791Z"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "person-1",
+    "email": "john.smith@example.com",
+    "firstName": "John",
+    "lastName": "Smith",
+    "role": "Risk Manager",
+    "function": "Risk Management",
+    "assignedUnits": ["l7-credit-trading"]
+  },
+  {
+    "id": "person-2",
+    "email": "jane.doe@example.com",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "role": "Logistics Manager",
+    "function": "Operations",
+    "assignedUnits": ["l7-energy-risk"]
+  }
+]

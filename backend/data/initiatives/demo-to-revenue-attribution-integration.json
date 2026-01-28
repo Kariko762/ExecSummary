@@ -1,0 +1,207 @@
+{
+  "id": "demo-to-revenue-attribution-integration",
+  "name": "Demo-to-Revenue Attribution & Integration",
+  "shortName": "Demo Revenue Attribution",
+  "slug": "demo-to-revenue-attribution-integration",
+  "category": "revenue-growth",
+  "owner": "Head of Revenue Operations",
+  "coOwners": [
+    "Demo Services",
+    "Finance",
+    "CRM Team"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "critical",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, implement demo-to-revenue attribution across CRM and finance systems to achieve 90% demo-influenced opportunity tracking and full ROI visibility.",
+    "specific": {
+      "objectives": [
+        "Integrate demo activity into CRM",
+        "Link demo data to opportunity and revenue records",
+        "Build ROI attribution models"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Opportunities with demo attribution: 20% \u2192 90%",
+        "Deals with demo influence tracked: 15% \u2192 85%",
+        "Demo ROI visibility: 0% \u2192 100%"
+      ]
+    },
+    "achievable": {
+      "resources": "CRM engineers, finance analysts, data integration tools",
+      "teamSize": "3 FTEs"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Revenue Growth",
+        "Operational Excellence"
+      ],
+      "strategicThemes": [
+        "Data-Driven Decisions",
+        "Digital Transformation"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "CRM Integration Live",
+          "deliverable": "Demo attribution fields and workflows live",
+          "dueDate": "2026-11-30",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "CRM objects integrated",
+        "baseline": "0",
+        "target": "5",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Opportunities with demo attribution",
+        "baseline": "20",
+        "target": "90",
+        "current": "20",
+        "unit": "%"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "No clear visibility into demo ROI.",
+    "opportunity": "Attribution improves investment decisions.",
+    "solution": "CRM + finance integration for demo tracking.",
+    "expectedBenefits": [
+      "Improved forecast confidence",
+      "Optimized demo investment"
+    ],
+    "roi": "300% ROI in 12 months",
+    "paybackPeriod": "7 months"
+  },
+  "budget": {
+    "total": 280000,
+    "allocated": 280000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 140000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 70000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 25000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 15000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "Revenue Operations Budget",
+    "costAvoidance": "$500K in reporting effort"
+  },
+  "funding": {
+    "requestedAmount": 280000,
+    "approvedAmount": 280000,
+    "approvalDate": "2026-07-01",
+    "approvedBy": "CRO & CFO",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 140000,
+        "releaseCondition": "CRM integration design approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-crm-complexity",
+      "description": "CRM customization complexity",
+      "impact": "Timeline delays",
+      "probability": "medium",
+      "severity": "high",
+      "mitigation": "Phased rollout",
+      "owner": "CRM Team",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-attribution",
+      "name": "Attribution Live",
+      "description": "Demo attribution live in CRM",
+      "dueDate": "2026-11-30",
+      "status": "not-started",
+      "deliverables": [
+        "CRM fields",
+        "Dashboards"
+      ],
+      "acceptanceCriteria": [
+        "Attribution visible on opps"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Finance",
+      "role": "ROI Validation",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Model validation",
+      "communicationFrequency": "Monthly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Opportunities with attribution",
+      "baseline": "20%",
+      "target": "90%",
+      "measurement": "% of opps",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-09-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-09-01T09:00:00Z",
+  "updatedAt": "2026-01-26T20:00:00Z",
+  "tags": [
+    "crm",
+    "roi",
+    "attribution"
+  ],
+  "notes": "Critical for executive ROI visibility."
+}

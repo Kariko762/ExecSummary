@@ -1,0 +1,177 @@
+{
+  "notes": [
+    {
+      "id": "note-demoprep-001",
+      "title": "Demo Ops Weekly Sync - Runbook Adoption",
+      "content": "Discussed runbook adoption challenges with the SE team. Current adoption at 47% - up from 35% last month. Main blockers are lack of awareness and training. Planning lunch & learn sessions for Q1. SEs reporting significant time savings when using standardized runbooks.",
+      "date": "2026-01-10",
+      "category": "goal-progression",
+      "tags": [
+        "demo-prep",
+        "runbooks",
+        "process-automation"
+      ],
+      "linkedGoals": ["demo-prep-efficiency"],
+      "createdAt": "2026-01-10T14:30:00.000Z",
+      "updatedAt": "2026-01-10T14:30:00.000Z",
+      "tag": "tag-demo-ops"
+    },
+    {
+      "id": "note-demoprep-002",
+      "title": "SE Feedback Session - Data Generator Tool",
+      "content": "Sales Engineers report 40% time savings with new automated data generator prototype. Key feedback: need more product-specific datasets, better error handling, and integration with demo scheduling system. Overall sentiment very positive - team eager for full rollout.",
+      "date": "2026-01-05",
+      "category": "sales-enablement",
+      "tags": [
+        "feedback",
+        "efficiency",
+        "demo-prep"
+      ],
+      "linkedGoals": ["demo-prep-efficiency"],
+      "createdAt": "2026-01-05T10:15:00.000Z",
+      "updatedAt": "2026-01-05T10:15:00.000Z",
+      "tag": "tag-se-feedback"
+    },
+    {
+      "id": "note-demoprep-003",
+      "title": "Demo Environment Issues - January",
+      "content": "Had 12 last-minute environment issues this month vs target of 2/month. Root causes: outdated credentials (5 cases), data refresh failures (4 cases), network config (3 cases). Validation scripts should address 80% of these when deployed. Urgent priority to complete automation.",
+      "date": "2026-01-12",
+      "category": "critical-blocker",
+      "tags": [
+        "demo-prep",
+        "infrastructure",
+        "process-automation"
+      ],
+      "linkedGoals": ["demo-prep-efficiency"],
+      "createdAt": "2026-01-12T16:45:00.000Z",
+      "updatedAt": "2026-01-12T16:45:00.000Z",
+      "tag": "tag-demo-ops"
+    },
+    {
+      "id": "note-1765819155265",
+      "title": "Embedded Finance : Coast Renewal",
+      "content": "James (Coast) and Melissa.K (FIS) meeting dicussing the January 2026 Renewal of the EF Workspace in Coast . 56K and its \"approved\"",
+      "date": "2025-12-15",
+      "category": "expansion-ops",
+      "tags": [
+        "expansion-ops",
+        "high-value-deals"
+      ],
+      "createdAt": "2025-12-15T17:19:15.265Z",
+      "updatedAt": "2025-12-16T23:45:34.960Z",
+      "tag": "tag-1765871299139-hexs02v4s"
+    },
+    {
+      "id": "note-1765824389614",
+      "title": "Note System : Exec Summary",
+      "content": "Working on the Executive Summary Platform - implementing the Notes with AI funtionality. whilst also updating the Notes timeline feature for simple viewing of day to day notes!",
+      "date": "2025-12-15",
+      "category": "platform-integration",
+      "tags": [
+        "process-automation",
+        "product-intelligence"
+      ],
+      "createdAt": "2025-12-15T18:46:29.614Z",
+      "updatedAt": "2025-12-16T23:48:43.622Z",
+      "tag": "tag-1765928918627-vslgkphi8"
+    },
+    {
+      "id": "note-1765833301550",
+      "title": "Coast MSA Renewal",
+      "content": "The Coast MSA renewal in January 2026 - we need to talk with the heads of each Business to confirm that they have received approval or are pending approval for 2026 renewal budget. Identify gaps or overages in budgets and sync back with Robert and Mario.",
+      "date": "2025-12-15",
+      "category": "critical-blocker",
+      "tags": [
+        "revenue-at-risk",
+        "capacity-planning"
+      ],
+      "createdAt": "2025-12-15T21:15:01.550Z",
+      "updatedAt": "2025-12-16T23:47:38.207Z",
+      "tag": "tag-1765871299139-hexs02v4s"
+    },
+    {
+      "id": "note-1765927049907",
+      "title": "(NA) Banking Interlock",
+      "content": "Really positive feedback from Richard Chapman on the Tiled / Synthesia / Coast initiative and current progress of adoption within banking. Pushing forward with Planning or SKO.",
+      "date": "2025-12-16",
+      "category": "sales-enablement",
+      "tags": [
+        "strategic-milestone",
+        "sales-enablement"
+      ],
+      "tag": "tag-1765927041901-3er6laubc",
+      "createdAt": "2025-12-16T23:17:29.907Z",
+      "updatedAt": "2025-12-16T23:49:05.902Z"
+    },
+    {
+      "id": "note-1765927207490",
+      "title": "TSYS Coast Integration",
+      "content": "Discussion with Jordan on TSYS and their TSA renewal, which we believe is in 2027. Ideally, we should be looking to migrate their Demo Assets into FIS Coast Workspace.",
+      "date": "2025-12-16",
+      "category": "goal-progression",
+      "tags": [
+        "data-operations",
+        "platform-integration"
+      ],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2025-12-16T23:20:07.490Z",
+      "updatedAt": "2025-12-24T06:58:17.898Z"
+    },
+    {
+      "id": "note-1768031985596",
+      "title": "YoY Reduction in Support Hours",
+      "content": "As 2025 closes and the Key Activities Data is in, we are able to see a year-on-year reduction of 52% in Demo Support Hours, time spent by Pre-Sales on Demo Support efforts. This 1,721 hours less in 2025 vs 2024, spent on non-strategic tasks.",
+      "date": "2026-01-10",
+      "category": "big-win",
+      "tags": [],
+      "createdAt": "2026-01-10T07:59:45.596Z",
+      "updatedAt": "2026-01-10T09:30:50.052Z",
+      "tag": "tag-1768037435678-ca97fd4na"
+    },
+    {
+      "id": "note-1768034356322",
+      "title": "Azure OpenAI Endpoint",
+      "content": "Validate and build a new FISDev and Prod Dev environment for Credit Assessment and FIS Compose. This is to enable new product AI functionality.\n\n- Validate Data used (NPI/PII/PHI etc)\n- Have we completed the AI Operational Review (Alexandra.M)",
+      "date": "2026-01-10",
+      "category": "new-project",
+      "tags": [],
+      "createdAt": "2026-01-10T08:39:16.322Z",
+      "updatedAt": "2026-01-10T09:30:41.619Z",
+      "tag": "tag-1768037435678-ca97fd4na"
+    },
+    {
+      "id": "note-1768034545578",
+      "title": "Major Issues with Shift-Allowance",
+      "content": "We are reviewing an issue with how the teams \"Shift Allowance\" has been claimed over the last 2 years which is causing issues with one member of the team having to pay back 100,000 - 200,000 INR in Shift Payments. This is a major financial burden on the team member and is causing concern throughout the group.\n\nWorking with Priya and Sanil from India TPO on resolution.",
+      "date": "2026-01-10",
+      "category": "documentation",
+      "tags": [],
+      "createdAt": "2026-01-10T08:42:25.578Z",
+      "updatedAt": "2026-01-10T09:30:58.641Z",
+      "tag": "tag-1768037435678-ca97fd4na"
+    },
+    {
+      "id": "note-1768036589102",
+      "title": "Vendor Executive Summary",
+      "content": "Created initial draft of a \"Vendor Summary\" template. this will provide visibility into our engagement across demo tools and provide; \n\n- Vendor Identity Summary\n- Strategic Value\n- SMART Goals\n- Quick Stats\n- Impact\n- Risks\n- Budget",
+      "date": "2026-01-10",
+      "category": "new-project",
+      "tags": [],
+      "createdAt": "2026-01-10T09:16:29.102Z",
+      "updatedAt": "2026-01-10T09:31:06.208Z",
+      "tag": "tag-1765927041901-3er6laubc"
+    },
+    {
+      "id": "note-1768037196712",
+      "title": "2026 Demo Services Gantt",
+      "content": "Put together initial Gantt framework for 2026 Demo Tools deliverables.\n\nWork with Leadership to identify Strategic Products to prioritize.",
+      "date": "2026-01-10",
+      "category": "new-project",
+      "tags": [],
+      "createdAt": "2026-01-10T09:26:36.712Z",
+      "updatedAt": "2026-01-10T09:31:12.563Z",
+      "tag": "tag-1765927041901-3er6laubc"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+PRIORITY UPDATES PLAN
+===================================
+
+User Requested 5 New Priorities:
+1) Demo Asset Visibility - Managers meetings [DONE - replaced Priority 1]
+2) Coast MSA renewal - Finance Meetings and follow up
+3) MUFG AI Endpoint - Engage with Network Security Architecture team  
+4) Setup and Communicate Weekly Open Sessions
+5) Executive Summary Platform Deployment
+
+Current Priorities 2-5 need to be replaced with items 2-5 above.
+
+RISKS - Only 2 risks needed:
+1) COAST MSA RENEWAL
+2) AI Endpoint Authentication
