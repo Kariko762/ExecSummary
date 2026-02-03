@@ -17,6 +17,10 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
   const [editData, setEditData] = useState(initiative);
   const [activeTab, setActiveTab] = useState<'overview' | 'smart' | 'milestones' | 'performance' | 'resources' | 'risks' | 'tasks' | 'goals'>('overview');
   const [showGanttEditor, setShowGanttEditor] = useState(false);
+  const [hideTabIcons, setHideTabIcons] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showPublishModal, setShowPublishModal] = useState(false);
+  const modalRef = React.useRef<HTMLDivElement>(null);
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Info },
@@ -30,8 +34,23 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
   ];
 
   const handleSave = () => {
+    setShowSaveModal(true);
+  };
+
+  const handleSaveAndClose = () => {
     onSave(editData);
+    setShowSaveModal(false);
     onClose();
+  };
+
+  const handleSaveAndContinue = () => {
+    onSave(editData);
+    setShowSaveModal(false);
+  };
+
+  const handlePublishToggle = () => {
+    setEditData({ ...editData, _published: !editData._published });
+    setShowPublishModal(false);
   };
 
   const handleGanttSave = (ganttData: any) => {
@@ -41,15 +60,38 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
     });
   };
 
+  // Responsive tabs based on modal width
+  React.useEffect(() => {
+    const checkModalWidth = () => {
+      const modal = modalRef.current;
+      if (!modal) return;
+
+      const width = modal.offsetWidth;
+      
+      if (width < 1300) {
+        setHideTabIcons(true);
+      } else {
+        setHideTabIcons(false);
+      }
+      
+      // Scroll happens naturally via overflow-x-auto when width < 900px
+    };
+
+    checkModalWidth();
+    window.addEventListener('resize', checkModalWidth);
+    return () => window.removeEventListener('resize', checkModalWidth);
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[10000] p-4">
       <motion.div
+        ref={modalRef}
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-[75vw] h-[90vh] overflow-hidden flex flex-col"
+        className="bg-gradient-to-br from-[#0a0f1a] via-[#0d1420] to-[#0f172a] rounded-xl shadow-2xl w-[75vw] h-[90vh] overflow-hidden flex flex-col border border-white/10"
       >
         {/* Header */}
-        <div className="relative bg-gradient-to-br from-fis-navy via-blue-900 to-fis-raspberry text-white overflow-hidden">
+        <div className="relative bg-gradient-to-br from-[#0a0f1a] via-[#0d1420] to-[#0f172a] text-white overflow-hidden border-b border-white/10">
           {/* Animated Background Pattern */}
           <div className="absolute inset-0 opacity-10">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -102,7 +144,29 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
               </h3>
               <p className="text-white/80 text-xs mt-0.5">Strategic project driving organizational transformation</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {/* Visibility Toggle */}
+              <button
+                onClick={() => setShowPublishModal(true)}
+                className={`flex items-center gap-2 p-2 rounded-lg border transition-all text-xs ${
+                  editData._published
+                    ? 'bg-green-500/20 border-green-500/50 text-green-300'
+                    : 'bg-white/20 border-white/10 text-white/60 hover:bg-white/30'
+                }`}
+                title={editData._published ? 'Published - Visible on frontend and CMS' : 'Unpublished - Only visible in CMS'}
+              >
+                {editData._published ? (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                    <span className="font-roobert-medium">Published</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-2 h-2 rounded-full bg-white/30" />
+                    <span className="font-roobert-medium">Draft</span>
+                  </>
+                )}
+              </button>
               <button
                 onClick={handleSave}
                 className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
@@ -123,7 +187,7 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-6">
+        <div className="border-b border-white/10 bg-[#0a0f1a]/50 px-6">
           <div className="flex gap-1 overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -133,11 +197,11 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`px-4 py-3 font-roobert-medium text-sm flex items-center gap-2 border-b-2 transition-all whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'border-pink-600 text-pink-600 dark:text-pink-400'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                      ? 'border-blue-500 text-white'
+                      : 'border-transparent text-white/60 hover:text-white/80'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  {!hideTabIcons && <Icon className="w-4 h-4" />}
                   {tab.label}
                 </button>
               );
@@ -183,6 +247,101 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
           onSave={handleGanttSave}
         />
       )}
+
+      {/* Save Confirmation Modal */}
+      {showSaveModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[10001]">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-gradient-to-br from-[#1a1f2e] to-[#0a0f1a] rounded-xl shadow-2xl border border-white/20 p-6 max-w-md w-full mx-4"
+          >
+            <div className="flex items-start gap-3 mb-4">
+              <div className="p-2 bg-blue-500/20 rounded-lg">
+                <Save className="w-5 h-5 text-blue-400" />
+              </div>
+              <div>
+                <h4 className="text-lg font-roobert-semibold text-white">Save Initiative</h4>
+                <p className="text-sm text-white/60 mt-1">Choose how you'd like to proceed after saving.</p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={handleSaveAndClose}
+                className="w-full px-4 py-3 bg-[#4bcd3e] hover:bg-[#3db032] text-white font-roobert-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                Save & Close
+              </button>
+              <button
+                onClick={handleSaveAndContinue}
+                className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-roobert-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                Save & Continue Editing
+              </button>
+              <button
+                onClick={() => setShowSaveModal(false)}
+                className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-roobert-medium rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Publish/Unpublish Confirmation Modal */}
+      {showPublishModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[10001]">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-gradient-to-br from-[#1a1f2e] to-[#0a0f1a] rounded-xl shadow-2xl border border-white/20 p-6 max-w-md w-full mx-4"
+          >
+            <div className="flex items-start gap-3 mb-4">
+              <div className={`p-2 rounded-lg ${
+                editData._published ? 'bg-orange-500/20' : 'bg-green-500/20'
+              }`}>
+                <Flag className={`w-5 h-5 ${
+                  editData._published ? 'text-orange-400' : 'text-green-400'
+                }`} />
+              </div>
+              <div>
+                <h4 className="text-lg font-roobert-semibold text-white">
+                  {editData._published ? 'Unpublish Initiative?' : 'Publish Initiative?'}
+                </h4>
+                <p className="text-sm text-white/60 mt-1">
+                  {editData._published 
+                    ? 'This will hide the initiative from the frontend. Only CMS users will see it.' 
+                    : 'This will make the initiative visible on the frontend to all users.'}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={handlePublishToggle}
+                className={`w-full px-4 py-3 text-white font-roobert-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                  editData._published 
+                    ? 'bg-orange-600 hover:bg-orange-700'
+                    : 'bg-[#4bcd3e] hover:bg-[#3db032]'
+                }`}
+              >
+                <Flag className="w-4 h-4" />
+                {editData._published ? 'Unpublish' : 'Publish'}
+              </button>
+              <button
+                onClick={() => setShowPublishModal(false)}
+                className="w-full px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-roobert-medium rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
@@ -194,32 +353,32 @@ function OverviewTab({ editData, setEditData, goals }: any) {
     <div className="space-y-4">
       {/* Basic Info */}
       <div>
-        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+        <h4 className="text-xs font-roobert-semibold text-white/90 mb-2 flex items-center gap-1.5">
           <Info className="w-3.5 h-3.5" />
           Basic Information
         </h4>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">
               Initiative Name *
             </label>
             <input
               type="text"
               value={editData.name || ''}
               onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent"
               placeholder="Digital First Demo Services"
             />
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">
               Short Name
             </label>
             <input
               type="text"
               value={editData.shortName || ''}
               onChange={(e) => setEditData({ ...editData, shortName: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
               placeholder="Demo Automation"
             />
           </div>
@@ -228,59 +387,59 @@ function OverviewTab({ editData, setEditData, goals }: any) {
 
       {/* Status & Progress */}
       <div>
-        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Status & Timeline</h4>
+        <h4 className="text-xs font-roobert-semibold text-white/90 mb-2">Status & Timeline</h4>
         <div className="grid grid-cols-4 gap-3">
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Status *</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Status *</label>
             <select
               value={editData.status || 'planning'}
               onChange={(e) => setEditData({ ...editData, status: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
             >
-              <option value="planning">Planning</option>
-              <option value="in-progress">In Progress</option>
-              <option value="on-hold">On Hold</option>
-              <option value="at-risk">At Risk</option>
-              <option value="completed">Completed</option>
+              <option className="bg-[#0a0f1a] text-white" value="planning">Planning</option>
+              <option className="bg-[#0a0f1a] text-white" value="in-progress">In Progress</option>
+              <option className="bg-[#0a0f1a] text-white" value="on-hold">On Hold</option>
+              <option className="bg-[#0a0f1a] text-white" value="at-risk">At Risk</option>
+              <option className="bg-[#0a0f1a] text-white" value="completed">Completed</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Priority</label>
             <select
               value={editData.priority || 'medium'}
               onChange={(e) => setEditData({ ...editData, priority: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
             >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
+              <option className="bg-[#0a0f1a] text-white" value="low">Low</option>
+              <option className="bg-[#0a0f1a] text-white" value="medium">Medium</option>
+              <option className="bg-[#0a0f1a] text-white" value="high">High</option>
+              <option className="bg-[#0a0f1a] text-white" value="critical">Critical</option>
             </select>
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Progress (%)</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Progress (%)</label>
             <input
               type="number"
               value={editData.progress || 0}
               onChange={(e) => setEditData({ ...editData, progress: Number(e.target.value) })}
               min="0"
               max="100"
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
             />
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Stage</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Stage</label>
             <select
               value={editData.projectStage || 'planning'}
               onChange={(e) => setEditData({ ...editData, projectStage: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
             >
-              <option value="discovery">Discovery</option>
-              <option value="planning">Planning</option>
-              <option value="mvp">MVP</option>
-              <option value="pilot">Pilot</option>
-              <option value="scaling">Scaling</option>
-              <option value="complete">Complete</option>
+              <option className="bg-[#0a0f1a] text-white" value="discovery">Discovery</option>
+              <option className="bg-[#0a0f1a] text-white" value="planning">Planning</option>
+              <option className="bg-[#0a0f1a] text-white" value="mvp">MVP</option>
+              <option className="bg-[#0a0f1a] text-white" value="pilot">Pilot</option>
+              <option className="bg-[#0a0f1a] text-white" value="scaling">Scaling</option>
+              <option className="bg-[#0a0f1a] text-white" value="complete">Complete</option>
             </select>
           </div>
         </div>
@@ -288,7 +447,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
 
       {/* Linked Goals */}
       <div>
-        <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+        <label className="block text-xs font-roobert-semibold text-white/90 mb-2 flex items-center gap-2">
           <Target className="w-4 h-4" />
           Strategic Goals Supported
         </label>
@@ -328,9 +487,9 @@ function OverviewTab({ editData, setEditData, goals }: any) {
             }
             e.target.value = '';
           }}
-          className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+          className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
         >
-          <option value="">+ Add Strategic Goal</option>
+          <option className="bg-[#0a0f1a] text-white" value="">+ Add Strategic Goal</option>
           {goals
             .filter((g: any) => !editData.linkedGoals?.includes(g.id))
             .map((goal: any) => (
@@ -343,7 +502,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
 
       {/* Initiative Statement */}
       <div>
-        <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-1">Initiative Statement</label>
+        <label className="block text-xs font-roobert-semibold text-white/90 mb-1">Initiative Statement</label>
         <textarea
           value={editData.smartGoal?.statement || ''}
           onChange={(e) => setEditData({
@@ -351,17 +510,17 @@ function OverviewTab({ editData, setEditData, goals }: any) {
             smartGoal: { ...(editData.smartGoal || {}), statement: e.target.value }
           })}
           rows={3}
-          className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+          className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
           placeholder="1-2 sentence statement of what this initiative aims to achieve..."
         />
       </div>
 
       {/* Business Case */}
       <div>
-        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Business Case</h4>
+        <h4 className="text-xs font-roobert-semibold text-white/90 mb-2">Business Case</h4>
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Problem</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Problem</label>
             <textarea
               value={editData.businessCase?.problem || ''}
               onChange={(e) => setEditData({
@@ -369,12 +528,12 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                 businessCase: { ...(editData.businessCase || {}), problem: e.target.value }
               })}
               rows={2}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
               placeholder="What problem does this solve?"
             />
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Opportunity</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Opportunity</label>
             <textarea
               value={editData.businessCase?.opportunity || ''}
               onChange={(e) => setEditData({
@@ -382,12 +541,12 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                 businessCase: { ...(editData.businessCase || {}), opportunity: e.target.value }
               })}
               rows={2}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
               placeholder="What opportunity does this create?"
             />
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Solution</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Solution</label>
             <textarea
               value={editData.businessCase?.solution || ''}
               onChange={(e) => setEditData({
@@ -395,13 +554,13 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                 businessCase: { ...(editData.businessCase || {}), solution: e.target.value }
               })}
               rows={2}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
               placeholder="How will we solve it?"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Expected ROI</label>
+              <label className="block text-xs font-roobert-medium text-white/90 mb-1">Expected ROI</label>
               <input
                 type="text"
                 value={editData.businessCase?.roi || ''}
@@ -409,12 +568,12 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                   ...editData,
                   businessCase: { ...(editData.businessCase || {}), roi: e.target.value }
                 })}
-                className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
                 placeholder="450% in 18 months"
               />
             </div>
             <div>
-              <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Payback Period</label>
+              <label className="block text-xs font-roobert-medium text-white/90 mb-1">Payback Period</label>
               <input
                 type="text"
                 value={editData.businessCase?.paybackPeriod || ''}
@@ -422,13 +581,13 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                   ...editData,
                   businessCase: { ...(editData.businessCase || {}), paybackPeriod: e.target.value }
                 })}
-                className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
                 placeholder="12 months"
               />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Expected Benefits</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Expected Benefits</label>
             <div className="space-y-2">
               {(editData.businessCase?.expectedBenefits || []).map((benefit: string, idx: number) => (
                 <div key={idx} className="flex items-center gap-2">
@@ -443,7 +602,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                         businessCase: { ...(editData.businessCase || {}), expectedBenefits: updated }
                       });
                     }}
-                    className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm"
+                    className="flex-1 px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white text-sm"
                     placeholder="Benefit description"
                   />
                   <button
@@ -455,7 +614,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                         businessCase: { ...(editData.businessCase || {}), expectedBenefits: updated }
                       });
                     }}
-                    className="p-1.5 text-white bg-red-600 hover:bg-red-700 rounded"
+                    className="p-1.5 text-white bg-white/10 hover:bg-white/20 rounded transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -471,7 +630,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                     }
                   });
                 }}
-                className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg flex items-center gap-1"
+                className="px-3 py-1.5 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
               >
                 <Plus className="w-3 h-3" />
                 Add Benefit
@@ -483,39 +642,39 @@ function OverviewTab({ editData, setEditData, goals }: any) {
 
       {/* Ownership */}
       <div>
-        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Ownership</h4>
+        <h4 className="text-xs font-roobert-semibold text-white/90 mb-2">Ownership</h4>
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Owner *</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Owner *</label>
             <input
               type="text"
               value={editData.owner || ''}
               onChange={(e) => setEditData({ ...editData, owner: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
               placeholder="Sarah Chen"
             />
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Sponsor</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Sponsor</label>
             <input
               type="text"
               value={editData.sponsor || ''}
               onChange={(e) => setEditData({ ...editData, sponsor: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
               placeholder="SVP, Revenue Operations"
             />
           </div>
           <div>
-            <label className="block text-xs font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+            <label className="block text-xs font-roobert-medium text-white/90 mb-1">Category</label>
             <select
               value={editData.category || 'innovation'}
               onChange={(e) => setEditData({ ...editData, category: e.target.value })}
-              className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
             >
-              <option value="revenue">Revenue</option>
-              <option value="customer">Customer</option>
-              <option value="cost">Cost</option>
-              <option value="innovation">Innovation</option>
+              <option className="bg-[#0a0f1a] text-white" value="revenue">Revenue</option>
+              <option className="bg-[#0a0f1a] text-white" value="customer">Customer</option>
+              <option className="bg-[#0a0f1a] text-white" value="cost">Cost</option>
+              <option className="bg-[#0a0f1a] text-white" value="innovation">Innovation</option>
             </select>
           </div>
         </div>
@@ -523,7 +682,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
 
       {/* Co-Owners */}
       <div>
-        <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Co-Owners</label>
+        <label className="block text-xs font-roobert-semibold text-white/90 mb-2">Co-Owners</label>
         <div className="space-y-2">
           {(editData.coOwners || []).map((coOwner: string, idx: number) => (
             <div key={idx} className="flex items-center gap-2">
@@ -535,7 +694,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                   updated[idx] = e.target.value;
                   setEditData({ ...editData, coOwners: updated });
                 }}
-                className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm"
+                className="flex-1 px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white text-sm"
                 placeholder="Co-owner name"
               />
               <button
@@ -544,7 +703,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                   updated.splice(idx, 1);
                   setEditData({ ...editData, coOwners: updated });
                 }}
-                className="p-1.5 text-white bg-red-600 hover:bg-red-700 rounded"
+                className="p-1.5 text-white bg-white/10 hover:bg-white/20 rounded transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -557,7 +716,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                 coOwners: [...(editData.coOwners || []), '']
               });
             }}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1"
+            className="px-3 py-1.5 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
           >
             <Plus className="w-3 h-3" />
             Add Co-Owner
@@ -567,10 +726,10 @@ function OverviewTab({ editData, setEditData, goals }: any) {
 
       {/* Key Stakeholders */}
       <div>
-        <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Key Stakeholders</label>
+        <label className="block text-xs font-roobert-semibold text-white/90 mb-2">Key Stakeholders</label>
         <div className="space-y-3">
           {(editData.stakeholders || []).map((stakeholder: any, idx: number) => (
-            <div key={idx} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div key={idx} className="p-3 bg-white/5 rounded-lg border border-white/10">
               <div className="grid grid-cols-3 gap-2 mb-2">
                 <input
                   type="text"
@@ -580,7 +739,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                     updated[idx] = { ...updated[idx], name: e.target.value };
                     setEditData({ ...editData, stakeholders: updated });
                   }}
-                  className="px-2.5 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white text-sm"
+                  className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm"
                   placeholder="Name"
                 />
                 <input
@@ -591,7 +750,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                     updated[idx] = { ...updated[idx], role: e.target.value };
                     setEditData({ ...editData, stakeholders: updated });
                   }}
-                  className="px-2.5 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white text-sm"
+                  className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm"
                   placeholder="Role"
                 />
                 <select
@@ -601,12 +760,12 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                     updated[idx] = { ...updated[idx], supportLevel: e.target.value };
                     setEditData({ ...editData, stakeholders: updated });
                   }}
-                  className="px-2.5 py-1.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white text-sm"
+                  className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded text-white text-sm"
                 >
-                  <option value="champion">Champion</option>
-                  <option value="supporter">Supporter</option>
-                  <option value="neutral">Neutral</option>
-                  <option value="skeptic">Skeptic</option>
+                  <option className="bg-[#0a0f1a] text-white" value="champion">Champion</option>
+                  <option className="bg-[#0a0f1a] text-white" value="supporter">Supporter</option>
+                  <option className="bg-[#0a0f1a] text-white" value="neutral">Neutral</option>
+                  <option className="bg-[#0a0f1a] text-white" value="skeptic">Skeptic</option>
                 </select>
               </div>
               <button
@@ -615,10 +774,9 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                   updated.splice(idx, 1);
                   setEditData({ ...editData, stakeholders: updated });
                 }}
-                className="text-white bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-xs flex items-center gap-1"
+                className="p-1.5 text-white bg-white/10 hover:bg-white/20 rounded transition-colors"
               >
                 <X className="w-3 h-3" />
-                Remove
               </button>
             </div>
           ))}
@@ -629,7 +787,7 @@ function OverviewTab({ editData, setEditData, goals }: any) {
                 stakeholders: [...(editData.stakeholders || []), { name: '', role: '', supportLevel: 'neutral' }]
               });
             }}
-            className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg flex items-center gap-1"
+            className="px-3 py-1.5 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
           >
             <Plus className="w-3 h-3" />
             Add Stakeholder
@@ -846,53 +1004,16 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
 
   return (
     <div className="space-y-4">
-      {/* ========== GANTT CHART BUTTON ========== */}
-      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border-2 border-purple-300 dark:border-purple-700 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h4 className="text-sm font-roobert-bold text-purple-900 dark:text-purple-100 flex items-center gap-2 mb-1">
-              <Calendar className="w-5 h-5" />
-              Advanced Gantt Chart Editor
-            </h4>
-            <p className="text-xs text-purple-700 dark:text-purple-300">
-              Open external Gantt editor to build detailed project plans with templates, dependencies, and hierarchical tasks
-            </p>
-          </div>
-          <button
-            onClick={onOpenGanttEditor}
-            className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-roobert-semibold flex items-center gap-2 transition-colors shadow-lg"
-          >
-            <Calendar className="w-5 h-5" />
-            Edit Gantt
-          </button>
-        </div>
-      </div>
-
-      {/* ========== GANTT VISUALIZATION ========== */}
-      {(() => {
-        console.log('🔍 Gantt Check:', {
-          hasGanttData: !!editData.ganttData,
-          hasTasks: !!editData.ganttData?.tasks,
-          taskCount: editData.ganttData?.tasks?.length,
-          ganttData: editData.ganttData
-        });
-        return editData.ganttData && editData.ganttData.tasks && editData.ganttData.tasks.length > 0;
-      })() && (
-        <div className="my-4">
-          <GanttVisualizer ganttData={editData.ganttData} />
-        </div>
-      )}
-
       {/* ========== PROJECT MILESTONES ========== */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <Flag className="w-4 h-4" />
             Project Milestones
           </h4>
           <button
             onClick={addMilestone}
-            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1"
+            className="px-3 py-1.5 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
           >
             <Plus className="w-3 h-3" />
             Add Milestone
@@ -902,67 +1023,66 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
         <div className="space-y-3">
           {(editData.smartGoal?.timeBound?.timeline || []).map((milestone: any, index: number) => (
             <div key={index} className={`p-4 rounded-lg border-2 ${
-              milestone.status === 'completed' ? 'bg-green-50 dark:bg-green-950/20 border-green-500 dark:border-green-700' :
-              milestone.status === 'in-progress' ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-500 dark:border-blue-700' :
-              'bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600'
+              milestone.status === 'completed' ? 'bg-green-500/10 border-green-500/50' :
+              milestone.status === 'in-progress' ? 'bg-blue-500/10 border-blue-500/50' :
+              'bg-white/5 border-white/10'
             }`}>
               <div className="grid grid-cols-6 gap-3 mb-3">
                 <div className="col-span-2">
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Phase Name</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Phase Name</label>
                   <input
                     type="text"
                     value={milestone.phase || ''}
                     onChange={(e) => updateMilestone(index, 'phase', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="MVP Development"
                   />
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Deliverable</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Deliverable</label>
                   <input
                     type="text"
                     value={milestone.deliverable || ''}
                     onChange={(e) => updateMilestone(index, 'deliverable', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Core automation workflows operational"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Due Date</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Due Date</label>
                   <input
                     type="date"
                     value={milestone.dueDate || ''}
                     onChange={(e) => updateMilestone(index, 'dueDate', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Status</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Status</label>
                   <select
                     value={milestone.status || 'not-started'}
                     onChange={(e) => updateMilestone(index, 'status', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   >
-                    <option value="not-started">Not Started</option>
-                    <option value="in-progress">In Progress</option>
-                    <option value="completed">Completed</option>
+                    <option className="bg-[#0a0f1a] text-white" value="not-started">Not Started</option>
+                    <option className="bg-[#0a0f1a] text-white" value="in-progress">In Progress</option>
+                    <option className="bg-[#0a0f1a] text-white" value="completed">Completed</option>
                   </select>
                 </div>
               </div>
               <div className="flex justify-end">
                 <button
                   onClick={() => removeMilestone(index)}
-                  className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded flex items-center gap-1"
+                  className="p-1.5 text-white bg-white/10 hover:bg-white/20 rounded transition-colors"
                 >
                   <X className="w-3 h-3" />
-                  Remove
                 </button>
               </div>
             </div>
           ))}
           
           {(!editData.smartGoal?.timeBound?.timeline || editData.smartGoal.timeBound.timeline.length === 0) && (
-            <p className="text-sm text-gray-500 dark:text-gray-400 italic py-4 text-center">
+            <p className="text-sm text-white/50 italic py-4 text-center">
               No milestones yet. Click "Add Milestone" to create project milestones.
             </p>
           )}
@@ -970,8 +1090,8 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
       </div>
 
       {/* ========== OBJECTIVES (SMART GOALS) ========== */}
-      <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mt-6">
-        <h3 className="text-sm font-roobert-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+      <div className="border-t border-white/10 pt-4 mt-6">
+        <h3 className="text-sm font-roobert-bold text-white mb-3 flex items-center gap-2">
           <Target className="w-4 h-4" />
           Objectives
         </h3>
@@ -981,10 +1101,10 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
           {/* Specific Objectives */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">Specific Objectives</h4>
+              <h4 className="text-xs font-roobert-semibold text-white/90">Specific Objectives</h4>
               <button
                 onClick={addSpecificObjective}
-                className="px-2 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded flex items-center gap-1"
+                className="px-2 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-xs rounded flex items-center gap-1"
               >
                 <Plus className="w-3 h-3" />
                 Add
@@ -997,19 +1117,19 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
                     type="text"
                     value={obj}
                     onChange={(e) => updateSpecificObjective(idx, e.target.value)}
-                    className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                    className="flex-1 px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
                     placeholder="What specifically will we accomplish?"
                   />
                   <button
                     onClick={() => removeSpecificObjective(idx)}
-                    className="px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded"
+                    className="p-1.5 text-white bg-white/10 hover:bg-white/20 rounded transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>
                 </div>
               ))}
               {(!editData.smartGoal?.specific?.objectives || editData.smartGoal.specific.objectives.length === 0) && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 italic py-2 text-center">
+                <p className="text-xs text-white/50 italic py-2 text-center">
                   No objectives yet. Click "Add" to define specific goals.
                 </p>
               )}
@@ -1019,10 +1139,10 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
           {/* Measurable Metrics */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">Measurable Metrics</h4>
+              <h4 className="text-xs font-roobert-semibold text-white/90">Measurable Metrics</h4>
               <button
                 onClick={addMeasurableMetric}
-                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded flex items-center gap-1"
+                className="px-2 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-xs rounded flex items-center gap-1"
               >
                 <Plus className="w-3 h-3" />
                 Add
@@ -1035,19 +1155,19 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
                     type="text"
                     value={metric}
                     onChange={(e) => updateMeasurableMetric(idx, e.target.value)}
-                    className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                    className="flex-1 px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
                     placeholder="How will we measure success?"
                   />
                   <button
                     onClick={() => removeMeasurableMetric(idx)}
-                    className="px-2 py-1.5 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded"
+                    className="p-1.5 text-white bg-white/10 hover:bg-white/20 rounded transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>
                 </div>
               ))}
               {(!editData.smartGoal?.measurable?.metrics || editData.smartGoal.measurable.metrics.length === 0) && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 italic py-2 text-center">
+                <p className="text-xs text-white/50 italic py-2 text-center">
                   No metrics yet. Click "Add" to define measurable outcomes.
                 </p>
               )}
@@ -1059,10 +1179,10 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
         <div className="grid grid-cols-2 gap-4">
           {/* Achievable */}
           <div>
-            <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Achievable Resources</h4>
+            <h4 className="text-xs font-roobert-semibold text-white/90 mb-2">Achievable Resources</h4>
             <div className="space-y-2">
               <div>
-                <label className="block text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-1">Available Resources</label>
+                <label className="block text-xs font-roobert-medium text-white/70 mb-1">Available Resources</label>
                 <textarea
                   value={editData.smartGoal?.achievable?.resources || ''}
                   onChange={(e) => setEditData({
@@ -1073,12 +1193,12 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
                     }
                   })}
                   rows={2}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
                   placeholder="What resources are available to achieve this?"
                 />
               </div>
               <div>
-                <label className="block text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-1">Team Size</label>
+                <label className="block text-xs font-roobert-medium text-white/70 mb-1">Team Size</label>
                 <input
                   type="text"
                   value={editData.smartGoal?.achievable?.teamSize || ''}
@@ -1089,7 +1209,7 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
                       achievable: { ...(editData.smartGoal?.achievable || {}), teamSize: e.target.value }
                     }
                   })}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
                   placeholder="5 FTE"
                 />
               </div>
@@ -1098,12 +1218,12 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
 
           {/* Relevant - Strategic Alignment */}
           <div>
-            <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">Strategic Alignment</h4>
+            <h4 className="text-xs font-roobert-semibold text-white/90 mb-2">Strategic Alignment</h4>
             <div className="space-y-3">
               {/* CRO Impact Areas */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400">CRO Impact Areas</label>
+                  <label className="text-xs font-roobert-medium text-white/70">CRO Impact Areas</label>
                   <button
                     onClick={addCroAlignment}
                     className="px-1.5 py-0.5 bg-fis-navy hover:bg-fis-navy/80 text-white text-xs rounded"
@@ -1132,7 +1252,7 @@ function MilestonesTab({ editData, setEditData, onOpenGanttEditor }: any) {
               {/* Strategic Themes */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400">Strategic Themes</label>
+                  <label className="text-xs font-roobert-medium text-white/70">Strategic Themes</label>
                   <button
                     onClick={addStrategicTheme}
                     className="px-1.5 py-0.5 bg-fis-raspberry hover:bg-fis-raspberry/80 text-white text-xs rounded"
@@ -1275,13 +1395,13 @@ function DependenciesTab({ editData, setEditData }: any) {
       {/* Internal Dependencies */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <Users className="w-4 h-4" />
             Internal Dependencies
           </h4>
           <button
             onClick={addInternalDependency}
-            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1 transition-colors"
+            className="px-3 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1 transition-colors"
           >
             <Plus className="w-3 h-3" />
             Add Internal
@@ -1290,71 +1410,71 @@ function DependenciesTab({ editData, setEditData }: any) {
         
         <div className="grid grid-cols-2 gap-3">
           {editData.dependencies?.internal?.map((dep: any, index: number) => (
-            <div key={index} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
               <div className="grid grid-cols-2 gap-3 mb-2">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Depends On (Team/System)</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Depends On (Team/System)</label>
                   <input
                     type="text"
                     value={dep.on || ''}
                     onChange={(e) => updateInternalDependency(index, 'on', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Data Platform Team"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Due Date</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Due Date</label>
                   <input
                     type="date"
                     value={dep.dueDate || ''}
                     onChange={(e) => updateInternalDependency(index, 'dueDate', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   />
                 </div>
               </div>
               <div className="mb-2">
-                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Description</label>
+                <label className="block text-xs font-medium text-white/70 mb-1">Description</label>
                 <textarea
                   value={dep.description || ''}
                   onChange={(e) => updateInternalDependency(index, 'description', e.target.value)}
                   rows={2}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   placeholder="API access to customer data lakes"
                 />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Criticality</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Criticality</label>
                   <select
                     value={dep.criticality || 'medium'}
                     onChange={(e) => updateInternalDependency(index, 'criticality', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option className="bg-[#0a0f1a] text-white" value="low">Low</option>
+                    <option className="bg-[#0a0f1a] text-white" value="medium">Medium</option>
+                    <option className="bg-[#0a0f1a] text-white" value="high">High</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Status</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Status</label>
                   <select
                     value={dep.status || 'pending'}
                     onChange={(e) => updateInternalDependency(index, 'status', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   >
-                    <option value="pending">Pending</option>
-                    <option value="in-progress">In Progress</option>
-                    <option value="completed">Completed</option>
-                    <option value="blocked">Blocked</option>
+                    <option className="bg-[#0a0f1a] text-white" value="pending">Pending</option>
+                    <option className="bg-[#0a0f1a] text-white" value="in-progress">In Progress</option>
+                    <option className="bg-[#0a0f1a] text-white" value="completed">Completed</option>
+                    <option className="bg-[#0a0f1a] text-white" value="blocked">Blocked</option>
                   </select>
                 </div>
                 <div className="flex items-end">
                   <button
                     onClick={() => removeInternalDependency(index)}
-                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded flex items-center justify-center gap-1 transition-colors"
+                    className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
-                    <X className="w-3 h-3" />
-                    Remove
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -1372,13 +1492,13 @@ function DependenciesTab({ editData, setEditData }: any) {
       {/* External Dependencies */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <LinkIcon className="w-4 h-4" />
             External Dependencies
           </h4>
           <button
             onClick={newExternalDep}
-            className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg flex items-center gap-1 transition-colors"
+            className="px-3 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1 transition-colors"
           >
             <Plus className="w-3 h-3" />
             Add External
@@ -1387,71 +1507,71 @@ function DependenciesTab({ editData, setEditData }: any) {
         
         <div className="grid grid-cols-2 gap-3">
           {editData.dependencies?.external?.map((dep: any, index: number) => (
-            <div key={index} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
               <div className="grid grid-cols-2 gap-3 mb-2">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Vendor/Partner</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Vendor/Partner</label>
                   <input
                     type="text"
                     value={dep.on || ''}
                     onChange={(e) => updateExternalDependency(index, 'on', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="OpenAI"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Contract End</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Contract End</label>
                   <input
                     type="date"
                     value={dep.contractEnd || ''}
                     onChange={(e) => updateExternalDependency(index, 'contractEnd', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   />
                 </div>
               </div>
               <div className="mb-2">
-                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Description</label>
+                <label className="block text-xs font-medium text-white/70 mb-1">Description</label>
                 <textarea
                   value={dep.description || ''}
                   onChange={(e) => updateExternalDependency(index, 'description', e.target.value)}
                   rows={2}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   placeholder="GPT-4 API access for intelligent demo data generation"
                 />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Criticality</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Criticality</label>
                   <select
                     value={dep.criticality || 'medium'}
                     onChange={(e) => updateExternalDependency(index, 'criticality', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option className="bg-[#0a0f1a] text-white" value="low">Low</option>
+                    <option className="bg-[#0a0f1a] text-white" value="medium">Medium</option>
+                    <option className="bg-[#0a0f1a] text-white" value="high">High</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Status</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Status</label>
                   <select
                     value={dep.status || 'active'}
                     onChange={(e) => updateExternalDependency(index, 'status', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   >
-                    <option value="active">Active</option>
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
+                    <option className="bg-[#0a0f1a] text-white" value="active">Active</option>
+                    <option className="bg-[#0a0f1a] text-white" value="pending">Pending</option>
+                    <option className="bg-[#0a0f1a] text-white" value="completed">Completed</option>
+                    <option className="bg-[#0a0f1a] text-white" value="cancelled">Cancelled</option>
                   </select>
                 </div>
                 <div className="flex items-end">
                   <button
                     onClick={() => removeExternalDependency(index)}
-                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded flex items-center justify-center gap-1 transition-colors"
+                    className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
-                    <X className="w-3 h-3" />
-                    Remove
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -1469,13 +1589,13 @@ function DependenciesTab({ editData, setEditData }: any) {
       {/* Blocking Dependencies */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" />
             Blocking Dependencies (Other Initiatives)
           </h4>
           <button
             onClick={newBlockingDep}
-            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg flex items-center gap-1 transition-colors"
+            className="px-3 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1 transition-colors"
           >
             <Plus className="w-3 h-3" />
             Add Blocker
@@ -1484,58 +1604,58 @@ function DependenciesTab({ editData, setEditData }: any) {
         
         <div className="grid grid-cols-2 gap-3">
           {editData.dependencies?.blocking?.map((dep: any, index: number) => (
-            <div key={index} className="p-4 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-200 dark:border-red-800">
+            <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
               <div className="grid grid-cols-2 gap-3 mb-2">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Initiative/Project Name</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Initiative/Project Name</label>
                   <input
                     type="text"
                     value={dep.initiative || ''}
                     onChange={(e) => updateBlockingDependency(index, 'initiative', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Customer Data Platform v2"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Expected Resolution</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Expected Resolution</label>
                   <input
                     type="date"
                     value={dep.expectedResolution || ''}
                     onChange={(e) => updateBlockingDependency(index, 'expectedResolution', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   />
                 </div>
               </div>
               <div className="mb-2">
-                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Why This Blocks Progress</label>
+                <label className="block text-xs font-medium text-white/70 mb-1">Why This Blocks Progress</label>
                 <textarea
                   value={dep.description || ''}
                   onChange={(e) => updateBlockingDependency(index, 'description', e.target.value)}
                   rows={2}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   placeholder="Requires stable CDP APIs for production demo data synthesis"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Criticality</label>
+                  <label className="block text-xs font-medium text-white/70 mb-1">Criticality</label>
                   <select
                     value={dep.criticality || 'high'}
                     onChange={(e) => updateBlockingDependency(index, 'criticality', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   >
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                    <option value="critical">Critical</option>
+                    <option className="bg-[#0a0f1a] text-white" value="medium">Medium</option>
+                    <option className="bg-[#0a0f1a] text-white" value="high">High</option>
+                    <option className="bg-[#0a0f1a] text-white" value="critical">Critical</option>
                   </select>
                 </div>
                 <div className="flex items-end">
                   <button
                     onClick={() => removeBlockingDependency(index)}
-                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded flex items-center justify-center gap-1 transition-colors"
+                    className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
-                    <X className="w-3 h-3" />
-                    Remove
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -1615,13 +1735,13 @@ function PerformanceTab({ editData, setEditData }: any) {
       {/* Leading Indicators */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
             Leading Indicators
           </h4>
           <button
             onClick={addLeadingIndicator}
-            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1"
+            className="px-3 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
           >
             <Plus className="w-3 h-3" />
             Add Leading
@@ -1629,64 +1749,65 @@ function PerformanceTab({ editData, setEditData }: any) {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {(editData.indicators?.leading || []).map((indicator: any, index: number) => (
-            <div key={index} className="p-4 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
               <div className="mb-3">
-                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Indicator Name</label>
+                <label className="block text-xs font-medium text-white/70 mb-1">Indicator Name</label>
                 <input
                   type="text"
                   value={indicator.name || ''}
                   onChange={(e) => updateLeadingIndicator(index, 'name', e.target.value)}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   placeholder="e.g., Demo Request Volume"
                 />
               </div>
               <div className="grid grid-cols-5 gap-2">
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Baseline</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Baseline</label>
                   <input
                     type="text"
                     value={indicator.baseline || ''}
                     onChange={(e) => updateLeadingIndicator(index, 'baseline', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Current</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Current</label>
                   <input
                     type="text"
                     value={indicator.current || ''}
                     onChange={(e) => updateLeadingIndicator(index, 'current', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Target</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Target</label>
                   <input
                     type="text"
                     value={indicator.target || ''}
                     onChange={(e) => updateLeadingIndicator(index, 'target', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Unit</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Unit</label>
                   <input
                     type="text"
                     value={indicator.unit || ''}
                     onChange={(e) => updateLeadingIndicator(index, 'unit', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="/mo"
                   />
                 </div>
                 <div className="flex items-end">
                   <button
                     onClick={() => removeLeadingIndicator(index)}
-                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
+                    className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
-                    <X className="w-3 h-3 mx-auto" />
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -1698,13 +1819,13 @@ function PerformanceTab({ editData, setEditData }: any) {
       {/* Lagging Indicators */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
             Lagging Indicators
           </h4>
           <button
             onClick={addLaggingIndicator}
-            className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg flex items-center gap-1"
+            className="px-3 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
           >
             <Plus className="w-3 h-3" />
             Add Lagging
@@ -1712,64 +1833,65 @@ function PerformanceTab({ editData, setEditData }: any) {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {(editData.indicators?.lagging || []).map((indicator: any, index: number) => (
-            <div key={index} className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
+            <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
               <div className="mb-3">
-                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Indicator Name</label>
+                <label className="block text-xs font-medium text-white/70 mb-1">Indicator Name</label>
                 <input
                   type="text"
                   value={indicator.name || ''}
                   onChange={(e) => updateLaggingIndicator(index, 'name', e.target.value)}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   placeholder="e.g., Revenue from New Demos"
                 />
               </div>
               <div className="grid grid-cols-5 gap-2">
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Baseline</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Baseline</label>
                   <input
                     type="text"
                     value={indicator.baseline || ''}
                     onChange={(e) => updateLaggingIndicator(index, 'baseline', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Current</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Current</label>
                   <input
                     type="text"
                     value={indicator.current || ''}
                     onChange={(e) => updateLaggingIndicator(index, 'current', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Target</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Target</label>
                   <input
                     type="text"
                     value={indicator.target || ''}
                     onChange={(e) => updateLaggingIndicator(index, 'target', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Unit</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Unit</label>
                   <input
                     type="text"
                     value={indicator.unit || ''}
                     onChange={(e) => updateLaggingIndicator(index, 'unit', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="M"
                   />
                 </div>
                 <div className="flex items-end">
                   <button
                     onClick={() => removeLaggingIndicator(index)}
-                    className="w-full px-2 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
+                    className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
-                    <X className="w-3 h-3 mx-auto" />
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -1846,13 +1968,13 @@ function ResourcesTab({ editData, setEditData }: any) {
       {/* Team Members */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <Users className="w-4 h-4" />
             Team Members
           </h4>
           <button
             onClick={addTeamMember}
-            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg flex items-center gap-1"
+            className="px-3 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
           >
             <Plus className="w-3 h-3" />
             Add Member
@@ -1860,66 +1982,67 @@ function ResourcesTab({ editData, setEditData }: any) {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {(editData.resources?.team || []).map((member: any, index: number) => (
-            <div key={index} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Name</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Name</label>
                   <input
                     type="text"
                     value={member.name || ''}
                     onChange={(e) => updateTeamMember(index, 'name', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Jane Smith"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Role</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Role</label>
                   <input
                     type="text"
                     value={member.role || ''}
                     onChange={(e) => updateTeamMember(index, 'role', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Product Manager"
                   />
                 </div>
               </div>
               <div className="grid grid-cols-12 gap-3 mb-2">
                 <div className="col-span-4">
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Allocation</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Allocation</label>
                   <input
                     type="text"
                     value={member.allocation || ''}
                     onChange={(e) => updateTeamMember(index, 'allocation', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="75%"
                   />
                 </div>
                 <div className="col-span-7">
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Commitment</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Commitment</label>
                   <input
                     type="text"
                     value={member.commitment || ''}
                     onChange={(e) => updateTeamMember(index, 'commitment', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Full-time"
                   />
                 </div>
                 <div className="col-span-1 flex items-end">
                   <button
                     onClick={() => removeTeamMember(index)}
-                    className="w-full aspect-square p-2 bg-red-600 hover:bg-red-700 text-white rounded flex items-center justify-center"
+                    className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Note (Optional)</label>
+                <label className="block text-[10px] font-medium text-white/70 mb-1">Note (Optional)</label>
                 <input
                   type="text"
                   value={member.note || ''}
                   onChange={(e) => updateTeamMember(index, 'note', e.target.value)}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   placeholder="Additional notes"
                 />
               </div>
@@ -1931,13 +2054,13 @@ function ResourcesTab({ editData, setEditData }: any) {
       {/* Tools & Platforms */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <Package className="w-4 h-4" />
             Tools & Platforms
           </h4>
           <button
             onClick={addTool}
-            className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg flex items-center gap-1"
+            className="px-3 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
           >
             <Plus className="w-3 h-3" />
             Add Tool
@@ -1950,12 +2073,13 @@ function ResourcesTab({ editData, setEditData }: any) {
                 type="text"
                 value={tool}
                 onChange={(e) => updateTool(index, e.target.value)}
-                className="flex-1 px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm"
+                className="flex-1 px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white text-sm"
                 placeholder="Tool name (e.g., Salesforce, GitHub)"
               />
               <button
                 onClick={() => removeTool(index)}
-                className="p-1.5 text-white bg-red-600 hover:bg-red-700 rounded"
+                className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                title="Remove"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -2023,13 +2147,13 @@ function RisksTab({ editData, setEditData }: any) {
       {/* Top Risks */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+          <h4 className="text-xs font-roobert-semibold text-white/90 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" />
             Top Risks
           </h4>
           <button
             onClick={addTopRisk}
-            className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg flex items-center gap-1"
+            className="px-3 py-1 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-sm rounded-lg flex items-center gap-1"
           >
             <Plus className="w-3 h-3" />
             Add Risk
@@ -2037,50 +2161,47 @@ function RisksTab({ editData, setEditData }: any) {
         </div>
         <div className="grid grid-cols-2 gap-3">
           {(editData.topRisks || []).map((risk: any, index: number) => (
-            <div key={index} className={`p-4 rounded-lg border ${
-              risk.level === 'high' ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800' :
-              risk.level === 'medium' ? 'bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800' :
-              'bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800'
-            }`}>
+            <div key={index} className="p-4 bg-white/5 rounded-lg border border-white/10">
               <div className="grid grid-cols-12 gap-3 mb-3">
                 <div className="col-span-8">
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Risk Description</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Risk Description</label>
                   <input
                     type="text"
                     value={risk.risk || ''}
                     onChange={(e) => updateTopRisk(index, 'risk', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Describe the risk..."
                   />
                 </div>
                 <div className="col-span-3">
-                  <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Level</label>
+                  <label className="block text-[10px] font-medium text-white/70 mb-1">Level</label>
                   <select
                     value={risk.level || 'medium'}
                     onChange={(e) => updateTopRisk(index, 'level', e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
+                    <option className="bg-[#0a0f1a] text-white" value="low">Low</option>
+                    <option className="bg-[#0a0f1a] text-white" value="medium">Medium</option>
+                    <option className="bg-[#0a0f1a] text-white" value="high">High</option>
                   </select>
                 </div>
                 <div className="col-span-1 flex items-end">
                   <button
                     onClick={() => removeTopRisk(index)}
-                    className="w-full aspect-square p-2 bg-red-600 hover:bg-red-700 text-white rounded flex items-center justify-center"
+                    className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1">Mitigation Strategy</label>
+                <label className="block text-[10px] font-medium text-white/70 mb-1">Mitigation Strategy</label>
                 <textarea
                   value={risk.mitigation || ''}
                   onChange={(e) => updateTopRisk(index, 'mitigation', e.target.value)}
                   rows={2}
-                  className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                  className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded text-white"
                   placeholder="How will this risk be mitigated?"
                 />
               </div>
@@ -2091,7 +2212,7 @@ function RisksTab({ editData, setEditData }: any) {
 
       {/* Success Criteria */}
       <div>
-        <h4 className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+        <h4 className="text-xs font-roobert-semibold text-white/90 mb-2 flex items-center gap-2">
           <Target className="w-4 h-4" />
           Success Criteria
         </h4>
@@ -2103,7 +2224,7 @@ function RisksTab({ editData, setEditData }: any) {
               <label className="text-xs font-medium text-blue-600 dark:text-blue-400">Technical Success</label>
               <button
                 onClick={() => addSuccessCriteria('technical')}
-                className="px-2 py-0.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded flex items-center gap-1"
+                className="px-2 py-0.5 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-xs rounded flex items-center gap-1"
               >
                 <Plus className="w-2.5 h-2.5" />
               </button>
@@ -2115,12 +2236,13 @@ function RisksTab({ editData, setEditData }: any) {
                     type="text"
                     value={criteria}
                     onChange={(e) => updateSuccessCriteria('technical', idx, e.target.value)}
-                    className="flex-1 px-2 py-1 text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="flex-1 px-2 py-1 text-xs bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Criteria..."
                   />
                   <button
                     onClick={() => removeSuccessCriteria('technical', idx)}
-                    className="p-1 text-white bg-red-600 hover:bg-red-700 rounded"
+                    className="p-1 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -2135,7 +2257,7 @@ function RisksTab({ editData, setEditData }: any) {
               <label className="text-xs font-medium text-green-600 dark:text-green-400">Business Success</label>
               <button
                 onClick={() => addSuccessCriteria('business')}
-                className="px-2 py-0.5 bg-green-600 hover:bg-green-700 text-white text-xs rounded flex items-center gap-1"
+                className="px-2 py-0.5 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-xs rounded flex items-center gap-1"
               >
                 <Plus className="w-2.5 h-2.5" />
               </button>
@@ -2147,12 +2269,13 @@ function RisksTab({ editData, setEditData }: any) {
                     type="text"
                     value={criteria}
                     onChange={(e) => updateSuccessCriteria('business', idx, e.target.value)}
-                    className="flex-1 px-2 py-1 text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="flex-1 px-2 py-1 text-xs bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Criteria..."
                   />
                   <button
                     onClick={() => removeSuccessCriteria('business', idx)}
-                    className="p-1 text-white bg-red-600 hover:bg-red-700 rounded"
+                    className="p-1 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -2167,7 +2290,7 @@ function RisksTab({ editData, setEditData }: any) {
               <label className="text-xs font-medium text-purple-600 dark:text-purple-400">Adoption Success</label>
               <button
                 onClick={() => addSuccessCriteria('adoption')}
-                className="px-2 py-0.5 bg-purple-600 hover:bg-purple-700 text-white text-xs rounded flex items-center gap-1"
+                className="px-2 py-0.5 bg-[#4bcd3e] hover:bg-[#3db032] text-white text-xs rounded flex items-center gap-1"
               >
                 <Plus className="w-2.5 h-2.5" />
               </button>
@@ -2179,12 +2302,13 @@ function RisksTab({ editData, setEditData }: any) {
                     type="text"
                     value={criteria}
                     onChange={(e) => updateSuccessCriteria('adoption', idx, e.target.value)}
-                    className="flex-1 px-2 py-1 text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                    className="flex-1 px-2 py-1 text-xs bg-white/5 border border-white/10 rounded text-white"
                     placeholder="Criteria..."
                   />
                   <button
                     onClick={() => removeSuccessCriteria('adoption', idx)}
-                    className="p-1 text-white bg-red-600 hover:bg-red-700 rounded"
+                    className="p-1 bg-white/10 hover:bg-white/20 text-white rounded transition-colors"
+                    title="Remove"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -2196,7 +2320,7 @@ function RisksTab({ editData, setEditData }: any) {
 
         {/* Minimum Viable Success */}
         <div className="mt-3">
-          <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Minimum Viable Success</label>
+          <label className="block text-xs font-medium text-white/90 mb-1">Minimum Viable Success</label>
           <textarea
             value={editData.successCriteria?.minimumViableSuccess || ''}
             onChange={(e) => setEditData({
@@ -2207,7 +2331,7 @@ function RisksTab({ editData, setEditData }: any) {
               }
             })}
             rows={2}
-            className="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+            className="w-full px-2.5 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white"
             placeholder="What is the minimum we need to achieve for this initiative to be considered successful?"
           />
         </div>
@@ -2234,10 +2358,10 @@ function TasksTab({ editData, setEditData }: any) {
       <div className="space-y-4">
         <div className="flex items-center gap-2 mb-2">
           <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Initiative Tasks</h4>
+          <h4 className="text-lg font-roobert-semibold text-white">Initiative Tasks</h4>
         </div>
         
-        <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+        <div className="border border-white/10 rounded-lg overflow-hidden">
           <TaskConnectorRenderer
             data={{
               filters: {
@@ -2261,14 +2385,14 @@ function TasksTab({ editData, setEditData }: any) {
       <div className="space-y-4">
         <div className="flex items-center gap-2 mb-2">
           <StickyNote className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
-          <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Initiative Notes</h4>
+          <h4 className="text-lg font-roobert-semibold text-white">Initiative Notes</h4>
         </div>
 
         <div className="space-y-3">
           <textarea
             value={notes}
             onChange={(e) => handleNotesChange(e.target.value)}
-            className="w-full h-[500px] px-4 py-3 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 dark:focus:ring-pink-400"
+            className="w-full h-[500px] px-4 py-3 text-sm bg-white/5 border border-white/10 rounded-lg text-white resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 dark:focus:ring-pink-400"
             placeholder="Add notes, updates, or important information about this initiative..."
           />
 
@@ -2310,11 +2434,11 @@ function GoalsTab({ editData, setEditData, goals }: any) {
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-        <h4 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">Link Strategic Goals</h4>
+        <h4 className="text-lg font-roobert-semibold text-white">Link Strategic Goals</h4>
       </div>
       
-      <div className="p-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
-        <p className="text-xs text-purple-800 dark:text-purple-200">
+      <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
+        <p className="text-xs text-white/70">
           <Info className="w-3.5 h-3.5 inline mr-1" />
           Select which strategic goals this initiative contributes to. You can link multiple goals.
         </p>
@@ -2331,8 +2455,8 @@ function GoalsTab({ editData, setEditData, goals }: any) {
                 onClick={() => toggleGoal(goal.id)}
                 className={`p-3 rounded-lg border-2 cursor-pointer transition-all ${
                   isLinked
-                    ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-500 dark:border-purple-400'
-                    : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600'
+                    ? 'bg-purple-500/10 border-purple-500/50'
+                    : 'bg-white/5 border-white/10 hover:border-purple-500/30'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -2340,7 +2464,7 @@ function GoalsTab({ editData, setEditData, goals }: any) {
                     <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                       isLinked
                         ? 'bg-purple-600 border-purple-600'
-                        : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600'
+                        : 'bg-white/5 border-white/20'
                     }`}>
                       {isLinked && (
                         <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -2352,19 +2476,15 @@ function GoalsTab({ editData, setEditData, goals }: any) {
                   
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-xs font-medium rounded">
+                      <span className="px-2 py-0.5 bg-white/10 text-white text-xs font-roobert-medium rounded border border-white/20">
                         Goal #{goal.id}
                       </span>
-                      <span className={`px-2 py-0.5 text-xs font-medium rounded ${
-                        goal.status === 'on-track' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
-                        goal.status === 'at-risk' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' :
-                        'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
-                      }`}>
+                      <span className="px-2 py-0.5 bg-white/10 text-white text-xs font-roobert-medium rounded border border-white/20">
                         {goal.status === 'on-track' ? '✓ On Track' : goal.status === 'at-risk' ? '⚠ At Risk' : '⚠ Off Track'}
                       </span>
                     </div>
-                    <h5 className="text-sm font-roobert-semibold text-gray-900 dark:text-white mb-1">{goal.name}</h5>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">{goal.description}</p>
+                    <h5 className="text-sm font-roobert-semibold text-white mb-1">{goal.name}</h5>
+                    <p className="text-xs text-white/70 line-clamp-2">{goal.description}</p>
                     {goal.targetDate && (
                       <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
                         Target: {new Date(goal.targetDate).toLocaleDateString()}
@@ -2390,8 +2510,8 @@ function GoalsTab({ editData, setEditData, goals }: any) {
       )}
 
       {linkedGoalIds.length > 0 && (
-        <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <p className="text-xs text-green-800 dark:text-green-200">
+        <div className="mt-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
+          <p className="text-xs text-green-300">
             <strong>{linkedGoalIds.length}</strong> {linkedGoalIds.length === 1 ? 'goal' : 'goals'} linked to this initiative
           </p>
         </div>

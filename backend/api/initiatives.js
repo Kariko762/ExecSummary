@@ -21,7 +21,7 @@ async function discoverInitiatives() {
     
     for (const file of files) {
       // Skip non-JSON files and special files
-      if (!file.endsWith('.json') || file === 'index.json' || file === 'registry.json') {
+      if (!file.endsWith('.json') || file === 'index.json' || file === 'registry.json' || file === 'priority-order.json') {
         console.log(`⏭️  Skipping ${file}`);
         continue;
       }
@@ -47,6 +47,7 @@ async function discoverInitiatives() {
           endDate: initiative.endDate,
           linkedGoals: initiative.linkedGoals || [],
           linkedAssets: initiative.linkedAssets,
+          _published: initiative._published !== undefined ? initiative._published : false,
           smartGoal: initiative.smartGoal ? {
             statement: initiative.smartGoal.statement,
             measurable: initiative.smartGoal.measurable
@@ -127,7 +128,17 @@ async function readGoals() {
 // GET all initiatives (from index for performance)
 router.get('/', async (req, res) => {
   try {
-    const initiatives = await discoverInitiatives();
+    const { published } = req.query;
+    let initiatives = await discoverInitiatives();
+    
+    // Filter by published status if query param provided
+    if (published === 'true') {
+      initiatives = initiatives.filter(i => i._published === true);
+    } else if (published === 'false') {
+      initiatives = initiatives.filter(i => i._published === false);
+    }
+    // If no published param, return all (CMS behavior)
+    
     res.json({ success: true, initiatives });
   } catch (error) {
     console.error('Error fetching initiatives:', error);
@@ -249,6 +260,43 @@ router.delete('/:id', async (req, res) => {
   } catch (error) {
     console.error('Error deleting initiative:', error);
     res.status(500).json({ success: false, error: 'Failed to delete initiative' });
+  }
+});
+
+// GET priority order
+router.get('/settings/priority-order', async (req, res) => {
+  try {
+    const settingsFile = path.join(INITIATIVES_DIR, 'priority-order.json');
+    try {
+      const data = await fs.readFile(settingsFile, 'utf8');
+      const settings = JSON.parse(data);
+      res.json({ success: true, priorityOrder: settings.priorityOrder || [] });
+    } catch (error) {
+      // File doesn't exist yet, return empty array
+      res.json({ success: true, priorityOrder: [] });
+    }
+  } catch (error) {
+    console.error('Error reading priority order:', error);
+    res.status(500).json({ success: false, error: 'Failed to read priority order' });
+  }
+});
+
+// POST priority order
+router.post('/settings/priority-order', async (req, res) => {
+  try {
+    const { priorityOrder } = req.body;
+    const settingsFile = path.join(INITIATIVES_DIR, 'priority-order.json');
+    
+    const settings = {
+      priorityOrder: priorityOrder || [],
+      lastUpdated: new Date().toISOString()
+    };
+    
+    await fs.writeFile(settingsFile, JSON.stringify(settings, null, 2), 'utf8');
+    res.json({ success: true, message: 'Priority order saved successfully' });
+  } catch (error) {
+    console.error('Error saving priority order:', error);
+    res.status(500).json({ success: false, error: 'Failed to save priority order' });
   }
 });
 
