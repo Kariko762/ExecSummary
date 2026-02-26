@@ -1,0 +1,386 @@
+================================================================================
+              DEMO SERVICES GROUP - 2026 STRATEGIC GOALS
+                        Executive Summary
+                      Generated: February 4, 2026
+================================================================================
+
+MISSION
+Transform Demo Services into a scaled growth engine that accelerates profitable 
+revenue, improves forecast confidence, and raises win rates—while proving ROI 
+and simplifying operations.
+
+================================================================================
+                          2026 TARGET OUTCOMES
+================================================================================
+
+By December 31, 2026, Demo Services will deliver:
+
+✓ OPERATIONAL EXCELLENCE
+  → Cut prep hours 36% (21,915 → 14,000 hrs)
+  → Add 4,500+ customer-facing presentation hours
+  → Eliminate 85% of demo quality incidents
+  → Achieve 80% weekly Copilot/AI agent usage in Demo Ops
+
+✓ REVENUE GENERATION
+  → Launch digital demo pipeline engine generating £15M influenced pipeline
+  → Achieve 75% seller adoption of self-serve demos and Tiled microsites
+  → Improve demo-led win rate from 22% → 28%
+
+✓ EXECUTIVE TRANSPARENCY
+  → 100% demo-to-opportunity attribution in CRM
+  → Quarterly ROI reports with full cost-per-demo visibility
+  → Monthly executive performance packs (12/year)
+
+✓ GLOBAL SCALE
+  → Localized demo experiences across 6 strategic languages
+  → 70%+ localized assets covering Banking & Capital Markets priority portfolios
+  → Regional win rate improvement from 18% → 26%
+
+================================================================================
+                     THE 5 SMART GOALS (2026)
+================================================================================
+
+GOAL 1: AUTOMATE & GOVERN THE DEMO PLATFORM
+────────────────────────────────────────────────────────────────────────────────
+SMART STATEMENT
+By Dec 31, 2026, reduce total demo prep hours from 21,915 → 14,000 (-36%); 
+raise automated environment coverage from 10% → 75%; achieve 80% adoption of 
+standard demo blueprints; cut provisioning time from 5 → 1 days; establish 95% 
+verified asset baseline and retire 150 outdated assets; achieve >80% weekly 
+active Copilot/AI agent usage within Demo Ops.
+
+KEY RESULTS
+• Prep hours: 21,915 → 14,000 (-36%)
+• Automated environment coverage: 10% → 75%
+• Standard blueprint adoption: 0% → 80%
+• Provisioning time: 5 days → 1 day
+• Verified asset coverage: 95%
+• Outdated assets retired: 150
+• Demo data accuracy incidents: 20 → 3
+• Copilot/AI weekly usage: 80%+
+
+ALIGNMENT
+Commercial Office: Frictionless operations; accelerate profitable growth
+RevOps: AI-first engine; simplify comp/territories; Copilot adoption
+
+OWNERSHIP
+Owner: Demo Services
+Co-Owners: IT Operations, Product, Sales Engineering
+
+TIMELINE
+Q1: Design automation architecture, asset discovery, Copilot rollout
+Q2: Automated provisioning MVP, standard demo blueprints
+Q3: Scale automated environments, verified asset coverage expansion
+Q4: Hit prep reduction targets, optimize AI agent usage
+
+────────────────────────────────────────────────────────────────────────────────
+
+GOAL 2: SHIFT CAPACITY TO REVENUE-FACING ACTIVITIES
+────────────────────────────────────────────────────────────────────────────────
+SMART STATEMENT
+By Dec 31, 2026, increase customer-facing demo presentation hours from 13,478 
+→ 18,000 (+4,522 hrs); improve prep-to-present ratio from 1.6 → 0.9; support 
+600 deals/year (up from 400); achieve 98% demo availability SLA; raise demo-led 
+win rate from 22% → 28%; and deliver +15 point Demo NPS improvement.
+
+KEY RESULTS
+• Presentation hours: 13,478 → 18,000 (+33%)
+• Prep-to-present ratio: 1.6 → 0.9
+• Deals supported annually: 400 → 600
+• Availability SLA: 85% → 98%
+• Win rate (demo-led deals): 22% → 28%
+• Demo NPS improvement: +15 points
+
+ALIGNMENT
+Commercial Office: Beat TAM growth; faster revenue conversion; pricing discipline
+RevOps: Reduce forecast surprise; protect recurring revenue; executive reporting
+
+OWNERSHIP
+Owner: Demo Services
+Co-Owners: Sales, Sales Engineering, Revenue Operations
+
+TIMELINE
+Q1: Baseline capacity model, reallocate prep savings
+Q2: Redirect savings to presentation capacity
+Q3: Scale expanded demo coverage, NPS instrumentation
+Q4: Hit presentation hour and win rate targets
+
+────────────────────────────────────────────────────────────────────────────────
+
+GOAL 3: BUILD A DEMO-LED DIGITAL PIPELINE ENGINE
+────────────────────────────────────────────────────────────────────────────────
+SMART STATEMENT
+By Dec 31, 2026, launch 10 self-service demos and 50 Tiled-powered microsites 
+that generate 1,200 leads, 1,500 demo requests, 15% demo-to-opportunity 
+conversion, £15M influenced pipeline, and 75% seller adoption; enable digital 
+storefront transactions in 2-3 product lines (Banking & Capital Markets).
+
+KEY RESULTS
+• Self-service demos launched: 0 → 10
+• Tiled microsites live: 0 → 50
+• Leads generated: 0 → 1,200
+• Demo requests generated: 0 → 1,500
+• Demo-to-opportunity conversion: 15%
+• Pipeline influenced: £0 → £15M
+• Seller adoption rate: 75%
+• Digital storefront: Live in 2-3 product lines
+
+ALIGNMENT
+Commercial Office: Global growth engine; new routes to market; enterprise 2x pace
+RevOps: Digital storefront; Copilot adoption; pipeline generation & transparency
+
+OWNERSHIP
+Owner: Demo Services
+Co-Owners: Marketing, Sales, Product Marketing, Sales Enablement
+
+TIMELINE
+Q1: Platform selection (self-serve/storefront), Tiled configuration
+Q2: Build microsite templates, pilot self-serve demos
+Q3: Seller enablement rollout, persona-based journeys
+Q4: Scale to digital storefront transactions, hit pipeline targets
+
+────────────────────────────────────────────────────────────────────────────────
+
+GOAL 4: DELIVER EXECUTIVE DEMO INTELLIGENCE & ROI ATTRIBUTION
+────────────────────────────────────────────────────────────────────────────────
+SMART STATEMENT
+By Dec 31, 2026, deliver executive demo dashboard with monthly reports (12/year), 
+full NPS/feedback instrumentation, 100% CRM integration, 90% opportunity 
+attribution, 85% tracked demo influence, cost-per-demo visibility, and reduce 
+manual reporting from 40 → 5 hrs/month.
+
+KEY RESULTS
+• Dashboard coverage: 100% (all demo activities)
+• Monthly executive reports: 12/year
+• Demo NPS baseline established: +15 improvement tracked
+• CRM integration coverage: 100%
+• Opportunities with demo attribution: 20% → 90%
+• Deals with tracked demo influence: 15% → 85%
+• Demo ROI visibility: 100%
+• Cost-per-demo tracking: Live
+• Manual reporting effort: 40 hrs/month → 5 hrs/month
+
+ALIGNMENT
+Commercial Office: Market-savvy team; pricing/ACV mix decisions; flagship clients
+RevOps: Radical transparency; forecast confidence; automated yield model; M&A 
+         commercialization visibility
+
+OWNERSHIP
+Owner: Revenue Operations
+Co-Owners: Demo Services, IT, Data & Analytics, Finance
+
+TIMELINE
+Q1: Attribution framework, executive metrics design
+Q2: Dashboard MVP live, CRM integration
+Q3: NPS rollout, demo-to-revenue attribution
+Q4: Quarterly ROI reporting cadence established
+
+────────────────────────────────────────────────────────────────────────────────
+
+GOAL 5: STRATEGIC LOCALIZATION FOR PRIORITY PORTFOLIOS
+────────────────────────────────────────────────────────────────────────────────
+SMART STATEMENT
+By Dec 31, 2026, localize high-impact demos and narratives into 6 strategic 
+languages, publish 60 localized assets, drive 75% regional adoption, and improve 
+regional win rate from 18% → 26%, with ≥70% of localized assets covering Banking 
+(Digital, Payments, New Cores) and Capital Markets (TAS, T&R, Lending).
+
+KEY RESULTS
+• Languages supported: 1 → 6
+• Localized demo assets: 0 → 60
+• Regional demo adoption: 20% → 75%
+• Regional win rate: 18% → 26%
+• Priority portfolio coverage: ≥70% (Banking & CAP-M)
+
+ALIGNMENT
+Commercial Office: Redefine market leadership in Banking & CAP-M; beat TAM growth; 
+                   high-margin fast revenue conversion
+RevOps: Cross-sell/whitespace models; partnership/alliance revenue; M&A integration
+
+OWNERSHIP
+Owner: Demo Services
+Co-Owners: Product Marketing, Regional Sales, Localization
+
+TIMELINE
+Q1: Define priority regions and languages (Banking & CAP-M focus)
+Q2: Localize core demos for priority portfolios
+Q3: Platform multilingual support, regional validation
+Q4: Scale globally, hit regional win rate targets
+
+================================================================================
+                        ALIGNMENT MATRIX
+================================================================================
+
+┌──────────────────┬──────────────────────────┬──────────────────────────────┐
+│ DEMO GOAL        │ COMMERCIAL OFFICE        │ REVOPS                       │
+├──────────────────┼──────────────────────────┼──────────────────────────────┤
+│ 1. Automate &    │ Frictionless ops         │ AI-first engine              │
+│    Govern        │ Accelerate profit growth │ Simplify comp/territories    │
+│                  │ (reduce cost/time)       │ Copilot 80% usage            │
+├──────────────────┼──────────────────────────┼──────────────────────────────┤
+│ 2. Shift to      │ Beat TAM growth          │ Reduce forecast surprise <5% │
+│    Revenue       │ Faster conversion        │ Protect recurring revenue    │
+│                  │ Pricing discipline       │ Executive reporting          │
+├──────────────────┼──────────────────────────┼──────────────────────────────┤
+│ 3. Digital       │ Global growth engine     │ Digital storefront (2-3 lines│
+│    Pipeline      │ New routes to market     │ Copilot adoption             │
+│                  │ Enterprise 2x pace       │ Pipeline transparency        │
+├──────────────────┼──────────────────────────┼──────────────────────────────┤
+│ 4. Executive     │ Market-savvy team        │ Radical transparency         │
+│    Intelligence  │ Pricing/ACV decisions    │ Yield/forecast model         │
+│                  │ Flagship clients         │ M&A commercialization        │
+├──────────────────┼──────────────────────────┼──────────────────────────────┤
+│ 5. Localization  │ Market leadership        │ Cross-sell/whitespace models │
+│    (Banking/CAM) │ Banking & CAP-M priority │ Partnerships/alliances       │
+│                  │ Beat TAM in priority BUs │ M&A integration              │
+└──────────────────┴──────────────────────────┴──────────────────────────────┘
+
+================================================================================
+                      2026 QUARTERLY ROADMAP
+================================================================================
+
+Q1 2026 | DESIGN & BASELINES
+├─ Automation architecture & AI/Copilot rollout
+├─ Asset discovery & governance framework
+├─ Attribution data model & executive metrics design
+├─ Platform selection (self-serve, storefront, Tiled)
+└─ Define priority regions/languages for localization
+
+Q2 2026 | BUILD & MVP
+├─ Automated provisioning MVP & standard blueprints
+├─ Dashboard MVP live with CRM integration
+├─ First localized assets (Banking & CAP-M)
+├─ Pilot microsites & self-serve demos
+└─ Prep-to-present capacity reallocation begins
+
+Q3 2026 | SCALE & ADOPTION
+├─ Expand automated environments & verified assets
+├─ Seller enablement (microsites, narratives, self-serve)
+├─ NPS live for all demos
+├─ Demo-to-revenue attribution operational
+└─ Multilingual platform support enabled
+
+Q4 2026 | OPTIMIZE & PROVE ROI
+├─ Hit prep reduction & presentation hour targets
+├─ Reach adoption goals (75% seller, 80% Copilot)
+├─ Quarterly ROI reporting cadence established
+├─ Regional localization scaled globally
+└─ Digital storefront transactions live (2-3 lines)
+
+================================================================================
+                      SUCCESS METRICS SUMMARY
+================================================================================
+
+EFFICIENCY GAINS
+→ Demo prep time reduced by 7,915 hours (-36%)
+→ Manual reporting effort reduced by 35 hours/month (-88%)
+→ Demo provisioning time reduced by 4 days (-80%)
+→ 80%+ weekly Copilot/AI usage in Demo Ops
+
+REVENUE IMPACT
+→ £15M pipeline influenced by demos
+→ 1,200 new leads generated from digital demos
+→ 1,500 demo requests from microsites
+→ Win rate improvement: +6 percentage points
+→ 200 additional deals supported annually
+
+QUALITY & EXPERIENCE
+→ Demo NPS: +15 point improvement
+→ Demo availability SLA: 85% → 98%
+→ Demo data accuracy incidents: 20 → 3 (-85%)
+→ 600 deals supported with consistent quality
+
+TRANSPARENCY & ACCOUNTABILITY
+→ 100% CRM integration & attribution coverage
+→ 90% of opportunities with demo attribution
+→ 12 monthly executive performance reports
+→ Cost-per-demo visibility established
+→ Quarterly ROI reporting operational
+
+GLOBAL SCALE
+→ 6 languages supported (from 1)
+→ 60 localized assets published
+→ 75% regional adoption
+→ Regional win rate: +8 percentage points
+→ 70%+ coverage of Banking & CAP-M portfolios
+
+================================================================================
+                    GOVERNANCE & REPORTING
+================================================================================
+
+MONTHLY
+• Executive performance pack (demo metrics, NPS, attribution)
+• Demo operations dashboard review (capacity, quality, incidents)
+• AI/Copilot usage & automation metrics
+
+QUARTERLY
+• Demo ROI & cost-to-serve analysis
+• Pipeline influence & revenue attribution report
+• Goal progress review against targets
+• Digital demo channel performance (leads, microsites, self-serve)
+
+ANNUAL
+• Comprehensive ROI report with year-over-year comparison
+• Demo Services strategic plan refresh
+• Localization effectiveness & regional performance
+• Technology platform review & roadmap
+
+================================================================================
+                    CRITICAL SUCCESS FACTORS
+================================================================================
+
+ENABLERS
+✓ Automated demo platform with AI/Copilot integration
+✓ CRM integration for full attribution visibility
+✓ Tiled.io licensing & self-serve demo platform
+✓ BI tooling & analytics support from RevOps
+✓ Localization vendors & regional SMEs
+✓ Sales Enablement partnership for adoption
+
+RISKS & MITIGATIONS
+⚠ Risk: Slow CRM integration delays attribution
+  → Mitigation: Prioritize Q1 design, Q2 MVP with RevOps partnership
+
+⚠ Risk: Low seller adoption of digital tools
+  → Mitigation: Sales Enablement co-ownership, embedded training, SPIFs
+
+⚠ Risk: Copilot/AI usage doesn't reach 80%
+  → Mitigation: Mandatory workflow integration, weekly usage tracking
+
+⚠ Risk: Localization quality issues impact regional performance
+  → Mitigation: Regional SME validation, pilot before scale
+
+DEPENDENCIES
+• IT Operations: Infrastructure for automation, platform integrations
+• RevOps: CRM access, dashboard tooling, attribution model design
+• Marketing: Lead flow integration, microsite promotion
+• Sales Enablement: Training delivery, adoption measurement
+• Product Marketing: Messaging frameworks, localization content
+• Finance: ROI validation, cost tracking systems
+
+================================================================================
+                      LEADERSHIP COMMITMENT
+================================================================================
+
+This strategic plan represents Demo Services' commitment to becoming a 
+measurable, accountable growth engine for the Commercial Office. Every goal 
+directly supports FIS's priorities: accelerating profitable revenue, improving 
+forecast confidence, enabling global scale, and delivering radical transparency.
+
+Success will be measured not just in operational metrics, but in the 
+demonstrable impact on win rates, pipeline generation, and revenue attribution 
+that proves the ROI of Demo Services as a strategic asset.
+
+By December 31, 2026, Demo Services will have transformed from a cost center 
+into a revenue-generating, AI-enabled, globally scaled competitive advantage.
+
+================================================================================
+                          END OF EXECUTIVE SUMMARY
+================================================================================
+
+For detailed goal breakdowns, metrics, timelines, and tactical implementation 
+plans, refer to the full Goals Library within the Executive Summary Platform.
+
+Document Owner: Demo Services Leadership
+Last Updated: February 4, 2026
+Next Review: Quarterly (April 30, 2026)

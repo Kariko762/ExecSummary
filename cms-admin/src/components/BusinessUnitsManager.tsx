@@ -341,10 +341,27 @@ export default function BusinessUnitsManager({ onNotification }: BusinessUnitsMa
                   <select
                     value={formData.parentId || ''}
                     onChange={(e) => {
+                      const newParentId = e.target.value || null;
+                      let newLevel: BusinessUnit['level'] = 'BU';
+                      
+                      if (newParentId) {
+                        // Find parent and set level to next in hierarchy
+                        const parent = units.find(u => u.id === newParentId);
+                        if (parent) {
+                          const levelOrder: BusinessUnit['level'][] = ['BU', 'L3', 'L4', 'L5', 'L6', 'L7'];
+                          const parentIndex = levelOrder.indexOf(parent.level);
+                          if (parentIndex >= 0 && parentIndex < levelOrder.length - 1) {
+                            newLevel = levelOrder[parentIndex + 1]; // Next level after parent
+                          } else {
+                            newLevel = 'L7'; // Default to L7 if parent is L7 or unknown
+                          }
+                        }
+                      }
+                      
                       setFormData({ 
                         ...formData, 
-                        parentId: e.target.value || null,
-                        level: 'BU' // Reset level when parent changes
+                        parentId: newParentId,
+                        level: newLevel
                       });
                     }}
                     className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg"

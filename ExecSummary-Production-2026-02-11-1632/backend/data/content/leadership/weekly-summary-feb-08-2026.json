@@ -1,0 +1,137 @@
+{
+  "_contentTag": "leadership-summary",
+  "meta": {
+    "id": "weekly-summary-feb-08-2026",
+    "slug": "weekly-summary-feb-08-2026",
+    "title": "Weekly Leadership Summary - Feb 02-08, 2026",
+    "category": "leadership",
+    "status": "draft",
+    "createdAt": "2026-02-10",
+    "lastModified": "2026-02-11",
+    "author": "Jason Hanscomb",
+    "views": 0
+  },
+  "metadata": {
+    "weekStart": "Feb 02, 2026",
+    "weekEnd": "Feb 08, 2026",
+    "title": "Leadership Summary",
+    "description": "Weekly executive briefing for Pre-Sales leadership"
+  },
+  "bluf": {
+    "bottomLine": "Coast MSA renewal approved by Spend Control with funding transferred to Capital Markets; administrative sign-off is the final remaining hurdle.\nLegal redlines on E6 Demo Assets now pose a critical risk to deals and demonstrations scheduled for next week.\nDemo Services goals recalibrated against new Commercial OKRs, prioritizing high-margin recurring revenue and ACV conversion.\nEngagement for a Coast Enterprise Agreement initiated with Vendor Management/Finance; kickoff meeting scheduled for Feb 11.\nSGO 'Champions' program launched to integrate ambassadors into central demo requirements and open sessions.\nAzure AI Endpoint requests for CLO are currently stalled by internal infrastructure-as-code and cloud identity processes.\nGovernance framework and asset flow design (Coast, Synthesia, Tiled) mandated as a prerequisite for SKO readiness.\nTeam-wide mandate issued for AI Agent training to ensure full proficiency in bot creation and maintenance.",
+    "background": "Operational pivot toward 2026 Commercial OKRs focusing on strategic product mix.\nProcurement and legal negotiations are the primary gates for immediate demo execution.\nShift from transactional demo support to a scalable 'Champion' model and automated AI enablement.",
+    "assessment": "Coast renewal risk significantly reduced following funding alignment\nDemo Services goals aligned with Commercial leadership priorities\nSGO 'Champions' program launched successfully\nCoast Enterprise Agreement engagement initiated\nE6 legal blockers have increased in severity\nAzure infrastructure is primary bottleneck for AI initiatives",
+    "recommendation": "Finalize Coast MSA signature immediately to avoid disruption at CKO.\nEscalate E6 redline negotiations to prevent deal slippage next week.\nPrioritize internal IT tickets for Azure AI Endpoints to unblock CLO development.",
+    "asks": [
+      {
+        "type": "approval",
+        "item": "E6 Demo Asset Redlines",
+        "urgency": "high",
+        "owner": "Legal / Christian",
+        "deadline": "Feb 11, 2026"
+      },
+      {
+        "type": "approval",
+        "item": "Coast MSA Final Signature",
+        "urgency": "high",
+        "owner": "Jordan Spence",
+        "deadline": "Feb 10, 2026"
+      }
+    ]
+  },
+  "priorities": [
+    {
+      "id": 1,
+      "title": "Coast MSA & Enterprise Agreement",
+      "description": "Finalize current MSA signature while building out long-term enterprise terms for Cap-M/Banking.",
+      "status": "In Progress",
+      "impact": "HIGH IMPACT",
+      "borderColor": "var(--accent-green)",
+      "statusColor": "green",
+      "impactColor": "orange",
+      "details": {
+        "impact": "Critical for continued Banking demo platform access and expanded capabilities",
+        "likelihood": "High (funding approved, admin signature pending)",
+        "actionItems": [
+          "Complete administrative MSA sign-off",
+          "Kick off Enterprise Agreement meeting Feb 11"
+        ]
+      },
+      "owner": "Jason Hanscomb",
+      "dueDate": "13/02/2026"
+    },
+    {
+      "id": 2,
+      "title": "Commercial Goal Mapping",
+      "description": "Translate redefined commercial OKRs into specific Demo Services timelines and deliverables.",
+      "status": "On Track",
+      "impact": "HIGH IMPACT",
+      "borderColor": "var(--accent-green)",
+      "statusColor": "green",
+      "impactColor": "orange",
+      "details": {
+        "impact": "Strategic alignment with Commercial leadership priorities",
+        "likelihood": "Medium (awaiting detailed timeline definition)",
+        "actionItems": [
+          "Define timeline for high-margin product demo builds",
+          "Align ACV conversion metrics to demo performance"
+        ]
+      },
+      "owner": "Jason Hanscomb",
+      "dueDate": "Feb - EoM"
+    },
+    {
+      "id": 3,
+      "title": "Tool Governance Framework",
+      "description": "Establish flow diagrams for asset management across Coast, Synthesia, Tiled, and Seismic prior to SKO.",
+      "status": "In Progress",
+      "impact": "MEDIUM LIKELIHOOD",
+      "borderColor": "var(--accent-orange)",
+      "statusColor": "blue",
+      "impactColor": "orange",
+      "details": {
+        "impact": "Prerequisite for SKO readiness and scalable asset management",
+        "likelihood": "High (design phase in progress)",
+        "actionItems": [
+          "Map asset processing and storage flow",
+          "Define role-based access for tool licenses"
+        ]
+      },
+      "owner": "Jason Hanscomb",
+      "dueDate": "Pre-CKO"
+    }
+  ],
+  "risks": [
+    {
+      "type": "high-impact",
+      "title": "E6 Legal Redlines",
+      "description": "Unresolved usage terms for Demo Assets blocking upcoming client engagements.",
+      "severity": "Critical",
+      "probability": "High Probability",
+      "status": "Open",
+      "mitigation": "Urgent review with Christian and Legal to finalize IP protection language.",
+      "owner": "Jason Hanscomb"
+    },
+    {
+      "type": "medium-impact",
+      "title": "Azure AI Process Block",
+      "description": "Internal IT ticketing (IaC/Cloud Client ID) preventing deployment of CLO endpoints.",
+      "severity": "Medium",
+      "probability": "High Probability",
+      "status": "Open",
+      "mitigation": "Expedite FISDEV and Cloud Client ID tickets via IT leadership.",
+      "owner": "Infrastructure Team"
+    },
+    {
+      "type": "low-impact",
+      "title": "Resource BUC Misalignment",
+      "description": "Incorrect BUC assignment for Anshool impacting hardware/administrative status.",
+      "severity": "Low",
+      "probability": "Medium Probability",
+      "status": "Open",
+      "mitigation": "Coordinate with India Ops for BUC change or laptop swap.",
+      "owner": "India Ops"
+    }
+  ],
+  "_published": true
+}

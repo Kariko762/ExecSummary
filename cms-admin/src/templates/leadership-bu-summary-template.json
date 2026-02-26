@@ -1,0 +1,38 @@
+{
+  "_templateName": "leadership-bu-summary",
+  "title": "Leadership BU Summary",
+  "status": "draft",
+  "_contentTag": "leadership-bu-summary",
+  "_published": false,
+  "metadata": {
+    "weekStart": "",
+    "weekEnd": "",
+    "title": "Leadership BU Summary",
+    "description": "Business Unit focused executive summary"
+  },
+  "buSections": [
+    {
+      "buId": "banking-int",
+      "items": []
+    },
+    {
+      "buId": "banking-na",
+      "items": []
+    },
+    {
+      "buId": "capital-markets",
+      "items": []
+    },
+    {
+      "buId": "payments",
+      "items": []
+    },
+    {
+      "buId": "cross-bu",
+      "items": []
+    }
+  ],
+  "asks": [],
+  "crossBUPriorities": [],
+  "crossBURisks": []
+}

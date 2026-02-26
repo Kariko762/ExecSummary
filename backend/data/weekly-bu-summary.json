@@ -1,0 +1,505 @@
+{
+  "meta": {
+    "weekOf": "2026-02-23",
+    "quarter": "Q1 2026",
+    "author": "Executive Analytics Team",
+    "lastUpdated": "2026-02-23T08:00:00Z"
+  },
+  "businessUnits": {
+    "banking-international": {
+      "name": "Banking International",
+      "shortName": "Banking Int.",
+      "color": "blue",
+      "stats": {
+        "revenue": "$2.4B",
+        "growth": "+12.3%",
+        "activeProjects": 18,
+        "teamSize": 342
+      },
+      "leadershipSummaries": [
+        {
+          "id": "bi-lead-1",
+          "title": "Q1 Digital Transformation Update",
+          "author": "Sarah Chen",
+          "role": "SVP, Banking International",
+          "date": "2026-02-20",
+          "summary": "International banking digital initiatives showing strong momentum with 95% on-track delivery. Mobile banking adoption increased 18% QoQ across EMEA and APAC regions.",
+          "highlights": [
+            "Successfully launched mobile banking in 3 new markets",
+            "Cross-border payment processing improved by 40%",
+            "Customer satisfaction scores up 15 points"
+          ],
+          "priorities": [
+            "Complete regulatory compliance updates for EU markets",
+            "Scale AI-powered fraud detection to all regions",
+            "Prepare Q2 expansion into Southeast Asia"
+          ]
+        },
+        {
+          "id": "bi-lead-2",
+          "title": "EMEA Operations Excellence",
+          "author": "Klaus Mueller",
+          "role": "VP, EMEA Operations",
+          "date": "2026-02-18",
+          "summary": "EMEA operations achieving 99.8% uptime with significant cost optimization. Infrastructure modernization ahead of schedule.",
+          "highlights": [
+            "Migrated 60% of EMEA workloads to cloud",
+            "Reduced operational costs by €2.3M annually",
+            "Zero critical incidents for 45 consecutive days"
+          ],
+          "priorities": [
+            "Complete remaining data center consolidation",
+            "Implement new monitoring and alerting system",
+            "Expand DevOps team by 12 engineers"
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "id": "bi-task-1",
+          "title": "EU Regulatory Compliance Update",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-03-15",
+          "assignee": "Sarah Chen",
+          "progress": 65
+        },
+        {
+          "id": "bi-task-2",
+          "title": "APAC Mobile Banking Launch",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-03-30",
+          "assignee": "Jin Park",
+          "progress": 82
+        },
+        {
+          "id": "bi-task-3",
+          "title": "Cross-Border Payment API v3",
+          "status": "completed",
+          "priority": "medium",
+          "dueDate": "2026-02-15",
+          "assignee": "Maria Garcia",
+          "progress": 100
+        },
+        {
+          "id": "bi-task-4",
+          "title": "EMEA Data Center Consolidation",
+          "status": "in-progress",
+          "priority": "medium",
+          "dueDate": "2026-04-20",
+          "assignee": "Klaus Mueller",
+          "progress": 58
+        }
+      ],
+      "vendorStats": {
+        "licenses": [
+          { "vendor": "SAP Financial Services", "cost": "$1.2M", "renewal": "2026-06-30", "status": "active" },
+          { "vendor": "Oracle Banking Platform", "cost": "$890K", "renewal": "2026-08-15", "status": "active" },
+          { "vendor": "Temenos Core Banking", "cost": "$750K", "renewal": "2026-04-30", "status": "review" }
+        ],
+        "assets": [
+          { "category": "Servers", "count": 145, "utilization": "78%", "cost": "$420K" },
+          { "category": "Network Equipment", "count": 89, "utilization": "82%", "cost": "$310K" },
+          { "category": "Security Appliances", "count": 34, "utilization": "91%", "cost": "$180K" }
+        ]
+      }
+    },
+    "banking-north-america": {
+      "name": "Banking North America",
+      "shortName": "Banking NA",
+      "color": "cyan",
+      "stats": {
+        "revenue": "$3.1B",
+        "growth": "+8.7%",
+        "activeProjects": 24,
+        "teamSize": 458
+      },
+      "leadershipSummaries": [
+        {
+          "id": "bna-lead-1",
+          "title": "North America Digital Banking Strategy",
+          "author": "Michael Rodriguez",
+          "role": "EVP, Banking North America",
+          "date": "2026-02-21",
+          "summary": "NA banking operations maintaining strong performance with focus on digital-first customer experience. Q1 targets on track with 92% completion rate.",
+          "highlights": [
+            "Digital account opening increased 25% YoY",
+            "Branch optimization initiative reduced costs by $4.2M",
+            "New mobile app rated 4.8/5.0 with 2M+ downloads"
+          ],
+          "priorities": [
+            "Launch AI-powered financial advisor chatbot",
+            "Expand open banking API partnerships",
+            "Complete core banking system upgrade (Phase 2)"
+          ]
+        },
+        {
+          "id": "bna-lead-2",
+          "title": "Commercial Banking Innovation",
+          "author": "Jennifer Lin",
+          "role": "SVP, Commercial Banking",
+          "date": "2026-02-19",
+          "summary": "Commercial banking segment showing exceptional growth with enterprise clients. Treasury management solutions gaining market share.",
+          "highlights": [
+            "Secured 15 new enterprise banking clients",
+            "Treasury management revenue up 22%",
+            "Launched real-time cash flow forecasting tool"
+          ],
+          "priorities": [
+            "Expand commercial lending automation",
+            "Integrate trade finance platform",
+            "Build dedicated fintech partnership team"
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "id": "bna-task-1",
+          "title": "AI Chatbot Development",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-03-25",
+          "assignee": "Michael Rodriguez",
+          "progress": 72
+        },
+        {
+          "id": "bna-task-2",
+          "title": "Core Banking Upgrade Phase 2",
+          "status": "in-progress",
+          "priority": "critical",
+          "dueDate": "2026-03-10",
+          "assignee": "David Kim",
+          "progress": 88
+        },
+        {
+          "id": "bna-task-3",
+          "title": "Open Banking API Launch",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-04-05",
+          "assignee": "Sarah Johnson",
+          "progress": 45
+        },
+        {
+          "id": "bna-task-4",
+          "title": "Commercial Lending Automation",
+          "status": "planning",
+          "priority": "medium",
+          "dueDate": "2026-05-15",
+          "assignee": "Jennifer Lin",
+          "progress": 20
+        }
+      ],
+      "vendorStats": {
+        "licenses": [
+          { "vendor": "FIS Core Banking Suite", "cost": "$2.1M", "renewal": "2026-09-30", "status": "active" },
+          { "vendor": "Jack Henry Symitar", "cost": "$1.4M", "renewal": "2026-07-15", "status": "active" },
+          { "vendor": "nCino Commercial Banking", "cost": "$680K", "renewal": "2026-05-20", "status": "active" }
+        ],
+        "assets": [
+          { "category": "Servers", "count": 198, "utilization": "85%", "cost": "$580K" },
+          { "category": "Storage Systems", "count": 56, "utilization": "76%", "cost": "$340K" },
+          { "category": "ATM Network", "count": 423, "utilization": "68%", "cost": "$890K" }
+        ]
+      }
+    },
+    "capital-markets": {
+      "name": "Capital Markets",
+      "shortName": "Capital Markets",
+      "color": "purple",
+      "stats": {
+        "revenue": "$1.8B",
+        "growth": "+15.2%",
+        "activeProjects": 14,
+        "teamSize": 276
+      },
+      "leadershipSummaries": [
+        {
+          "id": "cm-lead-1",
+          "title": "Trading Platform Modernization",
+          "author": "Alexander Wright",
+          "role": "SVP, Capital Markets",
+          "date": "2026-02-22",
+          "summary": "Capital markets technology transformation accelerating with new low-latency trading platform. Market data infrastructure upgrade nearing completion.",
+          "highlights": [
+            "Reduced trade execution latency by 60%",
+            "Processed 2.5M trades daily with 99.99% uptime",
+            "Launched algorithmic trading suite for institutional clients"
+          ],
+          "priorities": [
+            "Complete market data aggregation platform",
+            "Expand cryptocurrency trading capabilities",
+            "Implement real-time risk analytics dashboard"
+          ]
+        },
+        {
+          "id": "cm-lead-2",
+          "title": "Risk Management Excellence",
+          "author": "Dr. Priya Sharma",
+          "role": "Chief Risk Officer, Capital Markets",
+          "date": "2026-02-20",
+          "summary": "Advanced risk management systems providing real-time insights across all trading desks. Regulatory reporting automation achieving 98% accuracy.",
+          "highlights": [
+            "Implemented ML-based risk prediction models",
+            "Automated 85% of regulatory reporting workflows",
+            "Reduced compliance review time by 40%"
+          ],
+          "priorities": [
+            "Enhance stress testing capabilities",
+            "Integrate ESG risk factors into models",
+            "Deploy blockchain for trade settlement"
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "id": "cm-task-1",
+          "title": "Market Data Aggregation Platform",
+          "status": "in-progress",
+          "priority": "critical",
+          "dueDate": "2026-03-08",
+          "assignee": "Alexander Wright",
+          "progress": 91
+        },
+        {
+          "id": "cm-task-2",
+          "title": "Cryptocurrency Trading Launch",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-04-12",
+          "assignee": "Marcus Chen",
+          "progress": 67
+        },
+        {
+          "id": "cm-task-3",
+          "title": "Real-Time Risk Analytics",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-03-28",
+          "assignee": "Dr. Priya Sharma",
+          "progress": 54
+        },
+        {
+          "id": "cm-task-4",
+          "title": "Blockchain Settlement POC",
+          "status": "planning",
+          "priority": "medium",
+          "dueDate": "2026-06-30",
+          "assignee": "Elena Petrov",
+          "progress": 15
+        }
+      ],
+      "vendorStats": {
+        "licenses": [
+          { "vendor": "Bloomberg Terminal", "cost": "$3.2M", "renewal": "2026-12-31", "status": "active" },
+          { "vendor": "Refinitiv Eikon", "cost": "$1.8M", "renewal": "2026-10-15", "status": "active" },
+          { "vendor": "FactSet Workstation", "cost": "$950K", "renewal": "2026-06-30", "status": "review" }
+        ],
+        "assets": [
+          { "category": "Trading Servers", "count": 124, "utilization": "92%", "cost": "$720K" },
+          { "category": "Network Infrastructure", "count": 78, "utilization": "88%", "cost": "$450K" },
+          { "category": "Market Data Feeds", "count": 45, "utilization": "95%", "cost": "$280K" }
+        ]
+      }
+    },
+    "payments": {
+      "name": "Payments",
+      "shortName": "Payments",
+      "color": "green",
+      "stats": {
+        "revenue": "$2.7B",
+        "growth": "+19.4%",
+        "activeProjects": 21,
+        "teamSize": 394
+      },
+      "leadershipSummaries": [
+        {
+          "id": "pay-lead-1",
+          "title": "Digital Payments Transformation",
+          "author": "Rachel Thompson",
+          "role": "EVP, Payments",
+          "date": "2026-02-23",
+          "summary": "Payments division experiencing record growth driven by real-time payment adoption and merchant expansion. Infrastructure scaling to support 100M+ transactions daily.",
+          "highlights": [
+            "Real-time payments volume increased 145% YoY",
+            "Onboarded 12,000 new merchant accounts",
+            "Fraud detection accuracy improved to 99.2%"
+          ],
+          "priorities": [
+            "Launch instant cross-border payment service",
+            "Expand buy-now-pay-later partnerships",
+            "Deploy next-gen payment gateway (v4.0)"
+          ]
+        },
+        {
+          "id": "pay-lead-2",
+          "title": "Merchant Services Innovation",
+          "author": "Carlos Mendez",
+          "role": "SVP, Merchant Services",
+          "date": "2026-02-21",
+          "summary": "Merchant services platform delivering exceptional value with integrated analytics and fraud prevention. SMB segment showing strongest growth at 32% QoQ.",
+          "highlights": [
+            "Launched unified commerce platform for retailers",
+            "Reduced transaction fees by 15% for SMB clients",
+            "Integrated QR code and tap-to-pay across all POS"
+          ],
+          "priorities": [
+            "Expand embedded finance solutions",
+            "Build merchant analytics dashboard",
+            "Launch loyalty program integration API"
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "id": "pay-task-1",
+          "title": "Instant Cross-Border Payments",
+          "status": "in-progress",
+          "priority": "critical",
+          "dueDate": "2026-03-20",
+          "assignee": "Rachel Thompson",
+          "progress": 78
+        },
+        {
+          "id": "pay-task-2",
+          "title": "Payment Gateway v4.0 Deployment",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-04-08",
+          "assignee": "Wei Zhang",
+          "progress": 62
+        },
+        {
+          "id": "pay-task-3",
+          "title": "BNPL Partnership Integration",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-03-31",
+          "assignee": "Amanda Foster",
+          "progress": 51
+        },
+        {
+          "id": "pay-task-4",
+          "title": "Merchant Analytics Dashboard",
+          "status": "in-progress",
+          "priority": "medium",
+          "dueDate": "2026-04-25",
+          "assignee": "Carlos Mendez",
+          "progress": 38
+        }
+      ],
+      "vendorStats": {
+        "licenses": [
+          { "vendor": "Stripe Connect Platform", "cost": "$2.8M", "renewal": "2026-11-30", "status": "active" },
+          { "vendor": "Adyen Payment Processing", "cost": "$1.9M", "renewal": "2026-09-15", "status": "active" },
+          { "vendor": "Plaid Financial Data", "cost": "$640K", "renewal": "2026-07-31", "status": "active" }
+        ],
+        "assets": [
+          { "category": "Payment Servers", "count": 234, "utilization": "89%", "cost": "$890K" },
+          { "category": "HSM Modules", "count": 48, "utilization": "76%", "cost": "$320K" },
+          { "category": "POS Terminals", "count": 8450, "utilization": "73%", "cost": "$1.2M" }
+        ]
+      }
+    },
+    "fis": {
+      "name": "FIS Enterprise",
+      "shortName": "FIS",
+      "color": "orange",
+      "stats": {
+        "revenue": "$4.2B",
+        "growth": "+10.8%",
+        "activeProjects": 32,
+        "teamSize": 612
+      },
+      "leadershipSummaries": [
+        {
+          "id": "fis-lead-1",
+          "title": "Enterprise Platform Evolution",
+          "author": "James Morrison",
+          "role": "President, FIS Enterprise",
+          "date": "2026-02-23",
+          "summary": "FIS enterprise solutions delivering comprehensive financial technology platform for global institutions. Cloud-native architecture adoption accelerating across client base.",
+          "highlights": [
+            "Migrated 40% of enterprise clients to cloud platform",
+            "Achieved 99.97% platform uptime across all services",
+            "Launched AI-powered financial insights suite"
+          ],
+          "priorities": [
+            "Complete platform migration for remaining clients",
+            "Expand API marketplace to 500+ integrations",
+            "Launch embedded banking-as-a-service offering"
+          ]
+        },
+        {
+          "id": "fis-lead-2",
+          "title": "Client Success & Innovation",
+          "author": "Lisa Anderson",
+          "role": "Chief Customer Officer",
+          "date": "2026-02-21",
+          "summary": "Client satisfaction scores at all-time high with 94 NPS. Strategic partnerships driving innovation across banking, payments, and capital markets segments.",
+          "highlights": [
+            "Renewed 98% of enterprise contracts",
+            "Client satisfaction increased 12 points QoQ",
+            "Co-developed 8 custom solutions with strategic clients"
+          ],
+          "priorities": [
+            "Launch client innovation lab in New York",
+            "Expand strategic advisory services team",
+            "Build industry-specific solution accelerators"
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "id": "fis-task-1",
+          "title": "Enterprise Cloud Migration Wave 3",
+          "status": "in-progress",
+          "priority": "critical",
+          "dueDate": "2026-03-15",
+          "assignee": "James Morrison",
+          "progress": 84
+        },
+        {
+          "id": "fis-task-2",
+          "title": "API Marketplace Expansion",
+          "status": "in-progress",
+          "priority": "high",
+          "dueDate": "2026-04-18",
+          "assignee": "Raj Patel",
+          "progress": 69
+        },
+        {
+          "id": "fis-task-3",
+          "title": "Banking-as-a-Service Launch",
+          "status": "in-progress",
+          "priority": "critical",
+          "dueDate": "2026-05-01",
+          "assignee": "Michelle Wu",
+          "progress": 47
+        },
+        {
+          "id": "fis-task-4",
+          "title": "Client Innovation Lab Setup",
+          "status": "planning",
+          "priority": "medium",
+          "dueDate": "2026-06-15",
+          "assignee": "Lisa Anderson",
+          "progress": 22
+        }
+      ],
+      "vendorStats": {
+        "licenses": [
+          { "vendor": "Microsoft Azure Enterprise", "cost": "$8.4M", "renewal": "2026-12-31", "status": "active" },
+          { "vendor": "AWS Enterprise Support", "cost": "$6.2M", "renewal": "2026-10-31", "status": "active" },
+          { "vendor": "Salesforce Financial Services", "cost": "$3.1M", "renewal": "2026-08-30", "status": "active" }
+        ],
+        "assets": [
+          { "category": "Cloud Infrastructure", "count": 1245, "utilization": "82%", "cost": "$4.2M" },
+          { "category": "Enterprise Servers", "count": 456, "utilization": "79%", "cost": "$1.8M" },
+          { "category": "Network Equipment", "count": 234, "utilization": "86%", "cost": "$920K" }
+        ]
+      }
+    }
+  }
+}

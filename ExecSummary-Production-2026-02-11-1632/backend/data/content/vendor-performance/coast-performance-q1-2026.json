@@ -1,0 +1,117 @@
+{
+  "meta": {
+    "id": "coast-performance-q1-2026",
+    "title": "Coast Performance Metrics",
+    "vendor": "Coast",
+    "quarter": "Q1",
+    "year": 2026,
+    "createdAt": "2026-02-04T00:00:00.000Z",
+    "updatedAt": "2026-02-04T00:00:00.000Z"
+  },
+  "_contentTag": "vendor-performance",
+  "_published": true,
+  
+  "revenueSupported": {
+    "total": "$18.7M",
+    "breakdown": [
+      { "category": "Influenced Pipeline", "value": "$12.3M", "percentage": 66 },
+      { "category": "Closed-Won Revenue", "value": "$6.4M", "percentage": 34 }
+    ]
+  },
+  
+  "contractingSpend": {
+    "currentSpend": "$150K/year",
+    "annualCommitment": "$150,000",
+    "contracts": [
+      {
+        "type": "Master Services Agreement (MSA)",
+        "startDate": "2024-06-01",
+        "renewalDate": "2026-06-01",
+        "status": "Active",
+        "value": "$150K",
+        "autoRenew": true
+      }
+    ],
+    "upcomingRenewals": [
+      {
+        "contractType": "MSA",
+        "renewalDate": "2026-06-01",
+        "daysUntilRenewal": 117,
+        "action": "Review and renew"
+      }
+    ]
+  },
+  
+  "licenseConsumption": {
+    "totalAllocated": 125,
+    "totalConsumed": 94,
+    "utilizationRate": 75,
+    "businessUnits": [
+      {
+        "name": "Capital Markets",
+        "allocated": 50,
+        "consumed": 38,
+        "percentage": 76,
+        "status": "healthy"
+      },
+      {
+        "name": "Banking NA",
+        "allocated": 30,
+        "consumed": 22,
+        "percentage": 73,
+        "status": "healthy"
+      },
+      {
+        "name": "Banking International",
+        "allocated": 20,
+        "consumed": 15,
+        "percentage": 75,
+        "status": "healthy"
+      },
+      {
+        "name": "Payments",
+        "allocated": 25,
+        "consumed": 19,
+        "percentage": 76,
+        "status": "healthy"
+      }
+    ]
+  },
+  
+  "currentAssets": {
+    "total": 47,
+    "lastUpdated": "2026-02-04",
+    "byBusinessUnit": [
+      {
+        "name": "Capital Markets",
+        "published": 8,
+        "draft": 3,
+        "archived": 2
+      },
+      {
+        "name": "Banking NA",
+        "published": 12,
+        "draft": 5,
+        "archived": 1
+      },
+      {
+        "name": "Banking International",
+        "published": 6,
+        "draft": 2,
+        "archived": 1
+      },
+      {
+        "name": "Payments",
+        "published": 5,
+        "draft": 2,
+        "archived": 0
+      }
+    ],
+    "demosPerformed": [
+      { "name": "Capital Markets", "count": 34 },
+      { "name": "Banking NA", "count": 52 },
+      { "name": "Banking International", "count": 28 },
+      { "name": "Payments", "count": 41 }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "iq-agentic-ai-2025",
+  "quarter": "Nov 13",
+  "year": 2025,
+  "date": "2025-11-13",
+  "title": "Agentic AI: The Future of Enterprise Automation",
+  "_contentTag": "executive-iq",
+  "status": "published",
+  "category": "Technology Trends",
+  "_content_type": "richText",
+  "_enabled_content": true,
+  "content": "Agentic AI represents a paradigm shift in enterprise automation. Unlike traditional AI that responds to queries, agentic AI proactively identifies opportunities, makes decisions, and takes action within defined guardrails. Organizations implementing agentic AI are seeing 3-5x productivity gains in knowledge work and 40% reduction in operational overhead.",
+  "_keyTakeaways_type": "list",
+  "_enabled_keyTakeaways": true,
+  "keyTakeaways": [
+    "Agentic AI acts autonomously within defined parameters",
+    "Early adopters report 3-5x productivity improvements",
+    "Critical success factor: Clear guardrails and oversight",
+    "Best suited for repetitive knowledge work tasks",
+    "Requires cultural shift toward AI collaboration"
+  ],
+  "_recommendations_type": "list",
+  "_enabled_recommendations": true,
+  "recommendations": [
+    "Start with pilot in low-risk, high-volume processes",
+    "Establish clear governance framework before deployment",
+    "Invest in change management and AI literacy training",
+    "Monitor outcomes closely and iterate rapidly",
+    "Build feedback loops to continuously improve agent performance"
+  ],
+  "_completed_standard_header": true,
+  "_completed_content": true,
+  "_completed_keyTakeaways": true,
+  "_completed_recommendations": true
+}

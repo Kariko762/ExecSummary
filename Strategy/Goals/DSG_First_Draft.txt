@@ -1,0 +1,113 @@
+Executive Summary (One Page)
+Objective: Turn Demo Services into a scaled growth engine that accelerates profitable revenue, improves forecast confidence, and raises win rates—while simplifying operations and proving ROI.
+
+Top outcomes by Dec 31, 2026
+
+Prep → Present shift: cut prep hours, add 4.5k+ customer-facing hours, lift demo-led win rate, and near‑eliminate demo quality incidents. [GOALS_SUMM...Y_DETAILED | Txt]
+Digital demand: launch self-serve demos + Tiled microsites to source £15M influenced pipeline with 75% seller adoption. [GOALS_SUMM...Y_DETAILED | Txt]
+Executive transparency: 100% demo→opportunity attribution in CRM, quarterly ROI reports, and monthly exec packs. [GOALS_SUMM...Y_DETAILED | Txt]
+Global scale: localized demo experiences across 6 languages prioritized to Banking & CAP‑M portfolios, raising regional win rates. [GOALS_SUMM...Y_DETAILED | Txt]
+The 5 SMART Goals (consolidated)
+1) Automate & Govern the Demo Platform (incl. AI assist)
+SMART statement (by Dec 31, 2026): Reduce total demo prep hours from 21,915 → 14,000; raise automated environment coverage 10% → 75%; reach 80% adoption of standard demo blueprints; cut provisioning time 5 → 1 days; establish a 95% verified asset baseline and retire 150 outdated assets; achieve >80% weekly active Copilot/AI agent usage within Demo Ops.
+Key Results [GOALS_SUMM...Y_DETAILED | Txt]
+
+Prep hours: 21,915 → 14,000 (‑36%). [GOALS_SUMM...Y_DETAILED | Txt]
+Automated env. coverage: 10% → 75%. [GOALS_SUMM...Y_DETAILED | Txt]
+Standard blueprint adoption: 0% → 80%. [GOALS_SUMM...Y_DETAILED | Txt]
+Provisioning time: 5 → 1 days. [GOALS_SUMM...Y_DETAILED | Txt]
+Verified asset coverage: 95%; 150 retirements; demo data incidents 20 → 3. [GOALS_SUMM...Y_DETAILED | Txt]
+Ticketing discipline: maintain 100% demo engagements with tickets by Q1’27 to close the maturity loop. [GOALS_SUMM...Y_DETAILED | Txt]
+Why it matters: Directly supports Commercial Office’s frictionless operating model and RevOps’ operational simplification + AI‑first engine (Copilot usage). It also unlocks capacity for Goals #2 and #3.
+
+2) Shift Capacity to Revenue: More (and Better) Demos
+SMART statement (by Dec 31, 2026): Increase customer-facing demo presentation hours 13,478 → 18,000 and improve the prep:present ratio 1.6 → 0.9, supporting 600 deals/year, SLA 98%, win rate 22% → 28%, and +15 Demo NPS (quality).
+Key Results [GOALS_SUMM...Y_DETAILED | Txt]
+
+Presentation hours: 13,478 → 18,000. [GOALS_SUMM...Y_DETAILED | Txt]
+Prep:present ratio: 1.6 → 0.9. [GOALS_SUMM...Y_DETAILED | Txt]
+Deals supported: 400 → 600. [GOALS_SUMM...Y_DETAILED | Txt]
+Availability SLA: 85% → 98%. [GOALS_SUMM...Y_DETAILED | Txt]
+Win rate (demo‑led): 22% → 28%. [GOALS_SUMM...Y_DETAILED | Txt]
+Demo NPS improvement: +15 (with exec reporting cadence in #4). [GOALS_SUMM...Y_DETAILED | Txt]
+Why it matters: Ties to Beat TAM growth, faster revenue conversion, and RevOps’ reduce forecast surprise (higher conversion predictability).
+
+3) Build a Demo‑Led Digital Pipeline Engine (Tiled + Self‑Serve + Storefront)
+SMART statement (by Dec 31, 2026): Launch 10 self‑service demos and 50 Tiled‑powered microsites that generate 1,200 leads, 1,500 demo‑requests, 15% demo→opportunity conversion, £15M influenced pipeline, and 75% seller adoption; enable the digital storefront to transact in 2–3 product lines (Banking & CAP‑M).
+Key Results [GOALS_SUMM...Y_DETAILED | Txt]
+
+Self‑serve demos: 0 → 10; microsites: 0 → 50. [GOALS_SUMM...Y_DETAILED | Txt]
+Leads: 0 → 1,200; demo‑requests: 0 → 1,500. [GOALS_SUMM...Y_DETAILED | Txt]
+Demo→opportunity conversion: → 15%. Pipeline influenced: £0 → £15M. [GOALS_SUMM...Y_DETAILED | Txt]
+Seller adoption: 0% → 75%. [GOALS_SUMM...Y_DETAILED | Txt]
+Why it matters: Directly fuels Global growth engine and new routes to market; supports RevOps’ digital storefront and Copilot adoption ambitions.
+
+4) Executive Demo Intelligence, Yield & ROI Attribution
+SMART statement (by Dec 31, 2026): Deliver an executive demo dashboard with monthly packs (12/yr), full NPS/feedback instrumentation, 100% CRM integration, 90% opportunity attribution, 85% tracked demo influence, cost‑per‑demo visibility, and reduce manual reporting from 40 → 5 hrs/month.
+Key Results [GOALS_SUMM...Y_DETAILED | Txt]
+
+Dashboard coverage: 100%; monthly exec reports: 12. [GOALS_SUMM...Y_DETAILED | Txt]
+NPS baseline & +15 improvement tracked. [GOALS_SUMM...Y_DETAILED | Txt]
+CRM integration: 100%; opps with demo attribution: 90%; deals with tracked influence: 85%. [GOALS_SUMM...Y_DETAILED | Txt]
+Cost‑to‑serve & ROI reporting live; manual effort 40 → 5 hrs/month. [GOALS_SUMM...Y_DETAILED | Txt]
+Why it matters: Supports RevOps’ radical transparency, forecast confidence, and automated yield model—and gives Commercial leadership the ROI proof for pricing discipline and mix decisions.
+
+5) Strategic Localization for Priority Portfolios (Banking & CAP‑M)
+SMART statement (by Dec 31, 2026): Localize high‑impact demos and narratives into 6 languages, publish 60 localized assets, drive 75% regional adoption, and improve regional win rate 18% → 26%, with ≥70% of localized assets covering Banking (Digital, Payments, New Cores) and CAP‑M (TAS, T&R, Lending).
+Key Results [GOALS_SUMM...Y_DETAILED | Txt]
+
+Languages: 1 → 6; localized assets: 0 → 60. [GOALS_SUMM...Y_DETAILED | Txt]
+Regional adoption: 20% → 75%; win rate: 18% → 26%. [GOALS_SUMM...Y_DETAILED | Txt]
+Why it matters: Lifts market leadership in priority portfolios, accelerates enterprise segment growth, and supports alliances/partner routes in-region.
+
+Alignment Map (what each goal unlocks)
+Goal
+
+Commercial Office Pillars
+
+RevOps OKRs
+
+1) Automate & Govern
+
+Frictionless ops; accelerate profitable growth (cost, time)
+
+AI‑first engine; simplify comp/territories (ops speed); adoption of Copilot
+
+2) Shift Capacity to Revenue
+
+Beat TAM growth; faster conversion; pricing discipline enabled by repeatable quality
+
+Reduce forecast surprise; exec reporting on conversion; protect recurring revenue via better demos
+
+3) Digital Pipeline Engine
+
+Global growth engine; new routes to market; enterprise velocity
+
+Digital storefront; Copilot adoption; pipeline generation & transparency
+
+4) Exec Intelligence & ROI
+
+Market‑savvy team; pricing/ACV mix decisions
+
+Executive reporting; yield/forecast model; M&A commercialization visibility
+
+5) Localization (Priority BUs)
+
+Redefine market leadership in Banking & CAP‑M
+
+Cross‑sell/whitespace models become more effective with localized engagement
+
+Quarterly Plan (2026)
+Q1 2026 – Design & Baselines
+
+Automation & standards blueprint; asset discovery; data model for attribution; exec metric framework; choose self‑serve/demo storefront platform; Tiled configuration. [GOALS_SUMM...Y_DETAILED | Txt]
+Q2 2026 – Build & MVP
+
+Automated provisioning MVP; standard demo flows (priority products); dashboard MVP live; first localized assets; pilot microsites + first self‑serve demos. [GOALS_SUMM...Y_DETAILED | Txt]
+Q3 2026 – Scale & Adoption
+
+Expand automated environments and verified asset coverage; sales enablement rollout of narratives; seller rollout of microsites/self‑serve; NPS live for all demos; CRM attribution live. [GOALS_SUMM...Y_DETAILED | Txt]
+Q4 2026 – Optimize & Prove ROI
+
+Hit prep→present targets; reach adoption goals; quarterly ROI report cadence; regional scale‑out of localization; tune yield model inputs. [GOALS_SUMM...Y_DETAILED | Txt]
+Note: Operational maturity items (100% ticketing discipline, visible flow models) complete by 2027 per your original phasing. [GOALS_SUMM...Y_DETAILED | Txt]

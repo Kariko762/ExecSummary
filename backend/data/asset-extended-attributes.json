@@ -1,0 +1,111 @@
+{
+  "lastUpdated": "2026-02-25T11:00:00Z",
+  "extendedAttributes": [
+    {
+      "assetId": "asset-001",
+      "owner": "Sarah Chen",
+      "financialOwner": "Richard Willcock",
+      "businessUnit": "Banking International",
+      "notes": "Primary EMEA demo environment for tier-1 banking clients"
+    },
+    {
+      "assetId": "asset-002",
+      "owner": "Jon Pendergast",
+      "financialOwner": "Emma Thompson",
+      "businessUnit": "Payments",
+      "notes": "Mobile banking demo for digital payments solutions"
+    },
+    {
+      "assetId": "asset-003",
+      "owner": "Alexander Wright",
+      "financialOwner": "Quinn Gammie",
+      "contentCreator": "Jessica Park",
+      "businessUnit": "Capital Markets",
+      "notes": "Interactive microsite for capital markets demonstrations"
+    },
+    {
+      "assetId": "asset-004",
+      "owner": "Michael Rodriguez",
+      "financialOwner": "David Kim",
+      "businessUnit": "Banking North America",
+      "notes": "Development database for Banking NA demonstrations"
+    },
+    {
+      "assetId": "asset-005",
+      "owner": "Alexander Wright",
+      "financialOwner": "Quinn Gammie",
+      "contentCreator": "Jessica Park",
+      "businessUnit": "Capital Markets",
+      "notes": "AI-powered banking demo video for MUFG presentation"
+    },
+    {
+      "assetId": "asset-006",
+      "owner": "Sarah Chen",
+      "financialOwner": "Klaus Mueller",
+      "contentCreator": "Emma Wilson",
+      "businessUnit": "Banking International",
+      "notes": "Internal training module for new banking product features"
+    },
+    {
+      "assetId": "asset-007",
+      "owner": "Klaus Mueller",
+      "financialOwner": "Richard Willcock",
+      "businessUnit": "Banking International",
+      "notes": "Primary demo portal URL for EMEA Banking client access"
+    },
+    {
+      "assetId": "asset-008",
+      "owner": "Emma Thompson",
+      "financialOwner": "Jon Pendergast",
+      "businessUnit": "Payments",
+      "notes": "Development container for Payments API testing"
+    },
+    {
+      "assetId": "asset-009",
+      "owner": "Alexander Wright",
+      "financialOwner": "Quinn Gammie",
+      "businessUnit": "Capital Markets",
+      "notes": "Primary Capital Markets demo server for US-based clients"
+    },
+    {
+      "assetId": "asset-010",
+      "owner": "Michael Rodriguez",
+      "financialOwner": "Austin Eames",
+      "contentCreator": "Jessica Park",
+      "businessUnit": "Banking North America",
+      "notes": "Product overview microsite for Banking NA mid-market clients"
+    },
+    {
+      "assetId": "asset-011",
+      "owner": "Richard Willcock",
+      "financialOwner": "Klaus Mueller",
+      "clientName": "HSBC",
+      "businessUnit": "Banking International",
+      "notes": "Dedicated UAT environment for HSBC integration testing"
+    },
+    {
+      "assetId": "asset-012",
+      "owner": "Jordan Spence",
+      "financialOwner": "David Kim",
+      "businessUnit": "Cross-BU",
+      "notes": "Shared sales engineering environment for POCs"
+    },
+    {
+      "assetId": "asset-013",
+      "owner": "David Kim",
+      "financialOwner": "Michael Rodriguez",
+      "projectManager": "Timothy Darcy",
+      "clientName": "Regional Bank",
+      "businessUnit": "Banking North America",
+      "notes": "Professional services implementation environment"
+    },
+    {
+      "assetId": "asset-014",
+      "owner": "Derek Grey",
+      "financialOwner": "Klaus Mueller",
+      "contentCreator": "Emma Wilson",
+      "businessUnit": "Banking International",
+      "notes": "E6 interactive demo in development - estimated completion March 2026"
+    }
+  ]
+}

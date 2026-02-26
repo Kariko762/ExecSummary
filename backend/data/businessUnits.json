@@ -15,10 +15,10 @@
   },
   {
     "id": "bu-int-banking",
-    "name": "International Banking",
+    "name": "Banking International",
     "level": "BU",
     "parentId": null,
-    "fullPath": "International Banking"
+    "fullPath": "Banking International"
   },
   {
     "id": "l3-trading-risk",
@@ -47,5 +47,26 @@
     "level": "L7",
     "parentId": "l4-risk",
     "fullPath": "Capital Markets > Trading and Risk > Risk > Energy Risk and Logistics"
+  },
+  {
+    "id": "bu-payments",
+    "name": "Payments",
+    "level": "BU",
+    "parentId": null,
+    "fullPath": "Payments"
+  },
+  {
+    "id": "bu-digital-one",
+    "name": "Digital-One",
+    "level": "L3",
+    "parentId": "bu-int-banking",
+    "fullPath": "Banking International > Digital-One"
+  },
+  {
+    "id": "l3-money-movmement",
+    "name": "Money Movmement",
+    "level": "L3",
+    "parentId": "bu-int-banking",
+    "fullPath": "Banking International > Money Movmement"
   }
 ]

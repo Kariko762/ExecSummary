@@ -1,0 +1,71 @@
+{
+  "weekEnding": "2026-01-31",
+  "previousWeek": "2026-01-24",
+  "currentWeek": [
+    {
+      "org": "Capital Markets",
+      "demoSupport": 84,
+      "demoPreparation": 114,
+      "demoPresentationVirtual": 152,
+      "demoPresentationOnsite": 114
+    },
+    {
+      "org": "Banking NA",
+      "demoSupport": 64,
+      "demoPreparation": 95,
+      "demoPresentationVirtual": 128,
+      "demoPresentationOnsite": 89
+    },
+    {
+      "org": "Int. Banking",
+      "demoSupport": 52,
+      "demoPreparation": 78,
+      "demoPresentationVirtual": 95,
+      "demoPresentationOnsite": 67
+    }
+  ],
+  "previousWeek": [
+    {
+      "org": "Capital Markets",
+      "demoSupport": 92,
+      "demoPreparation": 122,
+      "demoPresentationVirtual": 145,
+      "demoPresentationOnsite": 108
+    },
+    {
+      "org": "Banking NA",
+      "demoSupport": 71,
+      "demoPreparation": 102,
+      "demoPresentationVirtual": 118,
+      "demoPresentationOnsite": 82
+    },
+    {
+      "org": "Int. Banking",
+      "demoSupport": 58,
+      "demoPreparation": 85,
+      "demoPresentationVirtual": 88,
+      "demoPresentationOnsite": 61
+    }
+  ],
+  "historicalWeeks": [
+    {
+      "weekEnding": "2026-01-17",
+      "totalEfficiency": 54.2,
+      "totalWaste": 45.8
+    },
+    {
+      "weekEnding": "2026-01-24",
+      "totalEfficiency": 53.1,
+      "totalWaste": 46.9
+    },
+    {
+      "weekEnding": "2026-01-31",
+      "totalEfficiency": 56.7,
+      "totalWaste": 43.3
+    }
+  ],
+  "targets": {
+    "efficiencyTarget": 70,
+    "wasteReductionTarget": 30
+  }
+}

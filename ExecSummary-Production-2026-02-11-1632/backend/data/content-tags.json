@@ -1,0 +1,58 @@
+{
+  "tags": [
+    {
+      "id": "vendor-summary",
+      "name": "vendor-summary",
+      "color": "primary",
+      "icon": "Lightbulb",
+      "description": "Summary of vendor engagement",
+      "enableQuickClone": false,
+      "created": "2026-01-07T21:24:00.981Z"
+    },
+    {
+      "id": "weekly-summary",
+      "name": "weekly-summary",
+      "color": "secondary",
+      "icon": "FileText",
+      "description": "",
+      "enableQuickClone": false,
+      "created": "2026-01-10T10:45:44.492Z"
+    },
+    {
+      "id": "financial-summary",
+      "name": "financial-summary",
+      "color": "secondary",
+      "icon": "Bell",
+      "description": "",
+      "enableQuickClone": false,
+      "created": "2026-01-22T13:12:31.343Z"
+    },
+    {
+      "id": "performance",
+      "name": "Performance",
+      "color": "green",
+      "icon": "TrendingUp",
+      "description": "Performance Dashboard Configuration",
+      "enableQuickClone": false,
+      "created": "2026-01-23T15:51:18.604Z"
+    },
+    {
+      "id": "executive-summaries",
+      "name": "Executive Summaries",
+      "color": "purple",
+      "icon": "FileText",
+      "description": "Leadership and Executive Summary Documents",
+      "enableQuickClone": true,
+      "created": "2026-01-28T00:00:00.000Z"
+    },
+    {
+      "id": "leadership-summary",
+      "name": "Leadership Summary",
+      "color": "indigo",
+      "icon": "Sparkles",
+      "description": "Weekly Leadership Summaries (AI Generated)",
+      "enableQuickClone": false,
+      "created": "2026-01-28T00:00:00.000Z"
+    }
+  ]
+}

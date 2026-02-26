@@ -1,5 +1,6 @@
 {
   "id": "vendor-powtoon-2026-01-06",
+  "vendorId": "vendor-powtoon",
   "title": "PowToon Animation Platform",
   "_contentTag": "vendor",
   "_layout": "one-pager",
@@ -84,5 +85,43 @@
       "trend": "up",
       "subtitle": "Active users across organization"
     }
-  }
+  },
+  "userList": [
+    {
+      "userId": "user-pow-001",
+      "name": "Sarah Chen",
+      "email": "schen@fis.com",
+      "businessUnit": "banking-international",
+      "licenseType": "creator",
+      "status": "active",
+      "lastActive": "2026-02-15",
+      "assignedDate": "2025-10-01",
+      "videosCreated": 8,
+      "totalMinutes": 42
+    },
+    {
+      "userId": "user-pow-002",
+      "name": "Marketing Team",
+      "email": "marketing@fis.com",
+      "businessUnit": "cross-bu",
+      "licenseType": "creator",
+      "status": "active",
+      "lastActive": "2026-02-22",
+      "assignedDate": "2025-09-01",
+      "videosCreated": 15,
+      "totalMinutes": 78
+    }
+  ],
+  "assetList": [
+    {
+      "assetId": "asset-006",
+      "assetName": "Banking Training Module - Powtoon",
+      "businessUnit": "banking-international",
+      "owner": "Sarah Chen",
+      "status": "active",
+      "lastUsed": "2026-02-15",
+      "videosCreated": 8,
+      "createdDate": "2025-11-15"
+    }
+  ]
 }

@@ -1,0 +1,198 @@
+{
+  "title": "2026 Demo Services Financial Plan",
+  "fiscalYear": 2026,
+  "fiscalYearStart": "January",
+  "currency": "USD",
+  "planningHorizon": 3,
+  "lastUpdated": "2026-02-06",
+  "projects": [
+    {
+      "id": "demo-enablement",
+      "name": "Demo Enablement Tools",
+      "unit": "Platform Services",
+      "owner": "Sarah Chen",
+      "status": "active",
+      "lineItems": [
+        {
+          "id": "item-1",
+          "name": "Figma Enterprise License",
+          "costType": "OPEX",
+          "amount": 27500,
+          "term": 1,
+          "startMonth": "January 2026",
+          "description": "Design and prototyping collaboration platform",
+          "vendor": "Figma Inc",
+          "notes": "Annual subscription renews Jan 2027"
+        },
+        {
+          "id": "item-2",
+          "name": "Powtoon Studio",
+          "costType": "OPEX",
+          "amount": 30000,
+          "term": 2,
+          "startMonth": "January 2026",
+          "description": "Video creation and animation platform",
+          "vendor": "Powtoon Ltd"
+        },
+        {
+          "id": "item-3",
+          "name": "Tiled Platform",
+          "costType": "OPEX",
+          "amount": 56000,
+          "term": 1,
+          "startMonth": "June 2026",
+          "description": "Interactive demo platform",
+          "vendor": "Tiled Inc"
+        },
+        {
+          "id": "item-4",
+          "name": "Initial Platform Setup",
+          "costType": "CAPEX",
+          "amount": 45000,
+          "term": 1,
+          "startMonth": "January 2026",
+          "description": "One-time infrastructure setup and configuration"
+        }
+      ]
+    },
+    {
+      "id": "demo-operations",
+      "name": "Demo Operations & Promotions",
+      "unit": "Marketing & Outreach",
+      "owner": "Michael Torres",
+      "status": "active",
+      "lineItems": [
+        {
+          "id": "item-5",
+          "name": "Marketing Campaigns",
+          "costType": "OPEX",
+          "amount": 80000,
+          "term": 1,
+          "startMonth": "January 2026",
+          "description": "Digital advertising and promotional materials"
+        },
+        {
+          "id": "item-6",
+          "name": "Event Sponsorships",
+          "costType": "OPEX",
+          "amount": 120000,
+          "term": 1,
+          "startMonth": "March 2026",
+          "description": "Industry conferences and trade shows"
+        },
+        {
+          "id": "item-7",
+          "name": "Content Production Studio",
+          "costType": "CAPEX",
+          "amount": 85000,
+          "term": 1,
+          "startMonth": "February 2026",
+          "description": "Video equipment, lighting, and recording setup"
+        }
+      ]
+    },
+    {
+      "id": "demo-specialists",
+      "name": "Demo Specialist Team",
+      "unit": "Human Resources",
+      "owner": "Lisa Patel",
+      "status": "active",
+      "lineItems": [
+        {
+          "id": "item-8",
+          "name": "Senior Demo Specialist",
+          "costType": "FTE",
+          "amount": 145000,
+          "term": 1,
+          "startMonth": "January 2026",
+          "headcount": 1,
+          "description": "Capital Markets specialist"
+        },
+        {
+          "id": "item-9",
+          "name": "Demo Specialist (Mid-level)",
+          "costType": "FTE",
+          "amount": 110000,
+          "term": 1,
+          "startMonth": "April 2026",
+          "headcount": 2,
+          "description": "Retail Banking and Wealth Management specialists"
+        },
+        {
+          "id": "item-10",
+          "name": "Junior Demo Specialist",
+          "costType": "FTE",
+          "amount": 75000,
+          "term": 1,
+          "startMonth": "July 2026",
+          "headcount": 1,
+          "description": "Entry-level support role"
+        }
+      ]
+    },
+    {
+      "id": "infrastructure",
+      "name": "Cloud Infrastructure & Services",
+      "unit": "IT Operations",
+      "owner": "David Kim",
+      "status": "active",
+      "lineItems": [
+        {
+          "id": "item-11",
+          "name": "Azure Reserved Instances",
+          "costType": "CAPEX",
+          "amount": 180000,
+          "term": 3,
+          "startMonth": "January 2026",
+          "description": "3-year commitment for compute and storage (40% savings vs on-demand)"
+        },
+        {
+          "id": "item-12",
+          "name": "AWS Additional Services",
+          "costType": "OPEX",
+          "amount": 95000,
+          "term": 1,
+          "startMonth": "January 2026",
+          "description": "Variable workloads and development environments"
+        },
+        {
+          "id": "item-13",
+          "name": "Monitoring & Observability (Datadog)",
+          "costType": "OPEX",
+          "amount": 42000,
+          "term": 2,
+          "startMonth": "January 2026",
+          "description": "APM, infrastructure monitoring, log management"
+        }
+      ]
+    },
+    {
+      "id": "idsw-services",
+      "name": "IDSW Support Services",
+      "unit": "Professional Services",
+      "owner": "Emily Rodriguez",
+      "status": "active",
+      "lineItems": [
+        {
+          "id": "item-14",
+          "name": "IDSW Architecture Consulting",
+          "costType": "IDSW",
+          "amount": 125000,
+          "term": 1,
+          "startMonth": "January 2026",
+          "description": "Cloud migration and optimization guidance",
+          "vendor": "IDSW Consulting"
+        },
+        {
+          "id": "item-15",
+          "name": "IDSW Security Audit",
+          "costType": "IDSW",
+          "amount": 65000,
+          "term": 1,
+          "startMonth": "June 2026",
+          "description": "SOC 2 compliance and penetration testing"
+        }
+      ]
+    }
+  ]
+}

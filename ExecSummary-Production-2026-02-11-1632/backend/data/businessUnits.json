@@ -1,0 +1,58 @@
+[
+  {
+    "id": "bu-capital-markets",
+    "name": "Capital Markets",
+    "level": "BU",
+    "parentId": null,
+    "fullPath": "Capital Markets"
+  },
+  {
+    "id": "bu-banking",
+    "name": "Banking",
+    "level": "BU",
+    "parentId": null,
+    "fullPath": "Banking"
+  },
+  {
+    "id": "bu-int-banking",
+    "name": "International Banking",
+    "level": "BU",
+    "parentId": null,
+    "fullPath": "International Banking"
+  },
+  {
+    "id": "l3-trading-risk",
+    "name": "Trading and Risk",
+    "level": "L3",
+    "parentId": "bu-capital-markets",
+    "fullPath": "Capital Markets > Trading and Risk"
+  },
+  {
+    "id": "l4-risk",
+    "name": "Risk",
+    "level": "L4",
+    "parentId": "l3-trading-risk",
+    "fullPath": "Capital Markets > Trading and Risk > Risk"
+  },
+  {
+    "id": "l7-credit-trading",
+    "name": "Credit Trading and Risk Manager",
+    "level": "L7",
+    "parentId": "l4-risk",
+    "fullPath": "Capital Markets > Trading and Risk > Risk > Credit Trading and Risk Manager"
+  },
+  {
+    "id": "l7-energy-risk",
+    "name": "Energy Risk and Logistics",
+    "level": "L7",
+    "parentId": "l4-risk",
+    "fullPath": "Capital Markets > Trading and Risk > Risk > Energy Risk and Logistics"
+  },
+  {
+    "id": "bu-payments",
+    "name": "Payments",
+    "level": "BU",
+    "parentId": null,
+    "fullPath": "Payments"
+  }
+]

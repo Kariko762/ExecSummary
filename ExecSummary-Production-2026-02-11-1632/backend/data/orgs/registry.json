@@ -1,0 +1,44 @@
+{
+  "organizations": [
+    {
+      "id": "int-banking",
+      "name": "Int. Banking",
+      "slug": "int-banking",
+      "description": "",
+      "createdDate": "2025-11-15",
+      "contentCount": 0,
+      "publishedCount": 0,
+      "draftCount": 0
+    },
+    {
+      "id": "payments",
+      "name": "Payments",
+      "slug": "payments",
+      "description": "",
+      "createdDate": "2025-11-15",
+      "contentCount": 0,
+      "publishedCount": 0,
+      "draftCount": 0
+    },
+    {
+      "id": "capital-markets",
+      "name": "Capital Markets",
+      "slug": "capital-markets",
+      "description": "",
+      "createdDate": "2025-11-15",
+      "contentCount": 0,
+      "publishedCount": 0,
+      "draftCount": 0
+    },
+    {
+      "id": "banking-na",
+      "name": "Banking (NA)",
+      "slug": "banking-na",
+      "description": "",
+      "createdDate": "2025-11-15",
+      "contentCount": 0,
+      "publishedCount": 0,
+      "draftCount": 0
+    }
+  ]
+}

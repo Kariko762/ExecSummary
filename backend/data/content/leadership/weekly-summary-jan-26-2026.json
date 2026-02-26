@@ -1,0 +1,171 @@
+{
+  "_contentTag": "leadership-summary",
+  "meta": {
+    "id": "weekly-summary-jan-26-2026",
+    "slug": "weekly-summary-jan-26-2026",
+    "title": "Weekly Leadership Summary - Jan 26 - Feb 01, 2026",
+    "category": "leadership",
+    "status": "published",
+    "createdAt": "2026-02-02",
+    "lastModified": "2026-02-03",
+    "author": "Jason Hanscomb",
+    "views": 342
+  },
+  "metadata": {
+    "weekStart": "Jan 26, 2026",
+    "weekEnd": "Feb 01, 2026",
+    "title": "Leadership Summary",
+    "description": "Weekly executive briefing for Pre-Sales leadership"
+  },
+  "bluf": {
+    "bottomLine": "Coast MSA renewal is aligned at an ownership and funding level, but remains the top execution risk until REQ, PO, and signature are completed.\nBanking International Demo Audit is actively in progress and has expanded into a data-driven product prioritization effort using Sales deal analytics.\nFinalizing 2026 goals, initiatives, and tooling spend is now the critical path for scaling demo capability and AI enablement.\nMultiple AI and automation initiatives are ready to advance but are gated by tooling approval and prioritization outcomes.",
+    "background": "Coast renewal ownership has been resolved (Banking funding / RevOps ownership), removing ambiguity; remaining risk is procedural execution.\nThe Banking International Demo Audit, led with Richard Willcock, is underway and now incorporates cross-analysis of Sales deal data mapped to product usage.\nThis analytics layer ensures product prioritization is driven by revenue signal, not anecdotal demand.\n2026 planning is converging on a decision point where initiative sequencing, infrastructure investment, and tooling spend must be aligned.",
+    "assessment": "**Strategic Progress**\nShifted the Banking Audit from a static inventory to a quantitative prioritization model.\nEstablished a clear path to identify which Banking products justify enhanced demo support, new infrastructure, or AI tooling.\nDefined AI-led demo initiatives aligned to Banking GTM motions.\n\n**Cross-Team Collaboration**\nStrong partnership between Demo Services, Banking leadership, Sales Analytics, and Product.\nActive collaboration with Sales to ensure prioritization reflects real deal motion and pipeline value.\n\n**Critical Risks**\nCoast MSA execution timing remains a near-term risk.\nPremature tooling or infrastructure investment before audit completion could misallocate spend.\nCredit Assessment backup requirements remain undefined.",
+    "recommendation": "Maintain momentum on the deal-data → product prioritization analysis before locking 2026 investments.\nSequence 2026 tooling and infrastructure approvals after audit outputs are validated.\nContinue treating Coast MSA execution as a critical operational dependency.",
+    "asks": [
+      {
+        "type": "approval",
+        "item": "Coast MSA Execution",
+        "urgency": "high",
+        "owner": "Executive Leadership",
+        "deadline": "Immediate",
+        "context": "Prevents disruption to demo automation capability."
+      },
+      {
+        "type": "decision",
+        "item": "Banking Product Prioritization",
+        "urgency": "medium",
+        "owner": "Banking Leadership",
+        "deadline": "February",
+        "context": "Required to align demo, infrastructure, and tooling investments to revenue signal."
+      }
+    ]
+  },
+  "priorities": [
+    {
+      "id": 1,
+      "title": "Coast MSA Renewal",
+      "description": "Execute the Coast MSA renewal following agreed ownership and funding alignment.",
+      "status": "In Progress",
+      "impact": "HIGH IMPACT",
+      "borderColor": "var(--accent-red)",
+      "statusColor": "blue",
+      "impactColor": "red",
+      "details": {
+        "impact": "Prevents disruption to demo automation and Banking demo continuity.",
+        "likelihood": "Medium",
+        "actionItems": [
+          "Raise REQ and progress PO – Owner: Demo Services / RevOps – Deadline: Immediate",
+          "Execute MSA – Owner: RevOps – Deadline: Immediate"
+        ]
+      },
+      "owner": "Jason Hanscomb",
+      "dueDate": "2026/02/06"
+    },
+    {
+      "id": 2,
+      "title": "Banking International Demo Audit & Product Prioritization",
+      "description": "Conduct a Banking demo audit combined with Sales deal analytics mapped to product usage to determine which products should be prioritized for demo support, infrastructure investment, and tooling.",
+      "status": "In Progress",
+      "impact": "HIGH IMPACT",
+      "borderColor": "var(--accent-red)",
+      "statusColor": "blue",
+      "impactColor": "red",
+      "details": {
+        "impact": "Ensures demo and infrastructure investment is aligned to revenue-driving products.",
+        "likelihood": "High",
+        "actionItems": [
+          "Complete Sales deal data → product mapping – Owner: Demo Services / Sales Analytics – Deadline: February",
+          "Validate prioritization model with Banking leadership – Owner: Demo Services / Banking – Deadline: February"
+        ]
+      },
+      "owner": "Jason Hanscomb, Richard Willcock",
+      "dueDate": "TBD"
+    },
+    {
+      "id": 3,
+      "title": "Finalizing Goals & 2026 Initiatives",
+      "description": "Finalize Demo Services goals and initiatives for 2026, informed by Banking audit outputs.",
+      "status": "In Progress",
+      "impact": "HIGH IMPACT",
+      "borderColor": "var(--accent-red)",
+      "statusColor": "blue",
+      "impactColor": "red",
+      "details": {
+        "impact": "Prevents misaligned execution and enables focused delivery.",
+        "likelihood": "Medium",
+        "actionItems": [
+          "Finalize initiative list and success metrics – Owner: Demo Services Leadership – Deadline: February",
+          "Align initiatives to prioritized products – Owner: Demo Services – Deadline: February"
+        ]
+      },
+      "owner": "Jason Hanscomb",
+      "dueDate": "2026/02/11"
+    },
+    {
+      "id": 4,
+      "title": "2026 Tools Spend Approval",
+      "description": "Secure approval for 2026 demo tooling spend, sequenced after product prioritization is complete.",
+      "status": "Not Started",
+      "impact": "HIGH IMPACT",
+      "borderColor": "var(--accent-red)",
+      "statusColor": "gray",
+      "impactColor": "red",
+      "details": {
+        "impact": "Unlocks demo automation, AI narration, and self-service capability.",
+        "likelihood": "Medium",
+        "actionItems": [
+          "Build tooling spend proposal tied to prioritized products – Owner: Demo Services – Deadline: February",
+          "Secure executive approval – Owner: Executive Leadership – Deadline: February"
+        ]
+      },
+      "owner": "Jason Hanscomb, Jordan Spence",
+      "dueDate": "2026/02/23"
+    },
+    {
+      "id": 5,
+      "title": "AI Enablement for Banking Demos",
+      "description": "Advance AI-driven demo initiatives aligned to Banking GTM needs.",
+      "status": "In Progress",
+      "impact": "MEDIUM–HIGH IMPACT",
+      "borderColor": "var(--accent-orange)",
+      "statusColor": "blue",
+      "impactColor": "orange",
+      "details": {
+        "impact": "Improves personalization and reduces demo preparation effort.",
+        "likelihood": "High",
+        "actionItems": [
+          "Progress AI build-out for Commercial Loan Origination – Owner: Demo Services / Product – Deadline: Q1",
+          "Deliver Synthesia Banking (NA) 'Farmer Persona' video with Sandra Horvath – Owner: Demo Services – Deadline: Q1"
+        ]
+      },
+      "owner": "Jason Hanscomb",
+      "dueDate": "2026/02/11"
+    }
+  ],
+  "risks": [
+    {
+      "type": "critical",
+      "title": "Coast Contract Execution Delay",
+      "description": "Delay in contract execution could disrupt demo automation capability.",
+      "severity": "Critical",
+      "probability": "Medium Probability",
+      "status": "Open",
+      "mitigation": "Daily execution tracking until MSA is signed.",
+      "owner": "Demo Services / RevOps",
+      "impact": "Lose of access to the platform that would impact client facing demos and CKO planned demos."
+    },
+    {
+      "type": "medium-impact",
+      "title": "Credit Assessment VM Backup",
+      "description": "Change being planned to the CA system could cause data corruption close to a scheduled client demo",
+      "severity": "Medium",
+      "probability": "Medium Probability",
+      "status": "Open",
+      "mitigation": "Document and approve backup requirements.",
+      "owner": "Demo Services / Credit Assessment",
+      "impact": "If we are unable to backup the VM by Wednesday, then we risk demo data corruption and having to rescheduled a prospective demo."
+    }
+  ],
+  "_published": true
+}

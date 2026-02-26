@@ -287,6 +287,166 @@
       "goalId": "increase-demo-presentation-capacity",
       "createdAt": "2026-01-26T21:46:55.831Z",
       "updatedAt": "2026-01-26T21:46:55.831Z"
+    },
+    {
+      "id": "note-1770136996096",
+      "title": "Commercial OKRs",
+      "content": "- Redefine Market Leadership and priority Portfolios\n- - Beat TAM growth rates by x%\n- - Secure flagship clients with high-margin, fast revenue conversion\n-- shift towards Strategic / High margin product\n\n- Accelerate Profitable Revenue Growth With the Right Product mix\n- - focus on recurring\n- - improve ACV to Revenue conversion\n- - pricing discipline\n\n- Create a Global Growth Engine with new routes to market\n- - Mostly Sheamus \n- - enterpris segment 2x the pace of core\n- - X% of total revenues from Challens and alliances and Escosystem parthnerships\n - - strategic pricing leavers for enterprise\n- - achieve 10%+ revenue stretch on acquired assets above existing baseline\n\n- Build and enable a high-performing, market-savvy Commercial Team.\n- - looking at improving and retaining \n\nBanking\n- Digital, Payments and New Cores in Banking\n\nCAP-M\n- TAS - T&R - LENDING",
+      "date": "2026-02-03",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-02-03T16:43:16.096Z",
+      "updatedAt": "2026-02-03T16:43:16.096Z"
+    },
+    {
+      "id": "note-1770137361792",
+      "title": "AI Agents - Training",
+      "content": "We need to ensure everything on the team is able to create / train and understand AI Bots.",
+      "date": "2026-02-03",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "linkType": "goal",
+      "goalId": "",
+      "createdAt": "2026-02-03T16:49:21.792Z",
+      "updatedAt": "2026-02-03T16:49:21.792Z"
+    },
+    {
+      "id": "note-1770669336856",
+      "title": "E6 - Demo Asset Red Lines",
+      "content": "Continued to work with E6 and Christian on agreed upon redlines covering Demo Asset usage and protecting FIS IP and E6 IP.\n\n- This is now a risk to upcoming deals and demos due next week.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [
+        "risk",
+        "priority",
+        "pipeline-risk"
+      ],
+      "createdAt": "2026-02-09T20:35:36.856Z",
+      "updatedAt": "2026-02-09T20:35:36.856Z"
+    },
+    {
+      "id": "note-1770670214607",
+      "title": "Coast Enterprise Agreement",
+      "content": "Kicked off engagement with Coast,  Vendor Management and Finance on building out a cost and terms for an enterprise agreement.\n\n- Kick off meeting due 11th Feb",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-02-09T20:50:14.607Z",
+      "updatedAt": "2026-02-09T20:50:14.607Z"
+    },
+    {
+      "id": "note-1770670339975",
+      "title": "Anshool BUC Change",
+      "content": "India Ops have confirmed Anshool is on the Wrong BUC and either needs to return and swap his laptop or change his BUC.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1768037435678-ca97fd4na",
+      "noteType": [
+        "risk",
+        "priority"
+      ],
+      "createdAt": "2026-02-09T20:52:19.975Z",
+      "updatedAt": "2026-02-09T20:52:19.975Z"
+    },
+    {
+      "id": "note-1770670424415",
+      "title": "CLO Azure AI EndPoint",
+      "content": "Request for new Azure Endpoints is currently blocked due to Internal Process.\n\nNeed to raise a ticket for;\n- FISDEV Infrastructure as Code ticket\n- This required another ticket to generate a \"Cloud Client ID\"",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [
+        "priority",
+        "blocker",
+        "pipeline-risk"
+      ],
+      "createdAt": "2026-02-09T20:53:44.415Z",
+      "updatedAt": "2026-02-09T20:53:44.415Z"
+    },
+    {
+      "id": "note-1770672584537",
+      "title": "Tool Governance",
+      "content": "before SKO we want to be able to come up proper flow diagram and governance on where things should be stored and how we process assets from Coast and Synthesia and tiled into seismic How do we share how do we save who has the rights what type of roles do we need This all needs to be done prior to",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1769406221960-lg5cs3rle",
+      "noteType": [
+        "deadline-driven"
+      ],
+      "createdAt": "2026-02-09T21:29:44.537Z",
+      "updatedAt": "2026-02-09T21:29:44.537Z"
+    },
+    {
+      "id": "note-1770672833280",
+      "title": "Redefined Goals",
+      "content": "Demo Services have had their 2026 redefined based on commercial OKRS. the next step is to bring these goals into a timeline availability and deliverables tasks.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "noteType": [
+        "priority"
+      ],
+      "createdAt": "2026-02-09T21:33:53.280Z",
+      "updatedAt": "2026-02-09T21:33:53.280Z"
+    },
+    {
+      "id": "note-1770674969156",
+      "title": "SGO - \"Champions\"",
+      "content": "work with SGO leadership to identify Champions or Ambassadors that can work with Central Demo Services Team on Understanding Goals and requirements for the These people will also have licences and be invited to the demo services open sessions which are four times a week.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-02-09T22:09:29.156Z",
+      "updatedAt": "2026-02-09T22:09:29.156Z"
+    },
+    {
+      "id": "note-1770675056879",
+      "title": "Coast MSA Renewal",
+      "content": "the coast MSA has been approved by Spend Control The funding has been transferred from banking to capital markets and the MSA is to be owned by Jordan spence This is a item Stop demonstrations from Not happening at CKO Additionally being unable to demonstrate across multiple business lines due to inaccessible product demos Coast have agreed to continue maintain access and availability of the platform whilst we go through the simple administrative tasks of signing off paperwork",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [
+        "priority",
+        "highlight"
+      ],
+      "createdAt": "2026-02-09T22:10:56.879Z",
+      "updatedAt": "2026-02-09T22:10:56.879Z"
+    },
+    {
+      "id": "note-1770677001079",
+      "title": "Banking (Int.) Audit Cont.",
+      "content": "we must work next week with Richard Wil on pushing forward and prioritising the Demo audit health visibility for Banking.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765927041901-3er6laubc",
+      "noteType": [
+        "priority"
+      ],
+      "createdAt": "2026-02-09T22:43:21.079Z",
+      "updatedAt": "2026-02-09T22:43:21.079Z"
+    },
+    {
+      "id": "note-1770827515205",
+      "title": "Investran - Onboarding Data Refresh Process",
+      "content": "meeting David Wilmer and Benjamin Goldstein on standardising a That will take a production database and restore it to the demo database systems 345 times a year upon request\n\n- David is going to provide a Excel spreadsheet with the step by step process\n- Jason to update snow intake form to include investor and data refresh\n- organise training call with\n- map out wider support network and identify distribution group of key stake holders and impacted pre sales\n– finalise and publish the process",
+      "date": "2026-02-11",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1768037435678-ca97fd4na",
+      "createdAt": "2026-02-11T16:31:55.205Z",
+      "updatedAt": "2026-02-11T16:40:36.249Z",
+      "linkType": "initiative",
+      "initiativeId": "demo-operations-general"
     }
   ]
 }

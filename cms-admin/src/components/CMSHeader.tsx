@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target, BookText, StickyNote, DollarSign, ScrollText } from 'lucide-react';
+import { Moon, Sun, Database, Menu, Settings, ChevronDown, FileText, Lightbulb, Search, BookOpen, Wrench, ChevronRight, Palette, Grid, Shield, LogOut, User, Check, MessageCircle, Target, BookText, StickyNote, DollarSign, ScrollText, TrendingUp, Layers } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
@@ -17,13 +17,19 @@ interface CMSHeaderProps {
   onOpenGoals?: () => void;
   onOpenInitiatives?: () => void;
   onOpenInitiativesGantt?: () => void;
+  onOpenInitiativesStack?: () => void;
   onOpenBudget?: () => void;
   onOpenNotes?: () => void;
   onOpenTasks?: () => void;
   onOpenPlatformOverview?: () => void;
+  onOpenVendorSummary?: () => void;
+  onOpenVendorOverview?: () => void;
+  onOpenMultiVendorDashboard?: () => void;
+  onOpenVendorFeatureBreakdown?: () => void;
+  onOpenPerformanceDashboard?: () => void;
 }
 
-export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenDataSources, onOpenComments, onOpenGoals, onOpenInitiatives, onOpenInitiativesGantt, onOpenBudget, onOpenNotes, onOpenTasks, onOpenPlatformOverview }: CMSHeaderProps = {}) {
+export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onOpenTemplateBuilder, onOpenOrgIQ, onOpenSystemSettings, onOpenDataSources, onOpenComments, onOpenGoals, onOpenInitiatives, onOpenInitiativesGantt, onOpenInitiativesStack, onOpenBudget, onOpenNotes, onOpenTasks, onOpenPlatformOverview, onOpenVendorSummary, onOpenVendorOverview, onOpenMultiVendorDashboard, onOpenVendorFeatureBreakdown, onOpenPerformanceDashboard }: CMSHeaderProps = {}) {
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
   const [showAPIDashboard, setShowAPIDashboard] = useState(false);
@@ -32,12 +38,14 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
   const [engineSubmenuOpen, setEngineSubmenuOpen] = useState(false);
   const [strategySubmenuOpen, setStrategySubmenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isVendorMenuOpen, setIsVendorMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [customLogo, setCustomLogo] = useState<string | null>(null);
   const [backendConnected, setBackendConnected] = useState(false);
   const [requireAuth, setRequireAuth] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const vendorMenuRef = useRef<HTMLDivElement>(null);
   const engineMenuButtonRef = useRef<HTMLButtonElement>(null);
   const strategyMenuButtonRef = useRef<HTMLButtonElement>(null);
   const [engineSubmenuOpenUpward, setEngineSubmenuOpenUpward] = useState(false);
@@ -98,9 +106,12 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsUserMenuOpen(false);
       }
+      if (vendorMenuRef.current && !vendorMenuRef.current.contains(event.target as Node)) {
+        setIsVendorMenuOpen(false);
+      }
     };
 
-    if (isNavDropdownOpen || isUserMenuOpen) {
+    if (isNavDropdownOpen || isUserMenuOpen || isVendorMenuOpen) {
       // Small delay to prevent immediate closure when opening
       setTimeout(() => {
         document.addEventListener('mousedown', handleClickOutside);
@@ -110,7 +121,7 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [isNavDropdownOpen, isUserMenuOpen]);
+  }, [isNavDropdownOpen, isUserMenuOpen, isVendorMenuOpen]);
 
   // Detect if submenu should open upward (when near bottom of viewport)
   const handleEngineSubmenuOpen = () => {
@@ -387,6 +398,24 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     </div>
                                   </button>
 
+                                  {/* Initiatives Stack */}
+                                  <button
+                                    onClick={() => {
+                                      setIsNavDropdownOpen(false);
+                                      setStrategySubmenuOpen(false);
+                                      onOpenInitiativesStack?.();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-fuchsia-500/10 dark:hover:bg-fuchsia-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-fuchsia-500/10 dark:bg-fuchsia-500/20">
+                                      <Layers className="w-4 h-4 text-fuchsia-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Initiatives Stack</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Spotlight card view</div>
+                                    </div>
+                                  </button>
+
                                   {/* Goals */}
                                   <button
                                     onClick={() => {
@@ -587,6 +616,24 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
                                     </div>
                                   </button>
 
+                                  {/* Data Sources */}
+                                  <button
+                                    onClick={() => {
+                                      onOpenDataSources?.();
+                                      setIsNavDropdownOpen(false);
+                                      setEngineSubmenuOpen(false);
+                                    }}
+                                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-orange-500/10 dark:hover:bg-orange-500/20 text-gray-900 dark:text-white text-left"
+                                  >
+                                    <div className="p-1.5 rounded-lg bg-orange-500/10 dark:bg-orange-500/20">
+                                      <Database className="w-4 h-4 text-orange-500" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <div className="font-roobert-semibold text-sm">Data Sources</div>
+                                      <div className="text-xs text-gray-600 dark:text-gray-400">Manage content data sources</div>
+                                    </div>
+                                  </button>
+
                                   {/* Design System */}
                                   <button
                                     onClick={() => {
@@ -651,6 +698,94 @@ export default function CMSHeader({ onOpenAssetReference, onOpenStyleScheme, onO
           </form>
           {/* Actions */}
           <div className="flex items-center space-x-3">
+            {/* Vendor Menu Dropdown */}
+            <div ref={vendorMenuRef} className="relative">
+              <motion.button
+                onClick={() => setIsVendorMenuOpen(!isVendorMenuOpen)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg border-2 border-cyan-500/60 bg-cyan-500/25 hover:bg-cyan-500/40 transition-all"
+                title="Vendor templates"
+              >
+                <TrendingUp className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                <span className="text-sm font-roobert-medium text-cyan-600 dark:text-cyan-400">Vendor</span>
+                <ChevronDown className={`w-4 h-4 text-cyan-600 dark:text-cyan-400 transition-transform ${isVendorMenuOpen ? 'rotate-180' : ''}`} />
+              </motion.button>
+
+              <AnimatePresence>
+                {isVendorMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute right-0 mt-2 w-64 bg-slate-800/95 dark:bg-slate-900/95 backdrop-blur-md rounded-xl border-2 border-cyan-500/50 shadow-2xl overflow-hidden z-50"
+                  >
+                    <div className="p-2">
+                      <motion.button
+                        onClick={() => {
+                          onOpenVendorSummary?.();
+                          setIsVendorMenuOpen(false);
+                        }}
+                        whileHover={{ x: 4 }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-cyan-500/20 transition-all text-left"
+                      >
+                        <TrendingUp className="w-4 h-4 text-white" />
+                        <span className="text-sm font-roobert-medium text-white">Vendor Performance Index</span>
+                      </motion.button>
+                      
+                      <motion.button
+                        onClick={() => {
+                          onOpenVendorOverview?.();
+                          setIsVendorMenuOpen(false);
+                        }}
+                        whileHover={{ x: 4 }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-500/20 transition-all text-left"
+                      >
+                        <Target className="w-4 h-4 text-white" />
+                        <span className="text-sm font-roobert-medium text-white">Vendor Overview Template</span>
+                      </motion.button>
+                      
+                      <motion.button
+                        onClick={() => {
+                          onOpenMultiVendorDashboard?.();
+                          setIsVendorMenuOpen(false);
+                        }}
+                        whileHover={{ x: 4 }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-500/20 transition-all text-left"
+                      >
+                        <Grid className="w-4 h-4 text-white" />
+                        <span className="text-sm font-roobert-medium text-white">Multi-Vendor Performance</span>
+                      </motion.button>
+                      
+                      <motion.button
+                        onClick={() => {
+                          onOpenVendorFeatureBreakdown?.();
+                          setIsVendorMenuOpen(false);
+                        }}
+                        whileHover={{ x: 4 }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-orange-500/20 transition-all text-left"
+                      >
+                        <Layers className="w-4 h-4 text-white" />
+                        <span className="text-sm font-roobert-medium text-white">Vendor Feature Breakdown</span>
+                      </motion.button>
+
+                      <motion.button
+                        onClick={() => {
+                          onOpenPerformanceDashboard?.();
+                          setIsVendorMenuOpen(false);
+                        }}
+                        whileHover={{ x: 4 }}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-cyan-500/20 transition-all text-left"
+                      >
+                        <TrendingUp className="w-4 h-4 text-white" />
+                        <span className="text-sm font-roobert-medium text-white">Performance Dashboard</span>
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {/* Change Control Logs */}
             <motion.button
               onClick={() => setShowChangeControlLogs(true)}

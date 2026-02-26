@@ -16,6 +16,7 @@ import {
   X, ChevronRight, ChevronLeft, Calendar, CheckCircle, Copy,
   Sparkles, FileText, AlertCircle, Loader, ListTodo
 } from 'lucide-react';
+import weeklyLeadershipSummaryTemplate from '../templates/weekly-leadership-summary-template.json';
 
 interface TimelineNote {
   id: string;
@@ -456,9 +457,20 @@ IMPORTANT:
   // Create weekly summary
   const handleCreateSummary = async () => {
     if (!parsedData || !selectedWeek || !summaryType) return;
-    
-    // HARDCODED: Use demo-weekly-bluf template for weekly summaries
-    const templateId = 'demo-weekly-bluf';
+
+    const templateId = 'weekly-leadership-summary-template';
+    const baseTemplate = JSON.parse(JSON.stringify(weeklyLeadershipSummaryTemplate));
+    const summaryData = {
+      ...baseTemplate,
+      ...parsedData,
+      metadata: {
+        ...baseTemplate.metadata,
+        ...parsedData.metadata,
+        weekStart: selectedWeek.startDate,
+        weekEnd: selectedWeek.endDate,
+        generatedBy: baseTemplate.metadata?.generatedBy || 'AI Weekly Builder'
+      }
+    };
     
     setCreating(true);
     setStep('creating');
@@ -471,7 +483,7 @@ IMPORTANT:
         body: JSON.stringify({
           weekLabel: selectedWeek.label,
           summaryType,
-          summaryData: parsedData,
+          summaryData,
           noteIds: Array.from(selectedNoteIds),
           taskIds: Array.from(selectedTaskIds),
           templateId

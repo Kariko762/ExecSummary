@@ -1,0 +1,311 @@
+{
+  "id": "tickets-performance-feb-2026",
+  "month": "February",
+  "year": 2026,
+  "lastUpdated": "2026-02-24T10:00:00Z",
+  "businessUnits": [
+    {
+      "buId": "banking-international",
+      "buName": "Banking International",
+      "tickets": {
+        "openTickets": 14,
+        "criticalTickets": 3,
+        "impactedTickets": 2,
+        "closedTickets": 28,
+        "totalTickets": 42,
+        "resolutionRate": 67,
+        "averageResolutionTime": "4.2 days",
+        "slaCompliance": 85
+      },
+      "ticketsByType": [
+        {
+          "type": "Access Issues",
+          "count": 8,
+          "avgTime": "2.1 days"
+        },
+        {
+          "type": "Environment Down",
+          "count": 3,
+          "avgTime": "0.5 days"
+        },
+        {
+          "type": "Demo Request",
+          "count": 18,
+          "avgTime": "5.2 days"
+        },
+        {
+          "type": "License Issue",
+          "count": 5,
+          "avgTime": "3.8 days"
+        },
+        {
+          "type": "Technical Support",
+          "count": 8,
+          "avgTime": "4.5 days"
+        }
+      ],
+      "recentTickets": [
+        {
+          "ticketId": "TICK-2401",
+          "title": "E6 Demo Access Blocked",
+          "priority": "critical",
+          "status": "in-progress",
+          "openedDate": "2026-02-12",
+          "assignee": "Jason Hanscomb",
+          "category": "Access Issues"
+        },
+        {
+          "ticketId": "TICK-2398",
+          "title": "HSBC Texas Tiled Conversion",
+          "priority": "high",
+          "status": "complete",
+          "openedDate": "2026-02-17",
+          "closedDate": "2026-02-23",
+          "assignee": "Jason Hanscomb",
+          "category": "Demo Request"
+        },
+        {
+          "ticketId": "TICK-2395",
+          "title": "Banking Audit Environment Documentation",
+          "priority": "medium",
+          "status": "in-progress",
+          "openedDate": "2026-02-10",
+          "assignee": "Richard Willcock",
+          "category": "Technical Support"
+        }
+      ]
+    },
+    {
+      "buId": "banking-north-america",
+      "buName": "Banking North America",
+      "tickets": {
+        "openTickets": 11,
+        "criticalTickets": 1,
+        "impactedTickets": 2,
+        "closedTickets": 34,
+        "totalTickets": 45,
+        "resolutionRate": 76,
+        "averageResolutionTime": "3.8 days",
+        "slaCompliance": 91
+      },
+      "ticketsByType": [
+        {
+          "type": "Access Issues",
+          "count": 5,
+          "avgTime": "1.9 days"
+        },
+        {
+          "type": "Environment Down",
+          "count": 1,
+          "avgTime": "0.3 days"
+        },
+        {
+          "type": "Demo Request",
+          "count": 22,
+          "avgTime": "4.8 days"
+        },
+        {
+          "type": "License Issue",
+          "count": 8,
+          "avgTime": "3.2 days"
+        },
+        {
+          "type": "Technical Support",
+          "count": 9,
+          "avgTime": "4.1 days"
+        }
+      ],
+      "recentTickets": [
+        {
+          "ticketId": "TICK-2403",
+          "title": "Tiled Licenses for Banking NA",
+          "priority": "medium",
+          "status": "at-risk",
+          "openedDate": "2026-02-14",
+          "assignee": "Jordan Spence",
+          "category": "License Issue"
+        },
+        {
+          "ticketId": "TICK-2399",
+          "title": "Demo Environment Performance Issues",
+          "priority": "high",
+          "status": "complete",
+          "openedDate": "2026-02-08",
+          "closedDate": "2026-02-19",
+          "assignee": "Michael Rodriguez",
+          "category": "Technical Support"
+        }
+      ]
+    },
+    {
+      "buId": "capital-markets",
+      "buName": "Capital Markets",
+      "tickets": {
+        "openTickets": 9,
+        "criticalTickets": 2,
+        "impactedTickets": 1,
+        "closedTickets": 21,
+        "totalTickets": 30,
+        "resolutionRate": 70,
+        "averageResolutionTime": "5.1 days",
+        "slaCompliance": 78
+      },
+      "ticketsByType": [
+        {
+          "type": "Access Issues",
+          "count": 4,
+          "avgTime": "6.2 days"
+        },
+        {
+          "type": "Environment Down",
+          "count": 2,
+          "avgTime": "1.1 days"
+        },
+        {
+          "type": "Demo Request",
+          "count": 12,
+          "avgTime": "4.5 days"
+        },
+        {
+          "type": "License Issue",
+          "count": 6,
+          "avgTime": "4.8 days"
+        },
+        {
+          "type": "Technical Support",
+          "count": 6,
+          "avgTime": "5.2 days"
+        }
+      ],
+      "recentTickets": [
+        {
+          "ticketId": "TICK-2404",
+          "title": "MUFG AI Demo - Azure OpenAI Endpoint Blocked",
+          "priority": "critical",
+          "status": "at-risk",
+          "openedDate": "2026-02-10",
+          "assignee": "Cloud Team",
+          "category": "Environment Down"
+        },
+        {
+          "ticketId": "TICK-2402",
+          "title": "30 Synthesia Licenses Request",
+          "priority": "high",
+          "status": "in-progress",
+          "openedDate": "2026-02-15",
+          "assignee": "Jon Pendergast",
+          "category": "License Issue"
+        },
+        {
+          "ticketId": "TICK-2396",
+          "title": "Tiled Expansion for Capital Markets",
+          "priority": "high",
+          "status": "in-progress",
+          "openedDate": "2026-02-12",
+          "assignee": "Jon Pendergast",
+          "category": "License Issue"
+        }
+      ]
+    },
+    {
+      "buId": "payments",
+      "buName": "Payments",
+      "tickets": {
+        "openTickets": 7,
+        "criticalTickets": 0,
+        "impactedTickets": 1,
+        "closedTickets": 18,
+        "totalTickets": 25,
+        "resolutionRate": 72,
+        "averageResolutionTime": "3.5 days",
+        "slaCompliance": 88
+      },
+      "ticketsByType": [
+        {
+          "type": "Access Issues",
+          "count": 2,
+          "avgTime": "1.5 days"
+        },
+        {
+          "type": "Environment Down",
+          "count": 0,
+          "avgTime": "0 days"
+        },
+        {
+          "type": "Demo Request",
+          "count": 14,
+          "avgTime": "3.8 days"
+        },
+        {
+          "type": "License Issue",
+          "count": 4,
+          "avgTime": "4.2 days"
+        },
+        {
+          "type": "Technical Support",
+          "count": 5,
+          "avgTime": "3.9 days"
+        }
+      ],
+      "recentTickets": [
+        {
+          "ticketId": "TICK-2400",
+          "title": "Payments License Training - Session 1",
+          "priority": "medium",
+          "status": "scheduled",
+          "openedDate": "2026-02-13",
+          "scheduledDate": "2026-03-03",
+          "assignee": "Jon Pendergast",
+          "category": "Demo Request"
+        }
+      ]
+    },
+    {
+      "buId": "cross-bu",
+      "buName": "Cross-BU",
+      "tickets": {
+        "openTickets": 5,
+        "criticalTickets": 0,
+        "impactedTickets": 0,
+        "closedTickets": 12,
+        "totalTickets": 17,
+        "resolutionRate": 71,
+        "averageResolutionTime": "4.0 days",
+        "slaCompliance": 82
+      },
+      "ticketsByType": [
+        {
+          "type": "License Issue",
+          "count": 8,
+          "avgTime": "4.5 days"
+        },
+        {
+          "type": "Technical Support",
+          "count": 9,
+          "avgTime": "3.8 days"
+        }
+      ],
+      "recentTickets": [
+        {
+          "ticketId": "TICK-2397",
+          "title": "Coast MSA Renewal - PR Signature",
+          "priority": "high",
+          "status": "complete",
+          "openedDate": "2026-02-13",
+          "closedDate": "2026-02-17",
+          "assignee": "Jason Hanscomb",
+          "category": "License Issue"
+        },
+        {
+          "ticketId": "TICK-2405",
+          "title": "License Audit - Tiled Inactive Users",
+          "priority": "medium",
+          "status": "in-progress",
+          "openedDate": "2026-02-18",
+          "assignee": "Jordan Spence",
+          "category": "Technical Support"
+        }
+      ]
+    }
+  ]
+}

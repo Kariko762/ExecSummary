@@ -1,0 +1,721 @@
+import { motion } from 'framer-motion';
+import { TrendingUp, DollarSign, Users, Clock, Target, BarChart3, AlertCircle, CheckCircle2, Download, X } from 'lucide-react';
+
+interface VendorViewProps {
+  data?: any;
+  onClose?: () => void;
+}
+
+// DATA STRUCTURE - This will be replaced by AI or inline editing
+const VENDOR_DATA = {
+  metadata: {
+    vendorName: 'FABRICUM',
+    clientName: 'CONTOSO',
+    period: 'Q4 FY2025',
+    vertical: 'Demo Platform & Automation',
+    subVertical: 'Revenue Operations & Pre-Sales',
+    summary: 'How Fabricum is driving demo scale, efficiency and revenue impact across Contoso\'s GTM teams.'
+  },
+  
+  heroMetrics: [
+    {
+      id: 'investment',
+      icon: 'coins',
+      value: '£412,000',
+      label: 'Total Investment',
+      context: '(Licenses + Usage + Services)'
+    },
+    {
+      id: 'adoption',
+      icon: 'users',
+      value: '184 / 220',
+      label: 'Active Adoption',
+      context: '84% Utilization'
+    },
+    {
+      id: 'productivity',
+      icon: 'clock',
+      value: '3,420 hours',
+      label: 'Productivity Gained',
+      context: '(Prep + personalization + self-save call)'
+    },
+    {
+      id: 'revenue',
+      icon: 'trending',
+      value: '£18.6M',
+      label: 'Revenue Influence',
+      context: '$18, closed-won, reviews)'
+    }
+  ],
+
+  performanceIndex: {
+    overallScore: 82,
+    maxScore: 100,
+    segments: [
+      { name: 'Adoption\n+ Engagement', score: 82 },
+      { name: 'Productivity &\nEfficiency', score: 86 },
+      { name: 'Pipeline &\nRevenue Impact', score: 88 },
+      { name: 'Cost Efficiency\n+ Returns', score: 79 },
+      { name: 'Reliability &\nSupport', score: 74 },
+      { name: 'Support', score: 91 }
+    ],
+    summary: 'Strong performer delivering measurable productivity and pipeline influence, with opportunity to further optimize unit economics.'
+  },
+
+  spendBreakdown: {
+    platformLicenses: 285000,
+    usageOverages: 62000,
+    professionalServices: 412000
+  },
+
+  unitEconomics: {
+    costPerActiveUser: 2239,
+    costPerDemoExecuted: 128,
+    costPerAssetCreated: 412
+  },
+
+  licenseEfficiency: {
+    provisioned: 220,
+    active: 184,
+    powerUsers: 96,
+    utilization: 84,
+    powerUserRate: 44
+  },
+
+  revenueImpact: {
+    totalInfluence: 18600000,
+    attributedRevenue: 6200000,
+    winRateUsed: 32,
+    winRateNotUsed: 24,
+    performanceLiftDays: 13,
+    salesCycleUsed: 71,
+    salesCycleNotUsed: 84,
+    attributionMethod: 'Platform use logged with opportunity integration. AttributionBonus influenced performances, not sole use on attribution.'
+  },
+
+  reliability: {
+    uptime: { p1: 1, p2: 3 },
+    mttr: 42,
+    ticketsSubmitted: 38,
+    waitTime: 46,
+    medianResolution: 6.4,
+    csatScore: 4.6,
+    nps: 48
+  },
+
+  upsellOpportunities: [
+    'Upsell Advanced: Copilot to create & uses SlightPlan for payee time, Or Forecast pack: trials, drivers, diversity upside carrying 10 times common.',
+    'Moderate unused power users out to ERE innovation; communications.'
+  ],
+
+  next90Days: [
+    'If demo scale & business case ARMAS is a Partner effectiveness feature.',
+    'Moderate unused groups commutative ERP 245 SwAS.'
+  ]
+};
+
+// Main Component
+export default function VendorSummaryTemplate({ data: propData, onClose }: VendorViewProps) {
+  
+  const handleExport = () => {
+    window.print();
+  };
+
+  // Use prop data if provided, otherwise fallback to hardcoded data
+  const data = propData || VENDOR_DATA;
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="bg-[#1a1f2e] w-full h-full flex flex-col overflow-hidden"
+      >
+        {/* Header with Export/Close buttons */}
+        <div className="relative bg-[#1e2533] text-white flex-shrink-0 border-b border-white/10">
+          <div className="relative px-8 py-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-lg font-roobert-medium text-white">
+                  {data?.metadata?.vendorName || 'Vendor'} - {data?.metadata?.period || 'Summary'}
+                </h1>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleExport}
+                  className="p-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all border border-white/10"
+                  title="Export"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+                {onClose && (
+                  <button
+                    onClick={onClose}
+                    className="p-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all border border-white/10"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Area with padding */}
+        <div className="flex-1 overflow-y-auto px-20">
+          <div className="min-h-screen p-8" style={{ background: 'linear-gradient(135deg, #1A2332 0%, #3A4A5C 100%)' }}>
+      <div className="max-w-[1600px] mx-auto space-y-6">
+        {/* Header */}
+        <VendorHeader data={data.metadata} />
+        
+        {/* Hero Metrics */}
+        <HeroMetrics data={data.heroMetrics} />
+        
+        {/* Performance Index */}
+        <PerformanceIndex data={data.performanceIndex} />
+        
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-12 gap-6">
+          {/* Left Sidebar */}
+          <div className="col-span-4 space-y-6">
+            <SpendBreakdown data={data.spendBreakdown} />
+            <UnitEconomics data={data.unitEconomics} />
+            <LicenseEfficiency data={data.licenseEfficiency} />
+          </div>
+          
+          {/* Right Content Area */}
+          <div className="col-span-8 space-y-6">
+            <RevenueImpact data={data.revenueImpact} />
+            <div className="grid grid-cols-2 gap-6">
+              <PipelineDetail data={data.revenueImpact} />
+              <ReliabilitySupport 
+                data={data.reliability} 
+                upsell={data.upsellOpportunities}
+                next90={data.next90Days}
+              />
+            </div>
+            
+            {/* Executive Summary - aligned with License Efficiency */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+              <div className="flex items-start justify-between gap-8">
+                <div className="flex-1">
+                  <h3 className="text-sm font-roobert-bold text-white mb-3">Executive Summary</h3>
+                  <p className="text-sm text-white/80 font-roobert-light leading-relaxed">
+                    {VENDOR_DATA.metadata.vendorName} delivers strong performance across adoption, productivity, and revenue influence metrics. 
+                    The platform demonstrates measurable impact with 84% license utilization, 3,420 hours of productivity gains, and £18.6M in revenue influence. 
+                    Key opportunities include optimizing unit economics and expanding power user adoption to further maximize ROI.
+                  </p>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div className="text-center">
+                    <div className="text-xs text-white/60 font-roobert-light mb-1">Overall Score</div>
+                    <div className="text-4xl font-roobert-bold text-cyan-400">{VENDOR_DATA.performanceIndex.overallScore}</div>
+                    <div className="text-xs text-white/60 font-roobert-light">/ {VENDOR_DATA.performanceIndex.maxScore}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-white/60 font-roobert-light mb-1">Recommendation</div>
+                    <div className="px-4 py-2 bg-green-500/20 border border-green-500/30 rounded-lg">
+                      <div className="text-sm font-roobert-bold text-green-400">CONTINUE</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Header Component
+function VendorHeader({ data }: { data: any }) {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-3">
+        <h1 className="text-4xl font-roobert-medium text-white">
+          {data.clientName} <span className="text-white/60">&times;</span> {data.vendorName}
+        </h1>
+      </div>
+      <div className="flex items-baseline gap-3">
+        <h2 className="text-2xl font-roobert-light text-white/90">
+          Vendor Performance Scorecard
+        </h2>
+        <span className="text-lg font-roobert-light text-white/60">– {data.period}</span>
+      </div>
+      <div className="flex items-center gap-2 text-sm text-white/70 font-roobert-light">
+        <span>{data.vertical}</span>
+        <span className="text-white/40">|</span>
+        <span>{data.subVertical}</span>
+      </div>
+      <p className="text-sm text-white/80 font-roobert-light max-w-4xl mt-2">
+        {data.summary}
+      </p>
+    </div>
+  );
+}
+
+// Hero Metrics Component
+function HeroMetrics({ data }: { data: any }) {
+  const iconMap: Record<string, any> = {
+    coins: DollarSign,
+    users: Users,
+    clock: Clock,
+    trending: TrendingUp
+  };
+
+  return (
+    <div className="grid grid-cols-4 gap-4">
+      {data.map((metric) => {
+        const Icon = iconMap[metric.icon];
+        return (
+          <motion.div
+            key={metric.id}
+            className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-lg bg-cyan-500/20">
+                <Icon className="w-5 h-5 text-cyan-400" />
+              </div>
+              <div className="flex-1">
+                <div className="text-3xl font-roobert-bold text-white mb-1">
+                  {metric.value}
+                </div>
+                <div className="text-sm font-roobert-medium text-white/90 mb-1">
+                  {metric.label}
+                </div>
+                <div className="text-xs font-roobert-light text-white/60">
+                  {metric.context}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
+// Performance Index Component
+function PerformanceIndex({ data }: { data: any }) {
+  return (
+    <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-roobert-bold text-white">
+          {VENDOR_DATA.metadata.vendorName} PERFORMANCE INDEX:
+        </h3>
+        <div className="text-5xl font-roobert-bold text-white">
+          {data.overallScore}<span className="text-white/40">/{data.maxScore}</span>
+        </div>
+      </div>
+      
+      {/* Segmented Bar */}
+      <div className="grid grid-cols-6 gap-1 mb-4 h-3 rounded-lg overflow-hidden">
+        {data.segments.map((segment, idx) => (
+          <div
+            key={idx}
+            className="h-full"
+            style={{
+              background: `linear-gradient(135deg, rgba(77, 184, 184, ${0.4 + idx * 0.1}) 0%, rgba(109, 213, 213, ${0.5 + idx * 0.1}) 100%)`
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Segment Labels */}
+      <div className="grid grid-cols-6 gap-3">
+        {data.segments.map((segment, idx) => (
+          <div key={idx} className="text-center">
+            <div className="text-2xl font-roobert-bold text-white mb-1">
+              {segment.score}%
+            </div>
+            <div className="text-[10px] font-roobert-light text-white/70 leading-tight whitespace-pre-line">
+              {segment.name}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-xs font-roobert-light italic text-white/60 mt-4">
+        * {data.summary}
+      </p>
+    </div>
+  );
+}
+
+// Spend Breakdown Component
+function SpendBreakdown({ data }: { data: any }) {
+  const total = data.platformLicenses + data.usageOverages + data.professionalServices;
+  const platformPct = Math.round((data.platformLicenses / total) * 100);
+  const usagePct = Math.round((data.usageOverages / total) * 100);
+  const servicesPct = 100 - platformPct - usagePct;
+
+  return (
+    <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+      <div className="flex items-center gap-2 mb-4">
+        <BarChart3 className="w-4 h-4 text-cyan-400" />
+        <h3 className="text-sm font-roobert-bold text-white">Spend Breakdown</h3>
+      </div>
+      
+      {/* Donut Chart Placeholder */}
+      <div className="flex items-center justify-center mb-4">
+        <div className="relative w-40 h-40">
+          <svg viewBox="0 0 100 100" className="transform -rotate-90">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(77, 184, 184, 0.3)" strokeWidth="20" />
+            <circle 
+              cx="50" cy="50" r="40" fill="none" stroke="rgba(77, 184, 184, 0.9)" strokeWidth="20"
+              strokeDasharray={`${platformPct * 2.51} ${251 - platformPct * 2.51}`}
+            />
+            <circle 
+              cx="50" cy="50" r="40" fill="none" stroke="rgba(109, 213, 213, 0.7)" strokeWidth="20"
+              strokeDasharray={`${usagePct * 2.51} ${251 - usagePct * 2.51}`}
+              strokeDashoffset={-platformPct * 2.51}
+            />
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-xs text-white/60 font-roobert-light">Total</div>
+              <div className="text-sm font-roobert-bold text-white">£{(total / 1000).toFixed(0)}K</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="space-y-2 text-xs">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-sm bg-cyan-700" />
+            <span className="text-white/80 font-roobert-light">Platform Licenses</span>
+          </div>
+          <span className="text-white font-roobert-medium">£{(data.platformLicenses / 1000).toFixed(0)}K</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-sm bg-cyan-400" />
+            <span className="text-white/80 font-roobert-light">Usage & Overages</span>
+          </div>
+          <span className="text-white font-roobert-medium">£{(data.usageOverages / 1000).toFixed(0)}K</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-sm bg-gray-400" />
+            <span className="text-white/80 font-roobert-light">Professional Services</span>
+          </div>
+          <span className="text-white font-roobert-medium">£{(data.professionalServices / 1000).toFixed(0)}K</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Unit Economics Component
+function UnitEconomics({ data }: { data: any }) {
+  return (
+    <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+      <h3 className="text-sm font-roobert-bold text-white mb-4">Unit Economics</h3>
+      <div className="text-xs text-white/60 font-roobert-light mb-3">Cost per Active User</div>
+      
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-cyan-500/20">
+            <Users className="w-4 h-4 text-cyan-400" />
+          </div>
+          <div>
+            <div className="text-2xl font-roobert-bold text-white">
+              £{data.costPerActiveUser.toLocaleString()}
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-3 border-t border-white/10 space-y-3">
+          <div className="text-xs text-white/60 font-roobert-light mb-2">Cost per Demo Executed</div>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-cyan-500/20">
+              <Target className="w-4 h-4 text-cyan-400" />
+            </div>
+            <div className="text-xl font-roobert-bold text-white">
+              £{data.costPerDemoExecuted}
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-3 border-t border-white/10 space-y-3">
+          <div className="text-xs text-white/60 font-roobert-light mb-2">Cost per Demo Asset Created</div>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-cyan-500/20">
+              <BarChart3 className="w-4 h-4 text-cyan-400" />
+            </div>
+            <div className="text-xl font-roobert-bold text-white">
+              £{data.costPerAssetCreated}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// License Efficiency Component
+function LicenseEfficiency({ data }: { data: any }) {
+  return (
+    <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+      <h3 className="text-sm font-roobert-bold text-white mb-4">License Efficiency</h3>
+      
+      <div className="space-y-3">
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Users className="w-3 h-3 text-white/60" />
+            <span className="text-white/80 font-roobert-light">Provisioned</span>
+          </div>
+          <span className="text-white font-roobert-bold">{data.provisioned}</span>
+        </div>
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Users className="w-3 h-3 text-white/60" />
+            <span className="text-white/80 font-roobert-light">Active</span>
+          </div>
+          <span className="text-white font-roobert-bold">{data.active}</span>
+        </div>
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Users className="w-3 h-3 text-white/60" />
+            <span className="text-white/80 font-roobert-light">Power Users</span>
+          </div>
+          <span className="text-white font-roobert-bold">{data.powerUsers}</span>
+        </div>
+
+        <div className="pt-3 border-t border-white/10">
+          <div className="flex items-baseline gap-2 mb-1">
+            <div className="text-sm text-white/70 font-roobert-light">Utilization</div>
+            <div className="text-3xl font-roobert-bold text-white">{data.utilization}%</div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <div className="text-xs text-white/60 font-roobert-light">Power User Rate</div>
+            <div className="text-lg font-roobert-bold text-white">{data.powerUserRate}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Revenue Impact Component
+function RevenueImpact({ data }: { data: any }) {
+  return (
+    <div className="bg-white/5 backdrop-blur-sm rounded-lg p-5 border border-white/10">
+      <div className="flex items-center gap-2 mb-4">
+        <TrendingUp className="w-5 h-5 text-cyan-400" />
+        <h3 className="text-base font-roobert-bold text-white">PIPELINE & REVENUE IMPACT</h3>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-6">
+        {/* Revenue Influence */}
+        <div>
+          <div className="text-xs text-white/60 font-roobert-light mb-3">Revenue Influence</div>
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="text-xl font-roobert-bold text-white">
+                £{(data.totalInfluence / 1000000).toFixed(1)}M
+              </div>
+              <div className="flex-1 h-8 rounded-lg bg-white/10 relative overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-cyan-600 to-cyan-400"
+                  style={{ width: '71%' }}
+                />
+                <div className="absolute inset-0 flex items-center justify-center text-[10px] font-roobert-bold text-white">
+                  71%
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="text-xl font-roobert-bold text-white">
+                £{(data.attributedRevenue / 1000000).toFixed(1)}M
+              </div>
+              <div className="flex-1 h-8 rounded-lg bg-white/10 relative overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-cyan-700 to-cyan-500"
+                  style={{ width: '8.9%' }}
+                />
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[10px] font-roobert-bold text-white">
+                  <TrendingUp className="w-3 h-3" />
+                  8.9%
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="text-[9px] text-white/50 font-roobert-light italic mt-2">
+            {data.attributionMethod}
+          </p>
+        </div>
+
+        {/* Performance Lift */}
+        <div>
+          <div className="text-xs text-white/60 font-roobert-light mb-3">Performance Lift</div>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-white/70 font-roobert-light">Win Rate (used/Used)</span>
+              <span className="text-3xl font-roobert-bold text-white">{data.winRateUsed}%</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-white/70 font-roobert-light">Win Rate (Not Used)</span>
+              <div className="text-right">
+                <div className="text-3xl font-roobert-bold text-white">{data.winRateNotUsed}%</div>
+                <div className="text-[9px] text-green-400 font-roobert-medium">
+                  +{data.performanceLiftDays} days FFI/p
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Pipeline Detail Component
+function PipelineDetail({ data }: { data: any }) {
+  return (
+    <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+      <h3 className="text-sm font-roobert-bold text-white mb-4">Pipeline & Revenue Impact</h3>
+      
+      <div className="mb-4">
+        <div className="text-xs text-white/60 font-roobert-light mb-2">Revenue Influence</div>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="text-xl font-roobert-bold text-white">
+            £{(data.totalInfluence / 1000000).toFixed(1)}M
+          </div>
+          <div className="h-12 w-24 bg-gradient-to-r from-cyan-600/50 to-cyan-400/50 rounded flex items-center justify-center">
+            <span className="text-xs font-roobert-bold text-white">71%</span>
+          </div>
+          <div className="text-xl font-roobert-bold text-white">
+            £{(data.attributedRevenue / 1000000).toFixed(1)}M
+          </div>
+        </div>
+        
+        <div className="bg-white/10 rounded p-2 mb-3">
+          <div className="text-center text-sm font-roobert-bold text-white">
+            £180,000
+          </div>
+        </div>
+
+        <div className="flex items-start gap-2 text-[9px] text-white/60 font-roobert-light">
+          <BarChart3 className="w-3 h-3 mt-0.5 flex-shrink-0" />
+          <p>Attribution Medias: Platform used support &amp; time-critical integ/is Harmoni-impact Concours.</p>
+        </div>
+      </div>
+
+      <div className="pt-3 border-t border-white/10">
+        <div className="text-xs text-white/60 font-roobert-light mb-2">Sales Cycle Impact</div>
+        <div className="flex items-center justify-center gap-4">
+          <div className="text-center">
+            <div className="text-2xl font-roobert-bold text-white">{data.salesCycleUsed}</div>
+            <div className="text-[9px] text-white/60 font-roobert-light">days</div>
+          </div>
+          <div className="text-white/40">→</div>
+          <div className="text-center">
+            <div className="text-2xl font-roobert-bold text-white">{data.salesCycleNotUsed}</div>
+            <div className="text-[9px] text-white/60 font-roobert-light">days</div>
+          </div>
+        </div>
+        <div className="mt-2 text-center">
+          <span className="px-2 py-1 bg-green-500/20 text-green-400 text-[10px] font-roobert-bold rounded-full">
+            −{data.performanceLiftDays} days faster
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-4 pt-3 border-t border-white/10">
+        <div className="flex items-start gap-2 text-[9px] text-white/60 font-roobert-light">
+          <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <div className="font-roobert-bold text-white/80 mb-1">Upsell opti Advanced:</div>
+            <p>Copilot to create ci uses SlightPlan for payee time, Or Forecast pack: trials, drivers, diversity upside carrying 10 times common.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Reliability & Support Component
+function ReliabilitySupport({ data, upsell, next90 }: { 
+  data: any,
+  upsell: string[],
+  next90: string[]
+}) {
+  return (
+    <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+      <h3 className="text-sm font-roobert-bold text-white mb-4">Reliability, Support & Risk</h3>
+      
+      {/* Platform Reliability */}
+      <div className="mb-4">
+        <div className="text-xs text-white/60 font-roobert-light mb-2">Platform Reliability</div>
+        <div className="space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-white/70 font-roobert-light flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> Uptime
+            </span>
+            <span className="text-white font-roobert-medium">P1 / P2: {data.uptime.p1} / {data.uptime.p2}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-white/70 font-roobert-light flex items-center gap-1">
+              <Clock className="w-3 h-3" /> MTTR
+            </span>
+            <span className="text-white font-roobert-medium">{data.mttr} min</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Support Performance */}
+      <div className="mb-4 pt-3 border-t border-white/10">
+        <div className="text-xs text-white/60 font-roobert-light mb-2">Support Performance</div>
+        <div className="space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-white/70 font-roobert-light">Tickets Submitted</span>
+            <span className="text-white font-roobert-medium">{data.ticketsSubmitted}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-white/70 font-roobert-light">Wait Time &amp; Responses</span>
+            <span className="text-white font-roobert-medium">{data.waitTime} min</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-white/70 font-roobert-light">Median Time to Resolution</span>
+            <span className="text-white font-roobert-medium">{data.medianResolution} hrs</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Internal Satisfaction */}
+      <div className="mb-4 pt-3 border-t border-white/10">
+        <div className="text-xs text-white/60 font-roobert-light mb-2">Internal Satisfaction</div>
+        <div className="space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-white/70 font-roobert-light">Pre Sales CSAT</span>
+            <span className="text-white font-roobert-medium">{data.csatScore} / 5</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-white/70 font-roobert-light">NPS (internal)</span>
+            <span className="text-green-400 font-roobert-medium">+{data.nps}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Next 90 Days */}
+      <div className="pt-3 border-t border-white/10">
+        <div className="text-xs text-white/60 font-roobert-light mb-2">Next 90 Days</div>
+        <ul className="space-y-1.5 text-[9px] text-white/70 font-roobert-light">
+          {next90.map((item, idx) => (
+            <li key={idx} className="flex items-start gap-1">
+              <span className="text-cyan-400 mt-0.5">•</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}

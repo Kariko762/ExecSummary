@@ -92,7 +92,7 @@ router.get('/by-unit/:unitId', async (req, res) => {
 // POST create new person
 router.post('/', async (req, res) => {
   try {
-    const { email, firstName, lastName, role, function: func, assignedUnits } = req.body;
+    const { email, firstName, lastName, role, function: func, region, managerId, assignedUnits } = req.body;
     
     if (!email || !firstName || !lastName) {
       return res.status(400).json({ success: false, error: 'Email, first name, and last name are required' });
@@ -112,6 +112,8 @@ router.post('/', async (req, res) => {
       lastName,
       role: role || '',
       function: func || '',
+      region: region || '',
+      managerId: managerId || '',
       assignedUnits: assignedUnits || []
     };
     
@@ -128,7 +130,7 @@ router.post('/', async (req, res) => {
 // PUT update person
 router.put('/:id', async (req, res) => {
   try {
-    const { email, firstName, lastName, role, function: func, assignedUnits } = req.body;
+    const { email, firstName, lastName, role, function: func, region, managerId, assignedUnits, vendorLicenses, technologyAssignments } = req.body;
     const people = await readPeople();
     const index = people.findIndex(p => p.id === req.params.id);
     
@@ -148,7 +150,11 @@ router.put('/:id', async (req, res) => {
       lastName,
       role: role || '',
       function: func || '',
-      assignedUnits: assignedUnits || []
+      region: region || '',
+      managerId: managerId || '',
+      assignedUnits: assignedUnits || [],
+      vendorLicenses: vendorLicenses || people[index].vendorLicenses || [],
+      technologyAssignments: technologyAssignments || people[index].technologyAssignments || []
     };
     
     await writePeople(people);

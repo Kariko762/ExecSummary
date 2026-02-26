@@ -21,6 +21,7 @@ interface Note {
   title: string;
   content: string;
   category: 'key-highlight' | 'goal-progression' | 'big-win' | 'deal-support' | 'new-project' | 'general';
+  businessUnits?: string[];
   linkedTo: {
     type: 'organization' | 'initiative' | 'goal';
     id: string;
@@ -74,6 +75,8 @@ export default function AddNoteModal({
   const [taskId, setTaskId] = useState(''); // NEW
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
+  const [businessUnits, setBusinessUnits] = useState<Array<{ id: string; name: string; fullPath?: string }>>([]);
+  const [selectedBusinessUnits, setSelectedBusinessUnits] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,6 +91,7 @@ export default function AddNoteModal({
       setSelectedSections(existingNote.sectionIds);
       setTags(existingNote.tags);
       setTaskId(existingNote.taskId || '');
+      setSelectedBusinessUnits(existingNote.businessUnits || []);
       
       if (existingNote.linkedTo) {
         setLinkedType(existingNote.linkedTo.type as 'initiative' | 'goal');
@@ -103,9 +107,30 @@ export default function AddNoteModal({
       setTaskId('');
       setSelectedSections([]);
       setTags([]);
+      setSelectedBusinessUnits([]);
     }
     setError(null);
   }, [existingNote, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const fetchBusinessUnits = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/business-units');
+        const data = await response.json();
+        const allUnits = Array.isArray(data) ? data : (data.units || []);
+        // Filter to only root-level business units (no parent)
+        const rootUnits = allUnits.filter(unit => unit.parentId === null);
+        setBusinessUnits(rootUnits);
+      } catch (error) {
+        console.error('Failed to fetch business units:', error);
+        setBusinessUnits([]);
+      }
+    };
+
+    fetchBusinessUnits();
+  }, [isOpen]);
 
   const handleSave = async () => {
     if (!title.trim()) {
@@ -152,6 +177,7 @@ export default function AddNoteModal({
         title: title.trim(),
         content: content.trim(),
         category,
+        businessUnits: selectedBusinessUnits,
         linkedTo,
         ...(taskId && { taskId }), // Add taskId if selected
         sectionIds: selectedSections,
@@ -485,6 +511,36 @@ export default function AddNoteModal({
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Business Units */}
+          <div>
+            <label className="block text-sm font-roobert-semibold text-gray-900 dark:text-white mb-2">
+              Business Units
+            </label>
+            {businessUnits.length === 0 ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400">No business units available</p>
+            ) : (
+              <select
+                multiple
+                value={selectedBusinessUnits}
+                onChange={(e) => {
+                  const options = Array.from(e.target.selectedOptions).map(option => option.value);
+                  setSelectedBusinessUnits(options);
+                }}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white min-h-[120px]"
+              >
+                {businessUnits.map((unit) => {
+                  const label = unit.fullPath || unit.name;
+                  return (
+                    <option key={unit.id} value={label}>
+                      {label}
+                    </option>
+                  );
+                })}
+              </select>
+            )}
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Hold Ctrl (or Cmd) to select multiple.</p>
           </div>
 
           {/* Tags */}

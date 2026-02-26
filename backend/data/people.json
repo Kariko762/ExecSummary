@@ -1,20 +1,51 @@
 [
   {
-    "id": "person-1",
-    "email": "john.smith@example.com",
-    "firstName": "John",
-    "lastName": "Smith",
-    "role": "Risk Manager",
-    "function": "Risk Management",
-    "assignedUnits": ["l7-credit-trading"]
-  },
-  {
     "id": "person-2",
     "email": "jane.doe@example.com",
     "firstName": "Jane",
     "lastName": "Doe",
     "role": "Logistics Manager",
     "function": "Operations",
-    "assignedUnits": ["l7-energy-risk"]
+    "assignedUnits": [
+      "l7-credit-trading",
+      "bu-capital-markets",
+      "l3-trading-risk"
+    ],
+    "technologyAssignments": [
+      {
+        "technology": "Salesforce",
+        "status": "Active",
+        "assignedDate": "2026-01-20T12:15:00.000Z",
+        "modifiedDate": "2026-01-20T12:15:00.000Z"
+      },
+      {
+        "technology": "SharePoint",
+        "status": "Inactive",
+        "assignedDate": "2025-12-01T09:00:00.000Z",
+        "modifiedDate": "2026-02-15T16:45:00.000Z"
+      }
+    ],
+    "vendorLicenses": [
+      {
+        "vendor": "Tiled",
+        "status": "Active",
+        "licenseStartDate": "2026-02-26",
+        "lastLogin": "Today",
+        "linkedAssetId": "1772110151336"
+      }
+    ]
+  },
+  {
+    "id": "person-1772044767803",
+    "email": "jason.hanscomb@fisglobal.com",
+    "firstName": "Jason",
+    "lastName": "Hanscomb",
+    "role": "Snr. Manager",
+    "function": "Demo Services Lead",
+    "assignedUnits": [
+      "bu-int-banking",
+      "l3-money-movmement",
+      "bu-digital-one"
+    ]
   }
 ]

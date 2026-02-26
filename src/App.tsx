@@ -12,17 +12,28 @@ import { StickyNav } from './components/StickyNav';
 import { KnowledgeBaseDashboard } from './components/KnowledgeBaseDashboard';
 import { SchemaTest } from './components/SchemaTest';
 import { DesignSystemTest } from './pages/DesignSystemTest';
-import GoalsHome from './pages/GoalsHome';
+import Goals from './pages/dark-theme/Goals';
 import InitiativesHome from './pages/InitiativesHome';
 import TechnologiesHome from './pages/TechnologiesHome';
 import TechnologyStackOverview from './pages/TechnologyStackOverview';
 import PlatformArchitectureOverview from './pages/PlatformArchitectureOverview';
 import BudgetPage from './pages/BudgetPage';
 import LeadershipSummary from './pages/LeadershipSummary';
+import LeadershipBUSummary from './pages/LeadershipBUSummary';
 import InitiativesGantt from './pages/InitiativesGantt';
+import PerformanceDashboard from './pages/PerformanceDashboard';
+import AIUseCasePage from './pages/AIUseCasePage';
+import AIUseCasePageAQ from './pages/AIUseCasePageAQ';
+import PrecisionAQMultiStepSupportingDocument from './pages/PrecisionAQMultiStepSupportingDocument';
+import DemoEcosystemInvestment from './pages/DemoEcosystemInvestment';
 import PlatformOverview from './components/PlatformOverview';
 import CardStyleGallery from './components/CardStyleGallery';
 import LoginPage from './components/LoginPage';
+import ExecutiveDashboard from './pages/ExecutiveDashboard';
+import ExecutiveHome from './pages/ExecutiveHome';
+import BusinessUnitDashboard from './pages/BusinessUnitDashboard';
+import VendorDashboard from './pages/VendorDashboard';
+import AssetDashboard from './pages/AssetDashboard';
 import { timelineItems, isExecutiveSummary, loadTimelineData } from './data/timeline-loader';
 import { TimelineItem } from './types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -40,13 +51,17 @@ function AppContent() {
     '/budget',
     '/initiatives',
     '/technologies',
+    '/performance',
     '/knowledge-base',
     '/platform-overview',
     '/card-styles',
     '/schema-test',
+    '/ai-use-case',
+    '/precision-aq-supporting-doc',
     '/design-test',
     '/leadership-summary',
-    '/initiatives-gantt'
+    '/initiatives-gantt',
+    '/executive-dashboard'
   ];
   
   const shouldShowStickyNav = !noStickyNavRoutes.includes(location.pathname);
@@ -290,14 +305,29 @@ function App() {
     <Router>
       <ThemeProvider>
         <PresentationProvider>
-          <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
-            <Header 
-              onSearch={setSearchQuery} 
-              isAuthenticated={requireAuth && isAuthenticated}
-              onLogout={handleLogout}
-              onSelectContent={setSelectedSummary}
-            />
-            <AppContent />
+          <Routes>
+            {/* Full-Screen Routes - No App Shell */}
+            <Route path="/executive-dashboard" element={<ExecutiveDashboard />} />
+            <Route path="/executive-home" element={<ExecutiveHome />} />
+            <Route path="/executive-home/:businessUnit" element={<BusinessUnitDashboard />} />
+            <Route path="/executive-home/:businessUnit/vendor-dashboard" element={<VendorDashboard />} />
+            <Route path="/executive-home/:businessUnit/asset-dashboard" element={<AssetDashboard />} />
+            <Route path="/goals" element={<Goals />} />
+            <Route path="/ai-use-case" element={<AIUseCasePage />} />
+            <Route path="/ai-use-cases-aq" element={<AIUseCasePageAQ />} />
+            <Route path="/precision-aq-supporting-doc" element={<PrecisionAQMultiStepSupportingDocument />} />
+            <Route path="/demo-ecosystem-investment" element={<DemoEcosystemInvestment />} />
+            
+            {/* Standard Routes - With App Shell */}
+            <Route path="*" element={
+              <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
+                <Header 
+                  onSearch={setSearchQuery} 
+                  isAuthenticated={requireAuth && isAuthenticated}
+                  onLogout={handleLogout}
+                  onSelectContent={setSelectedSummary}
+                />
+                <AppContent />
             
             {/* Global Modals - Render outside Routes */}
             <AnimatePresence mode="wait">
@@ -480,6 +510,35 @@ function App() {
                                     </p>
                                     <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 text-sm font-roobert-semibold group-hover:gap-3 transition-all">
                                       <span>Explore Technologies</span>
+                                      <ChevronRight className="w-4 h-4" />
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              </Link>
+
+                              {/* Performance Tile */}
+                              <Link to="/performance" className="h-full">
+                                <motion.div
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.3 }}
+                                  whileHover={{ scale: 1.05, y: -4 }}
+                                  className="h-full rounded-xl p-6 transition-all cursor-pointer group relative bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-900/20 dark:to-cyan-800/20 hover:shadow-2xl border border-cyan-200 dark:border-cyan-700"
+                                >
+                                  <div className="flex flex-col items-center text-center h-full justify-between">
+                                    <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 shadow-lg" style={{ background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)' }}>
+                                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                      </svg>
+                                    </div>
+                                    <h3 className="text-xl font-roobert-heavy text-gray-900 dark:text-white mb-2 group-hover:text-cyan-700 dark:group-hover:text-cyan-300 transition-colors">
+                                      Performance
+                                    </h3>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-roobert-light mb-4">
+                                      Track demo hours and activity analytics
+                                    </p>
+                                    <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 text-sm font-roobert-semibold group-hover:gap-3 transition-all">
+                                      <span>View Dashboard</span>
                                       <ChevronRight className="w-4 h-4" />
                                     </div>
                                   </div>
@@ -832,11 +891,6 @@ function App() {
                     <DesignSystemTest />
                   } />
 
-                  {/* Goals Home Route */}
-                  <Route path="/goals" element={
-                    <GoalsHome onSelectGoal={setSelectedGoal} />
-                  } />
-
                   {/* Budget Route */}
                   <Route path="/budget" element={
                     <BudgetPage />
@@ -852,6 +906,11 @@ function App() {
                     <TechnologiesHome onSelectContent={setSelectedSummary} />
                   } />
                   
+                  {/* Performance Dashboard Route */}
+                  <Route path="/performance" element={
+                    <PerformanceDashboard />
+                  } />
+                  
                   {/* Technology Stack Overview Route */}
                   <Route path="/technology-stack-overview" element={
                     <TechnologyStackOverview />
@@ -865,6 +924,11 @@ function App() {
                   {/* Leadership Summary Route */}
                   <Route path="/leadership-summary" element={
                     <LeadershipSummary />
+                  } />
+                  
+                  {/* Leadership BU Summary Route */}
+                  <Route path="/leadership-bu-summary" element={
+                    <LeadershipBUSummary />
                   } />
                   
                   {/* Initiatives Gantt Route */}
@@ -944,6 +1008,8 @@ function App() {
               </footer>
             </main>
           </div>
+            } />
+          </Routes>
         </PresentationProvider>
       </ThemeProvider>
     </Router>

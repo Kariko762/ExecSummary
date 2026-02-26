@@ -1,0 +1,133 @@
+{
+  "overlayId": "ticket-depth-2025-q4",
+  "overlayName": "Support Ticket Depth Q4 2025",
+  "description": "Active support tickets assigned per team member",
+  "dataType": "support-metrics",
+  "createdDate": "2025-12-03T10:30:00Z",
+  "lastUpdated": "2025-12-03T10:30:00Z",
+  
+  "visualizationConfig": {
+    "title": "Ticket Depth",
+    "icon": "TicketCheck",
+    "primaryColor": "orange",
+    "hotspotEnabled": true,
+    "hotspotMetric": "ticketDepth",
+    "hotspotLabel": "Active Tickets",
+    "hotspotRanges": [
+      { "min": 0, "max": 10, "color": "#fed7aa", "label": "Low (0-10)" },
+      { "min": 11, "max": 20, "color": "#fdba74", "label": "Medium (11-20)" },
+      { "min": 21, "max": 30, "color": "#fb923c", "label": "High (21-30)" },
+      { "min": 31, "max": 999999, "color": "#f97316", "label": "Critical (30+)" }
+    ],
+    "aggregateMetrics": [
+      {
+        "id": "totalTickets",
+        "label": "Total Active Tickets",
+        "calculation": "sum",
+        "field": "ticketDepth",
+        "format": "number"
+      },
+      {
+        "id": "avgTickets",
+        "label": "Avg Per Person",
+        "calculation": "average",
+        "field": "ticketDepth",
+        "format": "number"
+      },
+      {
+        "id": "criticalCount",
+        "label": "Critical Priority",
+        "calculation": "count",
+        "field": "criticalTickets",
+        "format": "number"
+      }
+    ]
+  },
+  
+  "nodeMetrics": [
+    {
+      "nodeId": "1",
+      "ticketDepth": 23,
+      "criticalTickets": 4,
+      "avgResolutionTime": "4.2 days",
+      "ticketsByPriority": {
+        "critical": 4,
+        "high": 8,
+        "medium": 7,
+        "low": 4
+      }
+    },
+    {
+      "nodeId": "2",
+      "ticketDepth": 15,
+      "criticalTickets": 2,
+      "avgResolutionTime": "3.8 days",
+      "ticketsByPriority": {
+        "critical": 2,
+        "high": 5,
+        "medium": 6,
+        "low": 2
+      }
+    },
+    {
+      "nodeId": "3",
+      "ticketDepth": 18,
+      "criticalTickets": 3,
+      "avgResolutionTime": "4.5 days",
+      "ticketsByPriority": {
+        "critical": 3,
+        "high": 6,
+        "medium": 7,
+        "low": 2
+      }
+    },
+    {
+      "nodeId": "4",
+      "ticketDepth": 8,
+      "criticalTickets": 1,
+      "avgResolutionTime": "2.9 days",
+      "ticketsByPriority": {
+        "critical": 1,
+        "high": 2,
+        "medium": 4,
+        "low": 1
+      }
+    },
+    {
+      "nodeId": "5",
+      "ticketDepth": 10,
+      "criticalTickets": 1,
+      "avgResolutionTime": "3.2 days",
+      "ticketsByPriority": {
+        "critical": 1,
+        "high": 3,
+        "medium": 5,
+        "low": 1
+      }
+    },
+    {
+      "nodeId": "6",
+      "ticketDepth": 5,
+      "criticalTickets": 0,
+      "avgResolutionTime": "2.1 days",
+      "ticketsByPriority": {
+        "critical": 0,
+        "high": 1,
+        "medium": 3,
+        "low": 1
+      }
+    },
+    {
+      "nodeId": "7",
+      "ticketDepth": 7,
+      "criticalTickets": 1,
+      "avgResolutionTime": "3.5 days",
+      "ticketsByPriority": {
+        "critical": 1,
+        "high": 2,
+        "medium": 3,
+        "low": 1
+      }
+    }
+  ]
+}

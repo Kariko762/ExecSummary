@@ -111,7 +111,10 @@ export const GanttChartRenderer: React.FC<GanttChartRendererProps> = ({ data }) 
     try {
       const start = new Date(data.startDate);
       const end = new Date(data.endDate);
-      const weeks: { weekNumber: number; width: number }[] = [];
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Normalize to start of day
+      
+      const weeks: { weekNumber: number; width: number; startDate: Date; isCurrentWeek: boolean }[] = [];
       
       const totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
       const dayWidth = 100 / totalDays;
@@ -126,9 +129,14 @@ export const GanttChartRenderer: React.FC<GanttChartRendererProps> = ({ data }) 
         const weekEndClamped = new Date(Math.min(weekEnd.getTime(), end.getTime()));
         const daysInWeek = Math.ceil((weekEndClamped.getTime() - current.getTime()) / (1000 * 60 * 60 * 24)) + 1;
         
+        // Check if today falls within this week
+        const isCurrentWeek = today >= current && today <= weekEndClamped;
+        
         weeks.push({
           weekNumber: weekNum,
-          width: daysInWeek * dayWidth
+          width: daysInWeek * dayWidth,
+          startDate: new Date(current),
+          isCurrentWeek
         });
         
         current.setDate(current.getDate() + 7);
@@ -254,10 +262,12 @@ export const GanttChartRenderer: React.FC<GanttChartRendererProps> = ({ data }) 
             {weeks.map((week, index) => (
               <div 
                 key={index} 
-                className="gantt-week-cell"
+                className={`gantt-week-cell ${week.isCurrentWeek ? 'current-week' : ''}`}
                 style={{ width: `${week.width}%` }}
               >
-                Wk{week.weekNumber}
+                W{week.weekNumber}
+                <br />
+                {week.startDate.getDate().toString().padStart(2, '0')}/{(week.startDate.getMonth() + 1).toString().padStart(2, '0')}
               </div>
             ))}
           </div>
@@ -269,7 +279,7 @@ export const GanttChartRenderer: React.FC<GanttChartRendererProps> = ({ data }) 
         {weeks.map((week, index) => (
           <div 
             key={index}
-            className="gantt-grid-line"
+            className={`gantt-grid-line ${week.isCurrentWeek ? 'current-week' : ''}`}
             style={{ width: `${week.width}%` }}
           />
         ))}

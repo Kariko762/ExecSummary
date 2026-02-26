@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Edit2, Trash2, Save, Rocket, TrendingUp, Target, AlertTriangle, DollarSign, Users, Link, Shield, CheckCircle, Clock, Package, ChevronRight, Download, Settings, Sparkles, Maximize2, Minimize2 } from 'lucide-react';
 import InitiativeEditorModal from './InitiativeEditorModal';
-import ViewInitiativeModal from './ViewInitiativeModal';
+import ViewInitiativeModalClean from './ViewInitiativeModalClean';
 import AIInitiativeBuilderWizard from './AIInitiativeBuilderWizard';
 
 interface Initiative {
@@ -18,6 +18,8 @@ interface Initiative {
   progress: number;
   projectStage: 'discovery' | 'planning' | 'mvp' | 'pilot' | 'scaling' | 'complete';
   linkedGoals: string[];
+  businessUnits?: string[];
+  _published?: boolean;
   smartGoal: {
     statement: string;
     specific: { objectives: string[] };
@@ -35,7 +37,9 @@ interface Initiative {
   };
   budget: {
     total: number;
+    allocated?: number;
     spent: number;
+    currency?: string;
   };
   topRisks: Array<{ risk: string; level: string; mitigation: string }>;
   stakeholders: Array<{ name: string; role: string; supportLevel: string }>;
@@ -59,9 +63,17 @@ interface InitiativesManagerProps {
   isOpen: boolean;
   onClose: () => void;
   showNotification?: (type: 'success' | 'error' | 'info', message: string) => void;
+  autoOpenNewInitiative?: boolean;
+  onAutoOpenConsumed?: () => void;
 }
 
-export default function InitiativesManager({ isOpen, onClose, showNotification }: InitiativesManagerProps) {
+export default function InitiativesManager({
+  isOpen,
+  onClose,
+  showNotification,
+  autoOpenNewInitiative,
+  onAutoOpenConsumed
+}: InitiativesManagerProps) {
   const [initiatives, setInitiatives] = useState<Initiative[]>([]);
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
@@ -80,6 +92,13 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
       fetchGoals();
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && autoOpenNewInitiative) {
+      handleCreateInitiative();
+      onAutoOpenConsumed?.();
+    }
+  }, [isOpen, autoOpenNewInitiative]);
 
   const fetchInitiatives = async () => {
     try {
@@ -122,6 +141,7 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
       progress: 0,
       projectStage: 'discovery',
       linkedGoals: [],
+      businessUnits: [],
       smartGoal: {
         statement: '',
         specific: { objectives: [''] },
@@ -222,9 +242,21 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
     setLinkedGoals([]);
   };
 
-  const handleEditInitiative = (initiative: Initiative) => {
-    setEditingInitiative(initiative);
-    setShowEditor(true);
+  const handleEditInitiative = async (initiative: Initiative) => {
+    try {
+      // Fetch full initiative details from API
+      const response = await fetch(`http://localhost:3001/api/initiatives/${initiative.id}`);
+      const data = await response.json();
+      if (data.success) {
+        setEditingInitiative(data.initiative);
+        setShowEditor(true);
+      }
+    } catch (error) {
+      console.error('Error fetching initiative for editing:', error);
+      // Fallback to using the initiative data we have
+      setEditingInitiative(initiative);
+      setShowEditor(true);
+    }
   };
 
   const handleExportInitiative = async (initiative: Initiative) => {
@@ -293,7 +325,7 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className={`relative bg-white dark:bg-gray-900 shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
+          className={`relative bg-gradient-to-br from-[#1a2744] via-[#1e2f4f] to-[#0f172a] shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
             isFullscreen 
               ? 'w-full h-full rounded-none' 
               : modalWidth === 95
@@ -302,8 +334,8 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Navy/Raspberry Gradient Header - IDENTICAL TO FRONTEND */}
-          <div className="relative bg-gradient-to-br from-fis-navy via-blue-900 to-fis-raspberry text-white overflow-hidden">
+          {/* Dark Header */}
+          <div className="relative bg-gradient-to-br from-[#1a2744] via-[#2a3f5f] to-[#1e2f4f] text-white overflow-hidden border-b border-white/10">
             {/* Animated Background Pattern */}
             <div className="absolute inset-0 opacity-10">
               <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -458,21 +490,21 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
           </div>
 
           {/* Content - IDENTICAL CARD LAYOUT */}
-          <div className="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
+          <div className="flex-1 overflow-y-auto p-6 bg-transparent">
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="text-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fis-navy dark:border-fis-raspberry mx-auto mb-4"></div>
-                  <p className="text-gray-600 dark:text-gray-400">Loading initiatives...</p>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fis-raspberry mx-auto mb-4"></div>
+                  <p className="text-white/60">Loading initiatives...</p>
                 </div>
               </div>
             ) : initiatives.length === 0 ? (
               <div className="text-center py-12">
-                <Rocket className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4 opacity-50" />
-                <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
+                <Rocket className="w-16 h-16 text-white/20 mx-auto mb-4" />
+                <h3 className="text-lg font-roobert-semibold text-white mb-2">
                   No Initiatives Available
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-white/60">
                   Strategic initiatives will appear here once they are created.
                 </p>
               </div>
@@ -486,60 +518,45 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ 
-                      delay: index * 0.08,
-                      type: "spring",
-                      stiffness: 100
-                    }}
-                    whileHover={{ 
-                      y: -8, 
-                      scale: 1.02,
-                      transition: { type: "spring", stiffness: 300 }
+                      delay: index * 0.08
                     }}
                     onClick={() => handleInitiativeClick(initiative.id)}
-                    className="relative bg-white dark:bg-gray-800 rounded-xl p-6 cursor-pointer group overflow-hidden shadow-md hover:shadow-2xl transition-shadow"
+                    className="relative bg-white/[0.04] border border-white/[0.06] rounded-xl p-6 cursor-pointer group overflow-hidden shadow-lg hover:border-fis-raspberry/50 transition-colors backdrop-blur-sm"
                   >
-                    {/* Gradient Overlay on Hover - Navy to Raspberry */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900/0 via-fis-navy/0 to-fis-raspberry/0 group-hover:from-blue-900/10 group-hover:via-fis-navy/5 group-hover:to-fis-raspberry/10 transition-all duration-500 rounded-xl" />
                     
                     {/* Admin Controls Overlay - Top Right */}
                     <div className="absolute top-3 right-3 z-20 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={(e) => { e.stopPropagation(); handleExportInitiative(initiative); }}
-                        className="p-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors shadow-sm"
+                        className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors shadow-sm backdrop-blur-sm border border-white/10"
                         title="Export Initiative"
                       >
-                        <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        <Download className="w-3.5 h-3.5 text-white" />
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleEditInitiative(initiative); }}
-                        className="p-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-sm"
+                        className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors shadow-sm backdrop-blur-sm border border-white/10"
                         title="Edit Initiative"
                       >
-                        <Edit2 className="w-3.5 h-3.5 text-gray-500" />
+                        <Edit2 className="w-3.5 h-3.5 text-white" />
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleDeleteInitiative(initiative.id); }}
-                        className="p-1.5 rounded-lg bg-white/90 dark:bg-gray-800/90 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors shadow-sm"
+                        className="p-1.5 rounded-lg bg-white/10 hover:bg-red-500/20 transition-colors shadow-sm backdrop-blur-sm border border-white/10"
                         title="Delete Initiative"
                       >
-                        <X className="w-3.5 h-3.5 text-red-600" />
+                        <X className="w-3.5 h-3.5 text-red-400" />
                       </button>
                     </div>
 
                     {/* Content */}
                     <div className="relative z-10">
-                      <h3 className="text-xl font-roobert-semibold text-gray-900 dark:text-white mb-2 group-hover:text-fis-navy dark:group-hover:text-fis-raspberry transition-colors">
+                      <h3 className="text-xl font-roobert-semibold text-white mb-2">
                         {initiative.name}
                       </h3>
-                      
-                      {initiative.shortName && (
-                        <span className="inline-block px-2 py-1 rounded-full text-xs font-roobert-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 mb-2">
-                          {initiative.shortName}
-                        </span>
-                      )}
 
                       {initiative.smartGoal?.statement && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 font-roobert-light">
+                        <p className="text-sm text-white/70 mb-4 line-clamp-2 font-roobert-light">
                           {initiative.smartGoal.statement}
                         </p>
                       )}
@@ -548,10 +565,10 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                       {initiative.progress !== undefined && (
                         <div className="mb-4">
                           <div className="flex items-center justify-between text-xs mb-1">
-                            <span className="text-gray-600 dark:text-gray-400">Progress</span>
-                            <span className="font-roobert-semibold text-gray-900 dark:text-white">{initiative.progress}%</span>
+                            <span className="text-white/60">Progress</span>
+                            <span className="font-roobert-semibold text-white">{initiative.progress}%</span>
                           </div>
-                          <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden border border-white/10">
                             <div
                               className="h-full bg-gradient-to-r from-fis-navy to-fis-raspberry transition-all"
                               style={{ width: `${initiative.progress}%` }}
@@ -564,11 +581,11 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                       {initiative.smartGoal?.measurable?.metrics && initiative.smartGoal.measurable.metrics.length > 0 && (
                         <div className="grid grid-cols-2 gap-2 mb-4">
                           {initiative.smartGoal.measurable.metrics.slice(0, 2).map((metric: string, idx: number) => (
-                            <div key={idx} className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-2 border border-gray-200 dark:border-gray-700">
-                              <div className="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5 font-roobert-medium truncate">
+                            <div key={idx} className="bg-white/5 rounded-lg p-2 border border-white/10">
+                              <div className="text-[10px] text-white/50 mb-0.5 font-roobert-medium truncate">
                                 {metric.split(':')[0]}
                               </div>
-                              <div className="text-sm font-roobert-bold text-gray-900 dark:text-white truncate">
+                              <div className="text-sm font-roobert-bold text-white truncate">
                                 {metric.split(':')[1] || metric}
                               </div>
                             </div>
@@ -577,23 +594,23 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                       )}
 
                       {/* Stats Footer */}
-                      <div className="flex items-center gap-2 flex-wrap text-xs border-t border-gray-200 dark:border-gray-700 pt-3">
-                        <span className="px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-roobert-medium capitalize">
+                      <div className="flex items-center gap-2 flex-wrap text-xs border-t border-white/10 pt-3">
+                        <span className="px-2 py-1 rounded-full bg-white/10 text-white font-roobert-medium capitalize border border-white/10">
                           {initiative.category}
                         </span>
-                        <span className={`px-2 py-1 rounded-full font-roobert-medium capitalize ${
-                          initiative.status === 'complete' || initiative.status === 'completed' || initiative.status === 'achieved' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
-                          initiative.status === 'in-progress' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' :
-                          initiative.status === 'at-risk' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' :
-                          initiative.status === 'blocked' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
-                          'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                        <span className={`px-2 py-1 rounded-full font-roobert-medium capitalize border ${
+                          initiative.status === 'complete' || initiative.status === 'completed' || initiative.status === 'achieved' ? 'bg-green-500/20 text-green-300 border-green-500/30' :
+                          initiative.status === 'in-progress' ? 'bg-blue-500/20 text-blue-300 border-blue-500/30' :
+                          initiative.status === 'at-risk' ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' :
+                          initiative.status === 'blocked' ? 'bg-red-500/20 text-red-300 border-red-500/30' :
+                          'bg-white/10 text-white/70 border-white/10'
                         }`}>
                           {initiative.status.replace('-', ' ')}
                         </span>
-                        <span className={`px-2 py-1 rounded-full font-roobert-medium capitalize ${
-                          initiative.priority === 'high' || initiative.priority === 'critical' ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' :
-                          initiative.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' :
-                          'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                        <span className={`px-2 py-1 rounded-full font-roobert-medium capitalize border ${
+                          initiative.priority === 'high' || initiative.priority === 'critical' ? 'bg-red-500/20 text-red-300 border-red-500/30' :
+                          initiative.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30' :
+                          'bg-white/10 text-white/70 border-white/10'
                         }`}>
                           {initiative.priority}
                         </span>
@@ -601,7 +618,7 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
                       
                       {/* Owner & Assets Footer */}
                       {(initiative.owner || initiative.linkedGoals !== undefined) && (
-                        <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400 mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                        <div className="flex items-center justify-between text-[11px] text-white/50 mt-2 pt-2 border-t border-white/10">
                           {initiative.owner && (
                             <span className="flex items-center gap-1 font-roobert-medium">
                               <Users className="w-3 h-3" />
@@ -640,7 +657,7 @@ export default function InitiativesManager({ isOpen, onClose, showNotification }
 
           {/* View Initiative Modal */}
           {selectedInitiative && (
-            <ViewInitiativeModal
+            <ViewInitiativeModalClean
               initiative={selectedInitiative}
               linkedGoals={linkedGoals}
               onClose={handleCloseViewModal}

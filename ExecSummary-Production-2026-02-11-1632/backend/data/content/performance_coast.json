@@ -1,0 +1,204 @@
+{
+  "id": "performance_coast_2026_01",
+  "quarter": "Q1",
+  "year": 2026,
+  "date": "2026-01-23",
+  "title": "Coast Platform Performance - January 2026",
+  "displayName": "Coast",
+  "_type": "performance",
+  "_contentTag": "performance",
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "Performance Dashboard - Software Operations",
+  "_template_description": "Executive performance view for software operations vendors",
+  "_template_created": "2026-01-23T00:00:00.000Z",
+  "_template_updated": "2026-01-23T00:00:00.000Z",
+  "tags": ["performance"],
+  
+  "_enabled_hero": true,
+  "_hero_displayTitle": false,
+  "_hero_type": "multiField",
+  
+  "hero_0": {
+    "ROI Multiple": "11.2x",
+    "Revenue Linked": "$8.2M",
+    "YTD Investment": "$72,917",
+    "Net Value": "$8.13M"
+  },
+  "_hero_0_type": "metricCard",
+  "_hero_0_layoutZone": "left",
+  "_hero_0_assetTitle": "Return on Investment",
+  "_hero_0_displayAssetTitle": true,
+  
+  "hero_1": 8,
+  "_hero_1_type": "radialProgressChart",
+  "_hero_1_layoutZone": "center",
+  "_hero_1_assetTitle": "Budget Used (Jan)",
+  "_hero_1_displayAssetTitle": true,
+  "_hero_1_chartConfig": {
+    "percentage": 8,
+    "label": "$72,917 of $875K",
+    "color": "var(--accent-green)"
+  },
+  
+  "hero_2": {
+    "Annual Contract": "$875,000",
+    "Q1 Forecast": "$218,750",
+    "YTD Spend": "$72,917",
+    "Remaining": "$802,083",
+    "Forecast vs Budget": "On Track"
+  },
+  "_hero_2_type": "metricCard",
+  "_hero_2_layoutZone": "right",
+  "_hero_2_assetTitle": "Budget Health",
+  "_hero_2_displayAssetTitle": true,
+  
+  "_enabled_adoption": true,
+  "_adoption_displayTitle": true,
+  "_adoption_type": "multiField",
+  
+  "adoption_0": 77,
+  "_adoption_0_type": "radialProgressChart",
+  "_adoption_0_layoutZone": "left",
+  "_adoption_0_assetTitle": "License Utilization",
+  "_adoption_0_displayAssetTitle": true,
+  "_adoption_0_chartConfig": {
+    "percentage": 77,
+    "label": "387 of 500 licenses",
+    "color": "var(--accent-green)"
+  },
+  
+  "adoption_1": {
+    "Business Units Using": "73%",
+    "Total BUs": "41 of 56",
+    "FIS Adoption Rate": "24%",
+    "Active Users (MTD)": "387",
+    "New Users (Jan)": "23"
+  },
+  "_adoption_1_type": "metricCard",
+  "_adoption_1_layoutZone": "center",
+  "_adoption_1_assetTitle": "Adoption Metrics",
+  "_adoption_1_displayAssetTitle": true,
+  
+  "adoption_2": [
+    { "label": "Active Users", "value": "387", "percentage": 77 },
+    { "label": "BU Adoption", "value": "73%", "percentage": 73 },
+    { "label": "FIS Adoption", "value": "24%", "percentage": 24 },
+    { "label": "Monthly Growth", "value": "+6%", "percentage": 6 }
+  ],
+  "_adoption_2_type": "progressBarList",
+  "_adoption_2_layoutZone": "right",
+  "_adoption_2_assetTitle": "Usage Summary",
+  "_adoption_2_displayAssetTitle": true,
+  
+  "_enabled_performance": true,
+  "_performance_displayTitle": true,
+  "_performance_type": "multiField",
+  
+  "performance_0": [
+    { "category": "Aug", "value": 395, "label": "395" },
+    { "category": "Sep", "value": 421, "label": "421" },
+    { "category": "Oct", "value": 378, "label": "378" },
+    { "category": "Nov", "value": 405, "label": "405" },
+    { "category": "Dec", "value": 389, "label": "389" },
+    { "category": "Jan", "value": 412, "label": "412" }
+  ],
+  "_performance_0_type": "barChart",
+  "_performance_0_layoutZone": "left",
+  "_performance_0_assetTitle": "Demos Performed (6 Months)",
+  "_performance_0_displayAssetTitle": true,
+  "_performance_0_chartConfig": {
+    "xAxisKey": "category",
+    "dataKeys": ["value"],
+    "colors": ["var(--brand-secondary)"],
+    "legend": ["Demos"],
+    "yAxisLabel": "Volume"
+  },
+  
+  "performance_1": [
+    {
+      "title": "Banking Solutions",
+      "items": [
+        { "label": "Total Demos", "value": "87" },
+        { "label": "Revenue Linked", "value": "$3.2M" },
+        { "label": "Win Rate", "value": "22%" }
+      ]
+    },
+    {
+      "title": "Payment Processing",
+      "items": [
+        { "label": "Total Demos", "value": "65" },
+        { "label": "Revenue Linked", "value": "$2.4M" },
+        { "label": "Win Rate", "value": "19%" }
+      ]
+    },
+    {
+      "title": "Risk Management",
+      "items": [
+        { "label": "Total Demos", "value": "52" },
+        { "label": "Revenue Linked", "value": "$1.8M" },
+        { "label": "Win Rate", "value": "17%" }
+      ]
+    },
+    {
+      "title": "Digital Channels",
+      "items": [
+        { "label": "Total Demos", "value": "45" },
+        { "label": "Revenue Linked", "value": "$0.8M" },
+        { "label": "Win Rate", "value": "12%" }
+      ]
+    }
+  ],
+  "_performance_1_type": "nestedCards",
+  "_performance_1_layoutZone": "right",
+  "_performance_1_assetTitle": "Top Performing Assets",
+  "_performance_1_displayAssetTitle": true,
+  
+  "_enabled_details": true,
+  "_details_displayTitle": true,
+  "_details_type": "multiField",
+  
+  "details_0": {
+    "Vendor Contact": "Sarah Johnson",
+    "Email": "sjohnson@coastdemo.com",
+    "Phone": "+1 (415) 555-0123",
+    "Slack": "#coast-support",
+    "Account Manager": "Coast Demo Platform"
+  },
+  "_details_0_type": "keyValueList",
+  "_details_0_layoutZone": "left",
+  "_details_0_assetTitle": "Vendor Information",
+  "_details_0_displayAssetTitle": true,
+  
+  "details_1": {
+    "Contract Start": "Oct 1, 2025",
+    "Contract End": "Sep 30, 2026",
+    "Next Renewal": "Aug 1, 2026",
+    "Auto-Renew": "Enabled",
+    "Notice Period": "60 days"
+  },
+  "_details_1_type": "keyValueList",
+  "_details_1_layoutZone": "center",
+  "_details_1_assetTitle": "Contract Details",
+  "_details_1_displayAssetTitle": true,
+  
+  "details_2": [
+    { "category": "Aug", "value": 6.8, "label": "$6.8M" },
+    { "category": "Sep", "value": 7.2, "label": "$7.2M" },
+    { "category": "Oct", "value": 8.5, "label": "$8.5M" },
+    { "category": "Nov", "value": 7.9, "label": "$7.9M" },
+    { "category": "Dec", "value": 8.1, "label": "$8.1M" },
+    { "category": "Jan", "value": 8.2, "label": "$8.2M" }
+  ],
+  "_details_2_type": "barChart",
+  "_details_2_layoutZone": "right",
+  "_details_2_assetTitle": "Revenue Trend (6 Months)",
+  "_details_2_displayAssetTitle": true,
+  "_details_2_chartConfig": {
+    "xAxisKey": "category",
+    "dataKeys": ["value"],
+    "colors": ["var(--accent-green)"],
+    "legend": ["Revenue ($M)"],
+    "yAxisLabel": "$ Millions"
+  }
+}

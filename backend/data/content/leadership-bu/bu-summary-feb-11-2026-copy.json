@@ -1,0 +1,238 @@
+{
+  "id": "bu-summary-feb-17-2026",
+  "_templateName": "leadership-bu-summary",
+  "title": "Leadership BU Summary - Week of Feb 17",
+  "status": "draft",
+  "_contentTag": "leadership-bu-summary",
+  "_published": false,
+  "metadata": {
+    "weekStart": "2026-02-17",
+    "weekEnd": "2026-02-17",
+    "title": "Leadership BU Summary - Week of Feb 17",
+    "description": "Business Unit focused executive summary"
+  },
+  "buSections": [
+    {
+      "buId": "banking-int",
+      "items": [
+        {
+          "id": "1",
+          "title": "E6 Agreement shared (12th), chased (16th), pending signature for early March demo",
+          "background": "Clean agreement version delivered. JH followed up with E9. E6 signature required before demo asset access granted. Demo scheduled early March.",
+          "recommendation": "Continue to chase E6 for agreement signature. Ensure demo asset access is provided immediately upon signature to meet early March demo deadline.",
+          "deliverable": "Agreement signed Feb 20, Demo asset access Feb 27",
+          "priority": "high",
+          "status": "at-risk"
+        },
+        {
+          "id": "2",
+          "title": "Banking Audit progressing - Prioritization due (17th), Coast meetings scheduled",
+          "background": "Richard Willcock providing updated prioritization and names by 17th Feb. Profile/OPF/IST meetings scheduled with Coast for demo build exploration.",
+          "recommendation": "Complete full audit of demo environments by end of February. Document current state, identify gaps, and establish priority remediation roadmap. Documentation required for environment roadmap.",
+          "deliverable": "Audit completed Feb 28, 2026",
+          "priority": "high",
+          "status": "in-progress"
+        },
+        {
+          "id": "2a",
+          "title": "HSBC Texas presentation - PPTX received, Tiled conversion kick-off today (17th)",
+          "background": "Jason Wolff provided executive summary PPTX. Tiled conversion due 23rd Feb for HSBC Texas presentation. First modular Tiled sales asset for Banking Int.",
+          "recommendation": "Convert executive summary PPTX into Tiled microsite format. Ensure completion by Feb 23rd to support HSBC Texas presentation.",
+          "deliverable": "Tiled microsite completed Feb 23, 2026",
+          "priority": "medium",
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "buId": "banking-na",
+      "items": [
+        {
+          "id": "3",
+          "title": "CKD Tiled licenses - Jordan follow-up complete, working US Procurement",
+          "background": "Additional Tiled licenses needed for CKD. Incorporated into Sales Tech Tools ask. JH reformatting for Bora (17th) and working PREQ/ScanMarket tickets with US Procurement.",
+          "recommendation": "Incorporate additional Tiled licenses into the demo technology spend whilst working towards temporary licenses with Tiled as interim solution. Work with US Procurement on PREQ and ScanMarket processing.",
+          "deliverable": "Temporary licenses supplied for CKD",
+          "priority": "medium",
+          "status": "at-risk"
+        }
+      ]
+    },
+    {
+      "buId": "capital-markets",
+      "items": [
+        {
+          "id": "4",
+          "title": "MUFG ($6M+) AI demo blocked - Client cloud account pending, timeline mapping by 18th",
+          "background": "Azure OpenAI endpoint blocked by authentication policy conflicts. Pending client cloud account creation. JH reviewing with Cloud Team for confirmed timeline (process map due 18th Feb).",
+          "recommendation": "Urgent engagement with Network Security Architecture Team on Azure AI authentication policies. Resolve subscription vs token-based authentication conflict. Complete client cloud account setup and timeline mapping.",
+          "deliverable": "Auth resolution + endpoint deployment Feb 20, 2026",
+          "priority": "high",
+          "status": "at-risk"
+        },
+        {
+          "id": "5",
+          "title": "CM requesting 30 Synthesia + Tiled expansion - Coordinating with Pendergast for 20th",
+          "background": "30 additional Synthesia licenses and Tiled expansion requested. JH working with Jon Pendergast on initial license holders (access by 20th Feb). Coast needs part of wider Technology Ask.",
+          "recommendation": "Incorporate the license requirements into the wider demo technology spend whilst continuing to use their existing Synthesia and Tiled licenses alongside the complementary Coast demo services currently on offer. Coordinate with Jon Pendergast on Tiled license distribution.",
+          "deliverable": "Technology spend decision Feb 26",
+          "priority": "high",
+          "status": "at-risk"
+        }
+      ]
+    },
+    {
+      "buId": "payments",
+      "items": [
+        {
+          "id": "6",
+          "title": "Payments licenses provisioned (13th), follow-up training scheduled post-CKO",
+          "background": "Licenses provided and initial use-case discussions complete (12th/13th Feb). Follow-up training scheduled: Session 1 W/C 2nd March, Session 2 W/C 9th March.",
+          "recommendation": "Continue with planned follow-up training sessions post-CKO. Schedule comprehensive training on Tiled and Synthesia covering platform features, best practices, and demo narratives.",
+          "deliverable": "Licenses provisioned Feb 13 (Complete); Training Session 1: W/C 2nd March; Training Session 2: W/C 9th March",
+          "priority": "medium",
+          "status": "on-track"
+        }
+      ]
+    },
+    {
+      "buId": "cross-bu",
+      "items": [
+        {
+          "id": "7",
+          "title": "Coast MSA ($267K) - PR approved (PR184010376284), pending signature by 18th",
+          "background": "Spend Control and Purchase Request approved. PR184010376284 pending signature and release. Original Jan 31 deadline passed.",
+          "recommendation": "Complete signature and release of approved Purchase Request PR184010376284. Ensure Coast platform continuity.",
+          "deliverable": "PR/REQ raised Feb 13 (Complete), Signature Feb 18",
+          "priority": "high",
+          "status": "at-risk"
+        },
+        {
+          "id": "8",
+          "title": "Executive Summary Platform - Final testing complete, production deployment underway",
+          "background": "Platform entered final testing. Ready for deployment as central executive view into demo services activities.",
+          "recommendation": "Deploy platform to production by end of week. Conduct executive briefing session to showcase capabilities.",
+          "deliverable": "Platform deployed by Feb 13th, Network access by Feb 20th, Executive demonstrations from 1st March.",
+          "priority": "medium",
+          "status": "on-track"
+        },
+        {
+          "id": "10",
+          "title": "Governance Framework - Draft complete, review scheduled today (17th), on track for CKO",
+          "background": "Workflow designed and governance document drafted. Review scheduled 17th Feb. On track for CKO release.",
+          "recommendation": "Complete review of governance document on 17th Feb. Establish Demo Asset Governance review with pre-sales 'Champions'. Define asset lifecycle workflow from creation to retirement. Finalize for CKO release.",
+          "deliverable": "Governance framework published by CKO",
+          "priority": "high",
+          "status": "in-progress"
+        },
+        {
+          "id": "11",
+          "title": "License audit - Tiled review complete (28 inactive), building EoM dashboard, awaiting Synthesia data",
+          "background": "Tiled user access review complete. Building Tiled Dashboard for EoM. Identified 28 inactive accounts (>30 days). Inactivity notifications going out 18th. Synthesia data requested from Colin McKillop.",
+          "recommendation": "Complete Tiled Dashboard for end of month. Send license inactivity notifications (28 accounts). Conduct technology usage audit across all BUs once Synthesia data is received. Collate license counts, active users, and demo output metrics. Identify underutilized licenses for reallocation.",
+          "deliverable": "Tiled Dashboard EoM, Inactivity notifications Feb 18, Full usage report Feb 28, 2026",
+          "priority": "medium",
+          "status": "in-progress"
+        }
+      ]
+    }
+  ],
+  "asks": [
+    {
+      "id": "ask-1",
+      "title": "Segment Champions - Technology Ambassadors Needed",
+      "description": "Leaders need to identify technology champions/ambassadors within their groups to work alongside RevenueOps and Demo Services Groupon Demo Technology onboarding initiative and general demo requirements.",
+      "businessUnits": [
+        "banking-int",
+        "banking-na",
+        "capital-markets",
+        "payments"
+      ],
+      "requestedFrom": "BU Leadership / Pre-Sales Managers",
+      "targetDate": "2026-02-27",
+      "priority": "medium",
+      "status": "pending"
+    }
+  ],
+  "crossBUPriorities": [
+    {
+      "id": "p1",
+      "title": "Coast MSA Renewal",
+      "description": "Work with Vendor Management / Sales Ops and Finance on Coast MSA renewal ($267K). Purchase Request PR184010376284 approved and pending signature.",
+      "businessUnits": [
+        "banking-int",
+        "banking-na",
+        "capital-markets",
+        "payments",
+        "cross-bu"
+      ],
+      "priority": 1,
+      "targetDate": "2026-02-18",
+      "owner": "Jason Hanscomb / Jordan Spence / John Harris",
+      "status": "in-progress"
+    },
+    {
+      "id": "p2",
+      "title": "Demo Technology Licensing",
+      "description": "Review technology spend for additional licenses across all pre-sale BU's and work with Sales Ops and Finance on allocating funds. Capital Markets requesting 30 additional Synthesia licenses. Banking NA and Payments requiring Tiled expansion.",
+      "businessUnits": [
+        "banking-int",
+        "banking-na",
+        "capital-markets",
+        "payments",
+        "cross-bu"
+      ],
+      "priority": 2,
+      "targetDate": "2026-02-26",
+      "owner": "Jason Hanscomb / Jordan Spence / Robert Rossetti ",
+      "status": "in-progress"
+    },
+    {
+      "id": "p3",
+      "title": "Demo Audit for Banking",
+      "description": "Complete comprehensive audit of all Banking demo environments with Richard Willcock. Assess current status, identify challenges, and establish remediation roadmap.",
+      "businessUnits": [
+        "banking-int",
+        "banking-na"
+      ],
+      "priority": 3,
+      "targetDate": "2026-02-28",
+      "owner": "Jason Hanscomb / Richard Willcock",
+      "status": "in-progress"
+    },
+    {
+      "id": "p4",
+      "title": "E6 Signature",
+      "description": "Finalize cleaned document of demo asset governance agreement, and provide to E6 for signature.",
+      "businessUnits": [
+        "banking-int"
+      ],
+      "priority": 4,
+      "targetDate": "2026-02-20",
+      "owner": "Jason Hanscomb / Derek Grey / E6",
+      "status": "in-progress"
+    }
+  ],
+  "crossBURisks": [
+    {
+      "id": "risk-1",
+      "title": "Coast MSA",
+      "description": "Coast MSA renewal ($267K) past original Jan 31 deadline. Purchase Request PR184010376284 approved but pending signature. If unsigned by Feb 18th, platform access could be suspended, disrupting Q1 demo pipeline.",
+      "impact": "high",
+      "likelihood": "low",
+      "mitigation": "Purchase Request approved. Pending final signature and release.",
+      "owner": "Jason Hanscomb / Jordan Spence / Robert Rossetti",
+      "status": "open"
+    },
+    {
+      "id": "risk-2",
+      "title": "E6 Signature",
+      "description": "the E6 Demo Assets are require for FIS to perform demos for clients in early March. If we are unable to sign this agreement and get access, then those deals will be impacted.",
+      "impact": "high",
+      "likelihood": "low",
+      "mitigation": "Daily touchpoints with Product / Legal are getting results.",
+      "owner": "Banking (Int.) Leadership / Product",
+      "status": "open"
+    }
+  ]
+}

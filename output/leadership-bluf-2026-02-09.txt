@@ -1,0 +1,38 @@
+Bottom Line:
+- Coast MSA renewal approved by Spend Control with funding transferred to Capital Markets; administrative sign-off is the final remaining hurdle.
+- Legal redlines on E6 Demo Assets now pose a critical risk to deals and demonstrations scheduled for next week.
+- Demo Services goals recalibrated against new Commercial OKRs, prioritizing high-margin recurring revenue and ACV conversion.
+- Engagement for a Coast Enterprise Agreement initiated with Vendor Management/Finance; kickoff meeting scheduled for Feb 11.
+- SGO 'Champions' program launched to integrate ambassadors into central demo requirements and open sessions.
+- Azure AI Endpoint requests for CLO are currently stalled by internal infrastructure-as-code and cloud identity processes.
+- Governance framework and asset flow design (Coast, Synthesia, Tiled) mandated as a prerequisite for SKO readiness.
+- Team-wide mandate issued for AI Agent training to ensure full proficiency in bot creation and maintenance.
+
+Background:
+Operational pivot toward 2026 Commercial OKRs focusing on strategic product mix.
+Procurement and legal negotiations are the primary gates for immediate demo execution.
+Shift from transactional demo support to a scalable 'Champion' model and automated AI enablement.
+
+Assessment:
+Coast renewal risk is significantly reduced following funding alignment, though E6 legal blockers have increased in severity.
+Strategic alignment with Commercial leadership is strong following goal redefinition.
+Technical infrastructure (Azure) is currently the primary bottleneck for AI-led initiatives.
+
+Recommendations:
+Finalize Coast MSA signature immediately to avoid disruption at CKO.
+Escalate E6 redline negotiations to prevent deal slippage next week.
+Prioritize internal IT tickets for Azure AI Endpoints to unblock CLO development.
+
+Asks:
+- approval | E6 Demo Asset Redlines | urgency: high | owner: Legal / Christian | deadline: 2026-02-11
+- approval | Coast MSA Final Signature | urgency: high | owner: Jordan Spence | deadline: 2026-02-10
+
+Priorities:
+- Coast MSA & Enterprise Agreement (In Progress, Impact: High) - Finalize current MSA signature while building out long-term enterprise terms for Cap-M/Banking. Owner: Jordan Spence / Jason Hanscomb. Due: 2026-02-11.
+- Commercial Goal Mapping (On Track, Impact: High) - Translate redefined commercial OKRs into specific Demo Services timelines and deliverables. Owner: Jason Hanscomb. Due: 2026-02-13.
+- Tool Governance Framework (In Progress, Impact: Medium) - Establish flow diagrams for asset management across Coast, Synthesia, Tiled, and Seismic prior to SKO. Owner: Demo Services Team. Due: 2026-02-20.
+
+Risks:
+- Critical - E6 Legal Redlines: Unresolved usage terms for Demo Assets blocking upcoming client engagements. Owner: Christian. Mitigation: Urgent review with Christian and Legal to finalize IP protection language.
+- Medium - Azure AI Process Block: Internal IT ticketing (IaC/Cloud Client ID) preventing deployment of CLO endpoints. Owner: Infrastructure Team. Mitigation: Expedite FISDEV and Cloud Client ID tickets via IT leadership.
+- Low - Resource BUC Misalignment: Incorrect BUC assignment for Anshool impacting hardware/administrative status. Owner: India Ops. Mitigation: Coordinate with India Ops for BUC change or laptop swap.

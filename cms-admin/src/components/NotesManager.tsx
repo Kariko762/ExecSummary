@@ -24,6 +24,7 @@ interface Note {
   title: string;
   content: string;
   category: 'key-highlight' | 'goal-progression' | 'big-win' | 'deal-support' | 'new-project' | 'general';
+  businessUnits?: string[];
   linkedTo: {
     type: 'organization' | 'initiative' | 'goal';
     id: string;

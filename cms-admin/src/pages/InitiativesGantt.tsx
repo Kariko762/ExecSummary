@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { X, Download, Maximize2, Minimize2, ChevronRight, Plus, Edit2, Save, XCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { domToPng } from 'modern-screenshot';
+import { TaskEditorModal } from '../components/TaskEditorModal';
 
 // Note Type Constants
 const NOTE_TYPE_STATUS = {
@@ -257,6 +258,8 @@ function GanttChartContent() {
   const [showEditNoteModal, setShowEditNoteModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState<any>(null);
+  const [showTaskEditorModal, setShowTaskEditorModal] = useState(false);
+  const [taskToEdit, setTaskToEdit] = useState<any>(undefined);
   const [noteToEdit, setNoteToEdit] = useState<any>(null);
   const [newNoteTitle, setNewNoteTitle] = useState('');
   const [newNoteContent, setNewNoteContent] = useState('');
@@ -800,23 +803,8 @@ function GanttChartContent() {
               <span className="text-xs font-roobert-bold uppercase text-white">Initiatives / Tasks</span>
               <button
                 onClick={() => {
-                  setIsAddingTask(true);
-                  setIsEditing(true);
-                  setEditedTask({
-                    id: '',
-                    title: '',
-                    shortName: '',
-                    owner: '',
-                    status: 'scheduled',
-                    percentage: 0,
-                    startDate: '',
-                    targetDate: '',
-                    description: '',
-                    risks: '',
-                    dependencies: '',
-                    initiativeId: '',
-                  });
-                  setIsPanelOpen(true);
+                  setTaskToEdit(undefined);
+                  setShowTaskEditorModal(true);
                 }}
                 className="flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-xs font-roobert-bold transition-colors"
                 title="Add New Task"
@@ -1043,9 +1031,53 @@ function GanttChartContent() {
                 project.tasks.map((task, taskIdx) => (
                   <div
                     key={taskIdx}
-                    onClick={() => {
-                      setSelectedTask({ ...task, category: project.category });
-                      setIsPanelOpen(true);
+                    onClick={async () => {
+                      // Fetch full task data from API for complete editing
+                      try {
+                        const response = await fetch(`http://localhost:3001/api/tasks/${task.id}`);
+                        const data = await response.json();
+                        if (data.success && data.task) {
+                          setTaskToEdit(data.task);
+                        } else {
+                          // Fallback to converted Gantt task if API fails
+                          const fullTask = {
+                            id: task.id,
+                            title: task.name,
+                            owner: task.owner,
+                            businessUnit: task.businessUnit,
+                            startDate: task.startDate,
+                            targetDate: task.targetDate,
+                            percentage: task.progress,
+                            status: task.status,
+                            description: task.description,
+                            milestones: task.milestones,
+                            risks: task.risks,
+                            dependencies: task.dependencies,
+                            linkType: task.linkType,
+                          };
+                          setTaskToEdit(fullTask);
+                        }
+                      } catch (error) {
+                        console.error('Failed to fetch task details:', error);
+                        // Fallback
+                        const fullTask = {
+                          id: task.id,
+                          title: task.name,
+                          owner: task.owner,
+                          businessUnit: task.businessUnit,
+                          startDate: task.startDate,
+                          targetDate: task.targetDate,
+                          percentage: task.progress,
+                          status: task.status,
+                          description: task.description,
+                          milestones: task.milestones,
+                          risks: task.risks,
+                          dependencies: task.dependencies,
+                          linkType: task.linkType,
+                        };
+                        setTaskToEdit(fullTask);
+                      }
+                      setShowTaskEditorModal(true);
                     }}
                     className="grid grid-cols-[300px_80px_1fr] border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer"
                   >
@@ -2428,6 +2460,23 @@ function GanttChartContent() {
             )}
           </div>
         </div>
+      )}
+
+      {/* Task Editor Modal - FULL FEATURED FORM */}
+      {showTaskEditorModal && (
+        <TaskEditorModal
+          task={taskToEdit}
+          onSave={async (savedTask) => {
+            // Task saved successfully, reload the page to show updates
+            setShowTaskEditorModal(false);
+            setTaskToEdit(undefined);
+            window.location.reload();
+          }}
+          onClose={() => {
+            setShowTaskEditorModal(false);
+            setTaskToEdit(undefined);
+          }}
+        />
       )}
     </div>
   );

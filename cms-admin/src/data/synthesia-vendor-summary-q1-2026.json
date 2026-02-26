@@ -1,0 +1,148 @@
+{
+  "vendorName": "Synthesia",
+  "quarterYear": "Q1 2026",
+  "executiveSummary": "Synthesia enables teams to create professional AI-generated videos at scale - no cameras, studios, or actors required. Transform text into polished video in 140+ languages.",
+  "heroMetrics": [
+    {
+      "icon": "Video",
+      "title": "AI Video Generation",
+      "value": "Studio Quality",
+      "subtitle": "Professional videos from text alone"
+    },
+    {
+      "icon": "Globe",
+      "title": "140+ Languages",
+      "value": "Global Reach",
+      "subtitle": "Multilingual videos without translation teams"
+    },
+    {
+      "icon": "Zap",
+      "title": "Dynamic Videos",
+      "value": "Personalized",
+      "subtitle": "Unique videos for each viewer at scale"
+    },
+    {
+      "icon": "Clock",
+      "title": "Minutes Not Weeks",
+      "value": "10x Faster",
+      "subtitle": "From script to published video in minutes"
+    }
+  ],
+  "storytellingIndex": {
+    "title": "THE AI VIDEO EFFECTIVENESS INDEX",
+    "subtitle": "Measuring AI-Generated Video Impact",
+    "score": 92,
+    "maxScore": 100,
+    "segments": [
+      {
+        "name": "Production Speed",
+        "score": 95,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Personalization",
+        "score": 90,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Language Coverage",
+        "score": 94,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Video Quality",
+        "score": 88,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Ease of Use",
+        "score": 93,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Cost Efficiency",
+        "score": 91,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Scale Capability",
+        "score": 92,
+        "color": "#00d4aa"
+      }
+    ]
+  },
+  "featureCards": [
+    {
+      "title": "AI Avatars & Voices",
+      "subtitle": "Lifelike Presenters",
+      "description": "Choose from 150+ professional AI avatars in diverse ethnicities, ages, and styles. Natural text-to-speech voices with accurate lip sync.",
+      "icon": "Users"
+    },
+    {
+      "title": "Multilingual at Scale",
+      "subtitle": "140+ Languages Instantly",
+      "description": "Create videos in any language without hiring translators or voice actors. Same avatar, different language - automatically.",
+      "icon": "Globe"
+    },
+    {
+      "title": "Dynamic Personalization",
+      "subtitle": "1:1 Video Messages",
+      "description": "Generate unique videos for each recipient using variables. Personalize company names, metrics, names, or any data field at scale.",
+      "icon": "Sparkles"
+    }
+  ],
+  "problemsSolved": [
+    {
+      "problem": "Video Production Bottlenecks",
+      "solution": "Create professional videos in minutes - no cameras, studios, or actors needed",
+      "impact": "10x faster video production cycles"
+    },
+    {
+      "problem": "Multilingual Content Costs",
+      "solution": "Generate videos in 140+ languages from single script with same avatar",
+      "impact": "90% reduction in translation costs"
+    },
+    {
+      "problem": "Content Update Velocity",
+      "solution": "Edit scripts and republish videos in minutes vs. weeks of re-shooting",
+      "impact": "Update videos 50x faster than traditional"
+    },
+    {
+      "problem": "Personalization at Scale",
+      "solution": "Generate thousands of unique, personalized videos automatically using variables",
+      "impact": "Deliver 1:1 video at enterprise scale"
+    },
+    {
+      "problem": "Executive Availability",
+      "solution": "Clone executive voices and likenesses for scalable video messaging",
+      "impact": "Executive reach without calendar constraints"
+    },
+    {
+      "problem": "Consistency Across Teams",
+      "solution": "Centralized brand control with approved avatars, templates, and messaging",
+      "impact": "100% brand compliance globally"
+    }
+  ],
+  "gtmHighlights": [
+    {
+      "title": "Sales Outreach",
+      "description": "Send personalized video messages at scale. Include prospect's name, company, and custom value prop in each video. 8x higher response rates."
+    },
+    {
+      "title": "Product Demos",
+      "description": "Create demo videos in every language for global markets. Update product features without re-shooting. Deploy new demos in hours."
+    },
+    {
+      "title": "Training & Enablement",
+      "description": "Scalable training videos that update with product changes. Multi-language onboarding for global teams. Consistent messaging everywhere."
+    },
+    {
+      "title": "Internal Communications",
+      "description": "Executive updates, company announcements, and team messages in video format. Multilingual for distributed teams. Faster than scheduling live meetings."
+    },
+    {
+      "title": "Customer Success",
+      "description": "Personalized onboarding videos, feature announcements, and renewal messages. Include customer-specific usage data and ROI metrics in videos."
+    }
+  ]
+}

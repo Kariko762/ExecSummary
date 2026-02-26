@@ -1,0 +1,153 @@
+{
+  "id": "leadership-summary-test-duplication",
+  "title": "Test Duplication",
+  "date": "2026-02-10",
+  "quarter": "Feb 9",
+  "year": 2026,
+  "status": "draft",
+  "_contentTag": "leadership-summary",
+  "_published": false,
+  "metadata": {
+    "weekStart": "2026-02-02",
+    "weekEnd": "2026-02-08",
+    "title": "Weekly Leadership Summary - Feb 02-08, 2026",
+    "description": "Executive leadership summary"
+  },
+  "bluf": {
+    "bottomLine": [
+      "Coast MSA renewal approved by Spend Control with funding transferred to Capital Markets; administrative sign-off is the final remaining hurdle.",
+      "Legal redlines on E6 Demo Assets now pose a critical risk to deals and demonstrations scheduled for next week.",
+      "Demo Services goals recalibrated against new Commercial OKRs, prioritizing high-margin recurring revenue and ACV conversion.",
+      "Engagement for a Coast Enterprise Agreement initiated with Vendor Management/Finance; kickoff meeting scheduled for Feb 11.",
+      "SGO 'Champions' program launched to integrate ambassadors into central demo requirements and open sessions.",
+      "Azure AI Endpoint requests for CLO are currently stalled by internal infrastructure-as-code and cloud identity processes.",
+      "Governance framework and asset flow design (Coast, Synthesia, Tiled) mandated as a prerequisite for SKO readiness.",
+      "Team-wide mandate issued for AI Agent training to ensure full proficiency in bot creation and maintenance."
+    ],
+    "background": "Operational pivot toward 2026 Commercial OKRs focusing on strategic product mix.\nProcurement and legal negotiations are the primary gates for immediate demo execution.\nShift from transactional demo support to a scalable 'Champion' model and automated AI enablement.",
+    "assessment": "Coast renewal risk is significantly reduced following funding alignment, though E6 legal blockers have increased in severity.\nStrategic alignment with Commercial leadership is strong following goal redefinition.\nTechnical infrastructure (Azure) is currently the primary bottleneck for AI-led initiatives.",
+    "recommendation": "Finalize Coast MSA signature immediately to avoid disruption at CKO.\nEscalate E6 redline negotiations to prevent deal slippage next week.\nPrioritize internal IT tickets for Azure AI Endpoints to unblock CLO development.",
+    "asks": [
+      {
+        "type": "approval",
+        "item": "E6 Demo Asset Redlines",
+        "urgency": "high",
+        "owner": "Legal / Christian",
+        "deadline": "2026-02-11"
+      },
+      {
+        "type": "approval",
+        "item": "Coast MSA Final Signature",
+        "urgency": "high",
+        "owner": "Jordan Spence",
+        "deadline": "2026-02-10"
+      }
+    ]
+  },
+  "priorities": [
+    {
+      "id": 1,
+      "title": "Coast MSA & Enterprise Agreement",
+      "description": "Finalize current MSA signature while building out long-term enterprise terms for Cap-M/Banking.",
+      "status": "In Progress",
+      "impact": "High",
+      "borderColor": "border-green-500",
+      "statusColor": "text-green-400",
+      "impactColor": "text-orange-400",
+      "owner": "Jordan Spence / Jason Hanscomb",
+      "dueDate": "2026-02-11",
+      "details": {
+        "impact": "High",
+        "likelihood": "High",
+        "actionItems": [
+          "Complete administrative MSA sign-off",
+          "Kick off Enterprise Agreement meeting Feb 11"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "title": "Commercial Goal Mapping",
+      "description": "Translate redefined commercial OKRs into specific Demo Services timelines and deliverables.",
+      "status": "On Track",
+      "impact": "High",
+      "borderColor": "border-green-500",
+      "statusColor": "text-green-400",
+      "impactColor": "text-orange-400",
+      "owner": "Jason Hanscomb",
+      "dueDate": "2026-02-13",
+      "details": {
+        "impact": "High",
+        "likelihood": "Medium",
+        "actionItems": [
+          "Define timeline for high-margin product demo builds",
+          "Align ACV conversion metrics to demo performance"
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "title": "Tool Governance Framework",
+      "description": "Establish flow diagrams for asset management across Coast, Synthesia, Tiled, and Seismic prior to SKO.",
+      "status": "In Progress",
+      "impact": "Medium",
+      "borderColor": "border-blue-500",
+      "statusColor": "text-blue-400",
+      "impactColor": "text-orange-400",
+      "owner": "Demo Services Team",
+      "dueDate": "2026-02-20",
+      "details": {
+        "impact": "Medium",
+        "likelihood": "High",
+        "actionItems": [
+          "Map asset processing and storage flow",
+          "Define role-based access for tool licenses"
+        ]
+      }
+    }
+  ],
+  "risks": [
+    {
+      "type": "critical",
+      "title": "E6 Legal Redlines",
+      "description": "Unresolved usage terms for Demo Assets blocking upcoming client engagements.",
+      "severity": "Critical",
+      "probability": "High",
+      "impact": "High",
+      "status": "Open",
+      "mitigation": "Urgent review with Christian and Legal to finalize IP protection language.",
+      "owner": "Christian"
+    },
+    {
+      "type": "medium-impact",
+      "title": "Azure AI Process Block",
+      "description": "Internal IT ticketing (IaC/Cloud Client ID) preventing deployment of CLO endpoints.",
+      "severity": "Medium",
+      "probability": "High",
+      "impact": "Medium",
+      "status": "Open",
+      "mitigation": "Expedite FISDEV and Cloud Client ID tickets via IT leadership.",
+      "owner": "Infrastructure Team"
+    },
+    {
+      "type": "low-impact",
+      "title": "Resource BUC Misalignment",
+      "description": "Incorrect BUC assignment for Anshool impacting hardware/administrative status.",
+      "severity": "Low",
+      "probability": "Medium",
+      "impact": "Low",
+      "status": "Open",
+      "mitigation": "Coordinate with India Ops for BUC change or laptop swap.",
+      "owner": "India Ops"
+    }
+  ],
+  "meta": {
+    "id": "leadership-summary-test-duplication",
+    "title": "Test Duplication",
+    "date": "2026-02-10",
+    "quarter": "Feb 9",
+    "year": 2026,
+    "status": "draft"
+  },
+  "lastUpdated": "2026-02-10T12:25:45.760Z"
+}

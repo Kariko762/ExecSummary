@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { X, Save, Info, DollarSign, Link as LinkIcon, Users, AlertTriangle, Shield, Target, Clock, Package, Plus, Trash2, AlertCircle, TrendingUp, ExternalLink, StickyNote, Flag, Calendar } from 'lucide-react';
+import { X, Save, Info, DollarSign, Link as LinkIcon, Users, AlertTriangle, Shield, Target, Clock, Package, Plus, Trash2, AlertCircle, TrendingUp, ExternalLink, StickyNote, Flag, Calendar, Building2 } from 'lucide-react';
 import { TaskConnectorRenderer } from '../renderers/assetRenderTasks';
 import GanttEditor from './GanttEditor';
 import GanttVisualizer from './GanttVisualizer';
@@ -20,6 +20,7 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
   const [hideTabIcons, setHideTabIcons] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [businessUnits, setBusinessUnits] = useState<Array<{ id: string; name: string; fullPath?: string }>>([]);
   const modalRef = React.useRef<HTMLDivElement>(null);
 
   const tabs = [
@@ -80,6 +81,24 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
     checkModalWidth();
     window.addEventListener('resize', checkModalWidth);
     return () => window.removeEventListener('resize', checkModalWidth);
+  }, []);
+
+  React.useEffect(() => {
+    const fetchBusinessUnits = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/business-units');
+        const data = await response.json();
+        const allUnits = Array.isArray(data) ? data : (data.units || []);
+        // Filter to only root-level business units (no parent)
+        const rootUnits = allUnits.filter(unit => unit.parentId === null);
+        setBusinessUnits(rootUnits);
+      } catch (error) {
+        console.error('Failed to fetch business units:', error);
+        setBusinessUnits([]);
+      }
+    };
+
+    fetchBusinessUnits();
   }, []);
 
   return (
@@ -212,7 +231,7 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
         {/* Tab Content */}
         <div className="flex-1 overflow-y-auto p-4">
           {activeTab === 'overview' && (
-            <OverviewTab editData={editData} setEditData={setEditData} goals={goals} />
+            <OverviewTab editData={editData} setEditData={setEditData} goals={goals} businessUnits={businessUnits} />
           )}
           {activeTab === 'milestones' && (
             <MilestonesTab editData={editData} setEditData={setEditData} onOpenGanttEditor={() => setShowGanttEditor(true)} />
@@ -348,7 +367,7 @@ export default function InitiativeEditorModal({ initiative, goals, onSave, onClo
 
 // ==================== TAB COMPONENTS ====================
 
-function OverviewTab({ editData, setEditData, goals }: any) {
+function OverviewTab({ editData, setEditData, goals, businessUnits }: any) {
   return (
     <div className="space-y-4">
       {/* Basic Info */}
@@ -383,6 +402,37 @@ function OverviewTab({ editData, setEditData, goals }: any) {
             />
           </div>
         </div>
+      </div>
+
+      {/* Business Units */}
+      <div>
+        <label className="block text-xs font-roobert-semibold text-white/90 mb-2 flex items-center gap-2">
+          <Building2 className="w-3.5 h-3.5" />
+          Business Units
+        </label>
+        {businessUnits.length === 0 ? (
+          <p className="text-xs text-white/60">No business units available</p>
+        ) : (
+          <select
+            multiple
+            value={editData.businessUnits || []}
+            onChange={(e) => {
+              const values = Array.from(e.target.selectedOptions).map(option => option.value);
+              setEditData({ ...editData, businessUnits: values });
+            }}
+            className="w-full px-2.5 py-2 text-sm bg-white/5 border border-white/10 rounded-lg text-white min-h-[120px]"
+          >
+            {businessUnits.map((unit: any) => {
+              const label = unit.fullPath || unit.name;
+              return (
+                <option key={unit.id} value={label}>
+                  {label}
+                </option>
+              );
+            })}
+          </select>
+        )}
+        <p className="text-[10px] text-white/50 mt-1">Hold Ctrl (or Cmd) to select multiple.</p>
       </div>
 
       {/* Status & Progress */}

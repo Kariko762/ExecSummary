@@ -1,0 +1,329 @@
+{
+  "lastUpdated": "2026-02-24T10:00:00Z",
+  "attributes": {
+    "asset-001": {
+      "assetId": "asset-001",
+      "ownership": {
+        "salesRep": {
+          "name": "John Harris",
+          "email": "john.harris@fis.com",
+          "phone": "+1-555-0123"
+        },
+        "preSalesRep": {
+          "name": "Jason Hanscomb",
+          "email": "jason.hanscomb@fis.com",
+          "phone": "+1-555-0456"
+        },
+        "businessLead": {
+          "name": "Sarah Chen",
+          "email": "sarah.chen@fis.com",
+          "title": "SVP, Banking International"
+        },
+        "devLead": {
+          "name": "Klaus Mueller",
+          "email": "klaus.mueller@fis.com",
+          "title": "VP, EMEA Operations"
+        },
+        "technicalOwner": {
+          "name": "Maria Garcia",
+          "email": "maria.garcia@fis.com",
+          "title": "Senior DevOps Engineer"
+        }
+      },
+      "support": {
+        "primarySupportGroup": "EMEA Infrastructure Team",
+        "secondarySupportGroup": "Banking Demo Services",
+        "oncallContact": "emea-oncall@fis.com",
+        "escalationPath": "Klaus Mueller → Sarah Chen → CTO",
+        "sla": "4 hours response, 24 hours resolution",
+        "maintenanceWindow": "Saturday 02:00-06:00 UTC"
+      },
+      "technical": {
+        "domainLocation": "demo.banking.emea.fis.com",
+        "ipAddress": "10.42.15.89",
+        "dnsRecords": ["banking-demo-emea.fis.com", "emea-banking.fis.demo"],
+        "region": "Azure West Europe",
+        "resourceGroup": "rg-banking-demos-prod",
+        "subscriptionId": "sub-banking-emea-001",
+        "vnet": "vnet-banking-emea",
+        "subnet": "subnet-demos-prod",
+        "tags": {
+          "CostCenter": "Banking-EMEA",
+          "Project": "Demo-Infrastructure",
+          "Compliance": "PCI-DSS",
+          "Backup": "Daily"
+        }
+      },
+      "specs": {
+        "cpu": "16 cores (Intel Xeon)",
+        "ram": "64GB DDR4",
+        "storage": "2TB SSD + 4TB HDD",
+        "os": "Windows Server 2022",
+        "software": [
+          "SQL Server 2022 Enterprise",
+          "IIS 10.0",
+          ".NET Framework 4.8",
+          "Banking Demo Suite v3.2"
+        ]
+      },
+      "compliance": {
+        "dataClassification": "Confidential - Demo Data",
+        "regulatoryRequirements": ["PCI-DSS", "GDPR", "SOC2"],
+        "encryptionAtRest": true,
+        "encryptionInTransit": true,
+        "auditLogging": true,
+        "lastAuditDate": "2026-01-15",
+        "nextAuditDate": "2026-04-15"
+      },
+      "lifecycle": {
+        "createdDate": "2025-08-15",
+        "lastModified": "2026-02-10",
+        "provisionedBy": "Klaus Mueller",
+        "deploymentMethod": "Terraform",
+        "configRepo": "https://github.com/fis/banking-demos/emea-server",
+        "cicdPipeline": "Azure DevOps - Banking EMEA",
+        "retirementDate": null,
+        "eolDate": "2027-08-15"
+      },
+      "usage": {
+        "primaryUse": "Live client demos for EMEA banking prospects",
+        "secondaryUse": "Internal training and testing",
+        "activeUsers": 23,
+        "avgMonthlyDemos": 18,
+        "lastUsedDate": "2026-02-22",
+        "utilizationRate": "78%"
+      },
+      "financials": {
+        "monthlyCost": 1200,
+        "annualCost": 14400,
+        "costBreakdown": {
+          "compute": 800,
+          "storage": 200,
+          "networking": 100,
+          "licenses": 100
+        },
+        "chargebackBU": "banking-international",
+        "budgetCode": "BANK-EMEA-DEMO-2026",
+        "approvedBy": "Sarah Chen",
+        "purchaseOrder": "PO-BANK-2025-08-123"
+      },
+      "monitoring": {
+        "healthCheckUrl": "https://demo.banking.emea.fis.com/health",
+        "uptimeTarget": "99.5%",
+        "currentUptime": "99.8%",
+        "lastIncident": "2026-01-08",
+        "incidentCount30Days": 2,
+        "alertingEnabled": true,
+        "dashboardUrl": "https://monitoring.fis.com/dashboards/asset-001"
+      }
+    },
+    "asset-002": {
+      "assetId": "asset-002",
+      "vendorRelationship": {
+        "primaryVendor": {
+          "vendorId": "vendor-coast",
+          "vendorName": "Coast",
+          "licenseType": "Enterprise MSA",
+          "licenseCount": 1,
+          "costAllocation": "Included in $267K annual MSA",
+          "renewalDate": "2027-02-18",
+          "contractOwner": "Jason Hanscomb",
+          "accountManager": "Emma Williams (ewilliams@coastvideo.com)",
+          "seatUsage": {
+            "allocated": 1,
+            "used": 1,
+            "available": 0
+          }
+        }
+      },
+      "ownership": {
+        "salesRep": {
+          "name": "Robert Rossetti",
+          "email": "robert.rossetti@fis.com"
+        },
+        "preSalesRep": {
+          "name": "Jon Pendergast",
+          "email": "jon.pendergast@fis.com"
+        },
+        "businessLead": {
+          "name": "Jennifer Lin",
+          "email": "jennifer.lin@fis.com",
+          "title": "SVP, Payments"
+        },
+        "devLead": {
+          "name": "Emma Thompson",
+          "email": "emma.thompson@fis.com",
+          "title": "Lead Demo Engineer, Payments"
+        }
+      },
+      "support": {
+        "primarySupportGroup": "Demo Services Coast Team",
+        "secondarySupportGroup": "Payments Technical Support",
+        "oncallContact": "demo-services-oncall@fis.com",
+        "escalationPath": "Jon Pendergast → Jennifer Lin → SVP Sales Ops",
+        "vendorSupport": "support@coastvideo.com",
+        "vendorSLA": "4 hours response, 24 hours resolution",
+        "sla": "2 hours response (business hours)"
+      },
+      "technical": {
+        "platform": "Coast Interactive Demo Platform",
+        "hostingProvider": "Coast (SaaS)",
+        "region": "US-East",
+        "accessControl": "SSO via FIS Azure AD"
+      },
+      "specs": {
+        "demoType": "Interactive Click-Through",
+        "sections": 12,
+        "totalScreens": 47,
+        "languages": ["English", "Spanish"],
+        "mobileOptimized": true,
+        "tabletOptimized": true,
+        "desktopOptimized": true
+      },
+      "lifecycle": {
+        "createdDate": "2026-01-05",
+        "lastModified": "2026-02-18",
+        "provisionedBy": "Jon Pendergast",
+        "lastContentUpdate": "2026-02-18",
+        "version": "2.1"
+      },
+      "usage": {
+        "primaryUse": "Client-facing sales demos for mobile banking",
+        "secondaryUse": "Trade show presentations, marketing materials",
+        "totalViews": 342,
+        "uniqueViewers": 187,
+        "avgSessionDuration": "8.2 minutes",
+        "lastUsedDate": "2026-02-23",
+        "utilizationRate": "High"
+      },
+      "financials": {
+        "costAllocation": "Included in Coast MSA",
+        "chargebackBU": "payments",
+        "estimatedValue": "Part of $267K annual Coast license"
+      },
+      "monitoring": {
+        "analyticsEnabled": true,
+        "viewTracking": true,
+        "heatmapEnabled": true,
+        "dashboardUrl": "https://coast.io/analytics/payments-mobile-banking"
+      }
+    },
+    "asset-003": {
+      "assetId": "asset-003",
+      "vendorRelationship": {
+        "primaryVendor": {
+          "vendorId": "vendor-tiled",
+          "vendorName": "Tiled",
+          "licenseType": "Creator License",
+          "licenseCount": 1,
+          "costPerSeat": "$149/month",
+          "annualCost": "$1,788",
+          "renewalDate": "2026-12-31",
+          "contractOwner": "Jordan Spence",
+          "accountManager": "Alex Thompson (alex@tiled.co)",
+          "seatUsage": {
+            "allocated": 1,
+            "used": 1,
+            "available": 0
+          }
+        }
+      },
+      "ownership": {
+        "salesRep": {
+          "name": "Jon Pendergast",
+          "email": "jon.pendergast@fis.com"
+        },
+        "preSalesRep": {
+          "name": "Alexander Wright",
+          "email": "alexander.wright@fis.com"
+        },
+        "businessLead": {
+          "name": "Alexander Wright",
+          "email": "alexander.wright@fis.com",
+          "title": "SVP, Capital Markets"
+        }
+      },
+      "support": {
+        "primarySupportGroup": "Demo Services Tiled Team",
+        "vendorSupport": "enterprise@tiled.co",
+        "vendorSLA": "Same business day response"
+      },
+      "usage": {
+        "primaryUse": "Client-facing sales microsites",
+        "totalViews": 89,
+        "uniqueViewers": 45,
+        "lastPublished": "2026-02-18"
+      },
+      "financials": {
+        "licenseCostAllocation": "Direct license cost",
+        "chargebackBU": "capital-markets",
+        "chargebackPercentage": 100
+      }
+    },
+    "asset-005": {
+      "assetId": "asset-005",
+      "vendorRelationship": {
+        "primaryVendor": {
+          "vendorId": "vendor-synthesia",
+          "vendorName": "Synthesia",
+          "licenseType": "Enterprise Seat",
+          "licenseCount": 1,
+          "costPerSeat": "$1,200/year",
+          "annualCost": "$1,200",
+          "renewalDate": "2026-08-15",
+          "contractOwner": "Colin McKillop",
+          "accountManager": "Maria Rodriguez (maria@synthesia.io)"
+        },
+        "secondaryVendors": [
+          {
+            "vendorId": "vendor-coast",
+            "vendorName": "Coast",
+            "relationship": "Video hosted in Coast demo"
+          }
+        ]
+      },
+      "ownership": {
+        "salesRep": {
+          "name": "Derek Grey",
+          "email": "derek.grey@fis.com"
+        },
+        "preSalesRep": {
+          "name": "Alexander Wright",
+          "email": "alexander.wright@fis.com"
+        },
+        "businessLead": {
+          "name": "Alexander Wright",
+          "email": "alexander.wright@fis.com",
+          "title": "SVP, Capital Markets"
+        },
+        "contentCreator": {
+          "name": "Marcus Chen",
+          "email": "marcus.chen@fis.com",
+          "title": "Demo Engineer"
+        }
+      },
+      "support": {
+        "primarySupportGroup": "Demo Services Video Team",
+        "vendorSupport": "enterprise@synthesia.io",
+        "vendorSLA": "4 hours response, next business day resolution"
+      },
+      "usage": {
+        "primaryUse": "AI-powered demo videos for MUFG deal ($6M+)",
+        "videosCreated": 3,
+        "totalRuntime": "8.5 minutes",
+        "lastUsedDate": "2026-02-20"
+      },
+      "financials": {
+        "licenseCostAllocation": "Direct license cost",
+        "chargebackBU": "capital-markets",
+        "chargebackPercentage": 100,
+        "dealAttribution": "MUFG-CM-2026-001"
+      },
+      "compliance": {
+        "dataClassification": "Confidential - Client Demo",
+        "regulatoryRequirements": ["Client approval required"],
+        "approvalStatus": "Approved by MUFG legal - Feb 8, 2026"
+      }
+    }
+  }
+}

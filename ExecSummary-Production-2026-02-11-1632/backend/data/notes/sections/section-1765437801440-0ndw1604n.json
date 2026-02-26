@@ -1,0 +1,20 @@
+{
+  "id": "section-1765437801440-0ndw1604n",
+  "name": "Banking (NA) Updates",
+  "description": "Section to record Banking Notes and updates",
+  "type": "weekly",
+  "startDate": null,
+  "endDate": null,
+  "status": "active",
+  "noteOrder": [],
+  "createdAt": "2025-12-11T07:23:21.440Z",
+  "updatedAt": "2025-12-11T07:23:21.440Z",
+  "author": "current-user",
+  "color": "gray",
+  "icon": "calendar",
+  "exportSettings": {
+    "includeTableOfContents": true,
+    "groupBy": "category",
+    "format": "detailed"
+  }
+}

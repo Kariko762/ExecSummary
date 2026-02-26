@@ -1,0 +1,69 @@
+{
+  "id": "demo-operations-general",
+  "name": "Demo Operations : General",
+  "shortName": "DemoOps - General",
+  "category": "customer",
+  "owner": "Jason Hanscomb",
+  "coOwners": [],
+  "sponsor": "Jason Hanscomb",
+  "status": "in-progress",
+  "priority": "low",
+  "progress": 0,
+  "projectStage": "scaling",
+  "linkedGoals": [],
+  "businessUnits": [
+    "Capital Markets",
+    "Banking",
+    "International Banking",
+    "Payments"
+  ],
+  "smartGoal": {
+    "statement": "This initiative is an open Initiative to capture demo operation projects for onboarding additional services that don't go specifically towards a corporate goal or target. Examples of this would be onboarding different support processes that are outside of the normal support and specific to a product, e.g. Investran data refresh requirements.",
+    "specific": {
+      "objectives": [
+        "To improve, based on demand, demo services support and processes"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        ""
+      ]
+    },
+    "achievable": {
+      "resources": "",
+      "teamSize": ""
+    },
+    "relevant": {
+      "croAlignment": [
+        ""
+      ],
+      "strategicThemes": [
+        ""
+      ]
+    },
+    "timeBound": {
+      "timeline": []
+    }
+  },
+  "businessCase": {
+    "problem": "",
+    "opportunity": "",
+    "solution": "",
+    "roi": "",
+    "paybackPeriod": ""
+  },
+  "budget": {
+    "total": 0,
+    "spent": 0
+  },
+  "topRisks": [],
+  "stakeholders": [],
+  "color": "#EC4899",
+  "icon": "🚀",
+  "createdDate": "2026-02-11",
+  "lastUpdated": "2026-02-11",
+  "startDate": "",
+  "endDate": "",
+  "createdAt": "2026-02-11T16:40:03.707Z",
+  "updatedAt": "2026-02-11T16:40:03.707Z"
+}

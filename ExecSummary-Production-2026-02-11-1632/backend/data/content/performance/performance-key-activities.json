@@ -1,0 +1,97 @@
+{
+  "shortName": "GTM Performance",
+  "weeks": {
+    "W1": [
+      {
+        "org": "Capital Markets",
+        "demoSupport": 92,
+        "demoPreparation": 122,
+        "demoPresentationVirtual": 145,
+        "demoPresentationOnsite": 108
+      },
+      {
+        "org": "Banking NA",
+        "demoSupport": 71,
+        "demoPreparation": 102,
+        "demoPresentationVirtual": 118,
+        "demoPresentationOnsite": 82
+      },
+      {
+        "org": "Int. Banking",
+        "demoSupport": 58,
+        "demoPreparation": 85,
+        "demoPresentationVirtual": 88,
+        "demoPresentationOnsite": 61
+      }
+    ],
+    "W2": [
+      {
+        "org": "Capital Markets",
+        "demoSupport": 88,
+        "demoPreparation": 118,
+        "demoPresentationVirtual": 148,
+        "demoPresentationOnsite": 112
+      },
+      {
+        "org": "Banking NA",
+        "demoSupport": 68,
+        "demoPreparation": 98,
+        "demoPresentationVirtual": 122,
+        "demoPresentationOnsite": 85
+      },
+      {
+        "org": "Int. Banking",
+        "demoSupport": 55,
+        "demoPreparation": 82,
+        "demoPresentationVirtual": 92,
+        "demoPresentationOnsite": 64
+      }
+    ],
+    "W3": [
+      {
+        "org": "Capital Markets",
+        "demoSupport": 84,
+        "demoPreparation": 114,
+        "demoPresentationVirtual": 152,
+        "demoPresentationOnsite": 114
+      },
+      {
+        "org": "Banking NA",
+        "demoSupport": 64,
+        "demoPreparation": 95,
+        "demoPresentationVirtual": 128,
+        "demoPresentationOnsite": 89
+      },
+      {
+        "org": "Int. Banking",
+        "demoSupport": 52,
+        "demoPreparation": 78,
+        "demoPresentationVirtual": 95,
+        "demoPresentationOnsite": 67
+      }
+    ],
+    "W4": [
+      {
+        "org": "Capital Markets",
+        "demoSupport": 80,
+        "demoPreparation": 108,
+        "demoPresentationVirtual": 158,
+        "demoPresentationOnsite": 118
+      },
+      {
+        "org": "Banking NA",
+        "demoSupport": 62,
+        "demoPreparation": 92,
+        "demoPresentationVirtual": 132,
+        "demoPresentationOnsite": 92
+      },
+      {
+        "org": "Int. Banking",
+        "demoSupport": 48,
+        "demoPreparation": 74,
+        "demoPresentationVirtual": 98,
+        "demoPresentationOnsite": 71
+      }
+    ]
+  }
+}

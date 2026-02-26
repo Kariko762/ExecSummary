@@ -1,0 +1,163 @@
+{
+  "_contentTag": "vendor-summary",
+  "meta": {
+    "id": "synthesia-vendor-summary-q1-2026",
+    "slug": "synthesia-vendor-summary-q1-2026",
+    "title": "Synthesia Technology Overview",
+    "category": "vendor",
+    "status": "published",
+    "createdAt": "2026-01-20T08:00:00Z",
+    "lastModified": "2026-02-04",
+    "author": "Technology Strategy Team",
+    "views": 0
+  },
+  "metadata": {
+    "vendorName": "Synthesia",
+    "logo": "/vendor-logos/Synthesia_Logo_2024.png",
+    "title": "Technology Overview",
+    "period": "Q1 2026"
+  },
+  "heroMetrics": [
+    {
+      "id": "ai-avatars",
+      "icon": "sparkles",
+      "value": "AI Video Generation",
+      "label": "Studio-Quality Without Cameras",
+      "iconColor": "text-cyan-400"
+    },
+    {
+      "id": "multilingual",
+      "icon": "target",
+      "value": "140+ Languages",
+      "label": "Global Reach Without Recording",
+      "iconColor": "text-blue-400"
+    },
+    {
+      "id": "personalization",
+      "icon": "trending",
+      "value": "Dynamic Videos",
+      "label": "Personalized at Scale",
+      "iconColor": "text-purple-400"
+    },
+    {
+      "id": "speed",
+      "icon": "zap",
+      "value": "Minutes Not Weeks",
+      "label": "Instant Video Production",
+      "iconColor": "text-cyan-400"
+    }
+  ],
+  "storytellingIndex": {
+    "overallScore": 92,
+    "maxScore": 100,
+    "title": "THE AI VIDEO EFFECTIVENESS INDEX",
+    "subtitle": "AI-powered video generation enables personalized communication at enterprise scale, eliminating production barriers without cameras, studios, or editing expertise.",
+    "segments": [
+      {
+        "name": "Production Speed",
+        "score": 95
+      },
+      {
+        "name": "Personalization",
+        "score": 90
+      },
+      {
+        "name": "Language Coverage",
+        "score": 94
+      },
+      {
+        "name": "Video Quality",
+        "score": 88
+      },
+      {
+        "name": "Ease of Use",
+        "score": 93
+      },
+      {
+        "name": "Cost Efficiency",
+        "score": 91
+      },
+      {
+        "name": "Scale Capability",
+        "score": 92
+      }
+    ]
+  },
+  "featureCards": [
+    {
+      "title": "AI Avatar Technology",
+      "icon": "workflow",
+      "color": "cyan",
+      "features": [
+        "140+ Realistic AI Avatars",
+        "Custom Avatar Creation",
+        "Natural Voice Synthesis",
+        "Expressive Gestures & Emotions"
+      ]
+    },
+    {
+      "title": "Enterprise Video Creation",
+      "icon": "story",
+      "color": "blue",
+      "features": [
+        "Template Library",
+        "Brand Customization",
+        "Screen Recording Integration",
+        "Collaborative Editing"
+      ]
+    },
+    {
+      "title": "Global Personalization",
+      "icon": "gtm",
+      "color": "purple",
+      "features": [
+        "140+ Languages & Accents",
+        "Dynamic Variable Insertion",
+        "API-Driven Generation",
+        "CRM Integration"
+      ]
+    }
+  ],
+  "problemsSolved": [
+    {
+      "title": "Video production bottlenecks eliminated",
+      "description": "Traditional video requires cameras, studios, actors, and editing expertise. Synthesia enables professional video creation in minutes without any equipment or technical skills."
+    },
+    {
+      "title": "Multilingual content at scale",
+      "description": "Recording in 140+ languages traditionally multiplied costs exponentially. Synthesia generates localized videos instantly with native-quality avatars and voices."
+    },
+    {
+      "title": "Instant content updates",
+      "description": "Updating videos required full re-shoots. Synthesia allows text-based editing, making video as easy to update as documents."
+    },
+    {
+      "title": "Personalized messaging at scale",
+      "description": "Creating thousands of personalized videos manually was impossible. Synthesia's API-driven generation enables 1:1 video messages across entire prospect databases."
+    }
+  ],
+  "gtmHighlights": [
+    {
+      "title": "Sales Outreach Personalization",
+      "description": "Sales teams create personalized video prospecting messages for each lead, increasing response rates by 3x compared to text emails."
+    },
+    {
+      "title": "Product Demo Localization",
+      "description": "Product marketing generates demos in 20+ languages instantly, expanding addressable market without regional production teams."
+    },
+    {
+      "title": "Training & Enablement",
+      "description": "L&D creates comprehensive video training libraries without scheduling SMEs, reducing onboarding time by 40%."
+    },
+    {
+      "title": "Executive Communications",
+      "description": "Leadership delivers consistent global messages without travel or studio time, maintaining culture at scale."
+    },
+    {
+      "title": "Customer Success",
+      "description": "CS sends personalized onboarding and feature adoption videos to each customer segment, improving activation by 50%."
+    }
+  ],
+  "executiveSummary": "Synthesia has transformed how we create video content across every customer-facing function. By eliminating traditional production barriers, teams now generate professional, personalized videos in minutes rather than weeks. The platform supports over 140 languages with photorealistic AI avatars, enabling global personalization previously impossible at our scale.\n\nKey impact areas: Sales outreach sees significantly higher response rates, product marketing delivers multilingual demos without regional teams, and training programs show faster onboarding times. The API integration allows dynamic video generation triggered by CRM events, creating true 1:1 video personalization across our entire prospect database.\n\nStrategic value: Synthesia isn't just reducing video production costs—it's making video a viable medium for personalized communication at scale. As competitors still rely on static emails and PDFs, our video-first engagement creates significant differentiation in crowded markets.\n\nRecommendation: Expand to customer success workflows and product onboarding. Explore custom avatar creation for executive team to maintain authentic brand presence in scaled communications.",
+  "_published": true
+}

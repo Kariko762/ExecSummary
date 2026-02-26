@@ -1,0 +1,204 @@
+{
+  "id": "demo-platform-standardisation",
+  "name": "Demo Platform Standardisation & Rationalisation",
+  "shortName": "Platform Standardisation",
+  "slug": "demo-platform-standardisation",
+  "category": "infrastructure",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "IT Architecture",
+    "Cloud Engineering"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "critical",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "Standardise and rationalise demo platforms by 2027-12-31 to migrate 70% of demos to approved platforms and reduce platform sprawl and risk.",
+    "specific": {
+      "objectives": [
+        "Define approved platforms",
+        "Migrate priority demos",
+        "Retire non-compliant platforms"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Approved platforms: 0 \u2192 3",
+        "Demos on standard platforms: 40% \u2192 85%",
+        "Legacy platforms retired: 0 \u2192 70%"
+      ]
+    },
+    "achievable": {
+      "resources": "Demo platform engineers, IT architecture",
+      "teamSize": "3 FTEs"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Operational Excellence",
+        "Risk Management"
+      ],
+      "strategicThemes": [
+        "Technology Modernization",
+        "Operational Excellence"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Design",
+          "deliverable": "Approved platforms",
+          "dueDate": "2026-03-31",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Platforms defined",
+        "baseline": "0",
+        "target": "3",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Standard platform adoption",
+        "baseline": "40",
+        "target": "85",
+        "current": "40",
+        "unit": "%"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "Platform sprawl increases cost and risk.",
+    "opportunity": "Standardisation enables automation and scale.",
+    "solution": "Define and enforce standard demo platforms.",
+    "expectedBenefits": [
+      "40% cost reduction",
+      "Improved stability"
+    ],
+    "roi": "250% ROI in 18 months",
+    "paybackPeriod": "9 months"
+  },
+  "budget": {
+    "total": 500000,
+    "allocated": 500000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 300000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 120000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 40000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 30000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 10000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "RevOps Transformation",
+    "costAvoidance": "$1M annually"
+  },
+  "funding": {
+    "requestedAmount": 500000,
+    "approvedAmount": 500000,
+    "approvalDate": "2026-02-01",
+    "approvedBy": "CRO & CIO",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 200000,
+        "releaseCondition": "Design approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-std",
+      "description": "Resistance to migration",
+      "impact": "Delays",
+      "probability": "medium",
+      "severity": "high",
+      "mitigation": "Executive mandate",
+      "owner": "Head of Demo Services",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-std",
+      "name": "Standards Live",
+      "description": "Platforms approved",
+      "dueDate": "2026-03-31",
+      "status": "not-started",
+      "deliverables": [
+        "Architecture docs"
+      ],
+      "acceptanceCriteria": [
+        "Exec signoff"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "CRO",
+      "role": "Sponsor",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Steering",
+      "communicationFrequency": "Monthly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Platform adoption",
+      "baseline": "40%",
+      "target": "85%",
+      "measurement": "% demos on standard",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-02-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-02-01T09:00:00Z",
+  "updatedAt": "2026-01-26T18:30:00Z",
+  "tags": [
+    "platform",
+    "standardisation"
+  ],
+  "notes": "Core transformation initiative."
+}

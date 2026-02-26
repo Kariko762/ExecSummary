@@ -14,6 +14,7 @@ import tasksRoutes from './api/tasks.js';
 import businessUnitsRoutes from './api/businessUnits.js';
 import peopleRoutes from './api/people.js';
 import technologiesMenuRoutes from './api/technologiesMenu.js';
+import healthCheckRoutes, { startHealthChecks } from './api/health-check.js';
 import { logTaskCreated, logTaskUpdated, logNoteCreated, logNoteDeleted } from './utils/change-control-logger.js';
 import { getTenants, createTenant, deleteTenant, getTenantContent, getTenantStats, updateTenantStats } from './api/tenants.js';
 import {
@@ -32,6 +33,176 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+
+// Serve data files
+app.use('/data', express.static('data'));
+
+// Leadership Summaries - Auto-discovery endpoint
+app.get('/api/content/list/leadership', async (req, res) => {
+  try {
+    const leadershipDir = path.join(__dirname, 'data', 'content', 'leadership');
+    const files = await fs.readdir(leadershipDir);
+    const jsonFiles = files.filter(f => f.endsWith('.json'));
+
+    const leadershipFiles = await Promise.all(
+      jsonFiles.map(async (filename) => {
+        const filePath = path.join(leadershipDir, filename);
+        const content = JSON.parse(await fs.readFile(filePath, 'utf8'));
+        const stats = await fs.stat(filePath);
+
+        return {
+          ...content,
+          id: content.id || filename.replace('.json', ''),
+          lastModified: stats.mtime.toISOString()
+        };
+      })
+    );
+
+    res.json({ success: true, content: leadershipFiles });
+  } catch (error) {
+    console.error('Error listing leadership files:', error);
+    res.json({ success: true, content: [] });
+  }
+});
+
+// Leadership BU Summaries - Auto-discovery endpoint
+app.get('/api/content/list/leadership-bu', async (req, res) => {
+  try {
+    const leadershipBUDir = path.join(__dirname, 'data', 'content', 'leadership-bu');
+    
+    // Create directory if it doesn't exist
+    try {
+      await fs.access(leadershipBUDir);
+    } catch {
+      await fs.mkdir(leadershipBUDir, { recursive: true });
+    }
+    
+    const files = await fs.readdir(leadershipBUDir);
+    const jsonFiles = files.filter(f => f.endsWith('.json'));
+
+    const leadershipBUFiles = await Promise.all(
+      jsonFiles.map(async (filename) => {
+        const filePath = path.join(leadershipBUDir, filename);
+        const content = JSON.parse(await fs.readFile(filePath, 'utf8'));
+        const stats = await fs.stat(filePath);
+
+        return {
+          ...content,
+          id: content.id || filename.replace('.json', ''),
+          lastModified: stats.mtime.toISOString()
+        };
+      })
+    );
+
+    res.json({ success: true, content: leadershipBUFiles });
+  } catch (error) {
+    console.error('Error listing leadership BU files:', error);
+    res.json({ success: true, content: [] });
+  }
+});
+
+// Leadership BU Summaries - Update endpoint
+app.put('/api/content/leadership-bu/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const leadershipBUDir = path.join(__dirname, 'data', 'content', 'leadership-bu');
+    const filePath = path.join(leadershipBUDir, `${id}.json`);
+    
+    console.log('💾 Saving Leadership BU Summary:', id);
+    console.log('📂 File path:', filePath);
+    
+    await fs.writeFile(filePath, JSON.stringify(req.body, null, 2), 'utf8');
+    
+    console.log('✅ Leadership BU Summary saved successfully');
+    res.json({ success: true, message: 'Leadership BU Summary saved successfully' });
+  } catch (error) {
+    console.error('❌ Error saving leadership BU file:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Weekly Business Unit Summary - Get all or filter by BU
+app.get('/api/weekly-bu-summary/:businessUnit?', async (req, res) => {
+  try {
+    const { businessUnit } = req.params;
+    const filePath = path.join(__dirname, 'data', 'weekly-bu-summary.json');
+    
+    const content = JSON.parse(await fs.readFile(filePath, 'utf8'));
+    
+    // If specific business unit requested, return only that BU's data
+    if (businessUnit && content.businessUnits[businessUnit]) {
+      res.json({
+        success: true,
+        meta: content.meta,
+        businessUnit: {
+          id: businessUnit,
+          ...content.businessUnits[businessUnit]
+        }
+      });
+    } else if (businessUnit) {
+      // Business unit not found
+      res.status(404).json({
+        success: false,
+        error: `Business unit '${businessUnit}' not found`
+      });
+    } else {
+      // Return all business units
+      res.json({
+        success: true,
+        ...content
+      });
+    }
+  } catch (error) {
+    console.error('Error loading weekly BU summary:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Performance Reports - Auto-discovery endpoint
+app.get('/api/content/list/performance', async (req, res) => {
+  try {
+    const performanceDir = path.join(__dirname, 'data', 'content', 'performance');
+    const files = await fs.readdir(performanceDir);
+    const jsonFiles = files.filter(f => f.endsWith('.json'));
+    
+    const performanceFiles = await Promise.all(
+      jsonFiles.map(async (filename) => {
+        const filePath = path.join(performanceDir, filename);
+        const content = JSON.parse(await fs.readFile(filePath, 'utf8'));
+        const stats = await fs.stat(filePath);
+        
+        return {
+          id: filename.replace('.json', ''),
+          name: content.name || content.shortName || filename.replace('.json', '').replace(/-/g, ' '),
+          shortName: content.shortName || content.name || filename.replace('.json', '').replace(/-/g, ' '),
+          path: `/data/content/performance/${filename}`,
+          lastModified: stats.mtime.toISOString()
+        };
+      })
+    );
+    
+    res.json({ success: true, files: performanceFiles });
+  } catch (error) {
+    console.error('Error listing performance files:', error);
+    res.json({ success: true, files: [] }); // Return empty array if folder doesn't exist yet
+  }
+});
+
+// Performance Reports - Save endpoint
+app.put('/api/content/performance/:filename', async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const performanceDir = path.join(__dirname, 'data', 'content', 'performance');
+    const filePath = path.join(performanceDir, `${filename}.json`);
+    
+    await fs.writeFile(filePath, JSON.stringify(req.body, null, 2), 'utf8');
+    
+    res.json({ success: true, message: 'Performance data saved successfully' });
+  } catch (error) {
+    console.error('Error saving performance file:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // Authentication routes
 app.use('/api/auth', authRoutes);
@@ -62,6 +233,100 @@ app.use('/api/people', peopleRoutes);
 
 // Technologies Menu Routes
 app.use('/api/technologies-menu', technologiesMenuRoutes);
+
+// ============================================
+// Asset Management Routes
+// ============================================
+// GET all assets from register
+app.get('/api/assets', async (req, res) => {
+  try {
+    const assetsPath = path.join(__dirname, 'data', 'assets-register.json');
+    const assetsData = JSON.parse(await fs.readFile(assetsPath, 'utf8'));
+    res.json({ success: true, data: assetsData });
+  } catch (error) {
+    console.error('Error reading assets register:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// POST/PUT assets (save entire assets array)
+app.post('/api/assets', async (req, res) => {
+  try {
+    const assetsPath = path.join(__dirname, 'data', 'assets-register.json');
+    await fs.writeFile(assetsPath, JSON.stringify(req.body, null, 2));
+    res.json({ success: true, message: 'Assets saved successfully' });
+  } catch (error) {
+    console.error('Error saving assets:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// GET extended attributes for a specific asset
+app.get('/api/assets/:assetId/extended', async (req, res) => {
+  try {
+    const { assetId } = req.params;
+    const extAttrsPath = path.join(__dirname, 'data', 'asset-extended-attributes.json');
+    const extAttrsData = JSON.parse(await fs.readFile(extAttrsPath, 'utf8'));
+    
+    const assetExtAttr = extAttrsData.extendedAttributes.find(attr => attr.assetId === assetId);
+    
+    if (assetExtAttr) {
+      res.json({ success: true, data: assetExtAttr });
+    } else {
+      res.json({ success: true, data: null, message: 'No extended attributes found for this asset' });
+    }
+  } catch (error) {
+    console.error('Error reading asset extended attributes:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// GET all extended attributes
+app.get('/api/assets/extended/all', async (req, res) => {
+  try {
+    const extAttrsPath = path.join(__dirname, 'data', 'asset-extended-attributes.json');
+    const extAttrsData = JSON.parse(await fs.readFile(extAttrsPath, 'utf8'));
+    res.json({ success: true, data: extAttrsData });
+  } catch (error) {
+    console.error('Error reading asset extended attributes:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// GET infrastructure assets (for Asset Dashboard)
+app.get('/api/infrastructure-assets', async (req, res) => {
+  try {
+    const infraPath = path.join(__dirname, 'data', 'infrastructure-assets.json');
+    
+    // Check if file exists, if not return empty structure
+    try {
+      await fs.access(infraPath);
+    } catch {
+      return res.json({ success: true, data: [] });
+    }
+    
+    const infraData = JSON.parse(await fs.readFile(infraPath, 'utf8'));
+    res.json({ success: true, data: infraData });
+  } catch (error) {
+    console.error('Error reading infrastructure assets:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// POST infrastructure assets (save from Asset Dashboard)
+app.post('/api/infrastructure-assets', async (req, res) => {
+  try {
+    const infraPath = path.join(__dirname, 'data', 'infrastructure-assets.json');
+    await fs.writeFile(infraPath, JSON.stringify(req.body, null, 2));
+    res.json({ success: true, message: 'Infrastructure assets saved successfully' });
+  } catch (error) {
+    console.error('Error saving infrastructure assets:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Health Check Routes
+app.use('/api/health-check', healthCheckRoutes);
 
 // Tenant Management Routes (Organizations & Initiatives)
 app.get('/api/tenants', getTenants);
@@ -167,6 +432,32 @@ app.delete('/api/timeline-notes/:id', async (req, res) => {
     }
     
     res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// ============================================
+// PERFORMANCE DASHBOARD API
+// ============================================
+const PERFORMANCE_DASHBOARD_FILE = path.join(__dirname, 'data', 'performance-dashboard.json');
+
+app.get('/api/performance-dashboard', async (req, res) => {
+  try {
+    const data = await readJSONFile(PERFORMANCE_DASHBOARD_FILE).catch(() => null);
+    if (!data) {
+      return res.json({ success: false, error: 'Performance dashboard data not found' });
+    }
+    res.json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.post('/api/performance-dashboard', async (req, res) => {
+  try {
+    await writeJSONFile(PERFORMANCE_DASHBOARD_FILE, req.body);
+    res.json({ success: true, data: req.body });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -584,6 +875,51 @@ app.get('/api/content', async (req, res) => {
         console.log('No content in main directory:', error.message);
       }
       
+      // Read from leadership subfolder
+      try {
+        const leadershipDir = path.join(CONTENT_DIR, 'leadership');
+        const files = await listFiles(leadershipDir);
+        const leadershipContent = await Promise.all(
+          files.map(async (file) => {
+            const filePath = path.join(leadershipDir, file);
+            return await readJSONFile(filePath);
+          })
+        );
+        allContent.push(...leadershipContent);
+      } catch (error) {
+        console.log('No leadership content:', error.message);
+      }
+      
+      // Read from vendor subfolder
+      try {
+        const vendorDir = path.join(CONTENT_DIR, 'vendor');
+        const files = await listFiles(vendorDir);
+        const vendorContent = await Promise.all(
+          files.map(async (file) => {
+            const filePath = path.join(vendorDir, file);
+            return await readJSONFile(filePath);
+          })
+        );
+        allContent.push(...vendorContent);
+      } catch (error) {
+        console.log('No vendor content:', error.message);
+      }
+      
+      // Read from vendor-performance subfolder
+      try {
+        const vendorPerfDir = path.join(CONTENT_DIR, 'vendor-performance');
+        const files = await listFiles(vendorPerfDir);
+        const vendorPerfContent = await Promise.all(
+          files.map(async (file) => {
+            const filePath = path.join(vendorPerfDir, file);
+            return await readJSONFile(filePath);
+          })
+        );
+        allContent.push(...vendorPerfContent);
+      } catch (error) {
+        console.log('No vendor performance content:', error.message);
+      }
+      
       // Read from organization folders
       try {
         const orgsDir = path.join(DATA_DIR, 'orgs');
@@ -652,11 +988,35 @@ app.get('/api/content', async (req, res) => {
 // GET single content item by ID
 app.get('/api/content/:id', async (req, res) => {
   try {
-    const filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
-    const content = await readJSONFile(filePath);
-    res.json(content);
+    // Try main content directory first
+    let filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+    let content;
+    
+    try {
+      content = await readJSONFile(filePath);
+      return res.json({ success: true, content });
+    } catch (error) {
+      // If not found, try leadership subdirectory
+      try {
+        filePath = path.join(CONTENT_DIR, 'leadership', `${req.params.id}.json`);
+        content = await readJSONFile(filePath);
+        return res.json({ success: true, content });
+      } catch (error2) {
+        // If not found, try vendor subdirectory
+        try {
+          filePath = path.join(CONTENT_DIR, 'vendor', `${req.params.id}.json`);
+          content = await readJSONFile(filePath);
+          return res.json({ success: true, content });
+        } catch (error3) {
+          // If not found, try vendor-performance subdirectory
+          filePath = path.join(CONTENT_DIR, 'vendor-performance', `${req.params.id}.json`);
+          content = await readJSONFile(filePath);
+          return res.json({ success: true, content });
+        }
+      }
+    }
   } catch (error) {
-    res.status(404).json({ error: 'Content not found' });
+    res.status(404).json({ success: false, error: 'Content not found' });
   }
 });
 
@@ -681,8 +1041,16 @@ app.post('/api/content', async (req, res) => {
       await writeJSONFile(filePath, content);
       await updateTenantStats(type, slug);
     } else {
-      // Save to regular content directory
-      filePath = path.join(CONTENT_DIR, `${content.id}.json`);
+      const isLeadershipSummary = content._contentTag === 'leadership-summary';
+      const targetDir = isLeadershipSummary
+        ? path.join(CONTENT_DIR, 'leadership')
+        : CONTENT_DIR;
+
+      if (isLeadershipSummary) {
+        await fs.mkdir(targetDir, { recursive: true });
+      }
+
+      filePath = path.join(targetDir, `${content.id}.json`);
       await writeJSONFile(filePath, content);
     }
     
@@ -711,8 +1079,16 @@ app.put('/api/content/:id', async (req, res) => {
       await writeJSONFile(filePath, content);
       await updateTenantStats(type, slug);
     } else {
-      // Save to regular content directory
-      filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
+      const isLeadershipSummary = content._contentTag === 'leadership-summary';
+      const targetDir = isLeadershipSummary
+        ? path.join(CONTENT_DIR, 'leadership')
+        : CONTENT_DIR;
+
+      if (isLeadershipSummary) {
+        await fs.mkdir(targetDir, { recursive: true });
+      }
+
+      filePath = path.join(targetDir, `${req.params.id}.json`);
       await writeJSONFile(filePath, content);
     }
     
@@ -725,9 +1101,23 @@ app.put('/api/content/:id', async (req, res) => {
 // DELETE content
 app.delete('/api/content/:id', async (req, res) => {
   try {
-    const filePath = path.join(CONTENT_DIR, `${req.params.id}.json`);
-    await fs.unlink(filePath);
-    res.json({ message: 'Content deleted' });
+    const candidatePaths = [
+      path.join(CONTENT_DIR, `${req.params.id}.json`),
+      path.join(CONTENT_DIR, 'leadership', `${req.params.id}.json`),
+      path.join(CONTENT_DIR, 'vendor', `${req.params.id}.json`),
+      path.join(CONTENT_DIR, 'vendor-performance', `${req.params.id}.json`)
+    ];
+
+    for (const candidatePath of candidatePaths) {
+      try {
+        await fs.unlink(candidatePath);
+        return res.json({ message: 'Content deleted' });
+      } catch (error) {
+        // try next path
+      }
+    }
+
+    res.status(404).json({ error: 'Content not found' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -1383,6 +1773,47 @@ app.get('/api/note-tags/:id/usage', async (req, res) => {
   }
 });
 
+// ============================================
+// Content Management Routes (CMS v2)
+// ============================================
+
+// GET content by category and ID
+app.get('/api/content/:category/:id', async (req, res) => {
+  try {
+    const { category, id } = req.params;
+    const contentPath = path.join(__dirname, 'data', 'content', category, `${id}.json`);
+    
+    const content = await readJSONFile(contentPath);
+    res.json(content);
+  } catch (error) {
+    console.error('Error loading content:', error);
+    res.status(404).json({ error: 'Content not found', message: error.message });
+  }
+});
+
+// POST save content
+app.post('/api/content/save', async (req, res) => {
+  try {
+    const { id, category, data } = req.body;
+    const contentPath = path.join(__dirname, 'data', 'content', category, `${id}.json`);
+    
+    // Update lastModified timestamp
+    const updatedData = {
+      ...data,
+      meta: {
+        ...data.meta,
+        lastModified: new Date().toISOString().split('T')[0]
+      }
+    };
+    
+    await writeJSONFile(contentPath, updatedData);
+    res.json({ success: true, message: 'Content saved successfully' });
+  } catch (error) {
+    console.error('Error saving content:', error);
+    res.status(500).json({ error: 'Failed to save content', message: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Backend API running on http://localhost:${PORT}`);
@@ -1426,4 +1857,7 @@ app.listen(PORT, () => {
   console.log(`  POST   /api/comments`);
   console.log(`  PUT    /api/comments/:id`);
   console.log(`  DELETE /api/comments/:id`);
+  
+  // Start API health monitoring
+  startHealthChecks();
 });

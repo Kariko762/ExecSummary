@@ -21,7 +21,8 @@ export interface Task {
   title: string;
   owner: string;
   team: string;
-  businessUnit: string;
+  businessUnits: string[];
+  businessUnit?: string;
   product: string;
   startDate: string;
   targetDate: string;
@@ -63,10 +64,11 @@ interface TaskEditorModalProps {
 
 export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, onClose, viewOnly = false }) => {
   const [activeTab, setActiveTab] = useState<'task' | 'notes' | 'dataPoints'>('task');
-  const [editMode, setEditMode] = useState(!task); // True for new tasks, false for existing
+  const [editMode, setEditMode] = useState(true); // Always start in edit mode (CMS-Admin is for editing)
   const [tags, setTags] = useState<Array<{ id: string; name: string; color: string }>>([]);
   const [goals, setGoals] = useState<Array<{ id: string; name: string; shortName: string; color: string }>>([]);
   const [initiatives, setInitiatives] = useState<Array<{ id: string; name: string; slug: string }>>([]);
+  const [businessUnits, setBusinessUnits] = useState<Array<{ id: string; name: string; fullPath?: string }>>([]);
   const [notes, setNotes] = useState<any[]>([]); // NEW: Linked notes
   const [notesLoading, setNotesLoading] = useState(false); // NEW
   
@@ -75,41 +77,74 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
   const [newTagName, setNewTagName] = useState('');
   const [newTagColor, setNewTagColor] = useState('#7C3AED');
   
-  const [formData, setFormData] = useState<Task>(task || {
-    title: 'New Task',
-    owner: '',
-    team: '',
-    businessUnit: '',
-    product: '',
-    startDate: new Date().toISOString().split('T')[0],
-    targetDate: '',
-    percentage: 0,
-    status: 'On Track',
-    budget: '',
-    priority: 'Medium',
-    description: '',
-    milestones: '',
-    risks: '',
-    dependencies: '',
-    steps: [],
-    tags: [],
-    linkType: 'goal', // NEW: Default to linking to goal
-    goalId: '',
-    initiativeId: '', // NEW
-    enabledFields: {
-      owner: true,
-      team: true,
-      businessUnit: true,
-      product: true,
-      startDate: true,
-      targetDate: true,
-      budget: true,
-      description: true,
-      milestones: true,
-      risks: true,
-      dependencies: true,
-      steps: true
+  const [formData, setFormData] = useState<Task>(() => {
+    if (task) {
+      const normalizedBusinessUnits = Array.isArray(task.businessUnits)
+        ? task.businessUnits
+        : task.businessUnit
+          ? [task.businessUnit]
+          : [];
+
+      return {
+        ...task,
+        businessUnits: normalizedBusinessUnits,
+        businessUnit: task.businessUnit || '',
+        // Ensure all fields are enabled for CMS-Admin editing
+        enabledFields: {
+          owner: true,
+          team: true,
+          businessUnit: true,
+          product: true,
+          startDate: true,
+          targetDate: true,
+          budget: true,
+          description: true,
+          milestones: true,
+          risks: true,
+          dependencies: true,
+          steps: true,
+          ...task.enabledFields // Preserve any existing field overrides
+        }
+      };
     }
+
+    return {
+      title: 'New Task',
+      owner: '',
+      team: '',
+      businessUnits: [],
+      businessUnit: '',
+      product: '',
+      startDate: new Date().toISOString().split('T')[0],
+      targetDate: '',
+      percentage: 0,
+      status: 'On Track',
+      budget: '',
+      priority: 'Medium',
+      description: '',
+      milestones: '',
+      risks: '',
+      dependencies: '',
+      steps: [],
+      tags: [],
+      linkType: 'goal', // NEW: Default to linking to goal
+      goalId: '',
+      initiativeId: '', // NEW
+      enabledFields: {
+        owner: true,
+        team: true,
+        businessUnit: true,
+        product: true,
+        startDate: true,
+        targetDate: true,
+        budget: true,
+        description: true,
+        milestones: true,
+        risks: true,
+        dependencies: true,
+        steps: true
+      }
+    };
   });
 
   // Fetch tags and goals on mount
@@ -148,9 +183,24 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
       }
     };
 
+    const fetchBusinessUnits = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/business-units');
+        const data = await response.json();
+        const allUnits = Array.isArray(data) ? data : (data.units || []);
+        // Filter to only root-level business units (no parent)
+        const rootUnits = allUnits.filter((unit: any) => unit.parentId === null);
+        setBusinessUnits(rootUnits);
+      } catch (error) {
+        console.error('Failed to fetch business units:', error);
+        setBusinessUnits([]);
+      }
+    };
+
     fetchTags();
     fetchGoals();
     fetchInitiatives();
+    fetchBusinessUnits();
     
     // Fetch notes if viewing existing task
     if (task?.id) {
@@ -215,7 +265,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
   };
 
   const updateField = (field: keyof Task, value: any) => {
-    setFormData({ ...formData, [field]: value });
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const toggleField = (field: keyof NonNullable<Task['enabledFields']>) => {
@@ -230,7 +280,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
 
   return (
     <div className="fixed inset-0 bg-black/60 z-[70] flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative">
+      <div className="bg-gradient-to-br from-gray-900 to-slate-800 backdrop-blur-sm rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative">
         {/* Tag Panel Button - Hide in view-only mode */}
         {!viewOnly && (
         <motion.button
@@ -250,10 +300,10 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 h-full w-80 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700 shadow-2xl z-20 flex flex-col overflow-hidden"
+              className="absolute right-0 top-0 h-full w-80 bg-gradient-to-br from-gray-900 to-slate-800 backdrop-blur-sm border-l border-white/10 shadow-2xl z-20 flex flex-col overflow-hidden"
             >
               {/* Tag Panel Header */}
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)]">
+              <div className="p-4 border-b border-white/10 bg-gray-900/95 backdrop-blur-sm">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-lg font-roobert-semibold text-white">Select Tags</h3>
                   <button
@@ -270,7 +320,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                 {/* Current Tags */}
                 {formData.tags && formData.tags.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <h4 className="text-sm font-roobert-medium text-white mb-2">
                       Current Tags ({formData.tags.length})
                     </h4>
                     <div className="space-y-2">
@@ -307,7 +357,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
 
                 {/* Available Tags */}
                 <div>
-                  <h4 className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <h4 className="text-sm font-roobert-medium text-white mb-2">
                     Available Tags
                   </h4>
                   <div className="space-y-1">
@@ -319,7 +369,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                           onClick={() => handleToggleTag(tag.id)}
                           className={`w-full flex items-center gap-3 p-2 rounded-lg transition-colors ${
                             isSelected
-                              ? 'bg-gray-100 dark:bg-gray-800'
+                              ? 'bg-gray-700/50'
                               : 'hover:bg-gray-50 dark:hover:bg-gray-800'
                           }`}
                         >
@@ -327,7 +377,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                             className="w-4 h-4 rounded-full flex-shrink-0"
                             style={{ backgroundColor: tag.color }}
                           />
-                          <span className="text-sm font-roobert-regular text-gray-700 dark:text-gray-300 flex-1 text-left">
+                          <span className="text-sm font-roobert-regular text-white flex-1 text-left">
                             {tag.name}
                           </span>
                           {isSelected && (
@@ -340,8 +390,8 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                 </div>
 
                 {/* Create New Tag */}
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                  <h4 className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-3">
+                <div className="border-t border-white/10 pt-4">
+                  <h4 className="text-sm font-roobert-medium text-white mb-3">
                     Create New Tag
                   </h4>
                   <div className="space-y-3">
@@ -351,10 +401,10 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                       onChange={(e) => setNewTagName(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleCreateTag()}
                       placeholder="Tag name..."
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-roobert-regular bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                      className="w-full px-3 py-2 border border-white/10 rounded-lg text-sm font-roobert-regular bg-gray-800/50 text-white placeholder-white/50"
                     />
                     <div className="flex items-center gap-2">
-                      <label className="text-sm font-roobert-regular text-gray-600 dark:text-gray-400">
+                      <label className="text-sm font-roobert-regular text-white/70">
                         Color:
                       </label>
                       <input
@@ -364,14 +414,14 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                         className="w-12 h-8 rounded cursor-pointer"
                       />
                       <div
-                        className="w-8 h-8 rounded border border-gray-300 dark:border-gray-600"
+                        className="w-8 h-8 rounded border border-white/10"
                         style={{ backgroundColor: newTagColor }}
                       />
                     </div>
                     <button
                       onClick={handleCreateTag}
                       disabled={!newTagName.trim()}
-                      className="w-full px-4 py-2 bg-[var(--brand-primary)] hover:bg-[var(--brand-secondary)] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg font-roobert-medium text-sm transition-colors"
+                      className="w-full px-4 py-2 bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg font-roobert-medium text-sm transition-colors"
                     >
                       Create Tag
                     </button>
@@ -383,7 +433,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
         </AnimatePresence>
         
         {/* Header with Tabs */}
-        <div className="p-6 bg-gradient-to-r from-[var(--brand-primary)] via-[var(--brand-secondary)] to-[var(--brand-tertiary)] border-b border-gray-200 dark:border-gray-700">
+        <div className="p-6 bg-gray-900/95 backdrop-blur-sm border-b border-white/10">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-2xl font-roobert-semibold text-white">
               {viewOnly ? formData.title : (task ? 'Edit Task' : 'New Task')}
@@ -472,7 +522,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
           {activeTab === 'task' && (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {/* Title - Hide in view-only mode (already in header) */}
               {!viewOnly && (
               <div>
@@ -481,66 +531,100 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                     type="text"
                     value={formData.title}
                     onChange={(e) => updateField('title', e.target.value)}
-                    className="w-full px-4 py-3 text-2xl font-roobert-semibold bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                    className="w-full px-4 py-2 text-xl font-roobert-semibold bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-lg text-white"
                     placeholder="Task Title"
                   />
                 ) : (
-                  <h2 className="text-2xl font-roobert-semibold text-gray-900 dark:text-white">{formData.title}</h2>
+                  <h2 className="text-2xl font-roobert-semibold text-white">{formData.title}</h2>
                 )}
               </div>
               )}
 
-              {/* Row: Owner & Team */}
-              {(fields.owner || fields.team) && (
+              {/* Row: Owner, Product (left) & Business Unit (right, spans 2 rows) */}
+              {(fields.owner || fields.product || fields.team || fields.businessUnit) && (
                 <div className="grid grid-cols-2 gap-4">
-                  {fields.owner && (
-                    <div>
-                      <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
-                        <span className="flex items-center gap-2"><Users className="w-4 h-4" />Owner</span>
-                      </label>
-                      <input type="text" value={formData.owner} onChange={(e) => updateField('owner', e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
-                        disabled={!editMode} />
-                    </div>
-                  )}
-                  {fields.team && (
-                    <div>
-                      <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
-                        <span className="flex items-center gap-2"><Users className="w-4 h-4" />Team</span>
-                      </label>
-                      <input type="text" value={formData.team} onChange={(e) => updateField('team', e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
-                    </div>
-                  )}
-                </div>
-              )}
+                  {/* Left Column: Owner and Product stacked */}
+                  <div className="space-y-4">
+                    {fields.owner && (
+                      <div>
+                        <label className="block text-sm font-roobert-medium text-white mb-1">
+                          <span className="flex items-center gap-2"><Users className="w-4 h-4" />Owner</span>
+                        </label>
+                        <input type="text" value={formData.owner} onChange={(e) => updateField('owner', e.target.value)}
+                          className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white"
+                          disabled={!editMode} />
+                      </div>
+                    )}
+                    {fields.product && (
+                      <div>
+                        <label className="block text-sm font-roobert-medium text-white mb-1">
+                          <span className="flex items-center gap-2"><Package className="w-4 h-4" />Product</span>
+                        </label>
+                        <input type="text" value={formData.product} onChange={(e) => updateField('product', e.target.value)}
+                          className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
+                      </div>
+                    )}
+                    {fields.team && (
+                      <div>
+                        <label className="block text-sm font-roobert-medium text-white mb-1">
+                          <span className="flex items-center gap-2"><Users className="w-4 h-4" />Team</span>
+                        </label>
+                        <input type="text" value={formData.team} onChange={(e) => updateField('team', e.target.value)}
+                          className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
+                      </div>
+                    )}
+                  </div>
 
-              {/* Row: Business Unit & Product */}
-              {(fields.businessUnit || fields.product) && (
-                <div className="grid grid-cols-2 gap-4">
+                  {/* Right Column: Business Unit (full height) */}
                   {fields.businessUnit && (
-                    <div>
-                      <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-roobert-medium text-white mb-1">
                         <span className="flex items-center gap-2"><Building2 className="w-4 h-4" />Business Unit</span>
                       </label>
-                      <select value={formData.businessUnit} onChange={(e) => updateField('businessUnit', e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode}>
-                        <option value="">Select Business Unit...</option>
-                        <option value="FIS">FIS</option>
-                        <option value="Banking (Int)">Banking (Int)</option>
-                        <option value="Banking (NA)">Banking (NA)</option>
-                        <option value="Capital Markets">Capital Markets</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
-                  )}
-                  {fields.product && (
-                    <div>
-                      <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
-                        <span className="flex items-center gap-2"><Package className="w-4 h-4" />Product</span>
-                      </label>
-                      <input type="text" value={formData.product} onChange={(e) => updateField('product', e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
+                      <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded p-2 flex-1 overflow-y-auto space-y-1.5 min-h-[150px]">
+                        {businessUnits.length > 0 ? (
+                          businessUnits.map((unit) => {
+                            const label = unit.fullPath || unit.name;
+                            const isSelected = formData.businessUnits.includes(label);
+                            return (
+                              <div
+                                key={unit.id}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  if (!editMode) return;
+                                  const values = isSelected
+                                    ? formData.businessUnits.filter(v => v !== label)
+                                    : [...formData.businessUnits, label];
+                                  updateField('businessUnits', values);
+                                  updateField('businessUnit', values[0] || '');
+                                }}
+                                className={`flex items-center gap-2 p-1.5 rounded transition-colors ${
+                                  editMode ? 'cursor-pointer hover:bg-white/10' : 'opacity-60 cursor-not-allowed'
+                                }`}
+                              >
+                                <div className="flex items-center justify-center w-3.5 h-3.5">
+                                  {isSelected ? (
+                                    <div className="w-3.5 h-3.5 rounded bg-purple-600 flex items-center justify-center">
+                                      <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                    </div>
+                                  ) : (
+                                    <div className="w-3.5 h-3.5 rounded border-2 border-gray-600" />
+                                  )}
+                                </div>
+                                <span className="text-sm text-white">{label}</span>
+                              </div>
+                            );
+                          })
+                        ) : (
+                          <p className="text-xs text-white/50 p-2">No business units available</p>
+                        )}
+                      </div>
+                      {formData.businessUnits.length > 0 && (
+                        <p className="text-xs text-white/50 mt-1">{formData.businessUnits.length} selected</p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -550,29 +634,29 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               <div className="grid grid-cols-3 gap-4">
                 {fields.startDate && (
                   <div>
-                    <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
-                      <span className="flex items-center gap-2"><Calendar className="w-4 h-4" />Start Date</span>
+                    <label className="block text-sm font-roobert-medium text-white mb-1">
+                      <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-white" />Start Date</span>
                     </label>
                     <input type="date" value={formData.startDate} onChange={(e) => updateField('startDate', e.target.value)}
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
+                      className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed [color-scheme:dark]" disabled={!editMode} />
                   </div>
                 )}
                 {fields.targetDate && (
                   <div>
-                    <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
-                      <span className="flex items-center gap-2"><Target className="w-4 h-4" />Target Date</span>
+                    <label className="block text-sm font-roobert-medium text-white mb-1">
+                      <span className="flex items-center gap-2"><Target className="w-4 h-4 text-white" />Target Date</span>
                     </label>
                     <input type="date" value={formData.targetDate} onChange={(e) => updateField('targetDate', e.target.value)}
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
+                      className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed [color-scheme:dark]" disabled={!editMode} />
                   </div>
                 )}
                 {fields.budget && (
                   <div>
-                    <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-roobert-medium text-white mb-1">
                       <span className="flex items-center gap-2"><DollarSign className="w-4 h-4" />Budget</span>
                     </label>
                     <input type="text" value={formData.budget} onChange={(e) => updateField('budget', e.target.value)}
-                      className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white" placeholder="$0" />
+                      className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white" placeholder="$0" />
                   </div>
                 )}
               </div>
@@ -580,15 +664,15 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               {/* Row: Progress, Status, Priority - Always visible */}
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Progress (%)</label>
+                  <label className="block text-sm font-roobert-medium text-white mb-1">Progress (%)</label>
                   <input type="number" min="0" max="100" value={formData.percentage}
                     onChange={(e) => updateField('percentage', parseInt(e.target.value) || 0)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
+                    className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode} />
                 </div>
                 <div>
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                  <label className="block text-sm font-roobert-medium text-white mb-1">Status</label>
                   <select value={formData.status} onChange={(e) => updateField('status', e.target.value as Task['status'])}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode}>
+                    className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode}>
                     <option value="On Track">On Track</option>
                     <option value="At Risk">At Risk</option>
                     <option value="Blocked">Blocked</option>
@@ -596,9 +680,9 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
+                  <label className="block text-sm font-roobert-medium text-white mb-1">Priority</label>
                   <select value={formData.priority} onChange={(e) => updateField('priority', e.target.value as Task['priority'])}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode}>
+                    className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed" disabled={!editMode}>
                     <option value="High">High</option>
                     <option value="Medium">Medium</option>
                     <option value="Low">Low</option>
@@ -608,7 +692,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
 
               {/* Link Type Toggle & Selection */}
               <div className="space-y-3">
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+                <label className="block text-sm font-roobert-medium text-white">
                   <span className="flex items-center gap-2">
                     <Target className="w-4 h-4" />
                     Link Task To
@@ -630,7 +714,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                           }}
                           className="w-4 h-4 text-purple-600"
                         />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">Strategic Goal</span>
+                        <span className="text-sm text-white">Strategic Goal</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -643,20 +727,20 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                           }}
                           className="w-4 h-4 text-pink-600"
                         />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">Initiative (Project)</span>
+                        <span className="text-sm text-white">Initiative (Project)</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="radio"
                           name="linkType"
                           value="general"
-                          checked={formData.linkType === 'general'}
+                          checked={!formData.linkType || formData.linkType === undefined}
                           onChange={() => {
-                            setFormData({ ...formData, linkType: 'general', goalId: '', initiativeId: '' });
+                            setFormData({ ...formData, linkType: undefined, goalId: '', initiativeId: '' });
                           }}
                           className="w-4 h-4 text-blue-600"
                         />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">General Task</span>
+                        <span className="text-sm text-white">General Task</span>
                       </label>
                     </div>
 
@@ -665,7 +749,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                       <select
                         value={formData.goalId || ''}
                         onChange={(e) => updateField('goalId', e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                        className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white"
                       >
                         <option value="">Select a strategic goal...</option>
                         {goals.map(goal => (
@@ -678,7 +762,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                       <select
                         value={formData.initiativeId || ''}
                         onChange={(e) => updateField('initiativeId', e.target.value)}
-                        className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
+                        className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white"
                       >
                         <option value="">Select an initiative...</option>
                         {initiatives.map(initiative => (
@@ -696,7 +780,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                           const goal = goals.find(g => g.id === formData.goalId);
                           return goal ? (
                             <div>
-                              <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Strategic Goal</span>
+                              <span className="text-xs text-white/60 block mb-1">Strategic Goal</span>
                               <span
                                 className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium text-white"
                                 style={{ backgroundColor: goal.color }}
@@ -705,7 +789,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                               </span>
                             </div>
                           ) : (
-                            <span className="text-sm text-gray-500 dark:text-gray-400">Goal not found</span>
+                            <span className="text-sm text-white/60">Goal not found</span>
                           );
                         })()
                       ) : formData.linkType === 'initiative' && formData.initiativeId ? (
@@ -713,17 +797,17 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                           const initiative = initiatives.find(i => i.id === formData.initiativeId);
                           return initiative ? (
                             <div>
-                              <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Initiative</span>
+                              <span className="text-xs text-white/60 block mb-1">Initiative</span>
                               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium bg-pink-600 text-white">
                                 {initiative.name}
                               </span>
                             </div>
                           ) : (
-                            <span className="text-sm text-gray-500 dark:text-gray-400">Initiative not found</span>
+                            <span className="text-sm text-white/60">Initiative not found</span>
                           );
                         })()
                       ) : (
-                        <span className="text-sm text-gray-500 dark:text-gray-400">No link assigned</span>
+                        <span className="text-sm text-white/60">No link assigned</span>
                       )}
                     </div>
                     {((formData.linkType === 'goal' && formData.goalId) || (formData.linkType === 'initiative' && formData.initiativeId)) && (
@@ -750,9 +834,9 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               {/* Description */}
               {fields.description && (
                 <div>
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+                  <label className="block text-sm font-roobert-medium text-white mb-1">Description</label>
                   <textarea value={formData.description} onChange={(e) => updateField('description', e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed"
                     rows={3} placeholder="Task overview..." disabled={!editMode} />
                 </div>
               )}
@@ -760,11 +844,11 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               {/* Milestones */}
               {fields.milestones && (
                 <div>
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-roobert-medium text-white mb-1">
                     <span className="flex items-center gap-2"><Target className="w-4 h-4" />Milestones</span>
                   </label>
                   <textarea value={formData.milestones} onChange={(e) => updateField('milestones', e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed"
                     rows={2} placeholder="Separate with | character" disabled={!editMode} />
                 </div>
               )}
@@ -772,11 +856,11 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               {/* Risks */}
               {fields.risks && (
                 <div>
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">
+                  <label className="block text-sm font-roobert-medium text-white mb-1">
                     <span className="flex items-center gap-2"><AlertCircle className="w-4 h-4" />Risks</span>
                   </label>
                   <textarea value={formData.risks} onChange={(e) => updateField('risks', e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed"
                     rows={2} placeholder="Identified risks..." disabled={!editMode} />
                 </div>
               )}
@@ -784,9 +868,9 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               {/* Dependencies */}
               {fields.dependencies && (
                 <div>
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-1">Dependencies</label>
+                  <label className="block text-sm font-roobert-medium text-white mb-1">Dependencies</label>
                   <textarea value={formData.dependencies} onChange={(e) => updateField('dependencies', e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed"
                     rows={2} placeholder="External dependencies..." disabled={!editMode} />
                 </div>
               )}
@@ -794,7 +878,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
               {/* Steps */}
               {fields.steps && (
                 <div>
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-roobert-medium text-white mb-2">
                     <span className="flex items-center gap-2"><ListChecks className="w-4 h-4" />Steps</span>
                   </label>
                   <div className="space-y-2">
@@ -806,7 +890,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                             newSteps[index].state = e.target.value as TaskStep['state'];
                             updateField('steps', newSteps);
                           }}
-                          className="px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                          className="px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed"
                           style={{ width: '35%' }} disabled={!editMode}>
                           <option value="Pending">Pending</option>
                           <option value="Scheduled">Scheduled</option>
@@ -820,7 +904,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                             newSteps[index].step = e.target.value;
                             updateField('steps', newSteps);
                           }}
-                          className="px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                          className="px-3 py-2 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white disabled:opacity-60 disabled:cursor-not-allowed"
                           style={{ width: '65%' }} placeholder="Step description..." disabled={!editMode} />
                         {editMode && (
                           <button
@@ -834,7 +918,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                     {editMode && (
                       <button
                         onClick={() => updateField('steps', [...formData.steps, { id: `step-${Date.now()}`, step: '', state: 'Pending' as const }])}
-                        className="w-full px-3 py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
+                        className="w-full px-3 py-2 border-2 border-dashed border-white/10 rounded text-white/70 hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
                         + Add Step
                       </button>
                     )}
@@ -846,14 +930,16 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
 
           {activeTab === 'notes' && (
             <div>
-              <div className="mb-6">
-                <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">
-                  Linked Notes ({notes.length})
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Notes specifically linked to this task
-                </p>
-              </div>
+              {notes.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-lg font-roobert-semibold text-white mb-2">
+                    Linked Notes ({notes.length})
+                  </h3>
+                  <p className="text-sm text-white/70">
+                    Notes specifically linked to this task
+                  </p>
+                </div>
+              )}
 
               {notesLoading ? (
                 <div className="flex items-center justify-center p-12">
@@ -864,12 +950,12 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                 </div>
               ) : notes.length === 0 ? (
                 <div className="text-center py-12">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-700/50 flex items-center justify-center">
                     <FileText className="w-8 h-8 text-gray-400" />
                   </div>
-                  <p className="text-gray-500 dark:text-gray-400 mb-4">No notes linked to this task yet</p>
+                  <p className="text-white/70 font-roobert-medium mb-2">No notes linked to this task yet</p>
                   <p className="text-sm text-gray-400 dark:text-gray-500">
-                    Create a note from the Notes Manager and link it to this task
+                    Create a note and link it to this task for it to appear here
                   </p>
                 </div>
               ) : (
@@ -877,10 +963,10 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                   {notes.map((note) => (
                     <div
                       key={note.id}
-                      className="p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow"
+                      className="p-4 bg-white dark:bg-gray-800 border border-white/10 rounded-lg hover:shadow-md transition-shadow"
                     >
                       <div className="flex items-start justify-between mb-2">
-                        <h4 className="font-roobert-semibold text-gray-900 dark:text-white">
+                        <h4 className="font-roobert-semibold text-white">
                           {note.title}
                         </h4>
                         <span className={`px-2 py-1 text-xs rounded ${
@@ -892,7 +978,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                           {note.category}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                      <p className="text-sm text-white/70 line-clamp-3">
                         {note.content}
                       </p>
                       {note.tags && note.tags.length > 0 && (
@@ -900,7 +986,7 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                           {note.tags.map((tag: string) => (
                             <span
                               key={tag}
-                              className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded"
+                              className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-white rounded"
                             >
                               {tag}
                             </span>
@@ -917,8 +1003,8 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
           {activeTab === 'dataPoints' && (
             <div>
               <div className="mb-6">
-                <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-2">Configure Data Points</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Enable or disable fields. Only enabled fields appear in Task tab.</p>
+                <h3 className="text-lg font-roobert-semibold text-white mb-2">Configure Data Points</h3>
+                <p className="text-sm text-white/70">Enable or disable fields. Only enabled fields appear in Task tab.</p>
               </div>
               <div className="grid grid-cols-3 gap-3">
                 {[
@@ -935,15 +1021,15 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
                   { key: 'dependencies', icon: ExternalLink, label: 'Dependencies' },
                   { key: 'steps', icon: ListChecks, label: 'Steps' }
                 ].map(({ key, icon: Icon, label }) => (
-                  <div key={key} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <div key={key} className="flex items-center justify-between p-2 bg-gray-800/50 rounded-lg border border-white/10">
                     <div className="flex items-center gap-2">
-                      <Icon className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                      <div className="text-xs font-roobert-medium text-gray-900 dark:text-white">{label}</div>
+                      <Icon className="w-4 h-4 text-white/70" />
+                      <div className="text-xs font-roobert-medium text-white">{label}</div>
                     </div>
                     <select
                       value={fields[key as keyof typeof fields] ? 'enabled' : 'disabled'}
                       onChange={() => toggleField(key as keyof NonNullable<Task['enabledFields']>)}
-                      className="ml-4 px-2 py-0.5 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded text-[10px]">
+                      className="ml-4 px-2 py-0.5 bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded text-white text-[10px]">
                       <option value="enabled">Enabled</option>
                       <option value="disabled">Disabled</option>
                     </select>
@@ -956,11 +1042,20 @@ export const TaskEditorModal: React.FC<TaskEditorModalProps> = ({ task, onSave, 
 
         {/* Footer - Hide in view-only mode */}
         {!viewOnly && (
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
-          <button onClick={onClose} className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-white/10">
+          <button onClick={onClose} className="px-4 py-2 text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
             Cancel
           </button>
-          <button onClick={() => onSave(formData)} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+          <button
+            onClick={() => {
+              const primaryBusinessUnit = formData.businessUnits?.[0] || formData.businessUnit || '';
+              onSave({
+                ...formData,
+                businessUnit: primaryBusinessUnit
+              });
+            }}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          >
             {task ? 'Update Task' : 'Create Task'}
           </button>
         </div>

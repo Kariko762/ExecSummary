@@ -1,0 +1,46 @@
+Leadership Summary - Jan 26, 2026 - Feb 01, 2026
+
+Hope you are all well.
+
+Thank you for your continued engagement and support this week. Please see below the key updates from last week's execution and Demo Services workstreams. I will continue to expand on additional details, including initiative views, tasks, and timelines (Gantt) in upcoming versions.
+
+========================================
+
+KEY POINTS
+
+• Coast MSA Renewal - Execute renewal to prevent disruption to demo automation (Due: Feb 6)
+• Banking International Demo Audit - Conduct audit with Sales analytics to prioritize products for demo investment
+• Finalizing Goals & 2026 Initiatives - Complete Demo Services goals informed by Banking audit (Due: Feb 11)
+• 2026 Tools Spend Approval - Secure approval for demo tooling spend after prioritization complete (Due: Feb 23)
+• AI Enablement for Banking Demos - Advance AI-driven initiatives for Commercial Loan Origination and Synthesia videos
+
+========================================
+
+ASSESSMENT
+
+• Shifted Banking Audit from static inventory to quantitative prioritization model
+• Established clear path to identify which products justify enhanced demo support and AI tooling
+• Strong partnership between Demo Services, Banking leadership, Sales Analytics, and Product
+• Coast MSA execution timing remains a near-term risk
+• Premature tooling investment before audit completion could misallocate spend
+• Credit Assessment backup requirements remain undefined
+
+CRITICAL RISKS
+
+• Coast Contract Execution Delay - Could disrupt demo automation and impact client demos (Mitigation: Daily tracking)
+• Credit Assessment VM Backup - System changes could cause data corruption before scheduled demo (Mitigation: Document backup requirements)
+
+========================================
+
+RECOMMENDATIONS
+
+• Maintain momentum on deal-data → product prioritization analysis before locking 2026 investments
+• Sequence 2026 tooling and infrastructure approvals after audit outputs are validated
+• Continue treating Coast MSA execution as a critical operational dependency
+
+========================================
+
+EXECUTIVE ASKS
+
+• Approval (High): Coast MSA Execution - Prevents disruption to demo automation (Due: Immediate)
+• Decision (Medium): Banking Product Prioritization - Align investments to revenue signal (Due: February)

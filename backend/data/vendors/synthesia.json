@@ -1,5 +1,6 @@
 {
   "id": "vendor-synthesia-2026-01-06",
+  "vendorId": "vendor-synthesia",
   "title": "Synthesia AI Video",
   "_contentTag": "vendor",
   "_layout": "one-pager",
@@ -69,5 +70,55 @@
       "trend": "down",
       "subtitle": "Needs improvement - technical challenges"
     }
-  }
+  },
+  "userList": [
+    {
+      "userId": "user-synth-001",
+      "name": "Marcus Chen",
+      "email": "mchen@fis.com",
+      "businessUnit": "capital-markets",
+      "licenseType": "creator",
+      "status": "active",
+      "lastActive": "2026-02-20",
+      "assignedDate": "2025-09-15",
+      "videosCreated": 8,
+      "creditsUsed": 24
+    },
+    {
+      "userId": "user-synth-002",
+      "name": "Alexander Wright",
+      "email": "awright@fis.com",
+      "businessUnit": "capital-markets",
+      "licenseType": "creator",
+      "status": "active",
+      "lastActive": "2026-02-18",
+      "assignedDate": "2025-10-01",
+      "videosCreated": 3,
+      "creditsUsed": 12
+    },
+    {
+      "userId": "user-synth-003",
+      "name": "Colin McKillop",
+      "email": "cmckillop@fis.com",
+      "businessUnit": "cross-bu",
+      "licenseType": "admin",
+      "status": "active",
+      "lastActive": "2026-02-22",
+      "assignedDate": "2025-08-01",
+      "videosCreated": 0,
+      "creditsUsed": 0
+    }
+  ],
+  "assetList": [
+    {
+      "assetId": "asset-005",
+      "assetName": "MUFG AI Demo - Synthesia Video",
+      "businessUnit": "capital-markets",
+      "owner": "Alexander Wright",
+      "status": "active",
+      "lastUsed": "2026-02-20",
+      "videosCreated": 3,
+      "createdDate": "2026-02-08"
+    }
+  ]
 }

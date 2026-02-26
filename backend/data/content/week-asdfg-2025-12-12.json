@@ -45,15 +45,15 @@
             "lineItems": [
               {
                 "id": "item-1765579821820",
-                "name": "Figma (Full License)",
-                "qty": 25,
+                "name": "Figma for Tiled (Full License)",
+                "qty": 10,
                 "unitCost": 1100,
-                "amount": 27500,
-                "description": "Provide Figma licenses for Tiled power users to enable template automation and scalability.",
-                "summary": "To deliver high-quality, standardized microapps in Tiled, we propose granting Figma licenses to a select group of specialists. These users will design central templates, customize them for strategic deals and clients, and publish them into Tiled for end-user refinement, ensuring agility and consistency across all interactive content.",
-                "justification": "Figma integration is critical for introducing template automation, enforcing design standards, and accelerating development timelines. This approach reduces time-to-market, supports scale, and ensures our interactive content meets brand and quality expectations while enabling Pre-Sales and Sales teams to quickly tailor demos for client engagements.",
+                "amount": 11000,
+                "description": "Provide Figma licenses for Tiled power users to enable templatizing of Microsite Assets through Figma Native Extension for Tiled.",
+                "summary": "To deliver high-quality, standardized microapps in Tiled, we propose granting Figma licenses to a select group of specialists who will leverage the Figma Native Extension for Tiled. These users will design central Microsite Asset templates, customize them for strategic deals and clients, and publish them directly into Tiled for end-user refinement, ensuring agility and consistency across all interactive content.",
+                "justification": "Figma's Native Extension for Tiled is critical for introducing Microsite Asset template automation, enforcing design standards, and accelerating development timelines. This approach reduces time-to-market, supports scale, and ensures our interactive Tiled content meets brand and quality expectations while enabling Pre-Sales and Sales teams to quickly tailor microsite demos for client engagements.",
                 "owner": "TBC",
-                "lastUpdated": "2025-12-13T00:06:36.103Z",
+                "lastUpdated": "2026-02-17T00:00:00.000Z",
                 "summaryVisible": true,
                 "justificationVisible": true
               },
@@ -148,7 +148,7 @@
         ]
       }
     ],
-    "notes": "A RevOps lead strategic initiatives totaling $906.8K to transform demo capabilities and sales enablement.\n\nDemo Enablement & Talent ($130K): Includes on-shore hire and internal promotions to establish a dedicated enablement team.\nTechnology Partnerships ($467.3K): Coast MSA renewal and Capital Markets expansion to sustain and scale demo services across FIS products.\n\nContent Innovation ($309.5K): License expansions for Tiled, Synthesia, Powtoon, and Figma to deliver interactive microapps, AI-driven videos, and creative marketing assets.\n\nOverall focus: accelerate adoption of new demo technologies, standardize content delivery, and enhance client engagement at scale."
+    "notes": "A RevOps lead strategic initiatives totaling $890.3K to transform demo capabilities and sales enablement.\n\nDemo Enablement & Talent ($130K): Includes on-shore hire and internal promotions to establish a dedicated enablement team.\nTechnology Partnerships ($467.3K): Coast MSA renewal and Capital Markets expansion to sustain and scale demo services across FIS products.\n\nContent Innovation ($293K): License expansions for Tiled, Synthesia, Powtoon, and Figma (for Tiled Native Extension) to deliver interactive microapps, AI-driven videos, and creative marketing assets.\n\nOverall focus: accelerate adoption of new demo technologies, standardize content delivery, and enhance client engagement at scale."
   },
   "_funding_0_type": "forecastBreakdown",
   "_funding_0_layoutZone": "full",

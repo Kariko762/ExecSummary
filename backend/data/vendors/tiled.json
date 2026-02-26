@@ -1,5 +1,6 @@
 {
   "id": "vendor-tiled-2026-01-06",
+  "vendorId": "vendor-tiled",
   "title": "Tiled Interactive Media",
   "_contentTag": "vendor",
   "_layout": "one-pager",
@@ -79,5 +80,65 @@
       "trend": "up",
       "subtitle": "Avg. time on interactive content: 4.2 min"
     }
-  }
+  },
+  "userList": [
+    {
+      "userId": "user-tiled-001",
+      "name": "Alexander Wright",
+      "email": "awright@fis.com",
+      "businessUnit": "capital-markets",
+      "licenseType": "creator",
+      "status": "active",
+      "lastActive": "2026-02-18",
+      "assignedDate": "2025-08-01",
+      "micrositesCreated": 4,
+      "totalViews": 892
+    },
+    {
+      "userId": "user-tiled-002",
+      "name": "Michael Rodriguez",
+      "email": "mrodriguez@fis.com",
+      "businessUnit": "banking-north-america",
+      "licenseType": "creator",
+      "status": "active",
+      "lastActive": "2026-02-21",
+      "assignedDate": "2025-09-15",
+      "micrositesCreated": 6,
+      "totalViews": 1234
+    },
+    {
+      "userId": "user-tiled-003",
+      "name": "Jordan Spence",
+      "email": "jspence@fis.com",
+      "businessUnit": "cross-bu",
+      "licenseType": "admin",
+      "status": "active",
+      "lastActive": "2026-02-23",
+      "assignedDate": "2025-07-01",
+      "micrositesCreated": 2,
+      "totalViews": 456
+    }
+  ],
+  "assetList": [
+    {
+      "assetId": "asset-003",
+      "assetName": "Capital Markets Tiled Microsite",
+      "businessUnit": "capital-markets",
+      "owner": "Alexander Wright",
+      "status": "active",
+      "lastUsed": "2026-02-18",
+      "views": 89,
+      "createdDate": "2025-12-10"
+    },
+    {
+      "assetId": "asset-010",
+      "assetName": "Banking NA - Tiled Product Overview",
+      "businessUnit": "banking-north-america",
+      "owner": "Michael Rodriguez",
+      "status": "active",
+      "lastUsed": "2026-02-21",
+      "views": 145,
+      "createdDate": "2025-11-20"
+    }
+  ]
 }

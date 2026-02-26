@@ -1,0 +1,91 @@
+{
+  "id": "weekly-summary-feb-24-2026",
+  "weekOf": "2026-02-24",
+  "quarter": "Q1 2026",
+  "createdBy": "Jason Hanscomb",
+  "createdDate": "2026-02-24T08:00:00Z",
+  "_contentTag": "leadership-bu-summary",
+  "status": "published",
+  "summaries": [
+    {
+      "buId": "banking-international",
+      "buName": "Banking International",
+      "title": "Q1 Digital Transformation Update",
+      "author": "Sarah Chen",
+      "role": "SVP, Banking International",
+      "date": "2026-02-22",
+      "summary": "International banking digital initiatives showing strong momentum with 95% on-track delivery. Mobile banking adoption increased 18% QoQ across EMEA and APAC regions. E6 demo agreement in final signature phase, HSBC Texas Tiled conversion completed successfully.",
+      "highlights": [
+        "Successfully launched mobile banking in 3 new markets",
+        "HSBC Texas presentation - Tiled conversion completed Feb 23rd",
+        "E6 Agreement pending signature for early March demo",
+        "Banking Audit progressing - Coast meetings scheduled for demo build",
+        "Customer satisfaction scores up 15 points"
+      ]
+    },
+    {
+      "buId": "banking-north-america",
+      "buName": "Banking North America",
+      "title": "North America Digital Banking Strategy",
+      "author": "Michael Rodriguez",
+      "role": "EVP, Banking North America",
+      "date": "2026-02-21",
+      "summary": "NA banking operations maintaining strong performance with focus on digital-first customer experience. Q1 targets on track with 92% completion rate. Tiled license expansion in progress through Sales Tech Tools procurement.",
+      "highlights": [
+        "Digital account opening increased 25% YoY",
+        "Branch optimization initiative reduced costs by $4.2M",
+        "New mobile app rated 4.8/5.0 with 2M+ downloads",
+        "Tiled licenses - Working US Procurement for additional capacity",
+        "Demo environment performance improvements deployed"
+      ]
+    },
+    {
+      "buId": "capital-markets",
+      "buName": "Capital Markets",
+      "title": "Trading Platform Modernization",
+      "author": "Alexander Wright",
+      "role": "SVP, Capital Markets",
+      "date": "2026-02-22",
+      "summary": "Capital markets technology transformation accelerating with new low-latency trading platform. MUFG ($6M+) AI demo in critical phase - Azure OpenAI authentication resolution underway. Expanded technology requirements for 30 Synthesia licenses and Tiled expansion.",
+      "highlights": [
+        "Reduced trade execution latency by 60%",
+        "Processed 2.5M trades daily with 99.99% uptime",
+        "MUFG AI demo - Azure authentication policy conflict being resolved",
+        "30 additional Synthesia licenses requested for client demos",
+        "Tiled expansion coordinating with Jon Pendergast for license distribution"
+      ]
+    },
+    {
+      "buId": "payments",
+      "buName": "Payments",
+      "title": "Payments Innovation Update",
+      "author": "Jennifer Lin",
+      "role": "SVP, Payments",
+      "date": "2026-02-20",
+      "summary": "Real-time payments platform achieving market-leading performance. License provisioning complete (Feb 13th) with follow-up training sessions scheduled post-CKO. Coast demos demonstrating strong engagement metrics.",
+      "highlights": [
+        "Processing 1.2M transactions per second",
+        "99.995% uptime across all payment channels",
+        "Payments licenses provisioned - Training Session 1: W/C March 2nd",
+        "Coast Mobile Banking demo: 342 views, 187 unique viewers",
+        "Instant settlement feature launched successfully"
+      ]
+    },
+    {
+      "buId": "cross-bu",
+      "buName": "Cross-BU Initiatives",
+      "title": "Demo Services & Technology Operations",
+      "author": "Jason Hanscomb",
+      "role": "Director, Demo Services",
+      "date": "2026-02-24",
+      "summary": "Cross-BU operations focused on platform continuity and governance. Coast MSA renewal completed ($267K), Executive Summary Platform deployed to production, Governance Framework on track for CKO release.",
+      "highlights": [
+        "Coast MSA renewal complete - PR184010376284 signed Feb 17th",
+        "Executive Summary Platform deployed - Network access Feb 20th",
+        "Governance Framework draft complete - Review scheduled for CKO",
+        "License audit in progress - 28 inactive Tiled accounts identified",
+        "Technology spend consolidation underway across all BUs"
+      ]
+    }
+  ]
+}

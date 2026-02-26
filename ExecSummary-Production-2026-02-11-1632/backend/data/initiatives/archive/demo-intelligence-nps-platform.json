@@ -1,0 +1,205 @@
+{
+  "id": "demo-intelligence-nps-platform",
+  "name": "Demo Intelligence & NPS Platform",
+  "shortName": "Demo Intelligence Platform",
+  "slug": "demo-intelligence-nps-platform",
+  "category": "customer-success",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "Data Analytics",
+    "Revenue Operations"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "high",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, deploy a demo intelligence and NPS platform to provide executive visibility and improve demo quality, increasing demo NPS by +15 points.",
+    "specific": {
+      "objectives": [
+        "Implement demo telemetry",
+        "Launch executive dashboards",
+        "Roll out demo NPS surveys"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Demo NPS: Baseline \u2192 +15",
+        "Dashboard coverage: 0% \u2192 100%",
+        "Monthly exec reports: 0 \u2192 12"
+      ]
+    },
+    "achievable": {
+      "resources": "Analytics engineers, BI tools",
+      "teamSize": "2 FTEs"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Customer Experience",
+        "Operational Excellence"
+      ],
+      "strategicThemes": [
+        "Data-Driven Decisions",
+        "Digital Transformation"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Dashboard MVP",
+          "deliverable": "Exec demo dashboard live",
+          "dueDate": "2026-10-31",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Demos instrumented",
+        "baseline": "0",
+        "target": "200",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Demo NPS",
+        "baseline": "0",
+        "target": "15",
+        "current": "0",
+        "unit": "points"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "No visibility into demo quality or impact.",
+    "opportunity": "Data-driven improvement.",
+    "solution": "Central intelligence and NPS platform.",
+    "expectedBenefits": [
+      "Improved demo quality",
+      "Exec transparency"
+    ],
+    "roi": "180% ROI in 12 months",
+    "paybackPeriod": "8 months"
+  },
+  "budget": {
+    "total": 180000,
+    "allocated": 180000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 90000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 50000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 20000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 10000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 10000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "RevOps Analytics Budget",
+    "costAvoidance": "$150K in manual reporting"
+  },
+  "funding": {
+    "requestedAmount": 180000,
+    "approvedAmount": 180000,
+    "approvalDate": "2026-06-01",
+    "approvedBy": "VP Revenue Operations",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 90000,
+        "releaseCondition": "Dashboard MVP approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-data-quality",
+      "description": "Poor telemetry quality",
+      "impact": "Inaccurate insights",
+      "probability": "medium",
+      "severity": "medium",
+      "mitigation": "Data validation",
+      "owner": "Data Analytics",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-dashboard",
+      "name": "Demo Dashboard Live",
+      "description": "Exec dashboard live",
+      "dueDate": "2026-10-31",
+      "status": "not-started",
+      "deliverables": [
+        "Dashboards"
+      ],
+      "acceptanceCriteria": [
+        "Exec signoff"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Revenue Operations",
+      "role": "Reporting Owner",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Dashboard adoption",
+      "communicationFrequency": "Monthly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Demo NPS",
+      "baseline": "0",
+      "target": "15",
+      "measurement": "NPS score",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-08-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-08-01T09:00:00Z",
+  "updatedAt": "2026-01-26T19:30:00Z",
+  "tags": [
+    "analytics",
+    "nps",
+    "dashboard"
+  ],
+  "notes": "Exec visibility and demo quality improvement engine."
+}

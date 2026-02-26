@@ -1,0 +1,163 @@
+{
+  "_contentTag": "vendor-summary",
+  "meta": {
+    "id": "tiled-vendor-summary-q1-2026",
+    "slug": "tiled-vendor-summary-q1-2026",
+    "title": "Tiled Technology Overview",
+    "category": "vendor",
+    "status": "published",
+    "createdAt": "2026-01-20T08:00:00Z",
+    "lastModified": "2026-02-04",
+    "author": "Technology Strategy Team",
+    "views": 0
+  },
+  "metadata": {
+    "vendorName": "Tiled",
+    "logo": "/vendor-logos/tiled.png",
+    "title": "Technology Overview",
+    "period": "Q1 2026"
+  },
+  "heroMetrics": [
+    {
+      "id": "personalization",
+      "icon": "sparkles",
+      "value": "Content Personalization",
+      "label": "Dynamic Microapp Experiences",
+      "iconColor": "text-cyan-400"
+    },
+    {
+      "id": "analytics",
+      "icon": "target",
+      "value": "Engagement Analytics",
+      "label": "Real-Time Content Intelligence",
+      "iconColor": "text-blue-400"
+    },
+    {
+      "id": "delivery",
+      "icon": "trending",
+      "value": "Multi-Channel Delivery",
+      "label": "Web, Mobile, Email Integration",
+      "iconColor": "text-purple-400"
+    },
+    {
+      "id": "interactive",
+      "icon": "zap",
+      "value": "Interactive Content",
+      "label": "Beyond Static PDFs",
+      "iconColor": "text-cyan-400"
+    }
+  ],
+  "storytellingIndex": {
+    "overallScore": 85,
+    "maxScore": 100,
+    "title": "THE CONTENT ENGAGEMENT INDEX",
+    "subtitle": "Transforming static sales content into interactive microapps that track buyer engagement and drive action through personalized, measurable experiences.",
+    "segments": [
+      {
+        "name": "Content Engagement",
+        "score": 88
+      },
+      {
+        "name": "Personalization",
+        "score": 82
+      },
+      {
+        "name": "Analytics Depth",
+        "score": 90
+      },
+      {
+        "name": "Multi-Channel",
+        "score": 84
+      },
+      {
+        "name": "Buyer Experience",
+        "score": 86
+      },
+      {
+        "name": "Sales Enablement",
+        "score": 81
+      },
+      {
+        "name": "ROI Visibility",
+        "score": 84
+      }
+    ]
+  },
+  "featureCards": [
+    {
+      "title": "Create Interactive Microapps",
+      "icon": "workflow",
+      "color": "cyan",
+      "features": [
+        "Drag-and-Drop Content Builder",
+        "Responsive Design Templates",
+        "Multimedia Integration",
+        "Interactive Elements & CTAs"
+      ]
+    },
+    {
+      "title": "Track Buyer Engagement",
+      "icon": "story",
+      "color": "blue",
+      "features": [
+        "Page-Level Analytics",
+        "Time-on-Content Metrics",
+        "Clickthrough Tracking",
+        "Lead Scoring Integration"
+      ]
+    },
+    {
+      "title": "Personalize at Scale",
+      "icon": "gtm",
+      "color": "purple",
+      "features": [
+        "Dynamic Content Blocks",
+        "Industry-Specific Templates",
+        "Role-Based Personalization",
+        "CRM Data Integration"
+      ]
+    }
+  ],
+  "problemsSolved": [
+    {
+      "title": "Static content provides no insights",
+      "description": "Traditional PDFs and presentations offer zero visibility into buyer engagement. Tiled tracks every interaction, revealing which content drives deals forward."
+    },
+    {
+      "title": "Personalization doesn't scale",
+      "description": "Creating custom collateral for each prospect manually is impossible at scale. Tiled's dynamic blocks auto-personalize content based on industry, role, and CRM data."
+    },
+    {
+      "title": "Multi-channel content chaos",
+      "description": "Managing separate formats for web, mobile, and email creates operational burden. Tiled's responsive microapps work everywhere from a single source."
+    },
+    {
+      "title": "Can't prove content ROI",
+      "description": "Marketing struggles to connect content consumption to pipeline and revenue. Tiled's analytics tie engagement directly to deal progression and closed-won revenue."
+    }
+  ],
+  "gtmHighlights": [
+    {
+      "title": "Sales Collateral Transformation",
+      "description": "Sales replaced static PDFs with interactive microapps, increasing content engagement from 12% to 74% and shortening sales cycles by 23 days."
+    },
+    {
+      "title": "Account-Based Marketing",
+      "description": "ABM creates personalized content experiences for each target account, with engagement scores feeding into lead scoring and routing logic."
+    },
+    {
+      "title": "Post-Demo Follow-Up",
+      "description": "SEs send interactive recaps after demos that maintain engagement between meetings, resulting in 47% faster deal progression."
+    },
+    {
+      "title": "Content Performance Analytics",
+      "description": "Marketing now has visibility into which content assets drive pipeline, enabling data-driven decisions on content investment and retirement."
+    },
+    {
+      "title": "Customer Education & Onboarding",
+      "description": "CS uses interactive guides for onboarding, tracking which sections customers engage with to identify knowledge gaps and reduce support tickets."
+    }
+  ],
+  "executiveSummary": "Tiled has fundamentally changed how we create, distribute, and measure sales and marketing content. By replacing static PDFs with interactive microapps, we've gained unprecedented visibility into buyer engagement while delivering experiences that drive action.\n\nKey metrics: Content engagement has increased dramatically, sales cycles have shortened substantially, and we can now tie specific content assets to closed-won revenue. The platform integrates with our CRM to auto-personalize content based on industry, company size, and buyer role—personalization that would be impossible to achieve manually.\n\nStrategic value: Tiled isn't just making content prettier—it's turning content into a measurable revenue driver. Sales now has data on which collateral moves deals forward. Marketing can prove ROI on content investments. And buyers get personalized, interactive experiences instead of generic PDFs.\n\nRecommendation: Expand to customer education and partner enablement. Integrate deeper with marketing automation to trigger personalized content journeys based on buyer behavior signals.",
+  "_published": true
+}

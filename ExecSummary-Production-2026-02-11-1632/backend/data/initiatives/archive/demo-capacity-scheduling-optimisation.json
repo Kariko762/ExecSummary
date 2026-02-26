@@ -1,0 +1,138 @@
+{
+  "id": "demo-capacity-scheduling-optimisation",
+  "name": "Demo Capacity & Scheduling Optimisation",
+  "shortName": "Demo Capacity Optimisation",
+  "slug": "demo-capacity-scheduling-optimisation",
+  "category": "sales-operations",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "Sales Operations",
+    "Sales Engineering Leadership"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "high",
+  "progress": 10,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, optimize demo capacity and scheduling to increase customer-facing demo hours from 13,478 to 18,000 and improve demo availability SLA to 98%.",
+    "measurable": {
+      "metrics": [
+        "Demo hours: 13,478 → 18,000",
+        "Demo availability SLA: 85% → 98%",
+        "Deals supported per quarter: 100 → 150"
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Capacity model approved",
+        "baseline": "0",
+        "target": "1",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Customer-facing demo hours",
+        "baseline": "13478",
+        "target": "18000",
+        "current": "13478",
+        "unit": "hours"
+      }
+    ]
+  },
+  "businessCase": {
+    "roi": "180% ROI in 12 months",
+    "paybackPeriod": "7 months"
+  },
+  "budget": {
+    "total": 150000,
+    "allocated": 150000,
+    "spent": 0,
+    "currency": "USD"
+  },
+  "funding": {
+    "requestedAmount": 150000,
+    "approvedAmount": 150000,
+    "approvalDate": "2026-06-01",
+    "approvedBy": "VP Sales Operations",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 80000,
+        "releaseCondition": "Capacity model approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-adoption",
+      "description": "Low adoption of new scheduling",
+      "impact": "Limited benefit",
+      "probability": "medium",
+      "severity": "medium",
+      "mitigation": "Training and exec backing",
+      "owner": "Sales Operations",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-capacity",
+      "name": "Capacity Model Live",
+      "description": "New capacity model in use",
+      "dueDate": "2026-10-31",
+      "status": "not-started",
+      "deliverables": [
+        "Capacity model"
+      ],
+      "acceptanceCriteria": [
+        "Leadership signoff"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Sales Operations",
+      "role": "Process Owner",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Design and rollout",
+      "communicationFrequency": "Monthly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Demo hours",
+      "baseline": "13478",
+      "target": "18000",
+      "measurement": "Total demo hours",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-08-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-08-01T09:00:00Z",
+  "updatedAt": "2026-01-28T18:36:08.553Z",
+  "tags": [
+    "capacity",
+    "scheduling",
+    "sales-ops"
+  ],
+  "notes": "Drives increased presentation time and SLA improvements."
+}

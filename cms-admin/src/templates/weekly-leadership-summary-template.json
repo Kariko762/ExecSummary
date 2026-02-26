@@ -1,0 +1,22 @@
+{
+  "_templateName": "weekly-leadership-summary",
+  "title": "Weekly Leadership Summary",
+  "status": "draft",
+  "_contentTag": "leadership-summary",
+  "_published": false,
+  "metadata": {
+    "weekStart": "",
+    "weekEnd": "",
+    "title": "Weekly Leadership Summary",
+    "description": "Executive leadership summary"
+  },
+  "bluf": {
+    "bottomLine": [],
+    "background": "",
+    "assessment": "",
+    "recommendation": "",
+    "asks": []
+  },
+  "priorities": [],
+  "risks": []
+}

@@ -1,0 +1,213 @@
+{
+  "id": "automated-demo-provisioning-factory",
+  "name": "Automated Demo Provisioning & Factory (Coast)",
+  "shortName": "Demo Provisioning Factory",
+  "slug": "automated-demo-provisioning-factory",
+  "category": "infrastructure",
+  "owner": "Head of Demo Services",
+  "coOwners": [
+    "Cloud Engineering",
+    "Sales Engineering Leadership"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "planning",
+  "priority": "critical",
+  "progress": 0,
+  "projectStage": "planning",
+  "linkedGoals": [],
+  "smartGoal": {
+    "statement": "By 2027-12-31, implement automated demo provisioning using Coast to enable 75% of demos to be auto-provisioned and reduce average demo setup time from 5 days to 1 day.",
+    "specific": {
+      "objectives": [
+        "Integrate Coast with approved platforms",
+        "Build automated provisioning pipelines",
+        "Enable self-service provisioning for priority demos"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Auto-provisioned demos: 10% \u2192 75%",
+        "Provisioning time: 5 days \u2192 1 day",
+        "Manual setup effort: Baseline \u2192 -60%"
+      ]
+    },
+    "achievable": {
+      "resources": "Demo engineers, Coast licenses, cloud automation",
+      "teamSize": "3 FTEs"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Sales Productivity",
+        "Operational Excellence"
+      ],
+      "strategicThemes": [
+        "Process Automation",
+        "Technology Modernization"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "MVP Automation",
+          "deliverable": "Automated provisioning for pilot demos",
+          "dueDate": "2026-09-30",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Automation pipelines built",
+        "baseline": "0",
+        "target": "20",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Auto-provisioned demos",
+        "baseline": "10",
+        "target": "75",
+        "current": "10",
+        "unit": "%"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "Manual demo provisioning creates delays and bottlenecks.",
+    "opportunity": "Automation increases sales capacity and reduces cost.",
+    "solution": "Use Coast to automate demo provisioning.",
+    "expectedBenefits": [
+      "60% reduction in setup time",
+      "Higher demo throughput"
+    ],
+    "roi": "300% ROI in 18 months",
+    "paybackPeriod": "8 months"
+  },
+  "budget": {
+    "total": 450000,
+    "allocated": 450000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Engineering/Development",
+        "allocated": 250000,
+        "spent": 0
+      },
+      {
+        "category": "Infrastructure & Tools",
+        "allocated": 120000,
+        "spent": 0
+      },
+      {
+        "category": "Training & Change Management",
+        "allocated": 40000,
+        "spent": 0
+      },
+      {
+        "category": "External Vendors/Consultants",
+        "allocated": 25000,
+        "spent": 0
+      },
+      {
+        "category": "Contingency Reserve",
+        "allocated": 15000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "RevOps Transformation",
+    "costAvoidance": "$1.2M annually"
+  },
+  "funding": {
+    "requestedAmount": 450000,
+    "approvedAmount": 450000,
+    "approvalDate": "2026-03-01",
+    "approvedBy": "CRO & CIO",
+    "phaseGates": [
+      {
+        "phase": "Phase 1",
+        "amount": 200000,
+        "releaseCondition": "MVP approved",
+        "status": "released"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [],
+    "external": [],
+    "blocking": []
+  },
+  "resources": {
+    "team": [],
+    "tools": [
+      {
+        "name": "Coast",
+        "purpose": "Demo automation",
+        "cost": 80000,
+        "license": "Enterprise",
+        "status": "active"
+      }
+    ],
+    "training": []
+  },
+  "risks": [
+    {
+      "id": "risk-coast-scale",
+      "description": "Automation complexity higher than expected",
+      "impact": "Delays",
+      "probability": "medium",
+      "severity": "high",
+      "mitigation": "Pilot-first rollout",
+      "owner": "Head of Demo Services",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-factory",
+      "name": "Provisioning Factory Live",
+      "description": "Automated provisioning live",
+      "dueDate": "2026-09-30",
+      "status": "not-started",
+      "deliverables": [
+        "Automation pipelines"
+      ],
+      "acceptanceCriteria": [
+        "Pilot demos automated"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Sales Engineering Leadership",
+      "role": "Primary Users",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Pilot participation",
+      "communicationFrequency": "Bi-weekly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Auto-provisioned demos",
+      "baseline": "10%",
+      "target": "75%",
+      "measurement": "% demos auto-built",
+      "frequency": "Quarterly"
+    }
+  ],
+  "startDate": "2026-05-01",
+  "endDate": "2027-12-31",
+  "createdAt": "2026-05-01T09:00:00Z",
+  "updatedAt": "2026-01-26T19:00:00Z",
+  "tags": [
+    "automation",
+    "coast",
+    "factory"
+  ],
+  "notes": "Core automation engine for demo scale."
+}

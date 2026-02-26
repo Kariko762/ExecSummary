@@ -1,0 +1,104 @@
+{
+  "id": "performance-dashboard-q1-2026",
+  "title": "Performance Dashboard - Q1 2026",
+  "period": "Q1 2026",
+  "lastUpdated": "2026-01-29",
+  "weeklyData": [
+    {
+      "week": "2026-W01",
+      "businessUnit": "Capital Markets",
+      "demoSupportHours": 12,
+      "demoPrepHours": 45,
+      "demoPresentationVirtualHours": 28,
+      "demoPresentationPhysicalHours": 8
+    },
+    {
+      "week": "2026-W01",
+      "businessUnit": "Banking International",
+      "demoSupportHours": 18,
+      "demoPrepHours": 52,
+      "demoPresentationVirtualHours": 35,
+      "demoPresentationPhysicalHours": 12
+    },
+    {
+      "week": "2026-W01",
+      "businessUnit": "Banking North America",
+      "demoSupportHours": 15,
+      "demoPrepHours": 48,
+      "demoPresentationVirtualHours": 32,
+      "demoPresentationPhysicalHours": 10
+    },
+    {
+      "week": "2026-W02",
+      "businessUnit": "Capital Markets",
+      "demoSupportHours": 14,
+      "demoPrepHours": 50,
+      "demoPresentationVirtualHours": 30,
+      "demoPresentationPhysicalHours": 9
+    },
+    {
+      "week": "2026-W02",
+      "businessUnit": "Banking International",
+      "demoSupportHours": 20,
+      "demoPrepHours": 55,
+      "demoPresentationVirtualHours": 38,
+      "demoPresentationPhysicalHours": 14
+    },
+    {
+      "week": "2026-W02",
+      "businessUnit": "Banking North America",
+      "demoSupportHours": 16,
+      "demoPrepHours": 50,
+      "demoPresentationVirtualHours": 34,
+      "demoPresentationPhysicalHours": 11
+    },
+    {
+      "week": "2026-W03",
+      "businessUnit": "Capital Markets",
+      "demoSupportHours": 13,
+      "demoPrepHours": 47,
+      "demoPresentationVirtualHours": 29,
+      "demoPresentationPhysicalHours": 8
+    },
+    {
+      "week": "2026-W03",
+      "businessUnit": "Banking International",
+      "demoSupportHours": 19,
+      "demoPrepHours": 54,
+      "demoPresentationVirtualHours": 36,
+      "demoPresentationPhysicalHours": 13
+    },
+    {
+      "week": "2026-W03",
+      "businessUnit": "Banking North America",
+      "demoSupportHours": 17,
+      "demoPrepHours": 51,
+      "demoPresentationVirtualHours": 33,
+      "demoPresentationPhysicalHours": 10
+    },
+    {
+      "week": "2026-W04",
+      "businessUnit": "Capital Markets",
+      "demoSupportHours": 15,
+      "demoPrepHours": 49,
+      "demoPresentationVirtualHours": 31,
+      "demoPresentationPhysicalHours": 9
+    },
+    {
+      "week": "2026-W04",
+      "businessUnit": "Banking International",
+      "demoSupportHours": 21,
+      "demoPrepHours": 56,
+      "demoPresentationVirtualHours": 39,
+      "demoPresentationPhysicalHours": 15
+    },
+    {
+      "week": "2026-W04",
+      "businessUnit": "Banking North America",
+      "demoSupportHours": 18,
+      "demoPrepHours": 52,
+      "demoPresentationVirtualHours": 35,
+      "demoPresentationPhysicalHours": 12
+    }
+  ]
+}

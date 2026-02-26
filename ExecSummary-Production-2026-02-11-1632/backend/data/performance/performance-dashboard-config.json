@@ -1,0 +1,37 @@
+{
+  "_contentTag": "performance",
+  "_contentName": "Performance Dashboard Configuration",
+  "_description": "Configure which performance tabs and data sources appear in the frontend Performance Dashboard",
+  "tabs": [
+    {
+      "id": "kai",
+      "label": "Key Activity Insights",
+      "file": "performance_kai",
+      "enabled": true,
+      "order": 1
+    },
+    {
+      "id": "demostudio",
+      "label": "Demo Studio",
+      "file": "performance_demostudio",
+      "enabled": true,
+      "order": 2
+    },
+    {
+      "id": "coast",
+      "label": "Coast",
+      "file": "week-vendor-performance-q1-2026-01-23",
+      "enabled": true,
+      "order": 3
+    },
+    {
+      "id": "tiled",
+      "label": "Tiled",
+      "file": "performance_tiled",
+      "enabled": true,
+      "order": 4
+    }
+  ],
+  "createdDate": "2026-01-28",
+  "lastUpdated": "2026-01-28"
+}

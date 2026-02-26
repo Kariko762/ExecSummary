@@ -171,7 +171,7 @@ export default function LeadershipEditor({ data, onSave, onClose, isNewContent }
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-hidden flex">
+        <div className="flex-1 overflow-hidden flex px-20">
           {/* Editor Panel */}
           <div className={`${showPreview ? 'w-1/2' : 'w-full'} overflow-y-auto p-6 border-r border-gray-200 dark:border-gray-700`}>
             {/* Basic Info */}

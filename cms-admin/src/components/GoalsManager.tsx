@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Edit2, Save, Target, TrendingUp, CheckCircle, AlertCircle, Users, HelpCircle, Settings, Download, Sparkles, Maximize2, Minimize2 } from 'lucide-react';
+import { X, Plus, Edit2, Save, Target, TrendingUp, CheckCircle, AlertCircle, Users, HelpCircle, Settings, Download, Sparkles, Maximize2, Minimize2, Flag } from 'lucide-react';
 import ViewGoalModal from './ViewGoalModal';
 import GoalsSettingsModal from './GoalsSettingsModal';
 import AIGoalBuilderWizard from './AIGoalBuilderWizard';
@@ -33,6 +33,7 @@ interface Goal {
   createdDate: string;
   lastUpdated: string;
   targetDate: string;
+  _published?: boolean;
 }
 
 interface Category {
@@ -54,9 +55,10 @@ interface GoalsManagerProps {
   isOpen: boolean;
   onClose: () => void;
   showNotification?: (type: 'success' | 'error' | 'info', message: string) => void;
+  initialGoalId?: string;
 }
 
-export default function GoalsManager({ isOpen, onClose, showNotification }: GoalsManagerProps) {
+export default function GoalsManager({ isOpen, onClose, showNotification, initialGoalId }: GoalsManagerProps) {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [croImpactAreas, setCroImpactAreas] = useState<CroImpactArea[]>([]);
@@ -69,6 +71,7 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
   const [viewingGoal, setViewingGoal] = useState<Goal | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showAIBuilder, setShowAIBuilder] = useState(false);
+  const [showPublishModal, setShowPublishModal] = useState(false);
   const [modalWidth, setModalWidth] = useState<75 | 95 | 100>(75);
 
   // Fetch goals from API
@@ -77,6 +80,17 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
       fetchGoals();
     }
   }, [isOpen]);
+
+  // Auto-open editor for initial goal ID
+  useEffect(() => {
+    if (initialGoalId && goals.length > 0 && !loading) {
+      const goalToEdit = goals.find(g => g.id === initialGoalId);
+      if (goalToEdit) {
+        setEditingGoal(goalToEdit);
+        setShowEditor(true);
+      }
+    }
+  }, [initialGoalId, goals, loading]);
 
   const fetchGoals = async () => {
     try {
@@ -176,6 +190,16 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
       console.error('Failed to save goal:', error);
       showNotification?.('error', 'Failed to save goal');
     }
+  };
+
+  const handlePublishToggle = () => {
+    if (!editingGoal) return;
+    setEditingGoal({ ...editingGoal, _published: !editingGoal._published });
+    setShowPublishModal(false);
+    showNotification?.(
+      'success',
+      `Goal ${editingGoal._published ? 'unpublished' : 'published'} successfully`
+    );
   };
 
   const handleDeleteGoal = async (id: string) => {
@@ -574,6 +598,27 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
                   <p className="text-white/80 text-xs mt-0.5">SMART framework aligned with CRO/RevOps priorities</p>
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowPublishModal(true)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
+                      editingGoal._published
+                        ? 'bg-green-500/20 border-green-500/50 text-white hover:bg-green-500/30'
+                        : 'bg-white/20 border-white/10 text-white/60 hover:bg-white/30'
+                    }`}
+                    title={editingGoal._published ? 'Published' : 'Draft'}
+                  >
+                    {editingGoal._published ? (
+                      <>
+                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                        <span className="text-sm font-roobert-medium">Published</span>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-2 h-2 rounded-full bg-white/30" />
+                        <span className="text-sm font-roobert-medium">Draft</span>
+                      </>
+                    )}
+                  </button>
                   <button
                     onClick={handleSaveGoal}
                     className="p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
@@ -1510,6 +1555,70 @@ export default function GoalsManager({ isOpen, onClose, showNotification }: Goal
         onClose={() => setViewingGoal(null)}
       />
     )}
+
+    {/* Publish/Unpublish Confirmation Modal */}
+    <AnimatePresence>
+      {showPublishModal && editingGoal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+          onClick={() => setShowPublishModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white dark:bg-gray-800 rounded-xl w-full max-w-md shadow-2xl overflow-hidden"
+          >
+            <div className={`px-6 py-4 ${editingGoal._published ? 'bg-gradient-to-r from-orange-500 to-orange-600' : 'bg-gradient-to-r from-green-500 to-green-600'}`}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+                  <Flag className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-roobert-bold text-white">
+                    {editingGoal._published ? 'Unpublish' : 'Publish'} Goal
+                  </h3>
+                  <p className="text-white/80 text-sm">
+                    {editingGoal._published ? 'Hide from public view' : 'Make visible to all users'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="px-6 py-4">
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
+                {editingGoal._published
+                  ? 'This goal will be hidden from the public-facing dashboard. Only CMS administrators will be able to see it.'
+                  : 'This goal will be visible on the public-facing dashboard for all users to see.'}
+              </p>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowPublishModal(false)}
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handlePublishToggle}
+                  className={`flex-1 px-4 py-2 rounded-lg text-white transition-colors ${
+                    editingGoal._published
+                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700'
+                      : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
+                  }`}
+                >
+                  {editingGoal._published ? 'Unpublish' : 'Publish'}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
     </>
   );
 }

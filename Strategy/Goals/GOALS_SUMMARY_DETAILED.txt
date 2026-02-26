@@ -1,0 +1,579 @@
+================================================================================
+                    STRATEGIC GOALS - DETAILED SUMMARY
+                          Generated: February 4, 2026
+================================================================================
+
+Total Goals: 10
+Status: All goals currently in "Not Started" status
+Target Completion: 2026-12-31 (9 goals) | 2027-12-31 (1 goal)
+
+================================================================================
+
+GOAL 1: TRANSFORM DEMO PREPARATION THROUGH AUTOMATION & STANDARDISATION
+================================================================================
+ID: automate-demo-prep
+Short Name: Automate Demo Prep
+Category: Process Optimization
+Owner: Demo Services
+Co-Owners: Sales Engineering, IT Operations, Product
+Priority: Medium | Status: Not Started | Progress: 0%
+Target Date: 2026-12-31
+
+SMART STATEMENT:
+By 2026-12-31, reduce total demo preparation hours by automating environment 
+provisioning and standardising demo assets, resulting in faster readiness and 
+reduced manual effort.
+
+KEY OBJECTIVES:
+• Deploy automated demo environment provisioning
+• Standardise core demo blueprints by product and use case
+• Centralise ownership of demo environments
+• Reduce rep-managed demo systems
+
+MEASURABLE TARGETS:
+• Demo prep hours: 21,915 → 14,000
+• Automated environment coverage: 10% → 75%
+• Standard demo blueprint adoption: 0% → 80%
+• Rep-supported demo hours: 1,613 → 400
+
+RESOURCES & OWNERSHIP:
+Resources: Automation tooling, platform engineering, demo platform budget
+Ownership: Demo Ops owns automation, IT owns infrastructure, Product defines 
+standards
+
+CRO ALIGNMENT:
+• Sales Productivity
+• Sales Cycle Delays
+• Pipeline Risk
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2026): Assessment & Design → Target demo automation architecture 
+  and standards
+Phase 2 (Q2 2026): Platform Build → Automated provisioning MVP
+Phase 3 (Q3 2026): Rollout & Adoption → Standard demos live for priority 
+  products
+Phase 4 (Q4 2026): Optimisation → Prep hour reduction fully realised
+
+LEADING INDICATORS:
+• Automated environments deployed: 0 → 50 count
+• Standard demo templates created: 0 → 30 count
+• Users onboarded to platform: 0 → 200 count
+
+LAGGING INDICATORS:
+• Total demo prep hours: 21,915 → 14,000 hours
+• Rep-supported demo hours: 1,613 → 400 hours
+• Average time to provision demo: 5 → 1 days
+
+================================================================================
+
+GOAL 2: INCREASE REVENUE-FACING DEMO CAPACITY & PRESENTATION TIME
+================================================================================
+ID: increase-demo-presentation-capacity
+Short Name: Increase Presentation Time
+Category: Sales Operations
+Owner: Demo Services
+Co-Owners: Sales, Sales Engineering, Revenue Operations
+Priority: High | Status: Not Started | Progress: 0%
+Target Date: 2026-12-31
+
+SMART STATEMENT:
+By 2026-12-31, increase customer-facing demo presentation hours by reallocating 
+time saved from prep automation, resulting in higher sales capacity and deal 
+coverage.
+
+KEY OBJECTIVES:
+• Reallocate prep time savings to presentation capacity
+• Improve prep-to-present ratio
+• Increase supported deal coverage
+• Expand demo availability for peak sales periods
+
+MEASURABLE TARGETS:
+• Demo presentation hours: 13,478 → 18,000
+• Prep-to-present ratio: 1.6 → 0.9
+• Deals supported per quarter: 100 → 150
+• Demo availability SLA: 85% → 98%
+
+RESOURCES & OWNERSHIP:
+Resources: Automation gains, scheduling tools, capacity planning
+Ownership: Demo Ops manages capacity, Sales aligns demand
+
+CRO ALIGNMENT:
+• Sales Productivity
+• Deal Conversion
+• Sales Cycle Delays
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2026): Baseline & Capacity Model → New capacity model approved
+Phase 2 (Q2 2026): Reallocation → Prep savings redirected to demos
+Phase 3 (Q3 2026): Scaling → Expanded demo coverage live
+Phase 4 (Q4 2026): Optimisation → Target presentation hours achieved
+
+LEADING INDICATORS:
+• Prep hours reallocated: 0 → 6,000 hours
+• Demo capacity slots created: 0 → 200 count
+• Scheduling utilisation: 70% → 90%
+
+LAGGING INDICATORS:
+• Presentation hours: 13,478 → 18,000 hours
+• Deals supported: 400 → 600 count
+• Win rate on demo-led deals: 22% → 28%
+
+================================================================================
+
+GOAL 3: ESTABLISH DEMO AS A SCALABLE REVENUE & LEAD GENERATION CHANNEL
+================================================================================
+ID: demo-lead-generation
+Short Name: Demo Lead Gen
+Category: Revenue Growth
+Owner: Demo Services
+Co-Owners: Marketing, Sales, Product Marketing, Sales Enablement
+Priority: High | Status: Not Started | Progress: 0%
+Target Date: 2026-12-31
+
+SMART STATEMENT:
+By 2026-12-31, launch self-service demo experiences and Tiled.io-powered 
+microsites to generate qualified leads and enable personalised sales engagement, 
+resulting in increased top-of-funnel pipeline and higher seller productivity.
+
+KEY OBJECTIVES:
+• Deploy Tiled.io as standard demo microsite platform
+• Deploy self-service demo experiences
+• Create reusable microsite templates by product and persona
+• Integrate demo with marketing lead capture and CRM
+• Enable personalised demo journeys for strategic accounts
+
+MEASURABLE TARGETS:
+• Self-service demos launched: 0 → 10
+• Microsites live: 0 → 50
+• Leads generated from demos: 0 → 1,200
+• Microsite-driven demo requests: 0 → 1,500
+• Demo-to-opportunity conversion: 0% → 15%
+• Seller adoption rate: 0% → 75%
+• Pipeline influenced by demos: £0 → £15M
+
+RESOURCES & OWNERSHIP:
+Resources: Tiled.io licenses, self-service demo platform, marketing integration, 
+enablement content, integration engineering
+Ownership: Demo owns platform and templates, Marketing owns lead flow, Sales 
+owns follow-up, Sales Enablement drives adoption
+
+CRO ALIGNMENT:
+• Pipeline Risk
+• Deal Conversion
+• Forecast Confidence
+• Sales Productivity
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2026): Platform Setup → Tiled.io configured and self-service 
+  platform chosen
+Phase 2 (Q2 2026): Template Build & Pilot → Core microsite templates and 
+  initial self-service demos live
+Phase 3 (Q3 2026): Seller Rollout & Scale → Sales teams enabled, persona-based 
+  journeys deployed
+Phase 4 (Q4 2026): Optimise → Account-level personalisation and lead/pipeline 
+  targets achieved
+
+LEADING INDICATORS:
+• Self-service demos published: 0 → 10 count
+• Microsite templates created: 0 → 25 count
+• Microsites published: 0 → 50 count
+• Sellers trained on microsites: 0 → 300 count
+• Demo session starts: 0 → 5,000 count
+
+LAGGING INDICATORS:
+• Leads generated: 0 → 1,200 count
+• Microsite-driven demo requests: 0 → 1,500 count
+• Opportunities sourced: 0 → 180 count
+• Seller adoption rate: 0% → 75%
+• Demo engagement rate: 0% → 40%
+• Pipeline influenced: £0 → £15,000,000
+
+================================================================================
+
+GOAL 4: DELIVER EXECUTIVE-LEVEL TRANSPARENCY, DEMO INTELLIGENCE & EXPERIENCE 
+QUALITY (NPS)
+================================================================================
+ID: demo-intelligence-nps
+Short Name: Demo Intelligence & NPS
+Category: Customer Success
+Owner: Demo Services
+Co-Owners: Revenue Operations, Sales Leadership, Customer Experience
+Priority: High | Status: Not Started | Progress: 0%
+Target Date: 2026-12-31
+
+SMART STATEMENT:
+By 2026-12-31, implement an executive demo intelligence platform with NPS and 
+feedback tracking, resulting in improved demo quality, accountability, and 
+revenue alignment.
+
+KEY OBJECTIVES:
+• Launch executive demo operations dashboard
+• Implement demo NPS collection
+• Capture qualitative demo feedback
+• Establish monthly exec reporting cadence
+
+MEASURABLE TARGETS:
+• Dashboard coverage: 0% → 100%
+• Demo NPS baseline established: No → Yes
+• Demo NPS score: TBD → +15 improvement
+• Monthly exec reports: 0 → 12
+
+RESOURCES & OWNERSHIP:
+Resources: BI tooling, survey platform, RevOps analytics support
+Ownership: RevOps owns dashboard, Demo owns NPS and feedback
+
+CRO ALIGNMENT:
+• Customer Sat
+• Forecast Confidence
+• Deal Conversion
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2026): Data Design → Executive metrics framework
+Phase 2 (Q2 2026): Dashboard MVP → Live executive dashboard
+Phase 3 (Q3 2026): NPS Rollout → NPS live for all demos
+Phase 4 (Q4 2026): Optimisation → Closed-loop improvement process
+
+LEADING INDICATORS:
+• Dashboards live: 0 → 1 count
+• NPS surveys sent: 0 → 3,000 count
+• Feedback responses: 0 → 1,200 count
+
+LAGGING INDICATORS:
+• Demo NPS score: 0 → 15 count
+• Exec report adoption: 0 → 12 count
+• Demo quality issues resolved: 0 → 50 count
+
+================================================================================
+
+GOAL 5: BUILD AN INTEGRATED DEMO DATA & TECHNOLOGY ECOSYSTEM WITH ROI 
+ATTRIBUTION
+================================================================================
+ID: integrated-demo-ecosystem
+Short Name: Integrated Demo Ecosystem
+Category: Innovation
+Owner: Revenue Operations
+Co-Owners: Demo Services, IT, Data & Analytics, Finance
+Priority: High | Status: Not Started | Progress: 0%
+Target Date: 2026-12-31
+
+SMART STATEMENT:
+By 2026-12-31, integrate demo platforms with CRM and financial systems to enable 
+end-to-end demo-to-revenue tracking and ROI reporting, resulting in clear 
+accountability and investment justification.
+
+KEY OBJECTIVES:
+• Integrate demo platform with CRM
+• Define standard demo influence and attribution model
+• Enable demo-to-opportunity attribution
+• Implement demo ROI and cost-to-serve reporting
+• Centralise demo analytics
+• Publish quarterly demo revenue impact reports
+
+MEASURABLE TARGETS:
+• CRM integration coverage: 0% → 100%
+• Opportunities with demo attribution: 20% → 90%
+• Deals with tracked demo influence: 15% → 85%
+• Demo ROI visibility: 0% → 100%
+• Cost-per-demo tracked: No → Yes
+• Manual reporting effort: 40 hrs/month → 5 hrs/month
+
+RESOURCES & OWNERSHIP:
+Resources: CRM integration, BI tooling, RevOps analytics support, data platform, 
+financial tracking tools
+Ownership: RevOps owns attribution model and data model, IT builds integrations, 
+Demo owns activity tracking, Finance validates ROI
+
+CRO ALIGNMENT:
+• Forecast Confidence
+• Pipeline Risk
+• Sales Productivity
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2026): Attribution Design → Standard demo attribution framework and 
+  integration architecture
+Phase 2 (Q2 2026): CRM Integration → Demo activity linked to opportunities, CRM 
+  and demo platform connected
+Phase 3 (Q3 2026): ROI Reporting → Demo-to-revenue attribution live, Demo ROI 
+  dashboards built
+Phase 4 (Q4 2026): Executive Adoption → Full ecosystem reporting, Quarterly 
+  exec ROI reporting cadence
+
+LEADING INDICATORS:
+• Integrations built: 0 → 5 count
+• Attribution rules configured: 0 → 10 count
+• Opportunities with demo activity logged: 20% → 90%
+• Data fields mapped: 0 → 100 count
+• Revenue reports built: 0 → 5 count
+
+LAGGING INDICATORS:
+• Attribution coverage: 0% → 90%
+• Deals with demo influence: 15% → 85%
+• Demo ROI visibility: 0% → 100%
+• Manual reporting hours: 40 → 5 hours
+• Demo-to-revenue visibility: 0% → 100%
+• Exec adoption of ROI reports: 0 → 12 count
+
+================================================================================
+
+GOAL 6: ESTABLISH DEMO ASSET GOVERNANCE & DATA VERIFICATION
+================================================================================
+ID: demo-asset-governance
+Short Name: Demo Asset Governance
+Category: Process Optimization
+Owner: Demo Services
+Co-Owners: IT, Product, Revenue Operations
+Priority: High | Status: Not Started | Progress: 0%
+Target Date: 2026-12-31
+
+SMART STATEMENT:
+By 2026-12-31, establish a governed, verified inventory of all demo assets and 
+data, resulting in improved accuracy, reduced risk, and higher demo reliability.
+
+KEY OBJECTIVES:
+• Create a central demo asset inventory and registry
+• Implement regular demo data verification and audits
+• Define ownership and lifecycle management for demo assets
+• Retire outdated or duplicate demo environments and assets
+
+MEASURABLE TARGETS:
+• Demo assets inventoried: 0% → 100%
+• Verified demo data coverage: 0% → 95%
+• Outdated assets retired: 0 → 150
+• Demo data accuracy incidents: 20 → 3
+
+RESOURCES & OWNERSHIP:
+Resources: Asset management tooling, audit processes, product data owners
+Ownership: Demo owns registry, Product owns data accuracy, IT supports tooling
+
+CRO ALIGNMENT:
+• Pipeline Risk
+• Forecast Confidence
+• Customer Sat
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2026): Asset Discovery → Complete demo asset inventory
+Phase 2 (Q2 2026): Governance Framework → Ownership and lifecycle model defined
+Phase 3 (Q3 2026): Verification Rollout → Automated verification and audits live
+Phase 4 (Q4 2026): Optimisation → High-confidence demo asset baseline
+
+LEADING INDICATORS:
+• Assets discovered and logged: 0 → 500 count
+• Assets with assigned owners: 0 → 400 count
+• Verification audits completed: 0 → 12 count
+
+LAGGING INDICATORS:
+• Verified asset coverage: 0% → 95%
+• Outdated assets retired: 0 → 150 count
+• Demo data accuracy incidents: 20 → 3 count
+
+================================================================================
+
+GOAL 7: STANDARDISE DEMO NARRATIVE, STORYTELLING & VALUE MESSAGING EXCELLENCE
+================================================================================
+ID: demo-storytelling-excellence
+Short Name: Demo Storytelling
+Category: Quality & Reliability
+Owner: Demo Services
+Co-Owners: Product Marketing, Sales Enablement, Sales Engineering
+Priority: High | Status: Not Started | Progress: 0%
+Target Date: 2026-12-31
+
+SMART STATEMENT:
+By 2026-12-31, standardise persona-based demo narratives and value messaging to 
+improve buyer relevance and deal conversion, resulting in higher-quality and 
+more consistent demo experiences.
+
+KEY OBJECTIVES:
+• Define persona-based demo story frameworks
+• Create outcome-driven demo flows
+• Embed value and ROI messaging into demos
+• Standardise demo narrative playbooks
+
+MEASURABLE TARGETS:
+• Persona demo frameworks: 0 → 6
+• Standardised demo flows: 0% → 80%
+• Win rate on standard demos: 22% → 30%
+• Demo NPS (story quality): 0 → +20
+
+RESOURCES & OWNERSHIP:
+Resources: Product marketing content, enablement resources, demo design capacity
+Ownership: Product Marketing owns messaging, Demo owns flows, Enablement drives 
+rollout
+
+CRO ALIGNMENT:
+• Deal Conversion
+• Sales Productivity
+• Customer Sat
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2026): Narrative Design → Persona and value story frameworks
+Phase 2 (Q2 2026): Flow Build → Standard demo flows created
+Phase 3 (Q3 2026): Enablement Rollout → Playbooks and training delivered
+Phase 4 (Q4 2026): Optimisation → Story-driven demo quality targets met
+
+LEADING INDICATORS:
+• Persona stories created: 0 → 6 count
+• Standard demo flows published: 0 → 40 count
+• Sellers trained on narratives: 0 → 300 count
+
+LAGGING INDICATORS:
+• Standard flow adoption: 0% → 80%
+• Win rate on demo-led deals: 22% → 30%
+• Demo NPS (story quality): 0 → 20 count
+
+================================================================================
+
+GOAL 8: ENABLE STRATEGIC DEMO LOCALIZATION & MULTI-LINGUAL ASSETS
+================================================================================
+ID: demo-localization
+Short Name: Demo Localization
+Category: Customer Success
+Owner: Demo Services
+Co-Owners: Product Marketing, Regional Sales, Localization
+Priority: High | Status: Not Started | Progress: 0%
+Target Date: 2026-12-31
+
+SMART STATEMENT:
+By 2026-12-31, localize priority demo assets and narratives into strategic 
+languages to support regional growth, resulting in improved buyer engagement and 
+global deal conversion.
+
+KEY OBJECTIVES:
+• Identify priority regions and languages
+• Localize core demo narratives and assets
+• Implement multilingual demo data and UI support
+• Enable regional ownership of localized demos
+
+MEASURABLE TARGETS:
+• Languages supported: 1 → 6
+• Localized demo assets: 0 → 60
+• Regional demo adoption: 20% → 75%
+• Win rate in localized regions: 18% → 26%
+
+RESOURCES & OWNERSHIP:
+Resources: Localization vendors, regional SMEs, demo platform support
+Ownership: Demo owns assets, Product Marketing owns translation, Regions own 
+validation
+
+CRO ALIGNMENT:
+• Deal Conversion
+• Pipeline Risk
+• Customer Sat
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2026): Priority Definition → Target regions and languages approved
+Phase 2 (Q2 2026): Core Asset Localization → Top demos localized
+Phase 3 (Q3 2026): Platform Enablement → Multilingual demo support live
+Phase 4 (Q4 2026): Regional Scale → Localized demos operational globally
+
+LEADING INDICATORS:
+• Languages approved: 0 → 6 count
+• Assets submitted for localization: 0 → 80 count
+• Regional reviewers assigned: 0 → 20 count
+
+LAGGING INDICATORS:
+• Localized assets live: 0 → 60 count
+• Regional demo adoption: 20% → 75%
+• Win rate in localized regions: 18% → 26%
+
+================================================================================
+
+GOAL 9: DEMO OPERATIONAL MATURITY
+================================================================================
+ID: demo-operational-maturity
+Short Name: Operational Maturity
+Category: Process Optimization
+Owner: Demo Services
+Co-Owners: (None)
+Priority: High | Status: Not Started | Progress: 0%
+Target Date: 2027-12-31
+
+SMART STATEMENT:
+By 2027-12-31, evolve and mature the existing Demo Services operating model to 
+improve clarity, efficiency, visibility, and consistency in support, 
+decisioning, and engagement across all products, platforms, and regions.
+
+KEY OBJECTIVES:
+• Design clear visual flow diagrams for support decisioning
+• Refresh team ownership maps and contact lists
+• Reinforce mandatory ticketing for all demo engagements
+• Surface operational flows and ownership in the platform
+
+MEASURABLE TARGETS:
+• Support flow coverage: 60% → 100%
+• Decision flow diagrams: 0 → 100% coverage
+• Demo engagements with tickets: 70% → 100%
+• Support contacts mapping accuracy: 75% → 100%
+• Time to route issues: Baseline → -40%
+• Repeat issues due to misrouting: Baseline → -50%
+
+RESOURCES & OWNERSHIP:
+Resources: Process design expertise, platform engineering, knowledge management 
+tools
+Ownership: Demo Ops owns process design, IT supports platform integration, 
+Leadership enforces adoption
+
+CRO ALIGNMENT:
+• Sales Productivity
+• Operational Excellence
+• Pipeline Risk Reduction
+• Forecast Confidence
+
+TIMELINE (4 Phases):
+Phase 1 (Q1 2027): Flow & Decision Model Enhancement → Visual flow diagrams and 
+  standard paths for support decisioning
+Phase 2 (Q2 2027): Knowledge & Ownership Modernisation → Updated ownership maps 
+  and contact lists aligned to org structure
+Phase 3 (Q3 2027): Engagement & Ticketing Discipline → Mandatory ticketing 
+  embedded in operational workflows
+Phase 4 (Q4 2027): Visibility & Operational Intelligence → Operational flows and 
+  support models visible in Executive Summary Platform
+
+LEADING INDICATORS:
+• Support flow coverage documented: 60% → 100%
+• Decision flow diagrams published: 0% → 100% coverage
+• Demo engagements with tickets raised: 70% → 100%
+• Support contacts accuracy: 75% → 100%
+
+LAGGING INDICATORS:
+• First-touch resolution rate: 0% → 15% increase
+• Time to route to correct team: 0% → -40% reduction
+• Repeat issues due to misrouting: 0% → -50% reduction
+• Escalations for ownership clarity: 0% → -60% reduction
+
+================================================================================
+
+CATEGORIES OVERVIEW
+================================================================================
+1. Process Optimization (3 goals)
+   - Automate Demo Prep, Demo Asset Governance, Operational Maturity
+
+2. Sales Operations (1 goal)
+   - Increase Presentation Time
+
+3. Revenue Growth (1 goal)
+   - Demo Lead Gen
+
+4. Customer Success (2 goals)
+   - Demo Intelligence & NPS, Demo Localization
+
+5. Innovation (1 goal)
+   - Integrated Demo Ecosystem
+
+6. Quality & Reliability (1 goal)
+   - Demo Storytelling
+
+================================================================================
+
+CRO IMPACT AREAS
+================================================================================
+• Sales Cycle Delays: Reduce time from prospect to close
+• Pipeline Risk: Protect revenue in pipeline from delays or losses
+• Deal Conversion: Improve win rates and conversion metrics
+• Sales Productivity: Increase output per sales resource
+• Forecast Confidence: Improve accuracy of revenue predictions
+• Customer Sat: Enhance customer satisfaction and retention
+
+================================================================================
+                            END OF GOALS SUMMARY
+================================================================================

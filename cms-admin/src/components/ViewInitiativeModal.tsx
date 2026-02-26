@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Rocket, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, Maximize2, Minimize2, Target } from 'lucide-react';
+import { X, Rocket, Users, Calendar, TrendingUp, CheckCircle2, Circle, Clock, Download, Loader2, Maximize2, Minimize2, Target, DollarSign, AlertCircle, BarChart3 } from 'lucide-react';
 import { domToPng } from 'modern-screenshot';
 import { TaskConnectorRenderer } from '../renderers/assetRenderTasks';
 import GanttVisualizer from './GanttVisualizer';
@@ -10,16 +10,16 @@ interface Initiative {
   id: string;
   name: string;
   shortName?: string;
-  slug?: string;
   category: string;
   owner: string;
-  coOwners?: string[];
   sponsor?: string;
   status: string;
   priority: string;
   progress?: number;
   projectStage?: string;
   linkedGoals?: string[];
+  startDate?: string;
+  endDate?: string;
   
   smartGoal?: {
     statement: string;
@@ -27,19 +27,26 @@ interface Initiative {
     measurable?: { metrics: string[] };
     achievable?: { resources: string; teamSize?: string };
     relevant?: { croAlignment: string[]; strategicThemes?: string[] };
-    timeBound?: { milestones: Array<{ milestone: string; date: string; status: string }> };
+    timeBound?: { timeline: Array<{ phase: string; deliverable: string; dueDate: string; status: string }> };
   };
   
   budget?: {
-    allocated: string;
-    spent: string;
-    projected: string;
+    total: number;
+    allocated?: number;
+    spent: number;
+    currency?: string;
   };
   
-  linkedAssets?: number;
-  createdDate: string;
-  lastUpdated: string;
-  targetDate?: string;
+  businessCase?: {
+    problem?: string;
+    opportunity?: string;
+    solution?: string;
+    roi: string;
+    paybackPeriod: string;
+  };
+  
+  topRisks?: Array<{ risk: string; level: string; mitigation: string }>;
+  stakeholders?: Array<{ name: string; role: string; supportLevel: string }>;
 }
 
 interface ViewInitiativeModalProps {
@@ -158,7 +165,7 @@ const ViewInitiativeModal: React.FC<ViewInitiativeModalProps> = ({ initiative, l
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ type: 'spring', duration: 0.3 }}
-            className={`bg-white dark:bg-gray-900 shadow-2xl overflow-hidden flex flex-col ${
+            className={`bg-gradient-to-br from-[#1a2744] via-[#1e2f4f] to-[#0f172a] shadow-2xl overflow-hidden flex flex-col ${
               isFullscreen 
                 ? 'w-full h-full rounded-xl' 
                 : modalWidth === 95

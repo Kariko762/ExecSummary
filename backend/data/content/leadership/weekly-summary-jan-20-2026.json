@@ -1,0 +1,112 @@
+{
+  "_contentTag": "leadership-summary",
+  "meta": {
+    "id": "weekly-summary-jan-20-2026",
+    "slug": "weekly-summary-jan-20-2026",
+    "title": "Weekly Leadership Summary - Jan 20-26, 2026",
+    "category": "leadership",
+    "status": "published",
+    "createdAt": "2026-01-20",
+    "lastModified": "2026-02-03",
+    "author": "Jason Hanscomb",
+    "views": 342
+  },
+  "metadata": {
+    "weekStart": "Jan 20, 2026",
+    "weekEnd": "Jan 26, 2026",
+    "title": "Leadership Summary",
+    "description": "Weekly executive briefing for Pre-Sales leadership"
+  },
+  "bluf": {
+    "bottomLine": "Kicked off $6M+ MUFG Demo AI Endpoint Build (Credit Assessment)\n• Successful CBK Coast demo review with LoB\n• Request to deprioritize E6 demo asset access due to TSYS acquisition\n• Demo Asset and Visibility (Banking NA) High Priority\n• Coast MSA Renewal still Pending with Finance (Robert Rossetti)\n• Executive Summary Platform final testing in progress ready for launch",
+    "background": "MUFG Credit Assessment strategic deal requiring Azure OpenAI endpoint deployment\n• Demo Asset and Visibility initiative driven by need for status view across Banking NA demo systems\n• TSYS acquisition driving International Issuing Hub strategy realignment\n• Executive Summary platform completing final testing phase\n• 2026 goals and initiatives drafted, awaiting RevOps review",
+    "assessment": "**1. Strategic Progress:**\n• Executive Summary platform within final testing phase\n\n**2. Cross-Team Collaboration:**\n• Open Sessions approved with Sales Growth Office\n• TSYS demo alignment clarified available assets\n\n**3. Critical Risks:**\n• Azure OpenAI authentication misalignment for MUFG\n• Coast MSA renewal pending with Finance",
+    "recommendation": "Complete Executive Summary Platform testing and launch\n• Escalate Coast MSA renewal to CFO if Finance delays persist\n• Proceed with Demo Asset and Visibility initiative rollout\n• Finalize 2026 goals with RevOps for publication",
+    "asks": [
+      {
+        "type": "approval",
+        "item": "Approve MSA renewal at Coast (CFO approval needed if Finance delayed)",
+        "urgency": "high",
+        "owner": "Finance",
+        "deadline": "Jan 31, 2026"
+      },
+      {
+        "type": "approval",
+        "item": "Approve AI endpoint security exception request for MUFG deal",
+        "urgency": "high",
+        "owner": "InfoSec",
+        "deadline": "Feb 5, 2026"
+      },
+      {
+        "type": "decision",
+        "item": "Provide feedback on 2026 Q1 OKRs draft",
+        "urgency": "medium",
+        "owner": "RevOps",
+        "deadline": "Feb 10, 2026"
+      }
+    ]
+  },
+  "priorities": [
+    {
+      "id": 1,
+      "title": "Demo Asset Visibility",
+      "description": "Dashboard for visibility into demo environment status across Banking NA, expanding to other environments based on success.",
+      "status": "In Progress",
+      "impact": "HIGH IMPACT",
+      "borderColor": "var(--accent-red)",
+      "statusColor": "green",
+      "impactColor": "blue",
+      "details": {
+        "impact": "Proactive status visibility and issue alerts across demo platforms",
+        "likelihood": "High (technical POC complete)",
+        "actionItems": [
+          "Gather demo environment list from teams",
+          "Define status indicators (up/down/degraded)",
+          "Configure health check automation"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "title": "Coast MSA Renewal",
+      "description": "2026 MSA renewal critical for continued Banking demo platform access. Without renewal, all Banking demo capabilities at risk.",
+      "status": "Blocked",
+      "impact": "MEDIUM LIKELIHOOD",
+      "borderColor": "var(--accent-orange)",
+      "statusColor": "red",
+      "impactColor": "orange",
+      "details": {
+        "impact": "All Banking product demos would lose platform access",
+        "likelihood": "Medium (awaiting Finance approval)",
+        "actionItems": [
+          "Follow up with Robert Rossetti on Finance status",
+          "Escalate to CFO if approval delayed beyond Jan 31",
+          "Document alternative Banking demo platforms"
+        ]
+      }
+    }
+  ],
+  "risks": [
+    {
+      "type": "high-impact",
+      "title": "Coast MSA Renewal",
+      "description": "2026 MSA renewal pending Finance approval. Without renewal, all Banking demo capabilities at risk of immediate shutdown.",
+      "severity": "Critical",
+      "probability": "Medium Probability",
+      "status": "Open",
+      "mitigation": "Urgent Finance meetings and CFO escalation if needed",
+      "owner": "Robert Rossetti / Finance"
+    },
+    {
+      "type": "medium-impact",
+      "title": "AI Endpoint Authentication",
+      "description": "Azure OpenAI authentication misalignment between MUFG requirements (subscription-based) and FIS security posture (token-based).",
+      "severity": "Medium",
+      "probability": "Medium Probability",
+      "status": "Open",
+      "mitigation": "Security exception request submitted to CTO office",
+      "owner": "Demo Engineering / InfoSec"
+    }
+  ],
+  "_published": true
+}

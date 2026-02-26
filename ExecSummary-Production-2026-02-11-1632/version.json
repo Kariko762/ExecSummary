@@ -1,0 +1,23 @@
+﻿{
+  "version": "2026.02.11",
+  "buildDate": "2026-02-11 16:33:21",
+  "buildType": "production",
+  "offline": true,
+  "components": {
+    "frontend": "built",
+    "cmsAdmin": "built",
+    "backend": "production"
+  },
+  "nodeVersion": "v22.19.0",
+  "features": [
+    "Initiatives Management",
+    "Tasks & Notes",
+    "Goals (SMART Framework)",
+    "Gantt Charts",
+    "Business Units",
+    "Template Builder",
+    "Workflows",
+    "Vendors Management",
+    "Organization Charts"
+  ]
+}

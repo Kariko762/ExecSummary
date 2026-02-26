@@ -263,7 +263,7 @@ export default function EditorModalV2({
             };
             
             return (
-              <div key={fieldKey} className={`border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden`}>
+              <div key={fieldKey} className={`border border-gray-600 rounded-lg overflow-hidden`}>
                 {/* Subsection Header */}
                 <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800/50 flex items-center gap-2">
                   <button
@@ -274,7 +274,7 @@ export default function EditorModalV2({
                     <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                   </button>
                   
-                  <span className="font-roobert-semibold text-sm text-gray-900 dark:text-white truncate">
+                  <span className="font-roobert-semibold text-sm text-white truncate">
                     {formatSectionTitle(fieldKey)} {index}
                   </span>
                   <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -309,7 +309,7 @@ export default function EditorModalV2({
                       onKeyDown={(e) => e.stopPropagation()}
                       onKeyUp={(e) => e.stopPropagation()}
                       placeholder="Asset title (optional)"
-                      className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry"
+                      className="px-2 py-0.5 rounded text-xs border border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-raspberry"
                       style={{ width: '250px' }}
                     />
 
@@ -328,7 +328,7 @@ export default function EditorModalV2({
                         setIsDirty(true);
                       }}
                       onClick={(e) => e.stopPropagation()}
-                      className="px-1.5 py-0.5 rounded text-[10px] border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-44"
+                      className="px-1.5 py-0.5 rounded text-[10px] border border-gray-600 bg-gray-800 text-white focus:ring-1 focus:ring-fis-raspberry w-44"
                       title="Tag this content with a strategic goal"
                     >
                       <option value="">🎯 None</option>
@@ -396,7 +396,7 @@ export default function EditorModalV2({
                         className={`p-1 rounded transition-colors ${
                           (editedData[`_${fieldKey}_alignment`] || 'left') === 'left'
                             ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                         }`}
                         title="Align Left"
                       >
@@ -415,7 +415,7 @@ export default function EditorModalV2({
                         className={`p-1 rounded transition-colors ${
                           editedData[`_${fieldKey}_alignment`] === 'center'
                             ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                         }`}
                         title="Align Center"
                       >
@@ -434,7 +434,7 @@ export default function EditorModalV2({
                         className={`p-1 rounded transition-colors ${
                           editedData[`_${fieldKey}_alignment`] === 'right'
                             ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                         }`}
                         title="Align Right"
                       >
@@ -524,7 +524,7 @@ export default function EditorModalV2({
       return (
         <div className="space-y-4 p-4">
           <div>
-            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-xs font-roobert-semibold text-gray-300 mb-2">
               Document ID
               <span className="ml-2 text-xs font-normal text-gray-500">(read-only)</span>
             </label>
@@ -532,13 +532,13 @@ export default function EditorModalV2({
               type="text"
               value={editedData.id || ''}
               disabled
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-500 font-mono text-sm cursor-not-allowed"
+              className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-500 font-mono text-sm cursor-not-allowed"
               placeholder="week-mmm-dd-yyyy"
             />
           </div>
           
           <div>
-            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-xs font-roobert-semibold text-gray-300 mb-2">
               Quarter/Period
             </label>
             <input
@@ -548,13 +548,13 @@ export default function EditorModalV2({
                 setEditedData((prev: any) => ({ ...prev, quarter: e.target.value }));
                 setIsDirty(true);
               }}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white"
               placeholder="Oct 31 or Q4"
             />
           </div>
           
           <div>
-            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-xs font-roobert-semibold text-gray-300 mb-2">
               Year
             </label>
             <input
@@ -564,12 +564,12 @@ export default function EditorModalV2({
                 setEditedData((prev: any) => ({ ...prev, year: parseInt(e.target.value) || new Date().getFullYear() }));
                 setIsDirty(true);
               }}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white"
             />
           </div>
           
           <div>
-            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-xs font-roobert-semibold text-gray-300 mb-2">
               Date
             </label>
             <input
@@ -579,12 +579,12 @@ export default function EditorModalV2({
                 setEditedData((prev: any) => ({ ...prev, date: e.target.value }));
                 setIsDirty(true);
               }}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white"
             />
           </div>
           
           <div>
-            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-xs font-roobert-semibold text-gray-300 mb-2">
               Title
             </label>
             <input
@@ -594,13 +594,13 @@ export default function EditorModalV2({
                 setEditedData((prev: any) => ({ ...prev, title: e.target.value }));
                 setIsDirty(true);
               }}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white"
               placeholder="Organization - Weekly Executive Update"
             />
           </div>
           
           <div>
-            <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-xs font-roobert-semibold text-gray-300 mb-2">
               Content Tag
             </label>
             <select
@@ -609,7 +609,7 @@ export default function EditorModalV2({
                 setEditedData((prev: any) => ({ ...prev, _contentTag: e.target.value }));
                 setIsDirty(true);
               }}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white"
             >
               <option value="">-- Select a tag --</option>
               {availableTags.map((tag) => (
@@ -699,10 +699,10 @@ export default function EditorModalV2({
       const positionLabel = getPositionLabel(layoutZone);
       
       return (
-        <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+        <div className="border border-gray-600 rounded-lg overflow-hidden">
           {/* Asset Header with Controls */}
           <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800/50 flex items-center gap-2">
-            <span className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+            <span className="font-roobert-semibold text-sm text-white">
               {formatSectionTitle(sectionId)}
             </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -728,7 +728,7 @@ export default function EditorModalV2({
                 setIsDirty(true);
               }}
               placeholder="Asset title (optional)"
-              className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry"
+              className="px-2 py-0.5 rounded text-xs border border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-raspberry"
               style={{ width: '220px' }}
             />
             
@@ -745,7 +745,7 @@ export default function EditorModalV2({
                 }));
                 setIsDirty(true);
               }}
-              className="px-1.5 py-0.5 rounded text-[10px] border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-44"
+              className="px-1.5 py-0.5 rounded text-[10px] border border-gray-600 bg-gray-800 text-white focus:ring-1 focus:ring-fis-raspberry w-44"
               title="Tag this content with a strategic goal"
             >
               <option value="">🎯 None</option>
@@ -809,7 +809,7 @@ export default function EditorModalV2({
                 className={`p-1 rounded transition-colors ${
                   (editedData[`_${sectionId}_alignment`] || 'left') === 'left'
                     ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                 }`}
                 title="Align Left"
               >
@@ -826,7 +826,7 @@ export default function EditorModalV2({
                 className={`p-1 rounded transition-colors ${
                   editedData[`_${sectionId}_alignment`] === 'center'
                     ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                 }`}
                 title="Align Center"
               >
@@ -843,7 +843,7 @@ export default function EditorModalV2({
                 className={`p-1 rounded transition-colors ${
                   editedData[`_${sectionId}_alignment`] === 'right'
                     ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                 }`}
                 title="Align Right"
               >
@@ -930,10 +930,10 @@ export default function EditorModalV2({
       const positionLabel = getPositionLabel(layoutZone);
       
       return (
-        <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+        <div className="border border-gray-600 rounded-lg overflow-hidden">
           {/* Asset Header with Controls */}
           <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800/50 flex items-center gap-2">
-            <span className="font-roobert-semibold text-sm text-gray-900 dark:text-white">
+            <span className="font-roobert-semibold text-sm text-white">
               {formatSectionTitle(sectionId)}
             </span>
             <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -959,7 +959,7 @@ export default function EditorModalV2({
                 setIsDirty(true);
               }}
               placeholder="Asset title (optional)"
-              className="px-2 py-0.5 rounded text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry"
+              className="px-2 py-0.5 rounded text-xs border border-gray-600 bg-gray-800 text-white placeholder:text-gray-400 focus:ring-1 focus:ring-fis-raspberry"
               style={{ width: '220px' }}
             />
             
@@ -976,7 +976,7 @@ export default function EditorModalV2({
                 }));
                 setIsDirty(true);
               }}
-              className="px-1.5 py-0.5 rounded text-[10px] border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-1 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry w-44"
+              className="px-1.5 py-0.5 rounded text-[10px] border border-gray-600 bg-gray-800 text-white focus:ring-1 focus:ring-fis-raspberry w-44"
               title="Tag this content with a strategic goal"
             >
               <option value="">🎯 None</option>
@@ -1040,7 +1040,7 @@ export default function EditorModalV2({
                 className={`p-1 rounded transition-colors ${
                   (editedData[`_${sectionId}_alignment`] || 'left') === 'left'
                     ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                 }`}
                 title="Align Left"
               >
@@ -1057,7 +1057,7 @@ export default function EditorModalV2({
                 className={`p-1 rounded transition-colors ${
                   editedData[`_${sectionId}_alignment`] === 'center'
                     ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                 }`}
                 title="Align Center"
               >
@@ -1074,7 +1074,7 @@ export default function EditorModalV2({
                 className={`p-1 rounded transition-colors ${
                   editedData[`_${sectionId}_alignment`] === 'right'
                     ? 'bg-fis-eggplant/20 dark:bg-fis-raspberry/20 text-fis-eggplant dark:text-fis-raspberry'
-                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    : 'text-gray-400 dark:text-gray-500 hover:bg-gray-700'
                 }`}
                 title="Align Right"
               >
@@ -1898,10 +1898,10 @@ export default function EditorModalV2({
             <button
               key={idx}
               onClick={() => copyToClipboard(expr.syntax)}
-              className="w-full flex flex-col px-3 py-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all group text-left border border-transparent hover:border-fis-raspberry/20"
+              className="w-full flex flex-col px-3 py-2.5 rounded-lg hover:bg-gray-700 transition-all group text-left border border-transparent hover:border-fis-raspberry/20"
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-roobert-semibold text-gray-700 dark:text-gray-300">{expr.desc}</span>
+                <span className="text-xs font-roobert-semibold text-gray-300">{expr.desc}</span>
                 <div className="flex-shrink-0 ml-2">
                   {copiedExpression === expr.syntax ? (
                     <CheckCheck className="w-4 h-4 text-green-500" />
@@ -2037,7 +2037,7 @@ export default function EditorModalV2({
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-7xl h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          className="w-full max-w-7xl h-[90vh] bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-[#431C5B] to-[#B21A53]">
@@ -2186,7 +2186,7 @@ export default function EditorModalV2({
               </button>
               <button
                 onClick={() => setShowPreview(true)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 font-roobert-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-600 font-roobert-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 title="Preview content with validation checks"
               >
                 <Eye className="w-4 h-4" />
@@ -2221,11 +2221,11 @@ export default function EditorModalV2({
             </div>
 
             {/* Chevron Section Navigation */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-2 px-4 py-2 bg-gray-800 rounded-lg border border-gray-700">
               <button
                 onClick={navigateToPrevSection}
                 disabled={!canGoPrev}
-                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-1 rounded hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 title="Previous section"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -2236,7 +2236,7 @@ export default function EditorModalV2({
               <button
                 onClick={navigateToNextSection}
                 disabled={!canGoNext}
-                className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-1 rounded hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 title="Next section"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -2247,7 +2247,7 @@ export default function EditorModalV2({
           {/* Main Content: Sidebar + Single Section View */}
           <div className="flex-1 flex overflow-hidden">
             {/* Sidebar Navigation */}
-            <div className="w-64 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-y-auto">
+            <div className="w-64 border-r border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-y-auto">
               <div className="p-3">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xs font-roobert-heavy text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -2279,7 +2279,7 @@ export default function EditorModalV2({
                           activeSectionId === section.id
                             ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white shadow-md'
                             : section.enabled
-                            ? 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                            ? 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-300'
                             : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 dark:text-gray-600 opacity-60'
                         }`}
                       >
@@ -2316,7 +2316,7 @@ export default function EditorModalV2({
                           <button
                             onClick={(e) => { e.stopPropagation(); moveSectionUp(section.id); }}
                             disabled={index === 0}
-                            className="p-0.5 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="p-0.5 rounded bg-gray-800 border border-gray-600 hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
                             title="Move up"
                           >
                             <ChevronUp className="w-3 h-3" />
@@ -2324,7 +2324,7 @@ export default function EditorModalV2({
                           <button
                             onClick={(e) => { e.stopPropagation(); moveSectionDown(section.id); }}
                             disabled={index === sections.length - 1}
-                            className="p-0.5 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="p-0.5 rounded bg-gray-800 border border-gray-600 hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
                             title="Move down"
                           >
                             <ChevronDown className="w-3 h-3" />
@@ -2335,7 +2335,7 @@ export default function EditorModalV2({
                               setPendingDeleteSectionId(section.id);
                               setShowDeleteSectionConfirm(true);
                             }}
-                            className="p-0.5 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600"
+                            className="p-0.5 rounded bg-gray-800 border border-gray-600 hover:bg-red-900/20 hover:text-red-600"
                             title="Delete section"
                           >
                             <Trash2 className="w-3 h-3" />
@@ -2349,7 +2349,7 @@ export default function EditorModalV2({
             </div>
 
             {/* Single Section Content Area */}
-            <div className="flex-1 overflow-y-auto p-6 bg-white dark:bg-gray-900">
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-900">
               <AnimatePresence mode="wait">
                 {activeSection ? (
                   <motion.div
@@ -2364,7 +2364,7 @@ export default function EditorModalV2({
                     <div className="mb-2">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+                          <h2 className="text-2xl font-roobert-heavy text-white">
                             {activeSection.title}
                           </h2>
                           {editedData[`_${activeSection.id}_type`] && (
@@ -2374,7 +2374,7 @@ export default function EditorModalV2({
                               </span>
                               <button
                                 onClick={() => openAssetReference(editedData[`_${activeSection.id}_type`])}
-                                className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-fis-raspberry transition-colors"
+                                className="p-1 rounded-lg hover:bg-gray-700 text-gray-400 hover:text-fis-raspberry transition-colors"
                                 title="View asset type reference"
                               >
                                 <HelpCircle className="w-4 h-4" />
@@ -2581,7 +2581,7 @@ export default function EditorModalV2({
 
                     {/* Section Label Editor */}
                     <div className="mt-4 mb-2">
-                      <label className="block text-xs font-roobert-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-xs font-roobert-semibold text-gray-300 mb-2">
                         Section Display Title
                       </label>
                       <input
@@ -2595,7 +2595,7 @@ export default function EditorModalV2({
                           setIsDirty(true);
                         }}
                         placeholder={activeSection.title}
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-fis-eggplant dark:focus:ring-fis-raspberry focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-800 text-white text-sm focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
                       />
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         Leave blank to use auto-generated title: "{activeSection.title}"
@@ -2603,7 +2603,7 @@ export default function EditorModalV2({
                     </div>
 
                     {/* Schema-Driven Content */}
-                    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-[5px] border border-gray-200 dark:border-gray-700 relative min-h-[400px]">
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-[5px] border border-gray-700 relative min-h-[400px]">
                       {renderSchemaSection(activeSection.id)}
                       
                       {/* Overlay for locked sections - covers entire preview area */}
@@ -2669,7 +2669,7 @@ export default function EditorModalV2({
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="relative h-full w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl overflow-y-auto"
+                className="relative h-full w-full max-w-md bg-gray-900 shadow-2xl overflow-y-auto"
               >
                 {/* Header */}
                 <div className="sticky top-0 z-10 bg-gradient-to-r from-fis-eggplant to-fis-raspberry p-4 flex items-center justify-between">
@@ -3011,15 +3011,15 @@ export default function EditorModalV2({
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-xl"
+              className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-xl"
             >
-              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
+              <h3 className="text-lg font-roobert-semibold text-white mb-4">
                 Add New Section
               </h3>
               
               {/* Section Name Input */}
               <div className="mb-4">
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-roobert-medium text-gray-300 mb-2">
                   Section Name
                 </label>
                 <input
@@ -3027,14 +3027,14 @@ export default function EditorModalV2({
                   value={newSectionName}
                   onChange={(e) => setNewSectionName(e.target.value)}
                   placeholder="e.g., Key Metrics, Executive Summary"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
                   autoFocus
                 />
               </div>
               
               {/* Column Layout Selector */}
               <div className="mb-6">
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-3">
+                <label className="block text-sm font-roobert-medium text-gray-300 mb-3">
                   Column Layout
                 </label>
                 <div className="flex gap-3 justify-center">
@@ -3044,7 +3044,7 @@ export default function EditorModalV2({
                     className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       selectedColumnLayout === 'full'
                         ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                        : 'border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
                     }`}
                     title="Full Width"
                   >
@@ -3058,7 +3058,7 @@ export default function EditorModalV2({
                     className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       selectedColumnLayout === '50-50'
                         ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                        : 'border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
                     }`}
                     title="50/50 Split"
                   >
@@ -3075,7 +3075,7 @@ export default function EditorModalV2({
                     className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       selectedColumnLayout === '70-30'
                         ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                        : 'border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
                     }`}
                     title="70/30 Split"
                   >
@@ -3092,7 +3092,7 @@ export default function EditorModalV2({
                     className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       selectedColumnLayout === '30-70'
                         ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                        : 'border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
                     }`}
                     title="30/70 Split"
                   >
@@ -3109,7 +3109,7 @@ export default function EditorModalV2({
                     className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
                       selectedColumnLayout === '33-33-33'
                         ? 'border-fis-raspberry bg-fis-raspberry/10 text-fis-raspberry'
-                        : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
+                        : 'border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 text-gray-600 dark:text-gray-400'
                     }`}
                     title="Three Equal Columns"
                   >
@@ -3146,7 +3146,7 @@ export default function EditorModalV2({
 
               <button
                 onClick={() => setShowAddSectionModal(false)}
-                className="mt-4 w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-roobert-medium transition-colors"
+                className="mt-4 w-full px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-white rounded-lg font-roobert-medium transition-colors"
               >
                 Cancel
               </button>
@@ -3227,16 +3227,16 @@ export default function EditorModalV2({
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
+              className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white mb-4">
+              <h3 className="text-lg font-roobert-semibold text-white mb-4">
                 Add Asset to Section
               </h3>
               
               {/* Asset Name Input */}
               <div className="mb-4">
-                <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-roobert-medium text-gray-300 mb-2">
                   Asset Display Name
                 </label>
                 <input
@@ -3244,7 +3244,7 @@ export default function EditorModalV2({
                   value={newAssetName}
                   onChange={(e) => setNewAssetName(e.target.value)}
                   placeholder="e.g., Revenue Metrics, Risk Assessment"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
                   autoFocus
                 />
               </div>
@@ -3252,7 +3252,7 @@ export default function EditorModalV2({
               {/* Asset Type Selector */}
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+                  <label className="block text-sm font-roobert-medium text-gray-300">
                     Asset Type
                   </label>
                   <button
@@ -3268,7 +3268,7 @@ export default function EditorModalV2({
                 <select
                   value={selectedAssetForSection}
                   onChange={(e) => setSelectedAssetForSection(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-600 rounded-lg bg-gray-900 text-white focus:ring-2 focus:ring-fis-raspberry focus:border-transparent"
                 >
                   {(() => {
                     // Filter assets based on section layout
@@ -3336,7 +3336,7 @@ export default function EditorModalV2({
                 </button>
                 <button
                   onClick={() => setShowAddAssetModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg font-roobert-medium transition-colors"
+                  className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-white rounded-lg font-roobert-medium transition-colors"
                 >
                   Cancel
                 </button>
@@ -3354,3 +3354,5 @@ export default function EditorModalV2({
     </AnimatePresence>
   );
 }
+
+

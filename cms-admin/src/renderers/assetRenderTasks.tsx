@@ -35,6 +35,7 @@ interface Task {
   title: string;
   owner?: string;
   businessUnit?: string;
+  businessUnits?: string[];
   product?: string;
   status?: 'On Track' | 'At Risk' | 'Off Track' | 'Completed';
   priority?: 'High' | 'Medium' | 'Low';
@@ -608,10 +609,12 @@ export const TaskConnectorRenderer: React.FC<TaskConnectorProps> = ({ data, onTa
                 </div>
               )}
               
-              {task.businessUnit && (
+              {(task.businessUnits?.length || task.businessUnit) && (
                 <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                   <TrendingUp className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
-                  <span className="font-roobert-regular text-[11px] truncate">{task.businessUnit}</span>
+                  <span className="font-roobert-regular text-[11px] truncate">
+                    {task.businessUnits?.length ? task.businessUnits.join(', ') : task.businessUnit}
+                  </span>
                 </div>
               )}
             </div>

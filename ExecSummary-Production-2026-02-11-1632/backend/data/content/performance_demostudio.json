@@ -1,0 +1,129 @@
+{
+  "id": "performance_demostudio_2026_01",
+  "quarter": "Q1",
+  "year": 2026,
+  "date": "2026-01-23",
+  "title": "Demo Studio Performance - January 2026",
+  "displayName": "Demo Studio",
+  "_type": "performance",
+  "_contentTag": "performance",
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "Performance Dashboard - Software Operations",
+  "_template_description": "Executive performance view for software operations vendors",
+  "_template_created": "2026-01-23T00:00:00.000Z",
+  "_template_updated": "2026-01-23T00:00:00.000Z",
+  "tags": ["performance"],
+  
+  "_enabled_kpis": true,
+  "_kpis_displayTitle": true,
+  "_kpis_type": "multiField",
+  
+  "kpis_0": {
+    "Total Demos": "156",
+    "Active Demos": "89",
+    "Demos → Wins": "24",
+    "Revenue Linked": "$4.8M"
+  },
+  "_kpis_0_type": "metricCard",
+  "_kpis_0_layoutZone": "full",
+  "_kpis_0_assetTitle": "January Performance",
+  "_kpis_0_displayAssetTitle": true,
+  
+  "kpis_1": [
+    { "label": "Win Rate", "value": "15.4%", "percentage": 15 },
+    { "label": "Avg Deal Size", "value": "$200K", "percentage": 67 },
+    { "label": "Demo Conversion", "value": "42%", "percentage": 42 },
+    { "label": "User Satisfaction", "value": "4.7/5", "percentage": 94 }
+  ],
+  "_kpis_1_type": "progressBarList",
+  "_kpis_1_layoutZone": "right",
+  "_kpis_1_assetTitle": "Key Metrics",
+  "_kpis_1_displayAssetTitle": true,
+  
+  "_enabled_budget": true,
+  "_budget_displayTitle": true,
+  "budget": [
+    { "label": "Annual Budget", "value": "$450,000", "percentage": 100 },
+    { "label": "YTD Spent", "value": "$37,500", "percentage": 8 },
+    { "label": "Q1 Forecast", "value": "$112,500", "percentage": 25 },
+    { "label": "Remaining", "value": "$412,500", "percentage": 92 }
+  ],
+  "_budget_type": "progressBarList",
+  "_budget_assetTitle": "Budget Tracking",
+  "_budget_displayAssetTitle": true,
+  
+  "_enabled_personas": true,
+  "_personas_displayTitle": true,
+  "personas": [
+    {
+      "title": "CFO Persona",
+      "items": [
+        { "label": "Active Users", "value": "23" },
+        { "label": "Demo Views", "value": "87" },
+        { "label": "Avg Session", "value": "12 min" }
+      ]
+    },
+    {
+      "title": "CIO Persona",
+      "items": [
+        { "label": "Active Users", "value": "31" },
+        { "label": "Demo Views", "value": "124" },
+        { "label": "Avg Session", "value": "15 min" }
+      ]
+    },
+    {
+      "title": "VP Operations",
+      "items": [
+        { "label": "Active Users", "value": "18" },
+        { "label": "Demo Views", "value": "52" },
+        { "label": "Avg Session", "value": "9 min" }
+      ]
+    },
+    {
+      "title": "Controller Persona",
+      "items": [
+        { "label": "Active Users", "value": "15" },
+        { "label": "Demo Views", "value": "43" },
+        { "label": "Avg Session", "value": "11 min" }
+      ]
+    }
+  ],
+  "_personas_type": "nestedCards",
+  "_personas_assetTitle": "Persona Engagement",
+  "_personas_displayAssetTitle": true,
+  
+  "_enabled_revenueLink": true,
+  "_revenueLink_displayTitle": true,
+  "revenueLink": [
+    { "category": "Jan", "value": 24, "label": "24 wins" },
+    { "category": "Dec", "value": 19, "label": "19 wins" },
+    { "category": "Nov", "value": 21, "label": "21 wins" },
+    { "category": "Oct", "value": 17, "label": "17 wins" },
+    { "category": "Sep", "value": 22, "label": "22 wins" },
+    { "category": "Aug", "value": 18, "label": "18 wins" }
+  ],
+  "_revenueLink_type": "barChart",
+  "_revenueLink_chartConfig": {
+    "xAxisKey": "category",
+    "dataKeys": ["value"],
+    "colors": ["var(--accent-green)"],
+    "legend": ["Demos → Wins"],
+    "title": "Demo-to-Win Trend (6 Months)",
+    "yAxisLabel": "Wins"
+  },
+  
+  "_enabled_demoDetails": true,
+  "_demoDetails_displayTitle": true,
+  "demoDetails": [
+    { "label": "Total Personas", "value": "8" },
+    { "label": "Total Users w/ Access", "value": "87" },
+    { "label": "Avg Demos/User/Month", "value": "3.2" },
+    { "label": "Peak Usage Day", "value": "Wednesday" },
+    { "label": "Avg Demo Duration", "value": "12.5 min" },
+    { "label": "Mobile Access", "value": "34%" }
+  ],
+  "_demoDetails_type": "keyValueList",
+  "_demoDetails_assetTitle": "Platform Details",
+  "_demoDetails_displayAssetTitle": true
+}

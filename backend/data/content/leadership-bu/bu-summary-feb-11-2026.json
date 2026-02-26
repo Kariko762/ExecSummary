@@ -1,0 +1,229 @@
+{
+  "id": "bu-summary-feb-11-2026",
+  "_templateName": "leadership-bu-summary",
+  "title": "Leadership BU Summary",
+  "status": "published",
+  "_contentTag": "leadership-bu-summary",
+  "_published": true,
+  "metadata": {
+    "weekStart": "2026-02-11",
+    "weekEnd": "2026-02-11",
+    "title": "Leadership BU Summary",
+    "description": "Business Unit focused executive summary"
+  },
+  "buSections": [
+    {
+      "buId": "banking-int",
+      "items": [
+        {
+          "id": "1",
+          "title": "E6 International Issuing Hub - Pending clean Agreement from legal so E6 can execute.",
+          "background": "International Issuing Hub uses E6 as a third party vendor for the main end user portion of the application. For FIS to demo this new offering we require access to E6 demo assets in Coast.",
+          "recommendation": "Continue to work with legal on cleaned version of agreement and hand over to E6 for signature",
+          "deliverable": "Agreement signature by Feb 20th, Demo Asset access by Feb 27th",
+          "priority": "high",
+          "status": "at-risk"
+        },
+        {
+          "id": "2",
+          "title": "Banking Audit - Demo Environment Assessment",
+          "background": "Comprehensive banking audit scheduled with Richard Willcock to assess all demo environments, current status, and challenges across Banking Int. portfolio.",
+          "recommendation": "Complete full audit of demo environments by end of February. Document current state, identify gaps, and establish priority remediation roadmap.",
+          "deliverable": "Banking audit completed by Feb 28, 2026",
+          "priority": "high",
+          "status": "in-progress"
+        }
+      ]
+    },
+    {
+      "buId": "banking-na",
+      "items": [
+        {
+          "id": "3",
+          "title": "Technology License - Tiled access needed for CKO (Commercial Kickoff)",
+          "background": "The Banking North America team requires additional Tiled licenses to support training and demonstrations of the tool at Commercial kick-off. ",
+          "recommendation": "Incorporate additional Tiled licenses into the demo technology spend whilst working towards temporary licenses with Tiled as interim solution.",
+          "deliverable": "Temporary Licenses provided for CKO",
+          "priority": "medium",
+          "status": "at-risk"
+        }
+      ]
+    },
+    {
+      "buId": "capital-markets",
+      "items": [
+        {
+          "id": "4",
+          "title": "MUFG $6M+ Demo AI Endpoint Build for Credit Assessment",
+          "background": "Major Japanese client requested AI-powered credit assessment demonstration. Azure OpenAI endpoint deployment blocked by authentication policy conflicts requiring Network Security Architecture team engagement.",
+          "recommendation": "Urgent engagement with Network Security Architecture Team on Azure AI authentication policies. Resolve subscription vs token-based authentication conflict.",
+          "deliverable": "Azure authentication resolution and endpoint deployment by Feb 28, 2026",
+          "priority": "high",
+          "status": "at-risk"
+        },
+        {
+          "id": "5",
+          "title": "Demo Enablement - Licensing and Workspace Expansion",
+          "background": "Capital Markets team requires additional licenses for demo technologies, Synthesia and Tiled and requires an official Coast workspace for generation of interactive Demo Assets",
+          "recommendation": "Incorporate the license requirements into the wider demo technology spend whilst continuing to use their existing Synthesia and Tiled licenses alongside the complementary Coast demo services currently on offer.",
+          "deliverable": "Demo Technology Spend decision by Feb 28th",
+          "priority": "high",
+          "status": "at-risk"
+        }
+      ]
+    },
+    {
+      "buId": "payments",
+      "items": [
+        {
+          "id": "6",
+          "title": "Demo Enablement - Tiled access and Training",
+          "background": "The payments team currently does not have access to Tiled as a plat and need to be brought up to speed with the technology on offer so they can start creating sales content microsites ready for CKO and wider sales engagements",
+          "recommendation": "Provision Tiled licenses for Payments team. Schedule comprehensive training sessions covering platform features, best practices, and demo narratives.",
+          "deliverable": "Licenses provisioned by Feb 13th; Training completed by Feb 20th",
+          "priority": "medium",
+          "status": "on-track"
+        }
+      ]
+    },
+    {
+      "buId": "cross-bu",
+      "items": [
+        {
+          "id": "7",
+          "title": "Coast MSA Renewal - Critical Finance Approval Required",
+          "background": "Annual Master Service Agreement renewal for Coast platform ($267K) requires FIS Signature. Original approval deadline passed Jan 31. Risk of Demo disruption if signature delayed.",
+          "recommendation": "Work with the procurement team in the US to have the requisition raised and approved",
+          "deliverable": "P-REQ raised & approved by Feb 13th, Signature by Feb 18th",
+          "priority": "high",
+          "status": "at-risk"
+        },
+        {
+          "id": "8",
+          "title": "Executive Summary Platform - Final Testing Complete",
+          "background": "A new Executive Summary Platform has entered final development testing ready for deployment as a central executive view into demo services. This supports increased transparency and visibility into all demo services activities.",
+          "recommendation": "Deploy platform to production by end of week. Conduct executive briefing session to showcase capabilities.",
+          "deliverable": "Platform deployed by Feb 13th, Network access by Feb 20th, Executive demonstrations from 1st March.",
+          "priority": "medium",
+          "status": "on-track"
+        },
+        {
+          "id": "10",
+          "title": "Governance Framework and Asset Flow Design",
+          "background": "As new tools and technologies become available Governance and ownership and responsibilities are vital to ensure successful use, return on investment and adoption of said tools.",
+          "recommendation": "Establish Demo Asset Governance review with pre-sales \"Champions\". Define asset lifecycle workflow from creation to retirement.",
+          "deliverable": "Governance framework published by CKO",
+          "priority": "high",
+          "status": "in-progress"
+        },
+        {
+          "id": "11",
+          "title": "Technology Usage Visibility - License and Output Analysis",
+          "background": "Lack of comprehensive reporting of technology usage across teams: which teams have licenses, user counts per tool, and output/ROI analysis. Required for budget planning and optimization.",
+          "recommendation": "Conduct technology usage audit across all BUs. Collate license counts, active users, and demo output metrics. Identify underutilized licenses for reallocation.",
+          "deliverable": "Technology usage report by Feb 28, 2026",
+          "priority": "medium",
+          "status": "in-progress"
+        }
+      ]
+    }
+  ],
+  "asks": [
+    {
+      "id": "ask-1",
+      "title": "Segment Champions - Technology Ambassadors Needed",
+      "description": "Leaders need to identify technology champions/ambassadors within their groups to work alongside RevenueOps and Demo Services Groupon Demo Technology onboarding initiative and general demo requirements.",
+      "businessUnits": [
+        "banking-int",
+        "banking-na",
+        "capital-markets",
+        "payments"
+      ],
+      "requestedFrom": "BU Leadership / Pre-Sales Managers",
+      "targetDate": "2026-02-27",
+      "priority": "medium",
+      "status": "pending"
+    }
+  ],
+  "crossBUPriorities": [
+    {
+      "id": "p1",
+      "title": "Coast MSA Renewal",
+      "description": "Work with Vendor Management / Sales Ops and Finance on Coast MSA renewal ($267).",
+      "businessUnits": [
+        "banking-int",
+        "banking-na",
+        "capital-markets",
+        "payments",
+        "cross-bu"
+      ],
+      "priority": 1,
+      "targetDate": "2026-02-18",
+      "owner": "Jason Hanscomb / Jordan Spence / John Harris",
+      "status": "in-progress"
+    },
+    {
+      "id": "p2",
+      "title": "Demo Technology Licensing",
+      "description": "Review technology spend for additional licenses across all pre-sale BU's and work with Sales Ops and Finance on allocating funds.",
+      "businessUnits": [
+        "banking-int",
+        "banking-na",
+        "capital-markets",
+        "payments",
+        "cross-bu"
+      ],
+      "priority": 2,
+      "targetDate": "2026-03-01",
+      "owner": "Jason Hanscomb / Jordan Spence / Robert Rossetti ",
+      "status": "in-progress"
+    },
+    {
+      "id": "p3",
+      "title": "Demo Audit for Banking",
+      "description": "Complete comprehensive audit of all Banking demo environments with Richard Willcock. Assess current status, identify challenges, and establish remediation roadmap.",
+      "businessUnits": [
+        "banking-int",
+        "banking-na"
+      ],
+      "priority": 3,
+      "targetDate": "2026-02-28",
+      "owner": "Jason Hanscomb / Richard Willcock",
+      "status": "in-progress"
+    },
+    {
+      "id": "p4",
+      "title": "E6 Signature",
+      "description": "Finalize cleaned document of demo asset governance agreement, and provide to E6 for signature.",
+      "businessUnits": [
+        "banking-int"
+      ],
+      "priority": 4,
+      "targetDate": "2026-02-20",
+      "owner": "Jason Hanscomb / Derek Grey / E6",
+      "status": "in-progress"
+    }
+  ],
+  "crossBURisks": [
+    {
+      "id": "risk-1",
+      "title": "Coast MSA",
+      "description": "Coast MSA renewal ($267K) past original Jan 31 deadline. If unsigned by Feb 18th, platform access could be suspended, disrupting Q1 demo pipeline.",
+      "impact": "high",
+      "likelihood": "medium",
+      "mitigation": "Procurement engaged for fast-tracked Purchase Req",
+      "owner": "Jason Hanscomb / Jordan Spence / Robert Rossetti",
+      "status": "open"
+    },
+    {
+      "id": "risk-2",
+      "title": "E6 Signature",
+      "description": "the E6 Demo Assets are require for FIS to perform demos for clients in early March. If we are unable to sign this agreement and get access, then those deals will be impacted.",
+      "impact": "high",
+      "likelihood": "low",
+      "mitigation": "Daily touchpoints with Product / Legal are getting results.",
+      "owner": "Banking (Int.) Leadership / Product",
+      "status": "open"
+    }
+  ]
+}

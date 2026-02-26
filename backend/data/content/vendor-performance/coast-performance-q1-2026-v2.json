@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "id": "coast-performance-q1-2026-v2",
+    "title": "Coast Performance Metrics V2",
+    "vendor": "Coast",
+    "quarter": "Q1",
+    "year": 2026,
+    "createdAt": "2026-02-12T00:00:00.000Z",
+    "updatedAt": "2026-02-12T00:00:00.000Z"
+  },
+  "_contentTag": "vendor-performance",
+  "_published": true,
+  
+  "revenueSupported": {
+    "total": "$18.7M",
+    "breakdown": [
+      { "category": "Influenced Pipeline", "value": "$12.3M", "percentage": 66 },
+      { "category": "Closed-Won Revenue", "value": "$6.4M", "percentage": 34 }
+    ]
+  },
+  
+  "contractingSpend": {
+    "currentSpend": "$150K",
+    "annualCommitment": "$150,000"
+  },
+
+  "licenseUnitCost": 8,
+  "licenseTermModel": "Monthly",
+  
+  "licenseConsumption": {
+    "totalAllocated": 125,
+    "totalConsumed": 94,
+    "utilizationRate": 75,
+    "businessUnits": [
+      {
+        "name": "Capital Markets",
+        "allocated": 50,
+        "consumed": 38,
+        "percentage": 76,
+        "status": "healthy"
+      },
+      {
+        "name": "Banking NA",
+        "allocated": 30,
+        "consumed": 22,
+        "percentage": 73,
+        "status": "healthy"
+      },
+      {
+        "name": "Banking International",
+        "allocated": 20,
+        "consumed": 15,
+        "percentage": 75,
+        "status": "healthy"
+      },
+      {
+        "name": "Payments",
+        "allocated": 25,
+        "consumed": 19,
+        "percentage": 76,
+        "status": "healthy"
+      }
+    ]
+  },
+  
+  "currentAssets": {
+    "total": 47,
+    "lastUpdated": "2026-02-04",
+    "byBusinessUnit": [
+      {
+        "name": "Capital Markets",
+        "published": 8,
+        "draft": 3,
+        "archived": 2
+      },
+      {
+        "name": "Banking NA",
+        "published": 12,
+        "draft": 5,
+        "archived": 1
+      },
+      {
+        "name": "Banking International",
+        "published": 6,
+        "draft": 2,
+        "archived": 1
+      },
+      {
+        "name": "Payments",
+        "published": 5,
+        "draft": 2,
+        "archived": 0
+      }
+    ],
+    "demosPerformed": [
+      { "name": "Capital Markets", "count": 34 },
+      { "name": "Banking NA", "count": 52 },
+      { "name": "Banking International", "count": 28 },
+      { "name": "Payments", "count": 41 }
+    ]
+  },
+
+  "detailedData": {
+    "users": {
+      "Capital Markets": [
+        { "name": "Sarah Chen", "email": "sarah.chen@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Michael Torres", "email": "michael.torres@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Jennifer Park", "email": "jennifer.park@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "David Kumar", "email": "david.kumar@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Emma Wilson", "email": "emma.wilson@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "James Anderson", "email": "james.anderson@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Lisa Martinez", "email": "lisa.martinez@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Robert Johnson", "email": "robert.johnson@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Maria Garcia", "email": "maria.garcia@company.com", "lastLogin": "2d ago", "status": "Inactive", "licenseStartMonth": "2025-11" },
+        { "name": "William Brown", "email": "william.brown@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" }
+      ],
+      "Banking NA": [
+        { "name": "Alex Thompson", "email": "alex.thompson@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Rachel Green", "email": "rachel.green@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Daniel Wright", "email": "daniel.wright@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Sophia Lee", "email": "sophia.lee@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Christopher Hall", "email": "christopher.hall@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" }
+      ],
+      "Banking International": [
+        { "name": "Oliver Smith", "email": "oliver.smith@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Emily Davis", "email": "emily.davis@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Thomas White", "email": "thomas.white@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Ava Robinson", "email": "ava.robinson@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Henry Taylor", "email": "henry.taylor@company.com", "lastLogin": "1w ago", "status": "Inactive", "licenseStartMonth": "2025-10" }
+      ],
+      "Payments": [
+        { "name": "Grace Kim", "email": "grace.kim@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Lucas Miller", "email": "lucas.miller@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12" },
+        { "name": "Mia Harris", "email": "mia.harris@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Benjamin Clark", "email": "benjamin.clark@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" },
+        { "name": "Charlotte Lewis", "email": "charlotte.lewis@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01" }
+      ],
+      "FIS General": [
+        { "name": "Jessica Martinez", "email": "jessica.martinez@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12", "businessUnit": "Demo Services" },
+        { "name": "Ryan O'Connor", "email": "ryan.oconnor@company.com", "lastLogin": "Today", "status": "Active", "licenseStartMonth": "2025-12", "businessUnit": "Demo Services" },
+        { "name": "Amanda Foster", "email": "amanda.foster@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2025-12", "businessUnit": "Go-To-Market" },
+        { "name": "Kevin Zhang", "email": "kevin.zhang@company.com", "lastLogin": "2d ago", "status": "Active", "licenseStartMonth": "2026-01", "businessUnit": "Go-To-Market" },
+        { "name": "Nicole Peterson", "email": "nicole.peterson@company.com", "lastLogin": "1w ago", "status": "Active", "licenseStartMonth": "2026-01", "businessUnit": "Product Design" }
+      ]
+    },
+    "assets": {
+      "Capital Markets": [
+        { "name": "Trading Platform Demo", "created": "Jan 15", "ytdDemos": 45, "status": "Published" },
+        { "name": "Risk Analytics Dashboard", "created": "Jan 22", "ytdDemos": 38, "status": "Published" },
+        { "name": "Portfolio Management Tool", "created": "Feb 5", "ytdDemos": 32, "status": "Published" },
+        { "name": "Market Data Visualization", "created": "Feb 8", "ytdDemos": 28, "status": "Published" },
+        { "name": "Compliance Reporting", "created": "Jan 18", "ytdDemos": 25, "status": "Published" },
+        { "name": "Client Onboarding Flow", "created": "Feb 10", "ytdDemos": 15, "status": "Draft" },
+        { "name": "Transaction Monitoring", "created": "Feb 11", "ytdDemos": 12, "status": "Draft" },
+        { "name": "Investment Strategy Tool", "created": "Feb 12", "ytdDemos": 8, "status": "Draft" }
+      ],
+      "Banking NA": [
+        { "name": "Retail Banking Suite", "created": "Jan 10", "ytdDemos": 52, "status": "Published" },
+        { "name": "Mobile Banking Demo", "created": "Jan 14", "ytdDemos": 48, "status": "Published" },
+        { "name": "Loan Origination System", "created": "Jan 20", "ytdDemos": 41, "status": "Published" },
+        { "name": "Credit Decisioning Tool", "created": "Jan 25", "ytdDemos": 35, "status": "Published" },
+        { "name": "Customer Service Portal", "created": "Feb 1", "ytdDemos": 30, "status": "Published" }
+      ],
+      "Banking International": [
+        { "name": "Cross-Border Payments", "created": "Jan 12", "ytdDemos": 42, "status": "Published" },
+        { "name": "FX Trading Platform", "created": "Jan 19", "ytdDemos": 36, "status": "Published" },
+        { "name": "Trade Finance Hub", "created": "Jan 28", "ytdDemos": 29, "status": "Published" },
+        { "name": "SWIFT Integration Demo", "created": "Feb 3", "ytdDemos": 22, "status": "Published" },
+        { "name": "Multi-Currency Accounts", "created": "Feb 9", "ytdDemos": 18, "status": "Draft" }
+      ],
+      "Payments": [
+        { "name": "Payment Gateway Demo", "created": "Jan 8", "ytdDemos": 55, "status": "Published" },
+        { "name": "Digital Wallet Integration", "created": "Jan 16", "ytdDemos": 47, "status": "Published" },
+        { "name": "Fraud Detection System", "created": "Jan 24", "ytdDemos": 39, "status": "Published" },
+        { "name": "Real-Time Settlements", "created": "Feb 2", "ytdDemos": 31, "status": "Published" },
+        { "name": "QR Code Payments", "created": "Feb 7", "ytdDemos": 20, "status": "Draft" }
+      ]
+    },
+    "deals": {
+      "Capital Markets": [
+        { "oid": "OPP-12340", "client": "Goldman Sachs", "product": "Enterprise Package", "value": "$450K", "stage": "Closed-Won" },
+        { "oid": "OPP-12341", "client": "Morgan Stanley", "product": "Premium Suite", "value": "$380K", "stage": "Proposal" },
+        { "oid": "OPP-12342", "client": "JP Morgan", "product": "Custom Solution", "value": "$520K", "stage": "Negotiation" },
+        { "oid": "OPP-12343", "client": "Citi Group", "product": "Standard Plan", "value": "$290K", "stage": "Closed-Won" },
+        { "oid": "OPP-12344", "client": "Bank of America", "product": "Advanced Features", "value": "$410K", "stage": "Proposal" }
+      ],
+      "Banking NA": [
+        { "oid": "OPP-12350", "client": "Wells Fargo", "product": "Enterprise Package", "value": "$380K", "stage": "Closed-Won" },
+        { "oid": "OPP-12351", "client": "US Bank", "product": "Premium Suite", "value": "$295K", "stage": "Negotiation" },
+        { "oid": "OPP-12352", "client": "PNC Bank", "product": "Custom Solution", "value": "$340K", "stage": "Proposal" },
+        { "oid": "OPP-12353", "client": "TD Bank", "product": "Standard Plan", "value": "$215K", "stage": "Closed-Won" },
+        { "oid": "OPP-12354", "client": "Fifth Third Bank", "product": "Advanced Features", "value": "$265K", "stage": "Negotiation" }
+      ],
+      "Banking International": [
+        { "oid": "OPP-12360", "client": "HSBC", "product": "Enterprise Package", "value": "$490K", "stage": "Closed-Won" },
+        { "oid": "OPP-12361", "client": "Barclays", "product": "Premium Suite", "value": "$360K", "stage": "Proposal" },
+        { "oid": "OPP-12362", "client": "Standard Chartered", "product": "Custom Solution", "value": "$425K", "stage": "Closed-Won" },
+        { "oid": "OPP-12363", "client": "Deutsche Bank", "product": "Standard Plan", "value": "$310K", "stage": "Negotiation" },
+        { "oid": "OPP-12364", "client": "BNP Paribas", "product": "Advanced Features", "value": "$385K", "stage": "Proposal" }
+      ],
+      "Payments": [
+        { "oid": "OPP-12370", "client": "PayPal", "product": "Enterprise Package", "value": "$520K", "stage": "Closed-Won" },
+        { "oid": "OPP-12371", "client": "Square", "product": "Premium Suite", "value": "$410K", "stage": "Negotiation" },
+        { "oid": "OPP-12372", "client": "Stripe", "product": "Custom Solution", "value": "$475K", "stage": "Closed-Won" },
+        { "oid": "OPP-12373", "client": "Adyen", "product": "Standard Plan", "value": "$335K", "stage": "Proposal" },
+        { "oid": "OPP-12374", "client": "Worldpay", "product": "Advanced Features", "value": "$395K", "stage": "Negotiation" }
+      ]
+    }
+  }
+}

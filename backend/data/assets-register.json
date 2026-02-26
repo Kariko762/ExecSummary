@@ -1,0 +1,76 @@
+[
+  {
+    "id": "1772110151336",
+    "name": "Tiled Licenses",
+    "type": "Tiled Pool",
+    "classification": "Global Pool",
+    "businessUnit": "",
+    "product": "",
+    "peopleAlignment": [],
+    "status": "Active",
+    "url": "",
+    "conditionalFields": {
+      "costPerLicense": "102",
+      "poolCapacity": 80
+    },
+    "signalFields": {
+      "revenueCritical": false,
+      "customerFacing": false,
+      "productionLike": false,
+      "leveragesSharedInfra": false,
+      "hasDedicatedOwnership": false,
+      "requiresDemoData": false,
+      "execSafe": false
+    },
+    "extendedAttributes": {},
+    "hosts": [],
+    "created": "2026-02-26",
+    "lastModified": "2026-02-26"
+  },
+  {
+    "id": "1772126840550",
+    "name": "Demo Environment 01",
+    "type": "Live Environment",
+    "classification": "Dedicated Sales Environment",
+    "businessUnit": "Capital Markets",
+    "product": "Credit Trading and Risk Manager",
+    "peopleAlignment": [
+      "Jane Doe"
+    ],
+    "status": "Active",
+    "url": "https://demo-fis-risk.fisglobal.com",
+    "conditionalFields": {
+      "environmentName": "Capital-Markets-01",
+      "ownershipGroup": "Pre-Sales",
+      "primaryUseCase": "Sales",
+      "tenantModel": "Single-Tenant",
+      "lifecycleModel": "Persistent",
+      "assignedRegion": "North America",
+      "environmentCode": "FISDEV"
+    },
+    "signalFields": {
+      "revenueCritical": true,
+      "customerFacing": false,
+      "productionLike": false,
+      "leveragesSharedInfra": false,
+      "hasDedicatedOwnership": false,
+      "requiresDemoData": false,
+      "execSafe": false
+    },
+    "extendedAttributes": {},
+    "hosts": [
+      {
+        "hostname": "VM-Host-01",
+        "role": "Web Server",
+        "ip": "192.168.1.100"
+      },
+      {
+        "hostname": "VM-Host-01",
+        "role": "Database",
+        "ip": "192.168.1.99"
+      }
+    ],
+    "created": "2026-02-26",
+    "lastModified": "2026-02-26"
+  }
+]

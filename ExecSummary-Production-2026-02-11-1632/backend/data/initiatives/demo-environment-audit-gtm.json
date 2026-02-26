@@ -1,0 +1,467 @@
+{
+  "id": "demo-environment-audit-gtm",
+  "name": "Demo Platform Rapid Audit & Transformation Planning",
+  "shortName": "Demo Platform Audit",
+  "slug": "gtm-demo-environment-audit",
+  "category": "operational-risk-governance",
+  "owner": "Jason Hanscomb",
+  "_published": true,
+  "coOwners": [
+    "Sales",
+    "Pre-Sales / SGO",
+    "Product Management"
+  ],
+  "sponsor": "Chief Revenue Officer",
+  "status": "in-progress",
+  "priority": "critical",
+  "progress": 0,
+  "projectStage": "discovery",
+  "linkedGoals": ["automate-govern-demo-platform"],
+  "smartGoal": {
+    "statement": "By 2026-03-04, complete rapid 3-week audit of top 3 priority demo products (IST Switch, OPF, Profile) to document current state, stakeholder ecosystem, tech stack, demo challenges, and transformation roadmap with detailed costing (CapEx/OpEx/FTE) and tooling recommendations (Tiled vs Coast).",
+    "specific": {
+      "objectives": [
+        "Prioritize demo products by revenue/pipeline impact (Top 3 + Next 5 + Rest)",
+        "Map all stakeholders (Sales, Pre-Sales, Product, GTM, Support) per product",
+        "Document current state infrastructure, tech stack, and connectivity for Top 3",
+        "Assess demo metrics, challenges, and demo styles per product",
+        "Create current → future state transformation plan with Coast/Tiled implementation",
+        "Deliver detailed costing (CapEx, OpEx, FTE) and resource/timeline estimates"
+      ]
+    },
+    "measurable": {
+      "metrics": [
+        "Products prioritized with revenue mapping: 0 → 15+",
+        "Stakeholder interviews completed: 0 → 12 (Top 3 products)",
+        "Tech stacks fully documented: 0 → 3 (IST Switch, OPF, Profile)",
+        "Transformation plans with costing: 0 → 3",
+        "Tooling evaluation (Tiled/Coast): Not Started → Complete",
+        "Executive presentation delivered: No → Yes"
+      ]
+    },
+    "achievable": {
+      "resources": "Demo Ops lead, stakeholder time (Sales/Pre-Sales/Product), Infrastructure support",
+      "teamSize": "1 FTE lead + 12 stakeholder interviews"
+    },
+    "relevant": {
+      "croAlignment": [
+        "Accelerate Profitable Growth",
+        "Revenue Protection",
+        "Frictionless Operations"
+      ],
+      "strategicThemes": [
+        "Demo Automation & Governance",
+        "GTM Transformation",
+        "Product Prioritization"
+      ]
+    },
+    "timeBound": {
+      "timeline": [
+        {
+          "phase": "Week 1: Discovery & Stakeholder Input",
+          "deliverable": "Product prioritization + Top 3 stakeholder interviews + data collection",
+          "dueDate": "2026-02-18",
+          "status": "in-progress"
+        },
+        {
+          "phase": "Week 2: Tech Stack & Challenge Analysis",
+          "deliverable": "Infrastructure docs + tech stack diagrams + demo metrics + challenge matrix",
+          "dueDate": "2026-02-25",
+          "status": "not-started"
+        },
+        {
+          "phase": "Week 3: Transformation Planning & Costing",
+          "deliverable": "Current→Future plans + CapEx/OpEx/FTE costing + tooling eval + exec presentation",
+          "dueDate": "2026-03-04",
+          "status": "not-started"
+        }
+      ]
+    }
+  },
+  "indicators": {
+    "leading": [
+      {
+        "name": "Products prioritized with revenue data",
+        "baseline": "0",
+        "target": "15",
+        "current": "0",
+        "unit": "count"
+      },
+      {
+        "name": "Stakeholder interviews completed",
+        "baseline": "0",
+        "target": "12",
+        "current": "0",
+        "unit": "count"
+      },
+      {
+        "name": "Tech stacks documented (Top 3)",
+        "baseline": "0",
+        "target": "3",
+        "current": "0",
+        "unit": "count"
+      }
+    ],
+    "lagging": [
+      {
+        "name": "Transformation plans with costing complete",
+        "baseline": "0",
+        "target": "3",
+        "current": "0",
+        "unit": "count"
+      },
+      {
+        "name": "Tooling recommendation delivered",
+        "baseline": "No",
+        "target": "Yes",
+        "current": "No",
+        "unit": "boolean"
+      }
+    ]
+  },
+  "businessCase": {
+    "problem": "Demo platform lacks product prioritization, stakeholder clarity, tech stack documentation, and transformation roadmap—impacting revenue opportunities and demo effectiveness for strategic products.",
+    "opportunity": "Rapid 3-week audit focusing on Top 3 products (IST Switch, OPF, Profile) to build business case for demo transformation with Coast/Tiled platforms, enabling faster demos and better sales execution.",
+    "solution": "Sprint-style audit with stakeholder interviews, tech stack documentation, demo challenge analysis, and detailed transformation planning with CapEx/OpEx costing.",
+    "expectedBenefits": [
+      "Clear product prioritization by revenue/pipeline impact",
+      "Stakeholder ecosystem mapped per product",
+      "Transformation roadmap with costing (CapEx/OpEx/FTE)",
+      "Tooling strategy (Tiled vs Coast with licensing models)",
+      "30/60/90 day implementation plan for Top 3 products"
+    ],
+    "roi": "Foundation for $500K+ demo transformation investment decision",
+    "paybackPeriod": "Planning phase - enables downstream ROI"
+  },
+  "budget": {
+    "total": 15000,
+    "allocated": 15000,
+    "spent": 0,
+    "currency": "USD",
+    "breakdown": [
+      {
+        "category": "Internal Labor (3 weeks @ 80-100 hours)",
+        "allocated": 12000,
+        "spent": 0
+      },
+      {
+        "category": "Stakeholder Time (12 interviews)",
+        "allocated": 0,
+        "spent": 0,
+        "note": "Internal contribution"
+      },
+      {
+        "category": "Tools & Materials",
+        "allocated": 2000,
+        "spent": 0
+      },
+      {
+        "category": "Presentation & Reporting",
+        "allocated": 1000,
+        "spent": 0
+      }
+    ],
+    "fundingSource": "Demo Operations Budget",
+    "costAvoidance": "Enables informed $500K+ transformation investment decision"
+  },
+  "funding": {
+    "requestedAmount": 15000,
+    "approvedAmount": 15000,
+    "approvalDate": "2026-02-11",
+    "approvedBy": "CRO",
+    "phaseGates": [
+      {
+        "phase": "Week 1 – Discovery Complete",
+        "amount": 5000,
+        "releaseCondition": "Stakeholder interviews done",
+        "status": "approved"
+      },
+      {
+        "phase": "Week 2 – Analysis Complete",
+        "amount": 5000,
+        "releaseCondition": "Tech stacks documented",
+        "status": "approved"
+      },
+      {
+        "phase": "Week 3 – Planning Complete",
+        "amount": 5000,
+        "releaseCondition": "Executive presentation delivered",
+        "status": "approved"
+      }
+    ]
+  },
+  "dependencies": {
+    "internal": [
+      "Stakeholder availability (Sales, Pre-Sales, Product)",
+      "Infrastructure team support for tech stack docs",
+      "Finance team for BUC/funding clarity"
+    ],
+    "external": [
+      "Tiled and Coast vendor pricing information",
+      "Pipeline data from CRM system"
+    ],
+    "blocking": []
+  },
+  "resources": {
+    "team": [
+      {
+        "role": "Demo Operations Lead (Jason Hanscomb)",
+        "count": 1,
+        "commitment": "100%",
+        "duration": "3 weeks",
+        "skills": [
+          "Stakeholder management",
+          "Business case development",
+          "Tech stack documentation",
+          "Transformation planning"
+        ]
+      },
+      {
+        "role": "Stakeholders (Sales/Pre-Sales/Product)",
+        "count": 12,
+        "commitment": "1 hour each",
+        "duration": "3 weeks",
+        "skills": [
+          "Product knowledge",
+          "Demo requirements",
+          "Customer insights"
+        ]
+      },
+      {
+        "role": "Infrastructure Support",
+        "count": 1,
+        "commitment": "20%",
+        "duration": "2 weeks",
+        "skills": [
+          "Tech stack documentation",
+          "Connectivity patterns",
+          "Hosting details"
+        ]
+      }
+    ],
+    "tools": [
+      {
+        "tool": "Spreadsheets (Excel/Sheets)",
+        "purpose": "Data collection and analysis",
+        "cost": 0,
+        "users": 1
+      },
+      {
+        "tool": "PowerPoint",
+        "purpose": "Executive presentation",
+        "cost": 0,
+        "users": 1
+      },
+      {
+        "tool": "CRM/Pipeline Data Export",
+        "purpose": "Product prioritization by revenue",
+        "cost": 0,
+        "users": 1
+      }
+    ],
+    "training": [
+      "Stakeholder interview techniques",
+      "Business case development",
+      "CapEx/OpEx costing methodology"
+    ]
+  },
+  "risks": [
+    {
+      "id": "risk-stakeholder-availability",
+      "description": "Key stakeholders unavailable for interviews (busy with sales)",
+      "impact": "Incomplete data collection",
+      "probability": "medium",
+      "severity": "medium",
+      "mitigation": "Book interviews early, offer flexible 1-hour slots",
+      "owner": "Jason Hanscomb",
+      "status": "open"
+    },
+    {
+      "id": "risk-tech-stack-complexity",
+      "description": "Tech stacks more complex than anticipated (undocumented dependencies)",
+      "impact": "Delayed documentation",
+      "probability": "medium",
+      "severity": "low",
+      "mitigation": "Focus on high-level architecture, flag gaps for follow-up",
+      "owner": "Jason Hanscomb",
+      "status": "open"
+    },
+    {
+      "id": "risk-cost-estimation-accuracy",
+      "description": "Costing estimates lack precision (limited vendor data)",
+      "impact": "Executive decision delay",
+      "probability": "low",
+      "severity": "medium",
+      "mitigation": "Provide ranges, note assumptions, flag need for vendor quotes",
+      "owner": "Jason Hanscomb",
+      "status": "open"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "milestone-week1",
+      "name": "Week 1: Product Prioritization & Stakeholder Discovery Complete",
+      "description": "Top 3 products identified, stakeholders mapped, interviews scheduled",
+      "dueDate": "2026-02-18",
+      "status": "in-progress",
+      "deliverables": [
+        "Product prioritization matrix with revenue data",
+        "Stakeholder contact matrix",
+        "Top 3 stakeholder interviews completed (12 total)",
+        "Initial data collection complete"
+      ],
+      "acceptanceCriteria": [
+        "15+ products prioritized",
+        "12 stakeholder interviews done",
+        "Data gaps identified"
+      ]
+    },
+    {
+      "id": "milestone-week2",
+      "name": "Week 2: Tech Stack & Challenge Analysis Complete",
+      "description": "Infrastructure, tech stack, demo metrics, and challenges documented for Top 3",
+      "dueDate": "2026-02-25",
+      "status": "not-started",
+      "deliverables": [
+        "Infrastructure & finance alignment docs",
+        "Tech stack diagrams (OS, middleware, connectivity) for Top 3",
+        "Demo metrics & challenge matrix",
+        "Demo style analysis"
+      ],
+      "acceptanceCriteria": [
+        "3 tech stack diagrams complete",
+        "Demo challenges documented",
+        "Current state fully understood"
+      ]
+    },
+    {
+      "id": "milestone-week3",
+      "name": "Week 3: Transformation Planning & Executive Presentation",
+      "description": "Current→Future plans, CapEx/OpEx costing, tooling eval, exec presentation delivered",
+      "dueDate": "2026-03-04",
+      "status": "not-started",
+      "deliverables": [
+        "Current→Future state plans (3 products)",
+        "CapEx/OpEx/FTE costing per product",
+        "Resource & timeline estimates",
+        "Tiled vs Coast tooling evaluation",
+        "Risk & revenue impact analysis",
+        "Executive summary deck + detailed report"
+      ],
+      "acceptanceCriteria": [
+        "3 transformation plans with costing",
+        "Tooling recommendation delivered",
+        "Executive presentation approved"
+      ]
+    }
+  ],
+  "stakeholders": [
+    {
+      "name": "Sales Leaders (IST Switch, OPF, Profile)",
+      "role": "Revenue/pipeline data, deal urgency",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Interviews (Week 1)",
+      "communicationFrequency": "As needed"
+    },
+    {
+      "name": "Pre-Sales / SGO (per product)",
+      "role": "Demo frequency, personas, pain points",
+      "interest": "high",
+      "influence": "medium",
+      "engagement": "Interviews (Week 1)",
+      "communicationFrequency": "As needed"
+    },
+    {
+      "name": "Product Management (per product)",
+      "role": "Feature roadmap, versions, demo data",
+      "interest": "medium",
+      "influence": "medium",
+      "engagement": "Interviews (Week 1)",
+      "communicationFrequency": "As needed"
+    },
+    {
+      "name": "Infrastructure Team",
+      "role": "Tech ownership, hosting, capacity",
+      "interest": "medium",
+      "influence": "medium",
+      "engagement": "Meeting (Week 2)",
+      "communicationFrequency": "Weekly"
+    },
+    {
+      "name": "Finance (BUC)",
+      "role": "Budget owners, funding model",
+      "interest": "medium",
+      "influence": "high",
+      "engagement": "Meeting (Week 2)",
+      "communicationFrequency": "As needed"
+    },
+    {
+      "name": "GTM Leadership (Frederik)",
+      "role": "Strategic context (just in case)",
+      "interest": "low",
+      "influence": "high",
+      "engagement": "Inform only",
+      "communicationFrequency": "Bi-weekly"
+    },
+    {
+      "name": "CRO",
+      "role": "Sponsor & exec presentation audience",
+      "interest": "high",
+      "influence": "high",
+      "engagement": "Presentation (Week 3)",
+      "communicationFrequency": "Bi-weekly"
+    }
+  ],
+  "successCriteria": [
+    {
+      "metric": "Products prioritized with revenue mapping",
+      "baseline": "0",
+      "target": "15+",
+      "measurement": "Spreadsheet count",
+      "frequency": "Week 1"
+    },
+    {
+      "metric": "Stakeholder interviews completed",
+      "baseline": "0",
+      "target": "12",
+      "measurement": "Interview log",
+      "frequency": "Week 1-2"
+    },
+    {
+      "metric": "Tech stacks documented (Top 3)",
+      "baseline": "0",
+      "target": "3",
+      "measurement": "Diagram count",
+      "frequency": "Week 2"
+    },
+    {
+      "metric": "Transformation plans with CapEx/OpEx costing",
+      "baseline": "0",
+      "target": "3",
+      "measurement": "Plan document count",
+      "frequency": "Week 3"
+    },
+    {
+      "metric": "Executive presentation delivered",
+      "baseline": "No",
+      "target": "Yes",
+      "measurement": "Presentation date logged",
+      "frequency": "Week 3"
+    }
+  ],
+  "startDate": "2026-02-11",
+  "endDate": "2026-03-04",
+  "createdAt": "2026-02-11T09:00:00Z",
+  "updatedAt": "2026-02-11T14:30:00Z",
+  "tags": [
+    "demo",
+    "gtm",
+    "transformation",
+    "product-prioritization",
+    "stakeholder-mapping",
+    "costing",
+    "tooling-evaluation"
+  ],
+  "notes": "Rapid 3-week sprint to build business case for demo platform transformation. Focus: Top 3 products (IST Switch, OPF, Profile), stakeholder-driven, transformation planning with detailed costing, Tiled vs Coast evaluation. Bi-weekly meeting cadence on Thursdays."
+}

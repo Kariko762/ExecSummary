@@ -1,0 +1,117 @@
+{
+  "meta": {
+    "id": "synthesia-performance-q1-2026",
+    "title": "Synthesia Performance Metrics",
+    "vendor": "Synthesia",
+    "quarter": "Q1",
+    "year": 2026,
+    "createdAt": "2026-02-04T00:00:00.000Z",
+    "updatedAt": "2026-02-04T00:00:00.000Z"
+  },
+  "_contentTag": "vendor-performance",
+  "_published": true,
+  
+  "revenueSupported": {
+    "total": "$24.2M",
+    "breakdown": [
+      { "category": "Influenced Pipeline", "value": "$16.8M", "percentage": 69 },
+      { "category": "Closed-Won Revenue", "value": "$7.4M", "percentage": 31 }
+    ]
+  },
+  
+  "contractingSpend": {
+    "currentSpend": "$200K/year",
+    "annualCommitment": "$200,000",
+    "contracts": [
+      {
+        "type": "Enterprise License Agreement",
+        "startDate": "2024-01-15",
+        "renewalDate": "2026-01-15",
+        "status": "Active",
+        "value": "$200K",
+        "autoRenew": false
+      }
+    ],
+    "upcomingRenewals": [
+      {
+        "contractType": "Enterprise License",
+        "renewalDate": "2026-01-15",
+        "daysUntilRenewal": -20,
+        "action": "Renewal overdue - immediate action required"
+      }
+    ]
+  },
+  
+  "licenseConsumption": {
+    "totalAllocated": 150,
+    "totalConsumed": 127,
+    "utilizationRate": 85,
+    "businessUnits": [
+      {
+        "name": "Capital Markets",
+        "allocated": 60,
+        "consumed": 54,
+        "percentage": 90,
+        "status": "high"
+      },
+      {
+        "name": "Banking NA",
+        "allocated": 40,
+        "consumed": 34,
+        "percentage": 85,
+        "status": "healthy"
+      },
+      {
+        "name": "Banking International",
+        "allocated": 30,
+        "consumed": 24,
+        "percentage": 80,
+        "status": "healthy"
+      },
+      {
+        "name": "Payments",
+        "allocated": 20,
+        "consumed": 15,
+        "percentage": 75,
+        "status": "healthy"
+      }
+    ]
+  },
+  
+  "currentAssets": {
+    "total": 89,
+    "lastUpdated": "2026-02-04",
+    "byBusinessUnit": [
+      {
+        "name": "Capital Markets",
+        "published": 18,
+        "draft": 6,
+        "archived": 3
+      },
+      {
+        "name": "Banking NA",
+        "published": 22,
+        "draft": 8,
+        "archived": 4
+      },
+      {
+        "name": "Banking International",
+        "published": 14,
+        "draft": 5,
+        "archived": 2
+      },
+      {
+        "name": "Payments",
+        "published": 11,
+        "draft": 4,
+        "archived": 1
+      }
+    ],
+    "demosPerformed": [
+      { "name": "Capital Markets", "count": 67 },
+      { "name": "Banking NA", "count": 89 },
+      { "name": "Banking International", "count": 54 },
+      { "name": "Payments", "count": 72 }
+    ]
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "_contentTag": "vendor-summary",
+  "meta": {
+    "id": "coast-vendor-summary-q1-2026",
+    "slug": "coast-vendor-summary-q1-2026",
+    "title": "Coast Technology Overview",
+    "category": "vendor",
+    "status": "published",
+    "createdAt": "2026-01-20T08:00:00Z",
+    "lastModified": "2026-02-03",
+    "author": "Technology Strategy Team",
+    "views": 147
+  },
+  "metadata": {
+    "vendorName": "Coast",
+    "logo": "/vendor-logos/Coast.png",
+    "title": "Technology Overview",
+    "period": "Q1 2026"
+  },
+  "heroMetrics": [
+    {
+      "id": "visualization",
+      "icon": "sparkles",
+      "value": "API Visualization",
+      "label": "Backend to Frontend UI Generation",
+      "iconColor": "text-cyan-400"
+    },
+    {
+      "id": "stories",
+      "icon": "target",
+      "value": "Interactive Stories",
+      "label": "End-to-End Product Journeys",
+      "iconColor": "text-blue-400"
+    },
+    {
+      "id": "gtm",
+      "icon": "check",
+      "value": "GTM Enablement",
+      "label": "Multi-Channel Demo Support",
+      "iconColor": "text-purple-400"
+    },
+    {
+      "id": "technical",
+      "icon": "zap",
+      "value": "Technical Demos",
+      "label": "API-First Focus",
+      "iconColor": "text-cyan-400"
+    }
+  ],
+  "storytellingIndex": {
+    "overallScore": 89,
+    "maxScore": 100,
+    "title": "THE API PRODUCT STORYTELLING INDEX",
+    "subtitle": "Turning complex APIs into interactive, realistic product demos drives faster sales cycles and higher win rates by helping buyers truly understand backend value.",
+    "segments": [
+      {
+        "name": "Demo Realism",
+        "score": 84
+      },
+      {
+        "name": "Pre-Sales Efficiency",
+        "score": 85
+      },
+      {
+        "name": "Sales Engagement",
+        "score": 85
+      },
+      {
+        "name": "Buyer Detonation",
+        "score": 88
+      },
+      {
+        "name": "Buyer Velocity",
+        "score": 79
+      },
+      {
+        "name": "Pipeline Conversion",
+        "score": 70
+      },
+      {
+        "name": "GTM Impact",
+        "score": 89
+      }
+    ]
+  },
+  "featureCards": [
+    {
+      "title": "Visualize Backend Workflows",
+      "icon": "workflow",
+      "color": "cyan",
+      "features": [
+        "Generate UI from APIs",
+        "Simulate Requests, Headers, Payloads",
+        "Data Mapping & Transformation",
+        "Make APIs Feel Like Real Product Journeys"
+      ]
+    },
+    {
+      "title": "Build Interactive Product Stories",
+      "icon": "story",
+      "color": "blue",
+      "features": [
+        "Create End-to-End Technical Journeys",
+        "Use Cases & Personas Library",
+        "Dynamic Workflow Orchestration",
+        "Conditional Logic & State Management"
+      ]
+    },
+    {
+      "title": "Enable API + Technical GTM",
+      "icon": "gtm",
+      "color": "purple",
+      "features": [
+        "Sales Demos",
+        "Interactive Marketing Content",
+        "Self-Serve Buyer Experiences",
+        "Solution Engineering",
+        "Implementation Previews"
+      ]
+    }
+  ],
+  "problemsSolved": [
+    {
+      "title": "Backend complexity invisible to sales",
+      "description": "Sales teams struggled to articulate technical value without engineering support. Coast visualizes API workflows in simple diagrams non-technical teams can use in pitches."
+    },
+    {
+      "title": "Static product docs outdated",
+      "description": "Traditional docs became stale within weeks. Coast's interactive stories auto-update with API changes, ensuring demos always reflect current capabilities."
+    },
+    {
+      "title": "Long demo setup times",
+      "description": "Engineering spent days building custom environments for each prospect. Coast's self-serve sandboxes provision in minutes with real data."
+    },
+    {
+      "title": "GTM missed technical buyers",
+      "description": "Marketing focused on business users while technical decision-makers needed depth. Coast enabled parallel technical + business narratives."
+    }
+  ],
+  "gtmHighlights": [
+    {
+      "title": "Developer Documentation Portal",
+      "description": "Product teams use Coast to auto-generate API docs with interactive examples, reducing support tickets by 40%."
+    },
+    {
+      "title": "Sales Engineering Enablement",
+      "description": "SEs build reusable demo environments for common use cases, cutting demo prep time from 3 days to 30 minutes."
+    },
+    {
+      "title": "Partner Integration Kits",
+      "description": "Partnerships team creates self-serve integration guides, enabling 3x more partner launches per quarter."
+    },
+    {
+      "title": "Product Marketing Campaigns",
+      "description": "PMM embeds live API demos in launch campaigns, increasing trial-to-paid conversion by 27%."
+    }
+  ],
+  "executiveSummary": "Coast has become the central platform for translating technical complexity into business value across product, sales, and marketing teams. The storytelling capabilities enable non-technical stakeholders to create compelling API-driven narratives without engineering bottlenecks, directly contributing to significant influenced pipeline growth.\n\nKey adoption drivers: backend workflow visualization, interactive product storytelling, and self-serve demo environments show strong performance scores. Multiple core teams actively leverage Coast for developer docs, sales engineering, partner integrations, customer success, and product marketing.\n\nStrategic value extends beyond immediate ROI - Coast is becoming the \"translation layer\" between engineering depth and GTM accessibility, enabling parallel technical + business narratives that resonate with both developer and executive buyers.\n\nRecommendation: Expand to regional sales teams and product lines. Invest in Enterprise tier for advanced analytics, white-label capabilities, and dedicated technical account management.",
+  "_published": true
+}

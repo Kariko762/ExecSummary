@@ -1,0 +1,450 @@
+{
+  "notes": [
+    {
+      "id": "note-demoprep-001",
+      "title": "Demo Ops Weekly Sync - Runbook Adoption",
+      "content": "Discussed runbook adoption challenges with the SE team. Current adoption at 47% - up from 35% last month. Main blockers are lack of awareness and training. Planning lunch & learn sessions for Q1. SEs reporting significant time savings when using standardized runbooks.",
+      "date": "2026-01-10",
+      "category": "goal-progression",
+      "tags": [
+        "demo-prep",
+        "runbooks",
+        "process-automation"
+      ],
+      "linkedGoals": [
+        "demo-prep-efficiency"
+      ],
+      "noteType": [],
+      "createdAt": "2026-01-10T14:30:00.000Z",
+      "updatedAt": "2026-01-10T14:30:00.000Z",
+      "tag": "tag-demo-ops"
+    },
+    {
+      "id": "note-demoprep-002",
+      "title": "SE Feedback Session - Data Generator Tool",
+      "content": "Sales Engineers report 40% time savings with new automated data generator prototype. Key feedback: need more product-specific datasets, better error handling, and integration with demo scheduling system. Overall sentiment very positive - team eager for full rollout.",
+      "date": "2026-01-05",
+      "category": "sales-enablement",
+      "tags": [
+        "feedback",
+        "efficiency",
+        "demo-prep"
+      ],
+      "linkedGoals": [
+        "demo-prep-efficiency"
+      ],
+      "noteType": [],
+      "createdAt": "2026-01-05T10:15:00.000Z",
+      "updatedAt": "2026-01-05T10:15:00.000Z",
+      "tag": "tag-se-feedback"
+    },
+    {
+      "id": "note-demoprep-003",
+      "title": "Demo Environment Issues - January",
+      "content": "Had 12 last-minute environment issues this month vs target of 2/month. Root causes: outdated credentials (5 cases), data refresh failures (4 cases), network config (3 cases). Validation scripts should address 80% of these when deployed. Urgent priority to complete automation.",
+      "date": "2026-01-12",
+      "category": "critical-blocker",
+      "tags": [
+        "demo-prep",
+        "infrastructure",
+        "process-automation"
+      ],
+      "linkedGoals": [
+        "demo-prep-efficiency"
+      ],
+      "noteType": [],
+      "createdAt": "2026-01-12T16:45:00.000Z",
+      "updatedAt": "2026-01-12T16:45:00.000Z",
+      "tag": "tag-demo-ops"
+    },
+    {
+      "id": "note-1765819155265",
+      "title": "Embedded Finance : Coast Renewal",
+      "content": "James (Coast) and Melissa.K (FIS) meeting dicussing the January 2026 Renewal of the EF Workspace in Coast . 56K and its \"approved\"",
+      "date": "2025-12-15",
+      "category": "expansion-ops",
+      "tags": [
+        "expansion-ops",
+        "high-value-deals"
+      ],
+      "noteType": [],
+      "createdAt": "2025-12-15T17:19:15.265Z",
+      "updatedAt": "2025-12-16T23:45:34.960Z",
+      "tag": "tag-1765871299139-hexs02v4s"
+    },
+    {
+      "id": "note-1765824389614",
+      "title": "Note System : Exec Summary",
+      "content": "Working on the Executive Summary Platform - implementing the Notes with AI funtionality. whilst also updating the Notes timeline feature for simple viewing of day to day notes!",
+      "date": "2025-12-15",
+      "category": "platform-integration",
+      "tags": [
+        "process-automation",
+        "product-intelligence"
+      ],
+      "noteType": [],
+      "createdAt": "2025-12-15T18:46:29.614Z",
+      "updatedAt": "2025-12-16T23:48:43.622Z",
+      "tag": "tag-1765928918627-vslgkphi8"
+    },
+    {
+      "id": "note-1765833301550",
+      "title": "Coast MSA Renewal",
+      "content": "The Coast MSA renewal in January 2026 - we need to talk with the heads of each Business to confirm that they have received approval or are pending approval for 2026 renewal budget. Identify gaps or overages in budgets and sync back with Robert and Mario.",
+      "date": "2025-12-15",
+      "category": "critical-blocker",
+      "tags": [
+        "revenue-at-risk",
+        "capacity-planning"
+      ],
+      "noteType": [],
+      "createdAt": "2025-12-15T21:15:01.550Z",
+      "updatedAt": "2025-12-16T23:47:38.207Z",
+      "tag": "tag-1765871299139-hexs02v4s"
+    },
+    {
+      "id": "note-1765927049907",
+      "title": "(NA) Banking Interlock",
+      "content": "Really positive feedback from Richard Chapman on the Tiled / Synthesia / Coast initiative and current progress of adoption within banking. Pushing forward with Planning or SKO.",
+      "date": "2025-12-16",
+      "category": "sales-enablement",
+      "tags": [
+        "strategic-milestone",
+        "sales-enablement"
+      ],
+      "tag": "tag-1765927041901-3er6laubc",
+      "noteType": [],
+      "createdAt": "2025-12-16T23:17:29.907Z",
+      "updatedAt": "2025-12-16T23:49:05.902Z"
+    },
+    {
+      "id": "note-1765927207490",
+      "title": "TSYS Coast Integration",
+      "content": "Discussion with Jordan on TSYS and their TSA renewal, which we believe is in 2027. Ideally, we should be looking to migrate their Demo Assets into FIS Coast Workspace.",
+      "date": "2025-12-16",
+      "category": "goal-progression",
+      "tags": [
+        "data-operations",
+        "platform-integration"
+      ],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "noteType": [],
+      "createdAt": "2025-12-16T23:20:07.490Z",
+      "updatedAt": "2025-12-24T06:58:17.898Z"
+    },
+    {
+      "id": "note-1768031985596",
+      "title": "YoY Reduction in Support Hours",
+      "content": "As 2025 closes and the Key Activities Data is in, we are able to see a year-on-year reduction of 52% in Demo Support Hours, time spent by Pre-Sales on Demo Support efforts. This 1,721 hours less in 2025 vs 2024, spent on non-strategic tasks.",
+      "date": "2026-01-10",
+      "category": "big-win",
+      "tags": [],
+      "noteType": [],
+      "createdAt": "2026-01-10T07:59:45.596Z",
+      "updatedAt": "2026-01-10T09:30:50.052Z",
+      "tag": "tag-1768037435678-ca97fd4na"
+    },
+    {
+      "id": "note-1768034356322",
+      "title": "Azure OpenAI Endpoint",
+      "content": "Validate and build a new FISDev and Prod Dev environment for Credit Assessment and FIS Compose. This is to enable new product AI functionality.\n\n- Validate Data used (NPI/PII/PHI etc)\n- Have we completed the AI Operational Review (Alexandra.M)",
+      "date": "2026-01-10",
+      "category": "new-project",
+      "tags": [],
+      "noteType": [],
+      "createdAt": "2026-01-10T08:39:16.322Z",
+      "updatedAt": "2026-01-10T09:30:41.619Z",
+      "tag": "tag-1768037435678-ca97fd4na"
+    },
+    {
+      "id": "note-1768034545578",
+      "title": "Major Issues with Shift-Allowance",
+      "content": "We are reviewing an issue with how the teams \"Shift Allowance\" has been claimed over the last 2 years which is causing issues with one member of the team having to pay back 100,000 - 200,000 INR in Shift Payments. This is a major financial burden on the team member and is causing concern throughout the group.\n\nWorking with Priya and Sanil from India TPO on resolution.",
+      "date": "2026-01-10",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [],
+      "createdAt": "2026-01-10T08:42:25.578Z",
+      "updatedAt": "2026-01-10T09:30:58.641Z",
+      "tag": "tag-1768037435678-ca97fd4na"
+    },
+    {
+      "id": "note-1768036589102",
+      "title": "Vendor Executive Summary",
+      "content": "Created initial draft of a \"Vendor Summary\" template. this will provide visibility into our engagement across demo tools and provide; \n\n- Vendor Identity Summary\n- Strategic Value\n- SMART Goals\n- Quick Stats\n- Impact\n- Risks\n- Budget",
+      "date": "2026-01-10",
+      "category": "new-project",
+      "tags": [],
+      "noteType": [],
+      "createdAt": "2026-01-10T09:16:29.102Z",
+      "updatedAt": "2026-01-10T09:31:06.208Z",
+      "tag": "tag-1765927041901-3er6laubc"
+    },
+    {
+      "id": "note-1768037196712",
+      "title": "2026 Demo Services Gantt",
+      "content": "Put together initial Gantt framework for 2026 Demo Tools deliverables.\n\nWork with Leadership to identify Strategic Products to prioritize.",
+      "date": "2026-01-10",
+      "category": "new-project",
+      "tags": [],
+      "noteType": [],
+      "createdAt": "2026-01-10T09:26:36.712Z",
+      "updatedAt": "2026-01-10T09:31:12.563Z",
+      "tag": "tag-1765927041901-3er6laubc"
+    },
+    {
+      "id": "note-1769405167626",
+      "title": "Azure OpenAI Endpoint Deployment",
+      "content": "Working with the Credit Assessment pre-sales team, who have a strategic deal with MUFG for $6m+,  to deploy a new OpenAI EndPoint in Azure FISDev.\n\nAI Governance has been completed by the business and a build ticket created by the Demo Services Group to kick-off deployment.\n\nRISK : Authentication method of the product (Subscription Based) is not the approve FIS method (Token based)\n\nNEXT STEP : Meeting with business and technical teams to kick-off ask. 27/28th Jan.",
+      "date": "2026-01-26",
+      "category": "deal-support",
+      "tags": [],
+      "noteType": [],
+      "createdAt": "2026-01-26T05:26:07.626Z",
+      "updatedAt": "2026-01-26T05:27:10.123Z",
+      "tag": "tag-1768037435678-ca97fd4na"
+    },
+    {
+      "id": "note-1769405954574",
+      "title": "Demo Asset Visibility",
+      "content": "The request for better visibility on all demo assets and issues and \"state of play\".\n\nArranging meetings with all of Andrew Murry's management team to walk through demo products verify current Demo Services data points.\n\n- Pre-Sales / SGO Consultant to Product assignment\n- Current Demo Challenges and State",
+      "date": "2026-01-26",
+      "category": "general",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765927041901-3er6laubc",
+      "createdAt": "2026-01-26T05:39:14.574Z",
+      "updatedAt": "2026-01-26T21:47:25.699Z"
+    },
+    {
+      "id": "note-1769406128491",
+      "title": "International Issuing Hub",
+      "content": "Due to the TSYS acquisition, we have agreed to de-prioritize the E6 Demo Integration with Coast for IIH and look at the TSYS Demo capabilities and product compatibility with the IIH platform.\n\nReprioritizing Bank Int. demo strategy to meet this change.",
+      "date": "2026-01-26",
+      "category": "general",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765927041901-3er6laubc",
+      "createdAt": "2026-01-26T05:42:08.491Z",
+      "updatedAt": "2026-01-26T05:42:08.491Z"
+    },
+    {
+      "id": "note-1769406225795",
+      "title": "CBK Draft Demo",
+      "content": "Coast has shared an initial functionality demo for the CBK portion of the International Issuing Hub project.",
+      "date": "2026-01-26",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1769406221960-lg5cs3rle",
+      "createdAt": "2026-01-26T05:43:45.795Z",
+      "updatedAt": "2026-01-26T05:43:45.795Z"
+    },
+    {
+      "id": "note-1769406654710",
+      "title": "Weekly Open Sessiosn",
+      "content": "As discussed with the Sales Growth Office leadership, we have agreed to setup 4 Open Sessions each week to enable greater communication with the leaderships management structure. these are non-mandatory sessions that will be an open door for anyone to join to discuss demo issues.\n\nKEY POINT : Define rules for what is open for discussion.. prioritization of needs, urgent assistance, escalation, not \"I need a VM\".",
+      "date": "2026-01-26",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765927041901-3er6laubc",
+      "createdAt": "2026-01-26T05:50:54.710Z",
+      "updatedAt": "2026-01-26T05:50:54.710Z"
+    },
+    {
+      "id": "note-1769406724513",
+      "title": "Executive Summary platform",
+      "content": "Executive Summary platform is a high priority need to enable better visibility across all of the Demo Services data, giving the transparency needed.\n\nThis is a day or two away from being finished and deployed to Demo Services infrastructure, ready for testing and network integration.",
+      "date": "2026-01-26",
+      "category": "goal-progression",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-01-26T05:52:04.513Z",
+      "updatedAt": "2026-01-26T18:10:03.145Z"
+    },
+    {
+      "id": "note-1769407019870",
+      "title": "2026 Goals and Initiatives",
+      "content": "Initial draft of 2026 goals and initiatives has been completed and currently in refinement.\n\nThese will be shared with RevOps leadership for additional tweaking before being published. \n\nNext Step : Once the goals have been confirmed, the initiatives / projects, along with milestones and timelines, will be refined and equally published and assigned to the Demo Services.",
+      "date": "2026-01-26",
+      "category": "goal-progression",
+      "tags": [],
+      "noteType": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-01-26T05:56:59.870Z",
+      "updatedAt": "2026-01-26T05:56:59.870Z"
+    },
+    {
+      "id": "note-1769464015831",
+      "title": "TSYS - Demo Sync",
+      "content": "Meeting with Derek Tanis @ TSYS (VP Sales Ops) talk about Demo Strategy\n\nThey have 3 useable demo assets \nTS2 : Consumer Issuing (NA/UK/IRE)\nCenter Suite : Corporate Expense Manager\nPrime : International Issuing",
+      "date": "2026-01-26",
+      "category": "documentation",
+      "tags": [],
+      "linkType": "goal",
+      "goalId": "increase-demo-presentation-capacity",
+      "createdAt": "2026-01-26T21:46:55.831Z",
+      "updatedAt": "2026-01-26T21:46:55.831Z"
+    },
+    {
+      "id": "note-1770136996096",
+      "title": "Commercial OKRs",
+      "content": "- Redefine Market Leadership and priority Portfolios\n- - Beat TAM growth rates by x%\n- - Secure flagship clients with high-margin, fast revenue conversion\n-- shift towards Strategic / High margin product\n\n- Accelerate Profitable Revenue Growth With the Right Product mix\n- - focus on recurring\n- - improve ACV to Revenue conversion\n- - pricing discipline\n\n- Create a Global Growth Engine with new routes to market\n- - Mostly Sheamus \n- - enterpris segment 2x the pace of core\n- - X% of total revenues from Challens and alliances and Escosystem parthnerships\n - - strategic pricing leavers for enterprise\n- - achieve 10%+ revenue stretch on acquired assets above existing baseline\n\n- Build and enable a high-performing, market-savvy Commercial Team.\n- - looking at improving and retaining \n\nBanking\n- Digital, Payments and New Cores in Banking\n\nCAP-M\n- TAS - T&R - LENDING",
+      "date": "2026-02-03",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-02-03T16:43:16.096Z",
+      "updatedAt": "2026-02-03T16:43:16.096Z"
+    },
+    {
+      "id": "note-1770137361792",
+      "title": "AI Agents - Training",
+      "content": "We need to ensure everything on the team is able to create / train and understand AI Bots.",
+      "date": "2026-02-03",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "linkType": "goal",
+      "goalId": "",
+      "createdAt": "2026-02-03T16:49:21.792Z",
+      "updatedAt": "2026-02-03T16:49:21.792Z"
+    },
+    {
+      "id": "note-1770669336856",
+      "title": "E6 - Demo Asset Red Lines",
+      "content": "Continued to work with E6 and Christian on agreed upon redlines covering Demo Asset usage and protecting FIS IP and E6 IP.\n\n- This is now a risk to upcoming deals and demos due next week.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [
+        "risk",
+        "priority",
+        "pipeline-risk"
+      ],
+      "createdAt": "2026-02-09T20:35:36.856Z",
+      "updatedAt": "2026-02-09T20:35:36.856Z"
+    },
+    {
+      "id": "note-1770670214607",
+      "title": "Coast Enterprise Agreement",
+      "content": "Kicked off engagement with Coast,  Vendor Management and Finance on building out a cost and terms for an enterprise agreement.\n\n- Kick off meeting due 11th Feb",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-02-09T20:50:14.607Z",
+      "updatedAt": "2026-02-09T20:50:14.607Z"
+    },
+    {
+      "id": "note-1770670339975",
+      "title": "Anshool BUC Change",
+      "content": "India Ops have confirmed Anshool is on the Wrong BUC and either needs to return and swap his laptop or change his BUC.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1768037435678-ca97fd4na",
+      "noteType": [
+        "risk",
+        "priority"
+      ],
+      "createdAt": "2026-02-09T20:52:19.975Z",
+      "updatedAt": "2026-02-09T20:52:19.975Z"
+    },
+    {
+      "id": "note-1770670424415",
+      "title": "CLO Azure AI EndPoint",
+      "content": "Request for new Azure Endpoints is currently blocked due to Internal Process.\n\nNeed to raise a ticket for;\n- FISDEV Infrastructure as Code ticket\n- This required another ticket to generate a \"Cloud Client ID\"",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [
+        "priority",
+        "blocker",
+        "pipeline-risk"
+      ],
+      "createdAt": "2026-02-09T20:53:44.415Z",
+      "updatedAt": "2026-02-09T20:53:44.415Z"
+    },
+    {
+      "id": "note-1770672584537",
+      "title": "Tool Governance",
+      "content": "before SKO we want to be able to come up proper flow diagram and governance on where things should be stored and how we process assets from Coast and Synthesia and tiled into seismic How do we share how do we save who has the rights what type of roles do we need This all needs to be done prior to",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1769406221960-lg5cs3rle",
+      "noteType": [
+        "deadline-driven"
+      ],
+      "createdAt": "2026-02-09T21:29:44.537Z",
+      "updatedAt": "2026-02-09T21:29:44.537Z"
+    },
+    {
+      "id": "note-1770672833280",
+      "title": "Redefined Goals",
+      "content": "Demo Services have had their 2026 redefined based on commercial OKRS. the next step is to bring these goals into a timeline availability and deliverables tasks.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "noteType": [
+        "priority"
+      ],
+      "createdAt": "2026-02-09T21:33:53.280Z",
+      "updatedAt": "2026-02-09T21:33:53.280Z"
+    },
+    {
+      "id": "note-1770674969156",
+      "title": "SGO - \"Champions\"",
+      "content": "work with SGO leadership to identify Champions or Ambassadors that can work with Central Demo Services Team on Understanding Goals and requirements for the These people will also have licences and be invited to the demo services open sessions which are four times a week.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765928973168-l6anydq8v",
+      "createdAt": "2026-02-09T22:09:29.156Z",
+      "updatedAt": "2026-02-09T22:09:29.156Z"
+    },
+    {
+      "id": "note-1770675056879",
+      "title": "Coast MSA Renewal",
+      "content": "the coast MSA has been approved by Spend Control The funding has been transferred from banking to capital markets and the MSA is to be owned by Jordan spence This is a item Stop demonstrations from Not happening at CKO Additionally being unable to demonstrate across multiple business lines due to inaccessible product demos Coast have agreed to continue maintain access and availability of the platform whilst we go through the simple administrative tasks of signing off paperwork",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "noteType": [
+        "priority",
+        "highlight"
+      ],
+      "createdAt": "2026-02-09T22:10:56.879Z",
+      "updatedAt": "2026-02-09T22:10:56.879Z"
+    },
+    {
+      "id": "note-1770677001079",
+      "title": "Banking (Int.) Audit Cont.",
+      "content": "we must work next week with Richard Wil on pushing forward and prioritising the Demo audit health visibility for Banking.",
+      "date": "2026-02-06",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1765927041901-3er6laubc",
+      "noteType": [
+        "priority"
+      ],
+      "createdAt": "2026-02-09T22:43:21.079Z",
+      "updatedAt": "2026-02-09T22:43:21.079Z"
+    },
+    {
+      "id": "note-1770827515205",
+      "title": "Investran - Onboarding Data Refresh Process",
+      "content": "meeting David Wilmer and Benjamin Goldstein on standardising a That will take a production database and restore it to the demo database systems 345 times a year upon request\n\n- David is going to provide a Excel spreadsheet with the step by step process\n- Jason to update snow intake form to include investor and data refresh\n- organise training call with\n- map out wider support network and identify distribution group of key stake holders and impacted pre sales\n– finalise and publish the process",
+      "date": "2026-02-11",
+      "category": "documentation",
+      "tags": [],
+      "tag": "tag-1768037435678-ca97fd4na",
+      "createdAt": "2026-02-11T16:31:55.205Z",
+      "updatedAt": "2026-02-11T16:31:55.206Z"
+    }
+  ]
+}

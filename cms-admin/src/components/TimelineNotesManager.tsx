@@ -15,7 +15,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus, ChevronLeft, ChevronRight, Calendar, Copy, GripVertical,
-  Trash2, Edit, X, Check, MoreVertical, Circle, CircleDot, Sparkles, ListChecks, ClipboardList
+  Trash2, Edit, X, Check, MoreVertical, Circle, CircleDot, Sparkles, ListChecks, ClipboardList, Maximize2, Minimize2
 } from 'lucide-react';
 import AiWeeklySummaryModal from './AiWeeklySummaryModal';
 import { TaskEditorModal } from './TaskEditorModal';
@@ -117,12 +117,12 @@ const DEFAULT_CATEGORY_CONFIG = {
   'expansion-ops': { label: 'Expansion Ops', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/20', border: 'border-emerald-200 dark:border-emerald-800' },
   'process-automation': { label: 'Process Automation', color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-50 dark:bg-cyan-900/20', border: 'border-cyan-200 dark:border-cyan-800' },
   'capacity-planning': { label: 'Capacity Planning', color: 'text-slate-600 dark:text-slate-400', bg: 'bg-slate-50 dark:bg-slate-900/20', border: 'border-slate-200 dark:border-slate-800' },
-  'documentation': { label: 'Documentation', color: 'text-gray-600 dark:text-gray-400', bg: 'bg-gray-50 dark:bg-gray-900/20', border: 'border-gray-200 dark:border-gray-800' },
-  'revenue-at-risk': { label: 'Revenue at Risk', color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-900/20', border: 'border-red-200 dark:border-red-800' },
+  'documentation': { label: 'Documentation', color: 'text-white/70', bg: 'bg-gray-800/50/20', border: 'border-gray-200 dark:border-gray-800' },
+  'revenue-at-risk': { label: 'Revenue at Risk', color: 'text-red-400 hover:text-red-300', bg: 'bg-red-50 dark:bg-red-900/20', border: 'border-red-200 dark:border-red-800' },
   'critical-blocker': { label: 'Critical Blocker', color: 'text-orange-600 dark:text-orange-400', bg: 'bg-orange-50 dark:bg-orange-900/20', border: 'border-orange-200 dark:border-orange-800' },
   'strategic-milestone': { label: 'Strategic Milestone', color: 'text-fis-eggplant dark:text-fis-raspberry', bg: 'bg-purple-50 dark:bg-purple-900/20', border: 'border-purple-200 dark:border-purple-800' },
   'product-intelligence': { label: 'Product Intelligence', color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-50 dark:bg-violet-900/20', border: 'border-violet-200 dark:border-violet-800' },
-  'general': { label: 'General', color: 'text-gray-600 dark:text-gray-400', bg: 'bg-gray-50 dark:bg-gray-900/20', border: 'border-gray-200 dark:border-gray-800' }
+  'general': { label: 'General', color: 'text-white/70', bg: 'bg-gray-800/50/20', border: 'border-gray-200 dark:border-gray-800' }
 };
 
 export default function TimelineNotesManager({ onClose, showNotification, autoOpenAddModal }: TimelineNotesManagerProps) {
@@ -144,6 +144,7 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
   const [draggedNote, setDraggedNote] = useState<TimelineNote | null>(null);
   const [dragOverDate, setDragOverDate] = useState<string | null>(null);
   const [deleteConfirmNote, setDeleteConfirmNote] = useState<TimelineNote | null>(null);
+  const [screenSize, setScreenSize] = useState<75 | 95 | 100>(95);
 
   // Fetch note tags (categories)
   const fetchNoteTags = async () => {
@@ -552,35 +553,56 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-7xl h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className={`bg-gray-900/95 backdrop-blur-sm border border-white/10 shadow-2xl w-full flex flex-col ${
+        screenSize === 75 ? 'max-w-6xl h-[90vh] rounded-xl' : 
+        screenSize === 95 ? 'max-w-[95vw] h-[90vh] rounded-xl' : 
+        'max-w-full h-screen rounded-none'
+      }`}>
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-gradient-to-r from-slate-900 to-gray-900">
           <div>
-            <h2 className="text-2xl font-roobert-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-roobert-bold text-white">
               Timeline Notes
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-sm text-white/70 mt-1">
               Showing {daysBack} days ({Math.ceil(daysBack / 7)} weeks)
             </p>
           </div>
           
           <div className="flex items-center gap-3">
+            {/* Cycling Size Button */}
+            <button
+              onClick={() => {
+                if (screenSize === 75) {
+                  setScreenSize(95);
+                } else if (screenSize === 95) {
+                  setScreenSize(100);
+                } else {
+                  setScreenSize(75);
+                }
+              }}
+              className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors backdrop-blur-sm"
+              title={screenSize === 75 ? 'Wider View (95%)' : screenSize === 95 ? 'Fullscreen (100%)' : 'Exit Fullscreen (75%)'}
+            >
+              {screenSize === 100 ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+            </button>
+
             {/* Navigation */}
             <div className="flex items-center gap-2">
               <button
                 onClick={handleShowLess}
                 disabled={daysBack === 14}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg bg-white/5 text-white/80 hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <span className="text-sm font-roobert-medium text-gray-700 dark:text-gray-300 px-2">
+              <span className="text-sm font-roobert-medium text-white/90 px-2">
                 {daysBack} days
               </span>
               <button
                 onClick={handleShowMore}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+                className="p-2 rounded-lg bg-white/5 text-white/80 hover:bg-white/10 transition-all"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -589,7 +611,7 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
             {/* AI Weekly Summary */}
             <button
               onClick={() => setShowAiSummary(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-roobert-semibold transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg font-roobert-semibold transition-all shadow-lg shadow-purple-500/20"
             >
               <Sparkles className="w-5 h-5" />
               AI: Weekly Summary
@@ -598,25 +620,16 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
             {/* Add Note */}
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 font-roobert-semibold"
+              className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all backdrop-blur-sm"
+              title="Add Note"
             >
               <Plus className="w-5 h-5" />
-              Add Note
-            </button>
-
-            {/* Add Task */}
-            <button
-              onClick={() => setShowAddTaskModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:opacity-90 font-roobert-semibold"
-            >
-              <ListChecks className="w-5 h-5" />
-              Add Task
             </button>
 
             {/* Close */}
             <button
               onClick={onClose}
-              className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="p-2 rounded-lg text-white/80 hover:bg-white/10 transition-all"
             >
               <X className="w-5 h-5" />
             </button>
@@ -626,7 +639,7 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
         {/* Timeline Content - Sidebar + Main */}
         <div className="flex-1 flex overflow-hidden">
           {/* Left Sidebar - Date Navigator */}
-          <div className="w-32 border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 overflow-y-auto">
+          <div className="w-32 border-r border-white/10 bg-white/5 overflow-y-auto">
             <div className="p-3 space-y-1">
               {getDateRange().map((date) => {
                 const dateStr = formatDate(date, 'iso');
@@ -639,10 +652,10 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                     onClick={() => scrollToDate(dateStr)}
                     className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-all ${
                       isToday
-                        ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                        ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
                         : hasNotes
-                        ? 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white'
-                        : 'hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-500'
+                        ? 'hover:bg-white/10 text-white'
+                        : 'hover:bg-white/5 text-white/50'
                     }`}
                   >
                     {hasNotes ? (
@@ -670,21 +683,20 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
               <div key={weekIndex} className="mb-8">
                 {/* Week Header */}
                 <div className="flex items-center gap-3 mb-6">
-                  <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
+                  <h3 className="text-lg font-roobert-bold text-white">
                     {week.weekLabel}
                   </h3>
-                  <div className="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                  <div className="flex-1 h-px bg-gradient-to-r from-purple-500/50 to-transparent"></div>
+                  <span className="text-sm text-white/70">
                     {week.weekNotes.length} {week.weekNotes.length === 1 ? 'note' : 'notes'}
                   </span>
                 </div>
 
                 {/* 2-Column Masonry Layout */}
                 {(() => {
-                  // Merge notes and tasks into single chronological array
+                  // Only show notes, not tasks
                   const mergedItems = [
-                    ...week.weekNotes.map(note => ({ type: 'note' as const, date: note.date, item: note })),
-                    ...week.weekTasks.map(task => ({ type: 'task' as const, date: task.startDate, item: task }))
+                    ...week.weekNotes.map(note => ({ type: 'note' as const, date: note.date, item: note }))
                   ].sort((a, b) => b.date.localeCompare(a.date));
 
                   return mergedItems.length > 0 ? (
@@ -720,8 +732,8 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                                     <ClipboardList className="w-5 h-5 text-white" />
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{item.item.title}</h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <h3 className="text-lg font-semibold text-white mb-1">{item.item.title}</h3>
+                                    <p className="text-sm text-white/60">
                                       {item.item.startDate} {item.item.targetDate && `→ ${item.item.targetDate}`}
                                     </p>
                                   </div>
@@ -738,8 +750,8 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                                 {/* Task Progress */}
                                 <div className="mb-3">
                                   <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-gray-600 dark:text-gray-400">Progress</span>
-                                    <span className="font-medium text-gray-900 dark:text-white">{item.item.percentage}%</span>
+                                    <span className="text-white/70">Progress</span>
+                                    <span className="font-medium text-white">{item.item.percentage}%</span>
                                   </div>
                                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                     <div 
@@ -753,15 +765,15 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                                 <div className="space-y-2 text-sm">
                                   {item.item.owner && (
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-500 dark:text-gray-400">Owner:</span>
-                                      <span className="text-gray-900 dark:text-white">{item.item.owner}</span>
+                                      <span className="text-white/60">Owner:</span>
+                                      <span className="text-white">{item.item.owner}</span>
                                     </div>
                                   )}
                                   {item.item.priority && (
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-500 dark:text-gray-400">Priority:</span>
+                                      <span className="text-white/60">Priority:</span>
                                       <span className={`font-medium ${
-                                        item.item.priority === 'High' ? 'text-red-600 dark:text-red-400' :
+                                        item.item.priority === 'High' ? 'text-red-400 hover:text-red-300' :
                                         item.item.priority === 'Medium' ? 'text-yellow-600 dark:text-yellow-400' :
                                         'text-green-600 dark:text-green-400'
                                       }`}>{item.item.priority}</span>
@@ -769,8 +781,8 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                                   )}
                                   {item.item.steps && item.item.steps.length > 0 && (
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-500 dark:text-gray-400">Steps:</span>
-                                      <span className="text-gray-900 dark:text-white">
+                                      <span className="text-white/60">Steps:</span>
+                                      <span className="text-white">
                                         {item.item.steps.filter(s => s.state === 'Complete').length} / {item.item.steps.length}
                                       </span>
                                     </div>
@@ -812,8 +824,8 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                                     <ClipboardList className="w-5 h-5 text-white" />
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{item.item.title}</h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    <h3 className="text-lg font-semibold text-white mb-1">{item.item.title}</h3>
+                                    <p className="text-sm text-white/60">
                                       {item.item.startDate} {item.item.targetDate && `→ ${item.item.targetDate}`}
                                     </p>
                                   </div>
@@ -830,8 +842,8 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                                 {/* Task Progress */}
                                 <div className="mb-3">
                                   <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-gray-600 dark:text-gray-400">Progress</span>
-                                    <span className="font-medium text-gray-900 dark:text-white">{item.item.percentage}%</span>
+                                    <span className="text-white/70">Progress</span>
+                                    <span className="font-medium text-white">{item.item.percentage}%</span>
                                   </div>
                                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                     <div 
@@ -845,15 +857,15 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                                 <div className="space-y-2 text-sm">
                                   {item.item.owner && (
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-500 dark:text-gray-400">Owner:</span>
-                                      <span className="text-gray-900 dark:text-white">{item.item.owner}</span>
+                                      <span className="text-white/60">Owner:</span>
+                                      <span className="text-white">{item.item.owner}</span>
                                     </div>
                                   )}
                                   {item.item.priority && (
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-500 dark:text-gray-400">Priority:</span>
+                                      <span className="text-white/60">Priority:</span>
                                       <span className={`font-medium ${
-                                        item.item.priority === 'High' ? 'text-red-600 dark:text-red-400' :
+                                        item.item.priority === 'High' ? 'text-red-400 hover:text-red-300' :
                                         item.item.priority === 'Medium' ? 'text-yellow-600 dark:text-yellow-400' :
                                         'text-green-600 dark:text-green-400'
                                       }`}>{item.item.priority}</span>
@@ -861,8 +873,8 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
                                   )}
                                   {item.item.steps && item.item.steps.length > 0 && (
                                     <div className="flex items-center gap-2">
-                                      <span className="text-gray-500 dark:text-gray-400">Steps:</span>
-                                      <span className="text-gray-900 dark:text-white">
+                                      <span className="text-white/60">Steps:</span>
+                                      <span className="text-white">
                                         {item.item.steps.filter(s => s.state === 'Complete').length} / {item.item.steps.length}
                                       </span>
                                     </div>
@@ -923,17 +935,17 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6"
+            className="bg-gray-800/95 backdrop-blur-sm rounded-xl shadow-2xl max-w-md w-full mx-4 p-6"
           >
             <div className="flex items-start gap-4 mb-4">
               <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
-                <Trash2 className="w-6 h-6 text-red-600 dark:text-red-400" />
+                <Trash2 className="w-6 h-6 text-red-400 hover:text-red-300" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-roobert-bold text-gray-900 dark:text-white mb-1">
+                <h3 className="text-lg font-roobert-bold text-white mb-1">
                   Delete Note
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-white/70">
                   Are you sure you want to delete "{deleteConfirmNote.title}"? This action cannot be undone.
                 </p>
               </div>
@@ -941,7 +953,7 @@ export default function TimelineNotesManager({ onClose, showNotification, autoOp
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setDeleteConfirmNote(null)}
-                className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 font-roobert-semibold"
+                className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-white/90 hover:bg-gray-200 dark:hover:bg-gray-600 font-roobert-semibold"
               >
                 Cancel
               </button>
@@ -1024,29 +1036,29 @@ function NoteCard({
       draggable
       onDragStart={() => onDragStart(note)}
       onDragEnd={onDragEnd}
-      className={`p-4 rounded-xl ${(categoryConfig[note.category] || categoryConfig['general']).bg} ${(categoryConfig[note.category] || categoryConfig['general']).border} border-2 cursor-move hover:shadow-lg transition-all ${
+      className={`p-4 rounded-xl bg-gradient-to-br from-gray-800 to-gray-700 border border-white/10 cursor-move hover:shadow-lg hover:shadow-purple-500/20 transition-all ${
         isDragging ? 'opacity-50 scale-95' : 'opacity-100'
       }`}
     >
       {/* Note Header */}
       <div className="flex items-start gap-3 mb-3">
-        <GripVertical className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+        <GripVertical className="w-5 h-5 text-white/50 mt-1 flex-shrink-0" />
         <div className="flex-1 min-w-0">
-          <div className={`text-base font-roobert-bold ${(categoryConfig[note.category] || categoryConfig['general']).color} mb-1`}>
+          <div className="text-base font-roobert-bold text-white mb-1">
             {note.title}
           </div>
         </div>
         <div className="flex gap-1">
           <button
             onClick={() => onEdit(note)}
-            className="p-1.5 rounded-lg hover:bg-white dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400"
+            className="p-1.5 rounded-lg hover:bg-white/10 text-white/70 hover:text-white"
             title="Edit note"
           >
             <Edit className="w-4 h-4" />
           </button>
           <button
             onClick={() => onDelete(note)}
-            className="p-1.5 rounded-lg hover:bg-white dark:hover:bg-gray-700 text-red-600 dark:text-red-400"
+            className="p-1.5 rounded-lg hover:bg-white/10 text-red-400 hover:text-red-300"
             title="Delete note"
           >
             <Trash2 className="w-4 h-4" />
@@ -1055,12 +1067,12 @@ function NoteCard({
       </div>
 
       {/* Note Content */}
-      <div className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap mb-3">
+      <div className="text-sm text-white/80 whitespace-pre-wrap mb-3">
         {note.content}
       </div>
 
       {/* Date and Category at Bottom */}
-      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-2">
+      <div className="flex items-center gap-2 text-xs text-white/60 mb-2">
         <Calendar className="w-3 h-3" />
         <span>
           {new Date(note.date).toLocaleDateString('en-US', { 
@@ -1070,11 +1082,11 @@ function NoteCard({
           })}
         </span>
         {isToday && (
-          <span className="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-[10px] font-roobert-semibold">
+          <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 text-[10px] font-roobert-semibold">
             Today
           </span>
         )}
-        <span className={`px-2 py-0.5 rounded-full ${(categoryConfig[note.category] || categoryConfig['general']).bg} ${(categoryConfig[note.category] || categoryConfig['general']).color} text-[10px] font-roobert-medium`}>
+        <span className={`px-2 py-0.5 rounded-full ${(categoryConfig[note.category] || categoryConfig['general']).bg} ${(categoryConfig[note.category] || categoryConfig['general']).color} text-[10px] font-roobert-medium border border-white/20`}>
           #{(categoryConfig[note.category] || categoryConfig['general']).label}
         </span>
         {noteTag && (
@@ -1086,7 +1098,7 @@ function NoteCard({
         {note.noteType && note.noteType.length > 0 && note.noteType.map((typeId) => {
           const noteTypeInfo = NOTE_TYPE_DISPLAY_MAP[typeId];
           return noteTypeInfo ? (
-            <span key={typeId} className="px-2 py-0.5 rounded-full bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 text-[10px] font-roobert-semibold">
+            <span key={typeId} className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-200 border border-indigo-400/40 text-[10px] font-roobert-semibold">
               {noteTypeInfo.label}
             </span>
           ) : null;
@@ -1188,10 +1200,10 @@ function AddNoteModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl p-6 relative overflow-visible">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-xl shadow-2xl w-full max-w-2xl p-6 relative overflow-visible">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-roobert-bold text-gray-900 dark:text-white">
+          <h3 className="text-xl font-roobert-bold text-white">
             Add New Note
           </h3>
 
@@ -1202,7 +1214,7 @@ function AddNoteModal({
                 setShowTagPanel(!showTagPanel);
                 setShowTypePanel(false);
               }}
-              className="bg-fis-eggplant dark:bg-fis-raspberry text-white px-3 py-2 rounded-lg shadow-lg hover:opacity-90 transition-all text-xs font-roobert-semibold"
+              className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-2 rounded-lg shadow-lg transition-all text-xs font-roobert-semibold"
             >
               Tag
             </motion.button>
@@ -1212,7 +1224,7 @@ function AddNoteModal({
                 setShowTypePanel(!showTypePanel);
                 setShowTagPanel(false);
               }}
-              className="bg-fis-raspberry dark:bg-fis-eggplant text-white px-3 py-2 rounded-lg shadow-lg hover:opacity-90 transition-all text-xs font-roobert-semibold"
+              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg shadow-lg transition-all text-xs font-roobert-semibold"
             >
               Type {selectedNoteTypes.length > 0 && `(${selectedNoteTypes.length})`}
             </motion.button>
@@ -1226,119 +1238,133 @@ function AddNoteModal({
               initial={{ x: '100%', opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="absolute right-0 top-0 h-full w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 shadow-2xl rounded-r-xl p-4 overflow-y-auto z-20"
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="absolute right-0 top-0 h-full w-80 bg-gradient-to-br from-gray-900 to-slate-800 backdrop-blur-sm border-l border-white/10 shadow-2xl z-20 flex flex-col overflow-hidden"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
-                  Select Tag
-                </h4>
-                <button
-                  onClick={() => setShowTagPanel(false)}
-                  className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Current Tag */}
-              {selectedTag && (
-                <div className="mb-4 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
-                  <div className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-1">
-                    Current Tag
-                  </div>
-                  {(() => {
-                    const tag = availableTags.find(t => t.id === selectedTag);
-                    return tag ? (
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: tag.color }}
-                        />
-                        <span className="text-sm font-roobert-semibold text-gray-900 dark:text-white">
-                          {tag.name}
-                        </span>
-                        <button
-                          onClick={() => setSelectedTag('')}
-                          className="ml-auto text-xs text-red-600 dark:text-red-400 hover:underline"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ) : null;
-                  })()}
-                </div>
-              )}
-
-              {/* Available Tags */}
-              <div className="space-y-2 mb-4">
-                <div className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-2">
-                  Available Tags
-                </div>
-                {availableTags.length === 0 ? (
-                  <div className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
-                    No tags yet. Create one below!
-                  </div>
-                ) : (
-                  availableTags.map((tag) => (
+              {/* Tag Panel Header */}
+              <div className="p-4 border-b border-white/10 bg-gray-900/95 backdrop-blur-sm">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-roobert-semibold text-white">Select Tag</h3>
+                  <div className="flex items-center gap-2">
                     <button
-                      key={tag.id}
-                      onClick={() => setSelectedTag(tag.id)}
-                      className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                        selectedTag === tag.id
-                          ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700'
-                      }`}
+                      onClick={handleCreateTag}
+                      disabled={!newTagName.trim()}
+                      className="px-3 py-1.5 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-roobert-medium text-xs transition-colors"
                     >
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: tag.color }}
-                        />
-                        <div className="flex-1">
-                          <div className="text-sm font-roobert-semibold text-gray-900 dark:text-white">
-                            {tag.name}
-                          </div>
-                          {tag.description && (
-                            <div className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
-                              {tag.description}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      Create Tag
                     </button>
-                  ))
-                )}
+                    <button
+                      onClick={() => setShowTagPanel(false)}
+                      className="p-1 hover:bg-white/20 rounded transition-colors text-white"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              {/* Create New Tag */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                <div className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-2">
-                  Create New Tag
-                </div>
+              {/* Tag Panel Content */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {/* Create Tag Section */}
                 <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-roobert-medium text-white">
+                      Create Tag
+                    </h4>
+                    <div className="flex items-center gap-2">
+                      <label className="text-xs font-roobert-regular text-white/70">
+                        Tag Colour
+                      </label>
+                      <input
+                        type="color"
+                        value={newTagColor}
+                        onChange={(e) => setNewTagColor(e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border border-white/10"
+                      />
+                    </div>
+                  </div>
                   <input
                     type="text"
                     value={newTagName}
                     onChange={(e) => setNewTagName(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleCreateTag()}
                     placeholder="Tag name..."
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-white/10 rounded-lg text-sm font-roobert-regular bg-gray-800/50 text-white placeholder-white/50"
                   />
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="color"
-                      value={newTagColor}
-                      onChange={(e) => setNewTagColor(e.target.value)}
-                      className="w-12 h-10 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer"
-                    />
-                    <button
-                      onClick={handleCreateTag}
-                      disabled={!newTagName.trim()}
-                      className="flex-1 px-3 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-roobert-semibold"
-                    >
-                      <Plus className="w-4 h-4 inline-block mr-1" />
-                      Create
-                    </button>
+                </div>
+
+                {/* Current Tag */}
+                {selectedTag && (
+                  <div>
+                    <h4 className="text-sm font-roobert-medium text-white mb-2">
+                      Current Tag
+                    </h4>
+                    <div className="space-y-2">
+                      {(() => {
+                        const tag = availableTags.find(t => t.id === selectedTag);
+                        if (!tag) return null;
+                        return (
+                          <div
+                            key={tag.id}
+                            className="flex items-center justify-between p-2 rounded-lg"
+                            style={{ backgroundColor: `${tag.color}20` }}
+                          >
+                            <div className="flex items-center gap-2">
+                              <div
+                                className="w-3 h-3 rounded-full"
+                                style={{ backgroundColor: tag.color }}
+                              />
+                              <span className="text-sm font-roobert-medium" style={{ color: tag.color }}>
+                                {tag.name}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => setSelectedTag('')}
+                              className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                            >
+                              <X className="w-4 h-4 text-gray-500" />
+                            </button>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                )}
+
+                {/* Available Tags */}
+                <div>
+                  <div className="space-y-1">
+                    {availableTags.length === 0 ? (
+                      <div className="text-sm text-white/60 text-center py-4">
+                        No tags yet. Create one above!
+                      </div>
+                    ) : (
+                      availableTags.map(tag => {
+                        const isSelected = selectedTag === tag.id;
+                        return (
+                          <button
+                            key={tag.id}
+                            onClick={() => setSelectedTag(tag.id)}
+                            className={`w-full flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                              isSelected
+                                ? 'bg-gray-700/50'
+                                : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                            }`}
+                          >
+                            <div
+                              className="w-4 h-4 rounded-full flex-shrink-0"
+                              style={{ backgroundColor: tag.color }}
+                            />
+                            <span className="text-sm font-roobert-regular text-white flex-1 text-left">
+                              {tag.name}
+                            </span>
+                            {isSelected && (
+                              <Check className="w-4 h-4 text-green-600" />
+                            )}
+                          </button>
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               </div>
@@ -1354,15 +1380,15 @@ function AddNoteModal({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="absolute right-0 top-0 h-full w-96 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 shadow-2xl rounded-r-xl p-4 overflow-y-auto z-20"
+              className="absolute right-0 top-0 h-full w-96 bg-gray-800/95 backdrop-blur-sm border-l border-white/10 shadow-2xl rounded-r-xl p-4 overflow-y-auto z-20"
             >
               <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
+                <h4 className="text-lg font-roobert-bold text-white">
                   Select Note Types
                 </h4>
                 <button
                   onClick={() => setShowTypePanel(false)}
-                  className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="p-1 rounded-lg hover:bg-white/10"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1370,7 +1396,7 @@ function AddNoteModal({
 
               {/* STATUS / URGENCY Section */}
               <div className="mb-6">
-                <div className="text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                <div className="text-xs font-roobert-semibold text-white/70 uppercase tracking-wide mb-3">
                   Status / Urgency
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -1382,8 +1408,8 @@ function AddNoteModal({
                         px-2 py-2 rounded-lg border-2 transition-all duration-200
                         flex items-center justify-center min-w-[90px]
                         ${selectedNoteTypes.includes(type.id)
-                          ? 'bg-fis-eggplant dark:bg-fis-raspberry border-fis-eggplant dark:border-fis-raspberry text-white shadow-lg scale-105'
-                          : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-raspberry dark:hover:border-fis-eggplant hover:scale-102'
+                          ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry border-fis-eggplant text-white shadow-lg scale-105'
+                          : 'bg-gray-700/50 border-white/20 text-white hover:border-purple-400 hover:bg-gray-700/80 hover:scale-102'
                         }
                       `}
                     >
@@ -1395,7 +1421,7 @@ function AddNoteModal({
 
               {/* CRO IMPACT Section */}
               <div className="mb-6">
-                <div className="text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                <div className="text-xs font-roobert-semibold text-white/70 uppercase tracking-wide mb-3">
                   CRO Impact
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -1407,8 +1433,8 @@ function AddNoteModal({
                         px-2 py-2 rounded-lg border-2 transition-all duration-200
                         flex items-center justify-center min-w-[90px]
                         ${selectedNoteTypes.includes(type.id)
-                          ? 'bg-fis-eggplant dark:bg-fis-raspberry border-fis-eggplant dark:border-fis-raspberry text-white shadow-lg scale-105'
-                          : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-raspberry dark:hover:border-fis-eggplant hover:scale-102'
+                          ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry border-fis-eggplant text-white shadow-lg scale-105'
+                          : 'bg-gray-700/50 border-white/20 text-white hover:border-purple-400 hover:bg-gray-700/80 hover:scale-102'
                         }
                       `}
                     >
@@ -1422,7 +1448,7 @@ function AddNoteModal({
               {selectedNoteTypes.length > 0 && (
                 <button
                   onClick={() => setSelectedNoteTypes([])}
-                  className="w-full py-2 px-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-roobert-medium"
+                  className="w-full py-2 px-4 bg-gray-700/50 text-white rounded-lg hover:bg-gray-700/80 transition-colors text-sm font-roobert-medium"
                 >
                   Clear All ({selectedNoteTypes.length})
                 </button>
@@ -1434,20 +1460,21 @@ function AddNoteModal({
         <div className="space-y-4">
           {/* Date */}
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-roobert-medium text-white/90 mb-2 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-white" />
               Date
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-white [color-scheme:dark]"
             />
           </div>
 
           {/* Title */}
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-roobert-medium text-white/90 mb-2">
               Title
             </label>
             <input
@@ -1455,14 +1482,14 @@ function AddNoteModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter note title..."
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-white"
               autoFocus
             />
           </div>
 
           {/* Content */}
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-roobert-medium text-white/90 mb-2">
               Content
             </label>
             <textarea
@@ -1470,18 +1497,34 @@ function AddNoteModal({
               onChange={(e) => setContent(e.target.value)}
               placeholder="Enter note content..."
               rows={6}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white resize-none"
+              className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-white resize-none"
             />
           </div>
 
           {/* Link Note To */}
           <div className="space-y-3">
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-roobert-medium text-white/90">
               Link Note To
             </label>
             
             {/* Link Type Toggle */}
             <div className="flex gap-4 mb-3">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="linkType"
+                  value="general"
+                  checked={linkType === 'general'}
+                  onChange={() => {
+                    setLinkType('general');
+                    setGoalId('');
+                    setInitiativeId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-gray-600"
+                />
+                <span className="text-sm text-white/90">General</span>
+              </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
@@ -1495,7 +1538,7 @@ function AddNoteModal({
                   }}
                   className="w-4 h-4 text-purple-600"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Strategic Goal</span>
+                <span className="text-sm text-white/90">Strategic Goal</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -1510,7 +1553,7 @@ function AddNoteModal({
                   }}
                   className="w-4 h-4 text-pink-600"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Initiative (Project)</span>
+                <span className="text-sm text-white/90">Initiative (Project)</span>
               </label>
             </div>
 
@@ -1519,7 +1562,7 @@ function AddNoteModal({
               <select
                 value={goalId}
                 onChange={(e) => setGoalId(e.target.value)}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-slate-200"
               >
                 <option value="">Select a strategic goal...</option>
                 {availableGoals.map(goal => (
@@ -1536,7 +1579,7 @@ function AddNoteModal({
                     setInitiativeId(e.target.value);
                     setTaskId(''); // Reset task when initiative changes
                   }}
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-slate-200"
                 >
                   <option value="">Select an initiative...</option>
                   {availableInitiatives.map(initiative => (
@@ -1548,7 +1591,7 @@ function AddNoteModal({
                   <select
                     value={taskId}
                     onChange={(e) => setTaskId(e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white mt-2"
+                    className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-slate-200 mt-2"
                   >
                     <option value="">Select a task (optional)...</option>
                     {availableTasks
@@ -1565,7 +1608,7 @@ function AddNoteModal({
               <select
                 value={taskId}
                 onChange={(e) => setTaskId(e.target.value)}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-slate-200"
               >
                 <option value="">Select a task...</option>
                 {availableTasks.map(task => (
@@ -1594,7 +1637,7 @@ function AddNoteModal({
                 {selectedNoteTypes.map((typeId) => {
                   const noteTypeInfo = NOTE_TYPE_DISPLAY_MAP[typeId];
                   return noteTypeInfo ? (
-                    <span key={typeId} className="px-2 py-1 rounded-full bg-fis-eggplant/10 dark:bg-fis-raspberry/10 text-fis-eggplant dark:text-fis-raspberry border border-fis-eggplant/20 dark:border-fis-raspberry/20 text-xs font-roobert-semibold">
+                    <span key={typeId} className="px-2 py-1 rounded-full bg-indigo-500/20 text-indigo-200 border border-indigo-400/40 text-xs font-roobert-semibold">
                       {noteTypeInfo.label}
                     </span>
                   ) : null;
@@ -1603,7 +1646,7 @@ function AddNoteModal({
             )}
             
             {/* Metadata */}
-            <div className="flex gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex gap-4 text-xs text-white/60">
               <div>Creating new note...</div>
             </div>
           </div>
@@ -1612,14 +1655,14 @@ function AddNoteModal({
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-roobert-medium"
+              className="px-4 py-2 rounded-lg text-white/90 hover:bg-white/10 font-roobert-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={!title.trim()}
-              className="px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
+              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold transition-colors"
             >
               Add Note
             </button>
@@ -1717,10 +1760,10 @@ function EditNoteModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl p-6 relative overflow-visible">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="bg-gray-900/95 backdrop-blur-sm border border-white/10 rounded-xl shadow-2xl w-full max-w-2xl p-6 relative overflow-visible">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-roobert-bold text-gray-900 dark:text-white">
+          <h3 className="text-xl font-roobert-bold text-white">
             Edit Note
           </h3>
 
@@ -1731,7 +1774,7 @@ function EditNoteModal({
                 setShowTagPanel(!showTagPanel);
                 setShowTypePanel(false);
               }}
-              className="bg-fis-eggplant dark:bg-fis-raspberry text-white px-3 py-2 rounded-lg shadow-lg hover:opacity-90 transition-all text-xs font-roobert-semibold"
+              className="bg-cyan-600 hover:bg-cyan-700 text-white px-3 py-2 rounded-lg shadow-lg transition-all text-xs font-roobert-semibold"
             >
               Tag
             </motion.button>
@@ -1741,7 +1784,7 @@ function EditNoteModal({
                 setShowTypePanel(!showTypePanel);
                 setShowTagPanel(false);
               }}
-              className="bg-fis-raspberry dark:bg-fis-eggplant text-white px-3 py-2 rounded-lg shadow-lg hover:opacity-90 transition-all text-xs font-roobert-semibold"
+              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg shadow-lg transition-all text-xs font-roobert-semibold"
             >
               Type {selectedNoteTypes.length > 0 && `(${selectedNoteTypes.length})`}
             </motion.button>
@@ -1755,119 +1798,133 @@ function EditNoteModal({
               initial={{ x: '100%', opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="absolute right-0 top-0 h-full w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 shadow-2xl rounded-r-xl p-4 overflow-y-auto z-20"
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="absolute right-0 top-0 h-full w-80 bg-gradient-to-br from-gray-900 to-slate-800 backdrop-blur-sm border-l border-white/10 shadow-2xl z-20 flex flex-col overflow-hidden"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
-                  Select Tag
-                </h4>
-                <button
-                  onClick={() => setShowTagPanel(false)}
-                  className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Current Tag */}
-              {selectedTag && (
-                <div className="mb-4 p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
-                  <div className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-1">
-                    Current Tag
-                  </div>
-                  {(() => {
-                    const tag = availableTags.find(t => t.id === selectedTag);
-                    return tag ? (
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: tag.color }}
-                        />
-                        <span className="text-sm font-roobert-semibold text-gray-900 dark:text-white">
-                          {tag.name}
-                        </span>
-                        <button
-                          onClick={() => setSelectedTag('')}
-                          className="ml-auto text-xs text-red-600 dark:text-red-400 hover:underline"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ) : null;
-                  })()}
-                </div>
-              )}
-
-              {/* Available Tags */}
-              <div className="space-y-2 mb-4">
-                <div className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-2">
-                  Available Tags
-                </div>
-                {availableTags.length === 0 ? (
-                  <div className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
-                    No tags yet. Create one below!
-                  </div>
-                ) : (
-                  availableTags.map((tag) => (
+              {/* Tag Panel Header */}
+              <div className="p-4 border-b border-white/10 bg-gray-900/95 backdrop-blur-sm">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-roobert-semibold text-white">Select Tag</h3>
+                  <div className="flex items-center gap-2">
                     <button
-                      key={tag.id}
-                      onClick={() => setSelectedTag(tag.id)}
-                      className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                        selectedTag === tag.id
-                          ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700'
-                      }`}
+                      onClick={handleCreateTag}
+                      disabled={!newTagName.trim()}
+                      className="px-3 py-1.5 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg font-roobert-medium text-xs transition-colors"
                     >
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: tag.color }}
-                        />
-                        <div className="flex-1">
-                          <div className="text-sm font-roobert-semibold text-gray-900 dark:text-white">
-                            {tag.name}
-                          </div>
-                          {tag.description && (
-                            <div className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
-                              {tag.description}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      Create Tag
                     </button>
-                  ))
-                )}
+                    <button
+                      onClick={() => setShowTagPanel(false)}
+                      className="p-1 hover:bg-white/20 rounded transition-colors text-white"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              {/* Create New Tag */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-                <div className="text-xs font-roobert-medium text-gray-600 dark:text-gray-400 mb-2">
-                  Create New Tag
-                </div>
+              {/* Tag Panel Content */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {/* Create Tag Section */}
                 <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-roobert-medium text-white">
+                      Create Tag
+                    </h4>
+                    <div className="flex items-center gap-2">
+                      <label className="text-xs font-roobert-regular text-white/70">
+                        Tag Colour
+                      </label>
+                      <input
+                        type="color"
+                        value={newTagColor}
+                        onChange={(e) => setNewTagColor(e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border border-white/10"
+                      />
+                    </div>
+                  </div>
                   <input
                     type="text"
                     value={newTagName}
                     onChange={(e) => setNewTagName(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleCreateTag()}
                     placeholder="Tag name..."
-                    className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-white/10 rounded-lg text-sm font-roobert-regular bg-gray-800/50 text-white placeholder-white/50"
                   />
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="color"
-                      value={newTagColor}
-                      onChange={(e) => setNewTagColor(e.target.value)}
-                      className="w-12 h-10 rounded-lg border border-gray-300 dark:border-gray-600 cursor-pointer"
-                    />
-                    <button
-                      onClick={handleCreateTag}
-                      disabled={!newTagName.trim()}
-                      className="flex-1 px-3 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-roobert-semibold"
-                    >
-                      <Plus className="w-4 h-4 inline-block mr-1" />
-                      Create
-                    </button>
+                </div>
+
+                {/* Current Tag */}
+                {selectedTag && (
+                  <div>
+                    <h4 className="text-sm font-roobert-medium text-white mb-2">
+                      Current Tag
+                    </h4>
+                    <div className="space-y-2">
+                      {(() => {
+                        const tag = availableTags.find(t => t.id === selectedTag);
+                        if (!tag) return null;
+                        return (
+                          <div
+                            key={tag.id}
+                            className="flex items-center justify-between p-2 rounded-lg"
+                            style={{ backgroundColor: `${tag.color}20` }}
+                          >
+                            <div className="flex items-center gap-2">
+                              <div
+                                className="w-3 h-3 rounded-full"
+                                style={{ backgroundColor: tag.color }}
+                              />
+                              <span className="text-sm font-roobert-medium" style={{ color: tag.color }}>
+                                {tag.name}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => setSelectedTag('')}
+                              className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                            >
+                              <X className="w-4 h-4 text-gray-500" />
+                            </button>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                )}
+
+                {/* Available Tags */}
+                <div>
+                  <div className="space-y-1">
+                    {availableTags.length === 0 ? (
+                      <div className="text-sm text-white/60 text-center py-4">
+                        No tags yet. Create one above!
+                      </div>
+                    ) : (
+                      availableTags.map(tag => {
+                        const isSelected = selectedTag === tag.id;
+                        return (
+                          <button
+                            key={tag.id}
+                            onClick={() => setSelectedTag(tag.id)}
+                            className={`w-full flex items-center gap-3 p-2 rounded-lg transition-colors ${
+                              isSelected
+                                ? 'bg-gray-700/50'
+                                : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                            }`}
+                          >
+                            <div
+                              className="w-4 h-4 rounded-full flex-shrink-0"
+                              style={{ backgroundColor: tag.color }}
+                            />
+                            <span className="text-sm font-roobert-regular text-white flex-1 text-left">
+                              {tag.name}
+                            </span>
+                            {isSelected && (
+                              <Check className="w-4 h-4 text-green-600" />
+                            )}
+                          </button>
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               </div>
@@ -1883,15 +1940,15 @@ function EditNoteModal({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="absolute right-0 top-0 h-full w-96 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 shadow-2xl rounded-r-xl p-4 overflow-y-auto z-20"
+              className="absolute right-0 top-0 h-full w-96 bg-gray-800/95 backdrop-blur-sm border-l border-white/10 shadow-2xl rounded-r-xl p-4 overflow-y-auto z-20"
             >
               <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-roobert-bold text-gray-900 dark:text-white">
+                <h4 className="text-lg font-roobert-bold text-white">
                   Select Note Types
                 </h4>
                 <button
                   onClick={() => setShowTypePanel(false)}
-                  className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="p-1 rounded-lg hover:bg-white/10"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -1899,7 +1956,7 @@ function EditNoteModal({
 
               {/* STATUS / URGENCY Section */}
               <div className="mb-6">
-                <div className="text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                <div className="text-xs font-roobert-semibold text-white/70 uppercase tracking-wide mb-3">
                   Status / Urgency
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -1911,8 +1968,8 @@ function EditNoteModal({
                         px-2 py-2 rounded-lg border-2 transition-all duration-200
                         flex items-center justify-center min-w-[90px]
                         ${selectedNoteTypes.includes(type.id)
-                          ? 'bg-fis-eggplant dark:bg-fis-raspberry border-fis-eggplant dark:border-fis-raspberry text-white shadow-lg scale-105'
-                          : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-raspberry dark:hover:border-fis-eggplant hover:scale-102'
+                          ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry border-fis-eggplant text-white shadow-lg scale-105'
+                          : 'bg-gray-700/50 border-white/20 text-white hover:border-purple-400 hover:bg-gray-700/80 hover:scale-102'
                         }
                       `}
                     >
@@ -1924,7 +1981,7 @@ function EditNoteModal({
 
               {/* CRO IMPACT Section */}
               <div className="mb-6">
-                <div className="text-xs font-roobert-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-3">
+                <div className="text-xs font-roobert-semibold text-white/70 uppercase tracking-wide mb-3">
                   CRO Impact
                 </div>
                 <div className="grid grid-cols-3 gap-2">
@@ -1936,8 +1993,8 @@ function EditNoteModal({
                         px-2 py-2 rounded-lg border-2 transition-all duration-200
                         flex items-center justify-center min-w-[90px]
                         ${selectedNoteTypes.includes(type.id)
-                          ? 'bg-fis-eggplant dark:bg-fis-raspberry border-fis-eggplant dark:border-fis-raspberry text-white shadow-lg scale-105'
-                          : 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-fis-raspberry dark:hover:border-fis-eggplant hover:scale-102'
+                          ? 'bg-gradient-to-r from-fis-eggplant to-fis-raspberry border-fis-eggplant text-white shadow-lg scale-105'
+                          : 'bg-gray-700/50 border-white/20 text-white hover:border-purple-400 hover:bg-gray-700/80 hover:scale-102'
                         }
                       `}
                     >
@@ -1951,7 +2008,7 @@ function EditNoteModal({
               {selectedNoteTypes.length > 0 && (
                 <button
                   onClick={() => setSelectedNoteTypes([])}
-                  className="w-full py-2 px-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm font-roobert-medium"
+                  className="w-full py-2 px-4 bg-gray-700/50 text-white rounded-lg hover:bg-gray-700/80 transition-colors text-sm font-roobert-medium"
                 >
                   Clear All ({selectedNoteTypes.length})
                 </button>
@@ -1963,20 +2020,20 @@ function EditNoteModal({
         <div className="space-y-4">
           {/* Date */}
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-roobert-medium text-white/90 mb-2">
               Date
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-white [color-scheme:dark]"
             />
           </div>
 
           {/* Title */}
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-roobert-medium text-white/90 mb-2">
               Title
             </label>
             <input
@@ -1984,13 +2041,13 @@ function EditNoteModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter note title..."
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-white"
             />
           </div>
 
           {/* Content */}
           <div>
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-roobert-medium text-white/90 mb-2">
               Content
             </label>
             <textarea
@@ -1998,18 +2055,34 @@ function EditNoteModal({
               onChange={(e) => setContent(e.target.value)}
               placeholder="Enter note content..."
               rows={6}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white resize-none"
+              className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-white resize-none"
             />
           </div>
 
           {/* Link Note To */}
           <div className="space-y-3">
-            <label className="block text-sm font-roobert-medium text-gray-700 dark:text-gray-300">
+            <label className="block text-sm font-roobert-medium text-white/90">
               Link Note To
             </label>
             
             {/* Link Type Toggle */}
             <div className="flex gap-4 mb-3">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="linkTypeEdit"
+                  value="general"
+                  checked={linkType === 'general'}
+                  onChange={() => {
+                    setLinkType('general');
+                    setGoalId('');
+                    setInitiativeId('');
+                    setTaskId('');
+                  }}
+                  className="w-4 h-4 text-gray-600"
+                />
+                <span className="text-sm text-white/90">General</span>
+              </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="radio"
@@ -2023,7 +2096,7 @@ function EditNoteModal({
                   }}
                   className="w-4 h-4 text-purple-600"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Strategic Goal</span>
+                <span className="text-sm text-white/90">Strategic Goal</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -2038,7 +2111,7 @@ function EditNoteModal({
                   }}
                   className="w-4 h-4 text-pink-600"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Initiative (Project)</span>
+                <span className="text-sm text-white/90">Initiative (Project)</span>
               </label>
             </div>
 
@@ -2047,7 +2120,7 @@ function EditNoteModal({
               <select
                 value={goalId}
                 onChange={(e) => setGoalId(e.target.value)}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-slate-200"
               >
                 <option value="">Select a strategic goal...</option>
                 {availableGoals.map(goal => (
@@ -2064,7 +2137,7 @@ function EditNoteModal({
                     setInitiativeId(e.target.value);
                     setTaskId(''); // Reset task when initiative changes
                   }}
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                  className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-slate-200"
                 >
                   <option value="">Select an initiative...</option>
                   {availableInitiatives.map(initiative => (
@@ -2076,7 +2149,7 @@ function EditNoteModal({
                   <select
                     value={taskId}
                     onChange={(e) => setTaskId(e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white mt-2"
+                    className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-slate-200 mt-2"
                   >
                     <option value="">Select a task (optional)...</option>
                     {availableTasks
@@ -2093,7 +2166,7 @@ function EditNoteModal({
               <select
                 value={taskId}
                 onChange={(e) => setTaskId(e.target.value)}
-                className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 bg-gray-800/50 border border-white/20 rounded-lg text-slate-200"
               >
                 <option value="">Select a task...</option>
                 {availableTasks.map(task => (
@@ -2131,7 +2204,7 @@ function EditNoteModal({
             )}
             
             {/* Metadata */}
-            <div className="flex gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex gap-4 text-xs text-white/60">
               <div>Created: {new Date(note.createdAt).toLocaleString()}</div>
               <div>Modified: {new Date(note.updatedAt).toLocaleString()}</div>
             </div>
@@ -2141,14 +2214,14 @@ function EditNoteModal({
           <div className="flex items-center gap-3">
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-roobert-medium"
+              className="px-4 py-2 rounded-lg text-white/90 hover:bg-white/10 font-roobert-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={!title.trim()}
-              className="px-4 py-2 bg-fis-eggplant dark:bg-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
+              className="px-4 py-2 bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-roobert-semibold"
             >
               Save Changes
             </button>

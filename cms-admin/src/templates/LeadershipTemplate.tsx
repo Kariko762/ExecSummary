@@ -1,83 +1,151 @@
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Target, AlertTriangle } from 'lucide-react';
+import { domToPng } from 'modern-screenshot';
 
-// DATA STRUCTURE - This will be replaced by AI
-const LEADERSHIP_DATA = {
-  metadata: {
-    weekStart: '2026-01-20',
-    weekEnd: '2026-01-26',
-    generatedBy: 'AI Assistant',
-    title: 'Weekly Leadership Summary'
-  },
-  
-  bluf: {
-    bottomLine: [
-      'Key point 1 from this week',
-      'Key point 2 from this week',
-      'Key point 3 from this week'
-    ],
-    background: 'Background context for this week...',
-    assessment: 'Current assessment of the situation...',
-    recommendations: [
-      'Recommendation 1',
-      'Recommendation 2',
-      'Recommendation 3'
-    ],
-    asks: [
-      { item: 'Ask 1', urgency: 'High', owner: 'Leadership Team' },
-      { item: 'Ask 2', urgency: 'Medium', owner: 'Engineering' },
-      { item: 'Ask 3', urgency: 'Low', owner: 'Operations' }
-    ]
-  },
-  
-  prioritization: [
-    {
-      title: 'Demo Asset Needs to be Prioritized',
-      description: 'Description of what needs to be prioritized and why',
-      impact: 'High - impacts customer demos and revenue pipeline',
-      status: 'In Progress',
-      priority: 'High',
-      linkedGoal: 'Demo Excellence',
-      linkedInitiative: 'Demo Platform Modernization',
-      milestones: ['Phase 1 Complete', 'Phase 2 In Progress'],
-      deliverables: ['Updated demo environment', 'Training materials'],
-      owner: 'Demo Team Lead',
-      dueDate: '2026-02-15'
-    }
-  ],
-  
-  risks: [
-    {
-      title: 'Coast MSA Renewal at Risk',
-      description: 'Customer expressing concerns about renewal timing and pricing',
-      severity: 'High',
-      probability: 'Medium',
-      impact: 'Revenue impact of $2.5M if lost',
-      owner: 'Account Manager',
-      mitigation: 'Executive engagement scheduled, pricing review in progress',
-      category: 'Revenue'
-    }
-  ]
-};
+interface LeadershipTemplateProps {
+  data?: any;
+  onExportReady?: (handler: () => void) => void;
+  contentRef?: React.RefObject<HTMLDivElement>;
+}
 
 // Component
-export default function LeadershipSummary() {
+export default function LeadershipTemplate({ data: propData, onExportReady, contentRef: parentContentRef }: LeadershipTemplateProps) {
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const localContentRef = useRef<HTMLDivElement>(null);
+  const contentRef = parentContentRef || localContentRef;
+
+  // Use prop data if provided, otherwise fallback to default
+  const data = propData || {
+    metadata: {
+      weekStart: '2026-01-20',
+      weekEnd: '2026-01-26',
+      generatedBy: 'AI Assistant',
+      title: 'Weekly Leadership Summary'
+    },
+    bluf: {
+      bottomLine: ['Key point 1', 'Key point 2', 'Key point 3'],
+      background: 'Background context...',
+      assessment: 'Current assessment...',
+      recommendation: 'Recommendations...',
+      asks: [
+        { item: 'Ask 1', urgency: 'high', owner: 'Leadership' }
+      ]
+    },
+    priorities: [],
+    risks: []
+  };
+
+  // Parse BLUF data - handle both string and array formats
+  const parseBLUF = (blufData: any) => {
+    if (!blufData) return { bottomLine: [], background: '', assessment: '', recommendations: [], asks: [] };
+    
+    // Handle bottomLine (string with newlines -> array)
+    const bottomLine = typeof blufData.bottomLine === 'string' 
+      ? blufData.bottomLine.split('\n').filter((line: string) => line.trim())
+      : blufData.bottomLine || [];
+
+    // Handle recommendations (string with newlines -> array OR use recommendation field)
+    let recommendations = [];
+    if (blufData.recommendations) {
+      recommendations = typeof blufData.recommendations === 'string'
+        ? blufData.recommendations.split('\n').filter((line: string) => line.trim())
+        : blufData.recommendations;
+    } else if (blufData.recommendation) {
+      recommendations = typeof blufData.recommendation === 'string'
+        ? blufData.recommendation.split('\n').filter((line: string) => line.trim())
+        : [blufData.recommendation];
+    }
+
+    return {
+      bottomLine,
+      background: blufData.background || '',
+      assessment: blufData.assessment || '',
+      recommendations,
+      asks: blufData.asks || []
+    };
+  };
+
+  const blufData = parseBLUF(data.bluf);
+  const prioritization = data.priorities || data.prioritization || [];
+  const risks = data.risks || [];
+
+  // Register export handler with parent
+  useEffect(() => {
+    if (onExportReady) {
+      onExportReady(() => exportToImage);
+    }
+  }, [onExportReady]);
+
+  // Export function using modern-screenshot
+  const exportToImage = async () => {
+    if (!contentRef.current) return;
+    
+    try {
+      const weekStart = data.metadata?.weekStart || '';
+      const weekEnd = data.metadata?.weekEnd || '';
+      
+      // Capture the full scrollable content
+      const dataUrl = await domToPng(contentRef.current, {
+        backgroundColor: isDarkMode ? '#1a1f2e' : '#f9fafb',
+        scale: 2, // 2x for high resolution
+        width: contentRef.current.scrollWidth,
+        height: contentRef.current.scrollHeight,
+      });
+      
+      // Download the image
+      const link = document.createElement('a');
+      link.download = `leadership-summary-${weekStart.replace(/\s/g, '-').toLowerCase()}-${weekEnd.replace(/\s/g, '-').toLowerCase()}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error('Error exporting screenshot:', error);
+    }
+  };
+
   return (
-    <div className="space-y-8">
-      {/* BLUF Section */}
-      <DesktopBLUFSection data={LEADERSHIP_DATA.bluf} />
-      
-      {/* Prioritization Section */}
-      <DesktopPrioritizationSection data={LEADERSHIP_DATA.prioritization} />
-      
-      {/* Risks Section */}
-      <DesktopRisksSection data={LEADERSHIP_DATA.risks} />
+    <div className={isDarkMode ? 'dark' : ''}>
+      <div className="min-h-screen bg-gray-50 dark:bg-[#1a1f2e] p-6 transition-colors duration-300">
+        <div ref={contentRef} className="max-w-7xl mx-auto space-y-8">
+          {/* BLUF Section */}
+          <DesktopBLUFSection blufData={blufData} />
+          
+          {/* Prioritization Section - only show if there's data */}
+          {prioritization && prioritization.length > 0 && (
+            <DesktopPrioritizationSection data={prioritization} />
+          )}
+          
+          {/* Risks Section - only show if there's data */}
+          {risks && risks.length > 0 && (
+            <DesktopRisksSection risks={risks} />
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
 // BLUF Section Component
-function DesktopBLUFSection({ data }: { data: typeof LEADERSHIP_DATA.bluf }) {
+function DesktopBLUFSection({ blufData }: { blufData: any }) {
+  const toBulletItems = (value: string | string[]) => {
+    if (!value) return [];
+    if (Array.isArray(value)) {
+      return value
+        .flatMap(item => String(item).split('\n'))
+        .map(line => line.replace(/^[-•]\s*/, '').trim())
+        .filter(Boolean);
+    }
+
+    return value
+      .split('\n')
+      .map(line => line.replace(/^[-•]\s*/, '').trim())
+      .filter(Boolean);
+  };
+
+  const backgroundItems = toBulletItems(blufData.background);
+  const assessmentItems = toBulletItems(blufData.assessment);
+  const recommendationItems = toBulletItems(blufData.recommendations || blufData.recommendation);
+
   return (
     <div className="space-y-3">
       {/* Header */}
@@ -120,7 +188,7 @@ function DesktopBLUFSection({ data }: { data: typeof LEADERSHIP_DATA.bluf }) {
                 </h4>
               </div>
               <ul className="space-y-1.5 text-sm text-gray-700 dark:text-gray-300 font-roobert-light">
-                {data.bottomLine.map((item, idx) => (
+                {blufData.bottomLine.map((item: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="text-fis-eggplant dark:text-fis-raspberry mt-0.5">•</span>
                     <span>{item}</span>
@@ -151,9 +219,20 @@ function DesktopBLUFSection({ data }: { data: typeof LEADERSHIP_DATA.bluf }) {
                   Background
                 </h4>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light leading-relaxed">
-                {data.background}
-              </p>
+              {backgroundItems.length > 0 ? (
+                <ul className="space-y-1.5 text-sm text-gray-700 dark:text-gray-300 font-roobert-light">
+                  {backgroundItems.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-fis-eggplant dark:text-fis-raspberry mt-0.5">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light leading-relaxed">
+                  {blufData.background}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -179,9 +258,20 @@ function DesktopBLUFSection({ data }: { data: typeof LEADERSHIP_DATA.bluf }) {
                   Assessment
                 </h4>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light leading-relaxed">
-                {data.assessment}
-              </p>
+              {assessmentItems.length > 0 ? (
+                <ul className="space-y-1.5 text-sm text-gray-700 dark:text-gray-300 font-roobert-light">
+                  {assessmentItems.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-fis-eggplant dark:text-fis-raspberry mt-0.5">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light leading-relaxed">
+                  {blufData.assessment}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -207,12 +297,15 @@ function DesktopBLUFSection({ data }: { data: typeof LEADERSHIP_DATA.bluf }) {
                 </h4>
               </div>
               <ul className="space-y-1.5 text-sm text-gray-700 dark:text-gray-300 font-roobert-light">
-                {data.recommendations.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {(recommendationItems.length > 0
+                  ? recommendationItems
+                  : blufData.recommendations || [])
+                  .map((item: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
               </ul>
             </div>
           </div>
@@ -239,7 +332,7 @@ function DesktopBLUFSection({ data }: { data: typeof LEADERSHIP_DATA.bluf }) {
                 </h4>
               </div>
               <div className="space-y-2">
-                {data.asks.map((ask, idx) => (
+                {blufData.asks.map((ask: any, idx: number) => (
                   <div key={idx} className="flex items-start gap-2">
                     <span className="px-2 py-0.5 text-[10px] font-roobert-bold rounded uppercase text-white shrink-0" 
                           style={{ background: ask.urgency === 'High' ? 'var(--accent-red)' : ask.urgency === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-blue)' }}>
@@ -260,7 +353,7 @@ function DesktopBLUFSection({ data }: { data: typeof LEADERSHIP_DATA.bluf }) {
 }
 
 // Prioritization Section Component
-function DesktopPrioritizationSection({ data }: { data: typeof LEADERSHIP_DATA.prioritization }) {
+function DesktopPrioritizationSection({ data }: { data: any[] }) {
   return (
     <div className="space-y-3">
       {/* Header */}
@@ -298,40 +391,38 @@ function DesktopPrioritizationSection({ data }: { data: typeof LEADERSHIP_DATA.p
             </p>
 
             <div className="grid grid-cols-2 gap-3 mb-3">
-              <div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Impact</div>
-                <div className="text-sm text-gray-900 dark:text-white font-roobert-light">{item.impact}</div>
-              </div>
-              <div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Status</div>
-                <div className="text-sm text-gray-900 dark:text-white font-roobert-light">{item.status}</div>
-              </div>
-              <div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Linked Goal</div>
-                <div className="text-sm text-fis-eggplant dark:text-fis-raspberry font-roobert-medium">{item.linkedGoal}</div>
-              </div>
-              <div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Linked Initiative</div>
-                <div className="text-sm text-fis-eggplant dark:text-fis-raspberry font-roobert-medium">{item.linkedInitiative}</div>
-              </div>
+              {item.impact && (
+                <div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Impact</div>
+                  <div className="text-sm text-gray-900 dark:text-white font-roobert-light">{item.impact}</div>
+                </div>
+              )}
+              {item.status && (
+                <div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Status</div>
+                  <div className="text-sm text-gray-900 dark:text-white font-roobert-light">{item.status}</div>
+                </div>
+              )}
+              {(item.linkedGoal || item.details?.linkedGoal) && (
+                <div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Linked Goal</div>
+                  <div className="text-sm text-fis-eggplant dark:text-fis-raspberry font-roobert-medium">{item.linkedGoal || item.details?.linkedGoal}</div>
+                </div>
+              )}
+              {(item.linkedInitiative || item.details?.linkedInitiative) && (
+                <div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Linked Initiative</div>
+                  <div className="text-sm text-fis-eggplant dark:text-fis-raspberry font-roobert-medium">{item.linkedInitiative || item.details?.linkedInitiative}</div>
+                </div>
+              )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Milestones</div>
-                <ul className="space-y-0.5">
-                  {item.milestones.map((milestone, midx) => (
-                    <li key={midx} className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light flex items-center gap-1.5">
-                      <span className="text-green-600 dark:text-green-400">✓</span>
-                      {milestone}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
+            {/* Deliverables section (if data exists) */}
+            {(item.deliverables || item.details?.actionItems) && (item.deliverables?.length > 0 || item.details?.actionItems?.length > 0) && (
+              <div className="mb-3">
                 <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Deliverables</div>
                 <ul className="space-y-0.5">
-                  {item.deliverables.map((deliverable, didx) => (
+                  {(item.deliverables || item.details?.actionItems || []).map((deliverable: string, didx: number) => (
                     <li key={didx} className="text-sm text-gray-700 dark:text-gray-300 font-roobert-light flex items-center gap-1.5">
                       <span className="text-fis-eggplant dark:text-fis-raspberry">•</span>
                       {deliverable}
@@ -339,14 +430,14 @@ function DesktopPrioritizationSection({ data }: { data: typeof LEADERSHIP_DATA.p
                   ))}
                 </ul>
               </div>
-            </div>
+            )}
 
             <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between text-xs">
               <div className="text-gray-600 dark:text-gray-400 font-roobert-light">
-                Owner: <span className="text-gray-900 dark:text-white font-roobert-medium">{item.owner}</span>
+                Owner: <span className="text-gray-900 dark:text-white font-roobert-medium">{item.owner || 'Unassigned'}</span>
               </div>
               <div className="text-gray-600 dark:text-gray-400 font-roobert-light">
-                Due: <span className="text-gray-900 dark:text-white font-roobert-medium">{item.dueDate}</span>
+                Due: <span className="text-gray-900 dark:text-white font-roobert-medium">{item.dueDate || item.details?.deadline || 'TBD'}</span>
               </div>
             </div>
           </div>
@@ -357,7 +448,7 @@ function DesktopPrioritizationSection({ data }: { data: typeof LEADERSHIP_DATA.p
 }
 
 // Risks Section Component
-function DesktopRisksSection({ data }: { data: typeof LEADERSHIP_DATA.risks }) {
+function DesktopRisksSection({ risks }: { risks: any[] }) {
   return (
     <div className="space-y-3">
       {/* Header */}
@@ -377,7 +468,7 @@ function DesktopRisksSection({ data }: { data: typeof LEADERSHIP_DATA.risks }) {
 
       {/* Risk Items Grid */}
       <div className="grid grid-cols-2 gap-4">
-        {data.map((risk, idx) => (
+        {risks.map((risk: any, idx: number) => (
           <div key={idx} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border-l-4 relative" 
                style={{ 
                  borderLeftColor: risk.severity === 'High' ? 'var(--accent-red)' : risk.severity === 'Medium' ? 'var(--accent-orange)' : 'var(--accent-yellow)',
@@ -401,18 +492,18 @@ function DesktopRisksSection({ data }: { data: typeof LEADERSHIP_DATA.risks }) {
               {risk.description}
             </p>
             <div className="space-y-2 mb-3">
-              <div className="flex items-start gap-2">
-                <span className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium min-w-[60px]">Impact:</span>
-                <span className="text-xs text-gray-900 dark:text-white font-roobert-light">{risk.impact}</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium min-w-[60px]">Owner:</span>
-                <span className="text-xs text-gray-900 dark:text-white font-roobert-light">{risk.owner}</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium min-w-[60px]">Category:</span>
-                <span className="text-xs text-gray-900 dark:text-white font-roobert-light">{risk.category}</span>
-              </div>
+              {risk.impact && (
+                <div className="flex items-start gap-2">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium min-w-[60px]">Impact:</span>
+                  <span className="text-xs text-gray-900 dark:text-white font-roobert-light">{risk.impact}</span>
+                </div>
+              )}
+              {risk.owner && (
+                <div className="flex items-start gap-2">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium min-w-[60px]">Owner:</span>
+                  <span className="text-xs text-gray-900 dark:text-white font-roobert-light">{risk.owner}</span>
+                </div>
+              )}
             </div>
             <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
               <div className="text-xs text-gray-500 dark:text-gray-400 font-roobert-medium mb-1">Mitigation Plan</div>

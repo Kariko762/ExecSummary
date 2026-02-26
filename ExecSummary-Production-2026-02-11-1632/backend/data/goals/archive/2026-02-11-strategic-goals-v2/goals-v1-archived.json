@@ -1,0 +1,2021 @@
+{
+  "goals": [
+    {
+      "id": "automate-demo-prep",
+      "name": "Transform Demo Preparation Through Automation & Standardisation",
+      "shortName": "Automate Demo Prep",
+      "category": "process-optimization",
+      "owner": "Demo Services",
+      "coOwners": [
+        "Sales Engineering",
+        "IT Operations",
+        "Product"
+      ],
+      "status": "not-started",
+      "priority": "medium",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, reduce total demo preparation hours by automating environment provisioning and standardising demo assets, resulting in faster readiness and reduced manual effort.",
+        "specific": {
+          "objectives": [
+            "Deploy automated demo environment provisioning",
+            "Standardise core demo blueprints by product and use case",
+            "Centralise ownership of demo environments",
+            "Reduce rep-managed demo systems"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Demo prep hours: 21915 → 14000",
+            "Automated environment coverage: 10% → 75%",
+            "Standard demo blueprint adoption: 0% → 80%",
+            "Rep-supported demo hours: 1613 → 400"
+          ]
+        },
+        "achievable": {
+          "resources": "Automation tooling, platform engineering, demo platform budget",
+          "ownership": "Demo Ops owns automation, IT owns infrastructure, Product defines standards"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Sales Productivity",
+            "Sales Cycle Delays",
+            "Pipeline Risk"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Assessment & Design",
+              "deliverable": "Target demo automation architecture and standards",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Platform Build",
+              "deliverable": "Automated provisioning MVP",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Rollout & Adoption",
+              "deliverable": "Standard demos live for priority products",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimisation",
+              "deliverable": "Prep hour reduction fully realised",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Automated environments deployed",
+            "baseline": "0",
+            "target": "50",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Standard demo templates created",
+            "baseline": "0",
+            "target": "30",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Users onboarded to platform",
+            "baseline": "0",
+            "target": "200",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Total demo prep hours",
+            "baseline": "21915",
+            "target": "14000",
+            "current": "21915",
+            "unit": "hours"
+          },
+          {
+            "name": "Rep-supported demo hours",
+            "baseline": "1613",
+            "target": "400",
+            "current": "1613",
+            "unit": "hours"
+          },
+          {
+            "name": "Average time to provision demo",
+            "baseline": "5",
+            "target": "1",
+            "current": "5",
+            "unit": "days"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-28",
+      "linkedInitiatives": 0,
+      "linkedTasks": 0
+    },
+    {
+      "id": "increase-demo-presentation-capacity",
+      "name": "Increase Revenue-Facing Demo Capacity & Presentation Time",
+      "shortName": "Increase Presentation Time",
+      "category": "sales-operations",
+      "owner": "Demo Services",
+      "coOwners": [
+        "Sales",
+        "Sales Engineering",
+        "Revenue Operations"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, increase customer-facing demo presentation hours by reallocating time saved from prep automation, resulting in higher sales capacity and deal coverage.",
+        "specific": {
+          "objectives": [
+            "Reallocate prep time savings to presentation capacity",
+            "Improve prep-to-present ratio",
+            "Increase supported deal coverage",
+            "Expand demo availability for peak sales periods"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Demo presentation hours: 13478 → 18000",
+            "Prep-to-present ratio: 1.6 → 0.9",
+            "Deals supported per quarter: 100 → 150",
+            "Demo availability SLA: 85% → 98%"
+          ]
+        },
+        "achievable": {
+          "resources": "Automation gains, scheduling tools, capacity planning",
+          "ownership": "Demo Ops manages capacity, Sales aligns demand"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Sales Productivity",
+            "Deal Conversion",
+            "Sales Cycle Delays"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Baseline & Capacity Model",
+              "deliverable": "New capacity model approved",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Reallocation",
+              "deliverable": "Prep savings redirected to demos",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Scaling",
+              "deliverable": "Expanded demo coverage live",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimisation",
+              "deliverable": "Target presentation hours achieved",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Prep hours reallocated",
+            "baseline": "0",
+            "target": "6000",
+            "current": "0",
+            "unit": "hours"
+          },
+          {
+            "name": "Demo capacity slots created",
+            "baseline": "0",
+            "target": "200",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Scheduling utilisation",
+            "baseline": "70",
+            "target": "90",
+            "current": "70",
+            "unit": "%"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Presentation hours",
+            "baseline": "13478",
+            "target": "18000",
+            "current": "13478",
+            "unit": "hours"
+          },
+          {
+            "name": "Deals supported",
+            "baseline": "400",
+            "target": "600",
+            "current": "400",
+            "unit": "count"
+          },
+          {
+            "name": "Win rate on demo-led deals",
+            "baseline": "22",
+            "target": "28",
+            "current": "22",
+            "unit": "%"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-lead-generation",
+      "name": "Establish Demo as a Scalable Revenue & Lead Generation Channel",
+      "shortName": "Demo Lead Gen",
+      "category": "revenue-growth",
+      "owner": "Demo Services",
+      "coOwners": [
+        "Marketing",
+        "Sales",
+        "Product Marketing",
+        "Sales Enablement"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, launch self-service demo experiences and Tiled.io-powered microsites to generate qualified leads and enable personalised sales engagement, resulting in increased top-of-funnel pipeline and higher seller productivity.",
+        "specific": {
+          "objectives": [
+            "Deploy Tiled.io as standard demo microsite platform",
+            "Deploy self-service demo experiences",
+            "Create reusable microsite templates by product and persona",
+            "Integrate demo with marketing lead capture and CRM",
+            "Enable personalised demo journeys for strategic accounts"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Self-service demos launched: 0 → 10",
+            "Microsites live: 0 → 50",
+            "Leads generated from demos: 0 → 1200",
+            "Microsite-driven demo requests: 0 → 1500",
+            "Demo-to-opportunity conversion: 0% → 15%",
+            "Seller adoption rate: 0% → 75%",
+            "Pipeline influenced by demos: £0 → £15M"
+          ]
+        },
+        "achievable": {
+          "resources": "Tiled.io licenses, self-service demo platform, marketing integration, enablement content, integration engineering",
+          "ownership": "Demo owns platform and templates, Marketing owns lead flow, Sales owns follow-up, Sales Enablement drives adoption"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Pipeline Risk",
+            "Deal Conversion",
+            "Forecast Confidence",
+            "Sales Productivity"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Platform Setup",
+              "deliverable": "Tiled.io configured and self-service platform chosen",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Template Build & Pilot",
+              "deliverable": "Core microsite templates and initial self-service demos live",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Seller Rollout & Scale",
+              "deliverable": "Sales teams enabled, persona-based journeys deployed",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimise",
+              "deliverable": "Account-level personalisation and lead/pipeline targets achieved",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Self-service demos published",
+            "baseline": "0",
+            "target": "10",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Microsite templates created",
+            "baseline": "0",
+            "target": "25",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Microsites published",
+            "baseline": "0",
+            "target": "50",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Sellers trained on microsites",
+            "baseline": "0",
+            "target": "300",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Demo session starts",
+            "baseline": "0",
+            "target": "5000",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Leads generated",
+            "baseline": "0",
+            "target": "1200",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Microsite-driven demo requests",
+            "baseline": "0",
+            "target": "1500",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Opportunities sourced",
+            "baseline": "0",
+            "target": "180",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Seller adoption rate",
+            "baseline": "0",
+            "target": "75",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Demo engagement rate",
+            "baseline": "0",
+            "target": "40",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Pipeline influenced",
+            "baseline": "0",
+            "target": "15000000",
+            "current": "0",
+            "unit": "count"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-intelligence-nps",
+      "name": "Deliver Executive-Level Transparency, Demo Intelligence & Experience Quality (NPS)",
+      "shortName": "Demo Intelligence & NPS",
+      "category": "customer-success",
+      "owner": "Demo Services",
+      "coOwners": [
+        "Revenue Operations",
+        "Sales Leadership",
+        "Customer Experience"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, implement an executive demo intelligence platform with NPS and feedback tracking, resulting in improved demo quality, accountability, and revenue alignment.",
+        "specific": {
+          "objectives": [
+            "Launch executive demo operations dashboard",
+            "Implement demo NPS collection",
+            "Capture qualitative demo feedback",
+            "Establish monthly exec reporting cadence"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Dashboard coverage: 0% → 100%",
+            "Demo NPS baseline established: No → Yes",
+            "Demo NPS score: TBD → +15 improvement",
+            "Monthly exec reports: 0 → 12"
+          ]
+        },
+        "achievable": {
+          "resources": "BI tooling, survey platform, RevOps analytics support",
+          "ownership": "RevOps owns dashboard, Demo owns NPS and feedback"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Customer Sat",
+            "Forecast Confidence",
+            "Deal Conversion"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Data Design",
+              "deliverable": "Executive metrics framework",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Dashboard MVP",
+              "deliverable": "Live executive dashboard",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "NPS Rollout",
+              "deliverable": "NPS live for all demos",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimisation",
+              "deliverable": "Closed-loop improvement process",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Dashboards live",
+            "baseline": "0",
+            "target": "1",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "NPS surveys sent",
+            "baseline": "0",
+            "target": "3000",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Feedback responses",
+            "baseline": "0",
+            "target": "1200",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Demo NPS score",
+            "baseline": "0",
+            "target": "15",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Exec report adoption",
+            "baseline": "0",
+            "target": "12",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Demo quality issues resolved",
+            "baseline": "0",
+            "target": "50",
+            "current": "0",
+            "unit": "count"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "integrated-demo-ecosystem",
+      "name": "Build an Integrated Demo Data & Technology Ecosystem with ROI Attribution",
+      "shortName": "Integrated Demo Ecosystem",
+      "category": "innovation",
+      "owner": "Revenue Operations",
+      "coOwners": [
+        "Demo Services",
+        "IT",
+        "Data & Analytics",
+        "Finance"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, integrate demo platforms with CRM and financial systems to enable end-to-end demo-to-revenue tracking and ROI reporting, resulting in clear accountability and investment justification.",
+        "specific": {
+          "objectives": [
+            "Integrate demo platform with CRM",
+            "Define standard demo influence and attribution model",
+            "Enable demo-to-opportunity attribution",
+            "Implement demo ROI and cost-to-serve reporting",
+            "Centralise demo analytics",
+            "Publish quarterly demo revenue impact reports"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "CRM integration coverage: 0% → 100%",
+            "Opportunities with demo attribution: 20% → 90%",
+            "Deals with tracked demo influence: 15% → 85%",
+            "Demo ROI visibility: 0% → 100%",
+            "Cost-per-demo tracked: No → Yes",
+            "Manual reporting effort: 40 hrs/month → 5 hrs/month"
+          ]
+        },
+        "achievable": {
+          "resources": "CRM integration, BI tooling, RevOps analytics support, data platform, financial tracking tools",
+          "ownership": "RevOps owns attribution model and data model, IT builds integrations, Demo owns activity tracking, Finance validates ROI"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Forecast Confidence",
+            "Pipeline Risk",
+            "Sales Productivity"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Attribution Design",
+              "deliverable": "Standard demo attribution framework and integration architecture",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "CRM Integration",
+              "deliverable": "Demo activity linked to opportunities, CRM and demo platform connected",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "ROI Reporting",
+              "deliverable": "Demo-to-revenue attribution live, Demo ROI dashboards built",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Executive Adoption",
+              "deliverable": "Full ecosystem reporting, Quarterly exec ROI reporting cadence",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Integrations built",
+            "baseline": "0",
+            "target": "5",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Attribution rules configured",
+            "baseline": "0",
+            "target": "10",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Opportunities with demo activity logged",
+            "baseline": "20",
+            "target": "90",
+            "current": "20",
+            "unit": "%"
+          },
+          {
+            "name": "Data fields mapped",
+            "baseline": "0",
+            "target": "100",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Revenue reports built",
+            "baseline": "0",
+            "target": "5",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Attribution coverage",
+            "baseline": "0",
+            "target": "90",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Deals with demo influence",
+            "baseline": "15",
+            "target": "85",
+            "current": "15",
+            "unit": "%"
+          },
+          {
+            "name": "Demo ROI visibility",
+            "baseline": "0",
+            "target": "100",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Manual reporting hours",
+            "baseline": "40",
+            "target": "5",
+            "current": "40",
+            "unit": "hours"
+          },
+          {
+            "name": "Demo-to-revenue visibility",
+            "baseline": "0",
+            "target": "100",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Exec adoption of ROI reports",
+            "baseline": "0",
+            "target": "12",
+            "current": "0",
+            "unit": "count"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-asset-governance",
+      "name": "Establish Demo Asset Governance & Data Verification",
+      "shortName": "Demo Asset Governance",
+      "category": "process-optimization",
+      "owner": "Demo Services",
+      "coOwners": [
+        "IT",
+        "Product",
+        "Revenue Operations"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, establish a governed, verified inventory of all demo assets and data, resulting in improved accuracy, reduced risk, and higher demo reliability.",
+        "specific": {
+          "objectives": [
+            "Create a central demo asset inventory and registry",
+            "Implement regular demo data verification and audits",
+            "Define ownership and lifecycle management for demo assets",
+            "Retire outdated or duplicate demo environments and assets"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Demo assets inventoried: 0% → 100%",
+            "Verified demo data coverage: 0% → 95%",
+            "Outdated assets retired: 0 → 150",
+            "Demo data accuracy incidents: 20 → 3"
+          ]
+        },
+        "achievable": {
+          "resources": "Asset management tooling, audit processes, product data owners",
+          "ownership": "Demo owns registry, Product owns data accuracy, IT supports tooling"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Pipeline Risk",
+            "Forecast Confidence",
+            "Customer Sat"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Asset Discovery",
+              "deliverable": "Complete demo asset inventory",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Governance Framework",
+              "deliverable": "Ownership and lifecycle model defined",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Verification Rollout",
+              "deliverable": "Automated verification and audits live",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimisation",
+              "deliverable": "High-confidence demo asset baseline",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Assets discovered and logged",
+            "baseline": "0",
+            "target": "500",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Assets with assigned owners",
+            "baseline": "0",
+            "target": "400",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Verification audits completed",
+            "baseline": "0",
+            "target": "12",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Verified asset coverage",
+            "baseline": "0",
+            "target": "95",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Outdated assets retired",
+            "baseline": "0",
+            "target": "150",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Demo data accuracy incidents",
+            "baseline": "20",
+            "target": "3",
+            "current": "20",
+            "unit": "count"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-storytelling-excellence",
+      "name": "Standardise Demo Narrative, Storytelling & Value Messaging Excellence",
+      "shortName": "Demo Storytelling",
+      "category": "quality",
+      "owner": "Demo Services",
+      "coOwners": [
+        "Product Marketing",
+        "Sales Enablement",
+        "Sales Engineering"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, standardise persona-based demo narratives and value messaging to improve buyer relevance and deal conversion, resulting in higher-quality and more consistent demo experiences.",
+        "specific": {
+          "objectives": [
+            "Define persona-based demo story frameworks",
+            "Create outcome-driven demo flows",
+            "Embed value and ROI messaging into demos",
+            "Standardise demo narrative playbooks"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Persona demo frameworks: 0 → 6",
+            "Standardised demo flows: 0% → 80%",
+            "Win rate on standard demos: 22% → 30%",
+            "Demo NPS (story quality): 0 → +20"
+          ]
+        },
+        "achievable": {
+          "resources": "Product marketing content, enablement resources, demo design capacity",
+          "ownership": "Product Marketing owns messaging, Demo owns flows, Enablement drives rollout"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Deal Conversion",
+            "Sales Productivity",
+            "Customer Sat"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Narrative Design",
+              "deliverable": "Persona and value story frameworks",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Flow Build",
+              "deliverable": "Standard demo flows created",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Enablement Rollout",
+              "deliverable": "Playbooks and training delivered",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimisation",
+              "deliverable": "Story-driven demo quality targets met",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Persona stories created",
+            "baseline": "0",
+            "target": "6",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Standard demo flows published",
+            "baseline": "0",
+            "target": "40",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Sellers trained on narratives",
+            "baseline": "0",
+            "target": "300",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Standard flow adoption",
+            "baseline": "0",
+            "target": "80",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Win rate on demo-led deals",
+            "baseline": "22",
+            "target": "30",
+            "current": "22",
+            "unit": "%"
+          },
+          {
+            "name": "Demo NPS (story quality)",
+            "baseline": "0",
+            "target": "20",
+            "current": "0",
+            "unit": "count"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-localization",
+      "name": "Enable Strategic Demo Localization & Multi-Lingual Assets",
+      "shortName": "Demo Localization",
+      "category": "customer-success",
+      "owner": "Demo Services",
+      "coOwners": [
+        "Product Marketing",
+        "Regional Sales",
+        "Localization"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2026-12-31, localize priority demo assets and narratives into strategic languages to support regional growth, resulting in improved buyer engagement and global deal conversion.",
+        "specific": {
+          "objectives": [
+            "Identify priority regions and languages",
+            "Localize core demo narratives and assets",
+            "Implement multilingual demo data and UI support",
+            "Enable regional ownership of localized demos"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Languages supported: 1 → 6",
+            "Localized demo assets: 0 → 60",
+            "Regional demo adoption: 20% → 75%",
+            "Win rate in localized regions: 18% → 26%"
+          ]
+        },
+        "achievable": {
+          "resources": "Localization vendors, regional SMEs, demo platform support",
+          "ownership": "Demo owns assets, Product Marketing owns translation, Regions own validation"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Deal Conversion",
+            "Pipeline Risk",
+            "Customer Sat"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Priority Definition",
+              "deliverable": "Target regions and languages approved",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Core Asset Localization",
+              "deliverable": "Top demos localized",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Platform Enablement",
+              "deliverable": "Multilingual demo support live",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Regional Scale",
+              "deliverable": "Localized demos operational globally",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Languages approved",
+            "baseline": "0",
+            "target": "6",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Assets submitted for localization",
+            "baseline": "0",
+            "target": "80",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Regional reviewers assigned",
+            "baseline": "0",
+            "target": "20",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Localized assets live",
+            "baseline": "0",
+            "target": "60",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Regional demo adoption",
+            "baseline": "20",
+            "target": "75",
+            "current": "20",
+            "unit": "%"
+          },
+          {
+            "name": "Win rate in localized regions",
+            "baseline": "18",
+            "target": "26",
+            "current": "18",
+            "unit": "%"
+          }
+        ]
+      },
+      "createdDate": "2026-01-26",
+      "lastUpdated": "2026-01-26"
+    },
+    {
+      "id": "demo-operational-maturity",
+      "name": "Demo Operational Maturity",
+      "shortName": "Operational Maturity",
+      "category": "process-optimization",
+      "owner": "Demo Services",
+      "coOwners": [],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2027-12-31",
+      "color": "#8B5CF6",
+      "icon": "",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By 2027-12-31, evolve and mature the existing Demo Services operating model to improve clarity, efficiency, visibility, and consistency in support, decisioning, and engagement across all products, platforms, and regions.",
+        "specific": {
+          "objectives": [
+            "Design clear visual flow diagrams for support decisioning",
+            "Refresh team ownership maps and contact lists",
+            "Reinforce mandatory ticketing for all demo engagements",
+            "Surface operational flows and ownership in the platform"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Support flow coverage: 60% → 100%",
+            "Decision flow diagrams: 0 → 100% coverage",
+            "Demo engagements with tickets: 70% → 100%",
+            "Support contacts mapping accuracy: 75% → 100%",
+            "Time to route issues: Baseline → -40%",
+            "Repeat issues due to misrouting: Baseline → -50%"
+          ]
+        },
+        "achievable": {
+          "resources": "Process design expertise, platform engineering, knowledge management tools",
+          "ownership": "Demo Ops owns process design, IT supports platform integration, Leadership enforces adoption"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Sales Productivity",
+            "Operational Excellence",
+            "Pipeline Risk Reduction",
+            "Forecast Confidence"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Flow & Decision Model Enhancement",
+              "deliverable": "Visual flow diagrams and standard paths for support decisioning",
+              "dueDate": "2027-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Knowledge & Ownership Modernisation",
+              "deliverable": "Updated ownership maps and contact lists aligned to org structure",
+              "dueDate": "2027-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Engagement & Ticketing Discipline",
+              "deliverable": "Mandatory ticketing embedded in operational workflows",
+              "dueDate": "2027-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Visibility & Operational Intelligence",
+              "deliverable": "Operational flows and support models visible in Executive Summary Platform",
+              "dueDate": "2027-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Support flow coverage documented",
+            "baseline": "60",
+            "target": "100",
+            "current": "60",
+            "unit": "%"
+          },
+          {
+            "name": "Decision flow diagrams published",
+            "baseline": "0",
+            "target": "100",
+            "current": "0",
+            "unit": "% coverage"
+          },
+          {
+            "name": "Demo engagements with tickets raised",
+            "baseline": "70",
+            "target": "100",
+            "current": "70",
+            "unit": "%"
+          },
+          {
+            "name": "Support contacts accuracy",
+            "baseline": "75",
+            "target": "100",
+            "current": "75",
+            "unit": "%"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "First-touch resolution rate",
+            "baseline": "0",
+            "target": "15",
+            "current": "0",
+            "unit": "% increase"
+          },
+          {
+            "name": "Time to route to correct team",
+            "baseline": "0",
+            "target": "-40",
+            "current": "0",
+            "unit": "% reduction"
+          },
+          {
+            "name": "Repeat issues due to misrouting",
+            "baseline": "0",
+            "target": "-50",
+            "current": "0",
+            "unit": "% reduction"
+          },
+          {
+            "name": "Escalations for ownership clarity",
+            "baseline": "0",
+            "target": "-60",
+            "current": "0",
+            "unit": "% reduction"
+          }
+        ]
+      },
+      "createdDate": "2026-01-28",
+      "lastUpdated": "2026-01-28"
+    },
+    {
+      "id": "automate-govern-demo-platform",
+      "name": "Automate & Govern the Demo Platform",
+      "shortName": "Automate & Govern",
+      "category": "process-optimization",
+      "owner": "Commercial Office",
+      "coOwners": [
+        "RevOps",
+        "Demo Services",
+        "IT Operations"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "🤖",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By Dec 31, 2026, reduce demo prep hours for strategic products by 40%; onboard 10 strategic products with Copilot tailored to demo intelligence; implement rapid provisioning for priority portfolios; establish verified asset baselines and retire outdated assets; measure and track time-to-demo improvements.",
+        "specific": {
+          "objectives": [
+            "Reduce prep hours by 40% for strategic products",
+            "Onboard 10 strategic products with Copilot demo intelligence",
+            "Implement rapid demo provisioning for priority portfolios",
+            "Establish verified asset inventory and governance framework",
+            "Measure time-to-demo reduction and establish baseline",
+            "Retire outdated assets from strategic portfolios"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Demo prep hour reduction: 0% → 40%",
+            "Products with Copilot intelligence: 0 → 10",
+            "Rapid provisioning coverage: 0% → 75%",
+            "Verified asset baseline established: No → Yes",
+            "Outdated assets retired: 0 → 50+",
+            "Time-to-demo tracking implemented: No → Yes"
+          ]
+        },
+        "achievable": {
+          "resources": "AI tooling, automation platform, governance framework, asset management system",
+          "ownership": "Demo Services owns automation, RevOps defines governance, Commercial Office sponsors"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Frictionless operations",
+            "Accelerate profitable growth",
+            "AI-first engine",
+            "Copilot adoption"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Assessment & Planning",
+              "deliverable": "Baseline metrics and governance framework defined",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Copilot Onboarding",
+              "deliverable": "First 5 products with Copilot demo intelligence",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Automation Deployment",
+              "deliverable": "Rapid provisioning live for priority portfolios",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimization & Governance",
+              "deliverable": "40% prep hour reduction achieved, asset governance live",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Products onboarded to Copilot",
+            "baseline": "0",
+            "target": "10",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Automated provisioning coverage",
+            "baseline": "0",
+            "target": "75",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Verified assets documented",
+            "baseline": "0",
+            "target": "200",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Demo prep hour reduction",
+            "baseline": "0",
+            "target": "40",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Time to demo (average)",
+            "baseline": "5",
+            "target": "2",
+            "current": "5",
+            "unit": "days"
+          },
+          {
+            "name": "Outdated assets retired",
+            "baseline": "0",
+            "target": "50",
+            "current": "0",
+            "unit": "count"
+          }
+        ]
+      },
+      "createdDate": "2026-02-11",
+      "lastUpdated": "2026-02-11",
+      "linkedInitiatives": 0,
+      "linkedTasks": 0
+    },
+    {
+      "id": "shift-capacity-revenue-facing",
+      "name": "Shift Capacity to Revenue-Facing Activities",
+      "shortName": "Revenue Capacity",
+      "category": "sales-operations",
+      "owner": "Commercial Office",
+      "coOwners": [
+        "RevOps",
+        "Demo Services",
+        "Sales Engineering"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#10B981",
+      "icon": "📈",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By Dec 31, 2026, increase customer-facing hours by 15% through automation; improve prep-to-present efficiency for strategic products; expand deal support capacity; establish demo-led win rate baselines; implement NPS feedback collection and measure satisfaction improvements.",
+        "specific": {
+          "objectives": [
+            "Increase customer-facing hours by 15%",
+            "Improve prep-to-present ratio for strategic products",
+            "Expand support to priority deals across businesses",
+            "Establish demo-led win rate baseline and track improvements",
+            "Implement NPS feedback collection across all demos",
+            "Collect measurable satisfaction data and identify improvement areas"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Customer-facing hours: baseline → +15%",
+            "Prep-to-present ratio: 1.6 → 1.0",
+            "Priority deal support: baseline → +30%",
+            "Demo-led win rate baseline: 0% → established",
+            "NPS collection coverage: 0% → 90%",
+            "Satisfaction score baseline: none → tracked quarterly"
+          ]
+        },
+        "achievable": {
+          "resources": "Automation savings, NPS tooling, CRM integration, feedback platform",
+          "ownership": "Demo Services manages capacity, RevOps tracks metrics, Commercial Office sponsors"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Beat TAM growth",
+            "Faster revenue conversion",
+            "Pricing discipline",
+            "Reduce forecast surprise",
+            "Protect recurring revenue"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Baseline & Tool Setup",
+              "deliverable": "NPS platform deployed, baseline metrics captured",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Capacity Reallocation",
+              "deliverable": "Automation savings redirected to customer-facing time",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Expansion & Tracking",
+              "deliverable": "Priority deal coverage expanded, win rate tracking live",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimization",
+              "deliverable": "15% customer-facing hour increase achieved",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "NPS surveys sent",
+            "baseline": "0",
+            "target": "1000",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Priority deals covered",
+            "baseline": "100",
+            "target": "130",
+            "current": "100",
+            "unit": "count"
+          },
+          {
+            "name": "Prep hours reallocated",
+            "baseline": "0",
+            "target": "3000",
+            "current": "0",
+            "unit": "hours"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Customer-facing hours",
+            "baseline": "100",
+            "target": "115",
+            "current": "100",
+            "unit": "% of baseline"
+          },
+          {
+            "name": "Demo-led win rate",
+            "baseline": "0",
+            "target": "25",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "NPS score",
+            "baseline": "0",
+            "target": "70",
+            "current": "0",
+            "unit": "score"
+          }
+        ]
+      },
+      "createdDate": "2026-02-11",
+      "lastUpdated": "2026-02-11",
+      "linkedInitiatives": 0,
+      "linkedTasks": 0
+    },
+    {
+      "id": "demo-led-digital-pipeline",
+      "name": "Build a Demo-Led Digital Pipeline Engine",
+      "shortName": "Digital Pipeline",
+      "category": "revenue-growth",
+      "owner": "Commercial Office",
+      "coOwners": [
+        "RevOps",
+        "Demo Services",
+        "Marketing",
+        "Sales Enablement"
+      ],
+      "status": "not-started",
+      "priority": "high",
+      "targetDate": "2026-12-31",
+      "color": "#3B82F6",
+      "icon": "🚀",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By Dec 31, 2026, launch 10 self-service demos for strategic products; deploy Tiled microsites for priority portfolios; establish digital pipeline tracking; measure lead generation, demo requests, and conversion metrics; enable seller adoption and track usage data.",
+        "specific": {
+          "objectives": [
+            "Launch 10 self-service demos for strategic products",
+            "Deploy 15-20 Tiled microsites for priority products",
+            "Establish lead generation and demo request tracking",
+            "Measure pipeline influence and establish attribution baselines",
+            "Track seller adoption metrics for priority portfolios",
+            "Integration Demo engagement cycle to StoreFront for 2-3 products"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Self-service demos launched: 0 → 10",
+            "Tiled microsites deployed: 0 → 20",
+            "Demo requests generated: 0 → 1500+",
+            "Pipeline influence tracked: No → Yes",
+            "Seller adoption: 0% → 75%",
+            "StoreFront integrations: 0 → 3"
+          ]
+        },
+        "achievable": {
+          "resources": "Tiled platform, self-service demo technology, CRM integration, analytics tools",
+          "ownership": "Demo Services builds experiences, Marketing drives adoption, RevOps measures impact"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Global growth engine",
+            "New routes to market",
+            "Enterprise 2x pace",
+            "Digital storefront",
+            "Pipeline generation & transparency"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Platform Setup",
+              "deliverable": "Tiled platform configured, first 3 self-service demos live",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Content Deployment",
+              "deliverable": "10 microsites live, 7 self-service demos operational",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Integration & Tracking",
+              "deliverable": "StoreFront integrations live, attribution tracking enabled",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Scale & Optimize",
+              "deliverable": "20 microsites, pipeline influence measured quarterly",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Self-service demos live",
+            "baseline": "0",
+            "target": "10",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Tiled microsites deployed",
+            "baseline": "0",
+            "target": "20",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Seller adoption rate",
+            "baseline": "0",
+            "target": "75",
+            "current": "0",
+            "unit": "%"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Demo requests generated",
+            "baseline": "0",
+            "target": "1500",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Leads generated",
+            "baseline": "0",
+            "target": "1200",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Pipeline influenced",
+            "baseline": "0",
+            "target": "15000000",
+            "current": "0",
+            "unit": "GBP"
+          }
+        ]
+      },
+      "createdDate": "2026-02-11",
+      "lastUpdated": "2026-02-11",
+      "linkedInitiatives": 0,
+      "linkedTasks": 0
+    },
+    {
+      "id": "executive-demo-intelligence-roi",
+      "name": "Deliver Executive Demo Intelligence & ROI Attribution",
+      "shortName": "Demo Intelligence",
+      "category": "analytics",
+      "owner": "Commercial Office",
+      "coOwners": [
+        "RevOps",
+        "Demo Services",
+        "Finance"
+      ],
+      "status": "not-started",
+      "priority": "medium",
+      "targetDate": "2026-12-31",
+      "color": "#8B5CF6",
+      "icon": "📊",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By Dec 31, 2026, deliver executive demo dashboard with quarterly reporting; implement NPS/feedback instrumentation; establish CRM integration for demo-to-opportunity attribution; build cost-per-demo tracking; automate reporting workflows and reduce manual effort.",
+        "specific": {
+          "objectives": [
+            "Launch executive demo dashboard with key metrics",
+            "Deliver quarterly executive reports (4 in 2026)",
+            "Establish CRM integration for strategic products",
+            "Implement demo-to-opportunity attribution tracking",
+            "Build cost-per-demo visibility framework",
+            "Reduce manual reporting effort by 50%+"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Executive dashboard: Not live → Live Q2",
+            "Quarterly reports delivered: 0 → 4",
+            "CRM integration coverage: 0% → 80%",
+            "Attribution tracking: No → Yes",
+            "Cost-per-demo tracked: No → Yes",
+            "Manual reporting effort: 100% → 50%"
+          ]
+        },
+        "achievable": {
+          "resources": "BI platform, CRM integration tools, automation workflows, cost allocation framework",
+          "ownership": "RevOps builds reporting, Demo Services provides data, Finance validates costs"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Market-savvy team",
+            "Pricing/ACV mix decisions",
+            "Flagship clients",
+            "Radical transparency",
+            "Forecast confidence",
+            "Automated yield model"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Dashboard Development",
+              "deliverable": "Executive dashboard MVP live, Q1 report delivered",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "CRM Integration",
+              "deliverable": "CRM integration live, Q2 report delivered",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Attribution Framework",
+              "deliverable": "Demo-to-opportunity attribution tracked, Q3 report",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Automation & Optimization",
+              "deliverable": "Automated reporting live, Q4 report, 50% effort reduction",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Dashboard KPIs configured",
+            "baseline": "0",
+            "target": "25",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Products with CRM integration",
+            "baseline": "0",
+            "target": "20",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Automated reports deployed",
+            "baseline": "0",
+            "target": "12",
+            "current": "0",
+            "unit": "count"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Quarterly reports delivered",
+            "baseline": "0",
+            "target": "4",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Manual reporting effort",
+            "baseline": "100",
+            "target": "50",
+            "current": "100",
+            "unit": "% of original"
+          },
+          {
+            "name": "Cost-per-demo visibility",
+            "baseline": "0",
+            "target": "100",
+            "current": "0",
+            "unit": "%"
+          }
+        ]
+      },
+      "createdDate": "2026-02-11",
+      "lastUpdated": "2026-02-11",
+      "linkedInitiatives": 0,
+      "linkedTasks": 0
+    },
+    {
+      "id": "strategic-localization-priority-portfolios",
+      "name": "Strategic Localization for Priority Portfolios",
+      "shortName": "Localization",
+      "category": "market-expansion",
+      "owner": "Commercial Office",
+      "coOwners": [
+        "RevOps",
+        "Demo Services",
+        "Product Marketing"
+      ],
+      "status": "not-started",
+      "priority": "medium",
+      "targetDate": "2026-12-31",
+      "color": "#F59E0B",
+      "icon": "🌍",
+      "progress": 0,
+      "linkedAssets": 0,
+      "smartGoal": {
+        "statement": "By Dec 31, 2026, localize high-impact demos for 3-4 priority regions; publish localized assets; establish regional adoption tracking; measure regional performance and identify improvement opportunities.",
+        "specific": {
+          "objectives": [
+            "Deliver localized demos for 3-4 strategic regions/languages",
+            "Publish 20-30 localized assets for Banking & Capital Markets",
+            "Establish regional adoption tracking and baselines",
+            "Measure regional win rate performance for demo-led deals",
+            "Focus 75%+ of localized content on strategic portfolios",
+            "Collect feedback and refine localization approach"
+          ]
+        },
+        "measurable": {
+          "metrics": [
+            "Regions localized: 0 → 4",
+            "Localized assets published: 0 → 30",
+            "Regional adoption tracking: No → Yes",
+            "Strategic portfolio focus: 0% → 75%",
+            "Regional win rate baselines: 0 → 4",
+            "Feedback cycles completed: 0 → 4"
+          ]
+        },
+        "achievable": {
+          "resources": "Localization platform, translation services, regional SMEs, content management system",
+          "ownership": "Demo Services delivers content, Product Marketing defines requirements, RevOps tracks performance"
+        },
+        "relevant": {
+          "croAlignment": [
+            "Redefine market leadership in Banking & Capital Markets",
+            "Beat TAM growth",
+            "Cross-sell/whitespace models",
+            "Partnership/alliance revenue"
+          ]
+        },
+        "timeBound": {
+          "timeline": [
+            {
+              "phase": "Regional Prioritization",
+              "deliverable": "4 priority regions identified, localization plan approved",
+              "dueDate": "2026-03-31",
+              "status": "not-started"
+            },
+            {
+              "phase": "Content Localization",
+              "deliverable": "First 2 regions live with 10 assets each",
+              "dueDate": "2026-06-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Expansion",
+              "deliverable": "3-4 regions live, 25 total assets published",
+              "dueDate": "2026-09-30",
+              "status": "not-started"
+            },
+            {
+              "phase": "Optimization",
+              "deliverable": "30 assets live, regional performance tracked, feedback incorporated",
+              "dueDate": "2026-12-31",
+              "status": "not-started"
+            }
+          ]
+        }
+      },
+      "indicators": {
+        "leading": [
+          {
+            "name": "Regions with localized content",
+            "baseline": "0",
+            "target": "4",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Localized assets published",
+            "baseline": "0",
+            "target": "30",
+            "current": "0",
+            "unit": "count"
+          },
+          {
+            "name": "Strategic portfolio coverage",
+            "baseline": "0",
+            "target": "75",
+            "current": "0",
+            "unit": "%"
+          }
+        ],
+        "lagging": [
+          {
+            "name": "Regional adoption rate",
+            "baseline": "0",
+            "target": "60",
+            "current": "0",
+            "unit": "%"
+          },
+          {
+            "name": "Regional win rate improvement",
+            "baseline": "0",
+            "target": "20",
+            "current": "0",
+            "unit": "% increase"
+          },
+          {
+            "name": "Localized demo usage",
+            "baseline": "0",
+            "target": "500",
+            "current": "0",
+            "unit": "sessions"
+          }
+        ]
+      },
+      "createdDate": "2026-02-11",
+      "lastUpdated": "2026-02-11",
+      "linkedInitiatives": 0,
+      "linkedTasks": 0
+    }
+  ],
+  "categories": [
+    {
+      "id": "efficiency",
+      "name": "Operational Efficiency",
+      "description": "Streamline processes, reduce waste, increase productivity",
+      "color": "blue",
+      "icon": "⚡"
+    },
+    {
+      "id": "quality",
+      "name": "Quality & Reliability",
+      "description": "Improve consistency, reduce errors, enhance reliability",
+      "color": "green",
+      "icon": "✓"
+    },
+    {
+      "id": "customer",
+      "name": "Customer Experience",
+      "description": "Elevate customer satisfaction, improve engagement, drive loyalty",
+      "color": "purple",
+      "icon": "❤️"
+    },
+    {
+      "id": "customer-success",
+      "name": "Customer Success",
+      "description": "Drive customer adoption, retention, and expansion",
+      "color": "purple",
+      "icon": "🎯"
+    },
+    {
+      "id": "cost-reduction",
+      "name": "Cost Reduction",
+      "description": "Reduce expenses, optimize spending, improve ROI",
+      "color": "orange",
+      "icon": "💰"
+    },
+    {
+      "id": "innovation",
+      "name": "Innovation & Growth",
+      "description": "Drive new capabilities, explore emerging technologies, scale operations",
+      "color": "pink",
+      "icon": "🚀"
+    },
+    {
+      "id": "process-optimization",
+      "name": "Process Optimization",
+      "description": "Enhance workflows, standardize procedures, eliminate bottlenecks",
+      "color": "indigo",
+      "icon": "⚙️"
+    },
+    {
+      "id": "sales-operations",
+      "name": "Sales Operations",
+      "description": "Enable sales team effectiveness, tools, and efficiency",
+      "color": "cyan",
+      "icon": "📈"
+    },
+    {
+      "id": "revenue-growth",
+      "name": "Revenue Growth",
+      "description": "Increase revenue, improve conversion, expand market share",
+      "color": "emerald",
+      "icon": "💵"
+    }
+  ],
+  "croImpactAreas": [
+    {
+      "id": "sales-cycle-delays",
+      "name": "Sales Cycle Delays",
+      "description": "Reduce time from prospect to close",
+      "color": "red"
+    },
+    {
+      "id": "pipeline-risk",
+      "name": "Pipeline Risk",
+      "description": "Protect revenue in pipeline from delays or losses",
+      "color": "orange"
+    },
+    {
+      "id": "deal-conversion",
+      "name": "Deal Conversion",
+      "description": "Improve win rates and conversion metrics",
+      "color": "green"
+    },
+    {
+      "id": "sales-productivity",
+      "name": "Sales Productivity",
+      "description": "Increase output per sales resource",
+      "color": "blue"
+    },
+    {
+      "id": "forecast-confidence",
+      "name": "Forecast Confidence",
+      "description": "Improve accuracy of revenue predictions",
+      "color": "purple"
+    },
+    {
+      "id": "customer-sat",
+      "name": "Customer Sat",
+      "description": "Enhance customer satisfaction and retention",
+      "color": "pink"
+    }
+  ]
+}

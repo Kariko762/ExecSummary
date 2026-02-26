@@ -1,0 +1,153 @@
+{
+  "meta": {
+    "id": "tiled-performance-q1-2026",
+    "title": "Tiled Performance Metrics V2",
+    "vendor": "Tiled",
+    "quarter": "Q1",
+    "year": 2026,
+    "createdAt": "2026-02-04T00:00:00.000Z",
+    "updatedAt": "2026-02-12T20:02:53.298Z"
+  },
+  "revenueSupported": {
+    "total": "$14.2M",
+    "breakdown": [
+      {
+        "category": "Closed-Won Revenue",
+        "value": "$14.2M",
+        "percentage": 100
+      }
+    ]
+  },
+  "contractingSpend": {
+    "currentSpend": "$95K/year",
+    "annualCommitment": "$95,000",
+    "contracts": [
+      {
+        "type": "Software License Agreement",
+        "startDate": "2025-03-01",
+        "renewalDate": "2027-03-01",
+        "status": "Active",
+        "value": "$95K",
+        "autoRenew": true
+      }
+    ],
+    "upcomingRenewals": [
+      {
+        "contractType": "Software License",
+        "renewalDate": "2027-03-01",
+        "daysUntilRenewal": 390,
+        "action": "No action needed"
+      }
+    ]
+  },
+  "licenseUnitCost": 8.5,
+  "licenseTermModel": "Monthly",
+  "licenseConsumption": {
+    "totalAllocated": 100,
+    "totalConsumed": 68,
+    "utilizationRate": 68,
+    "businessUnits": [
+      {
+        "name": "Capital Markets",
+        "allocated": 35,
+        "consumed": 26,
+        "percentage": 74,
+        "status": "healthy"
+      },
+      {
+        "name": "Banking NA",
+        "allocated": 30,
+        "consumed": 19,
+        "percentage": 63,
+        "status": "low"
+      },
+      {
+        "name": "Banking International",
+        "allocated": 20,
+        "consumed": 14,
+        "percentage": 70,
+        "status": "healthy"
+      },
+      {
+        "name": "Payments",
+        "allocated": 15,
+        "consumed": 9,
+        "percentage": 60,
+        "status": "low"
+      }
+    ]
+  },
+  "currentAssets": {
+    "total": 63,
+    "lastUpdated": "2026-02-04",
+    "byBusinessUnit": [
+      {
+        "name": "Capital Markets",
+        "published": 10,
+        "draft": 4,
+        "archived": 2
+      },
+      {
+        "name": "Banking NA",
+        "published": 16,
+        "draft": 7,
+        "archived": 3
+      },
+      {
+        "name": "Banking International",
+        "published": 9,
+        "draft": 3,
+        "archived": 1
+      },
+      {
+        "name": "Payments",
+        "published": 7,
+        "draft": 3,
+        "archived": 1
+      }
+    ],
+    "demosPerformed": [
+      {
+        "name": "Capital Markets",
+        "count": 45
+      },
+      {
+        "name": "Banking NA",
+        "count": 61
+      },
+      {
+        "name": "Banking International",
+        "count": 38
+      },
+      {
+        "name": "Payments",
+        "count": 49
+      }
+    ]
+  },
+  "detailedData": {
+    "users": {
+      "Capital Markets": [
+        {
+          "name": "Jon Pendergast",
+          "email": "jon.pendergast@fisglobal.com",
+          "lastLogin": "Today",
+          "licenseStartDate": "2026-01-01",
+          "licenseStartMonth": "2026-01",
+          "status": "Active"
+        },
+        {
+          "name": "Jason Hanscomb",
+          "email": "jason.hanscomb@fisglobal.com",
+          "lastLogin": "Today",
+          "status": "Active",
+          "licenseStartMonth": "2026-02"
+        }
+      ]
+    },
+    "assets": {},
+    "deals": {}
+  },
+  "_contentTag": "vendor-performance",
+  "_published": true
+}

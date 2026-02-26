@@ -1,5 +1,6 @@
 {
   "id": "vendor-coast-video-2026-01-06",
+  "vendorId": "vendor-coast",
   "title": "Coast Video Production",
   "_contentTag": "vendor",
   "_layout": "one-pager",
@@ -74,5 +75,65 @@
       "trend": "up",
       "subtitle": "Last 12 months"
     }
-  }
+  },
+  "userList": [
+    {
+      "userId": "user-coast-001",
+      "name": "Jon Pendergast",
+      "email": "jpendergast@fis.com",
+      "businessUnit": "payments",
+      "licenseType": "creator",
+      "status": "active",
+      "lastActive": "2026-02-23",
+      "assignedDate": "2025-11-01",
+      "demosCreated": 12,
+      "totalViews": 3420
+    },
+    {
+      "userId": "user-coast-002",
+      "name": "Derek Grey",
+      "email": "dgrey@fis.com",
+      "businessUnit": "banking-international",
+      "licenseType": "creator",
+      "status": "active",
+      "lastActive": "2026-02-20",
+      "assignedDate": "2025-10-15",
+      "demosCreated": 8,
+      "totalViews": 1876
+    },
+    {
+      "userId": "user-coast-003",
+      "name": "Sarah Chen",
+      "email": "schen@fis.com",
+      "businessUnit": "banking-international",
+      "licenseType": "viewer",
+      "status": "active",
+      "lastActive": "2026-02-22",
+      "assignedDate": "2025-11-20",
+      "demosCreated": 0,
+      "totalViews": 0
+    }
+  ],
+  "assetList": [
+    {
+      "assetId": "asset-002",
+      "assetName": "Coast Demo - Payments Mobile Banking",
+      "businessUnit": "payments",
+      "owner": "Jon Pendergast",
+      "status": "active",
+      "lastUsed": "2026-02-23",
+      "views": 342,
+      "createdDate": "2026-01-05"
+    },
+    {
+      "assetId": "asset-014",
+      "assetName": "E6 Demo - Coast Interactive",
+      "businessUnit": "banking-international",
+      "owner": "Derek Grey",
+      "status": "pending",
+      "lastUsed": null,
+      "views": 0,
+      "createdDate": "2026-02-12"
+    }
+  ]
 }

@@ -712,8 +712,6 @@ export default function SystemSettingsManager({ onClose, onNotification }: Syste
         {activeTab === 'organization' && (
           <div className="space-y-8">
             <BusinessUnitsManager onNotification={onNotification} />
-            <div className="border-t border-gray-200 dark:border-gray-700 my-8"></div>
-            <PeopleManager onNotification={onNotification} />
           </div>
         )}
 

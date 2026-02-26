@@ -1,0 +1,87 @@
+[
+  {
+    "businessUnit": "Coast",
+    "environments": [
+      {
+        "name": "Production",
+        "region": "US-East",
+        "status": "active",
+        "hosts": [
+          {
+            "hostname": "coast-prod-web-01",
+            "role": "Web Server",
+            "ip": "10.20.30.41"
+          },
+          {
+            "hostname": "coast-prod-db-01",
+            "role": "Database",
+            "ip": "10.20.30.42"
+          }
+        ]
+      },
+      {
+        "name": "Staging",
+        "region": "US-West",
+        "status": "active",
+        "hosts": [
+          {
+            "hostname": "coast-stage-web-01",
+            "role": "Web Server",
+            "ip": "10.20.31.41"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "businessUnit": "Commercial Lending",
+    "environments": [
+      {
+        "name": "Production",
+        "region": "US-Central",
+        "status": "active",
+        "hosts": [
+          {
+            "hostname": "cl-prod-app-01",
+            "role": "Application Server",
+            "ip": "10.20.40.51"
+          },
+          {
+            "hostname": "cl-prod-db-01",
+            "role": "Database",
+            "ip": "10.20.40.52"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "businessUnit": "Community Banking",
+    "environments": [
+      {
+        "name": "Production",
+        "region": "US-East",
+        "status": "active",
+        "hosts": [
+          {
+            "hostname": "cb-prod-web-01",
+            "role": "Web Server",
+            "ip": "10.20.50.61"
+          }
+        ]
+      },
+      {
+        "name": "Development",
+        "region": "US-East",
+        "status": "active",
+        "hosts": [
+          {
+            "hostname": "cb-dev-web-01",
+            "role": "Web Server",
+            "ip": "10.20.51.61"
+          }
+        ]
+      }
+    ]
+  }
+]

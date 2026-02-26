@@ -1,0 +1,151 @@
+{
+  "id": "performance_tiled_2026_01",
+  "quarter": "Q1",
+  "year": 2026,
+  "date": "2026-01-23",
+  "title": "Tiled Content Platform Performance - January 2026",
+  "displayName": "Tiled",
+  "_type": "performance",
+  "_contentTag": "performance",
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "Performance Dashboard - Software Operations",
+  "_template_description": "Executive performance view for software operations vendors",
+  "_template_created": "2026-01-23T00:00:00.000Z",
+  "_template_updated": "2026-01-23T00:00:00.000Z",
+  "tags": ["performance"],
+  
+  "_enabled_overview": true,
+  "_overview_displayTitle": true,
+  "_overview_type": "multiField",
+  
+  "overview_0": {
+    "Content Created": "47",
+    "Live Content": "312",
+    "Total Assets": "1,847",
+    "Views This Month": "9,234"
+  },
+  "_overview_0_type": "metricCard",
+  "_overview_0_layoutZone": "full",
+  "_overview_0_assetTitle": "January Content Stats",
+  "_overview_0_displayAssetTitle": true,
+  
+  "overview_1": [
+    { "label": "Total Licenses", "value": "100", "percentage": 100 },
+    { "label": "Licenses Used", "value": "73", "percentage": 73 },
+    { "label": "Available", "value": "27", "percentage": 27 },
+    { "label": "Peak Usage", "value": "78 (Dec)" }
+  ],
+  "_overview_1_type": "progressBarList",
+  "_overview_1_layoutZone": "right",
+  "_overview_1_assetTitle": "License Utilization",
+  "_overview_1_displayAssetTitle": true,
+  
+  "_enabled_contentCreation": true,
+  "_contentCreation_displayTitle": true,
+  "contentCreation": [
+    { "category": "Week 1", "value": 8, "label": "8" },
+    { "category": "Week 2", "value": 12, "label": "12" },
+    { "category": "Week 3", "value": 15, "label": "15" },
+    { "category": "Week 4", "value": 12, "label": "12" }
+  ],
+  "_contentCreation_type": "barChart",
+  "_contentCreation_chartConfig": {
+    "xAxisKey": "category",
+    "dataKeys": ["value"],
+    "colors": ["var(--accent-purple)"],
+    "legend": ["New Content"],
+    "title": "Weekly Content Creation",
+    "yAxisLabel": "Items"
+  },
+  
+  "_enabled_contentStatus": true,
+  "_contentStatus_displayTitle": true,
+  "contentStatus": [
+    { "name": "Live & Published", "value": 312, "percentage": 62 },
+    { "name": "In Review", "value": 89, "percentage": 18 },
+    { "name": "Draft", "value": 67, "percentage": 13 },
+    { "name": "Archived", "value": 35, "percentage": 7 }
+  ],
+  "_contentStatus_type": "pieChart",
+  "_contentStatus_chartConfig": {
+    "nameKey": "name",
+    "valueKey": "value",
+    "title": "Content by Status",
+    "showPercentage": true
+  },
+  
+  "_enabled_assetTypes": true,
+  "_assetTypes_displayTitle": true,
+  "assetTypes": [
+    {
+      "title": "Interactive Demos",
+      "items": [
+        { "label": "Total", "value": "487" },
+        { "label": "Created This Month", "value": "18" },
+        { "label": "Avg Engagement", "value": "8.2 min" }
+      ]
+    },
+    {
+      "title": "Video Content",
+      "items": [
+        { "label": "Total", "value": "324" },
+        { "label": "Created This Month", "value": "9" },
+        { "label": "Avg Watch Time", "value": "3.4 min" }
+      ]
+    },
+    {
+      "title": "Documents & PDFs",
+      "items": [
+        { "label": "Total", "value": "612" },
+        { "label": "Created This Month", "value": "14" },
+        { "label": "Avg Downloads", "value": "23/doc" }
+      ]
+    },
+    {
+      "title": "Images & Graphics",
+      "items": [
+        { "label": "Total", "value": "424" },
+        { "label": "Created This Month", "value": "6" },
+        { "label": "Most Used", "value": "Infographics" }
+      ]
+    }
+  ],
+  "_assetTypes_type": "nestedCards",
+  "_assetTypes_assetTitle": "Asset Breakdown",
+  "_assetTypes_displayAssetTitle": true,
+  
+  "_enabled_timeMetrics": true,
+  "_timeMetrics_displayTitle": true,
+  "timeMetrics": [
+    { "label": "This Week", "value": "12 assets" },
+    { "label": "This Month", "value": "47 assets" },
+    { "label": "This Quarter", "value": "47 assets (Q1 ongoing)" },
+    { "label": "This Year", "value": "47 assets (2026 YTD)" },
+    { "label": "Avg Creation Time", "value": "4.2 days" },
+    { "label": "Fastest Turnaround", "value": "1.5 days" }
+  ],
+  "_timeMetrics_type": "keyValueList",
+  "_timeMetrics_assetTitle": "Creation Metrics",
+  "_timeMetrics_displayAssetTitle": true,
+  
+  "_enabled_engagement": true,
+  "_engagement_displayTitle": true,
+  "engagement": [
+    { "category": "Jan", "value": 9234, "label": "9.2K" },
+    { "category": "Dec", "value": 8756, "label": "8.8K" },
+    { "category": "Nov", "value": 7892, "label": "7.9K" },
+    { "category": "Oct", "value": 8345, "label": "8.3K" },
+    { "category": "Sep", "value": 7654, "label": "7.7K" },
+    { "category": "Aug", "value": 6987, "label": "7.0K" }
+  ],
+  "_engagement_type": "barChart",
+  "_engagement_chartConfig": {
+    "xAxisKey": "category",
+    "dataKeys": ["value"],
+    "colors": ["var(--accent-teal)"],
+    "legend": ["Total Views"],
+    "title": "Content Views Trend (6 Months)",
+    "yAxisLabel": "Views"
+  }
+}

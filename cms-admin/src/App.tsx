@@ -5,8 +5,24 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { PresentationProvider } from './contexts/PresentationContext';
 import { AuthProvider } from './contexts/AuthContext';
 import CMSHeader from './components/CMSHeader';
+import CMSv2Dashboard from './components/CMSv2Dashboard';
 import EditorModal from './components/EditorModalV2';
-import LeadershipEditor from './components/LeadershipEditor';
+import LeadershipSummaryEditor from './components/LeadershipSummaryEditor';
+import LeadershipBUSummaryEditor from './components/LeadershipBUSummaryEditor';
+import LeadershipBUSummaryEditorV2 from './components/LeadershipBUSummaryEditorV2';
+import VendorEditor from './components/VendorEditor';
+import VendorOverviewEditor from './components/VendorOverviewEditor';
+import VendorPerf from './components/VendorPerf';
+import VendorPerformanceV2 from './components/VendorPerformanceV2';
+import VendorPerformanceEditorV2 from './components/VendorPerformanceEditorV2';
+import VendorPerfEditor from './components/VendorPerfEditor';
+import MultiVendorDashboardEditor from './components/MultiVendorDashboardEditor';
+import VendorFeatureBreakdownEditor from './components/VendorFeatureBreakdownEditor';
+import PerformanceDashboardEditor from './components/PerformanceDashboardEditor';
+import ExecutiveHomeEditor from './components/ExecutiveHomeEditor';
+import BusinessUnitEditor from './components/BusinessUnitEditor';
+import VendorDashboardEditor from './components/VendorDashboardEditor';
+import AssetDashboardManager from './components/AssetDashboardManager';
 import AssetLibrary from './components/AssetLibrary';
 import DesignSystemManager from './components/DesignSystemManager';
 import DesignSystemInjector from './components/DesignSystemInjector';
@@ -16,15 +32,25 @@ import TemplateBuilder from './components/TemplateBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
 import CommentsPanel from './components/CommentsPanel';
 import GoalsManager from './components/GoalsManager';
+import GoalsHighLevel from './components/GoalsHighLevel';
+import Goals from './pages/dark-theme/Goals';
+import BudgetFinance from './components/BudgetFinance';
+import BudgetFinanceEditor from './components/BudgetFinanceEditor';
 import InitiativesManager from './components/InitiativesManager';
+import InitiativesHero from './components/InitiativesHero';
 import InitiativesGantt from './pages/InitiativesGantt';
+import InitiativesGanttV2 from './pages/InitiativesGanttV2';
 import BudgetPage from './pages/BudgetPage';
 import PlatformOverview from './components/PlatformOverview';
 import TimelineNotesManager from './components/TimelineNotesManager';
-import QuickActionsMenu from './components/QuickActionsMenu';
 import { TaskEditorModal } from './components/TaskEditorModal';
 import { AllTasksModal } from './components/AllTasksModal';
 import AiWeeklySummaryModal from './components/AiWeeklySummaryModal';
+import AIExecutiveSummaryWizard from './components/AIExecutiveSummaryWizard';
+import weeklyLeadershipSummaryTemplate from './templates/weekly-leadership-summary-template.json';
+import ContentEditor from './components/ContentEditor';
+import PeopleManager from './components/PeopleManager';
+import VendorManager from './components/VendorManager';
 import OrgIQ from './pages/OrgIQ';
 import './App.css';
 
@@ -68,6 +94,7 @@ interface Performance {
 }
 
 function App() {
+  const [cmsVersion, setCmsVersion] = useState<'v1' | 'v2'>('v2'); // Default to v2
   const [activeSection, setActiveSection] = useState<Section>('all-content');
   const [activeTagFilter, setActiveTagFilter] = useState<string>(''); // For filtering content by tag
   const [allContent, setAllContent] = useState<any[]>([]); // Unified content list (filtered)
@@ -78,6 +105,13 @@ function App() {
   const [notification, setNotification] = useState<{type: 'success' | 'error' | 'info' | 'warning', message: string} | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [showLeadershipEditor, setShowLeadershipEditor] = useState(false);
+  const [showLeadershipBUEditor, setShowLeadershipBUEditor] = useState(false);
+  const [showLeadershipBUEditorV2, setShowLeadershipBUEditorV2] = useState(false);
+  const [showVendorSummary, setShowVendorSummary] = useState(false);
+  const [showVendorOverview, setShowVendorOverview] = useState(false);
+  const [showMultiVendorDashboard, setShowMultiVendorDashboard] = useState(false);
+  const [showVendorFeatureBreakdown, setShowVendorFeatureBreakdown] = useState(false);
+  const [showPerformanceDashboard, setShowPerformanceDashboard] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [showNewSummaryModal, setShowNewSummaryModal] = useState(false);
   const [newSummaryName, setNewSummaryName] = useState('');
@@ -86,21 +120,36 @@ function App() {
   const [modalType, setModalType] = useState<'one-pager' | 'tabbed'>('one-pager');
   const [showAssetReference, setShowAssetReference] = useState(false);
   const [assetReferenceType, setAssetReferenceType] = useState<string | undefined>();
+  const [showContentEditor, setShowContentEditor] = useState(false);
+  const [selectedContent, setSelectedContent] = useState<any>(null);
   const [showStyleScheme, setShowStyleScheme] = useState(false);
   const [showSystemSettings, setShowSystemSettings] = useState(false);
   const [showDataSources, setShowDataSources] = useState(false);
   const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
   const [showOrgIQ, setShowOrgIQ] = useState(false);
   const [showGoals, setShowGoals] = useState(false);
+  const [showGoalsHighLevel, setShowGoalsHighLevel] = useState(false);
+  const [showGoalsDark, setShowGoalsDark] = useState(false);
+  const [editGoalId, setEditGoalId] = useState<string | undefined>(undefined);
+  const [showBudgetFinance, setShowBudgetFinance] = useState(false);
+  const [showBudgetFinanceEditor, setShowBudgetFinanceEditor] = useState(false);
   const [showInitiatives, setShowInitiatives] = useState(false);
+  const [showInitiativesHero, setShowInitiativesHero] = useState(false);
   const [showInitiativesGantt, setShowInitiativesGantt] = useState(false);
   const [showBudget, setShowBudget] = useState(false);
   const [showPlatformOverview, setShowPlatformOverview] = useState(false);
   const [showTimelineNotes, setShowTimelineNotes] = useState(false);
   const [autoOpenAddNote, setAutoOpenAddNote] = useState(false);
+  const [autoOpenNewInitiative, setAutoOpenNewInitiative] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [showAllTasksModal, setShowAllTasksModal] = useState(false);
   const [showAiWeeklySummary, setShowAiWeeklySummary] = useState(false);
+  const [showAiExecutiveSummaryWizard, setShowAiExecutiveSummaryWizard] = useState(false);
+  const [showNewLeadershipSummaryModal, setShowNewLeadershipSummaryModal] = useState(false);
+  const [leadershipCreateMode, setLeadershipCreateMode] = useState<'blank' | 'duplicate' | 'ai'>('blank');
+  const [leadershipDuplicateId, setLeadershipDuplicateId] = useState('');
+  const [leadershipFilename, setLeadershipFilename] = useState('');
+  const [isCreatingLeadershipSummary, setIsCreatingLeadershipSummary] = useState(false);
   const [editingTask, setEditingTask] = useState<any>();
   const [timelineNotes, setTimelineNotes] = useState<any[]>([]);
   const [allTasks, setAllTasks] = useState<any[]>([]);
@@ -111,6 +160,17 @@ function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
   const [showComments, setShowComments] = useState(false);
   const [activeCommentContent, setActiveCommentContent] = useState<{id: string, type: string, title: string} | null>(null);
+  const [vendorActiveTab, setVendorActiveTab] = useState<'summaries' | 'performance'>('summaries');
+  const [showVendorPerf, setShowVendorPerf] = useState(false);
+  const [showVendorPerfEditor, setShowVendorPerfEditor] = useState(false);
+  const [showVendorPerfView, setShowVendorPerfView] = useState(false);
+  const [selectedVendorPerf, setSelectedVendorPerf] = useState<any>(null);
+  const [showExecutiveHomeEditor, setShowExecutiveHomeEditor] = useState(false);
+  const [showBusinessUnitEditor, setShowBusinessUnitEditor] = useState(false);
+  const [showVendorDashboardEditor, setShowVendorDashboardEditor] = useState(false);
+  const [showAssetDashboardEditor, setShowAssetDashboardEditor] = useState(false);
+  const [showPeopleManager, setShowPeopleManager] = useState(false);
+  const [showVendorManager, setShowVendorManager] = useState(false);
   
   // Tenant content creation states
   const [contentCreationType, setContentCreationType] = useState<'timeline' | 'performance' | 'organization' | 'initiative' | 'announcement' | 'vendor'>('timeline');
@@ -336,6 +396,303 @@ function App() {
   };
 
   // Quick Actions Handlers
+  const parseWeekRangeFromTitle = (title?: string) => {
+    if (!title) return null;
+
+    let match = title.match(/Week of\s+(\d{4}-\d{2}-\d{2})\s+to\s+(\d{4}-\d{2}-\d{2})/i);
+    if (match) return { weekStart: match[1], weekEnd: match[2] };
+
+    match = title.match(/Weekly Leadership Summary\s*-\s*([A-Za-z]{3})\s(\d{2})-(?:([A-Za-z]{3})\s)?(\d{2}),\s(\d{4})/);
+    if (!match) return null;
+
+    const monthMap: Record<string, string> = {
+      jan: '01',
+      feb: '02',
+      mar: '03',
+      apr: '04',
+      may: '05',
+      jun: '06',
+      jul: '07',
+      aug: '08',
+      sep: '09',
+      oct: '10',
+      nov: '11',
+      dec: '12'
+    };
+
+    const startMonth = monthMap[match[1].toLowerCase()];
+    const endMonth = monthMap[(match[3] || match[1]).toLowerCase()];
+    const startDay = match[2];
+    const endDay = match[4];
+    const year = match[5];
+
+    if (!startMonth || !endMonth) return null;
+
+    return {
+      weekStart: `${year}-${startMonth}-${startDay}`,
+      weekEnd: `${year}-${endMonth}-${endDay}`
+    };
+  };
+
+  const formatWeeklyTitle = (start: string, end: string) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+      return `Weekly Leadership Summary - ${start} to ${end}`;
+    }
+
+    const startMonth = startDate.toLocaleDateString('en-US', { month: 'short' });
+    const endMonth = endDate.toLocaleDateString('en-US', { month: 'short' });
+    const startDay = startDate.toLocaleDateString('en-US', { day: '2-digit' });
+    const endDay = endDate.toLocaleDateString('en-US', { day: '2-digit' });
+    const startYear = startDate.getFullYear();
+    const endYear = endDate.getFullYear();
+
+    if (startYear === endYear) {
+      if (startMonth === endMonth) {
+        return `Weekly Leadership Summary - ${startMonth} ${startDay}-${endDay}, ${startYear}`;
+      }
+      return `Weekly Leadership Summary - ${startMonth} ${startDay}-${endMonth} ${endDay}, ${startYear}`;
+    }
+
+    return `Weekly Leadership Summary - ${startMonth} ${startDay}, ${startYear}-${endMonth} ${endDay}, ${endYear}`;
+  };
+
+  const normalizeLeadershipSummary = (data: any) => {
+    const today = new Date().toISOString().split('T')[0];
+    const parsedRange = parseWeekRangeFromTitle(data?.title);
+    const weekStart = data?.metadata?.weekStart || parsedRange?.weekStart || today;
+    const weekEnd = data?.metadata?.weekEnd || parsedRange?.weekEnd || today;
+
+    const highlights = Array.isArray(data?.sections)
+      ? data.sections.find((section: any) => section.id === 'highlights')
+      : null;
+    const highlightItems = highlights?.content?.[0]?.items || [];
+
+    const formattedTitle = data?.metadata?.title || data?.title || formatWeeklyTitle(weekStart, weekEnd);
+
+    return {
+      ...data,
+      title: formattedTitle,
+      metadata: {
+        weekStart,
+        weekEnd,
+        title: formattedTitle,
+        description: data?.metadata?.description || 'Executive leadership summary'
+      },
+      bluf: data?.bluf || {
+        bottomLine: highlightItems,
+        background: '',
+        assessment: '',
+        recommendation: '',
+        asks: []
+      },
+      priorities: data?.priorities || [],
+      risks: data?.risks || []
+    };
+  };
+
+  const normalizeLeadershipFilename = (value: string) =>
+    value
+      .replace(/\.json$/i, '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9-_\s]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^[-_]+|[-_]+$/g, '');
+
+  const buildLeadershipSummaryId = (filename: string) => {
+    const normalized = normalizeLeadershipFilename(filename);
+    if (!normalized) return '';
+    return normalized.startsWith('leadership-summary-')
+      ? normalized
+      : `leadership-summary-${normalized}`;
+  };
+
+  const buildLeadershipSummaryTitle = (filename: string) => {
+    const normalized = normalizeLeadershipFilename(filename);
+    if (!normalized) return '';
+    const withoutPrefix = normalized.replace(/^leadership-summary-/, '');
+    const withSpaces = withoutPrefix.replace(/[-_]+/g, ' ').trim();
+    return withSpaces
+      .split(' ')
+      .filter(Boolean)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  const leadershipSummaryIdExists = (id: string) =>
+    allContentUnfiltered.some((item: any) => (item.id || item.meta?.id) === id);
+
+  const openNewLeadershipSummaryModal = () => {
+    setLeadershipCreateMode('blank');
+    setLeadershipDuplicateId('');
+    setLeadershipFilename('');
+    setShowNewLeadershipSummaryModal(true);
+  };
+
+  const handleCreateBlankLeadershipSummary = async () => {
+    if (isCreatingLeadershipSummary) return;
+    const summaryId = buildLeadershipSummaryId(leadershipFilename);
+    if (!summaryId) {
+      showNotification('error', 'Enter a filename to create the summary');
+      return;
+    }
+    if (leadershipSummaryIdExists(summaryId)) {
+      showNotification('error', 'That filename already exists');
+      return;
+    }
+    setIsCreatingLeadershipSummary(true);
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const summaryTitle = buildLeadershipSummaryTitle(leadershipFilename);
+      const template = JSON.parse(JSON.stringify(weeklyLeadershipSummaryTemplate));
+      const summaryToSave = {
+        ...template,
+        id: summaryId,
+        title: summaryTitle || template.title || `Weekly Leadership Summary - ${today}`,
+        date: today,
+        status: 'draft',
+        _contentTag: 'leadership-summary',
+        _published: false,
+        metadata: {
+          ...template.metadata,
+          weekStart: today,
+          weekEnd: today,
+          title: summaryTitle || template.title || `Weekly Leadership Summary - ${today}`,
+          description: template.metadata?.description || 'Executive leadership summary'
+        }
+      };
+
+      const response = await fetch(`${API_URL}/content`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(summaryToSave)
+      });
+
+      if (!response.ok) throw new Error('Failed to create leadership summary');
+
+      showNotification('success', 'Leadership summary created');
+      setShowNewLeadershipSummaryModal(false);
+      await fetchAllContent();
+      setSelectedItem({ ...summaryToSave, _fileExists: true });
+      setShowLeadershipEditor(true);
+    } catch (error) {
+      console.error('Failed to create leadership summary:', error);
+      showNotification('error', 'Failed to create leadership summary');
+    } finally {
+      setIsCreatingLeadershipSummary(false);
+    }
+  };
+
+  const handleDuplicateLeadershipSummary = async (summaryId: string) => {
+    if (!summaryId || isCreatingLeadershipSummary) return;
+    const nextSummaryId = buildLeadershipSummaryId(leadershipFilename);
+    if (!nextSummaryId) {
+      showNotification('error', 'Enter a filename to create the summary');
+      return;
+    }
+    if (leadershipSummaryIdExists(nextSummaryId)) {
+      showNotification('error', 'That filename already exists');
+      return;
+    }
+    setIsCreatingLeadershipSummary(true);
+    try {
+      const response = await fetch(`${API_URL}/content/${summaryId}`);
+      if (!response.ok) throw new Error('Failed to fetch summary');
+      const data = await response.json();
+      const sourceData = data.content || data;
+      const today = new Date().toISOString().split('T')[0];
+      const summaryTitle = buildLeadershipSummaryTitle(leadershipFilename);
+      const normalized = normalizeLeadershipSummary(sourceData);
+
+      const newSummary = {
+        ...normalized,
+        id: nextSummaryId,
+        title: summaryTitle || normalized.title || `Weekly Leadership Summary - ${today}`,
+        date: today,
+        status: 'draft',
+        _contentTag: 'leadership-summary',
+        _published: false,
+        meta: {
+          ...(normalized.meta || {}),
+          id: nextSummaryId,
+          title: summaryTitle || normalized.title || `Weekly Leadership Summary - ${today}`,
+          date: today,
+          status: 'draft'
+        }
+      };
+
+      const saveResponse = await fetch(`${API_URL}/content`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSummary)
+      });
+
+      if (!saveResponse.ok) throw new Error('Failed to duplicate summary');
+
+      showNotification('success', 'Leadership summary duplicated');
+      setShowNewLeadershipSummaryModal(false);
+      await fetchAllContent();
+      setSelectedItem({ ...newSummary, _fileExists: true });
+      setShowLeadershipEditor(true);
+    } catch (error) {
+      console.error('Failed to duplicate leadership summary:', error);
+      showNotification('error', 'Failed to duplicate leadership summary');
+    } finally {
+      setIsCreatingLeadershipSummary(false);
+    }
+  };
+
+
+  const handleCreateExecutiveSummary = async (summaryData: any) => {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const normalized = normalizeLeadershipSummary(summaryData);
+      const summaryId = normalized.id || `leadership-summary-${today}-${Date.now().toString(36)}`;
+      const summaryToSave = {
+        ...normalized,
+        id: summaryId,
+        title: normalized.title || `Leadership Summary - ${today}`,
+        date: normalized.date || today,
+        status: normalized.status || 'draft',
+        _contentTag: normalized._contentTag || 'leadership-summary',
+        _published: normalized._published || false,
+        meta: {
+          id: summaryId,
+          title: normalized.title || `Leadership Summary - ${today}`,
+          date: normalized.date || today,
+          quarter: normalized.quarter || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          year: normalized.year || new Date().getFullYear(),
+          status: normalized.status || 'draft'
+        }
+      };
+
+      const response = await fetch(`${API_URL}/content`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(summaryToSave)
+      });
+
+      if (!response.ok) throw new Error('Failed to create executive summary');
+
+      showNotification('success', 'Executive summary created');
+      setShowAiExecutiveSummaryWizard(false);
+      await fetchAllContent();
+
+      setSelectedContent({
+        id: summaryToSave.id,
+        category: 'leadership',
+        name: summaryToSave.title
+      });
+      setShowContentEditor(true);
+    } catch (error) {
+      console.error('Failed to create executive summary:', error);
+      showNotification('error', 'Failed to create executive summary');
+    }
+  };
+
   const handleQuickClone = async (tagId: string, tagName: string) => {
     try {
       // Find all content with this tag
@@ -494,12 +851,12 @@ function App() {
     
     // Check if item is leadership-summary - use custom editor
     if (item._contentTag === 'leadership-summary') {
-      setSelectedItem(item);
+      setSelectedItem({ ...item, _fileExists: true });
       setShowLeadershipEditor(true);
       return;
     }
     
-    setSelectedItem(item);
+    setSelectedItem({ ...item, _fileExists: true });
     setModalOpen(true);
   };
 
@@ -507,14 +864,14 @@ function App() {
     if (itemToEdit) {
       // Check if item is leadership-summary - use custom editor
       if (itemToEdit._contentTag === 'leadership-summary') {
-        setSelectedItem(itemToEdit);
+        setSelectedItem({ ...itemToEdit, _fileExists: true });
         setShowLeadershipEditor(true);
         setShowEditWarningModal(false);
         setItemToEdit(null);
         return;
       }
       
-      setSelectedItem(itemToEdit);
+      setSelectedItem({ ...itemToEdit, _fileExists: true });
       setModalOpen(true);
       setShowEditWarningModal(false);
       setItemToEdit(null);
@@ -1281,10 +1638,11 @@ function App() {
           </div>
         )}
 
-        {/* Vendors Section - Hero Card Display */}
+        {/* Vendors Section - Hero Card Display with Tabs */}
         {!activeTagFilter && viewMode === 'grid' && (() => {
           const vendorItems = allContent.filter(item => item._contentTag === 'vendor');
-          if (vendorItems.length === 0) return null;
+          const performanceItems = allContent.filter(item => item._contentTag === 'vendor-performance');
+          if (vendorItems.length === 0 && performanceItems.length === 0) return null;
           
           return (
             <motion.div
@@ -1294,23 +1652,54 @@ function App() {
               className="mt-12"
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
-                  Vendor Partners
-                </h2>
+                <div className="flex items-center gap-6">
+                  <h2 className="text-2xl font-roobert-heavy text-gray-900 dark:text-white">
+                    Vendor
+                  </h2>
+                  <div className="flex gap-2 bg-gray-100 dark:bg-slate-800/50 rounded-lg p-1">
+                    <button
+                      onClick={() => setVendorActiveTab('summaries')}
+                      className={`px-4 py-2 rounded-lg font-roobert-semibold text-sm transition-all ${
+                        vendorActiveTab === 'summaries'
+                          ? 'bg-white dark:bg-slate-700 text-fis-navy dark:text-blue-400 shadow-sm'
+                          : 'text-gray-600 dark:text-white/60 hover:text-gray-900 dark:hover:text-white'
+                      }`}
+                    >
+                      Summaries
+                    </button>
+                    <button
+                      onClick={() => setVendorActiveTab('performance')}
+                      className={`px-4 py-2 rounded-lg font-roobert-semibold text-sm transition-all ${
+                        vendorActiveTab === 'performance'
+                          ? 'bg-white dark:bg-slate-700 text-fis-navy dark:text-blue-400 shadow-sm'
+                          : 'text-gray-600 dark:text-white/60 hover:text-gray-900 dark:hover:text-white'
+                      }`}
+                    >
+                      Performance
+                    </button>
+                  </div>
+                </div>
                 <button
                   onClick={() => {
-                    setContentCreationType('vendor');
-                    setShowNewSummaryModal(true);
+                    if (vendorActiveTab === 'summaries') {
+                      setContentCreationType('vendor');
+                      setShowNewSummaryModal(true);
+                    } else {
+                      setShowVendorPerfEditor(true);
+                      setSelectedVendorPerf(null);
+                    }
                   }}
                   className="px-4 py-2 rounded-lg bg-fis-navy/10 hover:bg-fis-navy/20 text-fis-navy dark:text-blue-400 transition-all flex items-center gap-2 font-roobert-semibold text-sm"
                 >
                   <Plus className="w-4 h-4" />
-                  Add Vendor
+                  {vendorActiveTab === 'summaries' ? 'Add Summary' : 'Add Performance'}
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {vendorItems.map((vendor, index) => {
+              {/* Summaries Tab Content */}
+              {vendorActiveTab === 'summaries' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {vendorItems.map((vendor, index) => {
                   const heroData = vendor.vendorHero || {};
                   const statusColor = heroData.healthStatus === 'On Track' ? 'green'
                     : heroData.healthStatus === 'At Risk' ? 'yellow'
@@ -1405,6 +1794,61 @@ function App() {
                   );
                 })}
               </div>
+              )}
+
+              {/* Performance Tab Content */}
+              {vendorActiveTab === 'performance' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {performanceItems.map((perf, index) => (
+                    <motion.div
+                      key={perf.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      whileHover={{ y: -4 }}
+                      onClick={() => {
+                        setSelectedVendorPerf(perf);
+                        setShowVendorPerfEditor(true);
+                      }}
+                      className="bg-white dark:bg-slate-800/50 border border-gray-200 dark:border-white/10 rounded-xl p-6 cursor-pointer hover:shadow-lg transition-all"
+                    >
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-roobert-semibold text-gray-900 dark:text-white">
+                          {perf.meta?.vendor || 'Vendor Performance'}
+                        </h3>
+                        <span className={`px-3 py-1 rounded-full text-xs font-roobert-semibold ${
+                          perf._published
+                            ? 'bg-green-500/20 text-green-600 dark:text-green-400'
+                            : 'bg-gray-500/20 text-gray-600 dark:text-gray-400'
+                        }`}>
+                          {perf._published ? 'Published' : 'Draft'}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-500 dark:text-white/60 font-roobert-medium mb-4">
+                        {perf.meta?.quarter} {perf.meta?.year}
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-3">
+                          <div className="text-xs text-gray-500 dark:text-white/50 font-roobert-medium mb-1">
+                            Revenue
+                          </div>
+                          <div className="text-lg font-roobert-bold text-gray-900 dark:text-white">
+                            {perf.revenueSupported?.total || '$0'}
+                          </div>
+                        </div>
+                        <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-3">
+                          <div className="text-xs text-gray-500 dark:text-white/50 font-roobert-medium mb-1">
+                            Assets
+                          </div>
+                          <div className="text-lg font-roobert-bold text-gray-900 dark:text-white">
+                            {perf.currentAssets?.total || 0}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </motion.div>
           );
         })()}
@@ -1421,22 +1865,58 @@ function App() {
           
           <ProtectedRoute requireAuth={requireAuth} appName="CMS Admin">
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-fis-navy dark:to-fis-eggplant transition-colors duration-500">
-              <CMSHeader 
-                onOpenAssetReference={() => setShowAssetReference(true)}
-                onOpenStyleScheme={() => setShowStyleScheme(true)}
-                onOpenSystemSettings={() => setShowSystemSettings(true)}
-                onOpenDataSources={() => setShowDataSources(true)}
-                onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
-                onOpenOrgIQ={() => setShowOrgIQ(true)}
-                onOpenPlatformOverview={() => setShowPlatformOverview(true)}
-                onOpenComments={() => setShowComments(true)}
-                onOpenGoals={() => setShowGoals(true)}
-                onOpenInitiatives={() => setShowInitiatives(true)}
-                onOpenInitiativesGantt={() => setShowInitiativesGantt(true)}
-                onOpenBudget={() => setShowBudget(true)}
-                onOpenNotes={() => setShowTimelineNotes(true)}
-                onOpenTasks={() => setShowAllTasksModal(true)}
-              />
+              {/* Only show header and toggle in v1 mode */}
+              {cmsVersion === 'v1' && (
+                <>
+                  <CMSHeader 
+                    onOpenAssetReference={() => setShowAssetReference(true)}
+                    onOpenStyleScheme={() => setShowStyleScheme(true)}
+                    onOpenSystemSettings={() => setShowSystemSettings(true)}
+                    onOpenDataSources={() => setShowDataSources(true)}
+                    onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
+                    onOpenOrgIQ={() => setShowOrgIQ(true)}
+                    onOpenPlatformOverview={() => setShowPlatformOverview(true)}
+                    onOpenComments={() => setShowComments(true)}
+                    onOpenGoals={() => setShowGoals(true)}
+                    onOpenInitiatives={() => setShowInitiatives(true)}
+                    onOpenInitiativesGantt={() => setShowInitiativesGantt(true)}
+                    onOpenBudget={() => setShowBudget(true)}
+                    onOpenNotes={() => setShowTimelineNotes(true)}
+                    onOpenTasks={() => setShowAllTasksModal(true)}
+                    onOpenVendorSummary={() => setShowVendorSummary(true)}
+                    onOpenVendorOverview={() => setShowVendorOverview(true)}
+                    onOpenMultiVendorDashboard={() => setShowMultiVendorDashboard(true)}
+                    onOpenVendorFeatureBreakdown={() => setShowVendorFeatureBreakdown(true)}
+                    onOpenPerformanceDashboard={() => setShowPerformanceDashboard(true)}
+                  />
+
+                  {/* CMS Version Toggle - Floating Top Right */}
+                  <div className="fixed top-24 right-6 z-50">
+                    <div className="flex items-center gap-2 bg-slate-800 dark:bg-slate-900 border border-slate-700 rounded-lg p-1 shadow-lg">
+                      <button
+                        onClick={() => setCmsVersion('v1')}
+                        className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
+                          cmsVersion === 'v1'
+                            ? 'bg-purple-500 text-white'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        CMS v1
+                      </button>
+                      <button
+                        onClick={() => setCmsVersion('v2')}
+                        className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
+                          cmsVersion === 'v2'
+                            ? 'bg-cyan-500 text-white'
+                            : 'text-slate-400 hover:text-white'
+                        }`}
+                      >
+                        CMS v2
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
           
               {/* Notification */}
               <AnimatePresence>
@@ -1463,6 +1943,138 @@ function App() {
             )}
           </AnimatePresence>
 
+          {/* Conditional Rendering based on CMS Version */}
+          {cmsVersion === 'v2' ? (
+            <CMSv2Dashboard 
+              onOpenEditor={(template) => {
+                // Route to ContentEditor for content files
+                if (template.editorComponent === 'ContentEditor') {
+                  setSelectedContent(template);
+                  setShowContentEditor(true);
+                } else if (template.editorComponent === 'VendorPerfEditor') {
+                  // Load vendor performance data and open view modal
+                  fetch(`http://localhost:3001/api/content/${template.id}`)
+                    .then(res => res.json())
+                    .then(data => {
+                      if (data.success) {
+                        setSelectedVendorPerf(data.content);
+                        setShowVendorPerfView(true);
+                      } else {
+                        showNotification('error', 'Failed to load vendor performance data');
+                      }
+                    })
+                    .catch(err => {
+                      console.error('Error loading vendor performance:', err);
+                      showNotification('error', 'Error loading vendor performance');
+                    });
+                } else {
+                  // Legacy editors for old templates
+                  switch (template.editorComponent) {
+                    case 'LeadershipEditor':
+                      setShowLeadershipEditor(true);
+                      break;
+                    case 'VendorEditor':
+                      setShowVendorSummary(true);
+                      break;
+                    case 'VendorOverviewEditor':
+                      setShowVendorOverview(true);
+                      break;
+                    case 'PerformanceDashboardEditor':
+                      setShowPerformanceDashboard(true);
+                      break;
+                    default:
+                      showNotification('info', `Opening ${template.name}...`);
+                  }
+                }
+              }}
+              onQuickAction={(action) => {
+                switch (action) {
+                  case 'new-note':
+                    setShowTimelineNotes(true);
+                    setAutoOpenAddNote(true);
+                    showNotification('info', 'Opening new note editor...');
+                    break;
+                  case 'new-task':
+                    setShowTaskModal(true);
+                    setEditingTask(undefined);
+                    showNotification('info', 'Opening new task creator...');
+                    break;
+                  case 'new-initiative':
+                    setShowInitiatives(true);
+                    setAutoOpenNewInitiative(true);
+                    showNotification('info', 'Opening new initiative creator...');
+                    break;
+                  case 'new-leadership':
+                    openNewLeadershipSummaryModal();
+                    showNotification('info', 'Choose how to create a Leadership Summary');
+                    break;
+                  case 'new-leadership-bu':
+                    setShowLeadershipBUEditor(true);
+                    showNotification('info', 'Opening Leadership BU Summary Editor...');
+                    break;
+                  case 'new-leadership-bu-v2':
+                    setShowLeadershipBUEditorV2(true);
+                    showNotification('info', 'Opening Leadership Summary V2 (Multi-BU Compact Layout)...');
+                    break;
+                  case 'new-vendor':
+                    showNotification('info', 'Creating new Vendor Summary...');
+                    // TODO: Create new vendor summary
+                    break;
+                  case 'new-performance':
+                    showNotification('info', 'Creating new Performance Report...');
+                    // TODO: Create new performance report
+                    break;
+                  case 'ai-exec-summary':
+                    setShowAiExecutiveSummaryWizard(true);
+                    showNotification('info', 'Opening AI Executive Summary Builder...');
+                    break;
+                  case 'executive-home':
+                    setShowExecutiveHomeEditor(true);
+                    showNotification('info', 'Opening Executive Home Editor...');
+                    break;
+                  case 'edit-business-unit':
+                    setShowBusinessUnitEditor(true);
+                    showNotification('info', 'Opening Business Unit Editor...');
+                    break;
+                  case 'vendor-dashboard':
+                    setShowVendorDashboardEditor(true);
+                    showNotification('info', 'Opening Vendor Dashboard Editor...');
+                    break;
+                  case 'asset-dashboard':
+                    setShowAssetDashboardEditor(true);
+                    showNotification('info', 'Opening Asset Dashboard Editor...');
+                    break;
+                  case 'manage-people':
+                    setShowPeopleManager(true);
+                    showNotification('info', 'Opening People Manager...');
+                    break;
+                  case 'manage-vendors':
+                    setShowVendorManager(true);
+                    showNotification('info', 'Opening Vendor Manager...');
+                    break;
+                  default:
+                    showNotification('info', `Action: ${action}`);
+                }
+              }}
+              onOpenGoals={() => setShowGoals(true)}
+              onOpenGoalsHighLevel={() => setShowGoalsHighLevel(true)}
+              onOpenGoalsDark={() => setShowGoalsDark(true)}
+              onOpenInitiatives={() => setShowInitiatives(true)}
+              onOpenInitiativesGantt={() => setShowInitiativesGantt(true)}
+              onOpenInitiativesHero={() => setShowInitiativesHero(true)}
+              onOpenBudget={() => setShowBudget(true)}
+              onOpenBudgetFinance={() => setShowBudgetFinance(true)}
+              onOpenNotes={() => setShowTimelineNotes(true)}
+              onOpenTasks={() => setShowAllTasksModal(true)}
+              onOpenPlatformOverview={() => setShowPlatformOverview(true)}
+              onOpenOrgIQ={() => setShowOrgIQ(true)}
+              onOpenTemplateBuilder={() => setShowTemplateBuilder(true)}
+              onOpenSystemSettings={() => setShowSystemSettings(true)}
+              onOpenDataSources={() => setShowDataSources(true)}
+              onOpenAssetReference={() => setShowAssetReference(true)}
+              onOpenStyleScheme={() => setShowStyleScheme(true)}
+            />
+          ) : (
           <main className="pt-20 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               {/* Top Action Bar - Stats + Action Buttons (only for all-content section) */}
@@ -1558,6 +2170,8 @@ function App() {
               </AnimatePresence>
             </div>
           </main>
+          )}
+          {/* End CMS Version Conditional */}
 
           {/* New Summary Modal */}
           <AnimatePresence>
@@ -1988,16 +2602,121 @@ function App() {
 
           {/* Leadership Editor (Custom for leadership-summary content) */}
           {showLeadershipEditor && selectedItem && (
-            <LeadershipEditor
+            <LeadershipSummaryEditor
               data={selectedItem}
               onSave={async (data) => {
-                await handleSaveItem(data, false);
+                await handleSaveItem(data, data.status || 'draft');
                 setShowLeadershipEditor(false);
+                const nextId = data?.id || selectedItem?.id;
+                if (nextId) {
+                  setSelectedContent({
+                    id: nextId,
+                    category: 'leadership',
+                    name: data?.title || selectedItem?.title || 'Leadership Summary'
+                  });
+                  setShowContentEditor(true);
+                }
               }}
               onClose={() => setShowLeadershipEditor(false)}
               isNewContent={!selectedItem.id}
             />
           )}
+
+          {/* Leadership BU Summary Editor */}
+          {showLeadershipBUEditor && (
+            <LeadershipBUSummaryEditor
+              onClose={() => setShowLeadershipBUEditor(false)}
+            />
+          )}
+
+          {/* Leadership BU Summary Editor V2 */}
+          {showLeadershipBUEditorV2 && (
+            <LeadershipBUSummaryEditorV2
+              onClose={() => setShowLeadershipBUEditorV2(false)}
+            />
+          )}
+
+          {/* Vendor Summary Editor */}
+          <AnimatePresence>
+            {showVendorSummary && (
+              <VendorEditor
+                onClose={() => setShowVendorSummary(false)}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Vendor Overview Editor */}
+          <AnimatePresence>
+            {showVendorOverview && (
+              <VendorOverviewEditor
+                onClose={() => setShowVendorOverview(false)}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Multi-Vendor Dashboard Editor */}
+          <AnimatePresence>
+            {showMultiVendorDashboard && (
+              <MultiVendorDashboardEditor
+                onClose={() => setShowMultiVendorDashboard(false)}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Vendor Feature Breakdown Editor */}
+          <AnimatePresence>
+            {showVendorFeatureBreakdown && (
+              <VendorFeatureBreakdownEditor
+                onClose={() => setShowVendorFeatureBreakdown(false)}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Performance Dashboard Editor */}
+          <AnimatePresence>
+            {showPerformanceDashboard && (
+              <PerformanceDashboardEditor
+                onClose={() => setShowPerformanceDashboard(false)}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Executive Home Editor */}
+          <AnimatePresence>
+            {showExecutiveHomeEditor && (
+              <ExecutiveHomeEditor
+                onClose={() => setShowExecutiveHomeEditor(false)}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Business Unit Editor */}
+          <AnimatePresence>
+            {showBusinessUnitEditor && (
+              <BusinessUnitEditor
+                onClose={() => setShowBusinessUnitEditor(false)}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Vendor Dashboard Editor */}
+          <AnimatePresence>
+            {showVendorDashboardEditor && (
+              <VendorDashboardEditor
+                onClose={() => setShowVendorDashboardEditor(false)}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Asset Dashboard Manager */}
+          <AnimatePresence>
+            {showAssetDashboardEditor && (
+              <AssetDashboardManager
+                onNotification={showNotification}
+                onClose={() => setShowAssetDashboardEditor(false)}
+              />
+            )}
+          </AnimatePresence>
 
           {/* Asset Library Modal */}
           <AssetLibrary
@@ -2029,6 +2748,22 @@ function App() {
                 <OrgIQ />
               </div>
             </div>
+          )}
+
+          {/* People Manager */}
+          {showPeopleManager && (
+            <PeopleManager 
+              onNotification={showNotification}
+              onClose={() => setShowPeopleManager(false)}
+            />
+          )}
+
+          {/* Vendor Manager */}
+          {showVendorManager && (
+            <VendorManager 
+              onNotification={showNotification}
+              onClose={() => setShowVendorManager(false)}
+            />
           )}
 
           {/* Style Scheme Manager */}
@@ -2068,8 +2803,131 @@ function App() {
           {showGoals && (
             <GoalsManager
               isOpen={showGoals}
-              onClose={() => setShowGoals(false)}
+              onClose={() => {
+                setShowGoals(false);
+                setEditGoalId(undefined);
+              }}
               showNotification={showNotification}
+              initialGoalId={editGoalId}
+            />
+          )}
+
+          {/* Goals High Level Executive Summary */}
+          {showGoalsHighLevel && (
+            <GoalsHighLevel
+              isOpen={showGoalsHighLevel}
+              onClose={() => setShowGoalsHighLevel(false)}
+            />
+          )}
+
+          {/* Goals Dark Theme - Full Screen */}
+          {showGoalsDark && (
+            <Goals 
+              onClose={() => setShowGoalsDark(false)}
+              onOpenGoalsManager={(goalId) => {
+                setEditGoalId(goalId);
+                setShowGoalsDark(false);
+                setShowGoals(true);
+              }}
+            />
+          )}
+
+          {/* Budget & Finance View */}
+          {showBudgetFinance && (
+            <BudgetFinance
+              isOpen={showBudgetFinance}
+              onClose={() => setShowBudgetFinance(false)}
+              onEdit={() => {
+                setShowBudgetFinance(false);
+                setShowBudgetFinanceEditor(true);
+              }}
+              showEdit={true}
+            />
+          )}
+
+          {/* Budget & Finance Editor */}
+          {showBudgetFinanceEditor && (
+            <BudgetFinanceEditor
+              isOpen={showBudgetFinanceEditor}
+              onClose={() => setShowBudgetFinanceEditor(false)}
+              showNotification={showNotification}
+            />
+          )}
+
+          {/* Vendor Performance View */}
+          {showVendorPerf && (
+            <VendorPerformanceV2
+              data={selectedVendorPerf}
+              onClose={() => {
+                setShowVendorPerf(false);
+                setSelectedVendorPerf(null);
+              }}
+            />
+          )}
+
+          {/* Vendor Performance Editor */}
+          {showVendorPerfView && selectedVendorPerf && (
+            <VendorPerformanceV2
+              data={selectedVendorPerf}
+              onClose={() => {
+                setShowVendorPerfView(false);
+                setSelectedVendorPerf(null);
+              }}
+              onEdit={() => {
+                setShowVendorPerfView(false);
+                setShowVendorPerfEditor(true);
+              }}
+            />
+          )}
+
+          {showVendorPerfEditor && (
+            <VendorPerformanceEditorV2
+              data={selectedVendorPerf}
+              onClose={() => {
+                setShowVendorPerfEditor(false);
+                setSelectedVendorPerf(null);
+              }}
+              onSave={async (data) => {
+                try {
+                  // Add metadata if not present
+                  const saveData = {
+                    ...data,
+                    _contentTag: 'vendor-performance',
+                    _published: true,
+                    meta: {
+                      ...data.meta,
+                      id: data.meta?.id || `${data.meta?.vendor?.toLowerCase()}-performance-${data.meta?.quarter?.toLowerCase()}-${data.meta?.year}`,
+                      title: `${data.meta?.vendor} Performance Metrics V2`,
+                      createdAt: data.meta?.createdAt || new Date().toISOString(),
+                      updatedAt: new Date().toISOString()
+                    }
+                  };
+
+                  const method = saveData.meta?.id ? 'PUT' : 'POST';
+                  const endpoint = saveData.meta?.id 
+                    ? `http://localhost:3001/api/content/${saveData.meta.id}`
+                    : 'http://localhost:3001/api/content';
+
+                  const response = await fetch(endpoint, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(saveData),
+                  });
+
+                  if (response.ok) {
+                    const result = await response.json();
+                    showNotification('success', 'Vendor performance data saved successfully!');
+                    setShowVendorPerfEditor(false);
+                    setSelectedVendorPerf(null);
+                    // Refresh vendor performance list if needed
+                  } else {
+                    showNotification('error', 'Failed to save vendor performance data');
+                  }
+                } catch (error) {
+                  console.error('Error saving vendor performance:', error);
+                  showNotification('error', 'Error saving vendor performance data');
+                }
+              }}
             />
           )}
 
@@ -2079,12 +2937,26 @@ function App() {
               isOpen={showInitiatives}
               onClose={() => setShowInitiatives(false)}
               showNotification={showNotification}
+              autoOpenNewInitiative={autoOpenNewInitiative}
+              onAutoOpenConsumed={() => setAutoOpenNewInitiative(false)}
             />
           )}
 
           {/* Initiatives Gantt Chart */}
           {showInitiativesGantt && (
-            <InitiativesGantt onClose={() => setShowInitiativesGantt(false)} />
+            <InitiativesGanttV2 onClose={() => setShowInitiativesGantt(false)} />
+          )}
+
+          {/* Initiatives Hero View */}
+          {showInitiativesHero && (
+            <InitiativesHero
+              isOpen={showInitiativesHero}
+              onClose={() => setShowInitiativesHero(false)}
+              onInitiativeClick={(id) => {
+                console.log('Open initiative details:', id);
+                // TODO: Open initiative details modal
+              }}
+            />
           )}
 
           {/* Budget Page */}
@@ -2099,6 +2971,20 @@ function App() {
           {/* Platform Overview */}
           {showPlatformOverview && (
             <PlatformOverview onClose={() => setShowPlatformOverview(false)} />
+          )}
+
+          {/* Content Editor - New v2 Content Editor */}
+          {showContentEditor && selectedContent && (
+            <ContentEditor
+              contentId={selectedContent.id}
+              category={selectedContent.category}
+              contentTitle={selectedContent.name}
+              onClose={() => {
+                setShowContentEditor(false);
+                setSelectedContent(null);
+              }}
+              showNotification={showNotification}
+            />
           )}
 
           {/* Timeline Notes Manager */}
@@ -2135,23 +3021,6 @@ function App() {
             onCommentChange={fetchComments}
           />
 
-          {/* Quick Actions Menu */}
-          <QuickActionsMenu
-            onNewNote={() => {
-              setAutoOpenAddNote(true);
-              setShowTimelineNotes(true);
-            }}
-            onQuickClone={handleQuickClone}
-            onNewContent={handleQuickNewContent}
-            onTimelineNotes={() => setShowTimelineNotes(true)}
-            onNewTask={() => {
-              setShowTaskModal(true);
-              setEditingTask(undefined);
-            }}
-            onAllTasks={() => setShowAllTasksModal(true)}
-            onWeeklyLeadership={() => setShowAiWeeklySummary(true)}
-          />
-
           {/* All Tasks Modal */}
           {showAllTasksModal && (
             <AllTasksModal
@@ -2159,7 +3028,6 @@ function App() {
               onEditTask={(task) => {
                 setEditingTask(task);
                 setShowTaskModal(true);
-                setShowAllTasksModal(false);
               }}
               onCreateTask={() => {
                 setEditingTask(undefined);
@@ -2172,6 +3040,160 @@ function App() {
             />
           )}
 
+          {/* New Leadership Summary Modal */}
+          <AnimatePresence>
+            {showNewLeadershipSummaryModal && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[210] flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4"
+                onClick={() => setShowNewLeadershipSummaryModal(false)}
+              >
+                <motion.div
+                  initial={{ scale: 0.96, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.96, opacity: 0 }}
+                  onClick={(event) => event.stopPropagation()}
+                  className="bg-slate-900 text-white rounded-2xl p-6 max-w-xl w-full border border-slate-700/60 shadow-2xl"
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-fis-eggplant to-fis-raspberry flex items-center justify-center flex-shrink-0 shadow-lg shadow-fis-raspberry/30">
+                      <Plus className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-roobert-heavy text-white mb-1">
+                        New Leadership Summary
+                      </h3>
+                      <p className="text-sm text-slate-300">
+                        Choose how you want to create this summary.
+                      </p>
+                    </div>
+                  </div>
+
+                      <div className="mb-4">
+                        <label className="text-sm font-roobert-semibold text-white">Filename</label>
+                        <input
+                          type="text"
+                          value={leadershipFilename}
+                          onChange={(event) => setLeadershipFilename(event.target.value)}
+                          placeholder="leadership-summary-2026-02-10"
+                          className="mt-2 w-full px-3 py-2 rounded-lg border border-slate-700/70 bg-slate-900 text-sm text-white focus:outline-none focus:ring-2 focus:ring-fis-raspberry/60"
+                        />
+                        <div className="mt-2 text-xs text-slate-300">
+                          Saved as {buildLeadershipSummaryId(leadershipFilename) || 'leadership-summary-<name>'}.json
+                        </div>
+                        {leadershipCreateMode !== 'ai' && leadershipFilename.trim() === '' && (
+                          <div className="mt-2 text-xs text-rose-300">Filename is required for blank or duplicate.</div>
+                        )}
+                        {leadershipCreateMode !== 'ai' &&
+                          leadershipFilename.trim() !== '' &&
+                          leadershipSummaryIdExists(buildLeadershipSummaryId(leadershipFilename)) && (
+                            <div className="mt-2 text-xs text-rose-300">That filename already exists.</div>
+                          )}
+                      </div>
+
+                  <div className="space-y-3">
+                    <label className="flex items-start gap-3 p-3 border border-slate-700/60 rounded-lg cursor-pointer bg-slate-900/70 hover:bg-slate-800/60 transition-colors">
+                      <input
+                        type="radio"
+                        name="leadership-create-mode"
+                        checked={leadershipCreateMode === 'blank'}
+                        onChange={() => setLeadershipCreateMode('blank')}
+                        className="mt-1 accent-fis-raspberry"
+                      />
+                      <div>
+                        <div className="text-sm font-roobert-semibold text-white">Blank summary</div>
+                        <div className="text-xs text-slate-300">Start from an empty leadership summary template.</div>
+                      </div>
+                    </label>
+
+                    <label className="flex items-start gap-3 p-3 border border-slate-700/60 rounded-lg cursor-pointer bg-slate-900/70 hover:bg-slate-800/60 transition-colors">
+                      <input
+                        type="radio"
+                        name="leadership-create-mode"
+                        checked={leadershipCreateMode === 'duplicate'}
+                        onChange={() => setLeadershipCreateMode('duplicate')}
+                        className="mt-1 accent-fis-raspberry"
+                      />
+                      <div className="flex-1">
+                        <div className="text-sm font-roobert-semibold text-white">Duplicate existing</div>
+                        <div className="text-xs text-slate-300 mb-2">Pick a prior summary to copy.</div>
+                        {leadershipCreateMode === 'duplicate' && (
+                          <select
+                            value={leadershipDuplicateId}
+                            onChange={(event) => setLeadershipDuplicateId(event.target.value)}
+                            className="w-full px-3 py-2 rounded-lg border border-slate-700/70 bg-slate-900 text-sm text-white focus:outline-none focus:ring-2 focus:ring-fis-raspberry/60"
+                          >
+                            <option value="">Select a summary...</option>
+                            {allContentUnfiltered
+                              .filter((item: any) => item._contentTag === 'leadership-summary')
+                              .map((item: any) => ({
+                                id: item.id || item.meta?.id,
+                                title: item.title || item.meta?.title || 'Untitled Summary',
+                                status: item.status || item.meta?.status || 'draft'
+                              }))
+                              .filter((item: any) => item.id)
+                              .map((item: any) => (
+                                <option key={item.id} value={item.id}>
+                                  {item.title} ({item.status})
+                                </option>
+                              ))}
+                          </select>
+                        )}
+                      </div>
+                    </label>
+
+                      <label className="flex items-start gap-3 p-3 border border-slate-700/60 rounded-lg cursor-pointer bg-slate-900/70 hover:bg-slate-800/60 transition-colors">
+                      <input
+                        type="radio"
+                        name="leadership-create-mode"
+                        checked={leadershipCreateMode === 'ai'}
+                        onChange={() => setLeadershipCreateMode('ai')}
+                          className="mt-1 accent-fis-raspberry"
+                      />
+                      <div>
+                          <div className="text-sm font-roobert-semibold text-white">AI Builder</div>
+                          <div className="text-xs text-slate-300">Launch the AI Weekly Summary builder.</div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-3 mt-6">
+                    <button
+                      onClick={() => setShowNewLeadershipSummaryModal(false)}
+                        className="px-4 py-2 rounded-lg border border-slate-700/70 text-slate-200 font-roobert-medium hover:bg-slate-800"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      disabled={
+                        isCreatingLeadershipSummary ||
+                        (leadershipCreateMode !== 'ai' && leadershipFilename.trim() === '') ||
+                        (leadershipCreateMode !== 'ai' &&
+                          leadershipSummaryIdExists(buildLeadershipSummaryId(leadershipFilename))) ||
+                        (leadershipCreateMode === 'duplicate' && !leadershipDuplicateId)
+                      }
+                      onClick={() => {
+                        if (leadershipCreateMode === 'blank') {
+                          handleCreateBlankLeadershipSummary();
+                        } else if (leadershipCreateMode === 'duplicate') {
+                          handleDuplicateLeadershipSummary(leadershipDuplicateId);
+                        } else {
+                          setShowNewLeadershipSummaryModal(false);
+                          setShowAiWeeklySummary(true);
+                        }
+                      }}
+                      className="px-4 py-2 rounded-lg bg-gradient-to-r from-fis-eggplant to-fis-raspberry text-white font-roobert-semibold hover:opacity-90 disabled:opacity-50 shadow-lg shadow-fis-raspberry/30"
+                    >
+                      {isCreatingLeadershipSummary ? 'Working...' : 'Continue'}
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* AI Weekly Summary Modal */}
           {showAiWeeklySummary && (
             <AiWeeklySummaryModal
@@ -2179,6 +3201,16 @@ function App() {
               showNotification={showNotification}
               notes={timelineNotes}
               tasks={allTasks}
+            />
+          )}
+
+          {/* AI Executive Summary Wizard */}
+          {showAiExecutiveSummaryWizard && (
+            <AIExecutiveSummaryWizard
+              isOpen={showAiExecutiveSummaryWizard}
+              onClose={() => setShowAiExecutiveSummaryWizard(false)}
+              onCreateSummary={handleCreateExecutiveSummary}
+              showNotification={showNotification}
             />
           )}
 

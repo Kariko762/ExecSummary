@@ -1,0 +1,148 @@
+{
+  "vendorName": "Tiled",
+  "quarterYear": "Q1 2026",
+  "executiveSummary": "Tiled transforms static content into personalized, interactive microapps that track engagement and drive measurable buyer action.",
+  "heroMetrics": [
+    {
+      "icon": "Users",
+      "title": "Content Personalization",
+      "value": "Dynamic",
+      "subtitle": "1:1 personalized experiences at scale"
+    },
+    {
+      "icon": "BarChart3",
+      "title": "Engagement Analytics",
+      "value": "Deep Insights",
+      "subtitle": "Track every interaction & touchpoint"
+    },
+    {
+      "icon": "Layers",
+      "title": "Multi-Channel Delivery",
+      "value": "Everywhere",
+      "subtitle": "Web, mobile, email, social embeds"
+    },
+    {
+      "icon": "Zap",
+      "title": "Interactive Content",
+      "value": "Microapps",
+      "subtitle": "Beyond static PDFs & presentations"
+    }
+  ],
+  "storytellingIndex": {
+    "title": "THE CONTENT ENGAGEMENT INDEX",
+    "subtitle": "Measuring Interactive Content Effectiveness",
+    "score": 85,
+    "maxScore": 100,
+    "segments": [
+      {
+        "name": "Content Engagement",
+        "score": 88,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Personalization",
+        "score": 82,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Analytics Depth",
+        "score": 90,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Multi-Channel",
+        "score": 84,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Buyer Experience",
+        "score": 86,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "Sales Enablement",
+        "score": 81,
+        "color": "#00d4aa"
+      },
+      {
+        "name": "ROI Visibility",
+        "score": 84,
+        "color": "#00d4aa"
+      }
+    ]
+  },
+  "featureCards": [
+    {
+      "title": "Interactive Microapps",
+      "subtitle": "Content That Engages",
+      "description": "Replace static PDFs with dynamic, interactive experiences. Add polls, quizzes, calculators, forms, and rich media to drive engagement.",
+      "icon": "FileText"
+    },
+    {
+      "title": "1:1 Personalization",
+      "subtitle": "Tailored for Each Buyer",
+      "description": "Dynamically customize content for each recipient based on role, industry, account data, or engagement history. Scale personal touches.",
+      "icon": "Users"
+    },
+    {
+      "title": "Engagement Intelligence",
+      "subtitle": "Know What Resonates",
+      "description": "Track every click, scroll, time spent, and interaction. See exactly what content drives buyer action and interest.",
+      "icon": "TrendingUp"
+    }
+  ],
+  "problemsSolved": [
+    {
+      "problem": "Static PDF Limitations",
+      "solution": "Interactive microapps with embedded forms, videos, polls, and calculators",
+      "impact": "3.5x higher engagement vs PDFs"
+    },
+    {
+      "problem": "Content Analytics Blackhole",
+      "solution": "Granular tracking of every interaction, scroll depth, time spent per section",
+      "impact": "100% visibility into content effectiveness"
+    },
+    {
+      "problem": "Manual Personalization",
+      "solution": "Dynamic content blocks that auto-populate based on recipient data",
+      "impact": "Personalized at scale without manual work"
+    },
+    {
+      "problem": "Multi-Channel Complexity",
+      "solution": "Single content source deployed everywhere - web, email, mobile, social",
+      "impact": "70% faster content distribution"
+    },
+    {
+      "problem": "Content ROI Measurement",
+      "solution": "Direct attribution from content engagement to pipeline & revenue",
+      "impact": "Prove content's business impact"
+    },
+    {
+      "problem": "Buyer Experience Gaps",
+      "solution": "Mobile-optimized, fast-loading, accessible interactive experiences",
+      "impact": "2x mobile engagement rates"
+    }
+  ],
+  "gtmHighlights": [
+    {
+      "title": "Sales Collateral",
+      "description": "Transform one-pagers, case studies, and battlecards into trackable, interactive assets. See which sections resonate with each prospect."
+    },
+    {
+      "title": "Marketing Campaigns",
+      "description": "Replace gated PDFs with interactive content experiences. Capture intent data while delivering value upfront."
+    },
+    {
+      "title": "Account-Based Marketing",
+      "description": "Create personalized microapps for target accounts with custom messaging, case studies, and ROI calculators tailored to their industry."
+    },
+    {
+      "title": "Post-Demo Follow-Up",
+      "description": "Send interactive recap docs with embedded video highlights, key takeaways, next steps, and personalized pricing scenarios."
+    },
+    {
+      "title": "Customer Onboarding",
+      "description": "Interactive welcome guides, product walkthroughs, and training materials that adapt to user role and progress."
+    }
+  ]
+}

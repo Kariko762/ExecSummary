@@ -1,0 +1,109 @@
+{
+  "id": "performance_kai_2026_01",
+  "quarter": "Q1",
+  "year": 2026,
+  "date": "2026-01-23",
+  "title": "Key Activity Insights - January 2026",
+  "displayName": "Key Activity Insights",
+  "_type": "performance",
+  "_contentTag": "performance",
+  "status": "published",
+  "protectionEnabled": false,
+  "_template_name": "Performance Dashboard - Activity Tracking",
+  "_template_description": "Executive performance view for activity and hours tracking",
+  "_template_created": "2026-01-23T00:00:00.000Z",
+  "_template_updated": "2026-01-23T00:00:00.000Z",
+  "tags": ["performance"],
+  
+  "_enabled_overview": true,
+  "_overview_displayTitle": true,
+  "_overview_type": "multiField",
+  
+  "overview_0": {
+    "Total Hours": "342",
+    "Demo Activities": "128",
+    "Prep & Planning": "94",
+    "Follow-up": "120"
+  },
+  "_overview_0_type": "metricCard",
+  "_overview_0_layoutZone": "full",
+  "_overview_0_assetTitle": "Hours Breakdown - January 2026",
+  "_overview_0_displayAssetTitle": true,
+  
+  "overview_1": [
+    { "label": "Average Hours/Demo", "value": "2.7 hrs" },
+    { "label": "Peak Activity Day", "value": "Tuesday" },
+    { "label": "Most Active Time", "value": "10am-2pm EST" },
+    { "label": "Team Utilization", "value": "87%" }
+  ],
+  "_overview_1_type": "keyValueList",
+  "_overview_1_layoutZone": "left",
+  "_overview_1_assetTitle": "Activity Metrics",
+  "_overview_1_displayAssetTitle": true,
+  
+  "_enabled_hoursTrend": true,
+  "_hoursTrend_displayTitle": true,
+  "hoursTrend": [
+    { "category": "Week 1", "value": 78, "label": "78 hrs" },
+    { "category": "Week 2", "value": 92, "label": "92 hrs" },
+    { "category": "Week 3", "value": 85, "label": "85 hrs" },
+    { "category": "Week 4", "value": 87, "label": "87 hrs" }
+  ],
+  "_hoursTrend_type": "barChart",
+  "_hoursTrend_chartConfig": {
+    "xAxisKey": "category",
+    "dataKeys": ["value"],
+    "colors": ["var(--brand-primary)"],
+    "legend": ["Demo Hours"],
+    "title": "Weekly Hours Trend",
+    "yAxisLabel": "Hours"
+  },
+  
+  "_enabled_activityBreakdown": true,
+  "_activityBreakdown_displayTitle": true,
+  "activityBreakdown": [
+    { "name": "Live Demos", "value": 128, "percentage": 37 },
+    { "name": "Demo Prep", "value": 94, "percentage": 27 },
+    { "name": "Follow-up Calls", "value": 75, "percentage": 22 },
+    { "name": "Content Updates", "value": 45, "percentage": 14 }
+  ],
+  "_activityBreakdown_type": "pieChart",
+  "_activityBreakdown_chartConfig": {
+    "nameKey": "name",
+    "valueKey": "value",
+    "title": "Activity Distribution",
+    "showPercentage": true
+  },
+  
+  "_enabled_teamActivity": true,
+  "_teamActivity_displayTitle": true,
+  "teamActivity": [
+    {
+      "title": "Sarah Johnson",
+      "items": [
+        { "label": "Total Hours", "value": "89 hrs" },
+        { "label": "Demos Delivered", "value": "32" },
+        { "label": "Win Rate", "value": "68%" }
+      ]
+    },
+    {
+      "title": "Michael Chen",
+      "items": [
+        { "label": "Total Hours", "value": "76 hrs" },
+        { "label": "Demos Delivered", "value": "28" },
+        { "label": "Win Rate", "value": "71%" }
+      ]
+    },
+    {
+      "title": "Emily Rodriguez",
+      "items": [
+        { "label": "Total Hours", "value": "82 hrs" },
+        { "label": "Demos Delivered", "value": "30" },
+        { "label": "Win Rate", "value": "65%" }
+      ]
+    }
+  ],
+  "_teamActivity_type": "nestedCards",
+  "_teamActivity_assetTitle": "Team Performance",
+  "_teamActivity_displayAssetTitle": true
+}
